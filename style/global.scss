@@ -1,0 +1,123 @@
+@import 'element-plus/dist/index.css';
+@import 'vuetify/styles';
+@import '@fontsource/open-sans';
+@import url('https://fonts.googleapis.com/earlyaccess/notosanstc.css');
+
+@font-face {
+  font-family: TaipeiSansTCBeta-Bold;
+  src: url('/font/TaipeiSansTCBeta-Bold.ttf');
+}
+@font-face {
+  font-family: TaipeiSansTCBeta-Light;
+  src: url('/font/TaipeiSansTCBeta-Light.ttf');
+}
+@font-face {
+  font-family: TaipeiSansTCBeta-Regular;
+  src: url('/font/TaipeiSansTCBeta-Regular.ttf');
+}
+
+html {
+  font-family: 'Noto Sans TC', sans-serif;
+  line-height: 1.15;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  font-size: 16px;
+
+  *:not(.wang_editor_view, .wang_editor_view *, .wang_editor, .wang_editor *) {
+    font-size: inherit;
+    font-family: inherit;
+    font-weight: inherit;
+  }
+
+  .v-btn {
+    text-transform: capitalize;
+  }
+}
+
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+button[disabled] {
+  pointer-events: unset;
+  cursor: not-allowed;
+}
+
+body {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #212529;
+  text-align: left;
+}
+
+label {
+  margin: 0;
+}
+
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+
+button {
+  border-style: solid;
+  cursor: pointer;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+
+  @include mobile {
+    height: 5px;
+  }
+}
+
+*::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #e7edfe;
+  border: 1px solid #e7edfe;
+}
+
+// *::-webkit-scrollbar-button {
+//   background   : transparent;
+//   border-radius: 4px;
+// }
+
+*::-webkit-scrollbar-track-piece {
+  background-color: #ffffff00;
+}
+
+*::-webkit-scrollbar-track {
+  box-shadow: transparent;
+}
+
+input[type='number']::-webkit-outer-spin-button,
+input[type='number']::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.flag {
+  display: inline-block;
+}

@@ -1,0 +1,21 @@
+{
+  "presets": [["@babel/preset-env", { "modules": false }]],
+  "plugins": [
+    [
+      "module-extension-resolver",
+      {
+        "srcExtensions": [
+          ".js",
+          ".cjs",
+          ".mjs",
+          ".es",
+          ".es6",
+          ".ts",
+          ".node",
+          ".json"
+        ],
+        "extensionsToKeep": [".mjs", ".json"]
+      }
+    ]
+  ]
+}
