@@ -24899,9 +24899,27 @@ const cssVariable = computed(() => {
   return _cssVariable;
 });
 
-async function handleDesmos() {
+function handleDesmos() {
+  if (document.querySelector('#desmos-srcipt')) {
+    initDesmos();
+    return;
+  }
   window.desmosLocales = DESMOS_LOCALES;
-  const _desmosModule = await import('desmos');
+  const srciptEl = document.createElement('script');
+  srciptEl.id = 'desmos-srcipt';
+  srciptEl.src = '/js/desmos.js';
+  srciptEl.setAttribute('id', 'desmos-srcipt');
+  srciptEl.setAttribute('src', '/js/desmos.js');
+  srciptEl.onload = initDesmos;
+  srciptEl.addEventListener('load', initDesmos);
+  document.head.append(srciptEl);
+}
+function initDesmos() {
+  if (typeof window.Desmos !== 'object') {
+    setTimeout(initDesmos, 500);
+    return;
+  }
+  const _desmosModule = window.Desmos;
 
   const _calculator = _desmosModule.GraphingCalculator(desmosEl.value);
   _calculator.updateSettings({ language: 'zh-TW' });
