@@ -1,5 +1,10 @@
 <template>
-  <div>教材測試</div>
+  <div>
+    <p>教材測試</p>
+    <NuxtLink to="/desmos">
+      <v-btn color="primary">desmos</v-btn>
+    </NuxtLink>
+  </div>
 </template>
 <script setup>
 definePageMeta({ title: 'follow_player.pageTitle' });

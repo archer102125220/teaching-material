@@ -1,7 +1,5 @@
 {
-  "name": "nuxt-app",
-  "private": true,
-  "type": "module",
+  "name": "teaching-material",
   "phet": {
     "chipperSupportsOutputJSGruntTasks": true,
     "supportsOutputJS": true
@@ -11,8 +9,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare",
-    "test": "qunit"
+    "test": "qunit",
+    "lint": "eslint --ext .js,.vue .",
+    "postinstall": "nuxt prepare"
   },
   "devDependencies": {
     "@babel/core": "^7.22.9",
@@ -61,9 +60,12 @@
     "autoprefixer": "^10.4.17",
     "axios": "^1.4.0",
     "date-fns": "^3.3.1",
+    "dayjs": "^1.11.10",
+    "desmos": "^1.5.4",
     "docdash": "^1.2.0",
     "element-plus": "^2.5.6",
     "expose-loader": "^4.1.0",
+    "google-auth-library": "^9.6.3",
     "grunt": "^1.5.3",
     "html-webpack-plugin": "^5.3.2",
     "jimp": "^0.16.1",

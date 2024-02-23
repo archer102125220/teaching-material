@@ -25,7 +25,10 @@
 </template>
 
 <script setup>
-const LAYOUT_SETTING = [{ name: 'index', layout: 'default' }];
+const LAYOUT_SETTING = [
+  { name: 'index', layout: 'default' },
+  { path: '/desmos', layout: 'default' }
+];
 
 const runtimeConfig = useRuntimeConfig();
 const GA_ID = runtimeConfig.public.GOOGLE_GA_ID;
@@ -52,11 +55,6 @@ if (process.server) {
     });
   }
 }
-// useHead({
-//   titleTemplate: (titleChunk) => {
-//     return titleChunk ? `${titleChunk} | 愛嬉遊臺灣青年旅館聯盟` : '愛嬉遊臺灣青年旅館聯盟';
-//   },
-// });
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk

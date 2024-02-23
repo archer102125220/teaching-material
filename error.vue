@@ -1,10 +1,10 @@
 <template>
   <div class="error_page">
-    <p>{{ props.error.statusCode }}</p>
-    <p>{{ props.error.statusMessage }}</p>
-    <p>{{ props.error.message }}</p>
+    <p>{{ error.statusCode }}</p>
+    <p>{{ error.statusMessage }}</p>
+    <p>{{ error.message }}</p>
     <!-- eslint-disable-next-line vue/no-v-html -->
-    <div v-html="props.error.stack" />
+    <div v-html="error.stack" />
   </div>
 </template>
 <script setup>
