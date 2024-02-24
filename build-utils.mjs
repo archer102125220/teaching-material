@@ -6,10 +6,10 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 
 function buildUtils() {
   try {
-    fs.mkdirSync(join(__dirname, '.output/server/node_modules/@popperjs'));
+    fs.mkdirSync('.output/server/node_modules/@popperjs');
     fs.renameSync(
-      join(__dirname, '.output/server/node_modules/@sxzz/popperjs-es'),
-      join(__dirname, '.output/server/node_modules/@popperjs/core')
+      '.output/server/node_modules/@sxzz/popperjs-es',
+      '.output/server/node_modules/@popperjs/core'
     );
   } catch (error) {
     console.log(error);
