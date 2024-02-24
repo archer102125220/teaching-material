@@ -24900,7 +24900,7 @@ const cssVariable = computed(() => {
 });
 
 function handleDesmos() {
-  if (document.querySelector('#desmos-srcipt')) {
+  if (document.querySelector('#desmos-srcipt') !== null) {
     initDesmos();
     return;
   }
@@ -24910,7 +24910,7 @@ function handleDesmos() {
   srciptEl.src = '/js/desmos.js';
   srciptEl.setAttribute('id', 'desmos-srcipt');
   srciptEl.setAttribute('src', '/js/desmos.js');
-  srciptEl.onload = initDesmos;
+  // srciptEl.onload = initDesmos;
   srciptEl.addEventListener('load', initDesmos);
   document.head.append(srciptEl);
 }
@@ -24941,9 +24941,11 @@ function initDesmos() {
 watch(
   () => $i18n.locale.value,
   (newLocale) => {
-    calculator.value.updateSettings({
-      language: newLocale.includes('zh') ? 'zh-TW' : newLocale
-    });
+    if (typeof calculator.value?.updateSettings === 'function') {
+      calculator.value.updateSettings({
+        language: newLocale.includes('zh') ? 'zh-TW' : newLocale
+      });
+    }
   }
 );
 
