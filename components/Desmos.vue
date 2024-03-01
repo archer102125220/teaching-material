@@ -106,6 +106,8 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .desmos_root {
+  width: var(--desmos_width);
+  height: var(--desmos_height);
   :deep(.dcg-calculator-api-container) {
     .dcg-settings-container .dcg-editable-mathquill-container {
       margin-top: 30px;
@@ -122,8 +124,8 @@ onMounted(() => {
     }
   }
   &-el {
-    height: var(--desmos_height);
-    width: var(--desmos_width);
+    width: 100%;
+    height: 100%;
   }
 }
 </style>
