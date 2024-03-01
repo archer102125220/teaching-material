@@ -1,5 +1,5 @@
 <template>
-  <div class="desmos_root" :style="cssVariable" >
+  <div class="desmos_root" :style="cssVariable">
     <div ref="desmosEl" :class="className" />
   </div>
 </template>
@@ -11,7 +11,7 @@ const { $i18n } = useNuxtApp();
 const props = defineProps({
   height: { type: String, default: '80vh' },
   width: { type: String, default: null },
-  className: { type: String, default: null }
+  className: { type: [String, Array, Object], default: null }
 });
 
 const desmosEl = ref(null);
@@ -30,6 +30,23 @@ const cssVariable = computed(() => {
   }
 
   return _cssVariable;
+});
+const className = computed(() => {
+  const _className = ['desmos_root-el'];
+
+  if (typeof props.className === 'string') {
+    _className.push(props.className);
+  } else if (Array.isArray(props.className) && props.className.length > 0) {
+    _className.push(...props.className);
+  } else if (typeof props.className === 'object' && props.className !== null) {
+    Object.keys(props.className).forEach((key) => {
+      if (props.className[key] !== false) {
+        _className.push(key);
+      }
+    });
+  }
+
+  return _className;
 });
 
 function handleDesmos() {
@@ -89,8 +106,6 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .desmos_root {
-  height: var(--desmos_height);
-  width: var(--desmos_width);
   :deep(.dcg-calculator-api-container) {
     .dcg-settings-container .dcg-editable-mathquill-container {
       margin-top: 30px;
@@ -105,6 +120,10 @@ onMounted(() => {
       align-items: center;
       justify-content: center;
     }
+  }
+  &-el {
+    height: var(--desmos_height);
+    width: var(--desmos_width);
   }
 }
 </style>
