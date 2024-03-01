@@ -1,6 +1,6 @@
 <template>
-  <div class="desmos_root">
-    <div ref="desmosEl" :style="cssVariable" :class="className" />
+  <div class="desmos_root" :style="cssVariable" >
+    <div ref="desmosEl" :class="className" />
   </div>
 </template>
 <script setup>
