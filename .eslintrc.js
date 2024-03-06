@@ -14,7 +14,7 @@ module.exports = {
     browser: true,
     node: true
   },
-  plugins: ['vue'],
+  plugins: ['vue','typescript'],
   ignorePatterns: ['.eslintrc.js'],
   rules: {
     'vue/no-deprecated-destroyed-lifecycle': 1,
@@ -44,7 +44,8 @@ module.exports = {
     'new-cap': 1,
     'unicorn/escape-case': 1,
     camelcase: 0,
-    'vue/no-dupe-keys': 1
+    'vue/no-dupe-keys': 1,
+    'import/order': 0
   },
   // https://github.com/nuxt/nuxt/discussions/16871
   globals: {

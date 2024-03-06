@@ -1,0 +1,202 @@
+{
+  "en": {
+    "projectile-data-lab.title": {
+      "value": "Projectile Data Lab"
+    },
+    "screen.variability": {
+      "value": "Variability"
+    },
+    "screen.sources": {
+      "value": "Sources"
+    },
+    "screen.measures": {
+      "value": "Measures"
+    },
+    "screen.sampling": {
+      "value": "Sampling"
+    },
+    "singleLaunch": {
+      "value": "Single"
+    },
+    "launch": {
+      "value": "Launch"
+    },
+    "stop": {
+      "value": "Stop"
+    },
+    "continuousLaunch": {
+      "value": "Continuous"
+    },
+    "singleSample": {
+      "value": "Single sample"
+    },
+    "continuousSampling": {
+      "value": "Continuous sampling"
+    },
+    "noAirResistance": {
+      "value": "No air resistance"
+    },
+    "configuration": {
+      "value": "Configuration"
+    },
+    "projectile": {
+      "value": "Projectile"
+    },
+    "launcherNumberPattern": {
+      "value": "Launcher {{number}}"
+    },
+    "angleStabilizer": {
+      "value": "Angle stabilizer"
+    },
+    "narrow": {
+      "value": "narrow"
+    },
+    "wide": {
+      "value": "wide"
+    },
+    "mysteryLauncher": {
+      "value": "Mystery launcher"
+    },
+    "customLauncher": {
+      "value": "Custom launcher"
+    },
+    "histogram": {
+      "value": "Histogram"
+    },
+    "field": {
+      "value": "Field"
+    },
+    "fieldValuePattern": {
+      "value": "Field {{value}}"
+    },
+    "noData": {
+      "value": "No data"
+    },
+    "mean": {
+      "value": "Mean"
+    },
+    "standardDeviation": {
+      "value": "Standard deviation"
+    },
+    "values": {
+      "value": "Values"
+    },
+    "sampleSize": {
+      "value": "Sample size (n)"
+    },
+    "sampleSizeValuePattern": {
+      "value": "Sample size: {{value}}"
+    },
+    "paths": {
+      "value": "Paths"
+    },
+    "launchSpeed": {
+      "value": "Launch speed"
+    },
+    "launchAngle": {
+      "value": "Launch angle"
+    },
+    "measuringTape": {
+      "value": "Measuring tape"
+    },
+    "stopwatch": {
+      "value": "Stopwatch"
+    },
+    "intervalTool": {
+      "value": "Interval tool"
+    },
+    "meters": {
+      "value": "m"
+    },
+    "longDash": {
+      "value": "—"
+    },
+    "meanEqualsValueMPattern": {
+      "value": "Mean = {{value}} m"
+    },
+    "meanXBarEqualsValueMPattern": {
+      "value": "Mean (x̅)= {{value}} m"
+    },
+    "standardDeviationMPattern": {
+      "value": "{{standardDeviation}} m"
+    },
+    "standardDeviationEqualsValueMPattern": {
+      "value": "Standard deviation = {{value}} m"
+    },
+    "standardErrorOfXBarEqualsValueMPattern": {
+      "value": "Standard error of x̅ = {{value}} m"
+    },
+    "metersPerSecondPattern": {
+      "value": "{{value}} m/s"
+    },
+    "degreesPattern": {
+      "value": "{{value}}°"
+    },
+    "nEqualsProjectileCountPattern": {
+      "value": "n = {{projectileCount}}"
+    },
+    "nEqualsSampleSizePattern": {
+      "value": "n = {{sampleSize}}"
+    },
+    "sampleNumberOfCountPattern": {
+      "value": "Sample {{number}} of {{count}}"
+    },
+    "numberOfCountPattern": {
+      "value": "{{number}} of {{count}}"
+    },
+    "binWidthMPattern": {
+      "value": "{{binWidth}} m"
+    },
+    "intervalMetersPattern": {
+      "value": "{{interval}} m"
+    },
+    "meanMetersPattern": {
+      "value": "{{mean}} m"
+    },
+    "distance": {
+      "value": "Distance"
+    },
+    "meanDistance": {
+      "value": "Mean distance"
+    },
+    "count": {
+      "value": "Count"
+    },
+    "binWidth": {
+      "value": "Bin width"
+    },
+    "totalBins": {
+      "value": "Total bins"
+    },
+    "histogramBins": {
+      "value": "Histogram bins"
+    },
+    "histogramBinsPreferenceDescription": {
+      "value": "The histogram offers two customization options for its data representation. You can either choose to define the width of the bins or specify the total number of bins in the histogram."
+    },
+    "intervalToolPercent": {
+      "value": "{{percent}}%"
+    },
+    "launcherPattern": {
+      "value": "Launcher {{launcher}}"
+    },
+    "sampleSizePattern": {
+      "value": "Sample size (n): {{sampleSize}}"
+    },
+    "numberOfSamplesPattern": {
+      "value": "Number of samples: {{numberOfSamples}}"
+    },
+    "keyboardShortcuts": {
+      "value": "Keyboard Shortcuts"
+    },
+    "selectAField": {
+      "value": "Select a field"
+    },
+    "creating": {
+      "value": "Creating..."
+    },
+    "pressTheLaunchButton": {
+      "value": "Press the launch button"
+    }
+  }
+}

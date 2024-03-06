@@ -1,0 +1,332 @@
+{
+  "credits.thanks": {
+    "value": "Giitu",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Giitu"
+      }
+    ]
+  },
+  "termsPrivacyAndLicensing": {
+    "value": "Eavttut ja liseansa",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Eavttut ja liseansa"
+      }
+    ]
+  },
+  "translation.credits.link": {
+    "value": "Jorgaleami krediteren",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Jorgaleami krediteren"
+      }
+    ]
+  },
+  "thirdParty.credits.link": {
+    "value": "Goalmmatgieđa krediteren",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Goalmmatgieđa krediteren"
+      }
+    ]
+  },
+  "updates.upToDate": {
+    "value": "Simuleren lea ođastuvvan.",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Simuleren lea ođastuvvan."
+      }
+    ]
+  },
+  "versionPattern": {
+    "value": "veršuvdna{0}",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "veršuvdna{0}"
+      }
+    ]
+  },
+  "menuItem.options": {
+    "value": "Molssaeavttut...",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Molssaeavttut..."
+      }
+    ]
+  },
+  "menuItem.phetWebsite": {
+    "value": "Phet neahttabáiki...",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Phet neahttabáiki..."
+      }
+    ]
+  },
+  "menuItem.reportAProblem": {
+    "value": "Dieđit váttisvuođa...",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Dieđit váttisvuođa..."
+      }
+    ]
+  },
+  "menuItem.screenshot": {
+    "value": "Šearbmagovva",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Šearbmagovva"
+      }
+    ]
+  },
+  "menuItem.fullscreen": {
+    "value": "Ollesšearbma",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Ollesšearbma"
+      }
+    ]
+  },
+  "menuItem.getUpdate": {
+    "value": "Oza ođastemiid...",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687369060980,
+        "oldValue": "",
+        "newValue": "Oza ođastemiid..."
+      }
+    ]
+  },
+  "updates.checking": {
+    "value": "Oza ođastemiid",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687370024862,
+        "oldValue": "",
+        "newValue": "Oza ođastemiid"
+      }
+    ]
+  },
+  "options.title": {
+    "value": "Válljen",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Válljen"
+      }
+    ]
+  },
+  "credits.title": {
+    "value": "Krediteremat",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Krediteremat"
+      }
+    ]
+  },
+  "credits.leadDesign": {
+    "value": "Design: {0}",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Design: {0}"
+      }
+    ]
+  },
+  "credits.softwareDevelopment": {
+    "value": "Prográmmagálvoovdánahttin: {0}",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Prográmmagálvoovdánahttin: {0}"
+      }
+    ]
+  },
+  "credits.team": {
+    "value": "Bargojoavku: {0}",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Bargojoavku: {0}"
+      }
+    ]
+  },
+  "credits.graphicArts": {
+    "value": "Gráfalaš design: {0}",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Gráfalaš design: {0}"
+      }
+    ]
+  },
+  "credits.translation": {
+    "value": "Jorgaleapmi",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Jorgaleapmi"
+      }
+    ]
+  },
+  "updates.outOfDate": {
+    "value": "Ođđa veršuvdna gávdno",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Ođđa veršuvdna gávdno"
+      }
+    ]
+  },
+  "updates.offline": {
+    "value": "Ii leat vejolaš gávdnat ođastemiid",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Ii leat vejolaš gávdnat ođastemiid"
+      }
+    ]
+  },
+  "updates.newVersionAvailable": {
+    "value": "Ođđa veršuvdna gávdno: {0}.",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Ođđa veršuvdna gávdno: {0}."
+      }
+    ]
+  },
+  "updates.yourCurrentVersion": {
+    "value": "Dálá veršuvdna dus lea: {0}.",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Dálá veršuvdna dus lea: {0}."
+      }
+    ]
+  },
+  "updates.getUpdate": {
+    "value": "Viečča ođasteami...",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Viečča ođasteami..."
+      }
+    ]
+  },
+  "updates.noThanks": {
+    "value": "In hálit",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "In hálit"
+      }
+    ]
+  },
+  "menuItem.about": {
+    "value": "Dán birra...",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Dán birra..."
+      }
+    ]
+  },
+  "keyboardShortcuts.title": {
+    "value": "Boallobeavdejođanisgeaidnu",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687417653921,
+        "oldValue": "",
+        "newValue": "Boallobeavdejođanisgeaidnu"
+      }
+    ]
+  },
+  "credits.contributors": {
+    "value": "Buktoaddit: {0}",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687418254902,
+        "oldValue": "",
+        "newValue": "Buktoaddit: {0}"
+      }
+    ]
+  },
+  "credits.qualityAssurance": {
+    "value": "Kvalitehtasihkkarastin: {0}",
+    "history": [
+      {
+        "userId": 339406,
+        "timestamp": 1687418254902,
+        "oldValue": "",
+        "newValue": "Kvalitehtasihkkarastin: {0}"
+      }
+    ]
+  }
+}

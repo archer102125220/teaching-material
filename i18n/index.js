@@ -1,5 +1,5 @@
-import en from './locales/en.json';
-import zhTw from './locales/zh-tw.json';
+import en from './locales/json/en.json';
+import zhTw from './locales/json/zh-tw.json';
 
 export const debug = process.env.NODE_ENV === 'development';
 export const defaultLang = 'zh';
@@ -19,7 +19,7 @@ export const locales = [
   // 'zh',
   // 'en'
 ];
-export const langDir = 'i18n/locales';
+export const langDir = 'i18n/json/locales';
 export const detectBrowserLanguage = {
   fallbackLocale,
   useCookie: true,
