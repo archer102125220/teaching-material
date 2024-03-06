@@ -61,6 +61,7 @@ export default defineNuxtConfig({
   css: ['@/style/global.scss', '@/style/animation.scss'],
 
   modules: [
+    '@nuxtjs/sitemap',
     '@nuxtjs/i18n',
     '@pinia/nuxt',
     (options, nuxt) => {
@@ -69,6 +70,11 @@ export default defineNuxtConfig({
       );
     }
   ],
+  // https://welly.tw/serp-rank-optimization/what-is-sitemap
+  // https://nuxtseo.com/sitemap/getting-started/installation
+  site: {
+    url: 'https://teaching-material-five.vercel.app/'
+  },
   i18n: {
     // debug,
     strategy,

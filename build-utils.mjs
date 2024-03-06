@@ -6,13 +6,17 @@ import fs from 'fs';
 
 function buildUtils() {
   try {
-    fs.mkdirSync('.output/server/node_modules/@popperjs');
+    try {
+      fs.mkdirSync('./.output/server/node_modules/@popperjs');
+    } catch (error) {
+      console.log(error);
+    }
     fs.renameSync(
-      '.output/server/node_modules/@sxzz/popperjs-es',
-      '.output/server/node_modules/@popperjs/core'
+      './.output/server/node_modules/@sxzz/popperjs-es',
+      './.output/server/node_modules/@popperjs/core'
     );
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
