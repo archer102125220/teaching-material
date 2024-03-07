@@ -68,25 +68,25 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import PhetioAction from '../../../tandem/js/PhetioAction.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import Transform3 from '../../../dot/js/Transform3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import RequiredOption from '../../../phet-core/js/types/RequiredOption.js';
-import EventType from '../../../tandem/js/EventType.js';
-import PhetioObject from '../../../tandem/js/PhetioObject.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import { Node, Pointer, PressedPressListener, PressListener, PressListenerCallback, PressListenerEvent, PressListenerNullableCallback, PressListenerOptions, scenery, SceneryEvent, TInputListener, TransformTracker } from '../imports.js';
-import Property from '../../../axon/js/Property.js';
+import PhetioAction from '../../tandem/PhetioAction';
+import type TProperty from '../../axon/TProperty';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import Bounds2 from '../../dot/Bounds2';
+import Transform3 from '../../dot/Transform3';
+import Vector2 from '../../dot/Vector2';
+import optionize from '../../phet-core/optionize';
+import type RequiredOption from '../../phet-core/types/RequiredOption';
+import EventType from '../../tandem/EventType';
+import PhetioObject from '../../tandem/PhetioObject';
+import Tandem from '../../tandem/Tandem';
+import { Node, Pointer, type PressedPressListener, PressListener, type PressListenerCallback, type PressListenerEvent, type PressListenerNullableCallback, type PressListenerOptions, scenery, SceneryEvent, type TInputListener, TransformTracker } from '../imports';
+import Property from '../../axon/Property';
 
 // Scratch vectors used to prevent allocations
-const scratchVector2A = new Vector2( 0, 0 );
+const scratchVector2A = new Vector2(0, 0);
 
-type MapPosition = ( point: Vector2 ) => Vector2;
-type OffsetPosition<Listener extends DragListener> = ( point: Vector2, listener: Listener ) => Vector2;
+type MapPosition = (point: Vector2) => Vector2;
+type OffsetPosition<Listener extends DragListener> = (point: Vector2, listener: Listener) => Vector2;
 
 type SelfOptions<Listener extends DragListener> = {
   // If provided, it will be synchronized with the drag position in the model coordinate
@@ -165,7 +165,7 @@ type CreateForwardingListenerOptions = {
 };
 
 export type PressedDragListener = DragListener & PressedPressListener;
-const isPressedListener = ( listener: DragListener ): listener is PressedDragListener => listener.isPressed;
+const isPressedListener = (listener: DragListener): listener is PressedDragListener => listener.isPressed;
 
 export default class DragListener extends PressListener implements TInputListener {
 
@@ -218,11 +218,11 @@ export default class DragListener extends PressListener implements TInputListene
   private _lastInterruptedTouchLikePointer: Pointer | null;
 
   // Emitted on drag. Used for triggering phet-io events to the data stream, see https://github.com/phetsims/scenery/issues/842
-  private _dragAction: PhetioAction<[ PressListenerEvent ]>;
+  private _dragAction: PhetioAction<[PressListenerEvent]>;
 
 
-  public constructor( providedOptions?: DragListenerOptions<PressedDragListener> ) {
-    const options = optionize<DragListenerOptions<PressedDragListener>, SelfOptions<PressedDragListener>, PressListenerOptions<PressedDragListener>>()( {
+  public constructor(providedOptions?: DragListenerOptions<PressedDragListener>) {
+    const options = optionize<DragListenerOptions<PressedDragListener>, SelfOptions<PressedDragListener>, PressListenerOptions<PressedDragListener>>()({
       positionProperty: null,
       start: null,
       end: null,
@@ -243,18 +243,18 @@ export default class DragListener extends PressListener implements TInputListene
       // DragListener by default doesn't allow PhET-iO to trigger drag Action events
       phetioReadOnly: true,
       phetioFeatured: PhetioObject.DEFAULT_OPTIONS.phetioFeatured
-    }, providedOptions );
+    }, providedOptions);
 
-    assert && assert( !( options as unknown as { dragBounds: Bounds2 } ).dragBounds, 'options.dragBounds was removed in favor of options.dragBoundsProperty' );
-    assert && assert( !options.useParentOffset || options.positionProperty, 'If useParentOffset is set, a positionProperty is required' );
+    assert && assert(!(options as unknown as { dragBounds: Bounds2 }).dragBounds, 'options.dragBounds was removed in favor of options.dragBoundsProperty');
+    assert && assert(!options.useParentOffset || options.positionProperty, 'If useParentOffset is set, a positionProperty is required');
 
     assert && assert(
-      !( options.mapPosition && options.dragBoundsProperty ),
+      !(options.mapPosition && options.dragBoundsProperty),
       'Only one of mapPosition and dragBoundsProperty can be provided, as they handle mapping of the drag point'
     );
 
     // @ts-expect-error TODO: See https://github.com/phetsims/phet-core/issues/128
-    super( options );
+    super(options);
 
     this._allowTouchSnag = options.allowTouchSnag;
     this._applyOffset = options.applyOffset;
@@ -265,44 +265,44 @@ export default class DragListener extends PressListener implements TInputListene
     this._positionProperty = options.positionProperty;
     this._mapPosition = options.mapPosition;
     this._offsetPosition = options.offsetPosition;
-    this._dragBoundsProperty = ( options.dragBoundsProperty || new Property( null ) );
+    this._dragBoundsProperty = (options.dragBoundsProperty || new Property(null));
     this._start = options.start;
     this._end = options.end;
     this._canClick = options.canClick;
     this.isUserControlledProperty = this.isPressedProperty;
-    this._globalPoint = new Vector2( 0, 0 );
-    this._localPoint = new Vector2( 0, 0 );
-    this._parentPoint = new Vector2( 0, 0 );
-    this._modelPoint = new Vector2( 0, 0 );
-    this._modelDelta = new Vector2( 0, 0 );
-    this._parentOffset = new Vector2( 0, 0 );
+    this._globalPoint = new Vector2(0, 0);
+    this._localPoint = new Vector2(0, 0);
+    this._parentPoint = new Vector2(0, 0);
+    this._modelPoint = new Vector2(0, 0);
+    this._modelDelta = new Vector2(0, 0);
+    this._parentOffset = new Vector2(0, 0);
     this._transformTracker = null;
-    this._transformTrackerListener = this.ancestorTransformed.bind( this );
+    this._transformTrackerListener = this.ancestorTransformed.bind(this);
     this._lastInterruptedTouchLikePointer = null;
 
-    this._dragAction = new PhetioAction( event => {
-      assert && assert( isPressedListener( this ) );
+    this._dragAction = new PhetioAction(event => {
+      assert && assert(isPressedListener(this));
       const pressedListener = this as PressedDragListener;
 
       const point = pressedListener.pointer.point;
 
-      if ( point ) {
+      if (point) {
         // This is done first, before the drag listener is called (from the prototype drag call)
-        if ( !this._globalPoint.equals( point ) ) {
-          this.reposition( point );
+        if (!this._globalPoint.equals(point)) {
+          this.reposition(point);
         }
       }
 
-      PressListener.prototype.drag.call( this, event );
+      PressListener.prototype.drag.call(this, event);
     }, {
-      parameters: [ { name: 'event', phetioType: SceneryEvent.SceneryEventIO } ],
+      parameters: [{ name: 'event', phetioType: SceneryEvent.SceneryEventIO }],
       phetioFeatured: options.phetioFeatured,
-      tandem: options.tandem.createTandem( 'dragAction' ),
+      tandem: options.tandem.createTandem('dragAction'),
       phetioHighFrequency: true,
       phetioDocumentation: 'Emits whenever a drag occurs with an SceneryEventIO argument.',
       phetioReadOnly: options.phetioReadOnly,
       phetioEventType: EventType.USER
-    } );
+    });
   }
 
   /**
@@ -316,15 +316,15 @@ export default class DragListener extends PressListener implements TInputListene
    * @param [callback] - to be run at the end of the function, but only on success
    * @returns success - Returns whether the press was actually started
    */
-  public override press( event: PressListenerEvent, targetNode?: Node, callback?: () => void ): boolean {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DragListener press' );
+  public override press(event: PressListenerEvent, targetNode?: Node, callback?: () => void): boolean {
+    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener press');
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-    const success = super.press( event, targetNode, () => {
-      sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DragListener successful press' );
+    const success = super.press(event, targetNode, () => {
+      sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener successful press');
       sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-      assert && assert( isPressedListener( this ) );
+      assert && assert(isPressedListener(this));
       const pressedListener = this as PressedDragListener;
 
       // signify that this listener is reserved for dragging so that other listeners can change
@@ -333,28 +333,28 @@ export default class DragListener extends PressListener implements TInputListene
 
       this.attachTransformTracker();
 
-      assert && assert( pressedListener.pointer.point !== null );
+      assert && assert(pressedListener.pointer.point !== null);
       const point = pressedListener.pointer.point;
 
       // Compute the parent point corresponding to the pointer's position
-      const parentPoint = this.globalToParentPoint( this._localPoint.set( point ) );
+      const parentPoint = this.globalToParentPoint(this._localPoint.set(point));
 
-      if ( this._useParentOffset ) {
-        this.modelToParentPoint( this._parentOffset.set( this._positionProperty!.value ) ).subtract( parentPoint );
+      if (this._useParentOffset) {
+        this.modelToParentPoint(this._parentOffset.set(this._positionProperty!.value)).subtract(parentPoint);
       }
 
       // Set the local point
-      this.parentToLocalPoint( parentPoint );
+      this.parentToLocalPoint(parentPoint);
 
-      this.reposition( point );
+      this.reposition(point);
 
       // Notify after positioning and other changes
-      this._start && this._start( event, pressedListener );
+      this._start && this._start(event, pressedListener);
 
       callback && callback();
 
       sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
-    } );
+    });
 
     sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
 
@@ -370,18 +370,18 @@ export default class DragListener extends PressListener implements TInputListene
    * @param [event] - scenery event if there was one
    * @param [callback] - called at the end of the release
    */
-  public override release( event?: PressListenerEvent, callback?: () => void ): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DragListener release' );
+  public override release(event?: PressListenerEvent, callback?: () => void): void {
+    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener release');
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-    super.release( event, () => {
+    super.release(event, () => {
       this.detachTransformTracker();
 
       // Notify after the rest of release is called in order to prevent it from triggering interrupt().
-      this._end && this._end( event || null, this as PressedDragListener );
+      this._end && this._end(event || null, this as PressedDragListener);
 
       callback && callback();
-    } );
+    });
 
     sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
   }
@@ -402,24 +402,24 @@ export default class DragListener extends PressListener implements TInputListene
    * components that have drag functionality but can still be activated with a single click event.
    * (scenery-internal) (part of the scenery listener API)
    */
-  public override click( event: SceneryEvent<MouseEvent>, callback?: () => void ): boolean {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DragListener click' );
+  public override click(event: SceneryEvent<MouseEvent>, callback?: () => void): boolean {
+    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener click');
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-    const success = super.click( event, () => {
-      sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DragListener successful press' );
+    const success = super.click(event, () => {
+      sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener successful press');
       sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
       // notify that we have started a change
-      this._start && this._start( event, this as PressedDragListener );
+      this._start && this._start(event, this as PressedDragListener);
 
       callback && callback();
 
       // notify that we have finished a 'drag' activation through click
-      this._end && this._end( event, this as PressedDragListener );
+      this._end && this._end(event, this as PressedDragListener);
 
       sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
-    } );
+    });
 
     sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
 
@@ -429,22 +429,22 @@ export default class DragListener extends PressListener implements TInputListene
   /**
    * Called when move events are fired on the attached pointer listener during a drag.
    */
-  public override drag( event: PressListenerEvent ): void {
-    assert && assert( isPressedListener( this ) );
+  public override drag(event: PressListenerEvent): void {
+    assert && assert(isPressedListener(this));
     const pressedListener = this as PressedDragListener;
 
     const point = pressedListener.pointer.point;
 
     // Ignore global moves that have zero length (Chrome might autofire, see
     // https://code.google.com/p/chromium/issues/detail?id=327114)
-    if ( !point || this._globalPoint.equals( point ) ) {
+    if (!point || this._globalPoint.equals(point)) {
       return;
     }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DragListener drag' );
+    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener drag');
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-    this._dragAction.execute( event );
+    this._dragAction.execute(event);
 
     sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
   }
@@ -454,12 +454,12 @@ export default class DragListener extends PressListener implements TInputListene
    *
    * Should be safe to be called externally with an event.
    */
-  public tryTouchSnag( event: PressListenerEvent ): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DragListener tryTouchSnag' );
+  public tryTouchSnag(event: PressListenerEvent): void {
+    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener tryTouchSnag');
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-    if ( this._allowTouchSnag && ( !this.attach || !event.pointer.isAttached() ) ) {
-      this.press( event );
+    if (this._allowTouchSnag && (!this.attach || !event.pointer.isAttached())) {
+      this.press(event);
     }
 
     sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
@@ -517,16 +517,16 @@ export default class DragListener extends PressListener implements TInputListene
    *
    * Should be overridden if a custom transformation is needed.
    */
-  protected globalToParentPoint( globalPoint: Vector2 ): Vector2 {
-    assert && assert( isPressedListener( this ) );
+  protected globalToParentPoint(globalPoint: Vector2): Vector2 {
+    assert && assert(isPressedListener(this));
     const pressedListener = this as PressedDragListener;
 
     let referenceResult: Vector2 | undefined;
-    if ( assert ) {
-      referenceResult = pressedListener.pressedTrail.globalToParentPoint( globalPoint );
+    if (assert) {
+      referenceResult = pressedListener.pressedTrail.globalToParentPoint(globalPoint);
     }
-    pressedListener.pressedTrail.getParentTransform().getInverse().multiplyVector2( globalPoint );
-    assert && assert( globalPoint.equals( referenceResult! ) );
+    pressedListener.pressedTrail.getParentTransform().getInverse().multiplyVector2(globalPoint);
+    assert && assert(globalPoint.equals(referenceResult!));
     return globalPoint;
   }
 
@@ -537,16 +537,16 @@ export default class DragListener extends PressListener implements TInputListene
    *
    * Should be overridden if a custom transformation is needed.
    */
-  protected parentToLocalPoint( parentPoint: Vector2 ): Vector2 {
-    assert && assert( isPressedListener( this ) );
+  protected parentToLocalPoint(parentPoint: Vector2): Vector2 {
+    assert && assert(isPressedListener(this));
     const pressedListener = this as PressedDragListener;
 
     let referenceResult: Vector2;
-    if ( assert ) {
-      referenceResult = pressedListener.pressedTrail.lastNode().parentToLocalPoint( parentPoint );
+    if (assert) {
+      referenceResult = pressedListener.pressedTrail.lastNode().parentToLocalPoint(parentPoint);
     }
-    pressedListener.pressedTrail.lastNode().getTransform().getInverse().multiplyVector2( parentPoint );
-    assert && assert( parentPoint.equals( referenceResult! ) );
+    pressedListener.pressedTrail.lastNode().getTransform().getInverse().multiplyVector2(parentPoint);
+    assert && assert(parentPoint.equals(referenceResult!));
     return parentPoint;
   }
 
@@ -557,16 +557,16 @@ export default class DragListener extends PressListener implements TInputListene
    *
    * Should be overridden if a custom transformation is needed.
    */
-  protected localToParentPoint( localPoint: Vector2 ): Vector2 {
-    assert && assert( isPressedListener( this ) );
+  protected localToParentPoint(localPoint: Vector2): Vector2 {
+    assert && assert(isPressedListener(this));
     const pressedListener = this as PressedDragListener;
 
     let referenceResult: Vector2;
-    if ( assert ) {
-      referenceResult = pressedListener.pressedTrail.lastNode().localToParentPoint( localPoint );
+    if (assert) {
+      referenceResult = pressedListener.pressedTrail.lastNode().localToParentPoint(localPoint);
     }
-    pressedListener.pressedTrail.lastNode().getMatrix().multiplyVector2( localPoint );
-    assert && assert( localPoint.equals( referenceResult! ) );
+    pressedListener.pressedTrail.lastNode().getMatrix().multiplyVector2(localPoint);
+    assert && assert(localPoint.equals(referenceResult!));
     return localPoint;
   }
 
@@ -578,11 +578,11 @@ export default class DragListener extends PressListener implements TInputListene
    * Should be overridden if a custom transformation is needed. Note that by default, unless a transform is provided,
    * the parent coordinate frame will be the same as the model coordinate frame.
    */
-  protected parentToModelPoint( parentPoint: Vector2 ): Vector2 {
-    if ( this._transform ) {
+  protected parentToModelPoint(parentPoint: Vector2): Vector2 {
+    if (this._transform) {
       const transform = this._transform instanceof Transform3 ? this._transform : this._transform.value;
 
-      transform.getInverse().multiplyVector2( parentPoint );
+      transform.getInverse().multiplyVector2(parentPoint);
     }
     return parentPoint;
   }
@@ -595,11 +595,11 @@ export default class DragListener extends PressListener implements TInputListene
    * Should be overridden if a custom transformation is needed. Note that by default, unless a transform is provided,
    * the parent coordinate frame will be the same as the model coordinate frame.
    */
-  protected modelToParentPoint( modelPoint: Vector2 ): Vector2 {
-    if ( this._transform ) {
+  protected modelToParentPoint(modelPoint: Vector2): Vector2 {
+    if (this._transform) {
       const transform = this._transform instanceof Transform3 ? this._transform : this._transform.value;
 
-      transform.getMatrix().multiplyVector2( modelPoint );
+      transform.getMatrix().multiplyVector2(modelPoint);
     }
     return modelPoint;
   }
@@ -615,12 +615,12 @@ export default class DragListener extends PressListener implements TInputListene
    *
    * @returns - A point in the model coordinate frame
    */
-  protected mapModelPoint( modelPoint: Vector2 ): Vector2 {
-    if ( this._mapPosition ) {
-      return this._mapPosition( modelPoint );
+  protected mapModelPoint(modelPoint: Vector2): Vector2 {
+    if (this._mapPosition) {
+      return this._mapPosition(modelPoint);
     }
-    else if ( this._dragBoundsProperty.value ) {
-      return this._dragBoundsProperty.value.closestPointTo( modelPoint );
+    else if (this._dragBoundsProperty.value) {
+      return this._dragBoundsProperty.value.closestPointTo(modelPoint);
     }
     else {
       return modelPoint;
@@ -630,21 +630,21 @@ export default class DragListener extends PressListener implements TInputListene
   /**
    * Mutates the parentPoint given to account for the initial pointer's offset from the drag target's origin.
    */
-  protected applyParentOffset( parentPoint: Vector2 ): void {
-    if ( this._offsetPosition ) {
-      parentPoint.add( this._offsetPosition( parentPoint, this as PressedDragListener ) );
+  protected applyParentOffset(parentPoint: Vector2): void {
+    if (this._offsetPosition) {
+      parentPoint.add(this._offsetPosition(parentPoint, this as PressedDragListener));
     }
 
     // Don't apply any offset if applyOffset is false
-    if ( this._applyOffset ) {
-      if ( this._useParentOffset ) {
-        parentPoint.add( this._parentOffset );
+    if (this._applyOffset) {
+      if (this._useParentOffset) {
+        parentPoint.add(this._parentOffset);
       }
       else {
         // Add the difference between our local origin (in the parent coordinate frame) and the local point (in the same
         // parent coordinate frame).
-        parentPoint.subtract( this.localToParentPoint( scratchVector2A.set( this._localPoint ) ) );
-        parentPoint.add( this.localToParentPoint( scratchVector2A.setXY( 0, 0 ) ) );
+        parentPoint.subtract(this.localToParentPoint(scratchVector2A.set(this._localPoint)));
+        parentPoint.add(this.localToParentPoint(scratchVector2A.setXY(0, 0)));
       }
     }
   }
@@ -655,35 +655,35 @@ export default class DragListener extends PressListener implements TInputListene
    * Should be called when something that changes the output positions of the drag occurs (most often, a drag event
    * itself).
    */
-  public reposition( globalPoint: Vector2 ): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DragListener reposition' );
+  public reposition(globalPoint: Vector2): void {
+    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener reposition');
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-    assert && assert( isPressedListener( this ) );
+    assert && assert(isPressedListener(this));
     const pressedListener = this as PressedDragListener;
 
-    this._globalPoint.set( globalPoint );
+    this._globalPoint.set(globalPoint);
 
     // Update parentPoint mutably.
-    this.applyParentOffset( this.globalToParentPoint( this._parentPoint.set( globalPoint ) ) );
+    this.applyParentOffset(this.globalToParentPoint(this._parentPoint.set(globalPoint)));
 
     // To compute the delta (new - old), we first mutate it to (-old)
-    this._modelDelta.set( this._modelPoint ).negate();
+    this._modelDelta.set(this._modelPoint).negate();
 
     // Compute the modelPoint from the parentPoint
-    this._modelPoint.set( this.mapModelPoint( this.parentToModelPoint( scratchVector2A.set( this._parentPoint ) ) ) );
+    this._modelPoint.set(this.mapModelPoint(this.parentToModelPoint(scratchVector2A.set(this._parentPoint))));
 
     // Complete the delta computation
-    this._modelDelta.add( this._modelPoint );
+    this._modelDelta.add(this._modelPoint);
 
     // Apply any mapping changes back to the parent point
-    this.modelToParentPoint( this._parentPoint.set( this._modelPoint ) );
+    this.modelToParentPoint(this._parentPoint.set(this._modelPoint));
 
-    if ( this._translateNode ) {
+    if (this._translateNode) {
       pressedListener.pressedTrail.lastNode().translation = this._parentPoint;
     }
 
-    if ( this._positionProperty ) {
+    if (this._positionProperty) {
       this._positionProperty.value = this._modelPoint.copy(); // Include an extra reference so that it will change.
     }
 
@@ -695,9 +695,9 @@ export default class DragListener extends PressListener implements TInputListene
    *
    * NOTE: Do not call directly. See the press method instead.
    */
-  public touchenter( event: PressListenerEvent ): void {
-    if ( event.pointer.isDownProperty.value ) {
-      this.tryTouchSnag( event );
+  public touchenter(event: PressListenerEvent): void {
+    if (event.pointer.isDownProperty.value) {
+      this.tryTouchSnag(event);
     }
   }
 
@@ -706,21 +706,21 @@ export default class DragListener extends PressListener implements TInputListene
    *
    * NOTE: Do not call directly. See the press method instead.
    */
-  public touchmove( event: PressListenerEvent ): void {
-    this.tryTouchSnag( event );
+  public touchmove(event: PressListenerEvent): void {
+    this.tryTouchSnag(event);
   }
 
   /**
    * Called when an ancestor's transform has changed (when trackAncestors is true).
    */
   private ancestorTransformed(): void {
-    assert && assert( isPressedListener( this ) );
+    assert && assert(isPressedListener(this));
     const pressedListener = this as PressedDragListener;
     const point = pressedListener.pointer.point;
 
-    if ( point ) {
+    if (point) {
       // Reposition based on the current point.
-      this.reposition( point );
+      this.reposition(point);
     }
   }
 
@@ -728,12 +728,12 @@ export default class DragListener extends PressListener implements TInputListene
    * Attaches our transform tracker (begins listening to the ancestor transforms)
    */
   private attachTransformTracker(): void {
-    assert && assert( isPressedListener( this ) );
+    assert && assert(isPressedListener(this));
     const pressedListener = this as PressedDragListener;
 
-    if ( this._trackAncestors ) {
-      this._transformTracker = new TransformTracker( pressedListener.pressedTrail.copy().removeDescendant() );
-      this._transformTracker.addListener( this._transformTrackerListener );
+    if (this._trackAncestors) {
+      this._transformTracker = new TransformTracker(pressedListener.pressedTrail.copy().removeDescendant());
+      this._transformTracker.addListener(this._transformTrackerListener);
     }
   }
 
@@ -741,8 +741,8 @@ export default class DragListener extends PressListener implements TInputListene
    * Detaches our transform tracker (stops listening to the ancestor transforms)
    */
   private detachTransformTracker(): void {
-    if ( this._transformTracker ) {
-      this._transformTracker.removeListener( this._transformTrackerListener );
+    if (this._transformTracker) {
+      this._transformTracker.removeListener(this._transformTrackerListener);
       this._transformTracker.dispose();
       this._transformTracker = null;
     }
@@ -760,11 +760,11 @@ export default class DragListener extends PressListener implements TInputListene
   /**
    * Sets the drag transform of the listener.
    */
-  public setTransform( transform: Transform3 | TReadOnlyProperty<Transform3> | null ): void {
+  public setTransform(transform: Transform3 | TReadOnlyProperty<Transform3> | null): void {
     this._transform = transform;
   }
 
-  public set transform( transform: Transform3 | TReadOnlyProperty<Transform3> | null ) { this.setTransform( transform ); }
+  public set transform(transform: Transform3 | TReadOnlyProperty<Transform3> | null) { this.setTransform(transform); }
 
   public get transform(): Transform3 | TReadOnlyProperty<Transform3> | null { return this.getTransform(); }
 
@@ -784,7 +784,7 @@ export default class DragListener extends PressListener implements TInputListene
    * This can be called manually, but can also be called through node.interruptSubtreeInput().
    */
   public override interrupt(): void {
-    if ( this.pointer && this.pointer.isTouchLike() ) {
+    if (this.pointer && this.pointer.isTouchLike()) {
       this._lastInterruptedTouchLikePointer = this.pointer;
     }
 
@@ -794,19 +794,19 @@ export default class DragListener extends PressListener implements TInputListene
   /**
    * Returns whether a press can be started with a particular event.
    */
-  public override canPress( event: PressListenerEvent ): boolean {
-    if ( event.pointer === this._lastInterruptedTouchLikePointer ) {
+  public override canPress(event: PressListenerEvent): boolean {
+    if (event.pointer === this._lastInterruptedTouchLikePointer) {
       return false;
     }
 
-    return super.canPress( event );
+    return super.canPress(event);
   }
 
   /**
    * Disposes the listener, releasing references. It should not be used after this.
    */
   public override dispose(): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DragListener dispose' );
+    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener dispose');
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
     this._dragAction.dispose();
@@ -824,27 +824,27 @@ export default class DragListener extends PressListener implements TInputListene
    *
    * See https://github.com/phetsims/scenery/issues/639
    */
-  public static createForwardingListener( down: ( event: PressListenerEvent ) => void,
-                                          providedOptions?: CreateForwardingListenerOptions ): TInputListener {
+  public static createForwardingListener(down: (event: PressListenerEvent) => void,
+    providedOptions?: CreateForwardingListenerOptions): TInputListener {
 
-    const options = optionize<CreateForwardingListenerOptions, CreateForwardingListenerOptions>()( {
+    const options = optionize<CreateForwardingListenerOptions, CreateForwardingListenerOptions>()({
       allowTouchSnag: true // see https://github.com/phetsims/scenery/issues/999
-    }, providedOptions );
+    }, providedOptions);
 
     return {
-      down( event ) {
-        if ( event.canStartPress() ) {
-          down( event );
+      down(event) {
+        if (event.canStartPress()) {
+          down(event);
         }
       },
-      touchenter( event ) {
-        options.allowTouchSnag && this.down!( event );
+      touchenter(event) {
+        options.allowTouchSnag && this.down!(event);
       },
-      touchmove( event ) {
-        options.allowTouchSnag && this.down!( event );
+      touchmove(event) {
+        options.allowTouchSnag && this.down!(event);
       }
     };
   }
 }
 
-scenery.register( 'DragListener', DragListener );
+scenery.register('DragListener', DragListener);

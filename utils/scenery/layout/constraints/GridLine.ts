@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Pool from '../../../../phet-core/js/Pool.js';
-import { GridCell, LayoutLine, scenery } from '../../imports.js';
+import Pool from '../../../phet-core/Pool';
+import { GridCell, LayoutLine, scenery } from '../../imports';
 
 export default class GridLine extends LayoutLine {
 
@@ -19,16 +19,16 @@ export default class GridLine extends LayoutLine {
   /**
    * (scenery-internal)
    */
-  public constructor( index: number, cells: GridCell[], grow: number ) {
+  public constructor(index: number, cells: GridCell[], grow: number) {
     super();
 
-    this.initialize( index, cells, grow );
+    this.initialize(index, cells, grow);
   }
 
   /**
    * (scenery-internal)
    */
-  public initialize( index: number, cells: GridCell[], grow: number ): this {
+  public initialize(index: number, cells: GridCell[], grow: number): this {
     this.index = index;
 
     this.cells = cells;
@@ -44,7 +44,7 @@ export default class GridLine extends LayoutLine {
    * (scenery-internal)
    */
   public freeToPool(): void {
-    GridLine.pool.freeToPool( this );
+    GridLine.pool.freeToPool(this);
   }
 
   public clean(): void {
@@ -55,9 +55,9 @@ export default class GridLine extends LayoutLine {
   /**
    * (scenery-internal)
    */
-  public static readonly pool = new Pool( GridLine, {
-    defaultArguments: [ 0, [], 0 ]
-  } );
+  public static readonly pool = new Pool(GridLine, {
+    defaultArguments: [0, [], 0]
+  });
 }
 
-scenery.register( 'GridLine', GridLine );
+scenery.register('GridLine', GridLine);

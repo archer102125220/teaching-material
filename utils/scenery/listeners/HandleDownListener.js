@@ -9,7 +9,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { scenery } from '../imports.js';
+import { scenery } from '../imports';
 
 class HandleDownlistener {
   /**
@@ -18,10 +18,10 @@ class HandleDownlistener {
    *
    * @param {SceneryEvent} event
    */
-  down( event ) {
+  down(event) {
     event.handle();
   }
 }
 
-scenery.register( 'HandleDownlistener', HandleDownlistener );
+scenery.register('HandleDownlistener', HandleDownlistener);
 export default HandleDownlistener;

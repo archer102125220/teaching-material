@@ -7,7 +7,7 @@
  */
 
 import tandemNamespace from './tandemNamespace';
-import TinyProperty from '../../axon/js/TinyProperty';
+import TinyProperty from '../axon/TinyProperty';
 
 const isSettingPhetioStateProperty = new TinyProperty(false);
 

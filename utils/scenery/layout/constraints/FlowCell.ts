@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { ExternalFlowConfigurableOptions, FlowConfigurable, FlowConstraint, FLOW_CONFIGURABLE_OPTION_KEYS, LayoutAlign, LayoutProxy, MarginLayoutCell, Node, scenery } from '../../imports.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import optionize from '../../../../phet-core/js/optionize.js';
+import { type ExternalFlowConfigurableOptions, FlowConfigurable, FlowConstraint, FLOW_CONFIGURABLE_OPTION_KEYS, LayoutAlign, LayoutProxy, MarginLayoutCell, Node, scenery } from '../../imports';
+import type StrictOmit from '../../../phet-core/types/StrictOmit';
+import optionize from '../../../phet-core/optionize';
 
 const FLOW_CELL_KEYS = [
   ...FLOW_CONFIGURABLE_OPTION_KEYS,
@@ -23,7 +23,7 @@ type SelfOptions = {
 
 export type FlowCellOptions = SelfOptions & StrictOmit<ExternalFlowConfigurableOptions, 'orientation'>;
 
-export default class FlowCell extends FlowConfigurable( MarginLayoutCell ) {
+export default class FlowCell extends FlowConfigurable(MarginLayoutCell) {
 
   // (scenery-internal) Set during FlowConstraint layout
   public size = 0;
@@ -33,8 +33,8 @@ export default class FlowCell extends FlowConfigurable( MarginLayoutCell ) {
 
   private readonly flowConstraint: FlowConstraint;
 
-  public constructor( constraint: FlowConstraint, node: Node, proxy: LayoutProxy | null ) {
-    super( constraint, node, proxy );
+  public constructor(constraint: FlowConstraint, node: Node, proxy: LayoutProxy | null) {
+    super(constraint, node, proxy);
 
     this.flowConstraint = constraint;
 
@@ -58,28 +58,28 @@ export default class FlowCell extends FlowConfigurable( MarginLayoutCell ) {
   }
 
   protected override onLayoutOptionsChange(): void {
-    if ( this.node.layoutOptions ) {
-      this.setOptions( this.node.layoutOptions as ExternalFlowConfigurableOptions );
+    if (this.node.layoutOptions) {
+      this.setOptions(this.node.layoutOptions as ExternalFlowConfigurableOptions);
     }
 
     super.onLayoutOptionsChange();
   }
 
-  private setOptions( providedOptions?: ExternalFlowConfigurableOptions ): void {
+  private setOptions(providedOptions?: ExternalFlowConfigurableOptions): void {
 
-    const options = optionize<FlowCellOptions, SelfOptions, ExternalFlowConfigurableOptions>()( {
+    const options = optionize<FlowCellOptions, SelfOptions, ExternalFlowConfigurableOptions>()({
       isSeparator: false
-    }, providedOptions );
+    }, providedOptions);
 
-    assert && Object.keys( options ).forEach( key => {
-      assert && assert( FLOW_CELL_KEYS.includes( key ), `Cannot provide key ${key} to a FlowCell's layoutOptions. Perhaps this is a Grid-style layout option?` );
-    } );
+    assert && Object.keys(options).forEach(key => {
+      assert && assert(FLOW_CELL_KEYS.includes(key), `Cannot provide key ${key} to a FlowCell's layoutOptions. Perhaps this is a Grid-style layout option?`);
+    });
 
     this._isSeparator = options.isSeparator;
 
     this.setConfigToInherit();
-    this.mutateConfigurable( options );
+    this.mutateConfigurable(options);
   }
 }
 
-scenery.register( 'FlowCell', FlowCell );
+scenery.register('FlowCell', FlowCell);

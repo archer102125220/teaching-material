@@ -9,19 +9,19 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import CallbackTimer from '../../../axon/js/CallbackTimer.js';
-import Emitter from '../../../axon/js/Emitter.js';
-import TEmitter from '../../../axon/js/TEmitter.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import EventType from '../../../tandem/js/EventType.js';
-import PhetioObject from '../../../tandem/js/PhetioObject.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import NullableIO from '../../../tandem/js/types/NullableIO.js';
-import { TInputListener, Node, PressListener, PressListenerOptions, scenery, SceneryEvent } from '../imports.js';
+import CallbackTimer from '../../axon/CallbackTimer';
+import Emitter from '../../axon/Emitter';
+import type TEmitter from '../../axon/TEmitter';
+import optionize from '../../phet-core/optionize';
+import EventType from '../../tandem/EventType';
+import PhetioObject from '../../tandem/PhetioObject';
+import Tandem from '../../tandem/Tandem';
+import NullableIO from '../../tandem/types/NullableIO';
+import { type TInputListener, Node, PressListener, type PressListenerOptions, scenery, SceneryEvent } from '../imports';
 
 type SelfOptions = {
   // Called as fire() when the button is fired.
-  fire?: ( event: SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent> ) => void;
+  fire?: (event: SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent>) => void;
 
   // If true, the button will fire when the button is pressed. If false, the button will fire when the
   // button is released while the pointer is over the button.
@@ -39,11 +39,11 @@ export type FireListenerOptions<Listener extends FireListener> = SelfOptions & P
 export default class FireListener extends PressListener implements TInputListener {
 
   private _fireOnDown: boolean;
-  private firedEmitter: TEmitter<[ SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent> | null ]>;
+  private firedEmitter: TEmitter<[SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent> | null]>;
   private _timer?: CallbackTimer;
 
-  public constructor( providedOptions?: FireListenerOptions<FireListener> ) {
-    const options = optionize<FireListenerOptions<FireListener>, SelfOptions, PressListenerOptions<FireListener>>()( {
+  public constructor(providedOptions?: FireListenerOptions<FireListener>) {
+    const options = optionize<FireListenerOptions<FireListener>, SelfOptions, PressListenerOptions<FireListener>>()({
       fire: _.noop,
       fireOnDown: false,
       fireOnHold: false,
@@ -55,37 +55,37 @@ export default class FireListener extends PressListener implements TInputListene
 
       // Though FireListener is not instrumented, declare these here to support properly passing this to children
       phetioReadOnly: PhetioObject.DEFAULT_OPTIONS.phetioReadOnly
-    }, providedOptions );
+    }, providedOptions);
 
-    assert && assert( typeof options.fire === 'function', 'The fire callback should be a function' );
-    assert && assert( typeof options.fireOnDown === 'boolean', 'fireOnDown should be a boolean' );
+    assert && assert(typeof options.fire === 'function', 'The fire callback should be a function');
+    assert && assert(typeof options.fireOnDown === 'boolean', 'fireOnDown should be a boolean');
 
     // @ts-expect-error TODO see https://github.com/phetsims/phet-core/issues/128
-    super( options );
+    super(options);
 
     this._fireOnDown = options.fireOnDown;
 
-    this.firedEmitter = new Emitter<[ SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent> | null ]>( {
-      tandem: options.tandem.createTandem( 'firedEmitter' ),
+    this.firedEmitter = new Emitter<[SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent> | null]>({
+      tandem: options.tandem.createTandem('firedEmitter'),
       phetioEventType: EventType.USER,
       phetioReadOnly: options.phetioReadOnly,
       phetioDocumentation: 'Emits at the time that the listener fires',
-      parameters: [ {
+      parameters: [{
         name: 'event',
-        phetioType: NullableIO( SceneryEvent.SceneryEventIO )
-      } ]
-    } );
+        phetioType: NullableIO(SceneryEvent.SceneryEventIO)
+      }]
+    });
     // @ts-expect-error TODO Emitter https://github.com/phetsims/scenery/issues/1581
-    this.firedEmitter.addListener( options.fire );
+    this.firedEmitter.addListener(options.fire);
 
     // Create a timer to handle the optional fire-on-hold feature.
     // When that feature is enabled, calling this.fire is delegated to the timer.
-    if ( options.fireOnHold ) {
-      this._timer = new CallbackTimer( {
-        callback: this.fire.bind( this, null ), // Pass null for fire-on-hold events
+    if (options.fireOnHold) {
+      this._timer = new CallbackTimer({
+        callback: this.fire.bind(this, null), // Pass null for fire-on-hold events
         delay: options.fireOnHoldDelay,
         interval: options.fireOnHoldInterval
-      } );
+      });
     }
   }
 
@@ -94,11 +94,11 @@ export default class FireListener extends PressListener implements TInputListene
    *
    * NOTE: This is safe to call on the listener externally.
    */
-  public fire( event: SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent> | null ): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'FireListener fire' );
+  public fire(event: SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent> | null): void {
+    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('FireListener fire');
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-    this.firedEmitter.emit( event );
+    this.firedEmitter.emit(event);
 
     sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
   }
@@ -115,17 +115,17 @@ export default class FireListener extends PressListener implements TInputListene
    * @param [callback] - to be run at the end of the function, but only on success
    * @returns success - Returns whether the press was actually started
    */
-  public override press( event: SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent>, targetNode?: Node, callback?: () => void ): boolean {
-    return super.press( event, targetNode, () => {
+  public override press(event: SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent>, targetNode?: Node, callback?: () => void): boolean {
+    return super.press(event, targetNode, () => {
       // This function is only called on success
-      if ( this._fireOnDown ) {
-        this.fire( event );
+      if (this._fireOnDown) {
+        this.fire(event);
       }
-      if ( this._timer ) {
+      if (this._timer) {
         this._timer.start();
       }
       callback && callback();
-    } );
+    });
   }
 
   /**
@@ -138,18 +138,18 @@ export default class FireListener extends PressListener implements TInputListene
    * @param [event] - scenery event if there was one
    * @param [callback] - called at the end of the release
    */
-  public override release( event?: SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent>, callback?: () => void ): void {
-    super.release( event, () => {
+  public override release(event?: SceneryEvent<MouseEvent | TouchEvent | PointerEvent | FocusEvent | KeyboardEvent>, callback?: () => void): void {
+    super.release(event, () => {
       // Notify after the rest of release is called in order to prevent it from triggering interrupt().
       const shouldFire = !this._fireOnDown && this.isHoveringProperty.value && !this.interrupted;
-      if ( this._timer ) {
-        this._timer.stop( shouldFire );
+      if (this._timer) {
+        this._timer.stop(shouldFire);
       }
-      else if ( shouldFire ) {
-        this.fire( event || null );
+      else if (shouldFire) {
+        this.fire(event || null);
       }
       callback && callback();
-    } );
+    });
   }
 
   /**
@@ -166,15 +166,15 @@ export default class FireListener extends PressListener implements TInputListene
    * @param [event]
    * @param [callback] - called at the end of the click
    */
-  public override click( event: SceneryEvent<MouseEvent> | null, callback?: () => void ): boolean {
-    return super.click( event, () => {
+  public override click(event: SceneryEvent<MouseEvent> | null, callback?: () => void): boolean {
+    return super.click(event, () => {
 
       // don't click if listener was interrupted before this callback
-      if ( !this.interrupted ) {
-        this.fire( event );
+      if (!this.interrupted) {
+        this.fire(event);
       }
       callback && callback();
-    } );
+    });
   }
 
   /**
@@ -188,7 +188,7 @@ export default class FireListener extends PressListener implements TInputListene
   public override interrupt(): void {
     super.interrupt();
 
-    this._timer && this._timer.stop( false ); // Stop the timer, don't fire if we haven't already
+    this._timer && this._timer.stop(false); // Stop the timer, don't fire if we haven't already
   }
 
   public override dispose(): void {
@@ -199,4 +199,4 @@ export default class FireListener extends PressListener implements TInputListene
   }
 }
 
-scenery.register( 'FireListener', FireListener );
+scenery.register('FireListener', FireListener);

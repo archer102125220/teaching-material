@@ -34,15 +34,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import optionize from '../../../../phet-core/js/optionize.js';
-import Orientation from '../../../../phet-core/js/Orientation.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import { FLOW_CONSTRAINT_OPTION_KEYS, FlowCell, FlowConstraint, FlowConstraintOptions, HorizontalLayoutAlign, HorizontalLayoutJustification, LAYOUT_NODE_OPTION_KEYS, LayoutAlign, LayoutNode, LayoutNodeOptions, LayoutOrientation, MarginLayoutCell, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery, SceneryConstants, SIZABLE_OPTION_KEYS, VerticalLayoutAlign, VerticalLayoutJustification } from '../../imports.js';
+import optionize from '../../../phet-core/optionize';
+import Orientation from '../../../phet-core/Orientation';
+import type StrictOmit from '../../../phet-core/types/StrictOmit';
+import { FLOW_CONSTRAINT_OPTION_KEYS, FlowCell, FlowConstraint, type FlowConstraintOptions, type HorizontalLayoutAlign, type HorizontalLayoutJustification, LAYOUT_NODE_OPTION_KEYS, LayoutAlign, LayoutNode, type LayoutNodeOptions, type LayoutOrientation, MarginLayoutCell, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery, SceneryConstants, SIZABLE_OPTION_KEYS, type VerticalLayoutAlign, type VerticalLayoutJustification } from '../../imports';
 
 // FlowBox-specific options that can be passed in the constructor or mutate() call.
 const FLOWBOX_OPTION_KEYS = [
   ...LAYOUT_NODE_OPTION_KEYS,
-  ...FLOW_CONSTRAINT_OPTION_KEYS.filter( key => key !== 'excludeInvisible' )
+  ...FLOW_CONSTRAINT_OPTION_KEYS.filter(key => key !== 'excludeInvisible')
 ];
 
 const DEFAULT_OPTIONS = {
@@ -68,24 +68,24 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
   private readonly _cellMap: Map<Node, FlowCell> = new Map<Node, FlowCell>();
 
   // Listeners that we'll need to remove
-  private readonly onChildInserted: ( node: Node, index: number ) => void;
-  private readonly onChildRemoved: ( node: Node ) => void;
-  private readonly onChildrenReordered: ( minChangeIndex: number, maxChangeIndex: number ) => void;
+  private readonly onChildInserted: (node: Node, index: number) => void;
+  private readonly onChildRemoved: (node: Node) => void;
+  private readonly onChildrenReordered: (minChangeIndex: number, maxChangeIndex: number) => void;
   private readonly onChildrenChanged: () => void;
 
-  public constructor( providedOptions?: FlowBoxOptions ) {
-    const options = optionize<FlowBoxOptions, StrictOmit<SelfOptions, Exclude<keyof FlowConstraintOptions, ExcludeFlowConstraintOptions>>, LayoutNodeOptions>()( {
+  public constructor(providedOptions?: FlowBoxOptions) {
+    const options = optionize<FlowBoxOptions, StrictOmit<SelfOptions, Exclude<keyof FlowConstraintOptions, ExcludeFlowConstraintOptions>>, LayoutNodeOptions>()({
       // Allow dynamic layout by default, see https://github.com/phetsims/joist/issues/608
       excludeInvisibleChildrenFromBounds: true,
       resize: true,
 
       // For LayoutBox compatibility
       disabledOpacity: SceneryConstants.DISABLED_OPACITY
-    }, providedOptions );
+    }, providedOptions);
 
     super();
 
-    this._constraint = new FlowConstraint( this, {
+    this._constraint = new FlowConstraint(this, {
       preferredWidthProperty: this.localPreferredWidthProperty,
       preferredHeightProperty: this.localPreferredHeightProperty,
       minimumWidthProperty: this.localMinimumWidthProperty,
@@ -97,32 +97,32 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
       align: DEFAULT_OPTIONS.align,
       stretch: DEFAULT_OPTIONS.stretch,
       excludeInvisible: false // Should be handled by the options mutate below
-    } );
+    });
 
-    this.onChildInserted = this.onFlowBoxChildInserted.bind( this );
-    this.onChildRemoved = this.onFlowBoxChildRemoved.bind( this );
-    this.onChildrenReordered = this.onFlowBoxChildrenReordered.bind( this );
-    this.onChildrenChanged = this.onFlowBoxChildrenChanged.bind( this );
+    this.onChildInserted = this.onFlowBoxChildInserted.bind(this);
+    this.onChildRemoved = this.onFlowBoxChildRemoved.bind(this);
+    this.onChildrenReordered = this.onFlowBoxChildrenReordered.bind(this);
+    this.onChildrenChanged = this.onFlowBoxChildrenChanged.bind(this);
 
-    this.childInsertedEmitter.addListener( this.onChildInserted );
-    this.childRemovedEmitter.addListener( this.onChildRemoved );
-    this.childrenReorderedEmitter.addListener( this.onChildrenReordered );
-    this.childrenChangedEmitter.addListener( this.onChildrenChanged );
+    this.childInsertedEmitter.addListener(this.onChildInserted);
+    this.childRemovedEmitter.addListener(this.onChildRemoved);
+    this.childrenReorderedEmitter.addListener(this.onChildrenReordered);
+    this.childrenChangedEmitter.addListener(this.onChildrenChanged);
 
-    const nonBoundsOptions = _.omit( options, REQUIRES_BOUNDS_OPTION_KEYS ) as LayoutNodeOptions;
-    const boundsOptions = _.pick( options, REQUIRES_BOUNDS_OPTION_KEYS ) as LayoutNodeOptions;
+    const nonBoundsOptions = _.omit(options, REQUIRES_BOUNDS_OPTION_KEYS) as LayoutNodeOptions;
+    const boundsOptions = _.pick(options, REQUIRES_BOUNDS_OPTION_KEYS) as LayoutNodeOptions;
 
     // Before we do layout, do non-bounds-related changes (in case we have resize:false), and prevent layout for
     // performance gains.
     this._constraint.lock();
-    this.mutate( nonBoundsOptions );
+    this.mutate(nonBoundsOptions);
     this._constraint.unlock();
 
     // Update the layout (so that it is done once if we have resize:false)
     this._constraint.updateLayout();
 
     // After we have our localBounds complete, now we can mutate things that rely on it.
-    this.mutate( boundsOptions );
+    this.mutate(boundsOptions);
 
     this.linkLayoutBounds();
   }
@@ -130,24 +130,24 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
   /**
    * Called when a child is inserted.
    */
-  protected onFlowBoxChildInserted( node: Node, index: number ): void {
-    const cell = new FlowCell( this._constraint, node, this._constraint.createLayoutProxy( node ) );
-    this._cellMap.set( node, cell );
+  protected onFlowBoxChildInserted(node: Node, index: number): void {
+    const cell = new FlowCell(this._constraint, node, this._constraint.createLayoutProxy(node));
+    this._cellMap.set(node, cell);
 
-    this._constraint.insertCell( index, cell );
+    this._constraint.insertCell(index, cell);
   }
 
   /**
    * Called when a child is removed.
    */
-  private onFlowBoxChildRemoved( node: Node ): void {
+  private onFlowBoxChildRemoved(node: Node): void {
 
-    const cell = this._cellMap.get( node )!;
-    assert && assert( cell );
+    const cell = this._cellMap.get(node)!;
+    assert && assert(cell);
 
-    this._cellMap.delete( node );
+    this._cellMap.delete(node);
 
-    this._constraint.removeCell( cell );
+    this._constraint.removeCell(cell);
 
     cell.dispose();
   }
@@ -155,9 +155,9 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
   /**
    * Called when children are rearranged
    */
-  private onFlowBoxChildrenReordered( minChangeIndex: number, maxChangeIndex: number ): void {
+  private onFlowBoxChildrenReordered(minChangeIndex: number, maxChangeIndex: number): void {
     this._constraint.reorderCells(
-      this._children.slice( minChangeIndex, maxChangeIndex + 1 ).map( node => this._cellMap.get( node )! ),
+      this._children.slice(minChangeIndex, maxChangeIndex + 1).map(node => this._cellMap.get(node)!),
       minChangeIndex,
       maxChangeIndex
     );
@@ -170,9 +170,9 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     this._constraint.updateLayoutAutomatically();
   }
 
-  public getCell( node: Node ): FlowCell {
-    const result = this._cellMap.get( node )!;
-    assert && assert( result );
+  public getCell(node: Node): FlowCell {
+    const result = this._cellMap.get(node)!;
+    assert && assert(result);
 
     return result;
   }
@@ -181,7 +181,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.orientation;
   }
 
-  public set orientation( value: LayoutOrientation ) {
+  public set orientation(value: LayoutOrientation) {
     this._constraint.orientation = value;
   }
 
@@ -189,7 +189,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.spacing;
   }
 
-  public set spacing( value: number ) {
+  public set spacing(value: number) {
     this._constraint.spacing = value;
   }
 
@@ -197,7 +197,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.lineSpacing;
   }
 
-  public set lineSpacing( value: number ) {
+  public set lineSpacing(value: number) {
     this._constraint.lineSpacing = value;
   }
 
@@ -205,7 +205,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.justify;
   }
 
-  public set justify( value: HorizontalLayoutJustification | VerticalLayoutJustification ) {
+  public set justify(value: HorizontalLayoutJustification | VerticalLayoutJustification) {
     this._constraint.justify = value;
   }
 
@@ -213,7 +213,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.justifyLines;
   }
 
-  public set justifyLines( value: HorizontalLayoutJustification | VerticalLayoutJustification | null ) {
+  public set justifyLines(value: HorizontalLayoutJustification | VerticalLayoutJustification | null) {
     this._constraint.justifyLines = value;
   }
 
@@ -221,27 +221,27 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.wrap;
   }
 
-  public set wrap( value: boolean ) {
+  public set wrap(value: boolean) {
     this._constraint.wrap = value;
   }
 
   public get align(): HorizontalLayoutAlign | VerticalLayoutAlign {
-    assert && assert( typeof this._constraint.align === 'string' );
+    assert && assert(typeof this._constraint.align === 'string');
 
     return this._constraint.align!;
   }
 
-  public set align( value: HorizontalLayoutAlign | VerticalLayoutAlign ) {
+  public set align(value: HorizontalLayoutAlign | VerticalLayoutAlign) {
     this._constraint.align = value;
   }
 
   public get stretch(): boolean {
-    assert && assert( typeof this._constraint.stretch === 'boolean' );
+    assert && assert(typeof this._constraint.stretch === 'boolean');
 
     return this._constraint.stretch!;
   }
 
-  public set stretch( value: boolean ) {
+  public set stretch(value: boolean) {
     this._constraint.stretch = value;
   }
 
@@ -249,7 +249,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.grow!;
   }
 
-  public set grow( value: number ) {
+  public set grow(value: number) {
     this._constraint.grow = value;
   }
 
@@ -257,7 +257,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.margin!;
   }
 
-  public set margin( value: number ) {
+  public set margin(value: number) {
     this._constraint.margin = value;
   }
 
@@ -265,7 +265,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.xMargin!;
   }
 
-  public set xMargin( value: number ) {
+  public set xMargin(value: number) {
     this._constraint.xMargin = value;
   }
 
@@ -273,7 +273,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.yMargin!;
   }
 
-  public set yMargin( value: number ) {
+  public set yMargin(value: number) {
     this._constraint.yMargin = value;
   }
 
@@ -281,7 +281,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.leftMargin!;
   }
 
-  public set leftMargin( value: number ) {
+  public set leftMargin(value: number) {
     this._constraint.leftMargin = value;
   }
 
@@ -289,7 +289,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.rightMargin!;
   }
 
-  public set rightMargin( value: number ) {
+  public set rightMargin(value: number) {
     this._constraint.rightMargin = value;
   }
 
@@ -297,7 +297,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.topMargin!;
   }
 
-  public set topMargin( value: number ) {
+  public set topMargin(value: number) {
     this._constraint.topMargin = value;
   }
 
@@ -305,7 +305,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.bottomMargin!;
   }
 
-  public set bottomMargin( value: number ) {
+  public set bottomMargin(value: number) {
     this._constraint.bottomMargin = value;
   }
 
@@ -313,7 +313,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.minContentWidth;
   }
 
-  public set minContentWidth( value: number | null ) {
+  public set minContentWidth(value: number | null) {
     this._constraint.minContentWidth = value;
   }
 
@@ -321,7 +321,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.minContentHeight;
   }
 
-  public set minContentHeight( value: number | null ) {
+  public set minContentHeight(value: number | null) {
     this._constraint.minContentHeight = value;
   }
 
@@ -329,7 +329,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.maxContentWidth;
   }
 
-  public set maxContentWidth( value: number | null ) {
+  public set maxContentWidth(value: number | null) {
     this._constraint.maxContentWidth = value;
   }
 
@@ -337,7 +337,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     return this._constraint.maxContentHeight;
   }
 
-  public set maxContentHeight( value: number | null ) {
+  public set maxContentHeight(value: number | null) {
     this._constraint.maxContentHeight = value;
   }
 
@@ -349,13 +349,13 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
     // Lock our layout forever
     this._constraint.lock();
 
-    this.childInsertedEmitter.removeListener( this.onChildInserted );
-    this.childRemovedEmitter.removeListener( this.onChildRemoved );
-    this.childrenReorderedEmitter.removeListener( this.onChildrenReordered );
-    this.childrenChangedEmitter.removeListener( this.onChildrenChanged );
+    this.childInsertedEmitter.removeListener(this.onChildInserted);
+    this.childRemovedEmitter.removeListener(this.onChildRemoved);
+    this.childrenReorderedEmitter.removeListener(this.onChildrenReordered);
+    this.childrenChangedEmitter.removeListener(this.onChildrenChanged);
 
     // Dispose our cells here. We won't be getting the children-removed listeners fired (we removed them above)
-    for ( const cell of this._cellMap.values() ) {
+    for (const cell of this._cellMap.values()) {
       cell.dispose();
     }
 
@@ -363,28 +363,28 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
   }
 
   // LayoutBox Compatibility (see the ES5 setters/getters, or the options doc)
-  public setOrientation( orientation: LayoutOrientation ): this {
+  public setOrientation(orientation: LayoutOrientation): this {
     this.orientation = orientation;
     return this;
   }
 
   public getOrientation(): LayoutOrientation { return this.orientation; }
 
-  public setSpacing( spacing: number ): this {
+  public setSpacing(spacing: number): this {
     this.spacing = spacing;
     return this;
   }
 
   public getSpacing(): number { return this.spacing; }
 
-  public setAlign( align: HorizontalLayoutAlign | VerticalLayoutAlign ): this {
+  public setAlign(align: HorizontalLayoutAlign | VerticalLayoutAlign): this {
     this.align = align;
     return this;
   }
 
   public getAlign(): HorizontalLayoutAlign | VerticalLayoutAlign { return this.align; }
 
-  public setResize( resize: boolean ): this {
+  public setResize(resize: boolean): this {
     this.resize = resize;
     return this;
   }
@@ -392,23 +392,23 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
   public isResize(): boolean { return this.resize; }
 
   public getHelperNode(): Node {
-    const marginsNode = MarginLayoutCell.createHelperNode( this.constraint.displayedCells, this.constraint.layoutBoundsProperty.value, cell => {
+    const marginsNode = MarginLayoutCell.createHelperNode(this.constraint.displayedCells, this.constraint.layoutBoundsProperty.value, cell => {
       let str = '';
 
-      const internalOrientation = Orientation.fromLayoutOrientation( cell.orientation );
+      const internalOrientation = Orientation.fromLayoutOrientation(cell.orientation);
 
-      str += `align: ${LayoutAlign.internalToAlign( internalOrientation, cell.effectiveAlign )}\n`;
+      str += `align: ${LayoutAlign.internalToAlign(internalOrientation, cell.effectiveAlign)}\n`;
       str += `stretch: ${cell.effectiveStretch}\n`;
       str += `grow: ${cell.effectiveGrow}\n`;
 
       return str;
-    } );
+    });
 
     return marginsNode;
   }
 
-  public override mutate( options?: FlowBoxOptions ): this {
-    return super.mutate( options );
+  public override mutate(options?: FlowBoxOptions): this {
+    return super.mutate(options);
   }
 
   public static readonly DEFAULT_FLOW_BOX_OPTIONS = DEFAULT_OPTIONS;
@@ -421,6 +421,6 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-FlowBox.prototype._mutatorKeys = [ ...SIZABLE_OPTION_KEYS, ...FLOWBOX_OPTION_KEYS, ...Node.prototype._mutatorKeys ];
+FlowBox.prototype._mutatorKeys = [...SIZABLE_OPTION_KEYS, ...FLOWBOX_OPTION_KEYS, ...Node.prototype._mutatorKeys];
 
-scenery.register( 'FlowBox', FlowBox );
+scenery.register('FlowBox', FlowBox);

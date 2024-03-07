@@ -26,13 +26,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Multilink from '../../../../axon/js/Multilink.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { AlignGroup, HeightSizableNode, isHeightSizable, isWidthSizable, LayoutConstraint, Node, NodeOptions, scenery, Sizable, SizableOptions, WidthSizableNode } from '../../imports.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import assertMutuallyExclusiveOptions from '../../../../phet-core/js/assertMutuallyExclusiveOptions.js';
+import Multilink from '../../../axon/Multilink';
+import type StrictOmit from '../../../phet-core/types/StrictOmit';
+import Bounds2 from '../../../dot/Bounds2';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import { AlignGroup, type HeightSizableNode, isHeightSizable, isWidthSizable, LayoutConstraint, Node, type NodeOptions, scenery, Sizable, type SizableOptions, type WidthSizableNode } from '../../imports';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
 
 const ALIGNMENT_CONTAINER_OPTION_KEYS = [
   'alignBounds', // {Bounds2|null} - See setAlignBounds() for more documentation
@@ -48,11 +48,11 @@ const ALIGNMENT_CONTAINER_OPTION_KEYS = [
   'group' // {AlignGroup|null} - Share bounds with others, see setGroup() for more documentation
 ];
 
-export const AlignBoxXAlignValues = [ 'left', 'center', 'right', 'stretch' ] as const;
-export type AlignBoxXAlign = ( typeof AlignBoxXAlignValues )[number];
+export const AlignBoxXAlignValues = ['left', 'center', 'right', 'stretch'] as const;
+export type AlignBoxXAlign = (typeof AlignBoxXAlignValues)[number];
 
-export const AlignBoxYAlignValues = [ 'top', 'center', 'bottom', 'stretch' ] as const;
-export type AlignBoxYAlign = ( typeof AlignBoxYAlignValues )[number];
+export const AlignBoxYAlignValues = ['top', 'center', 'bottom', 'stretch'] as const;
+export type AlignBoxYAlign = (typeof AlignBoxYAlignValues)[number];
 
 type SelfOptions = {
   alignBounds?: Bounds2 | null;
@@ -73,7 +73,7 @@ type ParentOptions = NodeOptions & SizableOptions;
 
 export type AlignBoxOptions = SelfOptions & StrictOmit<ParentOptions, 'children'>;
 
-const SuperType = Sizable( Node );
+const SuperType = Sizable(Node);
 
 export default class AlignBox extends SuperType {
 
@@ -108,7 +108,7 @@ export default class AlignBox extends SuperType {
 
   // Will sync the alignBounds to the passed in property
   private readonly _alignBoundsProperty: TReadOnlyProperty<Bounds2> | null;
-  private readonly _alignBoundsPropertyListener: ( b: Bounds2 ) => void;
+  private readonly _alignBoundsPropertyListener: (b: Bounds2) => void;
 
   /**
    * An individual container for an alignment group. Will maintain its size to match that of the group by overriding
@@ -118,11 +118,11 @@ export default class AlignBox extends SuperType {
    * @param [providedOptions] - AlignBox-specific options are documented in ALIGNMENT_CONTAINER_OPTION_KEYS
    *                    above, and can be provided along-side options for Node
    */
-  public constructor( content: Node, providedOptions?: AlignBoxOptions ) {
+  public constructor(content: Node, providedOptions?: AlignBoxOptions) {
 
-    const options = optionize<AlignBoxOptions, EmptySelfOptions, ParentOptions>()( {
-      children: [ content ]
-    }, providedOptions );
+    const options = optionize<AlignBoxOptions, EmptySelfOptions, ParentOptions>()({
+      children: [content]
+    }, providedOptions);
 
     // We'll want to default to sizable:false, but allow clients to pass in something conflicting like widthSizable:true
     // in the super mutate. To avoid the exclusive options, we isolate this out here.
@@ -131,10 +131,10 @@ export default class AlignBox extends SuperType {
       // space.
       sizable: false
     };
-    super( initialOptions );
+    super(initialOptions);
 
-    assert && assert( options === undefined || Object.getPrototypeOf( options ) === Object.prototype,
-      'Extra prototype on Node options object is a code smell' );
+    assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+      'Extra prototype on Node options object is a code smell');
 
     this._content = content;
     this._alignBounds = null;
@@ -146,44 +146,44 @@ export default class AlignBox extends SuperType {
     this._topMargin = 0;
     this._bottomMargin = 0;
     this._group = null;
-    this._contentBoundsListener = this.invalidateAlignment.bind( this );
+    this._contentBoundsListener = this.invalidateAlignment.bind(this);
     this._alignBoundsProperty = null;
     this._alignBoundsPropertyListener = _.noop;
 
-    assertMutuallyExclusiveOptions( options, [ 'alignBounds' ], [ 'alignBoundsProperty' ] );
+    assertMutuallyExclusiveOptions(options, ['alignBounds'], ['alignBoundsProperty']);
 
     // We will dynamically update alignBounds if an alignBoundsProperty was passed in through options.
-    if ( providedOptions?.alignBoundsProperty ) {
+    if (providedOptions?.alignBoundsProperty) {
       this._alignBoundsProperty = providedOptions.alignBoundsProperty;
 
       // Overrides any possible alignBounds passed in (should not be provided, assertion above).
       options.alignBounds = this._alignBoundsProperty.value;
 
-      this._alignBoundsPropertyListener = ( bounds: Bounds2 ) => { this.alignBounds = bounds; };
-      this._alignBoundsProperty.lazyLink( this._alignBoundsPropertyListener );
+      this._alignBoundsPropertyListener = (bounds: Bounds2) => { this.alignBounds = bounds; };
+      this._alignBoundsProperty.lazyLink(this._alignBoundsPropertyListener);
     }
 
-    this.localBounds = new Bounds2( 0, 0, 0, 0 );
+    this.localBounds = new Bounds2(0, 0, 0, 0);
 
-    this.constraint = new AlignBoxConstraint( this, content );
+    this.constraint = new AlignBoxConstraint(this, content);
 
     // Will be removed by dispose()
-    this._content.boundsProperty.link( this._contentBoundsListener );
+    this._content.boundsProperty.link(this._contentBoundsListener);
 
-    this.mutate( options );
+    this.mutate(options);
 
     // Update alignBounds based on preferred sizes
-    Multilink.multilink( [ this.localPreferredWidthProperty, this.localPreferredHeightProperty ], ( preferredWidth, preferredHeight ) => {
-      if ( preferredWidth !== null || preferredHeight !== null ) {
-        const bounds = this._alignBounds || new Bounds2( 0, 0, 0, 0 );
+    Multilink.multilink([this.localPreferredWidthProperty, this.localPreferredHeightProperty], (preferredWidth, preferredHeight) => {
+      if (preferredWidth !== null || preferredHeight !== null) {
+        const bounds = this._alignBounds || new Bounds2(0, 0, 0, 0);
 
         // Overwrite bounds with any preferred setting, with the left/top at 0
-        if ( preferredWidth ) {
+        if (preferredWidth) {
           bounds.minX = 0;
           bounds.maxX = preferredWidth;
           this._xSet = true;
         }
-        if ( preferredHeight ) {
+        if (preferredHeight) {
           bounds.minY = 0;
           bounds.maxY = preferredHeight;
           this._ySet = true;
@@ -193,7 +193,7 @@ export default class AlignBox extends SuperType {
         this._alignBounds = bounds;
         this.constraint.updateLayout();
       }
-    } );
+    });
   }
 
   /**
@@ -204,12 +204,12 @@ export default class AlignBox extends SuperType {
    * re-check.
    */
   public invalidateAlignment(): void {
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.AlignBox( `AlignBox#${this.id} invalidateAlignment` );
+    sceneryLog && sceneryLog.AlignBox && sceneryLog.AlignBox(`AlignBox#${this.id} invalidateAlignment`);
     sceneryLog && sceneryLog.AlignBox && sceneryLog.push();
 
     // The group update will change our alignBounds if required.
-    if ( this._group ) {
-      this._group.onAlignBoxResized( this );
+    if (this._group) {
+      this._group.onAlignBoxResized(this);
     }
 
     // If the alignBounds didn't change, we'll still need to update our own layout
@@ -225,18 +225,18 @@ export default class AlignBox extends SuperType {
    *
    * NOTE: If the group is a valid AlignGroup, it will be responsible for setting the alignBounds.
    */
-  public setAlignBounds( alignBounds: Bounds2 | null ): this {
-    assert && assert( alignBounds === null || ( alignBounds instanceof Bounds2 && !alignBounds.isEmpty() && alignBounds.isFinite() ),
-      'alignBounds should be a non-empty finite Bounds2' );
+  public setAlignBounds(alignBounds: Bounds2 | null): this {
+    assert && assert(alignBounds === null || (alignBounds instanceof Bounds2 && !alignBounds.isEmpty() && alignBounds.isFinite()),
+      'alignBounds should be a non-empty finite Bounds2');
 
     this._xSet = true;
     this._ySet = true;
 
     // See if the bounds have changed. If both are Bounds2 with the same value, we won't update it.
-    if ( this._alignBounds !== alignBounds &&
-         ( !alignBounds ||
-           !this._alignBounds ||
-           !alignBounds.equals( this._alignBounds ) ) ) {
+    if (this._alignBounds !== alignBounds &&
+      (!alignBounds ||
+        !this._alignBounds ||
+        !alignBounds.equals(this._alignBounds))) {
       this._alignBounds = alignBounds;
 
       this.constraint.updateLayout();
@@ -245,7 +245,7 @@ export default class AlignBox extends SuperType {
     return this;
   }
 
-  public set alignBounds( value: Bounds2 | null ) { this.setAlignBounds( value ); }
+  public set alignBounds(value: Bounds2 | null) { this.setAlignBounds(value); }
 
   public get alignBounds(): Bounds2 | null { return this.getAlignBounds(); }
 
@@ -259,27 +259,27 @@ export default class AlignBox extends SuperType {
   /**
    * Sets the attachment to an AlignGroup. When attached, our alignBounds will be controlled by the group.
    */
-  public setGroup( group: AlignGroup | null ): this {
-    assert && assert( group === null || group instanceof AlignGroup, 'group should be an AlignGroup' );
+  public setGroup(group: AlignGroup | null): this {
+    assert && assert(group === null || group instanceof AlignGroup, 'group should be an AlignGroup');
 
-    if ( this._group !== group ) {
+    if (this._group !== group) {
       // Remove from a previous group
-      if ( this._group ) {
-        this._group.removeAlignBox( this );
+      if (this._group) {
+        this._group.removeAlignBox(this);
       }
 
       this._group = group;
 
       // Add to a new group
-      if ( this._group ) {
-        this._group.addAlignBox( this );
+      if (this._group) {
+        this._group.addAlignBox(this);
       }
     }
 
     return this;
   }
 
-  public set group( value: AlignGroup | null ) { this.setGroup( value ); }
+  public set group(value: AlignGroup | null) { this.setGroup(value); }
 
   public get group(): AlignGroup | null { return this.getGroup(); }
 
@@ -293,10 +293,10 @@ export default class AlignBox extends SuperType {
   /**
    * Sets the horizontal alignment of this box.
    */
-  public setXAlign( xAlign: AlignBoxXAlign ): this {
-    assert && assert( AlignBoxXAlignValues.includes( xAlign ), `xAlign should be one of: ${AlignBoxXAlignValues}` );
+  public setXAlign(xAlign: AlignBoxXAlign): this {
+    assert && assert(AlignBoxXAlignValues.includes(xAlign), `xAlign should be one of: ${AlignBoxXAlignValues}`);
 
-    if ( this._xAlign !== xAlign ) {
+    if (this._xAlign !== xAlign) {
       this._xAlign = xAlign;
 
       // Trigger re-layout
@@ -306,7 +306,7 @@ export default class AlignBox extends SuperType {
     return this;
   }
 
-  public set xAlign( value: AlignBoxXAlign ) { this.setXAlign( value ); }
+  public set xAlign(value: AlignBoxXAlign) { this.setXAlign(value); }
 
   public get xAlign(): AlignBoxXAlign { return this.getXAlign(); }
 
@@ -320,10 +320,10 @@ export default class AlignBox extends SuperType {
   /**
    * Sets the vertical alignment of this box.
    */
-  public setYAlign( yAlign: AlignBoxYAlign ): this {
-    assert && assert( AlignBoxYAlignValues.includes( yAlign ), `xAlign should be one of: ${AlignBoxYAlignValues}` );
+  public setYAlign(yAlign: AlignBoxYAlign): this {
+    assert && assert(AlignBoxYAlignValues.includes(yAlign), `xAlign should be one of: ${AlignBoxYAlignValues}`);
 
-    if ( this._yAlign !== yAlign ) {
+    if (this._yAlign !== yAlign) {
       this._yAlign = yAlign;
 
       // Trigger re-layout
@@ -333,7 +333,7 @@ export default class AlignBox extends SuperType {
     return this;
   }
 
-  public set yAlign( value: AlignBoxYAlign ) { this.setYAlign( value ); }
+  public set yAlign(value: AlignBoxYAlign) { this.setYAlign(value); }
 
   public get yAlign(): AlignBoxYAlign { return this.getYAlign(); }
 
@@ -350,14 +350,14 @@ export default class AlignBox extends SuperType {
    * This margin is the minimum amount of horizontal space that will exist between the content the sides of this
    * box.
    */
-  public setMargin( margin: number ): this {
-    assert && assert( isFinite( margin ) && margin >= 0,
-      'margin should be a finite non-negative number' );
+  public setMargin(margin: number): this {
+    assert && assert(isFinite(margin) && margin >= 0,
+      'margin should be a finite non-negative number');
 
-    if ( this._leftMargin !== margin ||
-         this._rightMargin !== margin ||
-         this._topMargin !== margin ||
-         this._bottomMargin !== margin ) {
+    if (this._leftMargin !== margin ||
+      this._rightMargin !== margin ||
+      this._topMargin !== margin ||
+      this._bottomMargin !== margin) {
       this._leftMargin = this._rightMargin = this._topMargin = this._bottomMargin = margin;
 
       // Trigger re-layout
@@ -367,7 +367,7 @@ export default class AlignBox extends SuperType {
     return this;
   }
 
-  public set margin( value: number ) { this.setMargin( value ); }
+  public set margin(value: number) { this.setMargin(value); }
 
   public get margin(): number { return this.getMargin(); }
 
@@ -375,10 +375,10 @@ export default class AlignBox extends SuperType {
    * Returns the current margin of this box (assuming all margin values are the same).
    */
   public getMargin(): number {
-    assert && assert( this._leftMargin === this._rightMargin &&
-    this._leftMargin === this._topMargin &&
-    this._leftMargin === this._bottomMargin,
-      'Getting margin does not have a unique result if the left and right margins are different' );
+    assert && assert(this._leftMargin === this._rightMargin &&
+      this._leftMargin === this._topMargin &&
+      this._leftMargin === this._bottomMargin,
+      'Getting margin does not have a unique result if the left and right margins are different');
     return this._leftMargin;
   }
 
@@ -388,11 +388,11 @@ export default class AlignBox extends SuperType {
    * This margin is the minimum amount of horizontal space that will exist between the content and the left and
    * right sides of this box.
    */
-  public setXMargin( xMargin: number ): this {
-    assert && assert( isFinite( xMargin ) && xMargin >= 0,
-      'xMargin should be a finite non-negative number' );
+  public setXMargin(xMargin: number): this {
+    assert && assert(isFinite(xMargin) && xMargin >= 0,
+      'xMargin should be a finite non-negative number');
 
-    if ( this._leftMargin !== xMargin || this._rightMargin !== xMargin ) {
+    if (this._leftMargin !== xMargin || this._rightMargin !== xMargin) {
       this._leftMargin = this._rightMargin = xMargin;
 
       // Trigger re-layout
@@ -402,7 +402,7 @@ export default class AlignBox extends SuperType {
     return this;
   }
 
-  public set xMargin( value: number ) { this.setXMargin( value ); }
+  public set xMargin(value: number) { this.setXMargin(value); }
 
   public get xMargin(): number { return this.getXMargin(); }
 
@@ -410,8 +410,8 @@ export default class AlignBox extends SuperType {
    * Returns the current horizontal margin of this box (assuming the left and right margins are the same).
    */
   public getXMargin(): number {
-    assert && assert( this._leftMargin === this._rightMargin,
-      'Getting xMargin does not have a unique result if the left and right margins are different' );
+    assert && assert(this._leftMargin === this._rightMargin,
+      'Getting xMargin does not have a unique result if the left and right margins are different');
     return this._leftMargin;
   }
 
@@ -421,11 +421,11 @@ export default class AlignBox extends SuperType {
    * This margin is the minimum amount of vertical space that will exist between the content and the top and
    * bottom sides of this box.
    */
-  public setYMargin( yMargin: number ): this {
-    assert && assert( isFinite( yMargin ) && yMargin >= 0,
-      'yMargin should be a finite non-negative number' );
+  public setYMargin(yMargin: number): this {
+    assert && assert(isFinite(yMargin) && yMargin >= 0,
+      'yMargin should be a finite non-negative number');
 
-    if ( this._topMargin !== yMargin || this._bottomMargin !== yMargin ) {
+    if (this._topMargin !== yMargin || this._bottomMargin !== yMargin) {
       this._topMargin = this._bottomMargin = yMargin;
 
       // Trigger re-layout
@@ -435,7 +435,7 @@ export default class AlignBox extends SuperType {
     return this;
   }
 
-  public set yMargin( value: number ) { this.setYMargin( value ); }
+  public set yMargin(value: number) { this.setYMargin(value); }
 
   public get yMargin(): number { return this.getYMargin(); }
 
@@ -443,8 +443,8 @@ export default class AlignBox extends SuperType {
    * Returns the current vertical margin of this box (assuming the top and bottom margins are the same).
    */
   public getYMargin(): number {
-    assert && assert( this._topMargin === this._bottomMargin,
-      'Getting yMargin does not have a unique result if the top and bottom margins are different' );
+    assert && assert(this._topMargin === this._bottomMargin,
+      'Getting yMargin does not have a unique result if the top and bottom margins are different');
     return this._topMargin;
   }
 
@@ -454,11 +454,11 @@ export default class AlignBox extends SuperType {
    * This margin is the minimum amount of horizontal space that will exist between the content and the left side of
    * the box.
    */
-  public setLeftMargin( leftMargin: number ): this {
-    assert && assert( isFinite( leftMargin ) && leftMargin >= 0,
-      'leftMargin should be a finite non-negative number' );
+  public setLeftMargin(leftMargin: number): this {
+    assert && assert(isFinite(leftMargin) && leftMargin >= 0,
+      'leftMargin should be a finite non-negative number');
 
-    if ( this._leftMargin !== leftMargin ) {
+    if (this._leftMargin !== leftMargin) {
       this._leftMargin = leftMargin;
 
       // Trigger re-layout
@@ -468,7 +468,7 @@ export default class AlignBox extends SuperType {
     return this;
   }
 
-  public set leftMargin( value: number ) { this.setLeftMargin( value ); }
+  public set leftMargin(value: number) { this.setLeftMargin(value); }
 
   public get leftMargin(): number { return this.getLeftMargin(); }
 
@@ -485,11 +485,11 @@ export default class AlignBox extends SuperType {
    * This margin is the minimum amount of horizontal space that will exist between the content and the right side of
    * the container.
    */
-  public setRightMargin( rightMargin: number ): this {
-    assert && assert( isFinite( rightMargin ) && rightMargin >= 0,
-      'rightMargin should be a finite non-negative number' );
+  public setRightMargin(rightMargin: number): this {
+    assert && assert(isFinite(rightMargin) && rightMargin >= 0,
+      'rightMargin should be a finite non-negative number');
 
-    if ( this._rightMargin !== rightMargin ) {
+    if (this._rightMargin !== rightMargin) {
       this._rightMargin = rightMargin;
 
       // Trigger re-layout
@@ -499,7 +499,7 @@ export default class AlignBox extends SuperType {
     return this;
   }
 
-  public set rightMargin( value: number ) { this.setRightMargin( value ); }
+  public set rightMargin(value: number) { this.setRightMargin(value); }
 
   public get rightMargin(): number { return this.getRightMargin(); }
 
@@ -516,11 +516,11 @@ export default class AlignBox extends SuperType {
    * This margin is the minimum amount of vertical space that will exist between the content and the top side of the
    * container.
    */
-  public setTopMargin( topMargin: number ): this {
-    assert && assert( isFinite( topMargin ) && topMargin >= 0,
-      'topMargin should be a finite non-negative number' );
+  public setTopMargin(topMargin: number): this {
+    assert && assert(isFinite(topMargin) && topMargin >= 0,
+      'topMargin should be a finite non-negative number');
 
-    if ( this._topMargin !== topMargin ) {
+    if (this._topMargin !== topMargin) {
       this._topMargin = topMargin;
 
       // Trigger re-layout
@@ -530,7 +530,7 @@ export default class AlignBox extends SuperType {
     return this;
   }
 
-  public set topMargin( value: number ) { this.setTopMargin( value ); }
+  public set topMargin(value: number) { this.setTopMargin(value); }
 
   public get topMargin(): number { return this.getTopMargin(); }
 
@@ -547,11 +547,11 @@ export default class AlignBox extends SuperType {
    * This margin is the minimum amount of vertical space that will exist between the content and the bottom side of the
    * container.
    */
-  public setBottomMargin( bottomMargin: number ): this {
-    assert && assert( isFinite( bottomMargin ) && bottomMargin >= 0,
-      'bottomMargin should be a finite non-negative number' );
+  public setBottomMargin(bottomMargin: number): this {
+    assert && assert(isFinite(bottomMargin) && bottomMargin >= 0,
+      'bottomMargin should be a finite non-negative number');
 
-    if ( this._bottomMargin !== bottomMargin ) {
+    if (this._bottomMargin !== bottomMargin) {
       this._bottomMargin = bottomMargin;
 
       // Trigger re-layout
@@ -561,7 +561,7 @@ export default class AlignBox extends SuperType {
     return this;
   }
 
-  public set bottomMargin( value: number ) { this.setBottomMargin( value ); }
+  public set bottomMargin(value: number) { this.setBottomMargin(value); }
 
   public get bottomMargin(): number { return this.getBottomMargin(); }
 
@@ -584,33 +584,33 @@ export default class AlignBox extends SuperType {
    * Returns the bounding box of this box's content. This will include any margins.
    */
   public getContentBounds(): Bounds2 {
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.AlignBox( `AlignBox#${this.id} getContentBounds` );
+    sceneryLog && sceneryLog.AlignBox && sceneryLog.AlignBox(`AlignBox#${this.id} getContentBounds`);
     sceneryLog && sceneryLog.AlignBox && sceneryLog.push();
 
     const bounds = this._content.bounds;
 
     sceneryLog && sceneryLog.AlignBox && sceneryLog.pop();
 
-    return new Bounds2( bounds.left - this._leftMargin,
+    return new Bounds2(bounds.left - this._leftMargin,
       bounds.top - this._topMargin,
       bounds.right + this._rightMargin,
-      bounds.bottom + this._bottomMargin );
+      bounds.bottom + this._bottomMargin);
   }
 
   // scenery-internal, designed so that we can ignore adjusting certain dimensions
-  public setAdjustedLocalBounds( bounds: Bounds2 ): void {
-    if ( this._xSet && this._ySet ) {
+  public setAdjustedLocalBounds(bounds: Bounds2): void {
+    if (this._xSet && this._ySet) {
       this.localBounds = bounds;
     }
-    else if ( this._xSet ) {
+    else if (this._xSet) {
       const contentBounds = this.getContentBounds();
 
-      this.localBounds = new Bounds2( bounds.minX, contentBounds.minY, bounds.maxX, contentBounds.maxY );
+      this.localBounds = new Bounds2(bounds.minX, contentBounds.minY, bounds.maxX, contentBounds.maxY);
     }
-    else if ( this._ySet ) {
+    else if (this._ySet) {
       const contentBounds = this.getContentBounds();
 
-      this.localBounds = new Bounds2( contentBounds.minX, bounds.minY, contentBounds.maxX, bounds.maxY );
+      this.localBounds = new Bounds2(contentBounds.minX, bounds.minY, contentBounds.maxX, bounds.maxY);
     }
     else {
       this.localBounds = this.getContentBounds();
@@ -622,10 +622,10 @@ export default class AlignBox extends SuperType {
    */
   public override dispose(): void {
 
-    this._alignBoundsProperty && this._alignBoundsProperty.unlink( this._alignBoundsPropertyListener );
+    this._alignBoundsProperty && this._alignBoundsProperty.unlink(this._alignBoundsPropertyListener);
 
     // Remove our listener
-    this._content.boundsProperty.unlink( this._contentBoundsListener );
+    this._content.boundsProperty.unlink(this._contentBoundsListener);
     this._content = new Node(); // clear the reference for GC
 
     // Disconnects from the group
@@ -636,8 +636,8 @@ export default class AlignBox extends SuperType {
     super.dispose();
   }
 
-  public override mutate( options?: AlignBoxOptions ): this {
-    return super.mutate( options );
+  public override mutate(options?: AlignBoxOptions): this {
+    return super.mutate(options);
   }
 }
 
@@ -647,16 +647,16 @@ class AlignBoxConstraint extends LayoutConstraint {
   private readonly alignBox: AlignBox;
   private readonly content: Node;
 
-  public constructor( alignBox: AlignBox, content: Node ) {
-    super( alignBox );
+  public constructor(alignBox: AlignBox, content: Node) {
+    super(alignBox);
 
     this.alignBox = alignBox;
     this.content = content;
 
-    this.addNode( content );
+    this.addNode(content);
 
-    alignBox.isWidthResizableProperty.lazyLink( this._updateLayoutListener );
-    alignBox.isHeightResizableProperty.lazyLink( this._updateLayoutListener );
+    alignBox.isWidthResizableProperty.lazyLink(this._updateLayoutListener);
+    alignBox.isHeightResizableProperty.lazyLink(this._updateLayoutListener);
   }
 
   /**
@@ -669,13 +669,13 @@ class AlignBoxConstraint extends LayoutConstraint {
    * @param propName - A positional property on both Node and Bounds2, e.g. 'left'
    * @param offset - Offset to be applied to the localBounds location.
    */
-  private updateProperty( propName: 'left' | 'right' | 'top' | 'bottom' | 'centerX' | 'centerY', offset: number ): void {
-    const currentValue = this.content[ propName ];
-    const newValue = this.alignBox.localBounds[ propName ] + offset;
+  private updateProperty(propName: 'left' | 'right' | 'top' | 'bottom' | 'centerX' | 'centerY', offset: number): void {
+    const currentValue = this.content[propName];
+    const newValue = this.alignBox.localBounds[propName] + offset;
 
     // Prevent infinite loops or stack overflows by ignoring tiny changes
-    if ( Math.abs( currentValue - newValue ) > 1e-5 ) {
-      this.content[ propName ] = newValue;
+    if (Math.abs(currentValue - newValue) > 1e-5) {
+      this.content[propName] = newValue;
     }
   }
 
@@ -685,10 +685,10 @@ class AlignBoxConstraint extends LayoutConstraint {
     const box = this.alignBox;
     const content = this.content;
 
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.AlignBox( `AlignBoxConstraint#${this.alignBox.id} layout` );
+    sceneryLog && sceneryLog.AlignBox && sceneryLog.AlignBox(`AlignBoxConstraint#${this.alignBox.id} layout`);
     sceneryLog && sceneryLog.AlignBox && sceneryLog.push();
 
-    if ( !content.bounds.isValid() ) {
+    if (!content.bounds.isValid()) {
       return;
     }
 
@@ -696,60 +696,60 @@ class AlignBoxConstraint extends LayoutConstraint {
     const totalYMargins = box.topMargin + box.bottomMargin;
 
     // If we have alignBounds, use that.
-    if ( box.alignBounds !== null ) {
-      box.setAdjustedLocalBounds( box.alignBounds );
+    if (box.alignBounds !== null) {
+      box.setAdjustedLocalBounds(box.alignBounds);
     }
     // Otherwise, we'll grab a Bounds2 anchored at the upper-left with our required dimensions.
     else {
       const widthWithMargin = content.width + totalXMargins;
       const heightWithMargin = content.height + totalYMargins;
-      box.setAdjustedLocalBounds( new Bounds2( 0, 0, widthWithMargin, heightWithMargin ) );
+      box.setAdjustedLocalBounds(new Bounds2(0, 0, widthWithMargin, heightWithMargin));
     }
 
-    const minimumWidth = isFinite( content.width )
-                         ? ( isWidthSizable( content ) ? content.minimumWidth || 0 : content.width ) + totalXMargins
-                         : null;
-    const minimumHeight = isFinite( content.height )
-                          ? ( isHeightSizable( content ) ? content.minimumHeight || 0 : content.height ) + totalYMargins
-                          : null;
+    const minimumWidth = isFinite(content.width)
+      ? (isWidthSizable(content) ? content.minimumWidth || 0 : content.width) + totalXMargins
+      : null;
+    const minimumHeight = isFinite(content.height)
+      ? (isHeightSizable(content) ? content.minimumHeight || 0 : content.height) + totalYMargins
+      : null;
 
     // Don't try to lay out empty bounds
-    if ( !content.localBounds.isEmpty() ) {
+    if (!content.localBounds.isEmpty()) {
 
-      if ( box.xAlign === 'center' ) {
-        this.updateProperty( 'centerX', ( box.leftMargin - box.rightMargin ) / 2 );
+      if (box.xAlign === 'center') {
+        this.updateProperty('centerX', (box.leftMargin - box.rightMargin) / 2);
       }
-      else if ( box.xAlign === 'left' ) {
-        this.updateProperty( 'left', box.leftMargin );
+      else if (box.xAlign === 'left') {
+        this.updateProperty('left', box.leftMargin);
       }
-      else if ( box.xAlign === 'right' ) {
-        this.updateProperty( 'right', -box.rightMargin );
+      else if (box.xAlign === 'right') {
+        this.updateProperty('right', -box.rightMargin);
       }
-      else if ( box.xAlign === 'stretch' ) {
-        assert && assert( isWidthSizable( content ), 'xAlign:stretch can only be used if WidthSizable is mixed into the content' );
-        ( content as WidthSizableNode ).preferredWidth = box.localWidth - box.leftMargin - box.rightMargin;
-        this.updateProperty( 'left', box.leftMargin );
+      else if (box.xAlign === 'stretch') {
+        assert && assert(isWidthSizable(content), 'xAlign:stretch can only be used if WidthSizable is mixed into the content');
+        (content as WidthSizableNode).preferredWidth = box.localWidth - box.leftMargin - box.rightMargin;
+        this.updateProperty('left', box.leftMargin);
       }
       else {
-        assert && assert( `Bad xAlign: ${box.xAlign}` );
+        assert && assert(`Bad xAlign: ${box.xAlign}`);
       }
 
-      if ( box.yAlign === 'center' ) {
-        this.updateProperty( 'centerY', ( box.topMargin - box.bottomMargin ) / 2 );
+      if (box.yAlign === 'center') {
+        this.updateProperty('centerY', (box.topMargin - box.bottomMargin) / 2);
       }
-      else if ( box.yAlign === 'top' ) {
-        this.updateProperty( 'top', box.topMargin );
+      else if (box.yAlign === 'top') {
+        this.updateProperty('top', box.topMargin);
       }
-      else if ( box.yAlign === 'bottom' ) {
-        this.updateProperty( 'bottom', -box.bottomMargin );
+      else if (box.yAlign === 'bottom') {
+        this.updateProperty('bottom', -box.bottomMargin);
       }
-      else if ( box.yAlign === 'stretch' ) {
-        assert && assert( isHeightSizable( content ), 'yAlign:stretch can only be used if HeightSizable is mixed into the content' );
-        ( content as HeightSizableNode ).preferredHeight = box.localHeight - box.topMargin - box.bottomMargin;
-        this.updateProperty( 'top', box.topMargin );
+      else if (box.yAlign === 'stretch') {
+        assert && assert(isHeightSizable(content), 'yAlign:stretch can only be used if HeightSizable is mixed into the content');
+        (content as HeightSizableNode).preferredHeight = box.localHeight - box.topMargin - box.bottomMargin;
+        this.updateProperty('top', box.topMargin);
       }
       else {
-        assert && assert( `Bad yAlign: ${box.yAlign}` );
+        assert && assert(`Bad yAlign: ${box.yAlign}`);
       }
     }
 
@@ -769,6 +769,6 @@ class AlignBoxConstraint extends LayoutConstraint {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-AlignBox.prototype._mutatorKeys = ALIGNMENT_CONTAINER_OPTION_KEYS.concat( SuperType.prototype._mutatorKeys );
+AlignBox.prototype._mutatorKeys = ALIGNMENT_CONTAINER_OPTION_KEYS.concat(SuperType.prototype._mutatorKeys);
 
-scenery.register( 'AlignBox', AlignBox );
+scenery.register('AlignBox', AlignBox);

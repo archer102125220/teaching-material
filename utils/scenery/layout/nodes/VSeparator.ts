@@ -6,25 +6,25 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { Separator, SeparatorOptions, HeightSizable, HeightSizableOptions, scenery } from '../../imports.js';
+import { type EmptySelfOptions } from '../../../phet-core/optionize';
+import { Separator, type SeparatorOptions, HeightSizable, type HeightSizableOptions, scenery } from '../../imports';
 
 type SelfOptions = EmptySelfOptions;
 type ParentOptions = HeightSizableOptions & SeparatorOptions;
 export type VSeparatorOptions = SelfOptions & ParentOptions;
 
-export default class VSeparator extends HeightSizable( Separator ) {
-  public constructor( options?: VSeparatorOptions ) {
+export default class VSeparator extends HeightSizable(Separator) {
+  public constructor(options?: VSeparatorOptions) {
     super();
 
-    this.localPreferredHeightProperty.link( height => {
-      if ( height !== null ) {
+    this.localPreferredHeightProperty.link(height => {
+      if (height !== null) {
         this.y2 = height;
       }
-    } );
+    });
 
-    this.mutate( options );
+    this.mutate(options);
   }
 }
 
-scenery.register( 'VSeparator', VSeparator );
+scenery.register('VSeparator', VSeparator);

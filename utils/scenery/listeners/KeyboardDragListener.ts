@@ -20,25 +20,25 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import PhetioAction from '../../../tandem/js/PhetioAction.js';
-import EnabledComponent, { EnabledComponentOptions } from '../../../axon/js/EnabledComponent.js';
-import Emitter from '../../../axon/js/Emitter.js';
-import Property from '../../../axon/js/Property.js';
-import stepTimer from '../../../axon/js/stepTimer.js';
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import Transform3 from '../../../dot/js/Transform3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import platform from '../../../phet-core/js/platform.js';
-import EventType from '../../../tandem/js/EventType.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import { KeyboardUtils, Node, PDOMPointer, scenery, SceneryEvent, TInputListener } from '../imports.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import TEmitter from '../../../axon/js/TEmitter.js';
-import assertMutuallyExclusiveOptions from '../../../phet-core/js/assertMutuallyExclusiveOptions.js';
-import { PhetioObjectOptions } from '../../../tandem/js/PhetioObject.js';
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
+import PhetioAction from '../../tandem/PhetioAction';
+import EnabledComponent, { type EnabledComponentOptions } from '../../axon/EnabledComponent';
+import Emitter from '../../axon/Emitter';
+import Property from '../../axon/Property';
+import stepTimer from '../../axon/stepTimer';
+import Bounds2 from '../../dot/Bounds2';
+import Transform3 from '../../dot/Transform3';
+import Vector2 from '../../dot/Vector2';
+import platform from '../../phet-core/platform';
+import EventType from '../../tandem/EventType';
+import Tandem from '../../tandem/Tandem';
+import { KeyboardUtils, Node, PDOMPointer, scenery, SceneryEvent, type TInputListener } from '../imports';
+import type TProperty from '../../axon/TProperty';
+import optionize from '../../phet-core/optionize';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import type TEmitter from '../../axon/TEmitter';
+import assertMutuallyExclusiveOptions from '../../phet-core/assertMutuallyExclusiveOptions';
+import { type PhetioObjectOptions } from '../../tandem/PhetioObject';
+import BooleanProperty from '../../axon/BooleanProperty';
 
 type PressedKeyTiming = {
 
@@ -71,28 +71,28 @@ type KeyboardDragDirectionKeys = {
   down: string[];
 };
 
-const KEYBOARD_DRAG_DIRECTION_KEY_MAP = new Map<KeyboardDragDirection, KeyboardDragDirectionKeys>( [
-  [ 'both', {
-    left: [ KeyboardUtils.KEY_A, KeyboardUtils.KEY_LEFT_ARROW ],
-    right: [ KeyboardUtils.KEY_RIGHT_ARROW, KeyboardUtils.KEY_D ],
-    up: [ KeyboardUtils.KEY_UP_ARROW, KeyboardUtils.KEY_W ],
-    down: [ KeyboardUtils.KEY_DOWN_ARROW, KeyboardUtils.KEY_S ]
-  } ],
-  [ 'leftRight', {
-    left: [ KeyboardUtils.KEY_A, KeyboardUtils.KEY_LEFT_ARROW, KeyboardUtils.KEY_DOWN_ARROW, KeyboardUtils.KEY_S ],
-    right: [ KeyboardUtils.KEY_RIGHT_ARROW, KeyboardUtils.KEY_D, KeyboardUtils.KEY_UP_ARROW, KeyboardUtils.KEY_W ],
+const KEYBOARD_DRAG_DIRECTION_KEY_MAP = new Map<KeyboardDragDirection, KeyboardDragDirectionKeys>([
+  ['both', {
+    left: [KeyboardUtils.KEY_A, KeyboardUtils.KEY_LEFT_ARROW],
+    right: [KeyboardUtils.KEY_RIGHT_ARROW, KeyboardUtils.KEY_D],
+    up: [KeyboardUtils.KEY_UP_ARROW, KeyboardUtils.KEY_W],
+    down: [KeyboardUtils.KEY_DOWN_ARROW, KeyboardUtils.KEY_S]
+  }],
+  ['leftRight', {
+    left: [KeyboardUtils.KEY_A, KeyboardUtils.KEY_LEFT_ARROW, KeyboardUtils.KEY_DOWN_ARROW, KeyboardUtils.KEY_S],
+    right: [KeyboardUtils.KEY_RIGHT_ARROW, KeyboardUtils.KEY_D, KeyboardUtils.KEY_UP_ARROW, KeyboardUtils.KEY_W],
     up: [],
     down: []
-  } ],
-  [ 'upDown', {
+  }],
+  ['upDown', {
     left: [],
     right: [],
-    up: [ KeyboardUtils.KEY_RIGHT_ARROW, KeyboardUtils.KEY_D, KeyboardUtils.KEY_UP_ARROW, KeyboardUtils.KEY_W ],
-    down: [ KeyboardUtils.KEY_A, KeyboardUtils.KEY_LEFT_ARROW, KeyboardUtils.KEY_DOWN_ARROW, KeyboardUtils.KEY_S ]
-  } ]
-] );
+    up: [KeyboardUtils.KEY_RIGHT_ARROW, KeyboardUtils.KEY_D, KeyboardUtils.KEY_UP_ARROW, KeyboardUtils.KEY_W],
+    down: [KeyboardUtils.KEY_A, KeyboardUtils.KEY_LEFT_ARROW, KeyboardUtils.KEY_DOWN_ARROW, KeyboardUtils.KEY_S]
+  }]
+]);
 
-type MapPosition = ( point: Vector2 ) => Vector2;
+type MapPosition = (point: Vector2) => Vector2;
 
 type SelfOptions = {
 
@@ -144,15 +144,15 @@ type SelfOptions = {
   mapPosition?: MapPosition | null;
 
   // Called when keyboard drag is started (on initial press).
-  start?: ( ( event: SceneryEvent ) => void ) | null;
+  start?: ((event: SceneryEvent) => void) | null;
 
   // Called during drag. If providedOptions.transform is provided, vectorDelta will be in model coordinates.
   // Otherwise, it will be in view coordinates. Note that this does not provide the SceneryEvent. Dragging
   // happens during animation (as long as keys are down), so there is no event associated with the drag.
-  drag?: ( ( vectorDelta: Vector2 ) => void ) | null;
+  drag?: ((vectorDelta: Vector2) => void) | null;
 
   // Called when keyboard dragging ends.
-  end?: ( ( event?: SceneryEvent ) => void ) | null;
+  end?: ((event?: SceneryEvent) => void) | null;
 
   // Arrow keys must be pressed this long to begin movement set on moveOnHoldInterval, in ms
   moveOnHoldDelay?: number;
@@ -177,9 +177,9 @@ export type KeyboardDragListenerOptions = SelfOptions & EnabledComponentOptions;
 class KeyboardDragListener extends EnabledComponent implements TInputListener {
 
   // See options for documentation
-  private _start: ( ( event: SceneryEvent ) => void ) | null;
-  private _drag: ( ( vectorDelta: Vector2, listener: KeyboardDragListener ) => void ) | null;
-  private _end: ( ( event?: SceneryEvent ) => void ) | null;
+  private _start: ((event: SceneryEvent) => void) | null;
+  private _drag: ((vectorDelta: Vector2, listener: KeyboardDragListener) => void) | null;
+  private _end: ((event?: SceneryEvent) => void) | null;
   private _dragBoundsProperty: TReadOnlyProperty<Bounds2 | null>;
   private _mapPosition: MapPosition | null;
   private _transform: Transform3 | TReadOnlyProperty<Transform3> | null;
@@ -223,8 +223,8 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   private delayComplete: boolean;
 
   // Fires to conduct the start and end of a drag, added for PhET-iO interoperability
-  private dragStartAction: PhetioAction<[ SceneryEvent ]>;
-  private dragEndAction: PhetioAction<[ SceneryEvent ]>;
+  private dragStartAction: PhetioAction<[SceneryEvent]>;
+  private dragEndAction: PhetioAction<[SceneryEvent]>;
 
   // @deprecated - Use the drag option instead.
   public dragEmitter: TEmitter;
@@ -243,13 +243,13 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   // dragSpeed and dragDelta for more information.
   private readonly useDragSpeed: boolean;
 
-  public constructor( providedOptions?: KeyboardDragListenerOptions ) {
+  public constructor(providedOptions?: KeyboardDragListenerOptions) {
 
     // Use either dragSpeed or dragDelta, cannot use both at the same time.
-    assert && assertMutuallyExclusiveOptions( providedOptions, [ 'dragSpeed', 'shiftDragSpeed' ], [ 'dragDelta', 'shiftDragDelta' ] );
-    assert && assertMutuallyExclusiveOptions( providedOptions, [ 'mapPosition' ], [ 'dragBoundsProperty' ] );
+    assert && assertMutuallyExclusiveOptions(providedOptions, ['dragSpeed', 'shiftDragSpeed'], ['dragDelta', 'shiftDragDelta']);
+    assert && assertMutuallyExclusiveOptions(providedOptions, ['mapPosition'], ['dragBoundsProperty']);
 
-    const options = optionize<KeyboardDragListenerOptions, SelfOptions, EnabledComponentOptions>()( {
+    const options = optionize<KeyboardDragListenerOptions, SelfOptions, EnabledComponentOptions>()({
 
       // default moves the object roughly 600 view coordinates every second, assuming 60 fps
       dragDelta: 10,
@@ -272,18 +272,18 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
 
       // DragListener by default doesn't allow PhET-iO to trigger drag Action events
       phetioReadOnly: true
-    }, providedOptions );
+    }, providedOptions);
 
-    assert && assert( options.shiftDragSpeed <= options.dragSpeed, 'shiftDragSpeed should be less than or equal to shiftDragSpeed, it is intended to provide more fine-grained control' );
-    assert && assert( options.shiftDragDelta <= options.dragDelta, 'shiftDragDelta should be less than or equal to dragDelta, it is intended to provide more fine-grained control' );
+    assert && assert(options.shiftDragSpeed <= options.dragSpeed, 'shiftDragSpeed should be less than or equal to shiftDragSpeed, it is intended to provide more fine-grained control');
+    assert && assert(options.shiftDragDelta <= options.dragDelta, 'shiftDragDelta should be less than or equal to dragDelta, it is intended to provide more fine-grained control');
 
-    super( options );
+    super(options);
 
     // mutable attributes declared from options, see options for info, as well as getters and setters
     this._start = options.start;
     this._drag = options.drag;
     this._end = options.end;
-    this._dragBoundsProperty = ( options.dragBoundsProperty || new Property( null ) );
+    this._dragBoundsProperty = (options.dragBoundsProperty || new Property(null));
     this._mapPosition = options.mapPosition;
     this._transform = options.transform;
     this._positionProperty = options.positionProperty;
@@ -296,7 +296,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
     this._hotkeyHoldInterval = options.hotkeyHoldInterval;
     this._keyboardDragDirection = options.keyboardDragDirection;
 
-    this.isPressedProperty = new BooleanProperty( false, { reentrant: true } );
+    this.isPressedProperty = new BooleanProperty(false, { reentrant: true });
 
     this.keyState = [];
     this._hotkeys = [];
@@ -316,94 +316,94 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
 
     this.delayComplete = false;
 
-    this.dragStartAction = new PhetioAction( event => {
-      const key = KeyboardUtils.getEventCode( event.domEvent );
-      assert && assert( key, 'How can we have a null key for KeyboardDragListener?' );
+    this.dragStartAction = new PhetioAction(event => {
+      const key = KeyboardUtils.getEventCode(event.domEvent);
+      assert && assert(key, 'How can we have a null key for KeyboardDragListener?');
 
       // If there are no movement keys down, attach a listener to the Pointer that will tell the AnimatedPanZoomListener
       // to keep this Node in view
-      if ( !this.movementKeysDown && KeyboardUtils.isMovementKey( event.domEvent ) ) {
-        assert && assert( this._pointer === null, 'We should have cleared the Pointer reference by now.' );
+      if (!this.movementKeysDown && KeyboardUtils.isMovementKey(event.domEvent)) {
+        assert && assert(this._pointer === null, 'We should have cleared the Pointer reference by now.');
         this._pointer = event.pointer as PDOMPointer;
-        event.pointer.addInputListener( this._pointerListener, true );
+        event.pointer.addInputListener(this._pointerListener, true);
         this.isPressedProperty.value = true;
       }
 
       // update the key state
-      this.keyState.push( {
+      this.keyState.push({
         keyDown: true,
         key: key!,
         timeDown: 0 // in ms
-      } );
+      });
 
-      if ( this._start ) {
-        if ( this.movementKeysDown ) {
-          this._start( event );
+      if (this._start) {
+        if (this.movementKeysDown) {
+          this._start(event);
         }
       }
 
       // initial movement on down should only be used for dragDelta implementation
-      if ( !this.useDragSpeed ) {
+      if (!this.useDragSpeed) {
 
         // move object on first down before a delay
         const positionDelta = this.shiftKeyDown() ? this._shiftDragDelta : this._dragDelta;
-        this.updatePosition( positionDelta );
+        this.updatePosition(positionDelta);
         this.moveOnHoldIntervalCounter = 0;
       }
     }, {
-      parameters: [ { name: 'event', phetioType: SceneryEvent.SceneryEventIO } ],
-      tandem: options.tandem.createTandem( 'dragStartAction' ),
+      parameters: [{ name: 'event', phetioType: SceneryEvent.SceneryEventIO }],
+      tandem: options.tandem.createTandem('dragStartAction'),
       phetioDocumentation: 'Emits whenever a keyboard drag starts.',
       phetioReadOnly: options.phetioReadOnly,
       phetioEventType: EventType.USER
-    } );
+    });
 
     // Emits an event every drag
     // @deprecated - Use the drag option instead
-    this.dragEmitter = new Emitter( {
-      tandem: options.tandem.createTandem( 'dragEmitter' ),
+    this.dragEmitter = new Emitter({
+      tandem: options.tandem.createTandem('dragEmitter'),
       phetioHighFrequency: true,
       phetioDocumentation: 'Emits whenever a keyboard drag occurs.',
       phetioReadOnly: options.phetioReadOnly,
       phetioEventType: EventType.USER
-    } );
+    });
 
-    this.dragEndAction = new PhetioAction( event => {
+    this.dragEndAction = new PhetioAction(event => {
 
       // If there are no movement keys down, attach a listener to the Pointer that will tell the AnimatedPanZoomListener
       // to keep this Node in view
-      if ( !this.movementKeysDown ) {
-        assert && assert( event.pointer === this._pointer, 'How could the event Pointer be anything other than this PDOMPointer?' );
-        this._pointer!.removeInputListener( this._pointerListener );
+      if (!this.movementKeysDown) {
+        assert && assert(event.pointer === this._pointer, 'How could the event Pointer be anything other than this PDOMPointer?');
+        this._pointer!.removeInputListener(this._pointerListener);
         this._pointer = null;
         this.isPressedProperty.value = false;
       }
 
-      this._end && this._end( event );
+      this._end && this._end(event);
     }, {
-      parameters: [ { name: 'event', phetioType: SceneryEvent.SceneryEventIO } ],
-      tandem: options.tandem.createTandem( 'dragEndAction' ),
+      parameters: [{ name: 'event', phetioType: SceneryEvent.SceneryEventIO }],
+      tandem: options.tandem.createTandem('dragEndAction'),
       phetioDocumentation: 'Emits whenever a keyboard drag ends.',
       phetioReadOnly: options.phetioReadOnly,
       phetioEventType: EventType.USER
-    } );
+    });
 
     // step the drag listener, must be removed in dispose
-    const stepListener = this.step.bind( this );
-    stepTimer.addListener( stepListener );
+    const stepListener = this.step.bind(this);
+    stepTimer.addListener(stepListener);
 
-    this.enabledProperty.lazyLink( this.onEnabledPropertyChange.bind( this ) );
+    this.enabledProperty.lazyLink(this.onEnabledPropertyChange.bind(this));
 
     this._pointerListener = {
       listener: this,
-      interrupt: this.interrupt.bind( this )
+      interrupt: this.interrupt.bind(this)
     };
 
     this._pointer = null;
 
     // called in dispose
     this._disposeKeyboardDragListener = () => {
-      stepTimer.removeListener( stepListener );
+      stepTimer.removeListener(stepListener);
       this.isPressedProperty.dispose();
     };
   }
@@ -420,11 +420,11 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Sets the drag transform of the listener.
    */
-  public setTransform( transform: Transform3 | TReadOnlyProperty<Transform3> | null ): void {
+  public setTransform(transform: Transform3 | TReadOnlyProperty<Transform3> | null): void {
     this._transform = transform;
   }
 
-  public set transform( transform: Transform3 | TReadOnlyProperty<Transform3> | null ) { this.setTransform( transform ); }
+  public set transform(transform: Transform3 | TReadOnlyProperty<Transform3> | null) { this.setTransform(transform); }
 
   public get transform(): Transform3 | TReadOnlyProperty<Transform3> | null { return this.getTransform(); }
 
@@ -443,7 +443,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Setter for the dragSpeed property, see options.dragSpeed for more info.
    */
-  public set dragSpeed( dragSpeed: number ) { this._dragSpeed = dragSpeed; }
+  public set dragSpeed(dragSpeed: number) { this._dragSpeed = dragSpeed; }
 
   /**
    * Getter for the shiftDragSpeed property, see options.shiftDragSpeed for more info.
@@ -453,7 +453,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Setter for the shiftDragSpeed property, see options.shiftDragSpeed for more info.
    */
-  public set shiftDragSpeed( shiftDragSpeed: number ) { this._shiftDragSpeed = shiftDragSpeed; }
+  public set shiftDragSpeed(shiftDragSpeed: number) { this._shiftDragSpeed = shiftDragSpeed; }
 
   /**
    * Getter for the dragDelta property, see options.dragDelta for more info.
@@ -463,7 +463,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Setter for the dragDelta property, see options.dragDelta for more info.
    */
-  public set dragDelta( dragDelta: number ) { this._dragDelta = dragDelta; }
+  public set dragDelta(dragDelta: number) { this._dragDelta = dragDelta; }
 
   /**
    * Getter for the shiftDragDelta property, see options.shiftDragDelta for more info.
@@ -473,7 +473,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Setter for the shiftDragDelta property, see options.shiftDragDelta for more info.
    */
-  public set shiftDragDelta( shiftDragDelta: number ) { this._shiftDragDelta = shiftDragDelta; }
+  public set shiftDragDelta(shiftDragDelta: number) { this._shiftDragDelta = shiftDragDelta; }
 
   /**
    * Getter for the moveOnHoldDelay property, see options.moveOnHoldDelay for more info.
@@ -483,7 +483,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Setter for the moveOnHoldDelay property, see options.moveOnHoldDelay for more info.
    */
-  public set moveOnHoldDelay( moveOnHoldDelay: number ) { this._moveOnHoldDelay = moveOnHoldDelay; }
+  public set moveOnHoldDelay(moveOnHoldDelay: number) { this._moveOnHoldDelay = moveOnHoldDelay; }
 
   /**
    * Getter for the moveOnHoldInterval property, see options.moveOnHoldInterval for more info.
@@ -493,9 +493,9 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Setter for the moveOnHoldInterval property, see options.moveOnHoldInterval for more info.
    */
-  public set moveOnHoldInterval( moveOnHoldInterval: number ) {
-    assert && assert( moveOnHoldInterval > 0, 'if the moveOnHoldInterval is 0, then the dragging will be ' +
-                                              'dependent on how often the dragListener is stepped' );
+  public set moveOnHoldInterval(moveOnHoldInterval: number) {
+    assert && assert(moveOnHoldInterval > 0, 'if the moveOnHoldInterval is 0, then the dragging will be ' +
+      'dependent on how often the dragListener is stepped');
     this._moveOnHoldInterval = moveOnHoldInterval;
   }
 
@@ -507,7 +507,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Setter for the hotkeyHoldInterval property, see options.hotkeyHoldInterval for more info.
    */
-  public set hotkeyHoldInterval( hotkeyHoldInterval: number ) { this._hotkeyHoldInterval = hotkeyHoldInterval; }
+  public set hotkeyHoldInterval(hotkeyHoldInterval: number) { this._hotkeyHoldInterval = hotkeyHoldInterval; }
 
   public get isPressed(): boolean {
     return !!this._pointer;
@@ -517,15 +517,15 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * Get the current target Node of the drag.
    */
   public getCurrentTarget(): Node {
-    assert && assert( this.isPressed, 'We have no currentTarget if we are not pressed' );
-    assert && assert( this._pointer && this._pointer.trail, 'Must have a Pointer with an active trail if we are pressed' );
+    assert && assert(this.isPressed, 'We have no currentTarget if we are not pressed');
+    assert && assert(this._pointer && this._pointer.trail, 'Must have a Pointer with an active trail if we are pressed');
     return this._pointer!.trail!.lastNode();
   }
 
   /**
    * Fired when the enabledProperty changes
    */
-  private onEnabledPropertyChange( enabled: boolean ): void {
+  private onEnabledPropertyChange(enabled: boolean): void {
     !enabled && this.interrupt();
   }
 
@@ -533,22 +533,22 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * Implements keyboard dragging when listener is attached to the Node, public because this is called as part of
    * the Scenery Input API, but clients should not call this directly.
    */
-  public keydown( event: SceneryEvent ): void {
+  public keydown(event: SceneryEvent): void {
     const domEvent = event.domEvent as KeyboardEvent;
-    const key = KeyboardUtils.getEventCode( domEvent );
-    assert && assert( key, 'How can we have a null key from a keydown in KeyboardDragListener?' );
+    const key = KeyboardUtils.getEventCode(domEvent);
+    assert && assert(key, 'How can we have a null key from a keydown in KeyboardDragListener?');
 
     // If the meta key is down (command key/windows key) prevent movement and do not preventDefault.
     // Meta key + arrow key is a command to go back a page, and we need to allow that. But also, macOS
     // fails to provide keyup events once the meta key is pressed, see
     // http://web.archive.org/web/20160304022453/http://bitspushedaround.com/on-a-few-things-you-may-not-know-about-the-hellish-command-key-and-javascript-events/
-    if ( domEvent.metaKey ) {
+    if (domEvent.metaKey) {
       return;
     }
 
     // required to work with Safari and VoiceOver, otherwise arrow keys will move virtual cursor, see https://github.com/phetsims/balloons-and-static-electricity/issues/205#issuecomment-263428003
     // prevent default for WASD too, see https://github.com/phetsims/friction/issues/167
-    if ( KeyboardUtils.isMovementKey( domEvent ) ) {
+    if (KeyboardUtils.isMovementKey(domEvent)) {
       domEvent.preventDefault();
     }
 
@@ -557,24 +557,24 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
 
     // if the key is already down, don't do anything else (we don't want to create a new keystate object
     // for a key that is already being tracked and down, nor call startDrag every keydown event)
-    if ( this.keyInListDown( [ key! ] ) ) { return; }
+    if (this.keyInListDown([key!])) { return; }
 
     // Prevent a VoiceOver bug where pressing multiple arrow keys at once causes the AT to send the wrong keys
     // through the keyup event - as a workaround, we only allow one arrow key to be down at a time. If two are pressed
     // down, we immediately clear the keystate and return
     // see https://github.com/phetsims/balloons-and-static-electricity/issues/384
-    if ( platform.safari ) {
-      if ( KeyboardUtils.isArrowKey( domEvent ) ) {
-        if ( this.keyInListDown( [
+    if (platform.safari) {
+      if (KeyboardUtils.isArrowKey(domEvent)) {
+        if (this.keyInListDown([
           KeyboardUtils.KEY_RIGHT_ARROW, KeyboardUtils.KEY_LEFT_ARROW,
-          KeyboardUtils.KEY_UP_ARROW, KeyboardUtils.KEY_DOWN_ARROW ] ) ) {
+          KeyboardUtils.KEY_UP_ARROW, KeyboardUtils.KEY_DOWN_ARROW])) {
           this.interrupt();
           return;
         }
       }
     }
 
-    this.canDrag( event ) && this.dragStartAction.execute( event );
+    this.canDrag(event) && this.dragStartAction.execute(event);
   }
 
   /**
@@ -584,41 +584,41 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * `Node.addInputListener` only supports type properties as event listeners, and not the event keys as
    * prototype methods. Please see https://github.com/phetsims/scenery/issues/851 for more information.
    */
-  public keyup( event: SceneryEvent ): void {
+  public keyup(event: SceneryEvent): void {
     const domEvent = event.domEvent as KeyboardEvent;
-    const key = KeyboardUtils.getEventCode( domEvent );
+    const key = KeyboardUtils.getEventCode(domEvent);
 
     const moveKeysDown = this.movementKeysDown;
 
     // if the shift key is down when we navigate to the object, add it to the keystate because it won't be added until
     // the next keydown event
-    if ( key === KeyboardUtils.KEY_TAB ) {
-      if ( domEvent.shiftKey ) {
+    if (key === KeyboardUtils.KEY_TAB) {
+      if (domEvent.shiftKey) {
 
         // add 'shift' to the keystate until it is released again
-        this.keyState.push( {
+        this.keyState.push({
           keyDown: true,
           key: KeyboardUtils.KEY_SHIFT_LEFT,
           timeDown: 0 // in ms
-        } );
+        });
       }
     }
 
-    for ( let i = 0; i < this.keyState.length; i++ ) {
-      if ( key === this.keyState[ i ].key ) {
-        this.keyState.splice( i, 1 );
+    for (let i = 0; i < this.keyState.length; i++) {
+      if (key === this.keyState[i].key) {
+        this.keyState.splice(i, 1);
       }
     }
 
     const moveKeysStillDown = this.movementKeysDown;
 
     // if movement keys are no longer down after keyup, call the optional end drag function
-    if ( !moveKeysStillDown && moveKeysDown !== moveKeysStillDown ) {
-      this.dragEndAction.execute( event );
+    if (!moveKeysStillDown && moveKeysDown !== moveKeysStillDown) {
+      this.dragEndAction.execute(event);
     }
 
     // if any current hotkey keys are no longer down, clear out the current hotkey and reset.
-    if ( this.currentHotkey && !this.allKeysInListDown( this.currentHotkey.keys ) ) {
+    if (this.currentHotkey && !this.allKeysInListDown(this.currentHotkey.keys)) {
       this.resetHotkeyState();
     }
 
@@ -633,7 +633,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * a parent with a KeyboardDragListener, which can create state for the keystate.
    * See https://github.com/phetsims/scenery/issues/1461.
    */
-  public focusout( event: SceneryEvent ): void {
+  public focusout(event: SceneryEvent): void {
     this.interrupt();
   }
 
@@ -644,35 +644,35 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    *
    * @param dt - in seconds
    */
-  private step( dt: number ): void {
+  private step(dt: number): void {
 
     // dt is in seconds and we convert to ms
     const ms = dt * 1000;
 
     // no-op unless a key is down
-    if ( this.keyState.length > 0 ) {
+    if (this.keyState.length > 0) {
       // for each key that is still down, increment the tracked time that has been down
-      for ( let i = 0; i < this.keyState.length; i++ ) {
-        if ( this.keyState[ i ].keyDown ) {
-          this.keyState[ i ].timeDown += ms;
+      for (let i = 0; i < this.keyState.length; i++) {
+        if (this.keyState[i].keyDown) {
+          this.keyState[i].timeDown += ms;
         }
       }
 
       // Movement delay counters should only increment if movement keys are pressed down. They will get reset
       // every up event.
-      if ( this.movementKeysDown ) {
+      if (this.movementKeysDown) {
         this.moveOnHoldDelayCounter += ms;
         this.moveOnHoldIntervalCounter += ms;
       }
 
       // update timer for keygroup if one is being held down
-      if ( this.currentHotkey ) {
+      if (this.currentHotkey) {
         this.hotkeyHoldIntervalCounter += ms;
       }
 
       let positionDelta = 0;
 
-      if ( this.useDragSpeed ) {
+      if (this.useDragSpeed) {
 
         // calculate change in position from time step
         const positionSpeedSeconds = this.shiftKeyDown() ? this._shiftDragSpeed : this._dragSpeed;
@@ -685,14 +685,14 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
         let movable = false;
 
         // Wait for a longer delay (moveOnHoldDelay) on initial press and hold.
-        if ( this.moveOnHoldDelayCounter >= this._moveOnHoldDelay && !this.delayComplete ) {
+        if (this.moveOnHoldDelayCounter >= this._moveOnHoldDelay && !this.delayComplete) {
           movable = true;
           this.delayComplete = true;
           this.moveOnHoldIntervalCounter = 0;
         }
 
         // Initial delay is complete, now we will move every moveOnHoldInterval
-        if ( this.delayComplete && this.moveOnHoldIntervalCounter >= this._moveOnHoldInterval ) {
+        if (this.delayComplete && this.moveOnHoldIntervalCounter >= this._moveOnHoldInterval) {
           movable = true;
 
           // If updating as a result of the moveOnHoldIntervalCounter, don't automatically throw away any "remainder"
@@ -704,11 +704,11 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
           this.moveOnHoldIntervalCounter = overflowTime;
         }
 
-        positionDelta = movable ? ( this.shiftKeyDown() ? this._shiftDragDelta : this._dragDelta ) : 0;
+        positionDelta = movable ? (this.shiftKeyDown() ? this._shiftDragDelta : this._dragDelta) : 0;
       }
 
-      if ( positionDelta > 0 ) {
-        this.updatePosition( positionDelta );
+      if (positionDelta > 0) {
+        this.updatePosition(positionDelta);
       }
     }
   }
@@ -716,12 +716,12 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Returns true if a drag can begin from input with this listener.
    */
-  private canDrag( event: SceneryEvent ): boolean {
+  private canDrag(event: SceneryEvent): boolean {
 
     // must be enabled and must not be attached to a listener (other than this._pointerListener - (canDrag
     // is used every new key press)
     const attachedListener = event.pointer.attachedListener;
-    return this.enabledProperty.value && ( !attachedListener || attachedListener === this._pointerListener );
+    return this.enabledProperty.value && (!attachedListener || attachedListener === this._pointerListener);
   }
 
   /**
@@ -730,14 +730,14 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   private updateHotkeys(): void {
 
     // check to see if any hotkey combinations are down
-    for ( let j = 0; j < this._hotkeys.length; j++ ) {
+    for (let j = 0; j < this._hotkeys.length; j++) {
       const hotkeysDownList = [];
-      const keys = this._hotkeys[ j ].keys;
+      const keys = this._hotkeys[j].keys;
 
-      for ( let k = 0; k < keys.length; k++ ) {
-        for ( let l = 0; l < this.keyState.length; l++ ) {
-          if ( this.keyState[ l ].key === keys[ k ] ) {
-            hotkeysDownList.push( this.keyState[ l ] );
+      for (let k = 0; k < keys.length; k++) {
+        for (let l = 0; l < this.keyState.length; l++) {
+          if (this.keyState[l].key === keys[k]) {
+            hotkeysDownList.push(this.keyState[l]);
           }
         }
       }
@@ -747,32 +747,32 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
 
       // the hotkeysDownList array order should match the order of the key group, so now we just need to make
       // sure that the key down times are in the right order
-      for ( let m = 0; m < hotkeysDownList.length - 1; m++ ) {
-        if ( hotkeysDownList[ m + 1 ] && hotkeysDownList[ m ].timeDown > hotkeysDownList[ m + 1 ].timeDown ) {
+      for (let m = 0; m < hotkeysDownList.length - 1; m++) {
+        if (hotkeysDownList[m + 1] && hotkeysDownList[m].timeDown > hotkeysDownList[m + 1].timeDown) {
           keysInOrder = true;
         }
       }
 
       // if keys are in order, call the callback associated with the group, and disable dragging until
       // all hotkeys associated with that group are up again
-      if ( keysInOrder ) {
-        this.currentHotkey = this._hotkeys[ j ];
-        if ( this.hotkeyHoldIntervalCounter >= this._hotkeyHoldInterval ) {
+      if (keysInOrder) {
+        this.currentHotkey = this._hotkeys[j];
+        if (this.hotkeyHoldIntervalCounter >= this._hotkeyHoldInterval) {
 
           // Set the counter to begin counting the next interval between hotkey activations.
           this.hotkeyHoldIntervalCounter = 0;
 
           // call the callback last, after internal state has been updated. This solves a bug caused if this callback
           // then makes this listener interrupt.
-          this._hotkeys[ j ].callback();
+          this._hotkeys[j].callback();
         }
       }
     }
 
     // if a key group is down, check to see if any of those keys are still down - if so, we will disable dragging
     // until all of them are up
-    if ( this.currentHotkey ) {
-      if ( this.keyInListDown( this.currentHotkey.keys ) ) {
+    if (this.currentHotkey) {
+      if (this.keyInListDown(this.currentHotkey.keys)) {
         this.hotkeyDisablingDragging = true;
       }
       else {
@@ -790,57 +790,57 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    *
    * @param delta - potential change in position in x and y for the position Property
    */
-  private updatePosition( delta: number ): void {
+  private updatePosition(delta: number): void {
 
     // hotkeys may disable dragging, so do this first
     this.updateHotkeys();
 
-    if ( !this.hotkeyDisablingDragging ) {
+    if (!this.hotkeyDisablingDragging) {
 
       // handle the change in position
       let deltaX = 0;
       let deltaY = 0;
 
-      if ( this.leftMovementKeysDown() ) {
+      if (this.leftMovementKeysDown()) {
         deltaX -= delta;
       }
-      if ( this.rightMovementKeysDown() ) {
+      if (this.rightMovementKeysDown()) {
         deltaX += delta;
       }
 
-      if ( this.upMovementKeysDown() ) {
+      if (this.upMovementKeysDown()) {
         deltaY -= delta;
       }
-      if ( this.downMovementKeysDown() ) {
+      if (this.downMovementKeysDown()) {
         deltaY += delta;
       }
 
       // only initiate move if there was some attempted keyboard drag
-      let vectorDelta = new Vector2( deltaX, deltaY );
-      if ( !vectorDelta.equals( Vector2.ZERO ) ) {
+      let vectorDelta = new Vector2(deltaX, deltaY);
+      if (!vectorDelta.equals(Vector2.ZERO)) {
 
         // to model coordinates
-        if ( this._transform ) {
+        if (this._transform) {
           const transform = this._transform instanceof Transform3 ? this._transform : this._transform.value;
 
-          vectorDelta = transform.inverseDelta2( vectorDelta );
+          vectorDelta = transform.inverseDelta2(vectorDelta);
         }
 
         // synchronize with model position
-        if ( this._positionProperty ) {
-          let newPosition = this._positionProperty.value.plus( vectorDelta );
+        if (this._positionProperty) {
+          let newPosition = this._positionProperty.value.plus(vectorDelta);
 
-          newPosition = this.mapModelPoint( newPosition );
+          newPosition = this.mapModelPoint(newPosition);
 
           // update the position if it is different
-          if ( !newPosition.equals( this._positionProperty.value ) ) {
+          if (!newPosition.equals(this._positionProperty.value)) {
             this._positionProperty.value = newPosition;
           }
         }
 
         // call our drag function
-        if ( this._drag ) {
-          this._drag( vectorDelta, this );
+        if (this._drag) {
+          this._drag(vectorDelta, this);
         }
 
         this.dragEmitter.emit();
@@ -859,12 +859,12 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    *
    * @returns - A point in the model coordinate frame
    */
-  protected mapModelPoint( modelPoint: Vector2 ): Vector2 {
-    if ( this._mapPosition ) {
-      return this._mapPosition( modelPoint );
+  protected mapModelPoint(modelPoint: Vector2): Vector2 {
+    if (this._mapPosition) {
+      return this._mapPosition(modelPoint);
     }
-    else if ( this._dragBoundsProperty.value ) {
-      return this._dragBoundsProperty.value.closestPointTo( modelPoint );
+    else if (this._dragBoundsProperty.value) {
+      return this._dragBoundsProperty.value.closestPointTo(modelPoint);
     }
     else {
       return modelPoint;
@@ -874,18 +874,18 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Returns true if any of the keys in the list are currently down.
    */
-  public keyInListDown( keys: string[] ): boolean {
+  public keyInListDown(keys: string[]): boolean {
     let keyIsDown = false;
-    for ( let i = 0; i < this.keyState.length; i++ ) {
-      if ( this.keyState[ i ].keyDown ) {
-        for ( let j = 0; j < keys.length; j++ ) {
-          if ( keys[ j ] === this.keyState[ i ].key ) {
+    for (let i = 0; i < this.keyState.length; i++) {
+      if (this.keyState[i].keyDown) {
+        for (let j = 0; j < keys.length; j++) {
+          if (keys[j] === this.keyState[i].key) {
             keyIsDown = true;
             break;
           }
         }
       }
-      if ( keyIsDown ) {
+      if (keyIsDown) {
         // no need to keep looking
         break;
       }
@@ -897,14 +897,14 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Return true if all keys in the list are currently held down.
    */
-  public allKeysInListDown( keys: string[] ): boolean {
-    assert && assert( keys.length > 0, 'You are testing to see if an empty list of keys is down?' );
+  public allKeysInListDown(keys: string[]): boolean {
+    assert && assert(keys.length > 0, 'You are testing to see if an empty list of keys is down?');
 
     let allKeysDown = true;
 
-    for ( let i = 0; i < keys.length; i++ ) {
-      const foundKey = _.find( this.keyState, pressedKeyTiming => pressedKeyTiming.key === keys[ i ] );
-      if ( !foundKey || !foundKey.keyDown ) {
+    for (let i = 0; i < keys.length; i++) {
+      const foundKey = _.find(this.keyState, pressedKeyTiming => pressedKeyTiming.key === keys[i]);
+      if (!foundKey || !foundKey.keyDown) {
 
         // key is not in the keystate or is not currently pressed down, all provided keys are not down
         allKeysDown = false;
@@ -919,8 +919,8 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * Get the keyboard keys for the KeyboardDragDirection of this KeyboardDragListener.
    */
   private getKeyboardDragDirectionKeys(): KeyboardDragDirectionKeys {
-    const directionKeys = KEYBOARD_DRAG_DIRECTION_KEY_MAP.get( this._keyboardDragDirection )!;
-    assert && assert( directionKeys, `No direction keys found in map for KeyboardDragDirection ${this._keyboardDragDirection}` );
+    const directionKeys = KEYBOARD_DRAG_DIRECTION_KEY_MAP.get(this._keyboardDragDirection)!;
+    assert && assert(directionKeys, `No direction keys found in map for KeyboardDragDirection ${this._keyboardDragDirection}`);
     return directionKeys;
   }
 
@@ -928,28 +928,28 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * Returns true if the keystate indicates that a key is down that should move the object to the left.
    */
   public leftMovementKeysDown(): boolean {
-    return this.keyInListDown( this.getKeyboardDragDirectionKeys().left );
+    return this.keyInListDown(this.getKeyboardDragDirectionKeys().left);
   }
 
   /**
    * Returns true if the keystate indicates that a key is down that should move the object to the right.
    */
   public rightMovementKeysDown(): boolean {
-    return this.keyInListDown( this.getKeyboardDragDirectionKeys().right );
+    return this.keyInListDown(this.getKeyboardDragDirectionKeys().right);
   }
 
   /**
    * Returns true if the keystate indicates that a key is down that should move the object up.
    */
   public upMovementKeysDown(): boolean {
-    return this.keyInListDown( this.getKeyboardDragDirectionKeys().up );
+    return this.keyInListDown(this.getKeyboardDragDirectionKeys().up);
   }
 
   /**
    * Returns true if the keystate indicates that a key is down that should move the upject down.
    */
   public downMovementKeysDown(): boolean {
-    return this.keyInListDown( this.getKeyboardDragDirectionKeys().down );
+    return this.keyInListDown(this.getKeyboardDragDirectionKeys().down);
   }
 
   /**
@@ -957,7 +957,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    */
   public getMovementKeysDown(): boolean {
     return this.rightMovementKeysDown() || this.leftMovementKeysDown() ||
-           this.upMovementKeysDown() || this.downMovementKeysDown();
+      this.upMovementKeysDown() || this.downMovementKeysDown();
   }
 
   public get movementKeysDown(): boolean { return this.getMovementKeysDown(); }
@@ -966,46 +966,46 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * Returns true if the enter key is currently pressed down.
    */
   public enterKeyDown(): boolean {
-    return this.keyInListDown( [ KeyboardUtils.KEY_ENTER ] );
+    return this.keyInListDown([KeyboardUtils.KEY_ENTER]);
   }
 
   /**
    * Returns true if the keystate indicates that the shift key is currently down.
    */
   public shiftKeyDown(): boolean {
-    return this.keyInListDown( KeyboardUtils.SHIFT_KEYS );
+    return this.keyInListDown(KeyboardUtils.SHIFT_KEYS);
   }
 
   /**
    * Add a hotkey that behaves such that the desired callback will be called when all keys listed in the array are
    * pressed down in order.
    */
-  public addHotkey( hotkey: Hotkey ): void {
-    this._hotkeys.push( hotkey );
+  public addHotkey(hotkey: Hotkey): void {
+    this._hotkeys.push(hotkey);
   }
 
   /**
    * Remove a hotkey that was added with addHotkey.
    */
-  public removeHotkey( hotkey: Hotkey ): void {
-    assert && assert( this._hotkeys.includes( hotkey ), 'Trying to remove a hotkey that is not in the list of hotkeys.' );
+  public removeHotkey(hotkey: Hotkey): void {
+    assert && assert(this._hotkeys.includes(hotkey), 'Trying to remove a hotkey that is not in the list of hotkeys.');
 
-    const hotkeyIndex = this._hotkeys.indexOf( hotkey );
-    this._hotkeys.splice( hotkeyIndex, 1 );
+    const hotkeyIndex = this._hotkeys.indexOf(hotkey);
+    this._hotkeys.splice(hotkeyIndex, 1);
   }
 
   /**
    * Sets the hotkeys of the KeyboardDragListener to passed-in array.
    */
-  public setHotkeys( hotkeys: Hotkey[] ): void {
-    this._hotkeys = hotkeys.slice( 0 ); // shallow copy
+  public setHotkeys(hotkeys: Hotkey[]): void {
+    this._hotkeys = hotkeys.slice(0); // shallow copy
   }
 
   /**
    * See setHotkeys() for more information.
    */
-  public set hotkeys( hotkeys: Hotkey[] ) {
-    this.setHotkeys( hotkeys );
+  public set hotkeys(hotkeys: Hotkey[]) {
+    this.setHotkeys(hotkeys);
   }
 
   /**
@@ -1041,10 +1041,10 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
     this.resetHotkeyState();
     this.resetPressAndHold();
 
-    if ( this._pointer ) {
-      assert && assert( this._pointer.listeners.includes( this._pointerListener ),
-        'A reference to the Pointer means it should have the pointerListener' );
-      this._pointer.removeInputListener( this._pointerListener );
+    if (this._pointer) {
+      assert && assert(this._pointer.listeners.includes(this._pointerListener),
+        'A reference to the Pointer means it should have the pointerListener');
+      this._pointer.removeInputListener(this._pointerListener);
       this._pointer = null;
       this.isPressedProperty.value = false;
 
@@ -1064,32 +1064,32 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   /**
    * Returns true if the key corresponds to a key that should move the object to the left.
    */
-  public static isLeftMovementKey( key: string ): boolean {
+  public static isLeftMovementKey(key: string): boolean {
     return key === KeyboardUtils.KEY_A || key === KeyboardUtils.KEY_LEFT_ARROW;
   }
 
   /**
    * Returns true if the key corresponds to a key that should move the object to the right.
    */
-  public static isRightMovementKey( key: string ): boolean {
+  public static isRightMovementKey(key: string): boolean {
     return key === KeyboardUtils.KEY_D || key === KeyboardUtils.KEY_RIGHT_ARROW;
   }
 
   /**
    * Returns true if the key corresponds to a key that should move the object up.
    */
-  private static isUpMovementKey( key: string ): boolean {
+  private static isUpMovementKey(key: string): boolean {
     return key === KeyboardUtils.KEY_W || key === KeyboardUtils.KEY_UP_ARROW;
   }
 
   /**
    * Returns true if the key corresponds to a key that should move the object down.
    */
-  public static isDownMovementKey( key: string ): boolean {
+  public static isDownMovementKey(key: string): boolean {
     return key === KeyboardUtils.KEY_S || key === KeyboardUtils.KEY_DOWN_ARROW;
   }
 }
 
-scenery.register( 'KeyboardDragListener', KeyboardDragListener );
+scenery.register('KeyboardDragListener', KeyboardDragListener);
 
 export default KeyboardDragListener;

@@ -6,14 +6,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Matrix3 from '../../../../dot/js/Matrix3.js';
-import Utils from '../../../../dot/js/Utils.js';
-import { Shape } from '../../../../kite/js/imports.js';
-import Orientation from '../../../../phet-core/js/Orientation.js';
-import OrientationPair from '../../../../phet-core/js/OrientationPair.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import { Font, TColor, LayoutAlign, LayoutCell, LayoutProxy, Node, NodeLayoutConstraint, NodePattern, Path, PressListener, Rectangle, RichText, scenery, Text } from '../../imports.js';
+import Bounds2 from '../../../dot/Bounds2';
+import Matrix3 from '../../../dot/Matrix3';
+import Utils from '../../../dot/Utils';
+import { Shape } from '../../../kite/imports';
+import Orientation from '../../../phet-core/Orientation';
+import OrientationPair from '../../../phet-core/OrientationPair';
+import Tandem from '../../../tandem/Tandem';
+import { Font, type TColor, LayoutAlign, LayoutCell, LayoutProxy, Node, NodeLayoutConstraint, NodePattern, Path, PressListener, Rectangle, RichText, scenery, Text } from '../../imports';
 
 // Interface expected to be overridden by subtypes (GridCell, FlowCell)
 export type MarginLayout = {
@@ -34,7 +34,7 @@ export default class MarginLayoutCell extends LayoutCell {
 
   private readonly _marginConstraint: MarginLayoutConstraint;
 
-  private readonly preferredSizeSet: OrientationPair<boolean> = new OrientationPair<boolean>( false, false );
+  private readonly preferredSizeSet: OrientationPair<boolean> = new OrientationPair<boolean>(false, false);
 
   // These will get overridden, they're needed since mixins have many limitations and we'd have to have a ton of casts
   // without these existing.
@@ -60,8 +60,8 @@ export default class MarginLayoutCell extends LayoutCell {
    *
    * (scenery-internal)
    */
-  public constructor( constraint: MarginLayoutConstraint, node: Node, proxy: LayoutProxy | null ) {
-    super( constraint, node, proxy );
+  public constructor(constraint: MarginLayoutConstraint, node: Node, proxy: LayoutProxy | null) {
+    super(constraint, node, proxy);
 
     this._marginConstraint = constraint;
   }
@@ -72,37 +72,37 @@ export default class MarginLayoutCell extends LayoutCell {
    *
    * Returns the cell's bounds
    */
-  public reposition( orientation: Orientation, lineSize: number, linePosition: number, stretch: boolean, originOffset: number, align: LayoutAlign ): Bounds2 {
+  public reposition(orientation: Orientation, lineSize: number, linePosition: number, stretch: boolean, originOffset: number, align: LayoutAlign): Bounds2 {
     // Mimicking https://www.w3.org/TR/css-flexbox-1/#align-items-property for baseline (for our origin)
     // Origin will sync all origin-based items (so their origin matches), and then position ALL of that as if it was
     // align:left or align:top (depending on the orientation).
 
-    const preferredSize = ( stretch && this.isSizable( orientation ) ) ? lineSize : this.getMinimumSize( orientation );
+    const preferredSize = (stretch && this.isSizable(orientation)) ? lineSize : this.getMinimumSize(orientation);
 
-    if ( assert ) {
+    if (assert) {
       const maxSize = orientation === Orientation.HORIZONTAL ? this.node.maxWidth : this.node.maxHeight;
-      assert( !this.isSizable( orientation ) || maxSize === null || Math.abs( maxSize - preferredSize ) > -1e-9,
+      assert(!this.isSizable(orientation) || maxSize === null || Math.abs(maxSize - preferredSize) > -1e-9,
         `Tried to set a preferred size ${preferredSize} larger than the specified max${orientation === Orientation.HORIZONTAL ? 'Width' : 'Height'} of ${maxSize}. ` +
         'Ideally, try to avoid putting a maxWidth/maxHeight on a width/height-sizable Node (one that will resize to fit its preferred size) inside a layout container, ' +
-        'particularly one that will try to expand the Node past its maximum size.' );
+        'particularly one that will try to expand the Node past its maximum size.');
     }
 
-    this.attemptPreferredSize( orientation, preferredSize );
+    this.attemptPreferredSize(orientation, preferredSize);
 
-    if ( align === LayoutAlign.ORIGIN ) {
-      this.positionOrigin( orientation, linePosition + originOffset );
+    if (align === LayoutAlign.ORIGIN) {
+      this.positionOrigin(orientation, linePosition + originOffset);
     }
     else {
-      this.positionStart( orientation, linePosition + ( lineSize - this.getCellBounds()[ orientation.size ] ) * align.padRatio );
+      this.positionStart(orientation, linePosition + (lineSize - this.getCellBounds()[orientation.size]) * align.padRatio);
     }
 
     const cellBounds = this.getCellBounds();
 
-    assert && assert( cellBounds.isFinite() );
+    assert && assert(cellBounds.isFinite());
 
-    this.lastAvailableBounds[ orientation.minCoordinate ] = linePosition;
-    this.lastAvailableBounds[ orientation.maxCoordinate ] = linePosition + lineSize;
-    this.lastUsedBounds.set( cellBounds );
+    this.lastAvailableBounds[orientation.minCoordinate] = linePosition;
+    this.lastAvailableBounds[orientation.maxCoordinate] = linePosition + lineSize;
+    this.lastUsedBounds.set(cellBounds);
 
     return cellBounds;
   }
@@ -142,14 +142,14 @@ export default class MarginLayoutCell extends LayoutCell {
   /**
    * (scenery-internal)
    */
-  public getEffectiveMinMargin( orientation: Orientation ): number {
+  public getEffectiveMinMargin(orientation: Orientation): number {
     return orientation === Orientation.HORIZONTAL ? this.effectiveLeftMargin : this.effectiveTopMargin;
   }
 
   /**
    * (scenery-internal)
    */
-  public getEffectiveMaxMargin( orientation: Orientation ): number {
+  public getEffectiveMaxMargin(orientation: Orientation): number {
     return orientation === Orientation.HORIZONTAL ? this.effectiveRightMargin : this.effectiveBottomMargin;
   }
 
@@ -172,7 +172,7 @@ export default class MarginLayoutCell extends LayoutCell {
   /**
    * (scenery-internal)
    */
-  public getEffectiveMinContent( orientation: Orientation ): number | null {
+  public getEffectiveMinContent(orientation: Orientation): number | null {
     return orientation === Orientation.HORIZONTAL ? this.effectiveMinContentWidth : this.effectiveMinContentHeight;
   }
 
@@ -195,7 +195,7 @@ export default class MarginLayoutCell extends LayoutCell {
   /**
    * (scenery-internal)
    */
-  public getEffectiveMaxContent( orientation: Orientation ): number | null {
+  public getEffectiveMaxContent(orientation: Orientation): number | null {
     return orientation === Orientation.HORIZONTAL ? this.effectiveMaxContentWidth : this.effectiveMaxContentHeight;
   }
 
@@ -203,46 +203,46 @@ export default class MarginLayoutCell extends LayoutCell {
    * Returns the effective minimum size this cell can take (including the margins)
    * (scenery-internal)
    */
-  public getMinimumSize( orientation: Orientation ): number {
-    return this.getEffectiveMinMargin( orientation ) +
-           Math.max( this.proxy.getMinimum( orientation ), this.getEffectiveMinContent( orientation ) || 0 ) +
-           this.getEffectiveMaxMargin( orientation );
+  public getMinimumSize(orientation: Orientation): number {
+    return this.getEffectiveMinMargin(orientation) +
+      Math.max(this.proxy.getMinimum(orientation), this.getEffectiveMinContent(orientation) || 0) +
+      this.getEffectiveMaxMargin(orientation);
   }
 
   /**
    * Returns the effective maximum size this cell can take (including the margins)
    * (scenery-internal)
    */
-  public getMaximumSize( orientation: Orientation ): number {
-    return this.getEffectiveMinMargin( orientation ) +
-           ( this.getEffectiveMaxContent( orientation ) || Number.POSITIVE_INFINITY ) +
-           this.getEffectiveMaxMargin( orientation );
+  public getMaximumSize(orientation: Orientation): number {
+    return this.getEffectiveMinMargin(orientation) +
+      (this.getEffectiveMaxContent(orientation) || Number.POSITIVE_INFINITY) +
+      this.getEffectiveMaxMargin(orientation);
   }
 
   /**
    * Sets a preferred size on the content, obeying many constraints.
    * (scenery-internal)
    */
-  public attemptPreferredSize( orientation: Orientation, value: number ): void {
-    if ( this.proxy[ orientation.sizable ] ) {
-      const minimumSize = this.getMinimumSize( orientation );
-      const maximumSize = this.getMaximumSize( orientation );
+  public attemptPreferredSize(orientation: Orientation, value: number): void {
+    if (this.proxy[orientation.sizable]) {
+      const minimumSize = this.getMinimumSize(orientation);
+      const maximumSize = this.getMaximumSize(orientation);
 
-      assert && assert( isFinite( minimumSize ) );
-      assert && assert( maximumSize >= minimumSize );
+      assert && assert(isFinite(minimumSize));
+      assert && assert(maximumSize >= minimumSize);
 
-      value = Utils.clamp( value, minimumSize, maximumSize );
+      value = Utils.clamp(value, minimumSize, maximumSize);
 
-      let preferredSize = value - this.getEffectiveMinMargin( orientation ) - this.getEffectiveMaxMargin( orientation );
-      const maxSize = this.proxy.getMax( orientation );
-      if ( maxSize !== null ) {
-        preferredSize = Math.min( maxSize, preferredSize );
+      let preferredSize = value - this.getEffectiveMinMargin(orientation) - this.getEffectiveMaxMargin(orientation);
+      const maxSize = this.proxy.getMax(orientation);
+      if (maxSize !== null) {
+        preferredSize = Math.min(maxSize, preferredSize);
       }
 
-      this._marginConstraint.setProxyPreferredSize( orientation, this.proxy, preferredSize );
+      this._marginConstraint.setProxyPreferredSize(orientation, this.proxy, preferredSize);
 
       // Record that we set
-      this.preferredSizeSet.set( orientation, true );
+      this.preferredSizeSet.set(orientation, true);
     }
   }
 
@@ -250,9 +250,9 @@ export default class MarginLayoutCell extends LayoutCell {
    * Unsets the preferred size (if WE set it)
    * (scenery-internal)
    */
-  public unsetPreferredSize( orientation: Orientation ): void {
-    if ( this.proxy[ orientation.sizable ] ) {
-      this._marginConstraint.setProxyPreferredSize( orientation, this.proxy, null );
+  public unsetPreferredSize(orientation: Orientation): void {
+    if (this.proxy[orientation.sizable]) {
+      this._marginConstraint.setProxyPreferredSize(orientation, this.proxy, null);
     }
   }
 
@@ -260,18 +260,18 @@ export default class MarginLayoutCell extends LayoutCell {
    * Sets the left/top position of the (content+margin) for the cell in the constraint's ancestor coordinate frame.
    * (scenery-internal)
    */
-  public positionStart( orientation: Orientation, value: number ): void {
-    const start = this.getEffectiveMinMargin( orientation ) + value;
+  public positionStart(orientation: Orientation, value: number): void {
+    const start = this.getEffectiveMinMargin(orientation) + value;
 
-    this._marginConstraint.setProxyMinSide( orientation, this.proxy, start );
+    this._marginConstraint.setProxyMinSide(orientation, this.proxy, start);
   }
 
   /**
    * Sets the x/y value of the content for the cell in the constraint's ancestor coordinate frame.
    * (scenery-internal)
    */
-  public positionOrigin( orientation: Orientation, value: number ): void {
-    this._marginConstraint.setProxyOrigin( orientation, this.proxy, value );
+  public positionOrigin(orientation: Orientation, value: number): void {
+    this._marginConstraint.setProxyOrigin(orientation, this.proxy, value);
   }
 
   /**
@@ -280,7 +280,7 @@ export default class MarginLayoutCell extends LayoutCell {
    * (scenery-internal)
    */
   public getOriginBounds(): Bounds2 {
-    return this.getCellBounds().shiftedXY( -this.proxy.x, -this.proxy.y );
+    return this.getCellBounds().shiftedXY(-this.proxy.x, -this.proxy.y);
   }
 
   /**
@@ -298,139 +298,139 @@ export default class MarginLayoutCell extends LayoutCell {
 
   public override dispose(): void {
     // Unset the specified preferred sizes that were set by our layout (when we're removed)
-    Orientation.enumeration.values.forEach( orientation => {
-      if ( this.preferredSizeSet.get( orientation ) ) {
-        this.unsetPreferredSize( orientation );
+    Orientation.enumeration.values.forEach(orientation => {
+      if (this.preferredSizeSet.get(orientation)) {
+        this.unsetPreferredSize(orientation);
       }
-    } );
+    });
 
     super.dispose();
   }
 
-  public static createHelperNode<Cell extends MarginLayoutCell>( cells: Cell[], layoutBounds: Bounds2, cellToText: ( cell: Cell ) => string ): Node {
+  public static createHelperNode<Cell extends MarginLayoutCell>(cells: Cell[], layoutBounds: Bounds2, cellToText: (cell: Cell) => string): Node {
     const container = new Node();
     const lineWidth = 0.4;
 
-    const availableCellsShape = Shape.union( cells.map( cell => Shape.bounds( cell.lastAvailableBounds ) ) );
-    const usedCellsShape = Shape.union( cells.map( cell => Shape.bounds( cell.lastUsedBounds ) ) );
-    const usedContentShape = Shape.union( cells.map( cell => Shape.bounds( cell.proxy.bounds ) ) );
-    const spacingShape = Shape.bounds( layoutBounds ).shapeDifference( availableCellsShape );
-    const emptyShape = availableCellsShape.shapeDifference( usedCellsShape );
-    const marginShape = usedCellsShape.shapeDifference( usedContentShape );
+    const availableCellsShape = Shape.union(cells.map(cell => Shape.bounds(cell.lastAvailableBounds)));
+    const usedCellsShape = Shape.union(cells.map(cell => Shape.bounds(cell.lastUsedBounds)));
+    const usedContentShape = Shape.union(cells.map(cell => Shape.bounds(cell.proxy.bounds)));
+    const spacingShape = Shape.bounds(layoutBounds).shapeDifference(availableCellsShape);
+    const emptyShape = availableCellsShape.shapeDifference(usedCellsShape);
+    const marginShape = usedCellsShape.shapeDifference(usedContentShape);
 
-    const createLabeledTexture = ( label: string, foreground: TColor, background: TColor ) => {
-      const text = new Text( label, {
-        font: new Font( { size: 6, family: 'monospace' } ),
+    const createLabeledTexture = (label: string, foreground: TColor, background: TColor) => {
+      const text = new Text(label, {
+        font: new Font({ size: 6, family: 'monospace' }),
         fill: foreground
-      } );
-      const rectangle = Rectangle.bounds( text.bounds, {
+      });
+      const rectangle = Rectangle.bounds(text.bounds, {
         fill: background,
-        children: [ text ]
-      } );
+        children: [text]
+      });
       return new NodePattern(
         rectangle,
         4,
-        Math.floor( rectangle.left ),
-        Math.ceil( rectangle.top + 1 ),
-        Math.floor( rectangle.width ),
-        Math.floor( rectangle.height - 2 ),
-        Matrix3.rotation2( -Math.PI / 4 )
+        Math.floor(rectangle.left),
+        Math.ceil(rectangle.top + 1),
+        Math.floor(rectangle.width),
+        Math.floor(rectangle.height - 2),
+        Matrix3.rotation2(-Math.PI / 4)
       );
     };
 
-    container.addChild( new Path( spacingShape, {
-      fill: createLabeledTexture( 'spacing', '#000', '#fff' ),
+    container.addChild(new Path(spacingShape, {
+      fill: createLabeledTexture('spacing', '#000', '#fff'),
       opacity: 0.6
-    } ) );
-    container.addChild( new Path( emptyShape, {
-      fill: createLabeledTexture( 'empty', '#aaa', '#000' ),
+    }));
+    container.addChild(new Path(emptyShape, {
+      fill: createLabeledTexture('empty', '#aaa', '#000'),
       opacity: 0.6
-    } ) );
-    container.addChild( new Path( marginShape, {
-      fill: createLabeledTexture( 'margin', '#600', '#f00' ),
+    }));
+    container.addChild(new Path(marginShape, {
+      fill: createLabeledTexture('margin', '#600', '#f00'),
       opacity: 0.6
-    } ) );
+    }));
 
-    container.addChild( Rectangle.bounds( layoutBounds, {
+    container.addChild(Rectangle.bounds(layoutBounds, {
       stroke: 'white',
-      lineDash: [ 2, 2 ],
+      lineDash: [2, 2],
       lineDashOffset: 2,
-      lineWidth: lineWidth
-    } ) );
-    container.addChild( Rectangle.bounds( layoutBounds, {
+      lineWidth
+    }));
+    container.addChild(Rectangle.bounds(layoutBounds, {
       stroke: 'black',
-      lineDash: [ 2, 2 ],
-      lineWidth: lineWidth
-    } ) );
+      lineDash: [2, 2],
+      lineWidth
+    }));
 
-    cells.forEach( cell => {
-      container.addChild( Rectangle.bounds( cell.getCellBounds(), {
+    cells.forEach(cell => {
+      container.addChild(Rectangle.bounds(cell.getCellBounds(), {
         stroke: 'rgba(0,255,0,1)',
-        lineWidth: lineWidth
-      } ) );
-    } );
+        lineWidth
+      }));
+    });
 
-    cells.forEach( cell => {
-      container.addChild( Rectangle.bounds( cell.proxy.bounds, {
+    cells.forEach(cell => {
+      container.addChild(Rectangle.bounds(cell.proxy.bounds, {
         stroke: 'rgba(255,0,0,1)',
-        lineWidth: lineWidth
-      } ) );
-    } );
+        lineWidth
+      }));
+    });
 
-    cells.forEach( cell => {
+    cells.forEach(cell => {
       const bounds = cell.getCellBounds();
 
-      const hoverListener = new PressListener( {
+      const hoverListener = new PressListener({
         tandem: Tandem.OPT_OUT
-      } );
-      container.addChild( Rectangle.bounds( bounds, {
-        inputListeners: [ hoverListener ]
-      } ) );
+      });
+      container.addChild(Rectangle.bounds(bounds, {
+        inputListeners: [hoverListener]
+      }));
 
-      let str = cellToText( cell );
+      let str = cellToText(cell);
 
-      if ( cell.effectiveLeftMargin ) {
+      if (cell.effectiveLeftMargin) {
         str += `leftMargin: ${cell.effectiveLeftMargin}\n`;
       }
-      if ( cell.effectiveRightMargin ) {
+      if (cell.effectiveRightMargin) {
         str += `rightMargin: ${cell.effectiveRightMargin}\n`;
       }
-      if ( cell.effectiveTopMargin ) {
+      if (cell.effectiveTopMargin) {
         str += `topMargin: ${cell.effectiveTopMargin}\n`;
       }
-      if ( cell.effectiveBottomMargin ) {
+      if (cell.effectiveBottomMargin) {
         str += `bottomMargin: ${cell.effectiveBottomMargin}\n`;
       }
-      if ( cell.effectiveMinContentWidth ) {
+      if (cell.effectiveMinContentWidth) {
         str += `minContentWidth: ${cell.effectiveMinContentWidth}\n`;
       }
-      if ( cell.effectiveMinContentHeight ) {
+      if (cell.effectiveMinContentHeight) {
         str += `minContentHeight: ${cell.effectiveMinContentHeight}\n`;
       }
-      if ( cell.effectiveMaxContentWidth ) {
+      if (cell.effectiveMaxContentWidth) {
         str += `maxContentWidth: ${cell.effectiveMaxContentWidth}\n`;
       }
-      if ( cell.effectiveMaxContentHeight ) {
+      if (cell.effectiveMaxContentHeight) {
         str += `maxContentHeight: ${cell.effectiveMaxContentHeight}\n`;
       }
-      str += `layoutOptions: ${JSON.stringify( cell.node.layoutOptions, null, 2 ).replace( / /g, '&nbsp;' )}\n`;
+      str += `layoutOptions: ${JSON.stringify(cell.node.layoutOptions, null, 2).replace(/ /g, '&nbsp;')}\n`;
 
-      const hoverText = new RichText( str.trim().replace( /\n/g, '<br>' ), {
-        font: new Font( { size: 12 } )
-      } );
-      const hoverNode = Rectangle.bounds( hoverText.bounds.dilated( 3 ), {
+      const hoverText = new RichText(str.trim().replace(/\n/g, '<br>'), {
+        font: new Font({ size: 12 })
+      });
+      const hoverNode = Rectangle.bounds(hoverText.bounds.dilated(3), {
         fill: 'rgba(255,255,255,0.8)',
-        children: [ hoverText ],
+        children: [hoverText],
         leftTop: bounds.leftTop
-      } );
-      container.addChild( hoverNode );
-      hoverListener.isOverProperty.link( isOver => {
+      });
+      container.addChild(hoverNode);
+      hoverListener.isOverProperty.link(isOver => {
         hoverNode.visible = isOver;
-      } );
-    } );
+      });
+    });
 
     return container;
   }
 }
 
-scenery.register( 'MarginLayoutCell', MarginLayoutCell );
+scenery.register('MarginLayoutCell', MarginLayoutCell);

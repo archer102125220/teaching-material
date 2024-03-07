@@ -8,20 +8,20 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Pointer, scenery } from '../imports.js';
+import Vector2 from '../../dot/Vector2';
+import { Pointer, scenery } from '../imports';
 
 export default class Touch extends Pointer {
 
   // For tracking which touch is which
   public id: number;
 
-  public constructor( id: number, point: Vector2, event: Event ) {
-    super( point, 'touch' ); // true: touches always start in the down state
+  public constructor(id: number, point: Vector2, event: Event) {
+    super(point, 'touch'); // true: touches always start in the down state
 
     this.id = id;
 
-    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer( `Created ${this.toString()}` );
+    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`Created ${this.toString()}`);
   }
 
   /**
@@ -29,8 +29,8 @@ export default class Touch extends Pointer {
    *
    * @returns - Whether the point changed
    */
-  public move( point: Vector2 ): boolean {
-    const pointChanged = this.hasPointChanged( point );
+  public move(point: Vector2): boolean {
+    const pointChanged = this.hasPointChanged(point);
 
     this.point = point;
 
@@ -49,4 +49,4 @@ export default class Touch extends Pointer {
   }
 }
 
-scenery.register( 'Touch', Touch );
+scenery.register('Touch', Touch);

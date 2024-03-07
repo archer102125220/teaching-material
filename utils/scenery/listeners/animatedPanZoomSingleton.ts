@@ -8,19 +8,19 @@
  * @author Jesse Greenberg
  */
 
-import { AnimatedPanZoomListener, Node, PanZoomListenerOptions, scenery } from '../imports.js';
+import { AnimatedPanZoomListener, Node, type PanZoomListenerOptions, scenery } from '../imports';
 
 class AnimatedPanZoomSingleton {
 
   // A reference to the instance of the listener, null until initialized.
   private _listener: AnimatedPanZoomListener | null = null;
 
-  public initialize( targetNode: Node, options?: PanZoomListenerOptions ): void {
-    this._listener = new AnimatedPanZoomListener( targetNode, options );
+  public initialize(targetNode: Node, options?: PanZoomListenerOptions): void {
+    this._listener = new AnimatedPanZoomListener(targetNode, options);
   }
 
   public dispose(): void {
-    assert && assert( this._listener, 'No listener, call initialize first.' );
+    assert && assert(this._listener, 'No listener, call initialize first.');
     this._listener!.dispose();
     this._listener = null;
   }
@@ -29,7 +29,7 @@ class AnimatedPanZoomSingleton {
    * Returns the AnimatedPanZoomListener.
    */
   public get listener(): AnimatedPanZoomListener {
-    assert && assert( this._listener, 'No listener, call initialize first.' );
+    assert && assert(this._listener, 'No listener, call initialize first.');
     return this._listener!;
   }
 
@@ -42,5 +42,5 @@ class AnimatedPanZoomSingleton {
 }
 
 const animatedPanZoomSingleton = new AnimatedPanZoomSingleton();
-scenery.register( 'animatedPanZoomSingleton', animatedPanZoomSingleton );
+scenery.register('animatedPanZoomSingleton', animatedPanZoomSingleton);
 export default animatedPanZoomSingleton;

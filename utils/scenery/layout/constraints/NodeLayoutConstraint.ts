@@ -7,15 +7,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Property from '../../../../axon/js/Property.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import TinyProperty from '../../../../axon/js/TinyProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
-import { LayoutConstraint, LayoutProxy, MarginLayoutCell, Node, scenery } from '../../imports.js';
-import TProperty from '../../../../axon/js/TProperty.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import Orientation from '../../../../phet-core/js/Orientation.js';
+import Property from '../../../axon/Property';
+import type StrictOmit from '../../../phet-core/types/StrictOmit';
+import TinyProperty from '../../../axon/TinyProperty';
+import Bounds2 from '../../../dot/Bounds2';
+import { LayoutConstraint, LayoutProxy, MarginLayoutCell, Node, scenery } from '../../imports';
+import type TProperty from '../../../axon/TProperty';
+import optionize from '../../../phet-core/optionize';
+import Vector2 from '../../../dot/Vector2';
+import Orientation from '../../../phet-core/Orientation';
 
 // Position changes smaller than this will be ignored
 const CHANGE_POSITION_THRESHOLD = 1e-9;
@@ -61,23 +61,23 @@ export default class NodeLayoutConstraint extends LayoutConstraint {
    * Recommended for ancestorNode to be the layout container, and that the layout container extends LayoutNode.
    * (scenery-internal)
    */
-  public constructor( ancestorNode: Node, providedOptions?: NodeLayoutConstraintOptions ) {
+  public constructor(ancestorNode: Node, providedOptions?: NodeLayoutConstraintOptions) {
 
     // The omitted options are set to proper defaults below
-    const options = optionize<NodeLayoutConstraintOptions, StrictOmit<SelfOptions, 'excludeInvisible'>>()( {
+    const options = optionize<NodeLayoutConstraintOptions, StrictOmit<SelfOptions, 'excludeInvisible'>>()({
       // As options, so we could hook into a Node's preferred/minimum sizes if desired
-      preferredWidthProperty: new TinyProperty<number | null>( null ),
-      preferredHeightProperty: new TinyProperty<number | null>( null ),
-      minimumWidthProperty: new TinyProperty<number | null>( null ),
-      minimumHeightProperty: new TinyProperty<number | null>( null ),
-      layoutOriginProperty: new TinyProperty<Vector2>( Vector2.ZERO )
-    }, providedOptions );
+      preferredWidthProperty: new TinyProperty<number | null>(null),
+      preferredHeightProperty: new TinyProperty<number | null>(null),
+      minimumWidthProperty: new TinyProperty<number | null>(null),
+      minimumHeightProperty: new TinyProperty<number | null>(null),
+      layoutOriginProperty: new TinyProperty<Vector2>(Vector2.ZERO)
+    }, providedOptions);
 
-    super( ancestorNode );
+    super(ancestorNode);
 
-    this.layoutBoundsProperty = new Property( Bounds2.NOTHING, {
+    this.layoutBoundsProperty = new Property(Bounds2.NOTHING, {
       valueComparisonStrategy: 'equalsFunction'
-    } );
+    });
 
     this.preferredWidthProperty = options.preferredWidthProperty;
     this.preferredHeightProperty = options.preferredHeightProperty;
@@ -85,29 +85,29 @@ export default class NodeLayoutConstraint extends LayoutConstraint {
     this.minimumHeightProperty = options.minimumHeightProperty;
     this.layoutOriginProperty = options.layoutOriginProperty;
 
-    this.preferredWidthProperty.lazyLink( this._updateLayoutListener );
-    this.preferredHeightProperty.lazyLink( this._updateLayoutListener );
-    this.layoutOriginProperty.lazyLink( this._updateLayoutListener );
+    this.preferredWidthProperty.lazyLink(this._updateLayoutListener);
+    this.preferredHeightProperty.lazyLink(this._updateLayoutListener);
+    this.layoutOriginProperty.lazyLink(this._updateLayoutListener);
   }
 
   /**
    * Filters out cells to only those that will be involved in layout
    */
-  protected filterLayoutCells<Cell extends MarginLayoutCell>( cells: Cell[] ): Cell[] {
+  protected filterLayoutCells<Cell extends MarginLayoutCell>(cells: Cell[]): Cell[] {
     // We'll check to make sure cells are disposed in a common place, so it's not duplicated
-    assert && assert( _.every( cells, cell => !cell.node.isDisposed ), 'A cell\'s node should not be disposed when layout happens' );
+    assert && assert(_.every(cells, cell => !cell.node.isDisposed), 'A cell\'s node should not be disposed when layout happens');
 
-    return cells.filter( cell => {
-      return cell.isConnected() && cell.proxy.bounds.isValid() && ( !this.excludeInvisible || cell.node.visible );
-    } );
+    return cells.filter(cell => {
+      return cell.isConnected() && cell.proxy.bounds.isValid() && (!this.excludeInvisible || cell.node.visible);
+    });
   }
 
   public get excludeInvisible(): boolean {
     return this._excludeInvisible;
   }
 
-  public set excludeInvisible( value: boolean ) {
-    if ( this._excludeInvisible !== value ) {
+  public set excludeInvisible(value: boolean) {
+    if (this._excludeInvisible !== value) {
       this._excludeInvisible = value;
 
       this.updateLayoutAutomatically();
@@ -118,17 +118,17 @@ export default class NodeLayoutConstraint extends LayoutConstraint {
    * Sets preferred size of content in a central location (so we could hook in animation in the future)
    * (scenery-internal)
    */
-  public setProxyPreferredSize( orientation: Orientation, proxy: LayoutProxy, preferredSize: number | null ): void {
-    proxy[ orientation.preferredSize ] = preferredSize;
+  public setProxyPreferredSize(orientation: Orientation, proxy: LayoutProxy, preferredSize: number | null): void {
+    proxy[orientation.preferredSize] = preferredSize;
   }
 
   /**
    * Sets position of content in a central location (so we could hook in animation in the future)
    * (scenery-internal)
    */
-  public setProxyMinSide( orientation: Orientation, proxy: LayoutProxy, minSide: number ): void {
-    if ( Math.abs( proxy[ orientation.minSide ] - minSide ) > CHANGE_POSITION_THRESHOLD ) {
-      proxy[ orientation.minSide ] = minSide;
+  public setProxyMinSide(orientation: Orientation, proxy: LayoutProxy, minSide: number): void {
+    if (Math.abs(proxy[orientation.minSide] - minSide) > CHANGE_POSITION_THRESHOLD) {
+      proxy[orientation.minSide] = minSide;
     }
   }
 
@@ -136,9 +136,9 @@ export default class NodeLayoutConstraint extends LayoutConstraint {
    * Sets origin-based position of content in a central location (so we could hook in animation in the future)
    * (scenery-internal)
    */
-  public setProxyOrigin( orientation: Orientation, proxy: LayoutProxy, origin: number ): void {
-    if ( Math.abs( proxy[ orientation.coordinate ] - origin ) > CHANGE_POSITION_THRESHOLD ) {
-      proxy[ orientation.coordinate ] = origin;
+  public setProxyOrigin(orientation: Orientation, proxy: LayoutProxy, origin: number): void {
+    if (Math.abs(proxy[orientation.coordinate] - origin) > CHANGE_POSITION_THRESHOLD) {
+      proxy[orientation.coordinate] = origin;
     }
   }
 
@@ -148,12 +148,12 @@ export default class NodeLayoutConstraint extends LayoutConstraint {
   public override dispose(): void {
     // In case they're from external sources (since these constraints can be used without a dedicated Node that is also
     // being disposed.
-    this.preferredWidthProperty.unlink( this._updateLayoutListener );
-    this.preferredHeightProperty.unlink( this._updateLayoutListener );
-    this.layoutOriginProperty.unlink( this._updateLayoutListener );
+    this.preferredWidthProperty.unlink(this._updateLayoutListener);
+    this.preferredHeightProperty.unlink(this._updateLayoutListener);
+    this.layoutOriginProperty.unlink(this._updateLayoutListener);
 
     super.dispose();
   }
 }
 
-scenery.register( 'NodeLayoutConstraint', NodeLayoutConstraint );
+scenery.register('NodeLayoutConstraint', NodeLayoutConstraint);

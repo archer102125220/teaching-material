@@ -5,31 +5,31 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-import Bounds2 from '../../../../dot/js/Bounds2.js';
-import Pool, { TPoolable } from '../../../../phet-core/js/Pool.js';
-import { Node, RichTextCleanable, scenery } from '../../imports.js';
+import Bounds2 from '../../../dot/Bounds2';
+import Pool, { type TPoolable } from '../../../phet-core/Pool';
+import { Node, RichTextCleanable, scenery } from '../../imports';
 
-class RichTextVerticalSpacer extends RichTextCleanable( Node ) implements TPoolable {
-  public constructor( height: number ) {
+class RichTextVerticalSpacer extends RichTextCleanable(Node) implements TPoolable {
+  public constructor(height: number) {
     super();
 
-    this.initialize( height );
+    this.initialize(height);
   }
 
-  public initialize( height: number ): this {
+  public initialize(height: number): this {
 
-    this.localBounds = new Bounds2( 0, 0, 0, height );
+    this.localBounds = new Bounds2(0, 0, 0, height);
 
     return this;
   }
 
   public freeToPool(): void {
-    RichTextVerticalSpacer.pool.freeToPool( this );
+    RichTextVerticalSpacer.pool.freeToPool(this);
   }
 
-  public static readonly pool = new Pool( RichTextVerticalSpacer );
+  public static readonly pool = new Pool(RichTextVerticalSpacer);
 }
 
-scenery.register( 'RichTextVerticalSpacer', RichTextVerticalSpacer );
+scenery.register('RichTextVerticalSpacer', RichTextVerticalSpacer);
 
 export default RichTextVerticalSpacer;

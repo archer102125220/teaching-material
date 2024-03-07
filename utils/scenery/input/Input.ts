@@ -163,23 +163,23 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import PhetioAction from '../../../tandem/js/PhetioAction.js';
-import TinyEmitter from '../../../axon/js/TinyEmitter.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import cleanArray from '../../../phet-core/js/cleanArray.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import platform from '../../../phet-core/js/platform.js';
-import EventType from '../../../tandem/js/EventType.js';
-import NullableIO from '../../../tandem/js/types/NullableIO.js';
-import NumberIO from '../../../tandem/js/types/NumberIO.js';
-import { BatchedDOMEvent, BatchedDOMEventCallback, BatchedDOMEventType, BrowserEvents, Display, EventContext, EventContextIO, Mouse, Node, PDOMInstance, PDOMPointer, PDOMUtils, Pen, Pointer, scenery, SceneryEvent, SceneryListenerFunction, SupportedEventTypes, TInputListener, Touch, Trail, WindowTouch } from '../imports.js';
-import PhetioObject, { PhetioObjectOptions } from '../../../tandem/js/PhetioObject.js';
-import IOType from '../../../tandem/js/types/IOType.js';
-import ArrayIO from '../../../tandem/js/types/ArrayIO.js';
-import PickOptional from '../../../phet-core/js/types/PickOptional.js';
-import TEmitter from '../../../axon/js/TEmitter.js';
+import PhetioAction from '../../tandem/PhetioAction';
+import TinyEmitter from '../../axon/TinyEmitter';
+import Vector2 from '../../dot/Vector2';
+import cleanArray from '../../phet-core/cleanArray';
+import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
+import platform from '../../phet-core/platform';
+import EventType from '../../tandem/EventType';
+import NullableIO from '../../tandem/types/NullableIO';
+import NumberIO from '../../tandem/types/NumberIO';
+import { BatchedDOMEvent, type BatchedDOMEventCallback, BatchedDOMEventType, BrowserEvents, Display, EventContext, EventContextIO, Mouse, Node, PDOMInstance, PDOMPointer, PDOMUtils, Pen, Pointer, scenery, SceneryEvent, type SceneryListenerFunction, type SupportedEventTypes, type TInputListener, Touch, Trail, type WindowTouch } from '../imports';
+import PhetioObject, { type PhetioObjectOptions } from '../../tandem/PhetioObject';
+import IOType from '../../tandem/types/IOType';
+import ArrayIO from '../../tandem/types/ArrayIO';
+import type PickOptional from '../../phet-core/types/PickOptional';
+import type TEmitter from '../../axon/TEmitter';
 
-const ArrayIOPointerIO = ArrayIO( Pointer.PointerIO );
+const ArrayIOPointerIO = ArrayIO(Pointer.PointerIO);
 
 // This is the list of keys that get serialized AND deserialized. NOTE: Do not add or change this without
 // consulting the PhET-iO IOType schema for this in EventIO
@@ -242,17 +242,17 @@ const domEventPropertiesSetInConstructor: SerializedPropertiesForDeserialization
 type SerializedDOMEvent = {
   constructorName: string; // used to get the constructor from the window object, see Input.deserializeDOMEvent
 } & {
-  [key in SerializedPropertiesForDeserialization]?: unknown;
-};
+    [key in SerializedPropertiesForDeserialization]?: unknown;
+  };
 
 // A list of keys on events that need to be serialized into HTMLElements
-const EVENT_KEY_VALUES_AS_ELEMENTS: SerializedPropertiesForDeserialization[] = [ 'target', 'relatedTarget' ];
+const EVENT_KEY_VALUES_AS_ELEMENTS: SerializedPropertiesForDeserialization[] = ['target', 'relatedTarget'];
 
 // A list of events that should still fire, even when the Node is not pickable
-const PDOM_UNPICKABLE_EVENTS = [ 'focus', 'blur', 'focusin', 'focusout' ];
+const PDOM_UNPICKABLE_EVENTS = ['focus', 'blur', 'focusin', 'focusout'];
 const TARGET_SUBSTITUTE_KEY = 'targetSubstitute' as const;
 type TargetSubstitudeAugmentedEvent = Event & {
-  [ TARGET_SUBSTITUTE_KEY ]?: Element;
+  [TARGET_SUBSTITUTE_KEY]?: Element;
 };
 
 
@@ -283,7 +283,7 @@ export default class Input extends PhetioObject {
   // All active pointers.
   public pointers: Pointer[];
 
-  public pointerAddedEmitter: TEmitter<[ Pointer ]>;
+  public pointerAddedEmitter: TEmitter<[Pointer]>;
 
   // Whether we are currently firing events. We need to track this to handle re-entrant cases
   // like https://github.com/phetsims/balloons-and-static-electricity/issues/406.
@@ -303,44 +303,44 @@ export default class Input extends PhetioObject {
   // This is a high frequency event that is necessary for reproducible playbacks
   private readonly validatePointersAction: PhetioAction;
 
-  private readonly mouseUpAction: PhetioAction<[ Vector2, EventContext<MouseEvent> ]>;
-  private readonly mouseDownAction: PhetioAction<[ number, Vector2, EventContext<MouseEvent> ]>;
-  private readonly mouseMoveAction: PhetioAction<[ Vector2, EventContext<MouseEvent> ]>;
-  private readonly mouseOverAction: PhetioAction<[ Vector2, EventContext<MouseEvent> ]>;
-  private readonly mouseOutAction: PhetioAction<[ Vector2, EventContext<MouseEvent> ]>;
-  private readonly wheelScrollAction: PhetioAction<[ EventContext<WheelEvent> ]>;
-  private readonly touchStartAction: PhetioAction<[ number, Vector2, EventContext<TouchEvent | PointerEvent> ]>;
-  private readonly touchEndAction: PhetioAction<[ number, Vector2, EventContext<TouchEvent | PointerEvent> ]>;
-  private readonly touchMoveAction: PhetioAction<[ number, Vector2, EventContext<TouchEvent | PointerEvent> ]>;
-  private readonly touchCancelAction: PhetioAction<[ number, Vector2, EventContext<TouchEvent | PointerEvent> ]>;
-  private readonly penStartAction: PhetioAction<[ number, Vector2, EventContext<PointerEvent> ]>;
-  private readonly penEndAction: PhetioAction<[ number, Vector2, EventContext<PointerEvent> ]>;
-  private readonly penMoveAction: PhetioAction<[ number, Vector2, EventContext<PointerEvent> ]>;
-  private readonly penCancelAction: PhetioAction<[ number, Vector2, EventContext<PointerEvent> ]>;
-  private readonly gotPointerCaptureAction: PhetioAction<[ number, EventContext ]>;
-  private readonly lostPointerCaptureAction: PhetioAction<[ number, EventContext ]>;
+  private readonly mouseUpAction: PhetioAction<[Vector2, EventContext<MouseEvent>]>;
+  private readonly mouseDownAction: PhetioAction<[number, Vector2, EventContext<MouseEvent>]>;
+  private readonly mouseMoveAction: PhetioAction<[Vector2, EventContext<MouseEvent>]>;
+  private readonly mouseOverAction: PhetioAction<[Vector2, EventContext<MouseEvent>]>;
+  private readonly mouseOutAction: PhetioAction<[Vector2, EventContext<MouseEvent>]>;
+  private readonly wheelScrollAction: PhetioAction<[EventContext<WheelEvent>]>;
+  private readonly touchStartAction: PhetioAction<[number, Vector2, EventContext<TouchEvent | PointerEvent>]>;
+  private readonly touchEndAction: PhetioAction<[number, Vector2, EventContext<TouchEvent | PointerEvent>]>;
+  private readonly touchMoveAction: PhetioAction<[number, Vector2, EventContext<TouchEvent | PointerEvent>]>;
+  private readonly touchCancelAction: PhetioAction<[number, Vector2, EventContext<TouchEvent | PointerEvent>]>;
+  private readonly penStartAction: PhetioAction<[number, Vector2, EventContext<PointerEvent>]>;
+  private readonly penEndAction: PhetioAction<[number, Vector2, EventContext<PointerEvent>]>;
+  private readonly penMoveAction: PhetioAction<[number, Vector2, EventContext<PointerEvent>]>;
+  private readonly penCancelAction: PhetioAction<[number, Vector2, EventContext<PointerEvent>]>;
+  private readonly gotPointerCaptureAction: PhetioAction<[number, EventContext]>;
+  private readonly lostPointerCaptureAction: PhetioAction<[number, EventContext]>;
 
   // If accessible
-  private readonly focusinAction: PhetioAction<[ EventContext<FocusEvent> ]>;
-  private readonly focusoutAction: PhetioAction<[ EventContext<FocusEvent> ]>;
-  private readonly clickAction: PhetioAction<[ EventContext<MouseEvent> ]>;
-  private readonly inputAction: PhetioAction<[ EventContext<Event | InputEvent> ]>;
-  private readonly changeAction: PhetioAction<[ EventContext ]>;
-  private readonly keydownAction: PhetioAction<[ EventContext<KeyboardEvent> ]>;
-  private readonly keyupAction: PhetioAction<[ EventContext<KeyboardEvent> ]>;
+  private readonly focusinAction: PhetioAction<[EventContext<FocusEvent>]>;
+  private readonly focusoutAction: PhetioAction<[EventContext<FocusEvent>]>;
+  private readonly clickAction: PhetioAction<[EventContext<MouseEvent>]>;
+  private readonly inputAction: PhetioAction<[EventContext<Event | InputEvent>]>;
+  private readonly changeAction: PhetioAction<[EventContext]>;
+  private readonly keydownAction: PhetioAction<[EventContext<KeyboardEvent>]>;
+  private readonly keyupAction: PhetioAction<[EventContext<KeyboardEvent>]>;
 
-  public static readonly InputIO = new IOType<Input>( 'InputIO', {
+  public static readonly InputIO = new IOType<Input>('InputIO', {
     valueType: Input,
     applyState: _.noop,
-    toStateObject: ( input: Input ) => {
+    toStateObject: (input: Input) => {
       return {
-        pointers: ArrayIOPointerIO.toStateObject( input.pointers )
+        pointers: ArrayIOPointerIO.toStateObject(input.pointers)
       };
     },
     stateSchema: {
       pointers: ArrayIOPointerIO
     }
-  } );
+  });
 
   /**
    * @param display
@@ -353,14 +353,14 @@ export default class Input extends PhetioObject {
    *
    * @param [providedOptions]
    */
-  public constructor( display: Display, attachToWindow: boolean, batchDOMEvents: boolean, assumeFullWindow: boolean, passiveEvents: boolean | null, providedOptions?: InputOptions ) {
+  public constructor(display: Display, attachToWindow: boolean, batchDOMEvents: boolean, assumeFullWindow: boolean, passiveEvents: boolean | null, providedOptions?: InputOptions) {
 
-    const options = optionize<InputOptions, SelfOptions, PhetioObjectOptions>()( {
+    const options = optionize<InputOptions, SelfOptions, PhetioObjectOptions>()({
       phetioType: Input.InputIO,
       phetioDocumentation: 'Central point for user input events, such as mouse, touch'
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.display = display;
     this.rootNode = display.rootNode;
@@ -373,66 +373,66 @@ export default class Input extends PhetioObject {
     this.pdomPointer = null;
     this.mouse = null;
     this.pointers = [];
-    this.pointerAddedEmitter = new TinyEmitter<[ Pointer ]>();
+    this.pointerAddedEmitter = new TinyEmitter<[Pointer]>();
     this.currentlyFiringEvents = false;
     this.upTimeStamp = 0;
 
-    ////////////////////////////////////////////////////
+    // //////////////////////////////////////////////////
     // Declare the Actions that send scenery input events to the PhET-iO data stream.  Note they use the default value
     // of phetioReadOnly false, in case a client wants to synthesize events.
 
-    this.validatePointersAction = new PhetioAction( () => {
+    this.validatePointersAction = new PhetioAction(() => {
       let i = this.pointers.length;
-      while ( i-- ) {
-        const pointer = this.pointers[ i ];
-        if ( pointer.point && pointer !== this.pdomPointer ) {
-          this.branchChangeEvents<Event>( pointer, pointer.lastEventContext || EventContext.createSynthetic(), false );
+      while (i--) {
+        const pointer = this.pointers[i];
+        if (pointer.point && pointer !== this.pdomPointer) {
+          this.branchChangeEvents<Event>(pointer, pointer.lastEventContext || EventContext.createSynthetic(), false);
         }
       }
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'validatePointersAction' ),
+      tandem: options.tandem?.createTandem('validatePointersAction'),
       phetioHighFrequency: true
-    } );
+    });
 
-    this.mouseUpAction = new PhetioAction( ( point: Vector2, context: EventContext<MouseEvent> ) => {
-      const mouse = this.ensureMouse( point );
+    this.mouseUpAction = new PhetioAction((point: Vector2, context: EventContext<MouseEvent>) => {
+      const mouse = this.ensureMouse(point);
       mouse.id = null;
-      this.upEvent<MouseEvent>( mouse, context, point );
+      this.upEvent<MouseEvent>(mouse, context, point);
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'mouseUpAction' ),
+      tandem: options.tandem?.createTandem('mouseUpAction'),
       parameters: [
         { name: 'point', phetioType: Vector2.Vector2IO },
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a mouse button is released.'
-    } );
+    });
 
-    this.mouseDownAction = new PhetioAction( ( id: number, point: Vector2, context: EventContext<MouseEvent> ) => {
-      const mouse = this.ensureMouse( point );
+    this.mouseDownAction = new PhetioAction((id: number, point: Vector2, context: EventContext<MouseEvent>) => {
+      const mouse = this.ensureMouse(point);
       mouse.id = id;
-      this.downEvent<MouseEvent>( mouse, context, point );
+      this.downEvent<MouseEvent>(mouse, context, point);
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'mouseDownAction' ),
+      tandem: options.tandem?.createTandem('mouseDownAction'),
       parameters: [
-        { name: 'id', phetioType: NullableIO( NumberIO ) },
+        { name: 'id', phetioType: NullableIO(NumberIO) },
         { name: 'point', phetioType: Vector2.Vector2IO },
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a mouse button is pressed.'
-    } );
+    });
 
-    this.mouseMoveAction = new PhetioAction( ( point: Vector2, context: EventContext<MouseEvent> ) => {
-      const mouse = this.ensureMouse( point );
-      mouse.move( point );
-      this.moveEvent<MouseEvent>( mouse, context );
+    this.mouseMoveAction = new PhetioAction((point: Vector2, context: EventContext<MouseEvent>) => {
+      const mouse = this.ensureMouse(point);
+      mouse.move(point);
+      this.moveEvent<MouseEvent>(mouse, context);
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'mouseMoveAction' ),
+      tandem: options.tandem?.createTandem('mouseMoveAction'),
       parameters: [
         { name: 'point', phetioType: Vector2.Vector2IO },
         { name: 'context', phetioType: EventContextIO }
@@ -440,68 +440,68 @@ export default class Input extends PhetioObject {
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the mouse is moved.',
       phetioHighFrequency: true
-    } );
+    });
 
-    this.mouseOverAction = new PhetioAction( ( point: Vector2, context: EventContext<MouseEvent> ) => {
-      const mouse = this.ensureMouse( point );
-      mouse.over( point );
+    this.mouseOverAction = new PhetioAction((point: Vector2, context: EventContext<MouseEvent>) => {
+      const mouse = this.ensureMouse(point);
+      mouse.over(point);
       // TODO: how to handle mouse-over (and log it)... are we changing the pointer.point without a branch change? https://github.com/phetsims/scenery/issues/1581
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'mouseOverAction' ),
+      tandem: options.tandem?.createTandem('mouseOverAction'),
       parameters: [
         { name: 'point', phetioType: Vector2.Vector2IO },
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the mouse is moved while on the sim.'
-    } );
+    });
 
-    this.mouseOutAction = new PhetioAction( ( point: Vector2, context: EventContext<MouseEvent> ) => {
-      const mouse = this.ensureMouse( point );
-      mouse.out( point );
+    this.mouseOutAction = new PhetioAction((point: Vector2, context: EventContext<MouseEvent>) => {
+      const mouse = this.ensureMouse(point);
+      mouse.out(point);
       // TODO: how to handle mouse-out (and log it)... are we changing the pointer.point without a branch change? https://github.com/phetsims/scenery/issues/1581
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'mouseOutAction' ),
+      tandem: options.tandem?.createTandem('mouseOutAction'),
       parameters: [
         { name: 'point', phetioType: Vector2.Vector2IO },
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the mouse moves out of the display.'
-    } );
+    });
 
-    this.wheelScrollAction = new PhetioAction( ( context: EventContext<WheelEvent> ) => {
+    this.wheelScrollAction = new PhetioAction((context: EventContext<WheelEvent>) => {
       const event = context.domEvent;
 
-      const mouse = this.ensureMouse( this.pointFromEvent( event ) );
-      mouse.wheel( event );
+      const mouse = this.ensureMouse(this.pointFromEvent(event));
+      mouse.wheel(event);
 
       // don't send mouse-wheel events if we don't yet have a mouse location!
       // TODO: Can we set the mouse location based on the wheel event? https://github.com/phetsims/scenery/issues/1581
-      if ( mouse.point ) {
-        const trail = this.rootNode.trailUnderPointer( mouse ) || new Trail( this.rootNode );
-        this.dispatchEvent<WheelEvent>( trail, 'wheel', mouse, context, true );
+      if (mouse.point) {
+        const trail = this.rootNode.trailUnderPointer(mouse) || new Trail(this.rootNode);
+        this.dispatchEvent<WheelEvent>(trail, 'wheel', mouse, context, true);
       }
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'wheelScrollAction' ),
+      tandem: options.tandem?.createTandem('wheelScrollAction'),
       parameters: [
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the mouse wheel scrolls.',
       phetioHighFrequency: true
-    } );
+    });
 
-    this.touchStartAction = new PhetioAction( ( id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent> ) => {
-      const touch = new Touch( id, point, context.domEvent );
-      this.addPointer( touch );
-      this.downEvent<TouchEvent | PointerEvent>( touch, context, point );
+    this.touchStartAction = new PhetioAction((id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>) => {
+      const touch = new Touch(id, point, context.domEvent);
+      this.addPointer(touch);
+      this.downEvent<TouchEvent | PointerEvent>(touch, context, point);
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'touchStartAction' ),
+      tandem: options.tandem?.createTandem('touchStartAction'),
       parameters: [
         { name: 'id', phetioType: NumberIO },
         { name: 'point', phetioType: Vector2.Vector2IO },
@@ -509,18 +509,18 @@ export default class Input extends PhetioObject {
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a touch begins.'
-    } );
+    });
 
-    this.touchEndAction = new PhetioAction( ( id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent> ) => {
-      const touch = this.findPointerById( id ) as Touch | null;
-      if ( touch ) {
-        assert && assert( touch instanceof Touch ); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
-        this.upEvent<TouchEvent | PointerEvent>( touch, context, point );
-        this.removePointer( touch );
+    this.touchEndAction = new PhetioAction((id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>) => {
+      const touch = this.findPointerById(id) as Touch | null;
+      if (touch) {
+        assert && assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
+        this.upEvent<TouchEvent | PointerEvent>(touch, context, point);
+        this.removePointer(touch);
       }
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'touchEndAction' ),
+      tandem: options.tandem?.createTandem('touchEndAction'),
       parameters: [
         { name: 'id', phetioType: NumberIO },
         { name: 'point', phetioType: Vector2.Vector2IO },
@@ -528,18 +528,18 @@ export default class Input extends PhetioObject {
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a touch ends.'
-    } );
+    });
 
-    this.touchMoveAction = new PhetioAction( ( id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent> ) => {
-      const touch = this.findPointerById( id ) as Touch | null;
-      if ( touch ) {
-        assert && assert( touch instanceof Touch ); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
-        touch.move( point );
-        this.moveEvent<TouchEvent | PointerEvent>( touch, context );
+    this.touchMoveAction = new PhetioAction((id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>) => {
+      const touch = this.findPointerById(id) as Touch | null;
+      if (touch) {
+        assert && assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
+        touch.move(point);
+        this.moveEvent<TouchEvent | PointerEvent>(touch, context);
       }
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'touchMoveAction' ),
+      tandem: options.tandem?.createTandem('touchMoveAction'),
       parameters: [
         { name: 'id', phetioType: NumberIO },
         { name: 'point', phetioType: Vector2.Vector2IO },
@@ -548,18 +548,18 @@ export default class Input extends PhetioObject {
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a touch moves.',
       phetioHighFrequency: true
-    } );
+    });
 
-    this.touchCancelAction = new PhetioAction( ( id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent> ) => {
-      const touch = this.findPointerById( id ) as Touch | null;
-      if ( touch ) {
-        assert && assert( touch instanceof Touch ); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
-        this.cancelEvent<TouchEvent | PointerEvent>( touch, context, point );
-        this.removePointer( touch );
+    this.touchCancelAction = new PhetioAction((id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>) => {
+      const touch = this.findPointerById(id) as Touch | null;
+      if (touch) {
+        assert && assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
+        this.cancelEvent<TouchEvent | PointerEvent>(touch, context, point);
+        this.removePointer(touch);
       }
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'touchCancelAction' ),
+      tandem: options.tandem?.createTandem('touchCancelAction'),
       parameters: [
         { name: 'id', phetioType: NumberIO },
         { name: 'point', phetioType: Vector2.Vector2IO },
@@ -567,15 +567,15 @@ export default class Input extends PhetioObject {
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a touch is canceled.'
-    } );
+    });
 
-    this.penStartAction = new PhetioAction( ( id: number, point: Vector2, context: EventContext<PointerEvent> ) => {
-      const pen = new Pen( id, point, context.domEvent );
-      this.addPointer( pen );
-      this.downEvent<PointerEvent>( pen, context, point );
+    this.penStartAction = new PhetioAction((id: number, point: Vector2, context: EventContext<PointerEvent>) => {
+      const pen = new Pen(id, point, context.domEvent);
+      this.addPointer(pen);
+      this.downEvent<PointerEvent>(pen, context, point);
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'penStartAction' ),
+      tandem: options.tandem?.createTandem('penStartAction'),
       parameters: [
         { name: 'id', phetioType: NumberIO },
         { name: 'point', phetioType: Vector2.Vector2IO },
@@ -583,17 +583,17 @@ export default class Input extends PhetioObject {
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a pen touches the screen.'
-    } );
+    });
 
-    this.penEndAction = new PhetioAction( ( id: number, point: Vector2, context: EventContext<PointerEvent> ) => {
-      const pen = this.findPointerById( id ) as Pen | null;
-      if ( pen ) {
-        this.upEvent<PointerEvent>( pen, context, point );
-        this.removePointer( pen );
+    this.penEndAction = new PhetioAction((id: number, point: Vector2, context: EventContext<PointerEvent>) => {
+      const pen = this.findPointerById(id) as Pen | null;
+      if (pen) {
+        this.upEvent<PointerEvent>(pen, context, point);
+        this.removePointer(pen);
       }
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'penEndAction' ),
+      tandem: options.tandem?.createTandem('penEndAction'),
       parameters: [
         { name: 'id', phetioType: NumberIO },
         { name: 'point', phetioType: Vector2.Vector2IO },
@@ -601,17 +601,17 @@ export default class Input extends PhetioObject {
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a pen is lifted.'
-    } );
+    });
 
-    this.penMoveAction = new PhetioAction( ( id: number, point: Vector2, context: EventContext<PointerEvent> ) => {
-      const pen = this.findPointerById( id ) as Pen | null;
-      if ( pen ) {
-        pen.move( point );
-        this.moveEvent<PointerEvent>( pen, context );
+    this.penMoveAction = new PhetioAction((id: number, point: Vector2, context: EventContext<PointerEvent>) => {
+      const pen = this.findPointerById(id) as Pen | null;
+      if (pen) {
+        pen.move(point);
+        this.moveEvent<PointerEvent>(pen, context);
       }
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'penMoveAction' ),
+      tandem: options.tandem?.createTandem('penMoveAction'),
       parameters: [
         { name: 'id', phetioType: NumberIO },
         { name: 'point', phetioType: Vector2.Vector2IO },
@@ -620,17 +620,17 @@ export default class Input extends PhetioObject {
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a pen is moved.',
       phetioHighFrequency: true
-    } );
+    });
 
-    this.penCancelAction = new PhetioAction( ( id: number, point: Vector2, context: EventContext<PointerEvent> ) => {
-      const pen = this.findPointerById( id ) as Pen | null;
-      if ( pen ) {
-        this.cancelEvent<PointerEvent>( pen, context, point );
-        this.removePointer( pen );
+    this.penCancelAction = new PhetioAction((id: number, point: Vector2, context: EventContext<PointerEvent>) => {
+      const pen = this.findPointerById(id) as Pen | null;
+      if (pen) {
+        this.cancelEvent<PointerEvent>(pen, context, point);
+        this.removePointer(pen);
       }
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'penCancelAction' ),
+      tandem: options.tandem?.createTandem('penCancelAction'),
       parameters: [
         { name: 'id', phetioType: NumberIO },
         { name: 'point', phetioType: Vector2.Vector2IO },
@@ -638,17 +638,17 @@ export default class Input extends PhetioObject {
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a pen is canceled.'
-    } );
+    });
 
-    this.gotPointerCaptureAction = new PhetioAction( ( id: number, context: EventContext ) => {
-      const pointer = this.findPointerById( id );
+    this.gotPointerCaptureAction = new PhetioAction((id: number, context: EventContext) => {
+      const pointer = this.findPointerById(id);
 
-      if ( pointer ) {
+      if (pointer) {
         pointer.onGotPointerCapture();
       }
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'gotPointerCaptureAction' ),
+      tandem: options.tandem?.createTandem('gotPointerCaptureAction'),
       parameters: [
         { name: 'id', phetioType: NumberIO },
         { name: 'context', phetioType: EventContextIO }
@@ -656,17 +656,17 @@ export default class Input extends PhetioObject {
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a pointer is captured (normally at the start of an interaction)',
       phetioHighFrequency: true
-    } );
+    });
 
-    this.lostPointerCaptureAction = new PhetioAction( ( id: number, context: EventContext ) => {
-      const pointer = this.findPointerById( id );
+    this.lostPointerCaptureAction = new PhetioAction((id: number, context: EventContext) => {
+      const pointer = this.findPointerById(id);
 
-      if ( pointer ) {
+      if (pointer) {
         pointer.onLostPointerCapture();
       }
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'lostPointerCaptureAction' ),
+      tandem: options.tandem?.createTandem('lostPointerCaptureAction'),
       parameters: [
         { name: 'id', phetioType: NumberIO },
         { name: 'context', phetioType: EventContextIO }
@@ -674,165 +674,165 @@ export default class Input extends PhetioObject {
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when a pointer loses its capture (normally at the end of an interaction)',
       phetioHighFrequency: true
-    } );
+    });
 
-    this.focusinAction = new PhetioAction( ( context: EventContext<FocusEvent> ) => {
-      const trail = this.getPDOMEventTrail( context.domEvent, 'focusin' );
-      if ( !trail ) {
+    this.focusinAction = new PhetioAction((context: EventContext<FocusEvent>) => {
+      const trail = this.getPDOMEventTrail(context.domEvent, 'focusin');
+      if (!trail) {
         return;
       }
 
-      sceneryLog && sceneryLog.Input && sceneryLog.Input( `focusin(${Input.debugText( null, context.domEvent )});` );
+      sceneryLog && sceneryLog.Input && sceneryLog.Input(`focusin(${Input.debugText(null, context.domEvent)});`);
       sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-      this.dispatchPDOMEvent<FocusEvent>( trail, 'focus', context, false );
-      this.dispatchPDOMEvent<FocusEvent>( trail, 'focusin', context, true );
+      this.dispatchPDOMEvent<FocusEvent>(trail, 'focus', context, false);
+      this.dispatchPDOMEvent<FocusEvent>(trail, 'focusin', context, true);
 
       sceneryLog && sceneryLog.Input && sceneryLog.pop();
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'focusinAction' ),
+      tandem: options.tandem?.createTandem('focusinAction'),
       parameters: [
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the PDOM root gets the focusin DOM event.'
-    } );
+    });
 
-    this.focusoutAction = new PhetioAction( ( context: EventContext<FocusEvent> ) => {
-      const trail = this.getPDOMEventTrail( context.domEvent, 'focusout' );
-      if ( !trail ) {
+    this.focusoutAction = new PhetioAction((context: EventContext<FocusEvent>) => {
+      const trail = this.getPDOMEventTrail(context.domEvent, 'focusout');
+      if (!trail) {
         return;
       }
 
-      sceneryLog && sceneryLog.Input && sceneryLog.Input( `focusOut(${Input.debugText( null, context.domEvent )});` );
+      sceneryLog && sceneryLog.Input && sceneryLog.Input(`focusOut(${Input.debugText(null, context.domEvent)});`);
       sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-      this.dispatchPDOMEvent<FocusEvent>( trail, 'blur', context, false );
-      this.dispatchPDOMEvent<FocusEvent>( trail, 'focusout', context, true );
+      this.dispatchPDOMEvent<FocusEvent>(trail, 'blur', context, false);
+      this.dispatchPDOMEvent<FocusEvent>(trail, 'focusout', context, true);
 
       sceneryLog && sceneryLog.Input && sceneryLog.pop();
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'focusoutAction' ),
+      tandem: options.tandem?.createTandem('focusoutAction'),
       parameters: [
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the PDOM root gets the focusout DOM event.'
-    } );
+    });
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Element/click_event notes that the click action should result
     // in a MouseEvent
-    this.clickAction = new PhetioAction( ( context: EventContext<MouseEvent> ) => {
-      const trail = this.getPDOMEventTrail( context.domEvent, 'click' );
-      if ( !trail ) {
+    this.clickAction = new PhetioAction((context: EventContext<MouseEvent>) => {
+      const trail = this.getPDOMEventTrail(context.domEvent, 'click');
+      if (!trail) {
         return;
       }
 
-      sceneryLog && sceneryLog.Input && sceneryLog.Input( `click(${Input.debugText( null, context.domEvent )});` );
+      sceneryLog && sceneryLog.Input && sceneryLog.Input(`click(${Input.debugText(null, context.domEvent)});`);
       sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-      this.dispatchPDOMEvent<MouseEvent>( trail, 'click', context, true );
+      this.dispatchPDOMEvent<MouseEvent>(trail, 'click', context, true);
 
       sceneryLog && sceneryLog.Input && sceneryLog.pop();
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'clickAction' ),
+      tandem: options.tandem?.createTandem('clickAction'),
       parameters: [
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the PDOM root gets the click DOM event.'
-    } );
+    });
 
-    this.inputAction = new PhetioAction( ( context: EventContext<Event | InputEvent> ) => {
-      const trail = this.getPDOMEventTrail( context.domEvent, 'input' );
-      if ( !trail ) {
+    this.inputAction = new PhetioAction((context: EventContext<Event | InputEvent>) => {
+      const trail = this.getPDOMEventTrail(context.domEvent, 'input');
+      if (!trail) {
         return;
       }
 
-      sceneryLog && sceneryLog.Input && sceneryLog.Input( `input(${Input.debugText( null, context.domEvent )});` );
+      sceneryLog && sceneryLog.Input && sceneryLog.Input(`input(${Input.debugText(null, context.domEvent)});`);
       sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-      this.dispatchPDOMEvent<Event | InputEvent>( trail, 'input', context, true );
+      this.dispatchPDOMEvent<Event | InputEvent>(trail, 'input', context, true);
 
       sceneryLog && sceneryLog.Input && sceneryLog.pop();
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'inputAction' ),
+      tandem: options.tandem?.createTandem('inputAction'),
       parameters: [
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the PDOM root gets the input DOM event.'
-    } );
+    });
 
-    this.changeAction = new PhetioAction( ( context: EventContext ) => {
-      const trail = this.getPDOMEventTrail( context.domEvent, 'change' );
-      if ( !trail ) {
+    this.changeAction = new PhetioAction((context: EventContext) => {
+      const trail = this.getPDOMEventTrail(context.domEvent, 'change');
+      if (!trail) {
         return;
       }
 
-      sceneryLog && sceneryLog.Input && sceneryLog.Input( `change(${Input.debugText( null, context.domEvent )});` );
+      sceneryLog && sceneryLog.Input && sceneryLog.Input(`change(${Input.debugText(null, context.domEvent)});`);
       sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-      this.dispatchPDOMEvent<Event>( trail, 'change', context, true );
+      this.dispatchPDOMEvent<Event>(trail, 'change', context, true);
 
       sceneryLog && sceneryLog.Input && sceneryLog.pop();
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'changeAction' ),
+      tandem: options.tandem?.createTandem('changeAction'),
       parameters: [
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the PDOM root gets the change DOM event.'
-    } );
+    });
 
-    this.keydownAction = new PhetioAction( ( context: EventContext<KeyboardEvent> ) => {
-      sceneryLog && sceneryLog.Input && sceneryLog.Input( `keydown(${Input.debugText( null, context.domEvent )});` );
+    this.keydownAction = new PhetioAction((context: EventContext<KeyboardEvent>) => {
+      sceneryLog && sceneryLog.Input && sceneryLog.Input(`keydown(${Input.debugText(null, context.domEvent)});`);
       sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-      this.dispatchGlobalEvent<KeyboardEvent>( 'globalkeydown', context, true );
+      this.dispatchGlobalEvent<KeyboardEvent>('globalkeydown', context, true);
 
-      const trail = this.getPDOMEventTrail( context.domEvent, 'keydown' );
-      trail && this.dispatchPDOMEvent<KeyboardEvent>( trail, 'keydown', context, true );
+      const trail = this.getPDOMEventTrail(context.domEvent, 'keydown');
+      trail && this.dispatchPDOMEvent<KeyboardEvent>(trail, 'keydown', context, true);
 
-      this.dispatchGlobalEvent<KeyboardEvent>( 'globalkeydown', context, false );
+      this.dispatchGlobalEvent<KeyboardEvent>('globalkeydown', context, false);
 
       sceneryLog && sceneryLog.Input && sceneryLog.pop();
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'keydownAction' ),
+      tandem: options.tandem?.createTandem('keydownAction'),
       parameters: [
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the PDOM root gets the keydown DOM event.'
-    } );
+    });
 
-    this.keyupAction = new PhetioAction( ( context: EventContext<KeyboardEvent> ) => {
-      sceneryLog && sceneryLog.Input && sceneryLog.Input( `keyup(${Input.debugText( null, context.domEvent )});` );
+    this.keyupAction = new PhetioAction((context: EventContext<KeyboardEvent>) => {
+      sceneryLog && sceneryLog.Input && sceneryLog.Input(`keyup(${Input.debugText(null, context.domEvent)});`);
       sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-      this.dispatchGlobalEvent<KeyboardEvent>( 'globalkeyup', context, true );
+      this.dispatchGlobalEvent<KeyboardEvent>('globalkeyup', context, true);
 
-      const trail = this.getPDOMEventTrail( context.domEvent, 'keydown' );
-      trail && this.dispatchPDOMEvent<KeyboardEvent>( trail, 'keyup', context, true );
+      const trail = this.getPDOMEventTrail(context.domEvent, 'keydown');
+      trail && this.dispatchPDOMEvent<KeyboardEvent>(trail, 'keyup', context, true);
 
-      this.dispatchGlobalEvent<KeyboardEvent>( 'globalkeyup', context, false );
+      this.dispatchGlobalEvent<KeyboardEvent>('globalkeyup', context, false);
 
       sceneryLog && sceneryLog.Input && sceneryLog.pop();
     }, {
       phetioPlayback: true,
-      tandem: options.tandem?.createTandem( 'keyupAction' ),
+      tandem: options.tandem?.createTandem('keyupAction'),
       parameters: [
         { name: 'context', phetioType: EventContextIO }
       ],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Emits when the PDOM root gets the keyup DOM event.'
-    } );
+    });
   }
 
   /**
@@ -840,12 +840,12 @@ export default class Input extends PhetioObject {
    *
    * If excludePointer is provided, it will NOT be interrupted along with the others
    */
-  public interruptPointers( excludePointer: Pointer | null = null ): void {
-    _.each( this.pointers, pointer => {
-      if ( pointer !== excludePointer ) {
+  public interruptPointers(excludePointer: Pointer | null = null): void {
+    _.each(this.pointers, pointer => {
+      if (pointer !== excludePointer) {
         pointer.interruptAll();
       }
-    } );
+    });
   }
 
   /**
@@ -858,14 +858,14 @@ export default class Input extends PhetioObject {
    *                                     only allow certain operations in the callback for a user gesture (e.g. like
    *                                     a mouseup to open a window).
    */
-  public batchEvent( context: EventContext, batchType: BatchedDOMEventType, callback: BatchedDOMEventCallback, triggerImmediate: boolean ): void {
-    sceneryLog && sceneryLog.InputEvent && sceneryLog.InputEvent( 'Input.batchEvent' );
+  public batchEvent(context: EventContext, batchType: BatchedDOMEventType, callback: BatchedDOMEventCallback, triggerImmediate: boolean): void {
+    sceneryLog && sceneryLog.InputEvent && sceneryLog.InputEvent('Input.batchEvent');
     sceneryLog && sceneryLog.InputEvent && sceneryLog.push();
 
     // If our display is not interactive, do not respond to any events (but still prevent default)
-    if ( this.display.interactive ) {
-      this.batchedEvents.push( BatchedDOMEvent.pool.create( context, batchType, callback ) );
-      if ( triggerImmediate || !this.batchDOMEvents ) {
+    if (this.display.interactive) {
+      this.batchedEvents.push(BatchedDOMEvent.pool.create(context, batchType, callback));
+      if (triggerImmediate || !this.batchDOMEvents) {
         this.fireBatchedEvents();
       }
       // NOTE: If we ever want to Display.updateDisplay() on events, do so here
@@ -876,9 +876,9 @@ export default class Input extends PhetioObject {
     // Additionally, IE had some issues with skipping prevent default, see
     // https://github.com/phetsims/scenery/issues/464 for mouse handling.
     // WE WILL NOT preventDefault() on keyboard or alternative input events here
-    if ( !( this.passiveEvents === true ) &&
-         ( callback !== this.mouseDown || platform.edge ) &&
-         batchType !== BatchedDOMEventType.ALT_TYPE ) {
+    if (!(this.passiveEvents === true) &&
+      (callback !== this.mouseDown || platform.edge) &&
+      batchType !== BatchedDOMEventType.ALT_TYPE) {
       // We cannot prevent a passive event, so don't try
       context.domEvent.preventDefault();
     }
@@ -891,10 +891,10 @@ export default class Input extends PhetioObject {
    */
   public fireBatchedEvents(): void {
     sceneryLog && sceneryLog.InputEvent && this.currentlyFiringEvents && sceneryLog.InputEvent(
-      'REENTRANCE DETECTED' );
+      'REENTRANCE DETECTED');
     // Don't re-entrantly enter our loop, see https://github.com/phetsims/balloons-and-static-electricity/issues/406
-    if ( !this.currentlyFiringEvents && this.batchedEvents.length ) {
-      sceneryLog && sceneryLog.InputEvent && sceneryLog.InputEvent( `Input.fireBatchedEvents length:${this.batchedEvents.length}` );
+    if (!this.currentlyFiringEvents && this.batchedEvents.length) {
+      sceneryLog && sceneryLog.InputEvent && sceneryLog.InputEvent(`Input.fireBatchedEvents length:${this.batchedEvents.length}`);
       sceneryLog && sceneryLog.InputEvent && sceneryLog.push();
 
       this.currentlyFiringEvents = true;
@@ -905,12 +905,12 @@ export default class Input extends PhetioObject {
       // event handling, see https://github.com/phetsims/balloons-and-static-electricity/issues/406.
       // Events may be appended to this (synchronously) as part of firing initial events, so we want to FULLY run all
       // events before clearing our array.
-      for ( let i = 0; i < batchedEvents.length; i++ ) {
-        const batchedEvent = batchedEvents[ i ];
-        batchedEvent.run( this );
+      for (let i = 0; i < batchedEvents.length; i++) {
+        const batchedEvent = batchedEvents[i];
+        batchedEvent.run(this);
         batchedEvent.dispose();
       }
-      cleanArray( batchedEvents );
+      cleanArray(batchedEvents);
 
       this.currentlyFiringEvents = false;
 
@@ -941,14 +941,14 @@ export default class Input extends PhetioObject {
    * Removes all non-Mouse pointers from internal tracking. (scenery-internal)
    */
   public removeTemporaryPointers(): void {
-    for ( let i = this.pointers.length - 1; i >= 0; i-- ) {
-      const pointer = this.pointers[ i ];
-      if ( !( pointer instanceof Mouse ) ) {
-        this.pointers.splice( i, 1 );
+    for (let i = this.pointers.length - 1; i >= 0; i--) {
+      const pointer = this.pointers[i];
+      if (!(pointer instanceof Mouse)) {
+        this.pointers.splice(i, 1);
 
         // Send exit events. As we can't get a DOM event, we'll send a fake object instead.
-        const exitTrail = pointer.trail || new Trail( this.rootNode );
-        this.exitEvents( pointer, EventContext.createSynthetic(), exitTrail, 0, true );
+        const exitTrail = pointer.trail || new Trail(this.rootNode);
+        this.exitEvents(pointer, EventContext.createSynthetic(), exitTrail, 0, true);
       }
     }
   }
@@ -957,33 +957,33 @@ export default class Input extends PhetioObject {
    * Hooks up DOM listeners to whatever type of object we are going to listen to. (scenery-internal)
    */
   public connectListeners(): void {
-    BrowserEvents.addDisplay( this.display, this.attachToWindow, this.passiveEvents );
+    BrowserEvents.addDisplay(this.display, this.attachToWindow, this.passiveEvents);
   }
 
   /**
    * Removes DOM listeners from whatever type of object we were listening to. (scenery-internal)
    */
   public disconnectListeners(): void {
-    BrowserEvents.removeDisplay( this.display, this.attachToWindow, this.passiveEvents );
+    BrowserEvents.removeDisplay(this.display, this.attachToWindow, this.passiveEvents);
   }
 
   /**
    * Extract a {Vector2} global coordinate point from an arbitrary DOM event. (scenery-internal)
    */
-  public pointFromEvent( domEvent: MouseEvent | WindowTouch ): Vector2 {
-    const position = Vector2.pool.create( domEvent.clientX, domEvent.clientY );
-    if ( !this.assumeFullWindow ) {
+  public pointFromEvent(domEvent: MouseEvent | WindowTouch): Vector2 {
+    const position = Vector2.pool.create(domEvent.clientX, domEvent.clientY);
+    if (!this.assumeFullWindow) {
       const domBounds = this.display.domElement.getBoundingClientRect();
 
       // TODO: consider totally ignoring any with zero width/height, as we aren't attached to the display? https://github.com/phetsims/scenery/issues/1581
       // For now, don't offset.
-      if ( domBounds.width > 0 && domBounds.height > 0 ) {
-        position.subtractXY( domBounds.left, domBounds.top );
+      if (domBounds.width > 0 && domBounds.height > 0) {
+        position.subtractXY(domBounds.left, domBounds.top);
 
         // Detect a scaling of the display here (the client bounding rect having different dimensions from our
         // display), and attempt to compensate.
         // NOTE: We can't handle rotation here.
-        if ( domBounds.width !== this.display.width || domBounds.height !== this.display.height ) {
+        if (domBounds.width !== this.display.width || domBounds.height !== this.display.height) {
           // TODO: Have code verify the correctness here, and that it's not triggering all the time https://github.com/phetsims/scenery/issues/1581
           position.x *= this.display.width / domBounds.width;
           position.y *= this.display.height / domBounds.height;
@@ -996,20 +996,20 @@ export default class Input extends PhetioObject {
   /**
    * Adds a pointer to our list.
    */
-  private addPointer( pointer: Pointer ): void {
-    this.pointers.push( pointer );
+  private addPointer(pointer: Pointer): void {
+    this.pointers.push(pointer);
 
-    this.pointerAddedEmitter.emit( pointer );
+    this.pointerAddedEmitter.emit(pointer);
   }
 
   /**
    * Removes a pointer from our list. If we get future events for it (based on the ID) it will be ignored.
    */
-  private removePointer( pointer: Pointer ): void {
+  private removePointer(pointer: Pointer): void {
     // sanity check version, will remove all instances
-    for ( let i = this.pointers.length - 1; i >= 0; i-- ) {
-      if ( this.pointers[ i ] === pointer ) {
-        this.pointers.splice( i, 1 );
+    for (let i = this.pointers.length - 1; i >= 0; i--) {
+      if (this.pointers[i] === pointer) {
+        this.pointers.splice(i, 1);
       }
     }
 
@@ -1022,32 +1022,32 @@ export default class Input extends PhetioObject {
    *
    * NOTE: There are some cases where we may have prematurely "removed" a pointer.
    */
-  private findPointerById( id: number ): Mouse | Touch | Pen | null {
+  private findPointerById(id: number): Mouse | Touch | Pen | null {
     let i = this.pointers.length;
-    while ( i-- ) {
-      const pointer = this.pointers[ i ] as Mouse | Touch | Pen;
-      if ( pointer.id === id ) {
+    while (i--) {
+      const pointer = this.pointers[i] as Mouse | Touch | Pen;
+      if (pointer.id === id) {
         return pointer;
       }
     }
     return null;
   }
 
-  private getPDOMEventTrail( domEvent: TargetSubstitudeAugmentedEvent, eventName: string ): Trail | null {
-    if ( !this.display.interactive ) {
+  private getPDOMEventTrail(domEvent: TargetSubstitudeAugmentedEvent, eventName: string): Trail | null {
+    if (!this.display.interactive) {
       return null;
     }
 
-    const trail = this.getTrailFromPDOMEvent( domEvent );
+    const trail = this.getTrailFromPDOMEvent(domEvent);
 
     // Only dispatch the event if the click did not happen rapidly after an up event. It is
     // likely that the screen reader dispatched both pointer AND click events in this case, and
     // we only want to respond to one or the other. See https://github.com/phetsims/scenery/issues/1094.
     // This is outside of the clickAction execution so that blocked clicks are not part of the PhET-iO data
     // stream.
-    const notBlockingSubsequentClicksOccurringTooQuickly = trail && !( eventName === 'click' &&
-                                                           _.some( trail.nodes, node => node.positionInPDOM ) &&
-                                                           domEvent.timeStamp - this.upTimeStamp <= PDOM_CLICK_DELAY );
+    const notBlockingSubsequentClicksOccurringTooQuickly = trail && !(eventName === 'click' &&
+      _.some(trail.nodes, node => node.positionInPDOM) &&
+      domEvent.timeStamp - this.upTimeStamp <= PDOM_CLICK_DELAY);
 
     return notBlockingSubsequentClicksOccurringTooQuickly ? trail : null;
   }
@@ -1055,20 +1055,20 @@ export default class Input extends PhetioObject {
   /**
    * Initializes the Mouse object on the first mouse event (this may never happen on touch devices).
    */
-  private initMouse( point: Vector2 ): Mouse {
-    const mouse = new Mouse( point );
+  private initMouse(point: Vector2): Mouse {
+    const mouse = new Mouse(point);
     this.mouse = mouse;
-    this.addPointer( mouse );
+    this.addPointer(mouse);
     return mouse;
   }
 
-  private ensureMouse( point: Vector2 ): Mouse {
+  private ensureMouse(point: Vector2): Mouse {
     const mouse = this.mouse;
-    if ( mouse ) {
+    if (mouse) {
       return mouse;
     }
     else {
-      return this.initMouse( point );
+      return this.initMouse(point);
     }
   }
 
@@ -1076,17 +1076,17 @@ export default class Input extends PhetioObject {
    * Initializes the accessible pointer object on the first pdom event.
    */
   private initPDOMPointer(): PDOMPointer {
-    const pdomPointer = new PDOMPointer( this.display );
+    const pdomPointer = new PDOMPointer(this.display);
     this.pdomPointer = pdomPointer;
 
-    this.addPointer( pdomPointer );
+    this.addPointer(pdomPointer);
 
     return pdomPointer;
   }
 
   private ensurePDOMPointer(): PDOMPointer {
     const pdomPointer = this.pdomPointer;
-    if ( pdomPointer ) {
+    if (pdomPointer) {
       return pdomPointer;
     }
     else {
@@ -1098,54 +1098,54 @@ export default class Input extends PhetioObject {
    * Steps to dispatch a pdom-related event. Before dispatch, the PDOMPointer is initialized if it
    * hasn't been created yet and a userGestureEmitter emits to indicate that a user has begun an interaction.
    */
-  private dispatchPDOMEvent<DOMEvent extends Event>( trail: Trail, eventType: SupportedEventTypes, context: EventContext<DOMEvent>, bubbles: boolean ): void {
+  private dispatchPDOMEvent<DOMEvent extends Event>(trail: Trail, eventType: SupportedEventTypes, context: EventContext<DOMEvent>, bubbles: boolean): void {
 
-    this.ensurePDOMPointer().updateTrail( trail );
+    this.ensurePDOMPointer().updateTrail(trail);
 
     // exclude focus and blur events because they can happen with scripting without user input
-    if ( PDOMUtils.USER_GESTURE_EVENTS.includes( eventType ) ) {
+    if (PDOMUtils.USER_GESTURE_EVENTS.includes(eventType)) {
       Display.userGestureEmitter.emit();
     }
 
     const domEvent = context.domEvent;
 
     // This workaround hopefully won't be here forever, see ParallelDOM.setExcludeLabelSiblingFromInput() and https://github.com/phetsims/a11y-research/issues/156
-    if ( !( domEvent.target && ( domEvent.target as Element ).hasAttribute( PDOMUtils.DATA_EXCLUDE_FROM_INPUT ) ) ) {
+    if (!(domEvent.target && (domEvent.target as Element).hasAttribute(PDOMUtils.DATA_EXCLUDE_FROM_INPUT))) {
 
       // If the trail is not pickable, don't dispatch PDOM events to those targets - but we still
       // dispatch with an empty trail to call listeners on the Display and Pointer.
-      const canFireListeners = trail.isPickable() || PDOM_UNPICKABLE_EVENTS.includes( eventType );
+      const canFireListeners = trail.isPickable() || PDOM_UNPICKABLE_EVENTS.includes(eventType);
 
-      if ( !canFireListeners ) {
-        trail = new Trail( [] );
+      if (!canFireListeners) {
+        trail = new Trail([]);
       }
-      assert && assert( this.pdomPointer );
-      this.dispatchEvent<DOMEvent>( trail, eventType, this.pdomPointer!, context, bubbles );
+      assert && assert(this.pdomPointer);
+      this.dispatchEvent<DOMEvent>(trail, eventType, this.pdomPointer!, context, bubbles);
     }
   }
 
-  private dispatchGlobalEvent<DOMEvent extends Event>( eventType: SupportedEventTypes, context: EventContext<DOMEvent>, capture: boolean ): void {
+  private dispatchGlobalEvent<DOMEvent extends Event>(eventType: SupportedEventTypes, context: EventContext<DOMEvent>, capture: boolean): void {
     this.ensurePDOMPointer();
-    assert && assert( this.pdomPointer );
+    assert && assert(this.pdomPointer);
     const pointer = this.pdomPointer!;
-    const inputEvent = new SceneryEvent<DOMEvent>( new Trail(), eventType, pointer, context );
+    const inputEvent = new SceneryEvent<DOMEvent>(new Trail(), eventType, pointer, context);
 
-    const recursiveGlobalDispatch = ( node: Node ) => {
-      if ( !node.isDisposed && node.isVisible() && node.isInputEnabled() && node.isPDOMVisible() ) {
+    const recursiveGlobalDispatch = (node: Node) => {
+      if (!node.isDisposed && node.isVisible() && node.isInputEnabled() && node.isPDOMVisible()) {
         // Reverse iteration follows the z-order from "visually in front" to "visually in back" like normal dipatch
-        for ( let i = node._children.length - 1; i >= 0; i-- ) {
-          recursiveGlobalDispatch( node._children[ i ] );
+        for (let i = node._children.length - 1; i >= 0; i--) {
+          recursiveGlobalDispatch(node._children[i]);
         }
 
-        if ( !inputEvent.aborted && !inputEvent.handled ) {
+        if (!inputEvent.aborted && !inputEvent.handled) {
           // Notification of ourself AFTER our children results in the depth-first scan.
           inputEvent.currentTarget = node;
-          this.dispatchToListeners<DOMEvent>( pointer, node._inputListeners, eventType, inputEvent, capture );
+          this.dispatchToListeners<DOMEvent>(pointer, node._inputListeners, eventType, inputEvent, capture);
         }
       }
     };
 
-    recursiveGlobalDispatch( this.rootNode );
+    recursiveGlobalDispatch(this.rootNode);
   }
 
   /**
@@ -1155,17 +1155,17 @@ export default class Input extends PhetioObject {
    *
    * @param domEvent - DOM Event, not a SceneryEvent!
    */
-  public getRelatedTargetTrail( domEvent: FocusEvent | MouseEvent ): Trail | null {
+  public getRelatedTargetTrail(domEvent: FocusEvent | MouseEvent): Trail | null {
     const relatedTargetElement = domEvent.relatedTarget;
 
-    if ( relatedTargetElement && this.display.isElementUnderPDOM( relatedTargetElement as HTMLElement ) ) {
+    if (relatedTargetElement && this.display.isElementUnderPDOM(relatedTargetElement as HTMLElement)) {
 
-      const relatedTarget = ( domEvent.relatedTarget as unknown as Element );
-      assert && assert( relatedTarget instanceof window.Element );
-      const trailIndices = relatedTarget.getAttribute( PDOMUtils.DATA_PDOM_UNIQUE_ID );
-      assert && assert( trailIndices, 'should not be null' );
+      const relatedTarget = (domEvent.relatedTarget as unknown as Element);
+      assert && assert(relatedTarget instanceof window.Element);
+      const trailIndices = relatedTarget.getAttribute(PDOMUtils.DATA_PDOM_UNIQUE_ID);
+      assert && assert(trailIndices, 'should not be null');
 
-      return PDOMInstance.uniqueIdToTrail( this.display, trailIndices! );
+      return PDOMInstance.uniqueIdToTrail(this.display, trailIndices!);
     }
     return null;
   }
@@ -1174,25 +1174,25 @@ export default class Input extends PhetioObject {
    * Get the trail ID of the node represented by a DOM element who is the target of a DOM Event in the accessible PDOM.
    * This is a bit of a misnomer, because the domEvent doesn't have to be under the PDOM. Returns null if not in the PDOM.
    */
-  private getTrailFromPDOMEvent( domEvent: TargetSubstitudeAugmentedEvent ): Trail | null {
-    assert && assert( domEvent.target || domEvent[ TARGET_SUBSTITUTE_KEY ], 'need a way to get the target' );
+  private getTrailFromPDOMEvent(domEvent: TargetSubstitudeAugmentedEvent): Trail | null {
+    assert && assert(domEvent.target || domEvent[TARGET_SUBSTITUTE_KEY], 'need a way to get the target');
 
-    if ( !this.display._accessible ) {
+    if (!this.display._accessible) {
       return null;
     }
 
     // could be serialized event for phet-io playbacks, see Input.serializeDOMEvent()
-    if ( domEvent[ TARGET_SUBSTITUTE_KEY ] ) {
-      const trailIndices = domEvent[ TARGET_SUBSTITUTE_KEY ]!.getAttribute( PDOMUtils.DATA_PDOM_UNIQUE_ID );
-      return PDOMInstance.uniqueIdToTrail( this.display, trailIndices! );
+    if (domEvent[TARGET_SUBSTITUTE_KEY]) {
+      const trailIndices = domEvent[TARGET_SUBSTITUTE_KEY]!.getAttribute(PDOMUtils.DATA_PDOM_UNIQUE_ID);
+      return PDOMInstance.uniqueIdToTrail(this.display, trailIndices!);
     }
     else {
-      const target = ( domEvent.target as unknown as Element );
-      assert && assert( target instanceof window.Element, 'target is not an Element', target );
-      if ( target && this.display.isElementUnderPDOM( target as HTMLElement ) ) {
-        const trailIndices = target.getAttribute( PDOMUtils.DATA_PDOM_UNIQUE_ID );
-        assert && assert( trailIndices, 'should not be null' );
-        return PDOMInstance.uniqueIdToTrail( this.display, trailIndices! );
+      const target = (domEvent.target as unknown as Element);
+      assert && assert(target instanceof window.Element, 'target is not an Element', target);
+      if (target && this.display.isElementUnderPDOM(target as HTMLElement)) {
+        const trailIndices = target.getAttribute(PDOMUtils.DATA_PDOM_UNIQUE_ID);
+        assert && assert(trailIndices, 'should not be null');
+        return PDOMInstance.uniqueIdToTrail(this.display, trailIndices!);
       }
     }
     return null;
@@ -1204,10 +1204,10 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerDown) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public mouseDown( id: number, point: Vector2, context: EventContext<MouseEvent | PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `mouseDown('${id}', ${Input.debugText( point, context.domEvent )});` );
+  public mouseDown(id: number, point: Vector2, context: EventContext<MouseEvent | PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`mouseDown('${id}', ${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.mouseDownAction.execute( id, point, context );
+    this.mouseDownAction.execute(id, point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
@@ -1217,10 +1217,10 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerUp) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public mouseUp( point: Vector2, context: EventContext<MouseEvent | PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `mouseUp(${Input.debugText( point, context.domEvent )});` );
+  public mouseUp(point: Vector2, context: EventContext<MouseEvent | PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`mouseUp(${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.mouseUpAction.execute( point, context );
+    this.mouseUpAction.execute(point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
@@ -1230,40 +1230,40 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerMove) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public mouseMove( point: Vector2, context: EventContext<MouseEvent | PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `mouseMove(${Input.debugText( point, context.domEvent )});` );
+  public mouseMove(point: Vector2, context: EventContext<MouseEvent | PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`mouseMove(${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.mouseMoveAction.execute( point, context );
+    this.mouseMoveAction.execute(point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
   /**
    * Triggers a logical mouseover event (this does NOT correspond to the Scenery event, since this is for the display) (scenery-internal)
    */
-  public mouseOver( point: Vector2, context: EventContext<MouseEvent | PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `mouseOver(${Input.debugText( point, context.domEvent )});` );
+  public mouseOver(point: Vector2, context: EventContext<MouseEvent | PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`mouseOver(${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.mouseOverAction.execute( point, context );
+    this.mouseOverAction.execute(point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
   /**
    * Triggers a logical mouseout event (this does NOT correspond to the Scenery event, since this is for the display) (scenery-internal)
    */
-  public mouseOut( point: Vector2, context: EventContext<MouseEvent | PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `mouseOut(${Input.debugText( point, context.domEvent )});` );
+  public mouseOut(point: Vector2, context: EventContext<MouseEvent | PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`mouseOut(${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.mouseOutAction.execute( point, context );
+    this.mouseOutAction.execute(point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
   /**
    * Triggers a logical mouse-wheel/scroll event. (scenery-internal)
    */
-  public wheel( context: EventContext<WheelEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `wheel(${Input.debugText( null, context.domEvent )});` );
+  public wheel(context: EventContext<WheelEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`wheel(${Input.debugText(null, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.wheelScrollAction.execute( context );
+    this.wheelScrollAction.execute(context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
@@ -1273,11 +1273,11 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerDown) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public touchStart( id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `touchStart('${id}',${Input.debugText( point, context.domEvent )});` );
+  public touchStart(id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`touchStart('${id}',${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-    this.touchStartAction.execute( id, point, context );
+    this.touchStartAction.execute(id, point, context);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1288,11 +1288,11 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerUp) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public touchEnd( id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `touchEnd('${id}',${Input.debugText( point, context.domEvent )});` );
+  public touchEnd(id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`touchEnd('${id}',${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-    this.touchEndAction.execute( id, point, context );
+    this.touchEndAction.execute(id, point, context);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1303,10 +1303,10 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerMove) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public touchMove( id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `touchMove('${id}',${Input.debugText( point, context.domEvent )});` );
+  public touchMove(id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`touchMove('${id}',${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.touchMoveAction.execute( id, point, context );
+    this.touchMoveAction.execute(id, point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
@@ -1316,10 +1316,10 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerCancel) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public touchCancel( id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `touchCancel('${id}',${Input.debugText( point, context.domEvent )});` );
+  public touchCancel(id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`touchCancel('${id}',${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.touchCancelAction.execute( id, point, context );
+    this.touchCancelAction.execute(id, point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
@@ -1329,10 +1329,10 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerDown) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public penStart( id: number, point: Vector2, context: EventContext<PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `penStart('${id}',${Input.debugText( point, context.domEvent )});` );
+  public penStart(id: number, point: Vector2, context: EventContext<PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`penStart('${id}',${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.penStartAction.execute( id, point, context );
+    this.penStartAction.execute(id, point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
@@ -1342,10 +1342,10 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerUp) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public penEnd( id: number, point: Vector2, context: EventContext<PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `penEnd('${id}',${Input.debugText( point, context.domEvent )});` );
+  public penEnd(id: number, point: Vector2, context: EventContext<PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`penEnd('${id}',${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.penEndAction.execute( id, point, context );
+    this.penEndAction.execute(id, point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
@@ -1355,10 +1355,10 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerMove) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public penMove( id: number, point: Vector2, context: EventContext<PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `penMove('${id}',${Input.debugText( point, context.domEvent )});` );
+  public penMove(id: number, point: Vector2, context: EventContext<PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`penMove('${id}',${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.penMoveAction.execute( id, point, context );
+    this.penMoveAction.execute(id, point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
@@ -1368,41 +1368,41 @@ export default class Input extends PhetioObject {
    * NOTE: This may also be called from the pointer event handler (pointerCancel) or from things like fuzzing or
    * playback. The event may be "faked" for certain purposes.
    */
-  public penCancel( id: number, point: Vector2, context: EventContext<PointerEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `penCancel('${id}',${Input.debugText( point, context.domEvent )});` );
+  public penCancel(id: number, point: Vector2, context: EventContext<PointerEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`penCancel('${id}',${Input.debugText(point, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.penCancelAction.execute( id, point, context );
+    this.penCancelAction.execute(id, point, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
   /**
    * Handles a pointerdown event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public pointerDown( id: number, type: string, point: Vector2, context: EventContext<PointerEvent> ): void {
+  public pointerDown(id: number, type: string, point: Vector2, context: EventContext<PointerEvent>): void {
     // In IE for pointer down events, we want to make sure than the next interactions off the page are sent to
     // this element (it will bubble). See https://github.com/phetsims/scenery/issues/464 and
     // http://news.qooxdoo.org/mouse-capturing.
     const target = this.attachToWindow ? document.body : this.display.domElement;
-    if ( target.setPointerCapture && context.domEvent.pointerId ) {
+    if (target.setPointerCapture && context.domEvent.pointerId) {
       // NOTE: This will error out if run on a playback destination, where a pointer with the given ID does not exist.
-      target.setPointerCapture( context.domEvent.pointerId );
+      target.setPointerCapture(context.domEvent.pointerId);
     }
 
-    type = this.handleUnknownPointerType( type, id );
-    switch( type ) {
+    type = this.handleUnknownPointerType(type, id);
+    switch (type) {
       case 'mouse':
         // The actual event afterwards
-        this.mouseDown( id, point, context );
+        this.mouseDown(id, point, context);
         break;
       case 'touch':
-        this.touchStart( id, point, context );
+        this.touchStart(id, point, context);
         break;
       case 'pen':
-        this.penStart( id, point, context );
+        this.penStart(id, point, context);
         break;
       default:
-        if ( assert ) {
-          throw new Error( `Unknown pointer type: ${type}` );
+        if (assert) {
+          throw new Error(`Unknown pointer type: ${type}`);
         }
     }
   }
@@ -1410,25 +1410,25 @@ export default class Input extends PhetioObject {
   /**
    * Handles a pointerup event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public pointerUp( id: number, type: string, point: Vector2, context: EventContext<PointerEvent> ): void {
+  public pointerUp(id: number, type: string, point: Vector2, context: EventContext<PointerEvent>): void {
 
     // update this outside of the Action executions so that PhET-iO event playback does not override it
     this.upTimeStamp = context.domEvent.timeStamp;
 
-    type = this.handleUnknownPointerType( type, id );
-    switch( type ) {
+    type = this.handleUnknownPointerType(type, id);
+    switch (type) {
       case 'mouse':
-        this.mouseUp( point, context );
+        this.mouseUp(point, context);
         break;
       case 'touch':
-        this.touchEnd( id, point, context );
+        this.touchEnd(id, point, context);
         break;
       case 'pen':
-        this.penEnd( id, point, context );
+        this.penEnd(id, point, context);
         break;
       default:
-        if ( assert ) {
-          throw new Error( `Unknown pointer type: ${type}` );
+        if (assert) {
+          throw new Error(`Unknown pointer type: ${type}`);
         }
     }
   }
@@ -1436,23 +1436,23 @@ export default class Input extends PhetioObject {
   /**
    * Handles a pointercancel event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public pointerCancel( id: number, type: string, point: Vector2, context: EventContext<PointerEvent> ): void {
-    type = this.handleUnknownPointerType( type, id );
-    switch( type ) {
+  public pointerCancel(id: number, type: string, point: Vector2, context: EventContext<PointerEvent>): void {
+    type = this.handleUnknownPointerType(type, id);
+    switch (type) {
       case 'mouse':
-        if ( console && console.log ) {
-          console.log( 'WARNING: Pointer mouse cancel was received' );
+        if (console && console.log) {
+          console.log('WARNING: Pointer mouse cancel was received');
         }
         break;
       case 'touch':
-        this.touchCancel( id, point, context );
+        this.touchCancel(id, point, context);
         break;
       case 'pen':
-        this.penCancel( id, point, context );
+        this.penCancel(id, point, context);
         break;
       default:
-        if ( console.log ) {
-          console.log( `Unknown pointer type: ${type}` );
+        if (console.log) {
+          console.log(`Unknown pointer type: ${type}`);
         }
     }
   }
@@ -1460,41 +1460,41 @@ export default class Input extends PhetioObject {
   /**
    * Handles a gotpointercapture event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public gotPointerCapture( id: number, type: string, point: Vector2, context: EventContext ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `gotPointerCapture('${id}',${Input.debugText( null, context.domEvent )});` );
+  public gotPointerCapture(id: number, type: string, point: Vector2, context: EventContext): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`gotPointerCapture('${id}',${Input.debugText(null, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.gotPointerCaptureAction.execute( id, context );
+    this.gotPointerCaptureAction.execute(id, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
   /**
    * Handles a lostpointercapture event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public lostPointerCapture( id: number, type: string, point: Vector2, context: EventContext ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `lostPointerCapture('${id}',${Input.debugText( null, context.domEvent )});` );
+  public lostPointerCapture(id: number, type: string, point: Vector2, context: EventContext): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`lostPointerCapture('${id}',${Input.debugText(null, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
-    this.lostPointerCaptureAction.execute( id, context );
+    this.lostPointerCaptureAction.execute(id, context);
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
 
   /**
    * Handles a pointermove event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public pointerMove( id: number, type: string, point: Vector2, context: EventContext<PointerEvent> ): void {
-    type = this.handleUnknownPointerType( type, id );
-    switch( type ) {
+  public pointerMove(id: number, type: string, point: Vector2, context: EventContext<PointerEvent>): void {
+    type = this.handleUnknownPointerType(type, id);
+    switch (type) {
       case 'mouse':
-        this.mouseMove( point, context );
+        this.mouseMove(point, context);
         break;
       case 'touch':
-        this.touchMove( id, point, context );
+        this.touchMove(id, point, context);
         break;
       case 'pen':
-        this.penMove( id, point, context );
+        this.penMove(id, point, context);
         break;
       default:
-        if ( console.log ) {
-          console.log( `Unknown pointer type: ${type}` );
+        if (console.log) {
+          console.log(`Unknown pointer type: ${type}`);
         }
     }
   }
@@ -1502,7 +1502,7 @@ export default class Input extends PhetioObject {
   /**
    * Handles a pointerover event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public pointerOver( id: number, type: string, point: Vector2, context: EventContext<PointerEvent> ): void {
+  public pointerOver(id: number, type: string, point: Vector2, context: EventContext<PointerEvent>): void {
     // TODO: accumulate mouse/touch info in the object if needed? https://github.com/phetsims/scenery/issues/1581
     // TODO: do we want to branch change on these types of events? https://github.com/phetsims/scenery/issues/1581
   }
@@ -1510,7 +1510,7 @@ export default class Input extends PhetioObject {
   /**
    * Handles a pointerout event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public pointerOut( id: number, type: string, point: Vector2, context: EventContext<PointerEvent> ): void {
+  public pointerOut(id: number, type: string, point: Vector2, context: EventContext<PointerEvent>): void {
     // TODO: accumulate mouse/touch info in the object if needed? https://github.com/phetsims/scenery/issues/1581
     // TODO: do we want to branch change on these types of events? https://github.com/phetsims/scenery/issues/1581
   }
@@ -1518,7 +1518,7 @@ export default class Input extends PhetioObject {
   /**
    * Handles a pointerenter event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public pointerEnter( id: number, type: string, point: Vector2, context: EventContext<PointerEvent> ): void {
+  public pointerEnter(id: number, type: string, point: Vector2, context: EventContext<PointerEvent>): void {
     // TODO: accumulate mouse/touch info in the object if needed? https://github.com/phetsims/scenery/issues/1581
     // TODO: do we want to branch change on these types of events? https://github.com/phetsims/scenery/issues/1581
   }
@@ -1526,7 +1526,7 @@ export default class Input extends PhetioObject {
   /**
    * Handles a pointerleave event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public pointerLeave( id: number, type: string, point: Vector2, context: EventContext<PointerEvent> ): void {
+  public pointerLeave(id: number, type: string, point: Vector2, context: EventContext<PointerEvent>): void {
     // TODO: accumulate mouse/touch info in the object if needed? https://github.com/phetsims/scenery/issues/1581
     // TODO: do we want to branch change on these types of events? https://github.com/phetsims/scenery/issues/1581
   }
@@ -1534,11 +1534,11 @@ export default class Input extends PhetioObject {
   /**
    * Handles a focusin event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public focusIn( context: EventContext<FocusEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `focusIn('${Input.debugText( null, context.domEvent )});` );
+  public focusIn(context: EventContext<FocusEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`focusIn('${Input.debugText(null, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-    this.focusinAction.execute( context );
+    this.focusinAction.execute(context);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1546,11 +1546,11 @@ export default class Input extends PhetioObject {
   /**
    * Handles a focusout event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public focusOut( context: EventContext<FocusEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `focusOut('${Input.debugText( null, context.domEvent )});` );
+  public focusOut(context: EventContext<FocusEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`focusOut('${Input.debugText(null, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-    this.focusoutAction.execute( context );
+    this.focusoutAction.execute(context);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1558,11 +1558,11 @@ export default class Input extends PhetioObject {
   /**
    * Handles an input event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public input( context: EventContext<Event | InputEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `input('${Input.debugText( null, context.domEvent )});` );
+  public input(context: EventContext<Event | InputEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`input('${Input.debugText(null, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-    this.inputAction.execute( context );
+    this.inputAction.execute(context);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1570,11 +1570,11 @@ export default class Input extends PhetioObject {
   /**
    * Handles a change event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public change( context: EventContext ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `change('${Input.debugText( null, context.domEvent )});` );
+  public change(context: EventContext): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`change('${Input.debugText(null, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-    this.changeAction.execute( context );
+    this.changeAction.execute(context);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1582,11 +1582,11 @@ export default class Input extends PhetioObject {
   /**
    * Handles a click event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public click( context: EventContext<MouseEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `click('${Input.debugText( null, context.domEvent )});` );
+  public click(context: EventContext<MouseEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`click('${Input.debugText(null, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-    this.clickAction.execute( context );
+    this.clickAction.execute(context);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1594,11 +1594,11 @@ export default class Input extends PhetioObject {
   /**
    * Handles a keydown event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public keyDown( context: EventContext<KeyboardEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `keyDown('${Input.debugText( null, context.domEvent )});` );
+  public keyDown(context: EventContext<KeyboardEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`keyDown('${Input.debugText(null, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-    this.keydownAction.execute( context );
+    this.keydownAction.execute(context);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1606,11 +1606,11 @@ export default class Input extends PhetioObject {
   /**
    * Handles a keyup event, forwarding it to the proper logical event. (scenery-internal)
    */
-  public keyUp( context: EventContext<KeyboardEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `keyUp('${Input.debugText( null, context.domEvent )});` );
+  public keyUp(context: EventContext<KeyboardEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`keyUp('${Input.debugText(null, context.domEvent)});`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
-    this.keyupAction.execute( context );
+    this.keyupAction.execute(context);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1621,44 +1621,44 @@ export default class Input extends PhetioObject {
    * so that we can properly start/end the interaction. NOTE: this can happen for an 'up' where we received a
    * proper type for a 'down', so thus we need the detection.
    */
-  private handleUnknownPointerType( type: string, id: number ): string {
-    if ( type !== '' ) {
+  private handleUnknownPointerType(type: string, id: number): string {
+    if (type !== '') {
       return type;
     }
-    return ( this.mouse && this.mouse.id === id ) ? 'mouse' : 'touch';
+    return (this.mouse && this.mouse.id === id) ? 'mouse' : 'touch';
   }
 
   /**
    * Given a pointer reference, hit test it and determine the Trail that the pointer is over.
    */
-  private getPointerTrail( pointer: Pointer ): Trail {
-    return this.rootNode.trailUnderPointer( pointer ) || new Trail( this.rootNode );
+  private getPointerTrail(pointer: Pointer): Trail {
+    return this.rootNode.trailUnderPointer(pointer) || new Trail(this.rootNode);
   }
 
   /**
    * Called for each logical "up" event, for any pointer type.
    */
-  private upEvent<DOMEvent extends Event>( pointer: Pointer, context: EventContext<DOMEvent>, point: Vector2 ): void {
+  private upEvent<DOMEvent extends Event>(pointer: Pointer, context: EventContext<DOMEvent>, point: Vector2): void {
     // if the event target is within the PDOM the AT is sending a fake pointer event to the document - do not
     // dispatch this since the PDOM should only handle Input.PDOM_EVENT_TYPES, and all other pointer input should
     // go through the Display div. Otherwise, activation will be duplicated when we handle pointer and PDOM events
-    if ( this.display.isElementUnderPDOM( context.domEvent.target as HTMLElement ) ) {
+    if (this.display.isElementUnderPDOM(context.domEvent.target as HTMLElement)) {
       return;
     }
 
-    const pointChanged = pointer.up( point, context.domEvent );
+    const pointChanged = pointer.up(point, context.domEvent);
 
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `upEvent ${pointer.toString()} changed:${pointChanged}` );
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`upEvent ${pointer.toString()} changed:${pointChanged}`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
     // We'll use this trail for the entire dispatch of this event.
-    const eventTrail = this.branchChangeEvents<DOMEvent>( pointer, context, pointChanged );
+    const eventTrail = this.branchChangeEvents<DOMEvent>(pointer, context, pointChanged);
 
-    this.dispatchEvent<DOMEvent>( eventTrail, 'up', pointer, context, true );
+    this.dispatchEvent<DOMEvent>(eventTrail, 'up', pointer, context, true);
 
     // touch pointers are transient, so fire exit/out to the trail afterwards
-    if ( pointer.isTouchLike() ) {
-      this.exitEvents<DOMEvent>( pointer, context, eventTrail, 0, true );
+    if (pointer.isTouchLike()) {
+      this.exitEvents<DOMEvent>(pointer, context, eventTrail, 0, true);
     }
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
@@ -1667,25 +1667,25 @@ export default class Input extends PhetioObject {
   /**
    * Called for each logical "down" event, for any pointer type.
    */
-  private downEvent<DOMEvent extends Event>( pointer: Pointer, context: EventContext<DOMEvent>, point: Vector2 ): void {
+  private downEvent<DOMEvent extends Event>(pointer: Pointer, context: EventContext<DOMEvent>, point: Vector2): void {
     // if the event target is within the PDOM the AT is sending a fake pointer event to the document - do not
     // dispatch this since the PDOM should only handle Input.PDOM_EVENT_TYPES, and all other pointer input should
     // go through the Display div. Otherwise, activation will be duplicated when we handle pointer and PDOM events
-    if ( this.display.isElementUnderPDOM( context.domEvent.target as HTMLElement ) ) {
+    if (this.display.isElementUnderPDOM(context.domEvent.target as HTMLElement)) {
       return;
     }
 
-    const pointChanged = pointer.updatePoint( point );
+    const pointChanged = pointer.updatePoint(point);
 
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `downEvent ${pointer.toString()} changed:${pointChanged}` );
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`downEvent ${pointer.toString()} changed:${pointChanged}`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
     // We'll use this trail for the entire dispatch of this event.
-    const eventTrail = this.branchChangeEvents<DOMEvent>( pointer, context, pointChanged );
+    const eventTrail = this.branchChangeEvents<DOMEvent>(pointer, context, pointChanged);
 
-    pointer.down( context.domEvent );
+    pointer.down(context.domEvent);
 
-    this.dispatchEvent<DOMEvent>( eventTrail, 'down', pointer, context, true );
+    this.dispatchEvent<DOMEvent>(eventTrail, 'down', pointer, context, true);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1693,12 +1693,12 @@ export default class Input extends PhetioObject {
   /**
    * Called for each logical "move" event, for any pointer type.
    */
-  private moveEvent<DOMEvent extends Event>( pointer: Pointer, context: EventContext<DOMEvent> ): void {
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `moveEvent ${pointer.toString()}` );
+  private moveEvent<DOMEvent extends Event>(pointer: Pointer, context: EventContext<DOMEvent>): void {
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`moveEvent ${pointer.toString()}`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
     // Always treat move events as "point changed"
-    this.branchChangeEvents<DOMEvent>( pointer, context, true );
+    this.branchChangeEvents<DOMEvent>(pointer, context, true);
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
   }
@@ -1706,20 +1706,20 @@ export default class Input extends PhetioObject {
   /**
    * Called for each logical "cancel" event, for any pointer type.
    */
-  private cancelEvent<DOMEvent extends Event>( pointer: Pointer, context: EventContext<DOMEvent>, point: Vector2 ): void {
-    const pointChanged = pointer.cancel( point );
+  private cancelEvent<DOMEvent extends Event>(pointer: Pointer, context: EventContext<DOMEvent>, point: Vector2): void {
+    const pointChanged = pointer.cancel(point);
 
-    sceneryLog && sceneryLog.Input && sceneryLog.Input( `cancelEvent ${pointer.toString()} changed:${pointChanged}` );
+    sceneryLog && sceneryLog.Input && sceneryLog.Input(`cancelEvent ${pointer.toString()} changed:${pointChanged}`);
     sceneryLog && sceneryLog.Input && sceneryLog.push();
 
     // We'll use this trail for the entire dispatch of this event.
-    const eventTrail = this.branchChangeEvents<DOMEvent>( pointer, context, pointChanged );
+    const eventTrail = this.branchChangeEvents<DOMEvent>(pointer, context, pointChanged);
 
-    this.dispatchEvent<DOMEvent>( eventTrail, 'cancel', pointer, context, true );
+    this.dispatchEvent<DOMEvent>(eventTrail, 'cancel', pointer, context, true);
 
     // touch pointers are transient, so fire exit/out to the trail afterwards
-    if ( pointer.isTouchLike() ) {
-      this.exitEvents<DOMEvent>( pointer, context, eventTrail, 0, true );
+    if (pointer.isTouchLike()) {
+      this.exitEvents<DOMEvent>(pointer, context, eventTrail, 0, true);
     }
 
     sceneryLog && sceneryLog.Input && sceneryLog.pop();
@@ -1736,34 +1736,34 @@ export default class Input extends PhetioObject {
    * @param sendMove - Whether to send move events
    * @returns - The current trail of the pointer
    */
-  private branchChangeEvents<DOMEvent extends Event>( pointer: Pointer, context: EventContext<DOMEvent>, sendMove: boolean ): Trail {
+  private branchChangeEvents<DOMEvent extends Event>(pointer: Pointer, context: EventContext<DOMEvent>, sendMove: boolean): Trail {
     sceneryLog && sceneryLog.InputEvent && sceneryLog.InputEvent(
-      `branchChangeEvents: ${pointer.toString()} sendMove:${sendMove}` );
+      `branchChangeEvents: ${pointer.toString()} sendMove:${sendMove}`);
     sceneryLog && sceneryLog.InputEvent && sceneryLog.push();
 
-    const trail = this.getPointerTrail( pointer );
+    const trail = this.getPointerTrail(pointer);
 
-    const inputEnabledTrail = trail.slice( 0, Math.min( trail.nodes.length, trail.getLastInputEnabledIndex() + 1 ) );
-    const oldInputEnabledTrail = pointer.inputEnabledTrail || new Trail( this.rootNode );
-    const branchInputEnabledIndex = Trail.branchIndex( inputEnabledTrail, oldInputEnabledTrail );
+    const inputEnabledTrail = trail.slice(0, Math.min(trail.nodes.length, trail.getLastInputEnabledIndex() + 1));
+    const oldInputEnabledTrail = pointer.inputEnabledTrail || new Trail(this.rootNode);
+    const branchInputEnabledIndex = Trail.branchIndex(inputEnabledTrail, oldInputEnabledTrail);
     const lastInputEnabledNodeChanged = oldInputEnabledTrail.lastNode() !== inputEnabledTrail.lastNode();
 
-    if ( sceneryLog && sceneryLog.InputEvent ) {
-      const oldTrail = pointer.trail || new Trail( this.rootNode );
-      const branchIndex = Trail.branchIndex( trail, oldTrail );
+    if (sceneryLog && sceneryLog.InputEvent) {
+      const oldTrail = pointer.trail || new Trail(this.rootNode);
+      const branchIndex = Trail.branchIndex(trail, oldTrail);
 
-      ( branchIndex !== trail.length || branchIndex !== oldTrail.length ) && sceneryLog.InputEvent(
-        `changed from ${oldTrail.toString()} to ${trail.toString()}` );
+      (branchIndex !== trail.length || branchIndex !== oldTrail.length) && sceneryLog.InputEvent(
+        `changed from ${oldTrail.toString()} to ${trail.toString()}`);
     }
 
     // event order matches http://www.w3.org/TR/DOM-Level-3-Events/#events-mouseevent-event-order
-    if ( sendMove ) {
-      this.dispatchEvent<DOMEvent>( trail, 'move', pointer, context, true );
+    if (sendMove) {
+      this.dispatchEvent<DOMEvent>(trail, 'move', pointer, context, true);
     }
 
     // We want to approximately mimic http://www.w3.org/TR/DOM-Level-3-Events/#events-mouseevent-event-order
-    this.exitEvents<DOMEvent>( pointer, context, oldInputEnabledTrail, branchInputEnabledIndex, lastInputEnabledNodeChanged );
-    this.enterEvents<DOMEvent>( pointer, context, inputEnabledTrail, branchInputEnabledIndex, lastInputEnabledNodeChanged );
+    this.exitEvents<DOMEvent>(pointer, context, oldInputEnabledTrail, branchInputEnabledIndex, lastInputEnabledNodeChanged);
+    this.enterEvents<DOMEvent>(pointer, context, inputEnabledTrail, branchInputEnabledIndex, lastInputEnabledNodeChanged);
 
     pointer.trail = trail;
     pointer.inputEnabledTrail = inputEnabledTrail;
@@ -1788,13 +1788,13 @@ export default class Input extends PhetioObject {
    *                               for this node and all "descendant" nodes in the relevant trail.
    * @param lastNodeChanged - If the last node didn't change, we won't sent an over event.
    */
-  private enterEvents<DOMEvent extends Event>( pointer: Pointer, context: EventContext<DOMEvent>, trail: Trail, branchIndex: number, lastNodeChanged: boolean ): void {
-    if ( lastNodeChanged ) {
-      this.dispatchEvent<DOMEvent>( trail, 'over', pointer, context, true, true );
+  private enterEvents<DOMEvent extends Event>(pointer: Pointer, context: EventContext<DOMEvent>, trail: Trail, branchIndex: number, lastNodeChanged: boolean): void {
+    if (lastNodeChanged) {
+      this.dispatchEvent<DOMEvent>(trail, 'over', pointer, context, true, true);
     }
 
-    for ( let i = branchIndex; i < trail.length; i++ ) {
-      this.dispatchEvent<DOMEvent>( trail.slice( 0, i + 1 ), 'enter', pointer, context, false );
+    for (let i = branchIndex; i < trail.length; i++) {
+      this.dispatchEvent<DOMEvent>(trail.slice(0, i + 1), 'enter', pointer, context, false);
     }
   }
 
@@ -1815,13 +1815,13 @@ export default class Input extends PhetioObject {
    *                               for this node and all "descendant" nodes in the relevant trail.
    * @param lastNodeChanged - If the last node didn't change, we won't sent an out event.
    */
-  private exitEvents<DOMEvent extends Event>( pointer: Pointer, context: EventContext<DOMEvent>, trail: Trail, branchIndex: number, lastNodeChanged: boolean ): void {
-    for ( let i = trail.length - 1; i >= branchIndex; i-- ) {
-      this.dispatchEvent<DOMEvent>( trail.slice( 0, i + 1 ), 'exit', pointer, context, false, true );
+  private exitEvents<DOMEvent extends Event>(pointer: Pointer, context: EventContext<DOMEvent>, trail: Trail, branchIndex: number, lastNodeChanged: boolean): void {
+    for (let i = trail.length - 1; i >= branchIndex; i--) {
+      this.dispatchEvent<DOMEvent>(trail.slice(0, i + 1), 'exit', pointer, context, false, true);
     }
 
-    if ( lastNodeChanged ) {
-      this.dispatchEvent<DOMEvent>( trail, 'out', pointer, context, true );
+    if (lastNodeChanged) {
+      this.dispatchEvent<DOMEvent>(trail, 'out', pointer, context, true);
     }
   }
 
@@ -1835,33 +1835,33 @@ export default class Input extends PhetioObject {
    * @param bubbles - If bubbles is false, the event is only dispatched to the leaf node of the trail.
    * @param fireOnInputDisabled - Whether to fire this event even if nodes have inputEnabled:false
    */
-  private dispatchEvent<DOMEvent extends Event>( trail: Trail, type: SupportedEventTypes, pointer: Pointer, context: EventContext<DOMEvent>, bubbles: boolean, fireOnInputDisabled = false ): void {
+  private dispatchEvent<DOMEvent extends Event>(trail: Trail, type: SupportedEventTypes, pointer: Pointer, context: EventContext<DOMEvent>, bubbles: boolean, fireOnInputDisabled = false): void {
     sceneryLog && sceneryLog.EventDispatch && sceneryLog.EventDispatch(
-      `${type} trail:${trail.toString()} pointer:${pointer.toString()} at ${pointer.point ? pointer.point.toString() : 'null'}` );
+      `${type} trail:${trail.toString()} pointer:${pointer.toString()} at ${pointer.point ? pointer.point.toString() : 'null'}`);
     sceneryLog && sceneryLog.EventDispatch && sceneryLog.push();
 
-    assert && assert( trail, 'Falsy trail for dispatchEvent' );
+    assert && assert(trail, 'Falsy trail for dispatchEvent');
 
-    sceneryLog && sceneryLog.EventPath && sceneryLog.EventPath( `${type} ${trail.toPathString()}` );
+    sceneryLog && sceneryLog.EventPath && sceneryLog.EventPath(`${type} ${trail.toPathString()}`);
 
     // NOTE: event is not immutable, as its currentTarget changes
-    const inputEvent = new SceneryEvent<DOMEvent>( trail, type, pointer, context );
+    const inputEvent = new SceneryEvent<DOMEvent>(trail, type, pointer, context);
 
     this.currentSceneryEvent = inputEvent;
 
     // first run through the pointer's listeners to see if one of them will handle the event
-    this.dispatchToListeners<DOMEvent>( pointer, pointer.getListeners(), type, inputEvent );
+    this.dispatchToListeners<DOMEvent>(pointer, pointer.getListeners(), type, inputEvent);
 
     // if not yet handled, run through the trail in order to see if one of them will handle the event
     // at the base of the trail should be the scene node, so the scene will be notified last
-    this.dispatchToTargets<DOMEvent>( trail, type, pointer, inputEvent, bubbles, fireOnInputDisabled );
+    this.dispatchToTargets<DOMEvent>(trail, type, pointer, inputEvent, bubbles, fireOnInputDisabled);
 
     // Notify input listeners on the Display
-    this.dispatchToListeners<DOMEvent>( pointer, this.display.getInputListeners(), type, inputEvent );
+    this.dispatchToListeners<DOMEvent>(pointer, this.display.getInputListeners(), type, inputEvent);
 
     // Notify input listeners to any Display
-    if ( Display.inputListeners.length ) {
-      this.dispatchToListeners<DOMEvent>( pointer, Display.inputListeners.slice(), type, inputEvent );
+    if (Display.inputListeners.length) {
+      this.dispatchToListeners<DOMEvent>(pointer, Display.inputListeners.slice(), type, inputEvent);
     }
 
     this.currentSceneryEvent = null;
@@ -1879,32 +1879,32 @@ export default class Input extends PhetioObject {
    * @param capture - If true, this dispatch is in the capture sequence (like DOM's addEventListener useCapture).
    *                  Listeners will only be called if the listener also indicates it is for the capture sequence.
    */
-  private dispatchToListeners<DOMEvent extends Event>( pointer: Pointer, listeners: TInputListener[], type: SupportedEventTypes, inputEvent: SceneryEvent<DOMEvent>, capture: boolean | null = null ): void {
+  private dispatchToListeners<DOMEvent extends Event>(pointer: Pointer, listeners: TInputListener[], type: SupportedEventTypes, inputEvent: SceneryEvent<DOMEvent>, capture: boolean | null = null): void {
 
-    if ( inputEvent.handled ) {
+    if (inputEvent.handled) {
       return;
     }
 
     const specificType = pointer.type + type as SupportedEventTypes; // e.g. mouseup, touchup
 
-    for ( let i = 0; i < listeners.length; i++ ) {
-      const listener = listeners[ i ];
+    for (let i = 0; i < listeners.length; i++) {
+      const listener = listeners[i];
 
-      if ( capture === null || capture === !!listener.capture ) {
-        if ( !inputEvent.aborted && listener[ specificType ] ) {
-          sceneryLog && sceneryLog.EventDispatch && sceneryLog.EventDispatch( specificType );
+      if (capture === null || capture === !!listener.capture) {
+        if (!inputEvent.aborted && listener[specificType]) {
+          sceneryLog && sceneryLog.EventDispatch && sceneryLog.EventDispatch(specificType);
           sceneryLog && sceneryLog.EventDispatch && sceneryLog.push();
 
-          ( listener[ specificType ] as SceneryListenerFunction<DOMEvent> )( inputEvent );
+          (listener[specificType] as SceneryListenerFunction<DOMEvent>)(inputEvent);
 
           sceneryLog && sceneryLog.EventDispatch && sceneryLog.pop();
         }
 
-        if ( !inputEvent.aborted && listener[ type ] ) {
-          sceneryLog && sceneryLog.EventDispatch && sceneryLog.EventDispatch( type );
+        if (!inputEvent.aborted && listener[type]) {
+          sceneryLog && sceneryLog.EventDispatch && sceneryLog.EventDispatch(type);
           sceneryLog && sceneryLog.EventDispatch && sceneryLog.push();
 
-          ( listener[ type ] as SceneryListenerFunction<DOMEvent> )( inputEvent );
+          (listener[type] as SceneryListenerFunction<DOMEvent>)(inputEvent);
 
           sceneryLog && sceneryLog.EventDispatch && sceneryLog.pop();
         }
@@ -1922,32 +1922,32 @@ export default class Input extends PhetioObject {
    * @param bubbles - If bubbles is false, the event is only dispatched to the leaf node of the trail.
    * @param [fireOnInputDisabled]
    */
-  private dispatchToTargets<DOMEvent extends Event>( trail: Trail, type: SupportedEventTypes, pointer: Pointer,
-                                                     inputEvent: SceneryEvent<DOMEvent>, bubbles: boolean,
-                                                     fireOnInputDisabled = false ): void {
+  private dispatchToTargets<DOMEvent extends Event>(trail: Trail, type: SupportedEventTypes, pointer: Pointer,
+    inputEvent: SceneryEvent<DOMEvent>, bubbles: boolean,
+    fireOnInputDisabled = false): void {
 
-    if ( inputEvent.aborted || inputEvent.handled ) {
+    if (inputEvent.aborted || inputEvent.handled) {
       return;
     }
 
     const inputEnabledIndex = trail.getLastInputEnabledIndex();
 
-    for ( let i = trail.nodes.length - 1; i >= 0; bubbles ? i-- : i = -1 ) {
+    for (let i = trail.nodes.length - 1; i >= 0; bubbles ? i-- : i = -1) {
 
-      const target = trail.nodes[ i ];
+      const target = trail.nodes[i];
 
       const trailInputDisabled = inputEnabledIndex < i;
 
-      if ( target.isDisposed || ( !fireOnInputDisabled && trailInputDisabled ) ) {
+      if (target.isDisposed || (!fireOnInputDisabled && trailInputDisabled)) {
         continue;
       }
 
       inputEvent.currentTarget = target;
 
-      this.dispatchToListeners<DOMEvent>( pointer, target.getInputListeners(), type, inputEvent );
+      this.dispatchToListeners<DOMEvent>(pointer, target.getInputListeners(), type, inputEvent);
 
       // if the input event was aborted or handled, don't follow the trail down another level
-      if ( inputEvent.aborted || inputEvent.handled ) {
+      if (inputEvent.aborted || inputEvent.handled) {
         return;
       }
     }
@@ -1961,39 +1961,39 @@ export default class Input extends PhetioObject {
    *
    * @returns - see domEventPropertiesToSerialize for list keys that are serialized
    */
-  public static serializeDomEvent( domEvent: Event ): SerializedDOMEvent {
+  public static serializeDomEvent(domEvent: Event): SerializedDOMEvent {
     const entries: SerializedDOMEvent = {
       constructorName: domEvent.constructor.name
     };
 
-    domEventPropertiesToSerialize.forEach( property => {
+    domEventPropertiesToSerialize.forEach(property => {
 
-      const domEventProperty: Event[ keyof Event ] | Element = domEvent[ property as keyof Event ];
+      const domEventProperty: Event[keyof Event] | Element = domEvent[property as keyof Event];
 
       // We serialize many Event APIs into a single object, so be graceful if properties don't exist.
-      if ( domEventProperty === undefined || domEventProperty === null ) {
-        entries[ property ] = null;
+      if (domEventProperty === undefined || domEventProperty === null) {
+        entries[property] = null;
       }
 
-      else if ( domEventProperty instanceof Element && EVENT_KEY_VALUES_AS_ELEMENTS.includes( property ) && typeof domEventProperty.getAttribute === 'function' &&
+      else if (domEventProperty instanceof Element && EVENT_KEY_VALUES_AS_ELEMENTS.includes(property) && typeof domEventProperty.getAttribute === 'function' &&
 
-                // If false, then this target isn't a PDOM element, so we can skip this serialization
-                domEventProperty.hasAttribute( PDOMUtils.DATA_PDOM_UNIQUE_ID ) ) {
+        // If false, then this target isn't a PDOM element, so we can skip this serialization
+        domEventProperty.hasAttribute(PDOMUtils.DATA_PDOM_UNIQUE_ID)) {
 
         // If the target came from the accessibility PDOM, then we want to store the Node trail id of where it came from.
-        entries[ property ] = {
-          [ PDOMUtils.DATA_PDOM_UNIQUE_ID ]: domEventProperty.getAttribute( PDOMUtils.DATA_PDOM_UNIQUE_ID ),
+        entries[property] = {
+          [PDOMUtils.DATA_PDOM_UNIQUE_ID]: domEventProperty.getAttribute(PDOMUtils.DATA_PDOM_UNIQUE_ID),
 
           // Have the ID also
-          id: domEventProperty.getAttribute( 'id' )
+          id: domEventProperty.getAttribute('id')
         };
       }
       else {
 
         // Parse to get rid of functions and circular references.
-        entries[ property ] = ( ( typeof domEventProperty === 'object' ) ? {} : JSON.parse( JSON.stringify( domEventProperty ) ) );
+        entries[property] = ((typeof domEventProperty === 'object') ? {} : JSON.parse(JSON.stringify(domEventProperty)));
       }
-    } );
+    });
 
     return entries;
   }
@@ -2001,50 +2001,50 @@ export default class Input extends PhetioObject {
   /**
    * From a serialized dom event, return a recreated window.Event (scenery-internal)
    */
-  public static deserializeDomEvent( eventObject: SerializedDOMEvent ): Event {
+  public static deserializeDomEvent(eventObject: SerializedDOMEvent): Event {
     const constructorName = eventObject.constructorName || 'Event';
 
-    const configForConstructor = _.pick( eventObject, domEventPropertiesSetInConstructor );
+    const configForConstructor = _.pick(eventObject, domEventPropertiesSetInConstructor);
     // serialize the relatedTarget back into an event Object, so that it can be passed to the init config in the Event
     // constructor
-    if ( configForConstructor.relatedTarget ) {
+    if (configForConstructor.relatedTarget) {
       // @ts-expect-error
-      const htmlElement = document.getElementById( configForConstructor.relatedTarget.id );
-      assert && assert( htmlElement, 'cannot deserialize event when related target is not in the DOM.' );
+      const htmlElement = document.getElementById(configForConstructor.relatedTarget.id);
+      assert && assert(htmlElement, 'cannot deserialize event when related target is not in the DOM.');
       configForConstructor.relatedTarget = htmlElement;
     }
 
     // @ts-expect-error
-    const domEvent: Event = new window[ constructorName ]( constructorName, configForConstructor );
+    const domEvent: Event = new window[constructorName](constructorName, configForConstructor);
 
-    for ( const key in eventObject ) {
+    for (const key in eventObject) {
 
       // `type` is readonly, so don't try to set it.
-      if ( eventObject.hasOwnProperty( key ) && !( domEventPropertiesSetInConstructor as string[] ).includes( key ) ) {
+      if (eventObject.hasOwnProperty(key) && !(domEventPropertiesSetInConstructor as string[]).includes(key)) {
 
         // Special case for target since we can't set that read-only property. Instead use a substitute key.
-        if ( key === 'target' ) {
+        if (key === 'target') {
 
-          if ( assert ) {
+          if (assert) {
             const target = eventObject.target as { id?: string } | undefined;
-            if ( target && target.id ) {
-              assert( document.getElementById( target.id ), 'target should exist in the PDOM to support playback.' );
+            if (target && target.id) {
+              assert(document.getElementById(target.id), 'target should exist in the PDOM to support playback.');
             }
           }
 
           // @ts-expect-error
-          domEvent[ TARGET_SUBSTITUTE_KEY ] = _.clone( eventObject[ key ] ) || {};
+          domEvent[TARGET_SUBSTITUTE_KEY] = _.clone(eventObject[key]) || {};
 
           // This may not be needed since https://github.com/phetsims/scenery/issues/1296 is complete, double check on getTrailFromPDOMEvent() too
           // @ts-expect-error
-          domEvent[ TARGET_SUBSTITUTE_KEY ].getAttribute = function( key ) {
-            return this[ key ];
+          domEvent[TARGET_SUBSTITUTE_KEY].getAttribute = function (key) {
+            return this[key];
           };
         }
         else {
 
           // @ts-expect-error
-          domEvent[ key ] = eventObject[ key ];
+          domEvent[key] = eventObject[key];
         }
       }
     }
@@ -2057,9 +2057,9 @@ export default class Input extends PhetioObject {
    * @param point - Not logged if null
    * @param domEvent
    */
-  private static debugText( point: Vector2 | null, domEvent: Event ): string {
+  private static debugText(point: Vector2 | null, domEvent: Event): string {
     let result = `${domEvent.timeStamp} ${domEvent.type}`;
-    if ( point !== null ) {
+    if (point !== null) {
       result = `${point.x},${point.y} ${result}`;
     }
     return result;
@@ -2068,17 +2068,17 @@ export default class Input extends PhetioObject {
   /**
    * Maps the current MS pointer types onto the pointer spec. (scenery-internal)
    */
-  public static msPointerType( event: PointerEvent ): string {
+  public static msPointerType(event: PointerEvent): string {
     // @ts-expect-error -- legacy API
-    if ( event.pointerType === window.MSPointerEvent.MSPOINTER_TYPE_TOUCH ) {
+    if (event.pointerType === window.MSPointerEvent.MSPOINTER_TYPE_TOUCH) {
       return 'touch';
     }
     // @ts-expect-error -- legacy API
-    else if ( event.pointerType === window.MSPointerEvent.MSPOINTER_TYPE_PEN ) {
+    else if (event.pointerType === window.MSPointerEvent.MSPOINTER_TYPE_PEN) {
       return 'pen';
     }
     // @ts-expect-error -- legacy API
-    else if ( event.pointerType === window.MSPointerEvent.MSPOINTER_TYPE_MOUSE ) {
+    else if (event.pointerType === window.MSPointerEvent.MSPOINTER_TYPE_MOUSE) {
       return 'mouse';
     }
     else {
@@ -2087,4 +2087,4 @@ export default class Input extends PhetioObject {
   }
 }
 
-scenery.register( 'Input', Input );
+scenery.register('Input', Input);

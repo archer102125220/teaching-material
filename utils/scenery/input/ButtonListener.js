@@ -15,11 +15,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import deprecationWarning from '../../../phet-core/js/deprecationWarning.js';
-import merge from '../../../phet-core/js/merge.js';
-import EventType from '../../../tandem/js/EventType.js';
-import IOType from '../../../tandem/js/types/IOType.js';
-import { DownUpListener, scenery } from '../imports.js';
+import deprecationWarning from '../../phet-core/deprecationWarning';
+import merge from '../../phet-core/merge';
+import EventType from '../../tandem/EventType';
+import IOType from '../../tandem/types/IOType';
+import { DownUpListener, scenery } from '../imports';
 
 /**
  * @deprecated - please use FireListener for new code (set up for the `fire` callback to be easy, and has Properties
@@ -37,20 +37,24 @@ class ButtonListener extends DownUpListener {
    * out: null         // Called on an 'out' state change, as out( event, oldState )
    * fire: null        // Called on a state change to/from 'down' (depending on fireOnDown), as fire( event ). Called after the triggering up/over/down event.
    */
-  constructor( options ) {
-    assert && deprecationWarning( 'ButtonListener is deprecated, please use FireListener instead' );
+  constructor(options) {
+    assert &&
+      deprecationWarning(
+        'ButtonListener is deprecated, please use FireListener instead'
+      );
 
-
-    options = merge( {
-
-      // When running in PhET-iO brand, the tandem must be supplied
-      phetioType: ButtonListener.ButtonListenerIO,
-      phetioState: false,
-      phetioEventType: EventType.USER
-    }, options );
+    options = merge(
+      {
+        // When running in PhET-iO brand, the tandem must be supplied
+        phetioType: ButtonListener.ButtonListenerIO,
+        phetioState: false,
+        phetioEventType: EventType.USER
+      },
+      options
+    );
 
     // TODO: pass through options https://github.com/phetsims/scenery/issues/1581
-    super( {
+    super({
       tandem: options.tandem,
       phetioType: options.phetioType,
       phetioState: options.phetioState,
@@ -58,15 +62,15 @@ class ButtonListener extends DownUpListener {
       mouseButton: options.mouseButton || 0, // forward the mouse button, default to 0 (LMB)
 
       // parameter to DownUpListener, NOT an input listener itself
-      down: ( event, trail ) => {
-        this.setButtonState( event, 'down' );
+      down: (event, trail) => {
+        this.setButtonState(event, 'down');
       },
 
       // parameter to DownUpListener, NOT an input listener itself
-      up: ( event, trail ) => {
-        this.setButtonState( event, this._overCount > 0 ? 'over' : 'up' );
+      up: (event, trail) => {
+        this.setButtonState(event, this._overCount > 0 ? 'over' : 'up');
       }
-    } );
+    });
 
     // @public {string} - 'up', 'over', 'down' or 'out'
     this.buttonState = 'up';
@@ -84,35 +88,40 @@ class ButtonListener extends DownUpListener {
    * @param {SceneryEvent} event
    * @param {string} state
    */
-  setButtonState( event, state ) {
-    if ( state !== this.buttonState ) {
-      sceneryLog && sceneryLog.InputEvent && sceneryLog.InputEvent(
-        `ButtonListener state change to ${state} from ${this.buttonState} for ${this.downTrail ? this.downTrail.toString() : this.downTrail}` );
+  setButtonState(event, state) {
+    if (state !== this.buttonState) {
+      sceneryLog &&
+        sceneryLog.InputEvent &&
+        sceneryLog.InputEvent(
+          `ButtonListener state change to ${state} from ${this.buttonState} for ${this.downTrail ? this.downTrail.toString() : this.downTrail}`
+        );
       const oldState = this.buttonState;
 
       this.buttonState = state;
 
-      if ( this._buttonOptions[ state ] ) {
-
+      if (this._buttonOptions[state]) {
         // Record this event to the phet-io data stream, including all downstream events as nested children
-        this.phetioStartEvent( state );
+        this.phetioStartEvent(state);
 
         // Then invoke the callback
-        this._buttonOptions[ state ]( event, oldState );
+        this._buttonOptions[state](event, oldState);
 
         this.phetioEndEvent();
       }
 
-      if ( this._buttonOptions.fire &&
-           this._overCount > 0 &&
-           !this.interrupted &&
-           ( this._buttonOptions.fireOnDown ? ( state === 'down' ) : ( oldState === 'down' ) ) ) {
-
+      if (
+        this._buttonOptions.fire &&
+        this._overCount > 0 &&
+        !this.interrupted &&
+        (this._buttonOptions.fireOnDown
+          ? state === 'down'
+          : oldState === 'down')
+      ) {
         // Record this event to the phet-io data stream, including all downstream events as nested children
-        this.phetioStartEvent( 'fire' );
+        this.phetioStartEvent('fire');
 
         // Then fire the event
-        this._buttonOptions.fire( event );
+        this._buttonOptions.fire(event);
 
         this.phetioEndEvent();
       }
@@ -124,12 +133,15 @@ class ButtonListener extends DownUpListener {
    *
    * @param {SceneryEvent} event
    */
-  enter( event ) {
-    sceneryLog && sceneryLog.InputEvent && sceneryLog.InputEvent(
-      `ButtonListener enter for ${this.downTrail ? this.downTrail.toString() : this.downTrail}` );
+  enter(event) {
+    sceneryLog &&
+      sceneryLog.InputEvent &&
+      sceneryLog.InputEvent(
+        `ButtonListener enter for ${this.downTrail ? this.downTrail.toString() : this.downTrail}`
+      );
     this._overCount++;
-    if ( this._overCount === 1 ) {
-      this.setButtonState( event, this.isDown ? 'down' : 'over' );
+    if (this._overCount === 1) {
+      this.setButtonState(event, this.isDown ? 'down' : 'over');
     }
   }
 
@@ -138,13 +150,17 @@ class ButtonListener extends DownUpListener {
    *
    * @param {SceneryEvent} event
    */
-  exit( event ) {
-    sceneryLog && sceneryLog.InputEvent && sceneryLog.InputEvent(
-      `ButtonListener exit for ${this.downTrail ? this.downTrail.toString() : this.downTrail}` );
-    assert && assert( this._overCount > 0, 'Exit events not matched by an enter' );
+  exit(event) {
+    sceneryLog &&
+      sceneryLog.InputEvent &&
+      sceneryLog.InputEvent(
+        `ButtonListener exit for ${this.downTrail ? this.downTrail.toString() : this.downTrail}`
+      );
+    assert &&
+      assert(this._overCount > 0, 'Exit events not matched by an enter');
     this._overCount--;
-    if ( this._overCount === 0 ) {
-      this.setButtonState( event, this.isDown ? 'out' : 'up' );
+    if (this._overCount === 0) {
+      this.setButtonState(event, this.isDown ? 'out' : 'up');
     }
   }
 
@@ -155,8 +171,8 @@ class ButtonListener extends DownUpListener {
    *
    * @param {SceneryEvent} event
    */
-  focus( event ) {
-    this.enter( event );
+  focus(event) {
+    this.enter(event);
   }
 
   /**
@@ -166,8 +182,8 @@ class ButtonListener extends DownUpListener {
    *
    * @param {SceneryEvent} event
    */
-  blur( event ) {
-    this.exit( event );
+  blur(event) {
+    this.exit(event);
   }
 
   /**
@@ -182,18 +198,18 @@ class ButtonListener extends DownUpListener {
    *
    * @param {SceneryEvent} event
    */
-  click( event ) {
-    this.setButtonState( event, 'down' );
-    this.setButtonState( event, 'up' );
+  click(event) {
+    this.setButtonState(event, 'down');
+    this.setButtonState(event, 'up');
   }
 }
 
-scenery.register( 'ButtonListener', ButtonListener );
+scenery.register('ButtonListener', ButtonListener);
 
-ButtonListener.ButtonListenerIO = new IOType( 'ButtonListenerIO', {
+ButtonListener.ButtonListenerIO = new IOType('ButtonListenerIO', {
   valueType: ButtonListener,
   documentation: 'Button listener',
-  events: [ 'up', 'over', 'down', 'out', 'fire' ]
-} );
+  events: ['up', 'over', 'down', 'out', 'fire']
+});
 
 export default ButtonListener;

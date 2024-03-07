@@ -8,11 +8,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import { SceneryEvent } from '../imports.js';
+import Bounds2 from '../../dot/Bounds2';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import { SceneryEvent } from '../imports';
 
-export type SceneryListenerFunction<T extends Event = Event> = ( event: SceneryEvent<T> ) => void;
+export type SceneryListenerFunction<T extends Event = Event> = (event: SceneryEvent<T>) => void;
 
 type TInputListener = {
   interrupt?: () => void;
@@ -29,10 +29,10 @@ type TInputListener = {
   // Bounds are in the global coordinate frame.
   // While dragging, the AnimatedPanZoomListener will try to keep these bounds in view. Intended to be
   // called from a listener attached to a Pointer so that the API is compatible with multi-touch.
-  createPanTargetBounds?: ( () => Bounds2 ) | null;
+  createPanTargetBounds?: (() => Bounds2) | null;
 
-  ////////////////////////////////////////////////
-  //////////////////////////////////////////////
+  // //////////////////////////////////////////////
+  // ////////////////////////////////////////////
   // Only actual events below here
 
   focus?: SceneryListenerFunction<FocusEvent>;

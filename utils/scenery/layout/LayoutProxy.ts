@@ -12,11 +12,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import Orientation from '../../../phet-core/js/Orientation.js';
-import Pool from '../../../phet-core/js/Pool.js';
-import { HeightSizableNode, isHeightSizable, isWidthSizable, Node, scenery, Trail, WidthSizableNode } from '../imports.js';
+import Bounds2 from '../../dot/Bounds2';
+import Vector2 from '../../dot/Vector2';
+import Orientation from '../../phet-core/Orientation';
+import Pool from '../../phet-core/Pool';
+import { type HeightSizableNode, isHeightSizable, isWidthSizable, Node, scenery, Trail, type WidthSizableNode } from '../imports';
 
 export default class LayoutProxy {
 
@@ -27,8 +27,8 @@ export default class LayoutProxy {
    * @param trail - The wrapped Node is the leaf-most node, but coordinates will be handled in the global frame
    * of the trail itself.
    */
-  public constructor( trail: Trail ) {
-    this.initialize( trail );
+  public constructor(trail: Trail) {
+    this.initialize(trail);
   }
 
   /**
@@ -45,15 +45,15 @@ export default class LayoutProxy {
    *
    * DO not call it twice without in-between disposals (follow the above pattern).
    */
-  public initialize( trail: Trail ): this {
+  public initialize(trail: Trail): this {
     this.trail = trail;
 
     return this;
   }
 
   private checkPreconditions(): void {
-    assert && assert( this.trail, 'Should not be disposed' );
-    assert && assert( this.trail!.getParentMatrix().isAxisAligned(), 'Transforms with LayoutProxy need to be axis-aligned' );
+    assert && assert(this.trail, 'Should not be disposed');
+    assert && assert(this.trail!.getParentMatrix().isAxisAligned(), 'Transforms with LayoutProxy need to be axis-aligned');
   }
 
   public get node(): Node {
@@ -68,7 +68,7 @@ export default class LayoutProxy {
   public get bounds(): Bounds2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.parentToGlobalBounds( this.node.bounds );
+    return this.trail!.parentToGlobalBounds(this.node.bounds);
   }
 
   /**
@@ -77,7 +77,7 @@ export default class LayoutProxy {
   public get visibleBounds(): Bounds2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.parentToGlobalBounds( this.node.visibleBounds );
+    return this.trail!.parentToGlobalBounds(this.node.visibleBounds);
   }
 
   /**
@@ -100,16 +100,16 @@ export default class LayoutProxy {
   public get x(): number {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformX( this.node.x );
+    return this.trail!.getParentTransform().transformX(this.node.x);
   }
 
   /**
    * Sets the x of the last node in the trail, but in the root coordinate frame.
    */
-  public set x( value: number ) {
+  public set x(value: number) {
     assert && this.checkPreconditions();
 
-    this.node.x = this.trail!.getParentTransform().inverseX( value );
+    this.node.x = this.trail!.getParentTransform().inverseX(value);
   }
 
   /**
@@ -118,16 +118,16 @@ export default class LayoutProxy {
   public get y(): number {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformY( this.node.y );
+    return this.trail!.getParentTransform().transformY(this.node.y);
   }
 
   /**
    * Sets the y of the last node in the trail, but in the root coordinate frame.
    */
-  public set y( value: number ) {
+  public set y(value: number) {
     assert && this.checkPreconditions();
 
-    this.node.y = this.trail!.getParentTransform().inverseY( value );
+    this.node.y = this.trail!.getParentTransform().inverseY(value);
   }
 
   /**
@@ -136,16 +136,16 @@ export default class LayoutProxy {
   public get translation(): Vector2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformPosition2( this.node.translation );
+    return this.trail!.getParentTransform().transformPosition2(this.node.translation);
   }
 
   /**
    * Sets the translation of the last node in the trail, but in the root coordinate frame.
    */
-  public set translation( value: Vector2 ) {
+  public set translation(value: Vector2) {
     assert && this.checkPreconditions();
 
-    this.node.translation = this.trail!.getParentTransform().inversePosition2( value );
+    this.node.translation = this.trail!.getParentTransform().inversePosition2(value);
   }
 
   /**
@@ -154,14 +154,14 @@ export default class LayoutProxy {
   public get left(): number {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformX( this.node.left );
+    return this.trail!.getParentTransform().transformX(this.node.left);
   }
 
   /**
    * Sets the left of the last node in the trail, but in the root coordinate frame.
    */
-  public set left( value: number ) {
-    this.node.left = this.trail!.getParentTransform().inverseX( value );
+  public set left(value: number) {
+    this.node.left = this.trail!.getParentTransform().inverseX(value);
   }
 
   /**
@@ -170,16 +170,16 @@ export default class LayoutProxy {
   public get right(): number {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformX( this.node.right );
+    return this.trail!.getParentTransform().transformX(this.node.right);
   }
 
   /**
    * Sets the right of the last node in the trail, but in the root coordinate frame.
    */
-  public set right( value: number ) {
+  public set right(value: number) {
     assert && this.checkPreconditions();
 
-    this.node.right = this.trail!.getParentTransform().inverseX( value );
+    this.node.right = this.trail!.getParentTransform().inverseX(value);
   }
 
   /**
@@ -188,16 +188,16 @@ export default class LayoutProxy {
   public get centerX(): number {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformX( this.node.centerX );
+    return this.trail!.getParentTransform().transformX(this.node.centerX);
   }
 
   /**
    * Sets the centerX of the last node in the trail, but in the root coordinate frame.
    */
-  public set centerX( value: number ) {
+  public set centerX(value: number) {
     assert && this.checkPreconditions();
 
-    this.node.centerX = this.trail!.getParentTransform().inverseX( value );
+    this.node.centerX = this.trail!.getParentTransform().inverseX(value);
   }
 
   /**
@@ -206,16 +206,16 @@ export default class LayoutProxy {
   public get top(): number {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformY( this.node.top );
+    return this.trail!.getParentTransform().transformY(this.node.top);
   }
 
   /**
    * Sets the top of the last node in the trail, but in the root coordinate frame.
    */
-  public set top( value: number ) {
+  public set top(value: number) {
     assert && this.checkPreconditions();
 
-    this.node.top = this.trail!.getParentTransform().inverseY( value );
+    this.node.top = this.trail!.getParentTransform().inverseY(value);
   }
 
   /**
@@ -224,16 +224,16 @@ export default class LayoutProxy {
   public get bottom(): number {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformY( this.node.bottom );
+    return this.trail!.getParentTransform().transformY(this.node.bottom);
   }
 
   /**
    * Sets the bottom of the last node in the trail, but in the root coordinate frame.
    */
-  public set bottom( value: number ) {
+  public set bottom(value: number) {
     assert && this.checkPreconditions();
 
-    this.node.bottom = this.trail!.getParentTransform().inverseY( value );
+    this.node.bottom = this.trail!.getParentTransform().inverseY(value);
   }
 
   /**
@@ -242,16 +242,16 @@ export default class LayoutProxy {
   public get centerY(): number {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformY( this.node.centerY );
+    return this.trail!.getParentTransform().transformY(this.node.centerY);
   }
 
   /**
    * Sets the centerY of the last node in the trail, but in the root coordinate frame.
    */
-  public set centerY( value: number ) {
+  public set centerY(value: number) {
     assert && this.checkPreconditions();
 
-    this.node.centerY = this.trail!.getParentTransform().inverseY( value );
+    this.node.centerY = this.trail!.getParentTransform().inverseY(value);
   }
 
   /**
@@ -260,16 +260,16 @@ export default class LayoutProxy {
   public get leftTop(): Vector2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformPosition2( this.node.leftTop );
+    return this.trail!.getParentTransform().transformPosition2(this.node.leftTop);
   }
 
   /**
    * Sets the leftTop of the last node in the trail, but in the root coordinate frame.
    */
-  public set leftTop( value: Vector2 ) {
+  public set leftTop(value: Vector2) {
     assert && this.checkPreconditions();
 
-    this.node.leftTop = this.trail!.getParentTransform().inversePosition2( value );
+    this.node.leftTop = this.trail!.getParentTransform().inversePosition2(value);
   }
 
   /**
@@ -278,16 +278,16 @@ export default class LayoutProxy {
   public get centerTop(): Vector2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformPosition2( this.node.centerTop );
+    return this.trail!.getParentTransform().transformPosition2(this.node.centerTop);
   }
 
   /**
    * Sets the centerTop of the last node in the trail, but in the root coordinate frame.
    */
-  public set centerTop( value: Vector2 ) {
+  public set centerTop(value: Vector2) {
     assert && this.checkPreconditions();
 
-    this.node.centerTop = this.trail!.getParentTransform().inversePosition2( value );
+    this.node.centerTop = this.trail!.getParentTransform().inversePosition2(value);
   }
 
   /**
@@ -296,16 +296,16 @@ export default class LayoutProxy {
   public get rightTop(): Vector2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformPosition2( this.node.rightTop );
+    return this.trail!.getParentTransform().transformPosition2(this.node.rightTop);
   }
 
   /**
    * Sets the rightTop of the last node in the trail, but in the root coordinate frame.
    */
-  public set rightTop( value: Vector2 ) {
+  public set rightTop(value: Vector2) {
     assert && this.checkPreconditions();
 
-    this.node.rightTop = this.trail!.getParentTransform().inversePosition2( value );
+    this.node.rightTop = this.trail!.getParentTransform().inversePosition2(value);
   }
 
   /**
@@ -314,16 +314,16 @@ export default class LayoutProxy {
   public get leftCenter(): Vector2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformPosition2( this.node.leftCenter );
+    return this.trail!.getParentTransform().transformPosition2(this.node.leftCenter);
   }
 
   /**
    * Sets the leftCenter of the last node in the trail, but in the root coordinate frame.
    */
-  public set leftCenter( value: Vector2 ) {
+  public set leftCenter(value: Vector2) {
     assert && this.checkPreconditions();
 
-    this.node.leftCenter = this.trail!.getParentTransform().inversePosition2( value );
+    this.node.leftCenter = this.trail!.getParentTransform().inversePosition2(value);
   }
 
   /**
@@ -332,16 +332,16 @@ export default class LayoutProxy {
   public get center(): Vector2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformPosition2( this.node.center );
+    return this.trail!.getParentTransform().transformPosition2(this.node.center);
   }
 
   /**
    * Sets the center of the last node in the trail, but in the root coordinate frame.
    */
-  public set center( value: Vector2 ) {
+  public set center(value: Vector2) {
     assert && this.checkPreconditions();
 
-    this.node.center = this.trail!.getParentTransform().inversePosition2( value );
+    this.node.center = this.trail!.getParentTransform().inversePosition2(value);
   }
 
   /**
@@ -350,16 +350,16 @@ export default class LayoutProxy {
   public get rightCenter(): Vector2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformPosition2( this.node.rightCenter );
+    return this.trail!.getParentTransform().transformPosition2(this.node.rightCenter);
   }
 
   /**
    * Sets the rightCenter of the last node in the trail, but in the root coordinate frame.
    */
-  public set rightCenter( value: Vector2 ) {
+  public set rightCenter(value: Vector2) {
     assert && this.checkPreconditions();
 
-    this.node.rightCenter = this.trail!.getParentTransform().inversePosition2( value );
+    this.node.rightCenter = this.trail!.getParentTransform().inversePosition2(value);
   }
 
   /**
@@ -368,16 +368,16 @@ export default class LayoutProxy {
   public get leftBottom(): Vector2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformPosition2( this.node.leftBottom );
+    return this.trail!.getParentTransform().transformPosition2(this.node.leftBottom);
   }
 
   /**
    * Sets the leftBottom of the last node in the trail, but in the root coordinate frame.
    */
-  public set leftBottom( value: Vector2 ) {
+  public set leftBottom(value: Vector2) {
     assert && this.checkPreconditions();
 
-    this.node.leftBottom = this.trail!.getParentTransform().inversePosition2( value );
+    this.node.leftBottom = this.trail!.getParentTransform().inversePosition2(value);
   }
 
   /**
@@ -386,16 +386,16 @@ export default class LayoutProxy {
   public get centerBottom(): Vector2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformPosition2( this.node.centerBottom );
+    return this.trail!.getParentTransform().transformPosition2(this.node.centerBottom);
   }
 
   /**
    * Sets the centerBottom of the last node in the trail, but in the root coordinate frame.
    */
-  public set centerBottom( value: Vector2 ) {
+  public set centerBottom(value: Vector2) {
     assert && this.checkPreconditions();
 
-    this.node.centerBottom = this.trail!.getParentTransform().inversePosition2( value );
+    this.node.centerBottom = this.trail!.getParentTransform().inversePosition2(value);
   }
 
   /**
@@ -404,16 +404,16 @@ export default class LayoutProxy {
   public get rightBottom(): Vector2 {
     assert && this.checkPreconditions();
 
-    return this.trail!.getParentTransform().transformPosition2( this.node.rightBottom );
+    return this.trail!.getParentTransform().transformPosition2(this.node.rightBottom);
   }
 
   /**
    * Sets the rightBottom of the last node in the trail, but in the root coordinate frame.
    */
-  public set rightBottom( value: Vector2 ) {
+  public set rightBottom(value: Vector2) {
     assert && this.checkPreconditions();
 
-    this.node.rightBottom = this.trail!.getParentTransform().inversePosition2( value );
+    this.node.rightBottom = this.trail!.getParentTransform().inversePosition2(value);
   }
 
   public get widthSizable(): boolean {
@@ -426,94 +426,94 @@ export default class LayoutProxy {
 
   public get preferredWidth(): number | null {
     assert && this.checkPreconditions();
-    assert && assert( isWidthSizable( this.node ) );
+    assert && assert(isWidthSizable(this.node));
 
-    const preferredWidth = ( this.node as WidthSizableNode ).preferredWidth;
+    const preferredWidth = (this.node as WidthSizableNode).preferredWidth;
 
-    return preferredWidth === null ? null : Math.abs( this.trail!.getParentTransform().transformDeltaX( preferredWidth ) );
+    return preferredWidth === null ? null : Math.abs(this.trail!.getParentTransform().transformDeltaX(preferredWidth));
   }
 
-  public set preferredWidth( preferredWidth: number | null ) {
+  public set preferredWidth(preferredWidth: number | null) {
     assert && this.checkPreconditions();
-    assert && assert( isWidthSizable( this.node ) );
+    assert && assert(isWidthSizable(this.node));
 
-    ( this.node as WidthSizableNode ).preferredWidth = preferredWidth === null ? null : Math.abs( this.trail!.getParentTransform().inverseDeltaX( preferredWidth ) );
+    (this.node as WidthSizableNode).preferredWidth = preferredWidth === null ? null : Math.abs(this.trail!.getParentTransform().inverseDeltaX(preferredWidth));
   }
 
   public get preferredHeight(): number | null {
     assert && this.checkPreconditions();
-    assert && assert( isHeightSizable( this.node ) );
+    assert && assert(isHeightSizable(this.node));
 
-    const preferredHeight = ( this.node as HeightSizableNode ).preferredHeight;
+    const preferredHeight = (this.node as HeightSizableNode).preferredHeight;
 
-    return preferredHeight === null ? null : Math.abs( this.trail!.getParentTransform().transformDeltaY( preferredHeight ) );
+    return preferredHeight === null ? null : Math.abs(this.trail!.getParentTransform().transformDeltaY(preferredHeight));
   }
 
-  public set preferredHeight( preferredHeight: number | null ) {
+  public set preferredHeight(preferredHeight: number | null) {
     assert && this.checkPreconditions();
-    assert && assert( isHeightSizable( this.node ) );
+    assert && assert(isHeightSizable(this.node));
 
-    ( this.node as HeightSizableNode ).preferredHeight = preferredHeight === null ? null : Math.abs( this.trail!.getParentTransform().inverseDeltaY( preferredHeight ) );
+    (this.node as HeightSizableNode).preferredHeight = preferredHeight === null ? null : Math.abs(this.trail!.getParentTransform().inverseDeltaY(preferredHeight));
   }
 
   public get minimumWidth(): number {
     assert && this.checkPreconditions();
 
-    const minimumWidth = isWidthSizable( this.node ) ? this.node.minimumWidth || 0 : this.node.width;
+    const minimumWidth = isWidthSizable(this.node) ? this.node.minimumWidth || 0 : this.node.width;
 
-    return Math.abs( this.trail!.getParentTransform().transformDeltaX( minimumWidth ) );
+    return Math.abs(this.trail!.getParentTransform().transformDeltaX(minimumWidth));
   }
 
   public get minimumHeight(): number {
     assert && this.checkPreconditions();
 
-    const minimumHeight = isHeightSizable( this.node ) ? this.node.minimumHeight || 0 : this.node.height;
+    const minimumHeight = isHeightSizable(this.node) ? this.node.minimumHeight || 0 : this.node.height;
 
-    return Math.abs( this.trail!.getParentTransform().transformDeltaY( minimumHeight ) );
+    return Math.abs(this.trail!.getParentTransform().transformDeltaY(minimumHeight));
   }
 
-  public getMinimum( orientation: Orientation ): number {
+  public getMinimum(orientation: Orientation): number {
     return orientation === Orientation.HORIZONTAL ? this.minimumWidth : this.minimumHeight;
   }
 
   public get maxWidth(): number | null {
     assert && this.checkPreconditions();
 
-    if ( this.node.maxWidth === null ) {
+    if (this.node.maxWidth === null) {
       return null;
     }
     else {
-      return Math.abs( this.trail!.getParentTransform().transformDeltaX( this.node.maxWidth ) );
+      return Math.abs(this.trail!.getParentTransform().transformDeltaX(this.node.maxWidth));
     }
   }
 
-  public set maxWidth( value: number | null ) {
+  public set maxWidth(value: number | null) {
     assert && this.checkPreconditions();
 
-    this.node.maxWidth = value === null ? null : Math.abs( this.trail!.getParentTransform().inverseDeltaX( value ) );
+    this.node.maxWidth = value === null ? null : Math.abs(this.trail!.getParentTransform().inverseDeltaX(value));
   }
 
   public get maxHeight(): number | null {
     assert && this.checkPreconditions();
 
-    if ( this.node.maxHeight === null ) {
+    if (this.node.maxHeight === null) {
       return null;
     }
     else {
-      return Math.abs( this.trail!.getParentTransform().transformDeltaY( this.node.maxHeight ) );
+      return Math.abs(this.trail!.getParentTransform().transformDeltaY(this.node.maxHeight));
     }
   }
 
-  public set maxHeight( value: number | null ) {
+  public set maxHeight(value: number | null) {
     assert && this.checkPreconditions();
 
-    this.node.maxHeight = value === null ? null : Math.abs( this.trail!.getParentTransform().inverseDeltaY( value ) );
+    this.node.maxHeight = value === null ? null : Math.abs(this.trail!.getParentTransform().inverseDeltaY(value));
   }
 
   /**
    * Returns either the maxWidth or maxHeight depending on the orientation
    */
-  public getMax( orientation: Orientation ): number | null {
+  public getMax(orientation: Orientation): number | null {
     return orientation === Orientation.HORIZONTAL ? this.maxWidth : this.maxHeight;
   }
 
@@ -521,7 +521,7 @@ export default class LayoutProxy {
     return this.node.visible;
   }
 
-  public set visible( value: boolean ) {
+  public set visible(value: boolean) {
     this.node.visible = value;
   }
 
@@ -535,12 +535,12 @@ export default class LayoutProxy {
   }
 
   public freeToPool(): void {
-    LayoutProxy.pool.freeToPool( this );
+    LayoutProxy.pool.freeToPool(this);
   }
 
-  public static readonly pool = new Pool( LayoutProxy, {
+  public static readonly pool = new Pool(LayoutProxy, {
     maxSize: 1000
-  } );
+  });
 }
 
-scenery.register( 'LayoutProxy', LayoutProxy );
+scenery.register('LayoutProxy', LayoutProxy);

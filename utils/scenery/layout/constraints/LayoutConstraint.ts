@@ -16,9 +16,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TEmitter from '../../../../axon/js/TEmitter.js';
-import TinyEmitter from '../../../../axon/js/TinyEmitter.js';
-import { HeightSizableNode, LayoutProxy, extendsHeightSizable, extendsWidthSizable, Node, scenery, SizableNode, WidthSizableNode } from '../../imports.js';
+import type TEmitter from '../../../axon/TEmitter';
+import TinyEmitter from '../../../axon/TinyEmitter';
+import { type HeightSizableNode, LayoutProxy, extendsHeightSizable, extendsWidthSizable, Node, scenery, type SizableNode, type WidthSizableNode } from '../../imports';
 
 export default abstract class LayoutConstraint {
 
@@ -46,9 +46,9 @@ export default abstract class LayoutConstraint {
   /**
    * (scenery-internal)
    */
-  protected constructor( ancestorNode: Node ) {
+  protected constructor(ancestorNode: Node) {
     this.ancestorNode = ancestorNode;
-    this._updateLayoutListener = this.updateLayoutAutomatically.bind( this );
+    this._updateLayoutListener = this.updateLayoutAutomatically.bind(this);
   }
 
   /**
@@ -62,51 +62,51 @@ export default abstract class LayoutConstraint {
    * infinite loops where multiple constraints try to move a node back-and-forth).
    * See Node's _activeParentLayoutConstraint for more information.
    */
-  public addNode( node: Node, addLock = true ): void {
-    assert && assert( !this._listenedNodes.has( node ) );
-    assert && assert( !addLock || !node._activeParentLayoutConstraint, 'This node is already managed by a layout container - make sure to wrap it in a Node if DAG, removing it from an old layout container, etc.' );
+  public addNode(node: Node, addLock = true): void {
+    assert && assert(!this._listenedNodes.has(node));
+    assert && assert(!addLock || !node._activeParentLayoutConstraint, 'This node is already managed by a layout container - make sure to wrap it in a Node if DAG, removing it from an old layout container, etc.');
 
-    if ( addLock ) {
+    if (addLock) {
       node._activeParentLayoutConstraint = this;
     }
 
-    node.boundsProperty.lazyLink( this._updateLayoutListener );
-    node.visibleProperty.lazyLink( this._updateLayoutListener );
-    if ( extendsWidthSizable( node ) ) {
-      node.minimumWidthProperty.lazyLink( this._updateLayoutListener );
-      node.isWidthResizableProperty.lazyLink( this._updateLayoutListener );
+    node.boundsProperty.lazyLink(this._updateLayoutListener);
+    node.visibleProperty.lazyLink(this._updateLayoutListener);
+    if (extendsWidthSizable(node)) {
+      node.minimumWidthProperty.lazyLink(this._updateLayoutListener);
+      node.isWidthResizableProperty.lazyLink(this._updateLayoutListener);
     }
-    if ( extendsHeightSizable( node ) ) {
-      node.minimumHeightProperty.lazyLink( this._updateLayoutListener );
-      node.isHeightResizableProperty.lazyLink( this._updateLayoutListener );
+    if (extendsHeightSizable(node)) {
+      node.minimumHeightProperty.lazyLink(this._updateLayoutListener);
+      node.isHeightResizableProperty.lazyLink(this._updateLayoutListener);
     }
 
-    this._listenedNodes.add( node );
+    this._listenedNodes.add(node);
   }
 
   /**
    * (scenery-internal)
    */
-  public removeNode( node: Node ): void {
-    assert && assert( this._listenedNodes.has( node ) );
+  public removeNode(node: Node): void {
+    assert && assert(this._listenedNodes.has(node));
 
     // Optional, since we might not have added the "lock" in addNode
-    if ( node._activeParentLayoutConstraint === this ) {
+    if (node._activeParentLayoutConstraint === this) {
       node._activeParentLayoutConstraint = null;
     }
 
-    node.boundsProperty.unlink( this._updateLayoutListener );
-    node.visibleProperty.unlink( this._updateLayoutListener );
-    if ( extendsWidthSizable( node ) ) {
-      node.minimumWidthProperty.unlink( this._updateLayoutListener );
-      node.isWidthResizableProperty.unlink( this._updateLayoutListener );
+    node.boundsProperty.unlink(this._updateLayoutListener);
+    node.visibleProperty.unlink(this._updateLayoutListener);
+    if (extendsWidthSizable(node)) {
+      node.minimumWidthProperty.unlink(this._updateLayoutListener);
+      node.isWidthResizableProperty.unlink(this._updateLayoutListener);
     }
-    if ( extendsHeightSizable( node ) ) {
-      node.minimumHeightProperty.unlink( this._updateLayoutListener );
-      node.isHeightResizableProperty.unlink( this._updateLayoutListener );
+    if (extendsHeightSizable(node)) {
+      node.minimumHeightProperty.unlink(this._updateLayoutListener);
+      node.isHeightResizableProperty.unlink(this._updateLayoutListener);
     }
 
-    this._listenedNodes.delete( node );
+    this._listenedNodes.delete(node);
   }
 
   /**
@@ -149,8 +149,8 @@ export default abstract class LayoutConstraint {
    * could not be added to post-layout validation.
    * (scenery-internal)
    */
-  public validateLocalPreferredWidth( layoutContainer: WidthSizableNode ): void {
-    if ( assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock ) {
+  public validateLocalPreferredWidth(layoutContainer: WidthSizableNode): void {
+    if (assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock) {
       layoutContainer.validateLocalPreferredWidth();
     }
   }
@@ -160,8 +160,8 @@ export default abstract class LayoutConstraint {
    * could not be added to post-layout validation.
    * (scenery-internal)
    */
-  public validateLocalPreferredHeight( layoutContainer: HeightSizableNode ): void {
-    if ( assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock ) {
+  public validateLocalPreferredHeight(layoutContainer: HeightSizableNode): void {
+    if (assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock) {
       layoutContainer.validateLocalPreferredHeight();
     }
   }
@@ -171,8 +171,8 @@ export default abstract class LayoutConstraint {
    * could not be added to post-layout validation.
    * (scenery-internal)
    */
-  public validateLocalPreferredSize( layoutContainer: SizableNode ): void {
-    if ( assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock ) {
+  public validateLocalPreferredSize(layoutContainer: SizableNode): void {
+    if (assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock) {
       layoutContainer.validateLocalPreferredSize();
     }
   }
@@ -186,9 +186,9 @@ export default abstract class LayoutConstraint {
 
     // If we're locked AND someone tries to do layout, record this so we can attempt layout once we are not locked
     // anymore. We have some infinite-loop detection here for common development errors.
-    if ( this.isLocked ) {
+    if (this.isLocked) {
       assert && count++;
-      assert && assert( ++count < 500, 'Likely infinite loop detected, are we triggering layout within the layout?' );
+      assert && assert(++count < 500, 'Likely infinite loop detected, are we triggering layout within the layout?');
       this._layoutAttemptDuringLock = true;
     }
     else {
@@ -200,8 +200,8 @@ export default abstract class LayoutConstraint {
         this._layoutAttemptDuringLock = false;
         this.layout();
       }
-        // If we got any layout attempts during the lock, we'll want to rerun the layout
-      while ( this._layoutAttemptDuringLock );
+      // If we got any layout attempts during the lock, we'll want to rerun the layout
+      while (this._layoutAttemptDuringLock);
 
       this.unlock();
     }
@@ -211,7 +211,7 @@ export default abstract class LayoutConstraint {
    * Called when we attempt to automatically layout components. (scenery-internal)
    */
   public updateLayoutAutomatically(): void {
-    if ( this._enabled ) {
+    if (this._enabled) {
       this.updateLayout();
     }
   }
@@ -220,11 +220,11 @@ export default abstract class LayoutConstraint {
    * Creates a LayoutProxy for a unique trail from our ancestorNode to this Node (or null if that's not possible)
    * (scenery-internal)
    */
-  public createLayoutProxy( node: Node ): LayoutProxy | null {
-    const trails = node.getTrails( n => n === this.ancestorNode );
+  public createLayoutProxy(node: Node): LayoutProxy | null {
+    const trails = node.getTrails(n => n === this.ancestorNode);
 
-    if ( trails.length === 1 ) {
-      return LayoutProxy.pool.create( trails[ 0 ].removeAncestor() );
+    if (trails.length === 1) {
+      return LayoutProxy.pool.create(trails[0].removeAncestor());
     }
     else {
       return null;
@@ -235,8 +235,8 @@ export default abstract class LayoutConstraint {
     return this._enabled;
   }
 
-  public set enabled( value: boolean ) {
-    if ( this._enabled !== value ) {
+  public set enabled(value: boolean) {
+    if (this._enabled !== value) {
       this._enabled = value;
 
       this.updateLayoutAutomatically();
@@ -248,13 +248,13 @@ export default abstract class LayoutConstraint {
    */
   public dispose(): void {
     // Clean up listeners to any listened nodes
-    const listenedNodes = [ ...this._listenedNodes.keys() ];
-    for ( let i = 0; i < listenedNodes.length; i++ ) {
-      this.removeNode( listenedNodes[ i ] );
+    const listenedNodes = [...this._listenedNodes.keys()];
+    for (let i = 0; i < listenedNodes.length; i++) {
+      this.removeNode(listenedNodes[i]);
     }
 
     this.finishedLayoutEmitter.dispose();
   }
 }
 
-scenery.register( 'LayoutConstraint', LayoutConstraint );
+scenery.register('LayoutConstraint', LayoutConstraint);

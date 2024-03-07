@@ -46,19 +46,19 @@ const KEY_ALT = 'Alt';
 const KEY_SHIFT = 'Shift';
 const KEY_CONTROL = 'Control';
 
-const ARROW_KEYS = [ KEY_RIGHT_ARROW, KEY_LEFT_ARROW, KEY_UP_ARROW, KEY_DOWN_ARROW ];
-const WASD_KEYS = [ KEY_W, KEY_S, KEY_A, KEY_D ];
-const NUMBER_KEYS = [ KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9 ];
-const SHIFT_KEYS = [ KEY_SHIFT_LEFT, KEY_SHIFT_RIGHT ];
-const CONTROL_KEYS = [ KEY_CONTROL_LEFT, KEY_CONTROL_RIGHT ];
-const ALT_KEYS = [ KEY_ALT_LEFT, KEY_ALT_RIGHT ];
-const META_KEYS = [ KEY_META_LEFT, KEY_META_RIGHT, KEY_META_LEFT_FIREFOX, KEY_META_RIGHT_FIREFOX ];
+const ARROW_KEYS = [KEY_RIGHT_ARROW, KEY_LEFT_ARROW, KEY_UP_ARROW, KEY_DOWN_ARROW];
+const WASD_KEYS = [KEY_W, KEY_S, KEY_A, KEY_D];
+const NUMBER_KEYS = [KEY_0, KEY_1, KEY_2, KEY_3, KEY_4, KEY_5, KEY_6, KEY_7, KEY_8, KEY_9];
+const SHIFT_KEYS = [KEY_SHIFT_LEFT, KEY_SHIFT_RIGHT];
+const CONTROL_KEYS = [KEY_CONTROL_LEFT, KEY_CONTROL_RIGHT];
+const ALT_KEYS = [KEY_ALT_LEFT, KEY_ALT_RIGHT];
+const META_KEYS = [KEY_META_LEFT, KEY_META_RIGHT, KEY_META_LEFT_FIREFOX, KEY_META_RIGHT_FIREFOX];
 
 // These are KeyboardEvent.key values, excluding left/right KeyboardEvent.codes
-const MODIFIER_KEYS = [ KEY_ALT, KEY_CONTROL, KEY_SHIFT ];
+const MODIFIER_KEYS = [KEY_ALT, KEY_CONTROL, KEY_SHIFT];
 
 // These are KeyboardEvent.code values for modifier keys
-const MODIFIER_KEY_CODES = [ KEY_ALT_LEFT, KEY_ALT_RIGHT, KEY_CONTROL_LEFT, KEY_CONTROL_RIGHT, KEY_SHIFT_LEFT, KEY_SHIFT_RIGHT, KEY_META_LEFT, KEY_META_RIGHT, KEY_META_LEFT_FIREFOX, KEY_META_RIGHT_FIREFOX ];
+const MODIFIER_KEY_CODES = [KEY_ALT_LEFT, KEY_ALT_RIGHT, KEY_CONTROL_LEFT, KEY_CONTROL_RIGHT, KEY_SHIFT_LEFT, KEY_SHIFT_RIGHT, KEY_META_LEFT, KEY_META_RIGHT, KEY_META_LEFT_FIREFOX, KEY_META_RIGHT_FIREFOX];
 
 const DOM_EVENT_VALIDATOR = { valueType: Event };
 const ALL_KEY_CODES: string[] = [];
@@ -71,23 +71,23 @@ const KeyboardUtils = {
   KEY_SPACE: 'Space',
   KEY_ENTER: 'Enter',
   KEY_TAB: 'Tab',
-  KEY_RIGHT_ARROW: KEY_RIGHT_ARROW,
-  KEY_LEFT_ARROW: KEY_LEFT_ARROW,
-  KEY_UP_ARROW: KEY_UP_ARROW,
-  KEY_DOWN_ARROW: KEY_DOWN_ARROW,
-  KEY_SHIFT_LEFT: KEY_SHIFT_LEFT,
-  KEY_SHIFT_RIGHT: KEY_SHIFT_RIGHT,
-  KEY_ALT_LEFT: KEY_ALT_LEFT,
-  KEY_ALT_RIGHT: KEY_ALT_RIGHT,
-  KEY_CONTROL_LEFT: KEY_CONTROL_LEFT,
-  KEY_CONTROL_RIGHT: KEY_CONTROL_RIGHT,
-  KEY_META_LEFT: KEY_META_LEFT,
-  KEY_META_RIGHT: KEY_META_RIGHT,
-  KEY_META_LEFT_FIREFOX: KEY_META_LEFT_FIREFOX,
-  KEY_META_RIGHT_FIREFOX: KEY_META_RIGHT_FIREFOX,
-  KEY_SHIFT: KEY_SHIFT,
-  KEY_ALT: KEY_ALT,
-  KEY_CONTROL: KEY_CONTROL,
+  KEY_RIGHT_ARROW,
+  KEY_LEFT_ARROW,
+  KEY_UP_ARROW,
+  KEY_DOWN_ARROW,
+  KEY_SHIFT_LEFT,
+  KEY_SHIFT_RIGHT,
+  KEY_ALT_LEFT,
+  KEY_ALT_RIGHT,
+  KEY_CONTROL_LEFT,
+  KEY_CONTROL_RIGHT,
+  KEY_META_LEFT,
+  KEY_META_RIGHT,
+  KEY_META_LEFT_FIREFOX,
+  KEY_META_RIGHT_FIREFOX,
+  KEY_SHIFT,
+  KEY_ALT,
+  KEY_CONTROL,
   KEY_ESCAPE: 'Escape',
   KEY_DELETE: 'Delete',
   KEY_BACKSPACE: 'Backspace',
@@ -95,16 +95,16 @@ const KeyboardUtils = {
   KEY_PAGE_DOWN: 'PageDown',
   KEY_END: 'End',
   KEY_HOME: 'Home',
-  KEY_0: KEY_0,
-  KEY_1: KEY_1,
-  KEY_2: KEY_2,
-  KEY_3: KEY_3,
-  KEY_4: KEY_4,
-  KEY_5: KEY_5,
-  KEY_6: KEY_6,
-  KEY_7: KEY_7,
-  KEY_8: KEY_8,
-  KEY_9: KEY_9,
+  KEY_0,
+  KEY_1,
+  KEY_2,
+  KEY_3,
+  KEY_4,
+  KEY_5,
+  KEY_6,
+  KEY_7,
+  KEY_8,
+  KEY_9,
   KEY_NUMPAD_0: 'Numpad0',
   KEY_NUMPAD_1: 'Numpad1',
   KEY_NUMPAD_2: 'Numpad2',
@@ -151,58 +151,58 @@ const KeyboardUtils = {
   KEY_MINUS: 'Minus',
   KEY_PERIOD: 'Period',
 
-  ARROW_KEYS: ARROW_KEYS,
-  WASD_KEYS: WASD_KEYS,
-  MOVEMENT_KEYS: ARROW_KEYS.concat( WASD_KEYS ),
-  SHIFT_KEYS: SHIFT_KEYS,
-  CONTROL_KEYS: CONTROL_KEYS,
-  ALT_KEYS: ALT_KEYS,
-  META_KEYS: META_KEYS,
+  ARROW_KEYS,
+  WASD_KEYS,
+  MOVEMENT_KEYS: ARROW_KEYS.concat(WASD_KEYS),
+  SHIFT_KEYS,
+  CONTROL_KEYS,
+  ALT_KEYS,
+  META_KEYS,
 
   // The collection of modifier key codes
-  MODIFIER_KEY_CODES: MODIFIER_KEY_CODES,
+  MODIFIER_KEY_CODES,
 
   // Maps a KeyboardEvent.key to the left/right pair of KeyboardEvent.code for modifier keys
-  MODIFIER_KEY_TO_CODE_MAP: new Map( [
-    [ KEY_ALT, ALT_KEYS ],
-    [ KEY_SHIFT, SHIFT_KEYS ],
-    [ KEY_CONTROL, CONTROL_KEYS ]
-  ] ),
+  MODIFIER_KEY_TO_CODE_MAP: new Map([
+    [KEY_ALT, ALT_KEYS],
+    [KEY_SHIFT, SHIFT_KEYS],
+    [KEY_CONTROL, CONTROL_KEYS]
+  ]),
 
 
   /**
    * Returns whether the key corresponds to pressing an arrow key
    */
-  isArrowKey( domEvent: Event | null ): boolean {
-    return KeyboardUtils.isAnyKeyEvent( domEvent, ARROW_KEYS );
+  isArrowKey(domEvent: Event | null): boolean {
+    return KeyboardUtils.isAnyKeyEvent(domEvent, ARROW_KEYS);
   },
 
   /**
    * Returns true if key is one of keys used for range inputs
    */
-  isRangeKey( domEvent: Event | null ): boolean {
-    return KeyboardUtils.isArrowKey( domEvent ) ||
-           KeyboardUtils.isAnyKeyEvent( domEvent, [
-             KeyboardUtils.KEY_PAGE_UP,
-             KeyboardUtils.KEY_PAGE_DOWN,
-             KeyboardUtils.KEY_HOME,
-             KeyboardUtils.KEY_END
-           ] );
+  isRangeKey(domEvent: Event | null): boolean {
+    return KeyboardUtils.isArrowKey(domEvent) ||
+      KeyboardUtils.isAnyKeyEvent(domEvent, [
+        KeyboardUtils.KEY_PAGE_UP,
+        KeyboardUtils.KEY_PAGE_DOWN,
+        KeyboardUtils.KEY_HOME,
+        KeyboardUtils.KEY_END
+      ]);
   },
 
   /**
    * Returns whether or not the key corresponds to pressing a number key
    */
-  isNumberKey( domEvent: Event | null ): boolean {
-    return KeyboardUtils.isAnyKeyEvent( domEvent, NUMBER_KEYS );
+  isNumberKey(domEvent: Event | null): boolean {
+    return KeyboardUtils.isAnyKeyEvent(domEvent, NUMBER_KEYS);
   },
 
   /**
    * For number keys, return the number of the key, or null if not a number
    */
-  getNumberFromCode( domEvent: Event | null ): null | number {
-    if ( KeyboardUtils.isNumberKey( domEvent ) && domEvent instanceof KeyboardEvent ) {
-      return Number( domEvent.code.replace( 'Digit', '' ) );
+  getNumberFromCode(domEvent: Event | null): null | number {
+    if (KeyboardUtils.isNumberKey(domEvent) && domEvent instanceof KeyboardEvent) {
+      return Number(domEvent.code.replace('Digit', ''));
     }
     return null;
   },
@@ -211,62 +211,62 @@ const KeyboardUtils = {
    * Event.code distinguishes between left and right shift keys. If all you care about is the presence
    * of a shift key you can use this.
    */
-  isShiftKey( domEvent: Event | null ): boolean {
-    return KeyboardUtils.isAnyKeyEvent( domEvent, SHIFT_KEYS );
+  isShiftKey(domEvent: Event | null): boolean {
+    return KeyboardUtils.isAnyKeyEvent(domEvent, SHIFT_KEYS);
   },
 
   /**
    * Event.code distinguishes between left and right alt keys. If all you care about is the presence
    * of the alt key you can use this.
    */
-  isAltKey( domEvent: Event | null ): boolean {
-    return KeyboardUtils.isAnyKeyEvent( domEvent, ALT_KEYS );
+  isAltKey(domEvent: Event | null): boolean {
+    return KeyboardUtils.isAnyKeyEvent(domEvent, ALT_KEYS);
   },
 
   /**
    * Event.code distinguishes between left and right control keys. If all you care about is the presence
    * of a control key you can use this.
    */
-  isControlKey( domEvent: Event | null ): boolean {
-    return KeyboardUtils.isAnyKeyEvent( domEvent, CONTROL_KEYS );
+  isControlKey(domEvent: Event | null): boolean {
+    return KeyboardUtils.isAnyKeyEvent(domEvent, CONTROL_KEYS);
   },
 
   /**
    * Event.code distinguishes between left and right alt keys. If all you care about is the presence
    * of the meta key you can use this.
    */
-  isMetaKey( domEvent: Event | null ): boolean {
-    return KeyboardUtils.isAnyKeyEvent( domEvent, META_KEYS );
+  isMetaKey(domEvent: Event | null): boolean {
+    return KeyboardUtils.isAnyKeyEvent(domEvent, META_KEYS);
   },
 
   /**
    * Returns whether or not the key corresponds to one of the WASD movement keys.
    */
-  isWASDKey( domEvent: Event | null ): boolean {
-    return KeyboardUtils.isAnyKeyEvent( domEvent, WASD_KEYS );
+  isWASDKey(domEvent: Event | null): boolean {
+    return KeyboardUtils.isAnyKeyEvent(domEvent, WASD_KEYS);
   },
 
   /**
    * Returns true if the key indicates a 'movement' key in keyboard dragging
    */
-  isMovementKey( domEvent: Event | null ): boolean {
-    return KeyboardUtils.isAnyKeyEvent( domEvent, KeyboardUtils.MOVEMENT_KEYS );
+  isMovementKey(domEvent: Event | null): boolean {
+    return KeyboardUtils.isAnyKeyEvent(domEvent, KeyboardUtils.MOVEMENT_KEYS);
   },
 
   /**
    * If the domEvent corresponds to any of the provided keys in the list.
    */
-  isAnyKeyEvent( domEvent: Event | null, keyboardUtilsKeys: string[] ): boolean {
-    validate( domEvent, DOM_EVENT_VALIDATOR );
-    const code = KeyboardUtils.getEventCode( domEvent );
-    return code ? keyboardUtilsKeys.includes( code ) : false;
+  isAnyKeyEvent(domEvent: Event | null, keyboardUtilsKeys: string[]): boolean {
+    validate(domEvent, DOM_EVENT_VALIDATOR);
+    const code = KeyboardUtils.getEventCode(domEvent);
+    return code ? keyboardUtilsKeys.includes(code) : false;
   },
 
   /**
    * Whether the event was of the provided KeyboardUtils string.
    */
-  isKeyEvent( domEvent: Event | null, keyboardUtilsKey: string ): boolean {
-    return KeyboardUtils.getEventCode( domEvent ) === keyboardUtilsKey;
+  isKeyEvent(domEvent: Event | null, keyboardUtilsKey: string): boolean {
+    return KeyboardUtils.getEventCode(domEvent) === keyboardUtilsKey;
   },
 
   /**
@@ -280,14 +280,14 @@ const KeyboardUtils = {
    *
    * @returns - null if there is no `code` property on the provided Event.
    */
-  getEventCode( domEvent: Event | null ): string | null {
+  getEventCode(domEvent: Event | null): string | null {
     let eventCode = null;
-    if ( domEvent instanceof KeyboardEvent && domEvent.code ) {
+    if (domEvent instanceof KeyboardEvent && domEvent.code) {
       eventCode = domEvent.code;
 
       // For Numpad keys, the DomEvent.code does not match the equivalent "normal" keyboard key, but the DomEvent.key
       // will match the code of the "normal" key. In those cases (home/page up/page down/end) use the key as the code.
-      if ( eventCode.startsWith( 'Numpad' ) && ALL_KEY_CODES.includes( domEvent.key ) ) {
+      if (eventCode.startsWith('Numpad') && ALL_KEY_CODES.includes(domEvent.key)) {
         eventCode = domEvent.key;
       }
     }
@@ -301,23 +301,23 @@ const KeyboardUtils = {
    * have some special behavior when we detect a modifier key (left or right) is pressed.
    * @param key
    */
-  isModifierKey( key: string ): boolean {
-    return MODIFIER_KEYS.includes( key );
+  isModifierKey(key: string): boolean {
+    return MODIFIER_KEYS.includes(key);
   },
 
   ALL_KEYS: ALL_KEY_CODES
 };
 
-for ( const keyKey in KeyboardUtils ) {
+for (const keyKey in KeyboardUtils) {
 
   // @ts-expect-error No functions or key-groups allowed
-  if ( KeyboardUtils.hasOwnProperty( keyKey ) && typeof KeyboardUtils[ keyKey ] === 'string' ) {
+  if (KeyboardUtils.hasOwnProperty(keyKey) && typeof KeyboardUtils[keyKey] === 'string') {
 
     // @ts-expect-error
-    ALL_KEY_CODES.push( KeyboardUtils[ keyKey ] as string );
+    ALL_KEY_CODES.push(KeyboardUtils[keyKey] as string);
   }
 }
 
-scenery.register( 'KeyboardUtils', KeyboardUtils );
+scenery.register('KeyboardUtils', KeyboardUtils);
 
 export default KeyboardUtils;

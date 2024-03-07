@@ -15,14 +15,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyEmitter from '../../../../axon/js/TinyEmitter.js';
-import memoize from '../../../../phet-core/js/memoize.js';
-import { scenery } from '../../imports.js';
-import Constructor from '../../../../phet-core/js/types/Constructor.js';
-import assertMutuallyExclusiveOptions from '../../../../phet-core/js/assertMutuallyExclusiveOptions.js';
-import WithoutNull from '../../../../phet-core/js/types/WithoutNull.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import TEmitter from '../../../../axon/js/TEmitter.js';
+import TinyEmitter from '../../../axon/TinyEmitter';
+import memoize from '../../../phet-core/memoize';
+import { scenery } from '../../imports';
+import type Constructor from '../../../phet-core/types/Constructor';
+import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
+import type WithoutNull from '../../../phet-core/types/WithoutNull';
+import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
+import type TEmitter from '../../../axon/TEmitter';
 
 const MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS = [
   'margin',
@@ -69,7 +69,7 @@ export type MarginLayoutConfigurableOptions = {
 export type ExternalMarginLayoutConfigurableOptions = WithoutNull<MarginLayoutConfigurableOptions, Exclude<keyof MarginLayoutConfigurableOptions, 'minContentWidth' | 'minContentHeight' | 'maxContentWidth' | 'maxContentHeight'>>;
 
 // (scenery-internal)
-const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type: SuperType ) => {
+const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: SuperType) => {
   return class MarginLayoutConfigurableMixin extends type {
 
     // (scenery-internal)
@@ -87,17 +87,17 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public constructor( ...args: IntentionalAny[] ) {
-      super( ...args );
+    public constructor(...args: IntentionalAny[]) {
+      super(...args);
     }
 
     /**
      * (scenery-internal)
      */
-    public mutateConfigurable( options?: MarginLayoutConfigurableOptions ): void {
-      assertMutuallyExclusiveOptions( options, [ 'margin' ], [ 'xMargin', 'yMargin' ] );
-      assertMutuallyExclusiveOptions( options, [ 'xMargin' ], [ 'leftMargin', 'rightMargin' ] );
-      assertMutuallyExclusiveOptions( options, [ 'yMargin' ], [ 'topMargin', 'bottomMargin' ] );
+    public mutateConfigurable(options?: MarginLayoutConfigurableOptions): void {
+      assertMutuallyExclusiveOptions(options, ['margin'], ['xMargin', 'yMargin']);
+      assertMutuallyExclusiveOptions(options, ['xMargin'], ['leftMargin', 'rightMargin']);
+      assertMutuallyExclusiveOptions(options, ['yMargin'], ['topMargin', 'bottomMargin']);
     }
 
     /**
@@ -158,10 +158,10 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set leftMargin( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) ) );
+    public set leftMargin(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
 
-      if ( this._leftMargin !== value ) {
+      if (this._leftMargin !== value) {
         this._leftMargin = value;
 
         this.changedEmitter.emit();
@@ -178,10 +178,10 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set rightMargin( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) ) );
+    public set rightMargin(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
 
-      if ( this._rightMargin !== value ) {
+      if (this._rightMargin !== value) {
         this._rightMargin = value;
 
         this.changedEmitter.emit();
@@ -198,10 +198,10 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set topMargin( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) ) );
+    public set topMargin(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
 
-      if ( this._topMargin !== value ) {
+      if (this._topMargin !== value) {
         this._topMargin = value;
 
         this.changedEmitter.emit();
@@ -218,10 +218,10 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set bottomMargin( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) ) );
+    public set bottomMargin(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
 
-      if ( this._bottomMargin !== value ) {
+      if (this._bottomMargin !== value) {
         this._bottomMargin = value;
 
         this.changedEmitter.emit();
@@ -232,7 +232,7 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
      * (scenery-internal)
      */
     public get xMargin(): number | null {
-      assert && assert( this._leftMargin === this._rightMargin );
+      assert && assert(this._leftMargin === this._rightMargin);
 
       return this._leftMargin;
     }
@@ -240,10 +240,10 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set xMargin( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) ) );
+    public set xMargin(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
 
-      if ( this._leftMargin !== value || this._rightMargin !== value ) {
+      if (this._leftMargin !== value || this._rightMargin !== value) {
         this._leftMargin = value;
         this._rightMargin = value;
 
@@ -255,7 +255,7 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
      * (scenery-internal)
      */
     public get yMargin(): number | null {
-      assert && assert( this._topMargin === this._bottomMargin );
+      assert && assert(this._topMargin === this._bottomMargin);
 
       return this._topMargin;
     }
@@ -263,10 +263,10 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set yMargin( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) ) );
+    public set yMargin(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
 
-      if ( this._topMargin !== value || this._bottomMargin !== value ) {
+      if (this._topMargin !== value || this._bottomMargin !== value) {
         this._topMargin = value;
         this._bottomMargin = value;
 
@@ -279,9 +279,9 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
      */
     public get margin(): number | null {
       assert && assert(
-      this._leftMargin === this._rightMargin &&
-      this._leftMargin === this._topMargin &&
-      this._leftMargin === this._bottomMargin
+        this._leftMargin === this._rightMargin &&
+        this._leftMargin === this._topMargin &&
+        this._leftMargin === this._bottomMargin
       );
 
       return this._topMargin;
@@ -290,10 +290,10 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set margin( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) ) );
+    public set margin(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
 
-      if ( this._leftMargin !== value || this._rightMargin !== value || this._topMargin !== value || this._bottomMargin !== value ) {
+      if (this._leftMargin !== value || this._rightMargin !== value || this._topMargin !== value || this._bottomMargin !== value) {
         this._leftMargin = value;
         this._rightMargin = value;
         this._topMargin = value;
@@ -313,8 +313,8 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set minContentWidth( value: number | null ) {
-      if ( this._minContentWidth !== value ) {
+    public set minContentWidth(value: number | null) {
+      if (this._minContentWidth !== value) {
         this._minContentWidth = value;
 
         this.changedEmitter.emit();
@@ -331,8 +331,8 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set minContentHeight( value: number | null ) {
-      if ( this._minContentHeight !== value ) {
+    public set minContentHeight(value: number | null) {
+      if (this._minContentHeight !== value) {
         this._minContentHeight = value;
 
         this.changedEmitter.emit();
@@ -349,8 +349,8 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set maxContentWidth( value: number | null ) {
-      if ( this._maxContentWidth !== value ) {
+    public set maxContentWidth(value: number | null) {
+      if (this._maxContentWidth !== value) {
         this._maxContentWidth = value;
 
         this.changedEmitter.emit();
@@ -367,16 +367,16 @@ const MarginLayoutConfigurable = memoize( <SuperType extends Constructor>( type:
     /**
      * (scenery-internal)
      */
-    public set maxContentHeight( value: number | null ) {
-      if ( this._maxContentHeight !== value ) {
+    public set maxContentHeight(value: number | null) {
+      if (this._maxContentHeight !== value) {
         this._maxContentHeight = value;
 
         this.changedEmitter.emit();
       }
     }
   };
-} );
+});
 
-scenery.register( 'MarginLayoutConfigurable', MarginLayoutConfigurable );
+scenery.register('MarginLayoutConfigurable', MarginLayoutConfigurable);
 export default MarginLayoutConfigurable;
 export { MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS };

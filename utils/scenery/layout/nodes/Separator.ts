@@ -7,9 +7,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import { Line, LineOptions, scenery } from '../../imports.js';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import type StrictOmit from '../../../phet-core/types/StrictOmit';
+import { Line, type LineOptions, scenery } from '../../imports';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -22,14 +22,14 @@ export const DEFAULT_SEPARATOR_LAYOUT_OPTIONS = {
 };
 
 export default class Separator extends Line {
-  public constructor( providedOptions?: SeparatorOptions ) {
-    super( optionize<SeparatorOptions, SelfOptions, LineOptions>()( {
+  public constructor(providedOptions?: SeparatorOptions) {
+    super(optionize<SeparatorOptions, SelfOptions, LineOptions>()({
       layoutOptions: DEFAULT_SEPARATOR_LAYOUT_OPTIONS,
 
       // dark gray
       stroke: 'rgb(100,100,100)'
-    }, providedOptions ) );
+    }, providedOptions));
   }
 }
 
-scenery.register( 'Separator', Separator );
+scenery.register('Separator', Separator);

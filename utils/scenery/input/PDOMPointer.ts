@@ -8,8 +8,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Display, Node, PDOMInstance, Pointer, scenery, Trail } from '../imports.js';
+import Vector2 from '../../dot/Vector2';
+import { Display, Node, PDOMInstance, Pointer, scenery, Trail } from '../imports';
 
 export default class PDOMPointer extends Pointer {
 
@@ -26,9 +26,9 @@ export default class PDOMPointer extends Pointer {
   // for other single events like 'click', 'input' or 'change. See https://github.com/phetsims/scenery/issues/942
   private keydownTargetNode: Node | null;
 
-  public constructor( display: Display ) {
+  public constructor(display: Display) {
     // We'll start with a defined Vector2, so that pointers always have points
-    super( Vector2.ZERO, 'pdom' );
+    super(Vector2.ZERO, 'pdom');
 
     this.display = display;
 
@@ -38,7 +38,7 @@ export default class PDOMPointer extends Pointer {
 
     this.keydownTargetNode = null;
 
-    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer( `Created ${this.toString()}` );
+    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`Created ${this.toString()}`);
   }
 
   /**
@@ -47,20 +47,20 @@ export default class PDOMPointer extends Pointer {
    */
   private initializeListeners(): void {
 
-    this.addInputListener( {
+    this.addInputListener({
       focus: event => {
-        assert && assert( this.trail, 'trail should have been calculated for the focused node' );
+        assert && assert(this.trail, 'trail should have been calculated for the focused node');
 
         const lastNode = this.trail!.lastNode();
 
         // NOTE: The "root" peer can't be focused (so it doesn't matter if it doesn't have a node).
-        if ( lastNode.focusable ) {
-          const visualTrail = PDOMInstance.guessVisualTrail( this.trail!, this.display.rootNode );
-          this.point = visualTrail.parentToGlobalPoint( lastNode.center );
+        if (lastNode.focusable) {
+          const visualTrail = PDOMInstance.guessVisualTrail(this.trail!, this.display.rootNode);
+          this.point = visualTrail.parentToGlobalPoint(lastNode.center);
 
           // TODO: it would be better if we could use this assertion instead, but guessVisualTrail seems to not be working here, https://github.com/phetsims/phet-io/issues/1847
-          if ( isNaN( this.point.x ) ) {
-            this.point.setXY( 0, 0 );
+          if (isNaN(this.point.x)) {
+            this.point.setXY(0, 0);
             // assert && assert( !isNaN( this.point.x ), 'Guess visual trail should be able to get the right point' );
           }
         }
@@ -70,7 +70,7 @@ export default class PDOMPointer extends Pointer {
         this.keydownTargetNode = null;
       },
       keydown: event => {
-        if ( this.blockTrustedEvents && event.domEvent!.isTrusted ) {
+        if (this.blockTrustedEvents && event.domEvent!.isTrusted) {
           return;
         }
 
@@ -78,28 +78,28 @@ export default class PDOMPointer extends Pointer {
         this.keydownTargetNode = event.target;
       },
       keyup: event => {
-        if ( this.blockTrustedEvents && event.domEvent!.isTrusted ) {
+        if (this.blockTrustedEvents && event.domEvent!.isTrusted) {
           return;
         }
 
         // The keyup event was received on a node that didn't receive a keydown event, abort to prevent any other
         // listeners from being called for this event. Done after updating KeyStateTracker so that the global state
         // of the keyboard is still accurate
-        if ( this.keydownTargetNode !== event.target ) {
+        if (this.keydownTargetNode !== event.target) {
           event.abort();
         }
       }
-    } );
+    });
   }
 
-  public updateTrail( trail: Trail ): Trail {
+  public updateTrail(trail: Trail): Trail {
 
     // overwrite this.trail if we don't have a trail yet, or if the new trail doesn't equal the old one.
-    if ( !( this.trail && this.trail.equals( trail ) ) ) {
+    if (!(this.trail && this.trail.equals(trail))) {
       this.trail = trail;
     }
     return this.trail;
   }
 }
 
-scenery.register( 'PDOMPointer', PDOMPointer );
+scenery.register('PDOMPointer', PDOMPointer);

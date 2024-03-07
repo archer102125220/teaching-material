@@ -46,16 +46,16 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import assertMutuallyExclusiveOptions from '../../../../phet-core/js/assertMutuallyExclusiveOptions.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import Orientation from '../../../../phet-core/js/Orientation.js';
-import { GRID_CONSTRAINT_OPTION_KEYS, GridCell, GridConstraint, GridConstraintOptions, HorizontalLayoutAlign, LAYOUT_NODE_OPTION_KEYS, LayoutAlign, LayoutNode, LayoutNodeOptions, MarginLayoutCell, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery, SIZABLE_OPTION_KEYS, VerticalLayoutAlign } from '../../imports.js';
+import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
+import type StrictOmit from '../../../phet-core/types/StrictOmit';
+import optionize from '../../../phet-core/optionize';
+import Orientation from '../../../phet-core/Orientation';
+import { GRID_CONSTRAINT_OPTION_KEYS, GridCell, GridConstraint, type GridConstraintOptions, type HorizontalLayoutAlign, LAYOUT_NODE_OPTION_KEYS, LayoutAlign, LayoutNode, type LayoutNodeOptions, MarginLayoutCell, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery, SIZABLE_OPTION_KEYS, type VerticalLayoutAlign } from '../../imports';
 
 // GridBox-specific options that can be passed in the constructor or mutate() call.
 const GRIDBOX_OPTION_KEYS = [
   ...LAYOUT_NODE_OPTION_KEYS,
-  ...GRID_CONSTRAINT_OPTION_KEYS.filter( key => key !== 'excludeInvisible' ),
+  ...GRID_CONSTRAINT_OPTION_KEYS.filter(key => key !== 'excludeInvisible'),
   'rows',
   'columns',
   'autoRows',
@@ -63,7 +63,7 @@ const GRIDBOX_OPTION_KEYS = [
 ];
 
 // Used for setting/getting rows/columns
-type LineArray = ( Node | null )[];
+type LineArray = (Node | null)[];
 type LineArrays = LineArray[];
 
 type GridConstraintExcludedOptions = 'excludeInvisible' | 'preferredWidthProperty' | 'preferredHeightProperty' | 'minimumWidthProperty' | 'minimumHeightProperty' | 'layoutOriginProperty';
@@ -134,22 +134,28 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   private _autoLockCount = 0;
 
   // Listeners that we'll need to remove
-  private readonly onChildInserted: ( node: Node, index: number ) => void;
-  private readonly onChildRemoved: ( node: Node ) => void;
+  private readonly onChildInserted: (node: Node, index: number) => void;
+  private readonly onChildRemoved: (node: Node) => void;
   private readonly onChildVisibilityToggled: () => void;
 
-  public constructor( providedOptions?: GridBoxOptions ) {
-    const options = optionize<GridBoxOptions, StrictOmit<SelfOptions, Exclude<keyof GridConstraintOptions, GridConstraintExcludedOptions> | 'rows' | 'columns' | 'autoRows' | 'autoColumns'>,
-      LayoutNodeOptions>()( {
+  public constructor(providedOptions?: GridBoxOptions) {
+    const options = optionize<
+      GridBoxOptions,
+      StrictOmit<
+        SelfOptions,
+        Exclude<keyof GridConstraintOptions, GridConstraintExcludedOptions> | 'rows' | 'columns' | 'autoRows' | 'autoColumns'
+      >,
+      LayoutNodeOptions
+    >()({
       // Allow dynamic layout by default, see https://github.com/phetsims/joist/issues/608
       excludeInvisibleChildrenFromBounds: true,
 
       resize: true
-    }, providedOptions );
+    }, providedOptions);
 
     super();
 
-    this._constraint = new GridConstraint( this, {
+    this._constraint = new GridConstraint(this, {
       preferredWidthProperty: this.localPreferredWidthProperty,
       preferredHeightProperty: this.localPreferredHeightProperty,
       minimumWidthProperty: this.localMinimumWidthProperty,
@@ -157,29 +163,29 @@ export default class GridBox extends LayoutNode<GridConstraint> {
       layoutOriginProperty: this.layoutOriginProperty,
 
       excludeInvisible: false // Should be handled by the options mutate below
-    } );
+    });
 
-    this.onChildInserted = this.onGridBoxChildInserted.bind( this );
-    this.onChildRemoved = this.onGridBoxChildRemoved.bind( this );
-    this.onChildVisibilityToggled = this.updateAllAutoLines.bind( this );
+    this.onChildInserted = this.onGridBoxChildInserted.bind(this);
+    this.onChildRemoved = this.onGridBoxChildRemoved.bind(this);
+    this.onChildVisibilityToggled = this.updateAllAutoLines.bind(this);
 
-    this.childInsertedEmitter.addListener( this.onChildInserted );
-    this.childRemovedEmitter.addListener( this.onChildRemoved );
+    this.childInsertedEmitter.addListener(this.onChildInserted);
+    this.childRemovedEmitter.addListener(this.onChildRemoved);
 
-    const nonBoundsOptions = _.omit( options, REQUIRES_BOUNDS_OPTION_KEYS ) as LayoutNodeOptions;
-    const boundsOptions = _.pick( options, REQUIRES_BOUNDS_OPTION_KEYS ) as LayoutNodeOptions;
+    const nonBoundsOptions = _.omit(options, REQUIRES_BOUNDS_OPTION_KEYS) as LayoutNodeOptions;
+    const boundsOptions = _.pick(options, REQUIRES_BOUNDS_OPTION_KEYS) as LayoutNodeOptions;
 
     // Before we layout, do non-bounds-related changes (in case we have resize:false), and prevent layout for
     // performance gains.
     this._constraint.lock();
-    this.mutate( nonBoundsOptions );
+    this.mutate(nonBoundsOptions);
     this._constraint.unlock();
 
     // Update the layout (so that it is done once if we have resize:false)
     this._constraint.updateLayout();
 
     // After we have our localBounds complete, now we can mutate things that rely on it.
-    this.mutate( boundsOptions );
+    this.mutate(boundsOptions);
 
     this.linkLayoutBounds();
   }
@@ -193,19 +199,19 @@ export default class GridBox extends LayoutNode<GridConstraint> {
    *
    * See GridBox.rows or GridBox.columns for usages and more documentation.
    */
-  public setLines( orientation: Orientation, lineArrays: LineArrays ): void {
+  public setLines(orientation: Orientation, lineArrays: LineArrays): void {
     const children: Node[] = [];
 
-    for ( let i = 0; i < lineArrays.length; i++ ) {
-      const lineArray = lineArrays[ i ];
-      for ( let j = 0; j < lineArray.length; j++ ) {
-        const item = lineArray[ j ];
-        if ( item !== null ) {
-          children.push( item );
-          item.mutateLayoutOptions( {
-            [ orientation.line ]: i,
-            [ orientation.opposite.line ]: j
-          } );
+    for (let i = 0; i < lineArrays.length; i++) {
+      const lineArray = lineArrays[i];
+      for (let j = 0; j < lineArray.length; j++) {
+        const item = lineArray[j];
+        if (item !== null) {
+          children.push(item);
+          item.mutateLayoutOptions({
+            [orientation.line]: i,
+            [orientation.opposite.line]: j
+          });
         }
       }
     }
@@ -222,25 +228,25 @@ export default class GridBox extends LayoutNode<GridConstraint> {
    *
    * See GridBox.rows or GridBox.columns for usages
    */
-  public getLines( orientation: Orientation ): LineArrays {
+  public getLines(orientation: Orientation): LineArrays {
     const lineArrays: LineArrays = [];
 
-    for ( const cell of this._cellMap.values() ) {
-      const i = cell.position.get( orientation );
-      const j = cell.position.get( orientation.opposite );
+    for (const cell of this._cellMap.values()) {
+      const i = cell.position.get(orientation);
+      const j = cell.position.get(orientation.opposite);
 
       // Ensure we have enough lines
-      while ( lineArrays.length < i + 1 ) {
-        lineArrays.push( [] );
+      while (lineArrays.length < i + 1) {
+        lineArrays.push([]);
       }
 
       // null-pad lines
-      while ( lineArrays[ i ].length < j + 1 ) {
-        lineArrays[ i ].push( null );
+      while (lineArrays[i].length < j + 1) {
+        lineArrays[i].push(null);
       }
 
       // Finally the actual node!
-      lineArrays[ i ][ j ] = cell.node;
+      lineArrays[i][j] = cell.node;
     }
 
     return lineArrays;
@@ -251,15 +257,15 @@ export default class GridBox extends LayoutNode<GridConstraint> {
    * The inner arrays will be the rows of the grid.
    * Mutates layoutOptions of the provided Nodes. See setLines() for more documentation.
    */
-  public set rows( lineArrays: LineArrays ) {
-    this.setLines( Orientation.VERTICAL, lineArrays );
+  public set rows(lineArrays: LineArrays) {
+    this.setLines(Orientation.VERTICAL, lineArrays);
   }
 
   /**
    * Returns a two-dimensional array of the child Nodes (with null as a spacer) where the inner arrays are the rows.
    */
   public get rows(): LineArrays {
-    return this.getLines( Orientation.VERTICAL );
+    return this.getLines(Orientation.VERTICAL);
   }
 
   /**
@@ -267,22 +273,22 @@ export default class GridBox extends LayoutNode<GridConstraint> {
    * The inner arrays will be the columns of the grid.
    * * Mutates layoutOptions of the provided Nodes. See setLines() for more documentation.
    */
-  public set columns( lineArrays: LineArrays ) {
-    this.setLines( Orientation.HORIZONTAL, lineArrays );
+  public set columns(lineArrays: LineArrays) {
+    this.setLines(Orientation.HORIZONTAL, lineArrays);
   }
 
   /**
    * Returns a two-dimensional array of the child Nodes (with null as a spacer) where the inner arrays are the columns.
    */
   public get columns(): LineArrays {
-    return this.getLines( Orientation.HORIZONTAL );
+    return this.getLines(Orientation.HORIZONTAL);
   }
 
   /**
    * Returns the Node at a specific row/column intersection (or null if there are none)
    */
-  public getNodeAt( row: number, column: number ): Node | null {
-    const cell = this.constraint.getCell( row, column );
+  public getNodeAt(row: number, column: number): Node | null {
+    const cell = this.constraint.getCell(row, column);
 
     return cell ? cell.node : null;
   }
@@ -290,41 +296,41 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   /**
    * Returns the row index of a child Node (or if it spans multiple rows, the first row)
    */
-  public getRowOfNode( node: Node ): number {
-    assert && assert( this.children.includes( node ) );
+  public getRowOfNode(node: Node): number {
+    assert && assert(this.children.includes(node));
 
-    return this.constraint.getCellFromNode( node )!.position.vertical;
+    return this.constraint.getCellFromNode(node)!.position.vertical;
   }
 
   /**
    * Returns the column index of a child Node (or if it spans multiple columns, the first row)
    */
-  public getColumnOfNode( node: Node ): number {
-    assert && assert( this.children.includes( node ) );
+  public getColumnOfNode(node: Node): number {
+    assert && assert(this.children.includes(node));
 
-    return this.constraint.getCellFromNode( node )!.position.horizontal;
+    return this.constraint.getCellFromNode(node)!.position.horizontal;
   }
 
   /**
    * Returns all the Nodes in a given row (by index)
    */
-  public getNodesInRow( index: number ): Node[] {
-    return this.constraint.getCells( Orientation.VERTICAL, index ).map( cell => cell.node );
+  public getNodesInRow(index: number): Node[] {
+    return this.constraint.getCells(Orientation.VERTICAL, index).map(cell => cell.node);
   }
 
   /**
    * Returns all the Nodes in a given column (by index)
    */
-  public getNodesInColumn( index: number ): Node[] {
-    return this.constraint.getCells( Orientation.HORIZONTAL, index ).map( cell => cell.node );
+  public getNodesInColumn(index: number): Node[] {
+    return this.constraint.getCells(Orientation.HORIZONTAL, index).map(cell => cell.node);
   }
 
   /**
    * Adds an array of child Nodes (with null allowed as empty spacers) at the bottom of all existing rows.
    */
-  public addRow( row: LineArray ): this {
+  public addRow(row: LineArray): this {
 
-    this.rows = [ ...this.rows, row ];
+    this.rows = [...this.rows, row];
 
     return this;
   }
@@ -332,9 +338,9 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   /**
    * Adds an array of child Nodes (with null allowed as empty spacers) at the right of all existing columns.
    */
-  public addColumn( column: LineArray ): this {
+  public addColumn(column: LineArray): this {
 
-    this.columns = [ ...this.columns, column ];
+    this.columns = [...this.columns, column];
 
     return this;
   }
@@ -342,9 +348,9 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   /**
    * Inserts a row of child Nodes at a given row index (see addRow for more information)
    */
-  public insertRow( index: number, row: LineArray ): this {
+  public insertRow(index: number, row: LineArray): this {
 
-    this.rows = [ ...this.rows.slice( 0, index ), row, ...this.rows.slice( index ) ];
+    this.rows = [...this.rows.slice(0, index), row, ...this.rows.slice(index)];
 
     return this;
   }
@@ -352,9 +358,9 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   /**
    * Inserts a column of child Nodes at a given column index (see addColumn for more information)
    */
-  public insertColumn( index: number, column: LineArray ): this {
+  public insertColumn(index: number, column: LineArray): this {
 
-    this.columns = [ ...this.columns.slice( 0, index ), column, ...this.columns.slice( index ) ];
+    this.columns = [...this.columns.slice(0, index), column, ...this.columns.slice(index)];
 
     return this;
   }
@@ -362,9 +368,9 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   /**
    * Removes all child Nodes in a given row
    */
-  public removeRow( index: number ): this {
+  public removeRow(index: number): this {
 
-    this.rows = [ ...this.rows.slice( 0, index ), ...this.rows.slice( index + 1 ) ];
+    this.rows = [...this.rows.slice(0, index), ...this.rows.slice(index + 1)];
 
     return this;
   }
@@ -372,17 +378,17 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   /**
    * Removes all child Nodes in a given column
    */
-  public removeColumn( index: number ): this {
+  public removeColumn(index: number): this {
 
-    this.columns = [ ...this.columns.slice( 0, index ), ...this.columns.slice( index + 1 ) ];
+    this.columns = [...this.columns.slice(0, index), ...this.columns.slice(index + 1)];
 
     return this;
   }
 
-  public set autoRows( value: number | null ) {
-    assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) && value >= 1 ) );
+  public set autoRows(value: number | null) {
+    assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 1));
 
-    if ( this._autoRows !== value ) {
+    if (this._autoRows !== value) {
       this._autoRows = value;
 
       this.updateAutoRows();
@@ -393,10 +399,10 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._autoRows;
   }
 
-  public set autoColumns( value: number | null ) {
-    assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) && value >= 1 ) );
+  public set autoColumns(value: number | null) {
+    assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 1));
 
-    if ( this._autoColumns !== value ) {
+    if (this._autoColumns !== value) {
       this._autoColumns = value;
 
       this.updateAutoColumns();
@@ -408,74 +414,74 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   }
 
   // Used for autoRows/autoColumns
-  private updateAutoLines( orientation: Orientation, value: number | null ): void {
-    if ( value !== null && this._autoLockCount === 0 ) {
+  private updateAutoLines(orientation: Orientation, value: number | null): void {
+    if (value !== null && this._autoLockCount === 0) {
       let updatedCount = 0;
 
       this.constraint.lock();
 
-      this.children.filter( child => {
-        return child.bounds.isValid() && ( !this._constraint.excludeInvisible || child.visible );
-      } ).forEach( ( child, index ) => {
+      this.children.filter(child => {
+        return child.bounds.isValid() && (!this._constraint.excludeInvisible || child.visible);
+      }).forEach((child, index) => {
         const primary = index % value;
-        const secondary = Math.floor( index / value );
+        const secondary = Math.floor(index / value);
         const width = 1;
         const height = 1;
 
         // We guard to see if we actually have to update anything (so we can avoid triggering an auto-layout)
-        if ( !child.layoutOptions ||
-             child.layoutOptions[ orientation.line ] !== primary ||
-             child.layoutOptions[ orientation.opposite.line ] !== secondary ||
-             child.layoutOptions.horizontalSpan !== width ||
-             child.layoutOptions.verticalSpan !== height
+        if (!child.layoutOptions ||
+          child.layoutOptions[orientation.line] !== primary ||
+          child.layoutOptions[orientation.opposite.line] !== secondary ||
+          child.layoutOptions.horizontalSpan !== width ||
+          child.layoutOptions.verticalSpan !== height
         ) {
           updatedCount++;
-          child.mutateLayoutOptions( {
-            [ orientation.line ]: index % value,
-            [ orientation.opposite.line ]: Math.floor( index / value ),
+          child.mutateLayoutOptions({
+            [orientation.line]: index % value,
+            [orientation.opposite.line]: Math.floor(index / value),
             horizontalSpan: 1,
             verticalSpan: 1
-          } );
+          });
         }
 
-      } );
+      });
 
       this.constraint.unlock();
 
       // Only trigger an automatic layout IF we actually adjusted something.
-      if ( updatedCount > 0 ) {
+      if (updatedCount > 0) {
         this.constraint.updateLayoutAutomatically();
       }
     }
   }
 
   private updateAutoRows(): void {
-    this.updateAutoLines( Orientation.VERTICAL, this.autoRows );
+    this.updateAutoLines(Orientation.VERTICAL, this.autoRows);
   }
 
   private updateAutoColumns(): void {
-    this.updateAutoLines( Orientation.HORIZONTAL, this.autoColumns );
+    this.updateAutoLines(Orientation.HORIZONTAL, this.autoColumns);
   }
 
   // Updates rows or columns, whichever is active at the moment (if any)
   private updateAllAutoLines(): void {
-    assert && assert( this._autoRows === null || this._autoColumns === null,
-      'autoRows and autoColumns should not both be set when updating children' );
+    assert && assert(this._autoRows === null || this._autoColumns === null,
+      'autoRows and autoColumns should not both be set when updating children');
 
     this.updateAutoRows();
     this.updateAutoColumns();
   }
 
-  public override setChildren( children: Node[] ): this {
+  public override setChildren(children: Node[]): this {
 
     const oldChildren = this.getChildren(); // defensive copy
 
     // Don't update autoRows/autoColumns settings while setting children, wait until after for performance
     this._autoLockCount++;
-    super.setChildren( children );
+    super.setChildren(children);
     this._autoLockCount--;
 
-    if ( !_.isEqual( oldChildren, children ) ) {
+    if (!_.isEqual(oldChildren, children)) {
       this.updateAllAutoLines();
     }
 
@@ -485,13 +491,13 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   /**
    * Called when a child is inserted.
    */
-  private onGridBoxChildInserted( node: Node, index: number ): void {
-    node.visibleProperty.lazyLink( this.onChildVisibilityToggled );
+  private onGridBoxChildInserted(node: Node, index: number): void {
+    node.visibleProperty.lazyLink(this.onChildVisibilityToggled);
 
-    const cell = new GridCell( this._constraint, node, this._constraint.createLayoutProxy( node ) );
-    this._cellMap.set( node, cell );
+    const cell = new GridCell(this._constraint, node, this._constraint.createLayoutProxy(node));
+    this._cellMap.set(node, cell);
 
-    this._constraint.addCell( cell );
+    this._constraint.addCell(cell);
 
     this.updateAllAutoLines();
   }
@@ -502,38 +508,38 @@ export default class GridBox extends LayoutNode<GridConstraint> {
    * NOTE: This is NOT called on disposal. Any additional cleanup (to prevent memory leaks) should be included in the
    * dispose() function
    */
-  private onGridBoxChildRemoved( node: Node ): void {
+  private onGridBoxChildRemoved(node: Node): void {
 
-    const cell = this._cellMap.get( node )!;
-    assert && assert( cell );
+    const cell = this._cellMap.get(node)!;
+    assert && assert(cell);
 
-    this._cellMap.delete( node );
+    this._cellMap.delete(node);
 
-    this._constraint.removeCell( cell );
+    this._constraint.removeCell(cell);
 
     cell.dispose();
 
     this.updateAllAutoLines();
 
-    node.visibleProperty.unlink( this.onChildVisibilityToggled );
+    node.visibleProperty.unlink(this.onChildVisibilityToggled);
   }
 
-  public override mutate( options?: GridBoxOptions ): this {
+  public override mutate(options?: GridBoxOptions): this {
     // children can be used with one of autoRows/autoColumns, but otherwise these options are exclusive
-    assertMutuallyExclusiveOptions( options, [ 'rows' ], [ 'columns' ], [ 'children', 'autoRows', 'autoColumns' ] );
-    if ( options ) {
-      assert && assert( typeof options.autoRows !== 'number' || typeof options.autoColumns !== 'number',
-        'autoRows and autoColumns should not be specified both as non-null at the same time' );
+    assertMutuallyExclusiveOptions(options, ['rows'], ['columns'], ['children', 'autoRows', 'autoColumns']);
+    if (options) {
+      assert && assert(typeof options.autoRows !== 'number' || typeof options.autoColumns !== 'number',
+        'autoRows and autoColumns should not be specified both as non-null at the same time');
     }
 
-    return super.mutate( options );
+    return super.mutate(options);
   }
 
   public get spacing(): number | number[] {
     return this._constraint.spacing;
   }
 
-  public set spacing( value: number | number[] ) {
+  public set spacing(value: number | number[]) {
     this._constraint.spacing = value;
   }
 
@@ -541,7 +547,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.xSpacing;
   }
 
-  public set xSpacing( value: number | number[] ) {
+  public set xSpacing(value: number | number[]) {
     this._constraint.xSpacing = value;
   }
 
@@ -549,7 +555,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.ySpacing;
   }
 
-  public set ySpacing( value: number | number[] ) {
+  public set ySpacing(value: number | number[]) {
     this._constraint.ySpacing = value;
   }
 
@@ -557,7 +563,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.xAlign!;
   }
 
-  public set xAlign( value: HorizontalLayoutAlign ) {
+  public set xAlign(value: HorizontalLayoutAlign) {
     this._constraint.xAlign = value;
   }
 
@@ -565,7 +571,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.yAlign!;
   }
 
-  public set yAlign( value: VerticalLayoutAlign ) {
+  public set yAlign(value: VerticalLayoutAlign) {
     this._constraint.yAlign = value;
   }
 
@@ -573,7 +579,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.grow!;
   }
 
-  public set grow( value: number ) {
+  public set grow(value: number) {
     this._constraint.grow = value;
   }
 
@@ -581,7 +587,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.xGrow!;
   }
 
-  public set xGrow( value: number ) {
+  public set xGrow(value: number) {
     this._constraint.xGrow = value;
   }
 
@@ -589,7 +595,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.yGrow!;
   }
 
-  public set yGrow( value: number ) {
+  public set yGrow(value: number) {
     this._constraint.yGrow = value;
   }
 
@@ -597,7 +603,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.stretch!;
   }
 
-  public set stretch( value: boolean ) {
+  public set stretch(value: boolean) {
     this._constraint.stretch = value;
   }
 
@@ -605,7 +611,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.xStretch!;
   }
 
-  public set xStretch( value: boolean ) {
+  public set xStretch(value: boolean) {
     this._constraint.xStretch = value;
   }
 
@@ -613,7 +619,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.yStretch!;
   }
 
-  public set yStretch( value: boolean ) {
+  public set yStretch(value: boolean) {
     this._constraint.yStretch = value;
   }
 
@@ -621,7 +627,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.margin!;
   }
 
-  public set margin( value: number ) {
+  public set margin(value: number) {
     this._constraint.margin = value;
   }
 
@@ -629,7 +635,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.xMargin!;
   }
 
-  public set xMargin( value: number ) {
+  public set xMargin(value: number) {
     this._constraint.xMargin = value;
   }
 
@@ -637,7 +643,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.yMargin!;
   }
 
-  public set yMargin( value: number ) {
+  public set yMargin(value: number) {
     this._constraint.yMargin = value;
   }
 
@@ -645,7 +651,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.leftMargin!;
   }
 
-  public set leftMargin( value: number ) {
+  public set leftMargin(value: number) {
     this._constraint.leftMargin = value;
   }
 
@@ -653,7 +659,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.rightMargin!;
   }
 
-  public set rightMargin( value: number ) {
+  public set rightMargin(value: number) {
     this._constraint.rightMargin = value;
   }
 
@@ -661,7 +667,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.topMargin!;
   }
 
-  public set topMargin( value: number ) {
+  public set topMargin(value: number) {
     this._constraint.topMargin = value;
   }
 
@@ -669,7 +675,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.bottomMargin!;
   }
 
-  public set bottomMargin( value: number ) {
+  public set bottomMargin(value: number) {
     this._constraint.bottomMargin = value;
   }
 
@@ -677,7 +683,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.minContentWidth;
   }
 
-  public set minContentWidth( value: number | null ) {
+  public set minContentWidth(value: number | null) {
     this._constraint.minContentWidth = value;
   }
 
@@ -685,7 +691,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.minContentHeight;
   }
 
-  public set minContentHeight( value: number | null ) {
+  public set minContentHeight(value: number | null) {
     this._constraint.minContentHeight = value;
   }
 
@@ -693,7 +699,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.maxContentWidth;
   }
 
-  public set maxContentWidth( value: number | null ) {
+  public set maxContentWidth(value: number | null) {
     this._constraint.maxContentWidth = value;
   }
 
@@ -701,13 +707,13 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     return this._constraint.maxContentHeight;
   }
 
-  public set maxContentHeight( value: number | null ) {
+  public set maxContentHeight(value: number | null) {
     this._constraint.maxContentHeight = value;
   }
 
 
-  public override setExcludeInvisibleChildrenFromBounds( excludeInvisibleChildrenFromBounds: boolean ): void {
-    super.setExcludeInvisibleChildrenFromBounds( excludeInvisibleChildrenFromBounds );
+  public override setExcludeInvisibleChildrenFromBounds(excludeInvisibleChildrenFromBounds: boolean): void {
+    super.setExcludeInvisibleChildrenFromBounds(excludeInvisibleChildrenFromBounds);
 
     this.updateAllAutoLines();
   }
@@ -717,40 +723,40 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     // Lock our layout forever
     this._constraint.lock();
 
-    this.childInsertedEmitter.removeListener( this.onChildInserted );
-    this.childRemovedEmitter.removeListener( this.onChildRemoved );
+    this.childInsertedEmitter.removeListener(this.onChildInserted);
+    this.childRemovedEmitter.removeListener(this.onChildRemoved);
 
     // Dispose our cells here. We won't be getting the children-removed listeners fired (we removed them above)
-    for ( const cell of this._cellMap.values() ) {
+    for (const cell of this._cellMap.values()) {
       cell.dispose();
 
-      cell.node.visibleProperty.unlink( this.onChildVisibilityToggled );
+      cell.node.visibleProperty.unlink(this.onChildVisibilityToggled);
     }
 
     super.dispose();
   }
 
   public getHelperNode(): Node {
-    const marginsNode = MarginLayoutCell.createHelperNode( this.constraint.displayedCells, this.constraint.layoutBoundsProperty.value, cell => {
+    const marginsNode = MarginLayoutCell.createHelperNode(this.constraint.displayedCells, this.constraint.layoutBoundsProperty.value, cell => {
       let str = '';
 
       str += `row: ${cell.position.vertical}\n`;
       str += `column: ${cell.position.horizontal}\n`;
-      if ( cell.size.horizontal > 1 ) {
+      if (cell.size.horizontal > 1) {
         str += `horizontalSpan: ${cell.size.horizontal}\n`;
       }
-      if ( cell.size.vertical > 1 ) {
+      if (cell.size.vertical > 1) {
         str += `verticalSpan: ${cell.size.vertical}\n`;
       }
-      str += `xAlign: ${LayoutAlign.internalToAlign( Orientation.HORIZONTAL, cell.effectiveXAlign )}\n`;
-      str += `yAlign: ${LayoutAlign.internalToAlign( Orientation.VERTICAL, cell.effectiveYAlign )}\n`;
+      str += `xAlign: ${LayoutAlign.internalToAlign(Orientation.HORIZONTAL, cell.effectiveXAlign)}\n`;
+      str += `yAlign: ${LayoutAlign.internalToAlign(Orientation.VERTICAL, cell.effectiveYAlign)}\n`;
       str += `xStretch: ${cell.effectiveXStretch}\n`;
       str += `yStretch: ${cell.effectiveYStretch}\n`;
       str += `xGrow: ${cell.effectiveXGrow}\n`;
       str += `yGrow: ${cell.effectiveYGrow}\n`;
 
       return str;
-    } );
+    });
 
     return marginsNode;
   }
@@ -763,6 +769,6 @@ export default class GridBox extends LayoutNode<GridConstraint> {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-GridBox.prototype._mutatorKeys = [ ...SIZABLE_OPTION_KEYS, ...GRIDBOX_OPTION_KEYS, ...Node.prototype._mutatorKeys ];
+GridBox.prototype._mutatorKeys = [...SIZABLE_OPTION_KEYS, ...GRIDBOX_OPTION_KEYS, ...Node.prototype._mutatorKeys];
 
-scenery.register( 'GridBox', GridBox );
+scenery.register('GridBox', GridBox);

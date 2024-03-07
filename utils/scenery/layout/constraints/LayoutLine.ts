@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { scenery } from '../../imports.js';
+import { scenery } from '../../imports';
 
 export default class LayoutLine {
 
@@ -43,8 +43,8 @@ export default class LayoutLine {
    * (scenery-internal)
    */
   public hasOrigin(): boolean {
-    return isFinite( this.minOrigin ) && isFinite( this.maxOrigin );
+    return isFinite(this.minOrigin) && isFinite(this.maxOrigin);
   }
 }
 
-scenery.register( 'LayoutLine', LayoutLine );
+scenery.register('LayoutLine', LayoutLine);

@@ -6,17 +6,16 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Random from '../../../dot/js/Random.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { EventContext, scenery } from '../imports.js';
+import Random from '../../dot/Random';
+import Vector2 from '../../dot/Vector2';
+import { EventContext, scenery } from '../imports';
 
 class InputFuzzer {
   /**
    * @param {Display} display
    * @param {number} seed
    */
-  constructor( display, seed ) {
-
+  constructor(display, seed) {
     // @private {Display}
     this.display = display;
 
@@ -30,10 +29,10 @@ class InputFuzzer {
     this.isMouseDown = false;
 
     // @private {Vector2} - Starts at 0,0, because why not
-    this.mousePosition = new Vector2( 0, 0 );
+    this.mousePosition = new Vector2(0, 0);
 
     // @private {Random}
-    this.random = new Random( { seed: seed } );
+    this.random = new Random({ seed });
 
     // @private {function} - All of the various actions that may be options at certain times.
     this.mouseToggleAction = () => {
@@ -43,22 +42,22 @@ class InputFuzzer {
       this.mouseMove();
     };
     this.touchStartAction = () => {
-      const touch = this.createTouch( this.getRandomPosition() );
-      this.touchStart( touch );
+      const touch = this.createTouch(this.getRandomPosition());
+      this.touchStart(touch);
     };
     this.touchMoveAction = () => {
-      const touch = this.random.sample( this.touches );
-      this.touchMove( touch );
+      const touch = this.random.sample(this.touches);
+      this.touchMove(touch);
     };
     this.touchEndAction = () => {
-      const touch = this.random.sample( this.touches );
-      this.touchEnd( touch );
-      this.removeTouch( touch );
+      const touch = this.random.sample(this.touches);
+      this.touchEnd(touch);
+      this.removeTouch(touch);
     };
     this.touchCancelAction = () => {
-      const touch = this.random.sample( this.touches );
-      this.touchCancel( touch );
-      this.removeTouch( touch );
+      const touch = this.random.sample(this.touches);
+      this.touchCancel(touch);
+      this.removeTouch(touch);
     };
   }
 
@@ -71,39 +70,48 @@ class InputFuzzer {
    * @param {boolean} allowTouch
    * @param {number} maximumPointerCount
    */
-  fuzzEvents( averageEventCount, allowMouse, allowTouch, maximumPointerCount ) {
-    assert && assert( averageEventCount > 0, `averageEventCount must be positive: ${averageEventCount}` );
+  fuzzEvents(averageEventCount, allowMouse, allowTouch, maximumPointerCount) {
+    assert &&
+      assert(
+        averageEventCount > 0,
+        `averageEventCount must be positive: ${averageEventCount}`
+      );
 
     this.display._input.currentlyFiringEvents = true;
 
     // run a variable number of events, with a certain chance of bailing out (so no events are possible)
     // models a geometric distribution of events
     // See https://github.com/phetsims/joist/issues/343 for notes on the distribution.
-    while ( this.random.nextDouble() < 1 - 1 / ( averageEventCount + 1 ) ) {
-      const activePointerCount = this.touches.length + ( this.isMouseDown ? 1 : 0 ); // 1 extra for the mouse if down
+    while (this.random.nextDouble() < 1 - 1 / (averageEventCount + 1)) {
+      const activePointerCount =
+        this.touches.length + (this.isMouseDown ? 1 : 0); // 1 extra for the mouse if down
       const canAddPointer = activePointerCount < maximumPointerCount;
 
       const potentialActions = [];
 
-      if ( allowMouse ) {
+      if (allowMouse) {
         // We could always mouse up/move (if we are down), but can't 'down/move' without being able to add a pointer
-        if ( this.isMouseDown || canAddPointer ) {
-          potentialActions.push( this.mouseToggleAction );
-          potentialActions.push( this.mouseMoveAction );
+        if (this.isMouseDown || canAddPointer) {
+          potentialActions.push(this.mouseToggleAction);
+          potentialActions.push(this.mouseMoveAction);
         }
       }
 
-      if ( allowTouch ) {
-        if ( canAddPointer ) {
-          potentialActions.push( this.touchStartAction );
+      if (allowTouch) {
+        if (canAddPointer) {
+          potentialActions.push(this.touchStartAction);
         }
-        if ( this.touches.length ) {
-          potentialActions.push( this.random.nextDouble() < 0.8 ? this.touchEndAction : this.touchCancelAction );
-          potentialActions.push( this.touchMoveAction );
+        if (this.touches.length) {
+          potentialActions.push(
+            this.random.nextDouble() < 0.8
+              ? this.touchEndAction
+              : this.touchCancelAction
+          );
+          potentialActions.push(this.touchMoveAction);
         }
       }
 
-      const action = this.random.sample( potentialActions );
+      const action = this.random.sample(potentialActions);
       action();
     }
 
@@ -123,41 +131,45 @@ class InputFuzzer {
    * @param {Array.<Object>} touches - A subset of touch objects stored on the fuzzer itself.
    * @returns {Event} - If possible a TouchEvent, but may be a CustomEvent
    */
-  createTouchEvent( type, touches ) {
+  createTouchEvent(type, touches) {
     const domElement = this.display.domElement;
 
     // A specification that looks like a Touch object (and may be used to create one)
-    const touchItems = touches.map( touch => ( {
+    const touchItems = touches.map((touch) => ({
       identifier: touch.id,
       target: domElement,
       clientX: touch.position.x,
       clientY: touch.position.y
-    } ) );
+    }));
 
     // Check if we can use Touch/TouchEvent constructors, see https://www.chromestatus.com/feature/4923255479599104
-    if ( window.Touch !== undefined &&
-         window.TouchEvent !== undefined &&
-         window.Touch.length === 1 &&
-         window.TouchEvent.length === 1 ) {
-      const rawTouches = touchItems.map( touchItem => new window.Touch( touchItem ) );
+    if (
+      window.Touch !== undefined &&
+      window.TouchEvent !== undefined &&
+      window.Touch.length === 1 &&
+      window.TouchEvent.length === 1
+    ) {
+      const rawTouches = touchItems.map(
+        (touchItem) => new window.Touch(touchItem)
+      );
 
-      return new window.TouchEvent( type, {
+      return new window.TouchEvent(type, {
         cancelable: true,
         bubbles: true,
         touches: rawTouches,
         targetTouches: [],
         changedTouches: rawTouches,
         shiftKey: false // TODO: Do we need this? https://github.com/phetsims/scenery/issues/1581
-      } );
+      });
     }
     // Otherwise, use a CustomEvent and "fake" it.
     else {
-      const event = document.createEvent( 'CustomEvent' );
-      event.initCustomEvent( type, true, true, {
+      const event = document.createEvent('CustomEvent');
+      event.initCustomEvent(type, true, true, {
         touches: touchItems,
         targetTouches: [],
         changedTouches: touchItems
-      } );
+      });
       return event;
     }
   }
@@ -170,8 +182,8 @@ class InputFuzzer {
    */
   getRandomPosition() {
     return new Vector2(
-      Math.floor( this.random.nextDouble() * this.display.width ),
-      Math.floor( this.random.nextDouble() * this.display.height )
+      Math.floor(this.random.nextDouble() * this.display.width),
+      Math.floor(this.random.nextDouble() * this.display.height)
     );
   }
 
@@ -182,12 +194,12 @@ class InputFuzzer {
    * @param {Vector2} position
    * @returns {Object}
    */
-  createTouch( position ) {
+  createTouch(position) {
     const touch = {
       id: this.nextTouchID++,
-      position: position
+      position
     };
-    this.touches.push( touch );
+    this.touches.push(touch);
     return touch;
   }
 
@@ -197,8 +209,8 @@ class InputFuzzer {
    *
    * @param {Object} touch
    */
-  removeTouch( touch ) {
-    this.touches.splice( this.touches.indexOf( touch ), 1 );
+  removeTouch(touch) {
+    this.touches.splice(this.touches.indexOf(touch), 1);
   }
 
   /**
@@ -207,11 +219,15 @@ class InputFuzzer {
    *
    * @param {Object} touch
    */
-  touchStart( touch ) {
-    const event = this.createTouchEvent( 'touchstart', [ touch ] );
+  touchStart(touch) {
+    const event = this.createTouchEvent('touchstart', [touch]);
 
     this.display._input.validatePointers();
-    this.display._input.touchStart( touch.id, touch.position, new EventContext( event ) );
+    this.display._input.touchStart(
+      touch.id,
+      touch.position,
+      new EventContext(event)
+    );
   }
 
   /**
@@ -220,13 +236,17 @@ class InputFuzzer {
    *
    * @param {Object} touch
    */
-  touchMove( touch ) {
+  touchMove(touch) {
     touch.position = this.getRandomPosition();
 
-    const event = this.createTouchEvent( 'touchmove', [ touch ] );
+    const event = this.createTouchEvent('touchmove', [touch]);
 
     this.display._input.validatePointers();
-    this.display._input.touchMove( touch.id, touch.position, new EventContext( event ) );
+    this.display._input.touchMove(
+      touch.id,
+      touch.position,
+      new EventContext(event)
+    );
   }
 
   /**
@@ -235,11 +255,15 @@ class InputFuzzer {
    *
    * @param {Object} touch
    */
-  touchEnd( touch ) {
-    const event = this.createTouchEvent( 'touchend', [ touch ] );
+  touchEnd(touch) {
+    const event = this.createTouchEvent('touchend', [touch]);
 
     this.display._input.validatePointers();
-    this.display._input.touchEnd( touch.id, touch.position, new EventContext( event ) );
+    this.display._input.touchEnd(
+      touch.id,
+      touch.position,
+      new EventContext(event)
+    );
   }
 
   /**
@@ -248,11 +272,15 @@ class InputFuzzer {
    *
    * @param {Object} touch
    */
-  touchCancel( touch ) {
-    const event = this.createTouchEvent( 'touchcancel', [ touch ] );
+  touchCancel(touch) {
+    const event = this.createTouchEvent('touchcancel', [touch]);
 
     this.display._input.validatePointers();
-    this.display._input.touchCancel( touch.id, touch.position, new EventContext( event ) );
+    this.display._input.touchCancel(
+      touch.id,
+      touch.position,
+      new EventContext(event)
+    );
   }
 
   /**
@@ -260,23 +288,41 @@ class InputFuzzer {
    * @private
    */
   mouseToggle() {
-    const domEvent = document.createEvent( 'MouseEvent' );
+    const domEvent = document.createEvent('MouseEvent');
 
     // technically deprecated, but DOM4 event constructors not out yet. people on #whatwg said to use it
-    domEvent.initMouseEvent( this.isMouseDown ? 'mouseup' : 'mousedown', true, true, window, 1, // click count
-      this.mousePosition.x, this.mousePosition.y, this.mousePosition.x, this.mousePosition.y,
-      false, false, false, false,
+    domEvent.initMouseEvent(
+      this.isMouseDown ? 'mouseup' : 'mousedown',
+      true,
+      true,
+      window,
+      1, // click count
+      this.mousePosition.x,
+      this.mousePosition.y,
+      this.mousePosition.x,
+      this.mousePosition.y,
+      false,
+      false,
+      false,
+      false,
       0, // button
-      null );
+      null
+    );
 
     this.display._input.validatePointers();
 
-    if ( this.isMouseDown ) {
-      this.display._input.mouseUp( this.mousePosition, new EventContext( domEvent ) );
+    if (this.isMouseDown) {
+      this.display._input.mouseUp(
+        this.mousePosition,
+        new EventContext(domEvent)
+      );
       this.isMouseDown = false;
-    }
-    else {
-      this.display._input.mouseDown( null, this.mousePosition, new EventContext( domEvent ) );
+    } else {
+      this.display._input.mouseDown(
+        null,
+        this.mousePosition,
+        new EventContext(domEvent)
+      );
       this.isMouseDown = true;
     }
   }
@@ -289,19 +335,34 @@ class InputFuzzer {
     this.mousePosition = this.getRandomPosition();
 
     // our move event
-    const domEvent = document.createEvent( 'MouseEvent' ); // not 'MouseEvents' according to DOM Level 3 spec
+    const domEvent = document.createEvent('MouseEvent'); // not 'MouseEvents' according to DOM Level 3 spec
 
     // technically deprecated, but DOM4 event constructors not out yet. people on #whatwg said to use it
-    domEvent.initMouseEvent( 'mousemove', true, true, window, 0, // click count
-      this.mousePosition.x, this.mousePosition.y, this.mousePosition.x, this.mousePosition.y,
-      false, false, false, false,
+    domEvent.initMouseEvent(
+      'mousemove',
+      true,
+      true,
+      window,
+      0, // click count
+      this.mousePosition.x,
+      this.mousePosition.y,
+      this.mousePosition.x,
+      this.mousePosition.y,
+      false,
+      false,
+      false,
+      false,
       0, // button
-      null );
+      null
+    );
 
     this.display._input.validatePointers();
-    this.display._input.mouseMove( this.mousePosition, new EventContext( domEvent ) );
+    this.display._input.mouseMove(
+      this.mousePosition,
+      new EventContext(domEvent)
+    );
   }
 }
 
-scenery.register( 'InputFuzzer', InputFuzzer );
+scenery.register('InputFuzzer', InputFuzzer);
 export default InputFuzzer;

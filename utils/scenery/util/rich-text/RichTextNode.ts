@@ -5,22 +5,22 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-import Pool, { TPoolable } from '../../../../phet-core/js/Pool.js';
-import { Node, RichTextCleanable, scenery } from '../../imports.js';
+import Pool, { type TPoolable } from '../../../phet-core/Pool';
+import { Node, RichTextCleanable, scenery } from '../../imports';
 
-export default class RichTextNode extends RichTextCleanable( Node ) implements TPoolable {
+export default class RichTextNode extends RichTextCleanable(Node) implements TPoolable {
 
   public readonly leftSpacing = 0;
   public readonly rightSpacing = 0;
 
-  public constructor( content: Node ) {
+  public constructor(content: Node) {
     super();
 
-    this.initialize( content );
+    this.initialize(content);
   }
 
-  public initialize( content: Node ): this {
-    this.addChild( content );
+  public initialize(content: Node): this {
+    this.addChild(content);
 
     return this;
   }
@@ -37,15 +37,15 @@ export default class RichTextNode extends RichTextCleanable( Node ) implements T
   /**
    * Whether this leaf will fit in the specified amount of space
    */
-  public fitsIn( widthAvailable: number ): boolean {
+  public fitsIn(widthAvailable: number): boolean {
     return this.width <= widthAvailable;
   }
 
   public freeToPool(): void {
-    RichTextNode.pool.freeToPool( this );
+    RichTextNode.pool.freeToPool(this);
   }
 
-  public static readonly pool = new Pool( RichTextNode );
+  public static readonly pool = new Pool(RichTextNode);
 }
 
-scenery.register( 'RichTextNode', RichTextNode );
+scenery.register('RichTextNode', RichTextNode);

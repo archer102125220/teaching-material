@@ -17,8 +17,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { DerivedProperty1 } from '../../../axon/js/DerivedProperty.js';
-import { LayoutProxy, Node, scenery, Trail, TrailsBetweenProperty, TransformTracker } from '../imports.js';
+import { DerivedProperty1 } from '../../axon/DerivedProperty';
+import { LayoutProxy, Node, scenery, Trail, TrailsBetweenProperty, TransformTracker } from '../imports';
 
 type SelfOptions = {
   // If provided, this will be called when the transform of the proxy changes
@@ -41,31 +41,31 @@ export default class LayoutProxyProperty extends DerivedProperty1<LayoutProxy | 
    * @param leafNode - The leaf that we'll create the proxy for
    * @param providedOptions
    */
-  public constructor( rootNode: Node, leafNode: Node, providedOptions?: LayoutProxyPropertyOptions ) {
+  public constructor(rootNode: Node, leafNode: Node, providedOptions?: LayoutProxyPropertyOptions) {
 
-    const trailsBetweenProperty = new TrailsBetweenProperty( rootNode, leafNode );
+    const trailsBetweenProperty = new TrailsBetweenProperty(rootNode, leafNode);
 
-    super( [ trailsBetweenProperty ], trails => {
-      return trails.length === 1 ? LayoutProxy.pool.create( trails[ 0 ].copy().removeAncestor() ) : null;
-    } );
+    super([trailsBetweenProperty], trails => {
+      return trails.length === 1 ? LayoutProxy.pool.create(trails[0].copy().removeAncestor()) : null;
+    });
 
     this.trailsBetweenProperty = trailsBetweenProperty;
-    this.lazyLink( ( value, oldValue ) => {
+    this.lazyLink((value, oldValue) => {
       oldValue && oldValue.dispose();
-    } );
+    });
 
     const onTransformChange = providedOptions?.onTransformChange;
-    if ( onTransformChange ) {
-      this.link( proxy => {
-        if ( this.transformTracker ) {
+    if (onTransformChange) {
+      this.link(proxy => {
+        if (this.transformTracker) {
           this.transformTracker.dispose();
           this.transformTracker = null;
         }
-        if ( proxy ) {
-          this.transformTracker = new TransformTracker( proxy.trail!.copy().addAncestor( rootNode ) );
-          this.transformTracker.addListener( onTransformChange );
+        if (proxy) {
+          this.transformTracker = new TransformTracker(proxy.trail!.copy().addAncestor(rootNode));
+          this.transformTracker.addListener(onTransformChange);
         }
-      } );
+      });
     }
   }
 
@@ -77,4 +77,4 @@ export default class LayoutProxyProperty extends DerivedProperty1<LayoutProxy | 
   }
 }
 
-scenery.register( 'LayoutProxyProperty', LayoutProxyProperty );
+scenery.register('LayoutProxyProperty', LayoutProxyProperty);

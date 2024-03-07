@@ -6,10 +6,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import deprecationWarning from '../../../phet-core/js/deprecationWarning.js';
-import merge from '../../../phet-core/js/merge.js';
-import PhetioObject from '../../../tandem/js/PhetioObject.js';
-import { EventContext, Mouse, scenery, SceneryEvent, Trail } from '../imports.js';
+import deprecationWarning from '../../phet-core/deprecationWarning';
+import merge from '../../phet-core/merge';
+import PhetioObject from '../../tandem/PhetioObject';
+import { EventContext, Mouse, scenery, SceneryEvent, Trail } from '../imports';
 
 /**
  * @deprecated - use PressListener instead
@@ -35,15 +35,20 @@ class DownUpListener extends PhetioObject {
    *
    * @param {Object} [options]
    */
-  constructor( options ) {
-    assert && deprecationWarning( 'DownUpListener is deprecated, please use PressListener instead' );
+  constructor(options) {
+    assert &&
+      deprecationWarning(
+        'DownUpListener is deprecated, please use PressListener instead'
+      );
 
+    options = merge(
+      {
+        mouseButton: 0 // allow a different mouse button
+      },
+      options
+    );
 
-    options = merge( {
-      mouseButton: 0 // allow a different mouse button
-    }, options );
-
-    super( options );
+    super(options);
 
     // @private {Object}
     this.options = options;
@@ -67,13 +72,20 @@ class DownUpListener extends PhetioObject {
     // @private {function} - this listener gets added to the pointer on a 'down'
     this.downListener = {
       // mouse/touch up
-      up: event => {
-        sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( `DownUpListener (pointer) up for ${this.downTrail.toString()}` );
+      up: (event) => {
+        sceneryLog &&
+          sceneryLog.InputListener &&
+          sceneryLog.InputListener(
+            `DownUpListener (pointer) up for ${this.downTrail.toString()}`
+          );
         sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-        assert && assert( event.pointer === this.pointer );
-        if ( !( event.pointer instanceof Mouse ) || event.domEvent.button === this.options.mouseButton ) {
-          this.buttonUp( event );
+        assert && assert(event.pointer === this.pointer);
+        if (
+          !(event.pointer instanceof Mouse) ||
+          event.domEvent.button === this.options.mouseButton
+        ) {
+          this.buttonUp(event);
         }
 
         sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
@@ -81,7 +93,11 @@ class DownUpListener extends PhetioObject {
 
       // interruption of this Pointer listener
       interrupt: () => {
-        sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( `DownUpListener (pointer) interrupt for ${this.downTrail.toString()}` );
+        sceneryLog &&
+          sceneryLog.InputListener &&
+          sceneryLog.InputListener(
+            `DownUpListener (pointer) interrupt for ${this.downTrail.toString()}`
+          );
         sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
         this.interrupt();
@@ -90,12 +106,16 @@ class DownUpListener extends PhetioObject {
       },
 
       // touch cancel
-      cancel: event => {
-        sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( `DownUpListener (pointer) cancel for ${this.downTrail.toString()}` );
+      cancel: (event) => {
+        sceneryLog &&
+          sceneryLog.InputListener &&
+          sceneryLog.InputListener(
+            `DownUpListener (pointer) cancel for ${this.downTrail.toString()}`
+          );
         sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-        assert && assert( event.pointer === this.pointer );
-        this.buttonUp( event );
+        assert && assert(event.pointer === this.pointer);
+        this.buttonUp(event);
 
         sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
       }
@@ -107,26 +127,35 @@ class DownUpListener extends PhetioObject {
    *
    * @param {SceneryEvent} event
    */
-  buttonDown( event ) {
+  buttonDown(event) {
     // already down from another pointer, don't do anything
-    if ( this.isDown ) { return; }
+    if (this.isDown) {
+      return;
+    }
 
     // ignore other mouse buttons
-    if ( event.pointer instanceof Mouse && event.domEvent.button !== this.options.mouseButton ) { return; }
+    if (
+      event.pointer instanceof Mouse &&
+      event.domEvent.button !== this.options.mouseButton
+    ) {
+      return;
+    }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DownUpListener buttonDown' );
+    sceneryLog &&
+      sceneryLog.InputListener &&
+      sceneryLog.InputListener('DownUpListener buttonDown');
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
     // add our listener so we catch the up wherever we are
-    event.pointer.addInputListener( this.downListener );
+    event.pointer.addInputListener(this.downListener);
 
     this.isDown = true;
     this.downCurrentTarget = event.currentTarget;
-    this.downTrail = event.trail.subtrailTo( event.currentTarget, false );
+    this.downTrail = event.trail.subtrailTo(event.currentTarget, false);
     this.pointer = event.pointer;
 
-    if ( this.options.down ) {
-      this.options.down( event, this.downTrail );
+    if (this.options.down) {
+      this.options.down(event, this.downTrail);
     }
 
     sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
@@ -137,40 +166,43 @@ class DownUpListener extends PhetioObject {
    *
    * @param {SceneryEvent} event
    */
-  buttonUp( event ) {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DownUpListener buttonUp' );
+  buttonUp(event) {
+    sceneryLog &&
+      sceneryLog.InputListener &&
+      sceneryLog.InputListener('DownUpListener buttonUp');
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
     this.isDown = false;
-    this.pointer.removeInputListener( this.downListener );
+    this.pointer.removeInputListener(this.downListener);
 
     const currentTargetSave = event.currentTarget;
     event.currentTarget = this.downCurrentTarget; // up is handled by a pointer listener, so currentTarget would be null.
-    if ( this.options.upInside || this.options.upOutside ) {
+    if (this.options.upInside || this.options.upOutside) {
       const trailUnderPointer = event.trail;
 
       // TODO: consider changing this so that it just does a hit check and ignores anything in front? https://github.com/phetsims/scenery/issues/1581
-      const isInside = trailUnderPointer.isExtensionOf( this.downTrail, true ) && !this.interrupted;
+      const isInside =
+        trailUnderPointer.isExtensionOf(this.downTrail, true) &&
+        !this.interrupted;
 
-      if ( isInside && this.options.upInside ) {
-        this.options.upInside( event, this.downTrail );
-      }
-      else if ( !isInside && this.options.upOutside ) {
-        this.options.upOutside( event, this.downTrail );
+      if (isInside && this.options.upInside) {
+        this.options.upInside(event, this.downTrail);
+      } else if (!isInside && this.options.upOutside) {
+        this.options.upOutside(event, this.downTrail);
       }
     }
 
-    if ( this.options.up ) {
-      this.options.up( event, this.downTrail );
+    if (this.options.up) {
+      this.options.up(event, this.downTrail);
     }
     event.currentTarget = currentTargetSave; // be polite to other listeners, restore currentTarget
 
     sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
   }
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * events called from the node input listener
-   *----------------------------------------------------------------------------*/
+   * ---------------------------------------------------------------------------- */
 
   /**
    * mouse/touch down on this node
@@ -178,8 +210,8 @@ class DownUpListener extends PhetioObject {
    *
    * @param {SceneryEvent} event
    */
-  down( event ) {
-    this.buttonDown( event );
+  down(event) {
+    this.buttonDown(event);
   }
 
   /**
@@ -187,8 +219,10 @@ class DownUpListener extends PhetioObject {
    * @public
    */
   interrupt() {
-    if ( this.isDown ) {
-      sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener( 'DownUpListener interrupt' );
+    if (this.isDown) {
+      sceneryLog &&
+        sceneryLog.InputListener &&
+        sceneryLog.InputListener('DownUpListener interrupt');
       sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
       this.interrupted = true;
@@ -197,9 +231,14 @@ class DownUpListener extends PhetioObject {
 
       // We create a synthetic event here, as there is no available event here.
       // Empty trail, so that it for-sure isn't under our downTrail (guaranteeing that isInside will be false).
-      const syntheticEvent = new SceneryEvent( new Trail(), 'synthetic', this.pointer, context );
+      const syntheticEvent = new SceneryEvent(
+        new Trail(),
+        'synthetic',
+        this.pointer,
+        context
+      );
       syntheticEvent.currentTarget = this.downCurrentTarget;
-      this.buttonUp( syntheticEvent );
+      this.buttonUp(syntheticEvent);
 
       this.interrupted = false;
 
@@ -208,6 +247,6 @@ class DownUpListener extends PhetioObject {
   }
 }
 
-scenery.register( 'DownUpListener', DownUpListener );
+scenery.register('DownUpListener', DownUpListener);
 
 export default DownUpListener;

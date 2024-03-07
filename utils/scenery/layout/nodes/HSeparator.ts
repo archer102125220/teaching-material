@@ -6,25 +6,25 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { Separator, SeparatorOptions, scenery, WidthSizable, WidthSizableOptions } from '../../imports.js';
+import { type EmptySelfOptions } from '../../../phet-core/optionize';
+import { Separator, type SeparatorOptions, scenery, WidthSizable, type WidthSizableOptions } from '../../imports';
 
 type SelfOptions = EmptySelfOptions;
 type ParentOptions = WidthSizableOptions & SeparatorOptions;
 export type HSeparatorOptions = SelfOptions & ParentOptions;
 
-export default class HSeparator extends WidthSizable( Separator ) {
-  public constructor( options?: HSeparatorOptions ) {
+export default class HSeparator extends WidthSizable(Separator) {
+  public constructor(options?: HSeparatorOptions) {
     super();
 
-    this.localPreferredWidthProperty.link( width => {
-      if ( width !== null ) {
+    this.localPreferredWidthProperty.link(width => {
+      if (width !== null) {
         this.x2 = width;
       }
-    } );
+    });
 
-    this.mutate( options );
+    this.mutate(options);
   }
 }
 
-scenery.register( 'HSeparator', HSeparator );
+scenery.register('HSeparator', HSeparator);

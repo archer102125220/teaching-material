@@ -52,7 +52,7 @@ export default class Matrix3 implements TPoolable {
    * Creates an identity matrix, that can then be mutated into the proper form.
    */
   public constructor() {
-    //Make sure no clients are expecting to create a matrix with non-identity values
+    // Make sure no clients are expecting to create a matrix with non-identity values
     assert && assert( arguments.length === 0, 'Matrix3 constructor should not be called with any arguments.  Use m3()/Matrix3.identity()/etc.' );
 
     this.entries = [ 1, 0, 0, 0, 1, 0, 0, 0, 1 ];
@@ -373,9 +373,9 @@ export default class Matrix3 implements TPoolable {
            Math.abs( this.m22() - matrix.m22() ) < epsilon;
   }
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * Immutable operations (returns a new matrix)
-   *----------------------------------------------------------------------------*/
+   * ---------------------------------------------------------------------------- */
 
   /**
    * Returns a copy of this matrix
@@ -549,9 +549,9 @@ export default class Matrix3 implements TPoolable {
       this.m20() * matrix.m02() + this.m21() * matrix.m12() + this.m22() * matrix.m22() );
   }
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * Immutable operations (returns new form of a parameter)
-   *----------------------------------------------------------------------------*/
+   * ---------------------------------------------------------------------------- */
 
   /**
    * Returns the multiplication of this matrix times the provided vector (treating this matrix as homogeneous, so that
@@ -591,9 +591,9 @@ export default class Matrix3 implements TPoolable {
     return new Vector2( x, y );
   }
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * Mutable operations (changes this matrix)
-   *----------------------------------------------------------------------------*/
+   * ---------------------------------------------------------------------------- */
 
   /**
    * Sets the entire state of the matrix, in row-major order.
@@ -1135,6 +1135,7 @@ export default class Matrix3 implements TPoolable {
         }
       }
       else {
+        // eslint-disable-next-line no-lonely-if
         if ( x.y < x.z ) {
           x = Vector3.Y_UNIT;
         }
@@ -1179,9 +1180,9 @@ export default class Matrix3 implements TPoolable {
     }
   }
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * Mutable operations (changes the parameter)
-   *----------------------------------------------------------------------------*/
+   * ---------------------------------------------------------------------------- */
 
   /**
    * Sets the vector to the result of (matrix * vector), as a homogeneous multiplication.

@@ -6,9 +6,18 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import arrayRemove from '../../../phet-core/js/arrayRemove.js';
-import platform from '../../../phet-core/js/platform.js';
-import { BatchedDOMEventType, Display, EventContext, Features, FocusManager, globalKeyStateTracker, PDOMUtils, scenery } from '../imports.js';
+import arrayRemove from '../../phet-core/arrayRemove';
+import platform from '../../phet-core/platform';
+import {
+  BatchedDOMEventType,
+  Display,
+  EventContext,
+  Features,
+  FocusManager,
+  globalKeyStateTracker,
+  PDOMUtils,
+  scenery
+} from '../imports';
 
 // Sometimes we need to add a listener that does absolutely nothing
 const noop = () => {};
@@ -17,7 +26,6 @@ const noop = () => {};
 let isGloballyAttached = false;
 
 const BrowserEvents = {
-
   // Prevents focus related event callbacks from being dispatched - scenery internal operations might change
   // focus temporarily, we don't want event listeners to be called in this case because they are transient and not
   // caused by user interaction.
@@ -32,14 +40,17 @@ const BrowserEvents = {
    *                                   attached to the Display's domElement.
    * @param {boolean|null} passiveEvents - The value of the `passive` option for adding/removing DOM event listeners
    */
-  addDisplay( display, attachToWindow, passiveEvents ) {
-    assert && assert( display instanceof Display );
-    assert && assert( typeof attachToWindow === 'boolean' );
-    assert && assert( !_.includes( this.attachedDisplays, display ),
-      'A display cannot be concurrently attached to events more than one time' );
+  addDisplay(display, attachToWindow, passiveEvents) {
+    assert && assert(display instanceof Display);
+    assert && assert(typeof attachToWindow === 'boolean');
+    assert &&
+      assert(
+        !_.includes(this.attachedDisplays, display),
+        'A display cannot be concurrently attached to events more than one time'
+      );
 
     // Always first please
-    if ( !isGloballyAttached ) {
+    if (!isGloballyAttached) {
       isGloballyAttached = true;
 
       // never unattach because we don't know if there are other Displays listening to this.
@@ -47,20 +58,23 @@ const BrowserEvents = {
       FocusManager.attachToWindow();
     }
 
-    this.attachedDisplays.push( display );
+    this.attachedDisplays.push(display);
 
-    if ( attachToWindow ) {
+    if (attachToWindow) {
       // lazily connect listeners
-      if ( this.attachedDisplays.length === 1 ) {
-        this.connectWindowListeners( passiveEvents );
+      if (this.attachedDisplays.length === 1) {
+        this.connectWindowListeners(passiveEvents);
       }
-    }
-    else {
-      this.addOrRemoveListeners( display.domElement, true, passiveEvents );
+    } else {
+      this.addOrRemoveListeners(display.domElement, true, passiveEvents);
     }
 
     // Only add the wheel listeners directly on the elements, so it won't trigger outside
-    display.domElement.addEventListener( 'wheel', this.onwheel, BrowserEvents.getEventOptions( passiveEvents, true ) );
+    display.domElement.addEventListener(
+      'wheel',
+      this.onwheel,
+      BrowserEvents.getEventOptions(passiveEvents, true)
+    );
   },
 
   /**
@@ -71,25 +85,31 @@ const BrowserEvents = {
    * @param {boolean} attachToWindow - The value provided to addDisplay
    * @param {boolean|null} passiveEvents - The value of the `passive` option for adding/removing DOM event listeners
    */
-  removeDisplay( display, attachToWindow, passiveEvents ) {
-    assert && assert( display instanceof Display );
-    assert && assert( typeof attachToWindow === 'boolean' );
-    assert && assert( _.includes( this.attachedDisplays, display ),
-      'This display was not already attached to listen for window events' );
+  removeDisplay(display, attachToWindow, passiveEvents) {
+    assert && assert(display instanceof Display);
+    assert && assert(typeof attachToWindow === 'boolean');
+    assert &&
+      assert(
+        _.includes(this.attachedDisplays, display),
+        'This display was not already attached to listen for window events'
+      );
 
-    arrayRemove( this.attachedDisplays, display );
+    arrayRemove(this.attachedDisplays, display);
 
     // lazily disconnect listeners
-    if ( attachToWindow ) {
-      if ( this.attachedDisplays.length === 0 ) {
-        this.disconnectWindowListeners( passiveEvents );
+    if (attachToWindow) {
+      if (this.attachedDisplays.length === 0) {
+        this.disconnectWindowListeners(passiveEvents);
       }
-    }
-    else {
-      this.addOrRemoveListeners( display.domElement, false, passiveEvents );
+    } else {
+      this.addOrRemoveListeners(display.domElement, false, passiveEvents);
     }
 
-    display.domElement.removeEventListener( 'wheel', this.onwheel, BrowserEvents.getEventOptions( passiveEvents, true ) );
+    display.domElement.removeEventListener(
+      'wheel',
+      this.onwheel,
+      BrowserEvents.getEventOptions(passiveEvents, true)
+    );
   },
 
   /**
@@ -100,19 +120,22 @@ const BrowserEvents = {
    * @param {boolean} isMain - If false, it is used on the "document" for workarounds.
    * @returns {Object|boolean}
    */
-  getEventOptions( passiveEvents, isMain ) {
+  getEventOptions(passiveEvents, isMain) {
     const passDirectPassiveFlag = Features.passive && passiveEvents !== null;
-    if ( !passDirectPassiveFlag ) {
+    if (!passDirectPassiveFlag) {
       return false;
-    }
-    else {
+    } else {
       const eventOptions = { passive: passiveEvents };
-      if ( isMain ) {
+      if (isMain) {
         eventOptions.capture = false;
       }
 
-      assert && assert( !eventOptions.capture, 'Do not use capture without consulting globalKeyStateTracker, ' +
-                                               'which expects have listeners called FIRST in keyboard-related cases.' );
+      assert &&
+        assert(
+          !eventOptions.capture,
+          'Do not use capture without consulting globalKeyStateTracker, ' +
+            'which expects have listeners called FIRST in keyboard-related cases.'
+        );
       return eventOptions;
     }
   },
@@ -141,7 +164,11 @@ const BrowserEvents = {
    *
    * NOTE: Pointer events are currently disabled for Firefox due to https://github.com/phetsims/scenery/issues/837.
    */
-  canUsePointerEvents: !!( ( window.navigator && window.navigator.pointerEnabled ) || window.PointerEvent ) && !platform.firefox,
+  canUsePointerEvents:
+    !!(
+      (window.navigator && window.navigator.pointerEnabled) ||
+      window.PointerEvent
+    ) && !platform.firefox,
 
   /**
    * {boolean} - Whether pointer events in the format specified by the MS specification are allowed.
@@ -181,12 +208,7 @@ const BrowserEvents = {
    * {Array.<string>} - All touch event types that we care about
    * @private
    */
-  touchListenerTypes: [
-    'touchstart',
-    'touchend',
-    'touchmove',
-    'touchcancel'
-  ],
+  touchListenerTypes: ['touchstart', 'touchend', 'touchmove', 'touchcancel'],
 
   /**
    * {Array.<string>} - All mouse event types that we care about
@@ -204,9 +226,7 @@ const BrowserEvents = {
    * {Array.<string>} - All wheel event types that we care about
    * @private
    */
-  wheelListenerTypes: [
-    'wheel'
-  ],
+  wheelListenerTypes: ['wheel'],
 
   /**
    * {Array.<string>} - Alternative input types
@@ -223,24 +243,34 @@ const BrowserEvents = {
   getNonWheelUsedTypes() {
     let eventTypes;
 
-    if ( this.canUsePointerEvents ) {
+    if (this.canUsePointerEvents) {
       // accepts pointer events corresponding to the spec at http://www.w3.org/TR/pointerevents/
-      sceneryLog && sceneryLog.Input && sceneryLog.Input( 'Detected pointer events support, using that instead of mouse/touch events' );
+      sceneryLog &&
+        sceneryLog.Input &&
+        sceneryLog.Input(
+          'Detected pointer events support, using that instead of mouse/touch events'
+        );
 
       eventTypes = this.pointerListenerTypes;
-    }
-    else if ( this.canUseMSPointerEvents ) {
-      sceneryLog && sceneryLog.Input && sceneryLog.Input( 'Detected MS pointer events support, using that instead of mouse/touch events' );
+    } else if (this.canUseMSPointerEvents) {
+      sceneryLog &&
+        sceneryLog.Input &&
+        sceneryLog.Input(
+          'Detected MS pointer events support, using that instead of mouse/touch events'
+        );
 
       eventTypes = this.msPointerListenerTypes;
-    }
-    else {
-      sceneryLog && sceneryLog.Input && sceneryLog.Input( 'No pointer events support detected, using mouse/touch events' );
+    } else {
+      sceneryLog &&
+        sceneryLog.Input &&
+        sceneryLog.Input(
+          'No pointer events support detected, using mouse/touch events'
+        );
 
-      eventTypes = this.touchListenerTypes.concat( this.mouseListenerTypes );
+      eventTypes = this.touchListenerTypes.concat(this.mouseListenerTypes);
     }
 
-    eventTypes = eventTypes.concat( this.altListenerTypes );
+    eventTypes = eventTypes.concat(this.altListenerTypes);
 
     // eventTypes = eventTypes.concat( this.wheelListenerTypes );
 
@@ -253,8 +283,8 @@ const BrowserEvents = {
    *
    * @param {boolean|null} passiveEvents - The value of the `passive` option for adding/removing DOM event listeners
    */
-  connectWindowListeners( passiveEvents ) {
-    this.addOrRemoveListeners( window, true, passiveEvents );
+  connectWindowListeners(passiveEvents) {
+    this.addOrRemoveListeners(window, true, passiveEvents);
   },
 
   /**
@@ -263,8 +293,8 @@ const BrowserEvents = {
    *
    * @param {boolean|null} passiveEvents - The value of the `passive` option for adding/removing DOM event listeners
    */
-  disconnectWindowListeners( passiveEvents ) {
-    this.addOrRemoveListeners( window, false, passiveEvents );
+  disconnectWindowListeners(passiveEvents) {
+    this.addOrRemoveListeners(window, false, passiveEvents);
   },
 
   /**
@@ -277,46 +307,61 @@ const BrowserEvents = {
    *                                       NOTE: if it is passed in as null, the default value for the browser will be
    *                                       used.
    */
-  addOrRemoveListeners( element, addOrRemove, passiveEvents ) {
-    assert && assert( typeof addOrRemove === 'boolean' );
-    assert && assert( typeof passiveEvents === 'boolean' || passiveEvents === null );
+  addOrRemoveListeners(element, addOrRemove, passiveEvents) {
+    assert && assert(typeof addOrRemove === 'boolean');
+    assert &&
+      assert(typeof passiveEvents === 'boolean' || passiveEvents === null);
 
     const forWindow = element === window;
-    assert && assert( !forWindow || ( this.listenersAttachedToWindow > 0 ) === !addOrRemove,
-      'Do not add listeners to the window when already attached, or remove listeners when none are attached' );
+    assert &&
+      assert(
+        !forWindow || this.listenersAttachedToWindow > 0 === !addOrRemove,
+        'Do not add listeners to the window when already attached, or remove listeners when none are attached'
+      );
 
     const delta = addOrRemove ? 1 : -1;
-    if ( forWindow ) {
+    if (forWindow) {
       this.listenersAttachedToWindow += delta;
-    }
-    else {
+    } else {
       this.listenersAttachedToElement += delta;
     }
-    assert && assert( this.listenersAttachedToWindow === 0 || this.listenersAttachedToElement === 0,
-      'Listeners should not be added both with addDisplayToWindow and addDisplayToElement. Use only one.' );
+    assert &&
+      assert(
+        this.listenersAttachedToWindow === 0 ||
+          this.listenersAttachedToElement === 0,
+        'Listeners should not be added both with addDisplayToWindow and addDisplayToElement. Use only one.'
+      );
 
     const method = addOrRemove ? 'addEventListener' : 'removeEventListener';
 
     // {Array.<string>}
     const eventTypes = this.getNonWheelUsedTypes();
 
-    for ( let i = 0; i < eventTypes.length; i++ ) {
-      const type = eventTypes[ i ];
+    for (let i = 0; i < eventTypes.length; i++) {
+      const type = eventTypes[i];
 
       // If we add input listeners to the window itself, iOS Safari 7 won't send touch events to displays in an
       // iframe unless we also add dummy listeners to the document.
-      if ( forWindow ) {
+      if (forWindow) {
         // Workaround for older browsers needed,
         // see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Improving_scrolling_performance_with_passive_listeners
-        document[ method ]( type, noop, BrowserEvents.getEventOptions( passiveEvents, false ) );
+        document[method](
+          type,
+          noop,
+          BrowserEvents.getEventOptions(passiveEvents, false)
+        );
       }
 
-      const callback = this[ `on${type}` ];
-      assert && assert( !!callback );
+      const callback = this[`on${type}`];
+      assert && assert(!!callback);
 
       // Workaround for older browsers needed,
       // see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Improving_scrolling_performance_with_passive_listeners
-      element[ method ]( type, callback, BrowserEvents.getEventOptions( passiveEvents, true ) );
+      element[method](
+        type,
+        callback,
+        BrowserEvents.getEventOptions(passiveEvents, true)
+      );
     }
   },
 
@@ -332,16 +377,29 @@ const BrowserEvents = {
    *                                     necessary for certain security-sensitive actions (like triggering
    *                                     full-screen).
    */
-  batchWindowEvent( eventContext, batchType, inputCallbackName, triggerImmediate ) {
+  batchWindowEvent(
+    eventContext,
+    batchType,
+    inputCallbackName,
+    triggerImmediate
+  ) {
     // NOTE: For now, we don't check whether the event is actually within the display's boundingClientRect. Most
     // displays will want to receive events outside of their bounds (especially for checking drags and mouse-ups
     // outside of their bounds).
-    for ( let i = 0; i < this.attachedDisplays.length; i++ ) {
-      const display = this.attachedDisplays[ i ];
+    for (let i = 0; i < this.attachedDisplays.length; i++) {
+      const display = this.attachedDisplays[i];
       const input = display._input;
 
-      if ( !BrowserEvents.blockFocusCallbacks || ( inputCallbackName !== 'focusIn' && inputCallbackName !== 'focusOut' ) ) {
-        input.batchEvent( eventContext, batchType, input[ inputCallbackName ], triggerImmediate );
+      if (
+        !BrowserEvents.blockFocusCallbacks ||
+        (inputCallbackName !== 'focusIn' && inputCallbackName !== 'focusOut')
+      ) {
+        input.batchEvent(
+          eventContext,
+          batchType,
+          input[inputCallbackName],
+          triggerImmediate
+        );
       }
     }
   },
@@ -352,19 +410,24 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onpointerdown: function onpointerdown( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'pointerdown' );
+  onpointerdown: function onpointerdown(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointerdown');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // Get the active element BEFORE any actions are taken
-    const eventContext = new EventContext( domEvent );
+    const eventContext = new EventContext(domEvent);
 
-    if ( domEvent.pointerType === 'mouse' ) {
+    if (domEvent.pointerType === 'mouse') {
       Display.userGestureEmitter.emit();
     }
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( eventContext, BatchedDOMEventType.POINTER_TYPE, 'pointerDown', false );
+    BrowserEvents.batchWindowEvent(
+      eventContext,
+      BatchedDOMEventType.POINTER_TYPE,
+      'pointerDown',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -375,17 +438,22 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onpointerup: function onpointerup( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'pointerup' );
+  onpointerup: function onpointerup(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointerup');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // Get the active element BEFORE any actions are taken
-    const eventContext = new EventContext( domEvent );
+    const eventContext = new EventContext(domEvent);
 
     Display.userGestureEmitter.emit();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( eventContext, BatchedDOMEventType.POINTER_TYPE, 'pointerUp', true );
+    BrowserEvents.batchWindowEvent(
+      eventContext,
+      BatchedDOMEventType.POINTER_TYPE,
+      'pointerUp',
+      true
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -396,12 +464,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onpointermove: function onpointermove( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'pointermove' );
+  onpointermove: function onpointermove(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointermove');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.POINTER_TYPE, 'pointerMove', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.POINTER_TYPE,
+      'pointerMove',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -412,12 +485,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onpointerover: function onpointerover( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'pointerover' );
+  onpointerover: function onpointerover(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointerover');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.POINTER_TYPE, 'pointerOver', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.POINTER_TYPE,
+      'pointerOver',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -428,12 +506,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onpointerout: function onpointerout( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'pointerout' );
+  onpointerout: function onpointerout(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointerout');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.POINTER_TYPE, 'pointerOut', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.POINTER_TYPE,
+      'pointerOut',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -444,12 +527,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onpointercancel: function onpointercancel( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'pointercancel' );
+  onpointercancel: function onpointercancel(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointercancel');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.POINTER_TYPE, 'pointerCancel', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.POINTER_TYPE,
+      'pointerCancel',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -460,12 +548,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  ongotpointercapture: function ongotpointercapture( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'gotpointercapture' );
+  ongotpointercapture: function ongotpointercapture(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('gotpointercapture');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.POINTER_TYPE, 'gotPointerCapture', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.POINTER_TYPE,
+      'gotPointerCapture',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -476,12 +569,19 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onlostpointercapture: function onlostpointercapture( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'lostpointercapture' );
+  onlostpointercapture: function onlostpointercapture(domEvent) {
+    sceneryLog &&
+      sceneryLog.OnInput &&
+      sceneryLog.OnInput('lostpointercapture');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.POINTER_TYPE, 'lostPointerCapture', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.POINTER_TYPE,
+      'lostPointerCapture',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -492,12 +592,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onMSPointerDown: function onMSPointerDown( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'MSPointerDown' );
+  onMSPointerDown: function onMSPointerDown(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerDown');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.MS_POINTER_TYPE, 'pointerDown', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.MS_POINTER_TYPE,
+      'pointerDown',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -508,12 +613,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onMSPointerUp: function onMSPointerUp( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'MSPointerUp' );
+  onMSPointerUp: function onMSPointerUp(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerUp');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.MS_POINTER_TYPE, 'pointerUp', true );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.MS_POINTER_TYPE,
+      'pointerUp',
+      true
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -524,12 +634,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onMSPointerMove: function onMSPointerMove( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'MSPointerMove' );
+  onMSPointerMove: function onMSPointerMove(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerMove');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.MS_POINTER_TYPE, 'pointerMove', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.MS_POINTER_TYPE,
+      'pointerMove',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -540,12 +655,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onMSPointerOver: function onMSPointerOver( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'MSPointerOver' );
+  onMSPointerOver: function onMSPointerOver(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerOver');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.MS_POINTER_TYPE, 'pointerOver', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.MS_POINTER_TYPE,
+      'pointerOver',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -556,12 +676,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onMSPointerOut: function onMSPointerOut( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'MSPointerOut' );
+  onMSPointerOut: function onMSPointerOut(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerOut');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.MS_POINTER_TYPE, 'pointerOut', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.MS_POINTER_TYPE,
+      'pointerOut',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -572,12 +697,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onMSPointerCancel: function onMSPointerCancel( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'MSPointerCancel' );
+  onMSPointerCancel: function onMSPointerCancel(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerCancel');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.MS_POINTER_TYPE, 'pointerCancel', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.MS_POINTER_TYPE,
+      'pointerCancel',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -588,12 +718,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  ontouchstart: function ontouchstart( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'touchstart' );
+  ontouchstart: function ontouchstart(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('touchstart');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.TOUCH_TYPE, 'touchStart', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.TOUCH_TYPE,
+      'touchStart',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -604,17 +739,22 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  ontouchend: function ontouchend( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'touchend' );
+  ontouchend: function ontouchend(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('touchend');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // Get the active element BEFORE any actions are taken
-    const eventContext = new EventContext( domEvent );
+    const eventContext = new EventContext(domEvent);
 
     Display.userGestureEmitter.emit();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( eventContext, BatchedDOMEventType.TOUCH_TYPE, 'touchEnd', true );
+    BrowserEvents.batchWindowEvent(
+      eventContext,
+      BatchedDOMEventType.TOUCH_TYPE,
+      'touchEnd',
+      true
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -625,12 +765,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  ontouchmove: function ontouchmove( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'touchmove' );
+  ontouchmove: function ontouchmove(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('touchmove');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.TOUCH_TYPE, 'touchMove', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.TOUCH_TYPE,
+      'touchMove',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -641,12 +786,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  ontouchcancel: function ontouchcancel( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'touchcancel' );
+  ontouchcancel: function ontouchcancel(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('touchcancel');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.TOUCH_TYPE, 'touchCancel', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.TOUCH_TYPE,
+      'touchCancel',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -657,17 +807,22 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onmousedown: function onmousedown( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'mousedown' );
+  onmousedown: function onmousedown(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('mousedown');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // Get the active element BEFORE any actions are taken
-    const eventContext = new EventContext( domEvent );
+    const eventContext = new EventContext(domEvent);
 
     Display.userGestureEmitter.emit();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( eventContext, BatchedDOMEventType.MOUSE_TYPE, 'mouseDown', false );
+    BrowserEvents.batchWindowEvent(
+      eventContext,
+      BatchedDOMEventType.MOUSE_TYPE,
+      'mouseDown',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -678,17 +833,22 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onmouseup: function onmouseup( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'mouseup' );
+  onmouseup: function onmouseup(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('mouseup');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // Get the active element BEFORE any actions are taken
-    const eventContext = new EventContext( domEvent );
+    const eventContext = new EventContext(domEvent);
 
     Display.userGestureEmitter.emit();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( eventContext, BatchedDOMEventType.MOUSE_TYPE, 'mouseUp', true );
+    BrowserEvents.batchWindowEvent(
+      eventContext,
+      BatchedDOMEventType.MOUSE_TYPE,
+      'mouseUp',
+      true
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -699,12 +859,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onmousemove: function onmousemove( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'mousemove' );
+  onmousemove: function onmousemove(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('mousemove');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.MOUSE_TYPE, 'mouseMove', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.MOUSE_TYPE,
+      'mouseMove',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -715,12 +880,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onmouseover: function onmouseover( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'mouseover' );
+  onmouseover: function onmouseover(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('mouseover');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.MOUSE_TYPE, 'mouseOver', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.MOUSE_TYPE,
+      'mouseOver',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -731,12 +901,17 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onmouseout: function onmouseout( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'mouseout' );
+  onmouseout: function onmouseout(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('mouseout');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.MOUSE_TYPE, 'mouseOut', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.MOUSE_TYPE,
+      'mouseOut',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
@@ -747,98 +922,146 @@ const BrowserEvents = {
    *
    * @param {Event} domEvent
    */
-  onwheel: function onwheel( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'wheel' );
+  onwheel: function onwheel(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('wheel');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.WHEEL_TYPE, 'wheel', false );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.WHEEL_TYPE,
+      'wheel',
+      false
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
 
-  onfocusin: function onfocusin( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'focusin' );
+  onfocusin: function onfocusin(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('focusin');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
 
     // Update state related to focus immediately and allowing for reentrancy for focus state
     // that must match the browser's focus state.
-    FocusManager.updatePDOMFocusFromEvent( BrowserEvents.attachedDisplays, domEvent, true );
+    FocusManager.updatePDOMFocusFromEvent(
+      BrowserEvents.attachedDisplays,
+      domEvent,
+      true
+    );
 
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.ALT_TYPE, 'focusIn', true );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.ALT_TYPE,
+      'focusIn',
+      true
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
 
-  onfocusout: function onfocusout( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'focusout' );
+  onfocusout: function onfocusout(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('focusout');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
 
     // Update state related to focus immediately and allowing for reentrancy for focus state
     // that must match the browser's focus state.
-    FocusManager.updatePDOMFocusFromEvent( BrowserEvents.attachedDisplays, domEvent, false );
+    FocusManager.updatePDOMFocusFromEvent(
+      BrowserEvents.attachedDisplays,
+      domEvent,
+      false
+    );
 
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.ALT_TYPE, 'focusOut', true );
-
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
-  },
-
-  oninput: function oninput( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'input' );
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
-
-    // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.ALT_TYPE, 'input', true );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.ALT_TYPE,
+      'focusOut',
+      true
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
 
-  onchange: function onchange( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'change' );
+  oninput: function oninput(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('input');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.ALT_TYPE, 'change', true );
+
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.ALT_TYPE,
+      'input',
+      true
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
 
-  onclick: function onclick( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'click' );
+  onchange: function onchange(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('change');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.ALT_TYPE, 'click', true );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.ALT_TYPE,
+      'change',
+      true
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
 
-  onkeydown: function onkeydown( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'keydown' );
+  onclick: function onclick(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('click');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.ALT_TYPE, 'keyDown', true );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.ALT_TYPE,
+      'click',
+      true
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   },
 
-  onkeyup: function onkeyup( domEvent ) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput( 'keyup' );
+  onkeydown: function onkeydown(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('keydown');
     sceneryLog && sceneryLog.OnInput && sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
-    BrowserEvents.batchWindowEvent( new EventContext( domEvent ), BatchedDOMEventType.ALT_TYPE, 'keyUp', true );
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.ALT_TYPE,
+      'keyDown',
+      true
+    );
+
+    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+  },
+
+  onkeyup: function onkeyup(domEvent) {
+    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('keyup');
+    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+
+    // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
+    BrowserEvents.batchWindowEvent(
+      new EventContext(domEvent),
+      BatchedDOMEventType.ALT_TYPE,
+      'keyUp',
+      true
+    );
 
     sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
   }
 };
 
-scenery.register( 'BrowserEvents', BrowserEvents );
+scenery.register('BrowserEvents', BrowserEvents);
 
 export default BrowserEvents;

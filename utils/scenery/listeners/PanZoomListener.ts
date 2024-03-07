@@ -8,14 +8,14 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Property from '../../../axon/js/Property.js';
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import ModelViewTransform2 from '../../../phetcommon/js/view/ModelViewTransform2.js';
-import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import { MultiListener, MultiListenerOptions, MultiListenerPress, Node, scenery } from '../imports.js';
-import optionize from '../../../phet-core/js/optionize.js';
+import Property from '../../axon/Property';
+import Bounds2 from '../../dot/Bounds2';
+import Matrix3 from '../../dot/Matrix3';
+import ModelViewTransform2 from '../../phetcommon/view/ModelViewTransform2';
+import isSettingPhetioStateProperty from '../../tandem/isSettingPhetioStateProperty';
+import Tandem from '../../tandem/Tandem';
+import { MultiListener, type MultiListenerOptions, MultiListenerPress, Node, scenery } from '../imports';
+import optionize from '../../phet-core/optionize';
 
 // constants
 // Reusable Matrix3 instance to avoid creating lots of them
@@ -56,18 +56,18 @@ class PanZoomListener extends MultiListener {
    * @param targetNode - The Node that should be transformed by this PanZoomListener.
    * @param [providedOptions].
    */
-  public constructor( targetNode: Node, providedOptions?: PanZoomListenerOptions ) {
+  public constructor(targetNode: Node, providedOptions?: PanZoomListenerOptions) {
 
-    const options = optionize<PanZoomListenerOptions, SelfOptions, PanZoomListenerOptions>()( {
+    const options = optionize<PanZoomListenerOptions, SelfOptions, PanZoomListenerOptions>()({
       panBounds: Bounds2.NOTHING,
       targetBounds: null,
       targetScale: 1,
 
       // by default, the PanZoomListener does now allow rotation
       allowRotation: false
-    }, providedOptions );
+    }, providedOptions);
 
-    super( targetNode, options );
+    super(targetNode, options);
 
     this._panBounds = options.panBounds;
     this._targetBounds = options.targetBounds || targetNode.globalBounds.copy();
@@ -75,29 +75,29 @@ class PanZoomListener extends MultiListener {
 
     // When generating a PhET-iO API, the specific bounds of the window should be excluded from the initial state
     // so that the initial state part of the API doesn't depend on the window size.
-    this.sourceFramePanBoundsProperty = new Property( Tandem.API_GENERATION ? new Bounds2( 0, 0, 0, 0 ) : this._panBounds, {
-      tandem: options.tandem?.createTandem( 'sourceFramePanBoundsProperty' ),
+    this.sourceFramePanBoundsProperty = new Property(Tandem.API_GENERATION ? new Bounds2(0, 0, 0, 0) : this._panBounds, {
+      tandem: options.tandem?.createTandem('sourceFramePanBoundsProperty'),
       phetioReadOnly: true,
       phetioValueType: Bounds2.Bounds2IO
-    } );
+    });
 
-    this.sourceFramePanBoundsProperty.lazyLink( () => {
-      if ( isSettingPhetioStateProperty.value ) {
+    this.sourceFramePanBoundsProperty.lazyLink(() => {
+      if (isSettingPhetioStateProperty.value) {
 
         // The matrixProperty has transformations relative to the global view coordinates of the source simulation,
         // so it will not be correct if source and destination frames are different sizes. This will map transforamtions
         // if destination frame has different size.
-        const sourceDestinationTransform = ModelViewTransform2.createRectangleMapping( this.sourceFramePanBoundsProperty.get(), this._panBounds );
+        const sourceDestinationTransform = ModelViewTransform2.createRectangleMapping(this.sourceFramePanBoundsProperty.get(), this._panBounds);
 
-        const newTranslation = this._targetNode.matrix.translation.componentMultiply( sourceDestinationTransform.matrix.getScaleVector() );
+        const newTranslation = this._targetNode.matrix.translation.componentMultiply(sourceDestinationTransform.matrix.getScaleVector());
         const scale = this.matrixProperty.get().getScaleVector();
-        this.matrixProperty.set( Matrix3.translationFromVector( newTranslation ).timesMatrix( Matrix3.scaling( scale.x, scale.y ) ) );
+        this.matrixProperty.set(Matrix3.translationFromVector(newTranslation).timesMatrix(Matrix3.scaling(scale.x, scale.y)));
       }
     }, {
 
       // so that the listener will be called only after the matrixProperty is up to date in the downstream sim
-      phetioDependencies: [ this.matrixProperty ]
-    } );
+      phetioDependencies: [this.matrixProperty]
+    });
   }
 
   /**
@@ -107,29 +107,29 @@ class PanZoomListener extends MultiListener {
   protected correctReposition(): void {
 
     // Save values of the current matrix, so that we only do certain work when the matrix actually changes
-    SCRATCH_MATRIX.set( this._targetNode.matrix );
+    SCRATCH_MATRIX.set(this._targetNode.matrix);
 
     // the targetBounds transformed by the targetNode's transform, to determine if targetBounds are out of panBounds
-    const transformedBounds = this._targetBounds.transformed( this._targetNode.getMatrix() );
+    const transformedBounds = this._targetBounds.transformed(this._targetNode.getMatrix());
 
     // Don't let panning go through if the node is fully contained by the panBounds
-    if ( transformedBounds.left > this._panBounds.left ) {
-      this._targetNode.left = this._panBounds.left - ( transformedBounds.left - this._targetNode.left );
+    if (transformedBounds.left > this._panBounds.left) {
+      this._targetNode.left = this._panBounds.left - (transformedBounds.left - this._targetNode.left);
     }
-    if ( transformedBounds.top > this._panBounds.top ) {
-      this._targetNode.top = this._panBounds.top - ( transformedBounds.top - this._targetNode.top );
+    if (transformedBounds.top > this._panBounds.top) {
+      this._targetNode.top = this._panBounds.top - (transformedBounds.top - this._targetNode.top);
     }
-    if ( transformedBounds.right < this._panBounds.right ) {
-      this._targetNode.right = this._panBounds.right + ( this._targetNode.right - transformedBounds.right );
+    if (transformedBounds.right < this._panBounds.right) {
+      this._targetNode.right = this._panBounds.right + (this._targetNode.right - transformedBounds.right);
     }
-    if ( transformedBounds.bottom < this._panBounds.bottom ) {
-      this._targetNode.bottom = this._panBounds.bottom + ( this._targetNode.bottom - transformedBounds.bottom );
+    if (transformedBounds.bottom < this._panBounds.bottom) {
+      this._targetNode.bottom = this._panBounds.bottom + (this._targetNode.bottom - transformedBounds.bottom);
     }
 
     // Update Property with matrix once position has been corrected to notify listeners and set PhET-iO state, but
     // only notify when there has been an actual change.
-    if ( !SCRATCH_MATRIX.equals( this._targetNode.matrix ) ) {
-      this.matrixProperty.set( this._targetNode.matrix.copy() );
+    if (!SCRATCH_MATRIX.equals(this._targetNode.matrix)) {
+      this.matrixProperty.set(this._targetNode.matrix.copy());
     }
   }
 
@@ -137,12 +137,12 @@ class PanZoomListener extends MultiListener {
    * If the transformed targetBounds are equal to the panBounds, there is no space for us to pan so do not change
    * the pointer cursor.
    */
-  protected override addPress( press: MultiListenerPress ): void {
-    super.addPress( press );
+  protected override addPress(press: MultiListenerPress): void {
+    super.addPress(press);
 
     // don't show the pressCursor if our bounds are limited by pan bounds, and we cannot pan anywhere
-    const transformedBounds = this._targetBounds.transformed( this._targetNode.getMatrix() );
-    const boundsLimited = transformedBounds.equalsEpsilon( this._panBounds, 1E-8 );
+    const transformedBounds = this._targetBounds.transformed(this._targetNode.getMatrix());
+    const boundsLimited = transformedBounds.equalsEpsilon(this._panBounds, 1E-8);
     press.pointer.cursor = boundsLimited ? null : this._pressCursor;
   }
 
@@ -165,13 +165,13 @@ class PanZoomListener extends MultiListener {
   /**
    * Set the containing panBounds and then make sure that the targetBounds fully fill the new panBounds.
    */
-  public setPanBounds( panBounds: Bounds2 ): void {
+  public setPanBounds(panBounds: Bounds2): void {
     this._panBounds = panBounds;
 
     // When generating a PhET-iO API, the specific bounds of the window should be excluded from the initial state
     // so that the initial state part of the API doesn't depend on the window size.
-    if ( !Tandem.API_GENERATION ) {
-      this.sourceFramePanBoundsProperty.set( this._panBounds );
+    if (!Tandem.API_GENERATION) {
+      this.sourceFramePanBoundsProperty.set(this._panBounds);
     }
     this.correctReposition();
   }
@@ -183,7 +183,7 @@ class PanZoomListener extends MultiListener {
    *
    * targetBounds - in the global coordinate frame
    */
-  public setTargetBounds( targetBounds: Bounds2 ): void {
+  public setTargetBounds(targetBounds: Bounds2): void {
     this._targetBounds = targetBounds;
     this.correctReposition();
   }
@@ -193,7 +193,7 @@ class PanZoomListener extends MultiListener {
    * it may be useful to correct changes to panning and zooming by a scale that is different from the
    * actual scale applied to the targetNode during panning.
    */
-  public setTargetScale( scale: number ): void {
+  public setTargetScale(scale: number): void {
     this._targetScale = scale;
   }
 
@@ -205,5 +205,5 @@ class PanZoomListener extends MultiListener {
   }
 }
 
-scenery.register( 'PanZoomListener', PanZoomListener );
+scenery.register('PanZoomListener', PanZoomListener);
 export default PanZoomListener;

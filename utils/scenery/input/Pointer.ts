@@ -22,15 +22,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import Enumeration from '../../../phet-core/js/Enumeration.js';
-import EnumerationValue from '../../../phet-core/js/EnumerationValue.js';
-import IOType from '../../../tandem/js/types/IOType.js';
-import StringIO from '../../../tandem/js/types/StringIO.js';
-import TAttachableInputListener from './TAttachableInputListener.js';
-import { EventContext, scenery, SceneryEvent, TInputListener, Trail } from '../imports.js';
+import BooleanProperty from '../../axon/BooleanProperty';
+import type TProperty from '../../axon/TProperty';
+import Vector2 from '../../dot/Vector2';
+import Enumeration from '../../phet-core/Enumeration';
+import EnumerationValue from '../../phet-core/EnumerationValue';
+import IOType from '../../tandem/types/IOType';
+import StringIO from '../../tandem/types/StringIO';
+import type TAttachableInputListener from './TAttachableInputListener';
+import { EventContext, scenery, SceneryEvent, type TInputListener, Trail } from '../imports';
 
 export class Intent extends EnumerationValue {
   // listener attached to the pointer will be used for dragging
@@ -39,16 +39,13 @@ export class Intent extends EnumerationValue {
   // listener attached to pointer is for dragging with a keyboard
   public static readonly KEYBOARD_DRAG = new Intent();
 
-  public static readonly enumeration = new Enumeration( Intent, {
+  public static readonly enumeration = new Enumeration(Intent, {
     phetioDocumentation: 'entries when signifying Intent of the pointer'
-  } );
+  });
 }
 
 type PointerType = 'pdom' | 'touch' | 'mouse' | 'pen';
 
-export type ActivePointer = {
-  point: Vector2;
-} & Pointer;
 
 export default abstract class Pointer {
 
@@ -105,9 +102,9 @@ export default abstract class Pointer {
 
   // Pointer is not a PhetioObject and not instrumented, but this type is used for
   // toStateObject in Input
-  public static readonly PointerIO = new IOType<Pointer>( 'PointerIO', {
+  public static readonly PointerIO = new IOType<Pointer>('PointerIO', {
     valueType: Pointer,
-    toStateObject: ( pointer: Pointer ) => {
+    toStateObject: (pointer: Pointer) => {
       return {
         point: pointer.point.toStateObject(),
         type: pointer.type
@@ -117,22 +114,22 @@ export default abstract class Pointer {
       point: Vector2.Vector2IO,
       type: StringIO
     }
-  } );
+  });
 
   /**
    * @param initialPoint
    * @param type - the type of the pointer; can different for each subtype
    */
-  protected constructor( initialPoint: Vector2, type: PointerType ) {
-    assert && assert( initialPoint === null || initialPoint instanceof Vector2 );
-    assert && assert( Object.getPrototypeOf( this ) !== Pointer.prototype, 'Pointer is an abstract class' );
+  protected constructor(initialPoint: Vector2, type: PointerType) {
+    assert && assert(initialPoint === null || initialPoint instanceof Vector2);
+    assert && assert(Object.getPrototypeOf(this) !== Pointer.prototype, 'Pointer is an abstract class');
 
     this.point = initialPoint;
     this.type = type;
     this.trail = null;
     this.inputEnabledTrail = null;
-    this.isDownProperty = new BooleanProperty( false );
-    this.attachedProperty = new BooleanProperty( false );
+    this.isDownProperty = new BooleanProperty(false);
+    this.attachedProperty = new BooleanProperty(false);
     this._listeners = [];
     this._attachedListener = null;
     this._cursor = null;
@@ -152,13 +149,13 @@ export default abstract class Pointer {
    *
    * NOTE: Consider setting this only for attached listeners in the future (or have a cursor field on pointers).
    */
-  public setCursor( cursor: string | null ): this {
+  public setCursor(cursor: string | null): this {
     this._cursor = cursor;
 
     return this;
   }
 
-  public set cursor( value: string | null ) { this.setCursor( value ); }
+  public set cursor(value: string | null) { this.setCursor(value); }
 
   public get cursor(): string | null { return this.getCursor(); }
 
@@ -182,22 +179,22 @@ export default abstract class Pointer {
    * Adds an input listener to this pointer. If the attach flag is true, then it will be set as the "attached"
    * listener.
    */
-  public addInputListener( listener: TInputListener, attach?: boolean ): void {
-    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer( `addInputListener to ${this.toString()} attach:${attach}` );
+  public addInputListener(listener: TInputListener, attach?: boolean): void {
+    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`addInputListener to ${this.toString()} attach:${attach}`);
     sceneryLog && sceneryLog.Pointer && sceneryLog.push();
 
-    assert && assert( listener, 'A listener must be provided' );
-    assert && assert( attach === undefined || typeof attach === 'boolean',
-      'If provided, the attach parameter should be a boolean value' );
+    assert && assert(listener, 'A listener must be provided');
+    assert && assert(attach === undefined || typeof attach === 'boolean',
+      'If provided, the attach parameter should be a boolean value');
 
-    assert && assert( !_.includes( this._listeners, listener ),
-      'Attempted to add an input listener that was already added' );
+    assert && assert(!_.includes(this._listeners, listener),
+      'Attempted to add an input listener that was already added');
 
-    this._listeners.push( listener );
+    this._listeners.push(listener);
 
-    if ( attach ) {
-      assert && assert( listener.interrupt, 'Interrupt should exist on attached listeners' );
-      this.attach( listener as TAttachableInputListener );
+    if (attach) {
+      assert && assert(listener.interrupt, 'Interrupt should exist on attached listeners');
+      this.attach(listener as TAttachableInputListener);
     }
 
     sceneryLog && sceneryLog.Pointer && sceneryLog.pop();
@@ -206,21 +203,21 @@ export default abstract class Pointer {
   /**
    * Removes an input listener from this pointer.
    */
-  public removeInputListener( listener: TInputListener ): void {
-    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer( `removeInputListener to ${this.toString()}` );
+  public removeInputListener(listener: TInputListener): void {
+    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`removeInputListener to ${this.toString()}`);
     sceneryLog && sceneryLog.Pointer && sceneryLog.push();
 
-    assert && assert( listener, 'A listener must be provided' );
+    assert && assert(listener, 'A listener must be provided');
 
-    const index = _.indexOf( this._listeners, listener );
-    assert && assert( index !== -1, 'Could not find the input listener to remove' );
+    const index = _.indexOf(this._listeners, listener);
+    assert && assert(index !== -1, 'Could not find the input listener to remove');
 
     // If this listener is our attached listener, also detach it
-    if ( this.isAttached() && listener === this._attachedListener ) {
-      this.detach( listener as TAttachableInputListener );
+    if (this.isAttached() && listener === this._attachedListener) {
+      this.detach(listener as TAttachableInputListener);
     }
 
-    this._listeners.splice( index, 1 );
+    this._listeners.splice(index, 1);
 
     sceneryLog && sceneryLog.Pointer && sceneryLog.pop();
   }
@@ -255,7 +252,7 @@ export default abstract class Pointer {
    * NOTE: Naming convention is for legacy code, would usually have pointer.down
    * TODO: improve name, .setDown( value ) with .down = https://github.com/phetsims/scenery/issues/1581
    */
-  public set isDown( value: boolean ) {
+  public set isDown(value: boolean) {
     this.isDownProperty.value = value;
   }
 
@@ -275,7 +272,7 @@ export default abstract class Pointer {
    * After this executes, this pointer should not be attached.
    */
   public interruptAttached(): void {
-    if ( this.isAttached() ) {
+    if (this.isAttached()) {
       this._attachedListener!.interrupt(); // Any listener that uses the 'attach' API should have interrupt()
     }
   }
@@ -285,8 +282,8 @@ export default abstract class Pointer {
    */
   public interruptAll(): void {
     const listeners = this._listeners.slice();
-    for ( let i = 0; i < listeners.length; i++ ) {
-      const listener = listeners[ i ];
+    for (let i = 0; i < listeners.length; i++) {
+      const listener = listeners[i];
       listener.interrupt && listener.interrupt();
     }
   }
@@ -294,10 +291,10 @@ export default abstract class Pointer {
   /**
    * Marks the pointer as attached to this listener.
    */
-  private attach( listener: TAttachableInputListener ): void {
-    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer( `Attaching to ${this.toString()}` );
+  private attach(listener: TAttachableInputListener): void {
+    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`Attaching to ${this.toString()}`);
 
-    assert && assert( !this.isAttached(), 'Attempted to attach to an already attached pointer' );
+    assert && assert(!this.isAttached(), 'Attempted to attach to an already attached pointer');
 
     this.attachedProperty.value = true;
     this._attachedListener = listener;
@@ -306,9 +303,9 @@ export default abstract class Pointer {
   /**
    * @returns - Whether the point changed
    */
-  public updatePoint( point: Vector2, eventName = 'event' ): boolean {
-    const pointChanged = this.hasPointChanged( point );
-    point && sceneryLog && sceneryLog.InputEvent && sceneryLog.InputEvent( `pointer ${eventName} at ${point.toString()}` );
+  public updatePoint(point: Vector2, eventName = 'event'): boolean {
+    const pointChanged = this.hasPointChanged(point);
+    point && sceneryLog && sceneryLog.InputEvent && sceneryLog.InputEvent(`pointer ${eventName} at ${point.toString()}`);
 
     this.point = point;
     return pointChanged;
@@ -319,7 +316,7 @@ export default abstract class Pointer {
    *
    @returns - Whether the point changed
    */
-  public down( event: Event ): void {
+  public down(event: Event): void {
     this.isDown = true;
   }
 
@@ -328,10 +325,10 @@ export default abstract class Pointer {
    *
    * @returns - Whether the point changed
    */
-  public up( point: Vector2, event: Event ): boolean {
+  public up(point: Vector2, event: Event): boolean {
 
     this.isDown = false;
-    return this.updatePoint( point, 'up' );
+    return this.updatePoint(point, 'up');
   }
 
   /**
@@ -339,21 +336,21 @@ export default abstract class Pointer {
    *
    * @returns - Whether the point changed
    */
-  public cancel( point: Vector2 ): boolean {
+  public cancel(point: Vector2): boolean {
 
     this.isDown = false;
 
-    return this.updatePoint( point, 'cancel' );
+    return this.updatePoint(point, 'cancel');
   }
 
   /**
    * Marks the pointer as detached from a previously attached listener.
    */
-  private detach( listener: TAttachableInputListener ): void {
-    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer( `Detaching from ${this.toString()}` );
+  private detach(listener: TAttachableInputListener): void {
+    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`Detaching from ${this.toString()}`);
 
-    assert && assert( this.isAttached(), 'Cannot detach a listener if one is not attached' );
-    assert && assert( this._attachedListener === listener, 'Cannot detach a different listener' );
+    assert && assert(this.isAttached(), 'Cannot detach a listener if one is not attached');
+    assert && assert(this._attachedListener === listener, 'Cannot detach a different listener');
 
     this.attachedProperty.value = false;
     this._attachedListener = null;
@@ -362,8 +359,8 @@ export default abstract class Pointer {
   /**
    * Determines whether the point of the pointer has changed (used in mouse/touch/pen).
    */
-  protected hasPointChanged( point: Vector2 ): boolean {
-    return this.point !== point && ( !point || !this.point || !this.point.equals( point ) );
+  protected hasPointChanged(point: Vector2): boolean {
+    return this.point !== point && (!point || !this.point || !this.point.equals(point));
   }
 
   /**
@@ -371,33 +368,33 @@ export default abstract class Pointer {
    * Note that the Intent can be changed by listeners up the dispatch phase or on the next press. See Intent enum
    * for valid entries.
    */
-  public addIntent( intent: Intent ): void {
-    assert && assert( Intent.enumeration.includes( intent ), 'trying to set unsupported intent for Pointer' );
+  public addIntent(intent: Intent): void {
+    assert && assert(Intent.enumeration.includes(intent), 'trying to set unsupported intent for Pointer');
 
-    if ( !this._intents.includes( intent ) ) {
-      this._intents.push( intent );
+    if (!this._intents.includes(intent)) {
+      this._intents.push(intent);
     }
 
-    assert && assert( this._intents.length <= Intent.enumeration.values.length, 'to many Intents saved, memory leak likely' );
+    assert && assert(this._intents.length <= Intent.enumeration.values.length, 'to many Intents saved, memory leak likely');
   }
 
   /**
    * Remove an Intent from the Pointer. See addIntent for more information.
    */
-  public removeIntent( intent: Intent ): void {
-    assert && assert( Intent.enumeration.includes( intent ), 'trying to set unsupported intent for Pointer' );
+  public removeIntent(intent: Intent): void {
+    assert && assert(Intent.enumeration.includes(intent), 'trying to set unsupported intent for Pointer');
 
-    if ( this._intents.includes( intent ) ) {
-      const index = this._intents.indexOf( intent );
-      this._intents.splice( index, 1 );
+    if (this._intents.includes(intent)) {
+      const index = this._intents.indexOf(intent);
+      this._intents.splice(index, 1);
     }
   }
 
   /**
    * Returns whether or not this Pointer has been assigned the provided Intent.
    */
-  public hasIntent( intent: Intent ): boolean {
-    return this._intents.includes( intent );
+  public hasIntent(intent: Intent): boolean {
+    return this._intents.includes(intent);
   }
 
   /**
@@ -410,20 +407,20 @@ export default abstract class Pointer {
 
     // if the Pointer hasn't already been reserved for drag in Input event dispatch, in which
     // case it already has Intent and listener to remove Intent
-    if ( !this._intents.includes( Intent.DRAG ) ) {
-      this.addIntent( Intent.DRAG );
+    if (!this._intents.includes(Intent.DRAG)) {
+      this.addIntent(Intent.DRAG);
 
       const listener = {
-        up: ( event: SceneryEvent<TouchEvent | MouseEvent | PointerEvent> ) => {
-          this.removeIntent( Intent.DRAG );
-          this.removeInputListener( this._listenerForDragReserve! );
+        up: (event: SceneryEvent<TouchEvent | MouseEvent | PointerEvent>) => {
+          this.removeIntent(Intent.DRAG);
+          this.removeInputListener(this._listenerForDragReserve!);
           this._listenerForDragReserve = null;
         }
       };
 
-      assert && assert( this._listenerForDragReserve === null, 'still a listener to reserve pointer, memory leak likely' );
+      assert && assert(this._listenerForDragReserve === null, 'still a listener to reserve pointer, memory leak likely');
       this._listenerForDragReserve = listener;
-      this.addInputListener( this._listenerForDragReserve );
+      this.addInputListener(this._listenerForDragReserve);
     }
   }
 
@@ -435,25 +432,25 @@ export default abstract class Pointer {
    */
   public reserveForKeyboardDrag(): void {
 
-    if ( !this._intents.includes( Intent.KEYBOARD_DRAG ) ) {
-      this.addIntent( Intent.KEYBOARD_DRAG );
+    if (!this._intents.includes(Intent.KEYBOARD_DRAG)) {
+      this.addIntent(Intent.KEYBOARD_DRAG);
 
       const listener = {
-        keyup: ( event: SceneryEvent<KeyboardEvent> ) => clearIntent(),
+        keyup: (event: SceneryEvent<KeyboardEvent>) => clearIntent(),
 
         // clear on blur as well since focus may be lost before we receive a keyup event
-        blur: ( event: SceneryEvent<FocusEvent> ) => clearIntent()
+        blur: (event: SceneryEvent<FocusEvent>) => clearIntent()
       };
 
       const clearIntent = () => {
-        this.removeIntent( Intent.KEYBOARD_DRAG );
-        this.removeInputListener( this._listenerForKeyboardDragReserve! );
+        this.removeIntent(Intent.KEYBOARD_DRAG);
+        this.removeInputListener(this._listenerForKeyboardDragReserve!);
         this._listenerForKeyboardDragReserve = null;
       };
 
-      assert && assert( this._listenerForDragReserve === null, 'still a listener on Pointer for reserve, memory leak likely' );
+      assert && assert(this._listenerForDragReserve === null, 'still a listener on Pointer for reserve, memory leak likely');
       this._listenerForKeyboardDragReserve = listener;
-      this.addInputListener( this._listenerForKeyboardDragReserve );
+      this.addInputListener(this._listenerForKeyboardDragReserve);
     }
   }
 
@@ -473,7 +470,7 @@ export default abstract class Pointer {
    * on this case regardless,
    */
   public onLostPointerCapture(): void {
-    if ( this._pointerCaptured ) {
+    if (this._pointerCaptured) {
       this.interruptAll();
     }
     this._pointerCaptured = false;
@@ -483,18 +480,18 @@ export default abstract class Pointer {
    * Releases references so it can be garbage collected.
    */
   public dispose(): void {
-    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer( `Disposing ${this.toString()}` );
+    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`Disposing ${this.toString()}`);
 
     // remove listeners that would clear intent on disposal
-    if ( this._listenerForDragReserve && this._listeners.includes( this._listenerForDragReserve ) ) {
-      this.removeInputListener( this._listenerForDragReserve );
+    if (this._listenerForDragReserve && this._listeners.includes(this._listenerForDragReserve)) {
+      this.removeInputListener(this._listenerForDragReserve);
     }
-    if ( this._listenerForKeyboardDragReserve && this._listeners.includes( this._listenerForKeyboardDragReserve ) ) {
-      this.removeInputListener( this._listenerForKeyboardDragReserve );
+    if (this._listenerForKeyboardDragReserve && this._listeners.includes(this._listenerForKeyboardDragReserve)) {
+      this.removeInputListener(this._listenerForKeyboardDragReserve);
     }
 
-    assert && assert( this._attachedListener === null, 'Attached listeners should be cleared before pointer disposal' );
-    assert && assert( this._listeners.length === 0, 'Should not have listeners when a pointer is disposed' );
+    assert && assert(this._attachedListener === null, 'Attached listeners should be cleared before pointer disposal');
+    assert && assert(this._listeners.length === 0, 'Should not have listeners when a pointer is disposed');
   }
 
   public toString(): string {
@@ -502,4 +499,8 @@ export default abstract class Pointer {
   }
 }
 
-scenery.register( 'Pointer', Pointer );
+export type ActivePointer = {
+  point: Vector2;
+} & Pointer;
+
+scenery.register('Pointer', Pointer);

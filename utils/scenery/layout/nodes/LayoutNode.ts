@@ -6,10 +6,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TProperty from '../../../../axon/js/TProperty.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import Vector2Property from '../../../../dot/js/Vector2Property.js';
-import { Node, NodeLayoutConstraint, NodeOptions, scenery, Sizable, SizableOptions } from '../../imports.js';
+import type TProperty from '../../../axon/TProperty';
+import Vector2 from '../../../dot/Vector2';
+import Vector2Property from '../../../dot/Vector2Property';
+import { Node, NodeLayoutConstraint, type NodeOptions, scenery, Sizable, type SizableOptions } from '../../imports';
 
 type SelfOptions = {
   // Controls whether the layout container will re-trigger layout automatically after the "first" layout during
@@ -24,53 +24,54 @@ type SelfOptions = {
   layoutOrigin?: Vector2;
 };
 
-export const LAYOUT_NODE_OPTION_KEYS = [ 'resize', 'layoutOrigin' ] as const;
+export const LAYOUT_NODE_OPTION_KEYS = ['resize', 'layoutOrigin'] as const;
 
 type ParentOptions = NodeOptions & SizableOptions;
 
 export type LayoutNodeOptions = SelfOptions & ParentOptions;
 
-export default abstract class LayoutNode<Constraint extends NodeLayoutConstraint> extends Sizable( Node ) {
+export default abstract class LayoutNode<Constraint extends NodeLayoutConstraint> extends Sizable(Node) {
 
   protected _constraint!: Constraint; // Can't be readonly because the subtype sets this
 
-  public readonly layoutOriginProperty: TProperty<Vector2> = new Vector2Property( Vector2.ZERO );
+  public readonly layoutOriginProperty: TProperty<Vector2> = new Vector2Property(Vector2.ZERO);
 
-  protected constructor( providedOptions?: LayoutNodeOptions ) {
-    super( providedOptions );
+  protected constructor(providedOptions?: LayoutNodeOptions) {
+    super(providedOptions);
   }
 
   protected linkLayoutBounds(): void {
     // Adjust the localBounds to be the laid-out area (defined by the constraint)
-    this._constraint.layoutBoundsProperty.link( layoutBounds => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    this._constraint.layoutBoundsProperty.link((layoutBounds: any) => {
       this.localBounds = layoutBounds;
-    } );
+    });
   }
 
-  public override setExcludeInvisibleChildrenFromBounds( excludeInvisibleChildrenFromBounds: boolean ): void {
-    super.setExcludeInvisibleChildrenFromBounds( excludeInvisibleChildrenFromBounds );
+  public override setExcludeInvisibleChildrenFromBounds(excludeInvisibleChildrenFromBounds: boolean): void {
+    super.setExcludeInvisibleChildrenFromBounds(excludeInvisibleChildrenFromBounds);
 
     this._constraint.excludeInvisible = excludeInvisibleChildrenFromBounds;
   }
 
-  public override setChildren( children: Node[] ): this {
+  public override setChildren(children: Node[]): this {
 
     // If the layout is already locked, we need to bail and only call Node's setChildren. This is fine, our layout will
     // be handled once whatever locked us unlocks (so we don't have to override to handle layout or locking/unlocking.
-    if ( this.constraint.isLocked ) {
-      return super.setChildren( children );
+    if (this.constraint.isLocked) {
+      return super.setChildren(children);
     }
 
     const oldChildren = this.getChildren(); // defensive copy
 
     // Lock layout while the children are removed and added
     this.constraint.lock();
-    super.setChildren( children );
+    super.setChildren(children);
     this.constraint.unlock();
 
     // Determine if the children array has changed. We'll gain a performance benefit by not triggering layout when
     // the children haven't changed.
-    if ( !_.isEqual( oldChildren, children ) ) {
+    if (!_.isEqual(oldChildren, children)) {
       this.constraint.updateLayoutAutomatically();
     }
 
@@ -88,7 +89,7 @@ export default abstract class LayoutNode<Constraint extends NodeLayoutConstraint
     return this._constraint.enabled;
   }
 
-  public set resize( value: boolean ) {
+  public set resize(value: boolean) {
     this._constraint.enabled = value;
   }
 
@@ -96,7 +97,7 @@ export default abstract class LayoutNode<Constraint extends NodeLayoutConstraint
     return this.layoutOriginProperty.value;
   }
 
-  public set layoutOrigin( value: Vector2 ) {
+  public set layoutOrigin(value: Vector2) {
     this.layoutOriginProperty.value = value;
   }
 
@@ -118,4 +119,4 @@ export default abstract class LayoutNode<Constraint extends NodeLayoutConstraint
   }
 }
 
-scenery.register( 'LayoutNode', LayoutNode );
+scenery.register('LayoutNode', LayoutNode);

@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Orientation from '../../../../phet-core/js/Orientation.js';
-import { LayoutConstraint, LayoutProxy, LayoutProxyProperty, Node, scenery } from '../../imports.js';
+import Orientation from '../../../phet-core/Orientation';
+import { LayoutConstraint, LayoutProxy, LayoutProxyProperty, Node, scenery } from '../../imports';
 
 // NOTE: This would be an abstract class, but that is incompatible with how mixin constraints work in TypeScript
 export default class LayoutCell {
@@ -41,8 +41,8 @@ export default class LayoutCell {
    *                constraint. This includes more work, and ideally should be avoided for things like FlowBox/GridBox
    *                (but will be needed by ManualConstraint or other direct LayoutConstraint usage)
    */
-  public constructor( constraint: LayoutConstraint, node: Node, proxy: LayoutProxy | null ) {
-    if ( proxy ) {
+  public constructor(constraint: LayoutConstraint, node: Node, proxy: LayoutProxy | null) {
+    if (proxy) {
       this.layoutProxyProperty = null;
       this._proxy = proxy;
     }
@@ -53,21 +53,21 @@ export default class LayoutCell {
       // If a LayoutProxy is not provided, we'll listen to (a) all the trails between our ancestor and this node,
       // (b) construct layout proxies for it (and assign here), and (c) listen to ancestor transforms to refresh
       // the layout when needed.
-      this.layoutProxyProperty = new LayoutProxyProperty( constraint.ancestorNode, node, {
+      this.layoutProxyProperty = new LayoutProxyProperty(constraint.ancestorNode, node, {
         onTransformChange: () => constraint.updateLayoutAutomatically()
-      } );
-      this.layoutProxyProperty.link( proxy => {
+      });
+      this.layoutProxyProperty.link(proxy => {
         this._proxy = proxy;
 
         constraint.updateLayoutAutomatically();
-      } );
+      });
     }
 
     this._constraint = constraint;
     this._node = node;
 
-    this.layoutOptionsListener = this.onLayoutOptionsChange.bind( this );
-    this.node.layoutOptionsChangedEmitter.addListener( this.layoutOptionsListener );
+    this.layoutOptionsListener = this.onLayoutOptionsChange.bind(this);
+    this.node.layoutOptionsChangedEmitter.addListener(this.layoutOptionsListener);
   }
 
   // Can't be abstract, we're using mixins :(
@@ -93,7 +93,7 @@ export default class LayoutCell {
    * (scenery-internal)
    */
   public get proxy(): LayoutProxy {
-    assert && assert( this._proxy );
+    assert && assert(this._proxy);
 
     return this._proxy!;
   }
@@ -101,7 +101,7 @@ export default class LayoutCell {
   /**
    * (scenery-internal)
    */
-  public isSizable( orientation: Orientation ): boolean {
+  public isSizable(orientation: Orientation): boolean {
     return orientation === Orientation.HORIZONTAL ? this.proxy.widthSizable : this.proxy.heightSizable;
   }
 
@@ -111,8 +111,8 @@ export default class LayoutCell {
   public dispose(): void {
     this.layoutProxyProperty && this.layoutProxyProperty.dispose();
 
-    this.node.layoutOptionsChangedEmitter.removeListener( this.layoutOptionsListener );
+    this.node.layoutOptionsChangedEmitter.removeListener(this.layoutOptionsListener);
   }
 }
 
-scenery.register( 'LayoutCell', LayoutCell );
+scenery.register('LayoutCell', LayoutCell);

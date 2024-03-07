@@ -8,9 +8,9 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import type IOType from './types/IOType.js';
-import tandemNamespace from './tandemNamespace.js';
-import IntentionalAny from '../phet-core/types/IntentionalAny';
+import type IOType from './types/IOType';
+import tandemNamespace from './tandemNamespace';
+import type IntentionalAny from '../phet-core/types/IntentionalAny';
 
 
 // By default, the cache key is an IOType (like for a single parameter like PropertyIO)
@@ -18,16 +18,16 @@ class IOTypeCache<T = IOType> extends Map<T, IOType> {
 
   private static readonly caches: IOTypeCache<IntentionalAny>[] = [];
 
-  public constructor( entries?: readonly ( readonly [ T, IOType ] )[] | null ) {
-    super( entries );
+  public constructor(entries?: readonly (readonly [T, IOType])[] | null) {
+    super(entries);
 
-    IOTypeCache.caches.push( this );
+    IOTypeCache.caches.push(this);
   }
 
   public static clearAll(): void {
-    IOTypeCache.caches.forEach( cache => cache.clear() );
+    IOTypeCache.caches.forEach(cache => cache.clear());
   }
 }
 
-tandemNamespace.register( 'IOTypeCache', IOTypeCache );
+tandemNamespace.register('IOTypeCache', IOTypeCache);
 export default IOTypeCache;

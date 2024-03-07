@@ -17,13 +17,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Constructor from '../../../../phet-core/js/types/Constructor.js';
-import memoize from '../../../../phet-core/js/memoize.js';
-import mutate from '../../../../phet-core/js/mutate.js';
-import { HorizontalLayoutAlign, HorizontalLayoutAlignValues, LayoutAlign, MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS, MarginLayoutConfigurable, MarginLayoutConfigurableOptions, scenery, VerticalLayoutAlign, VerticalLayoutAlignValues } from '../../imports.js';
-import assertMutuallyExclusiveOptions from '../../../../phet-core/js/assertMutuallyExclusiveOptions.js';
-import WithoutNull from '../../../../phet-core/js/types/WithoutNull.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
+import type Constructor from '../../../phet-core/types/Constructor';
+import memoize from '../../../phet-core/memoize';
+import mutate from '../../../phet-core/mutate';
+import { type HorizontalLayoutAlign, HorizontalLayoutAlignValues, LayoutAlign, MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS, MarginLayoutConfigurable, type MarginLayoutConfigurableOptions, scenery, type VerticalLayoutAlign, VerticalLayoutAlignValues } from '../../imports';
+import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
+import type WithoutNull from '../../../phet-core/types/WithoutNull';
+import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
 
 const GRID_CONFIGURABLE_OPTION_KEYS = [
   'xAlign',
@@ -34,7 +34,7 @@ const GRID_CONFIGURABLE_OPTION_KEYS = [
   'grow',
   'xGrow',
   'yGrow'
-].concat( MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS );
+].concat(MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS);
 
 type SelfOptions = {
   // Alignments control how the content of a cell is positioned within that cell's available area (thus it only applies
@@ -68,8 +68,8 @@ export type GridConfigurableOptions = SelfOptions & MarginLayoutConfigurableOpti
 export type ExternalGridConfigurableOptions = WithoutNull<GridConfigurableOptions, Exclude<keyof GridConfigurableOptions, 'minContentWidth' | 'minContentHeight' | 'maxContentWidth' | 'maxContentHeight'>>;
 
 // (scenery-internal)
-const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperType ) => {
-  return class GridConfigurableMixin extends MarginLayoutConfigurable( type ) {
+const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType) => {
+  return class GridConfigurableMixin extends MarginLayoutConfigurable(type) {
 
     // (scenery-internal)
     public _xAlign: LayoutAlign | null = null;
@@ -82,20 +82,20 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public constructor( ...args: IntentionalAny[] ) {
-      super( ...args );
+    public constructor(...args: IntentionalAny[]) {
+      super(...args);
     }
 
     /**
      * (scenery-internal)
      */
-    public override mutateConfigurable( options?: GridConfigurableOptions ): void {
-      super.mutateConfigurable( options );
+    public override mutateConfigurable(options?: GridConfigurableOptions): void {
+      super.mutateConfigurable(options);
 
-      assertMutuallyExclusiveOptions( options, [ 'stretch' ], [ 'xStretch', 'yStretch' ] );
-      assertMutuallyExclusiveOptions( options, [ 'grow' ], [ 'xGrow', 'yGrow' ] );
+      assertMutuallyExclusiveOptions(options, ['stretch'], ['xStretch', 'yStretch']);
+      assertMutuallyExclusiveOptions(options, ['grow'], ['xGrow', 'yGrow']);
 
-      mutate( this, GRID_CONFIGURABLE_OPTION_KEYS, options );
+      mutate(this, GRID_CONFIGURABLE_OPTION_KEYS, options);
     }
 
     /**
@@ -145,7 +145,7 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     public get xAlign(): HorizontalLayoutAlign | null {
       const result = this._xAlign === null ? null : this._xAlign.horizontal;
 
-      assert && assert( result === null || typeof result === 'string' );
+      assert && assert(result === null || typeof result === 'string');
 
       return result;
     }
@@ -153,16 +153,16 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set xAlign( value: HorizontalLayoutAlign | null ) {
-      assert && assert( value === null || HorizontalLayoutAlignValues.includes( value ),
-        `align ${value} not supported, the valid values are ${HorizontalLayoutAlignValues} or null` );
+    public set xAlign(value: HorizontalLayoutAlign | null) {
+      assert && assert(value === null || HorizontalLayoutAlignValues.includes(value),
+        `align ${value} not supported, the valid values are ${HorizontalLayoutAlignValues} or null`);
 
       // remapping align values to an independent set, so they aren't orientation-dependent
-      const mappedValue = LayoutAlign.horizontalAlignToInternal( value );
+      const mappedValue = LayoutAlign.horizontalAlignToInternal(value);
 
-      assert && assert( mappedValue === null || mappedValue instanceof LayoutAlign );
+      assert && assert(mappedValue === null || mappedValue instanceof LayoutAlign);
 
-      if ( this._xAlign !== mappedValue ) {
+      if (this._xAlign !== mappedValue) {
         this._xAlign = mappedValue;
 
         this.changedEmitter.emit();
@@ -175,7 +175,7 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     public get yAlign(): VerticalLayoutAlign | null {
       const result = this._yAlign === null ? null : this._yAlign.vertical;
 
-      assert && assert( result === null || typeof result === 'string' );
+      assert && assert(result === null || typeof result === 'string');
 
       return result;
     }
@@ -183,16 +183,16 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set yAlign( value: VerticalLayoutAlign | null ) {
-      assert && assert( value === null || VerticalLayoutAlignValues.includes( value ),
-        `align ${value} not supported, the valid values are ${VerticalLayoutAlignValues} or null` );
+    public set yAlign(value: VerticalLayoutAlign | null) {
+      assert && assert(value === null || VerticalLayoutAlignValues.includes(value),
+        `align ${value} not supported, the valid values are ${VerticalLayoutAlignValues} or null`);
 
       // remapping align values to an independent set, so they aren't orientation-dependent
-      const mappedValue = LayoutAlign.verticalAlignToInternal( value );
+      const mappedValue = LayoutAlign.verticalAlignToInternal(value);
 
-      assert && assert( mappedValue === null || mappedValue instanceof LayoutAlign );
+      assert && assert(mappedValue === null || mappedValue instanceof LayoutAlign);
 
-      if ( this._yAlign !== mappedValue ) {
+      if (this._yAlign !== mappedValue) {
         this._yAlign = mappedValue;
 
         this.changedEmitter.emit();
@@ -203,7 +203,7 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
      * (scenery-internal)
      */
     public get grow(): number | null {
-      assert && assert( this._xGrow === this._yGrow );
+      assert && assert(this._xGrow === this._yGrow);
 
       return this._xGrow;
     }
@@ -211,10 +211,10 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set grow( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) && value >= 0 ) );
+    public set grow(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
 
-      if ( this._xGrow !== value || this._yGrow !== value ) {
+      if (this._xGrow !== value || this._yGrow !== value) {
         this._xGrow = value;
         this._yGrow = value;
 
@@ -232,10 +232,10 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set xGrow( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) && value >= 0 ) );
+    public set xGrow(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
 
-      if ( this._xGrow !== value ) {
+      if (this._xGrow !== value) {
         this._xGrow = value;
 
         this.changedEmitter.emit();
@@ -252,10 +252,10 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set yGrow( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) && value >= 0 ) );
+    public set yGrow(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
 
-      if ( this._yGrow !== value ) {
+      if (this._yGrow !== value) {
         this._yGrow = value;
 
         this.changedEmitter.emit();
@@ -266,7 +266,7 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
      * (scenery-internal)
      */
     public get stretch(): boolean | null {
-      assert && assert( this._xStretch === this._yStretch );
+      assert && assert(this._xStretch === this._yStretch);
 
       return this._xStretch;
     }
@@ -274,10 +274,10 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set stretch( value: boolean | null ) {
-      assert && assert( value === null || typeof value === 'boolean' );
+    public set stretch(value: boolean | null) {
+      assert && assert(value === null || typeof value === 'boolean');
 
-      if ( this._xStretch !== value || this._yStretch !== value ) {
+      if (this._xStretch !== value || this._yStretch !== value) {
         this._xStretch = value;
         this._yStretch = value;
 
@@ -295,10 +295,10 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set xStretch( value: boolean | null ) {
-      assert && assert( value === null || typeof value === 'boolean' );
+    public set xStretch(value: boolean | null) {
+      assert && assert(value === null || typeof value === 'boolean');
 
-      if ( this._xStretch !== value ) {
+      if (this._xStretch !== value) {
         this._xStretch = value;
 
         this.changedEmitter.emit();
@@ -315,18 +315,18 @@ const GridConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set yStretch( value: boolean | null ) {
-      assert && assert( value === null || typeof value === 'boolean' );
+    public set yStretch(value: boolean | null) {
+      assert && assert(value === null || typeof value === 'boolean');
 
-      if ( this._yStretch !== value ) {
+      if (this._yStretch !== value) {
         this._yStretch = value;
 
         this.changedEmitter.emit();
       }
     }
   };
-} );
+});
 
-scenery.register( 'GridConfigurable', GridConfigurable );
+scenery.register('GridConfigurable', GridConfigurable);
 export default GridConfigurable;
 export { GRID_CONFIGURABLE_OPTION_KEYS };

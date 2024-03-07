@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Orientation from '../../../../phet-core/js/Orientation.js';
-import Pool from '../../../../phet-core/js/Pool.js';
-import { FlowCell, LayoutLine, scenery } from '../../imports.js';
+import Orientation from '../../../phet-core/Orientation';
+import Pool from '../../../phet-core/Pool';
+import { FlowCell, LayoutLine, scenery } from '../../imports';
 
 export default class FlowLine extends LayoutLine {
 
@@ -19,16 +19,16 @@ export default class FlowLine extends LayoutLine {
   /**
    * (scenery-internal)
    */
-  public constructor( orientation: Orientation, cells: FlowCell[] ) {
+  public constructor(orientation: Orientation, cells: FlowCell[]) {
     super();
 
-    this.initialize( orientation, cells );
+    this.initialize(orientation, cells);
   }
 
   /**
    * (scenery-internal)
    */
-  public initialize( orientation: Orientation, cells: FlowCell[] ): this {
+  public initialize(orientation: Orientation, cells: FlowCell[]): this {
 
     this.orientation = orientation;
     this.cells = cells;
@@ -41,15 +41,15 @@ export default class FlowLine extends LayoutLine {
   /**
    * (scenery-internal)
    */
-  public getMinimumSize( spacing: number ): number {
-    return ( this.cells.length - 1 ) * spacing + _.sum( this.cells.map( cell => cell.getMinimumSize( this.orientation ) ) );
+  public getMinimumSize(spacing: number): number {
+    return (this.cells.length - 1) * spacing + _.sum(this.cells.map(cell => cell.getMinimumSize(this.orientation)));
   }
 
   /**
    * (scenery-internal)
    */
   public freeToPool(): void {
-    FlowLine.pool.freeToPool( this );
+    FlowLine.pool.freeToPool(this);
   }
 
   public clean(): void {
@@ -60,9 +60,9 @@ export default class FlowLine extends LayoutLine {
   /**
    * (scenery-internal)
    */
-  public static readonly pool = new Pool( FlowLine, {
-    defaultArguments: [ Orientation.HORIZONTAL, [] ]
-  } );
+  public static readonly pool = new Pool(FlowLine, {
+    defaultArguments: [Orientation.HORIZONTAL, []]
+  });
 }
 
-scenery.register( 'FlowLine', FlowLine );
+scenery.register('FlowLine', FlowLine);

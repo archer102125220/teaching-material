@@ -18,8 +18,8 @@
  * @author Jesse Greenberg
  */
 
-import stepTimer from '../../../axon/js/stepTimer.js';
-import { FocusManager, Intent, PDOMUtils, scenery } from '../imports.js';
+import stepTimer from '../../axon/stepTimer';
+import { FocusManager, Intent, PDOMUtils, scenery } from '../imports';
 
 // constants
 // in seconds, amount of time to initiate a press and hold gesture - note, it must be at least this long
@@ -29,12 +29,10 @@ const PRESS_AND_HOLD_INTERVAL = 0.75;
 const DOUBLE_TAP_INTERVAL = 0.6; // in seconds, max time between down events that would indicate a click gesture
 
 class SwipeListener {
-
   /**
    * @param {Input} input
    */
-  constructor( input ) {
-
+  constructor(input) {
     // @private - reference to the pointer taken on down, to watch for the user gesture
     this._pointer = null;
 
@@ -74,50 +72,52 @@ class SwipeListener {
     // @private - listener that gets attached to the Pointer right as it is added to Input,
     // to prevent any other input handling or dispatching
     this.handleEventListener = {
-      down: event => {
-
+      down: (event) => {
         // do not allow any other input handling, this listener assumes control
         event.handle();
         event.abort();
 
         // start the event handling, down will add Pointer listeners to respond to swipes
         // and other gestures
-        this.handleDown( event );
+        this.handleDown(event);
       }
     };
-    input.pointerAddedEmitter.addListener( pointer => {
-      if ( this.enabled ) {
-        pointer.addInputListener( this.handleEventListener, true );
+    input.pointerAddedEmitter.addListener((pointer) => {
+      if (this.enabled) {
+        pointer.addInputListener(this.handleEventListener, true);
       }
-    } );
+    });
 
     // @private - listener added to the pointer with attachment to call swipe functions
     // on a particular node with focus
     this._attachedPointerListener = {
-      up: event => {
-        this.focusedNode && this.focusedNode.swipeEnd && this.focusedNode.swipeEnd.bind( this.focusedNode )( event, this );
+      up: (event) => {
+        this.focusedNode &&
+          this.focusedNode.swipeEnd &&
+          this.focusedNode.swipeEnd.bind(this.focusedNode)(event, this);
 
         // remove this listener, call the focusedNode's swipeEnd function
         this.focusedNode = null;
-        this._pointer.removeInputListener( this._attachedPointerListener );
+        this._pointer.removeInputListener(this._attachedPointerListener);
         this._pointer = null;
       },
 
-      move: event => {
-
+      move: (event) => {
         // call the focusedNode's swipeDrag function
-        this.focusedNode && this.focusedNode.swipeMove && this.focusedNode.swipeMove.bind( this.focusedNode )( event, this );
+        this.focusedNode &&
+          this.focusedNode.swipeMove &&
+          this.focusedNode.swipeMove.bind(this.focusedNode)(event, this);
       },
 
-      interrupt: event => {
+      interrupt: (event) => {
         this.focusedNode = null;
-        this._pointer.removeInputListener( this._attachedPointerListener );
+        this._pointer.removeInputListener(this._attachedPointerListener);
         this._pointer = null;
       },
 
-      cancel: event => {
+      cancel: (event) => {
         this.focusedNode = null;
-        this._pointer.removeInputListener( this._attachedPointerListener );
+        this._pointer.removeInputListener(this._attachedPointerListener);
         this._pointer = null;
       }
     };
@@ -125,55 +125,56 @@ class SwipeListener {
     // @private - added to Pointer on down without attaching so that if the event does result
     // in attachment elsewhere, this listener can be interrupted
     this._pointerListener = {
-      up: event => {
-
+      up: (event) => {
         // on all releases, clear references and timers
         this.endSwipe();
         this._pointer = null;
 
-        this.swipeDistance = event.pointer.point.minus( this.downPoint );
+        this.swipeDistance = event.pointer.point.minus(this.downPoint);
 
         const verticalDistance = this.swipeDistance.y;
         const horizontalDistance = this.swipeDistance.x;
-        if ( Math.abs( horizontalDistance ) > 100 && Math.abs( verticalDistance ) < 100 ) {
-
+        if (
+          Math.abs(horizontalDistance) > 100 &&
+          Math.abs(verticalDistance) < 100
+        ) {
           // some sort of horizontal swipe
-          if ( horizontalDistance > 0 ) {
-
+          if (horizontalDistance > 0) {
             // for upcoming interviews, lets limit the focus to be within the simulation,
             // don't allow it to go into the (uninstrumented) navigation bar
-            if ( FocusManager.pdomFocusedNode && FocusManager.pdomFocusedNode.innerContent === 'Reset All' ) {
+            if (
+              FocusManager.pdomFocusedNode &&
+              FocusManager.pdomFocusedNode.innerContent === 'Reset All'
+            ) {
               return;
             }
-            PDOMUtils.getNextFocusable( document.body ).focus();
+            PDOMUtils.getNextFocusable(document.body).focus();
+          } else {
+            PDOMUtils.getPreviousFocusable(document.body).focus();
           }
-          else {
-            PDOMUtils.getPreviousFocusable( document.body ).focus();
-          }
-        }
-        else {
-
+        } else {
           // potentially a double tap
-          if ( this.firstUp ) {
-            if ( this.timeSinceLastDown < DOUBLE_TAP_INTERVAL ) {
+          // eslint-disable-next-line no-lonely-if
+          if (this.firstUp) {
+            if (this.timeSinceLastDown < DOUBLE_TAP_INTERVAL) {
               this.firstUp = false;
               this.timeSinceLastDown = 0;
 
               // send a click event to the active element
-              const pdomRoot = document.getElementsByClassName( 'a11y-pdom-root' )[ 0 ];
+              const pdomRoot =
+                document.getElementsByClassName('a11y-pdom-root')[0];
 
-              if ( pdomRoot && pdomRoot.contains( event.activeElement ) ) {
+              if (pdomRoot && pdomRoot.contains(event.activeElement)) {
                 event.activeElement.click();
               }
             }
-          }
-          else {
+          } else {
             this.firstUp = true;
           }
         }
       },
 
-      move: event => {
+      move: (event) => {
         this.lastPoint = this.currentPoint;
         this.currentPoint = event.pointer.point;
       },
@@ -187,32 +188,37 @@ class SwipeListener {
       }
     };
 
-    stepTimer.addListener( this.step.bind( this ) );
+    stepTimer.addListener(this.step.bind(this));
   }
 
   /**
    * @public (scenery-internal)
    * @param event
    */
-  handleDown( event ) {
-    event.pointer.addIntent( Intent.DRAG );
-    this.downPointers.push( event.pointer );
+  handleDown(event) {
+    event.pointer.addIntent(Intent.DRAG);
+    this.downPointers.push(event.pointer);
 
     // allow zoom gestures if there is more than one pointer down
-    if ( this.downPointers.length > 1 ) {
-      this.downPointers.forEach( downPointer => downPointer.removeIntent( Intent.DRAG ) );
-      event.pointer.removeIntent( Intent.DRAG );
+    if (this.downPointers.length > 1) {
+      this.downPointers.forEach((downPointer) =>
+        downPointer.removeIntent(Intent.DRAG)
+      );
+      event.pointer.removeIntent(Intent.DRAG);
     }
 
-    assert && assert( event.pointer.attachedProperty.get(), 'should be attached to the handle listener' );
-    event.pointer.removeInputListener( this.handleEventListener );
+    assert &&
+      assert(
+        event.pointer.attachedProperty.get(),
+        'should be attached to the handle listener'
+      );
+    event.pointer.removeInputListener(this.handleEventListener);
 
-    if ( this._pointer === null && event.pointer.type === 'touch' ) {
-
+    if (this._pointer === null && event.pointer.type === 'touch') {
       // don't add new listeners if we weren't able to successfully detach and interrupt
       // the previous listener
       this._pointer = event.pointer;
-      event.pointer.addInputListener( this._pointerListener, true );
+      event.pointer.addInputListener(this._pointerListener, true);
 
       // this takes priority, no other listeners should fire
       event.abort();
@@ -231,10 +237,10 @@ class SwipeListener {
    * @public
    * @param event
    */
-  up( event ) {
-    const index = this.downPointers.indexOf( event.pointer );
-    if ( index > -1 ) {
-      this.downPointers.splice( index, 1 );
+  up(event) {
+    const index = this.downPointers.indexOf(event.pointer);
+    if (index > -1) {
+      this.downPointers.splice(index, 1);
     }
   }
 
@@ -244,49 +250,46 @@ class SwipeListener {
    * @param dt
    * @private
    */
-  step( dt ) {
-
+  step(dt) {
     // detecting a double-tap
-    if ( this.firstUp ) {
+    if (this.firstUp) {
       this.timeSinceLastDown += dt;
 
       // too long for gesture, wait till next attempt
-      if ( this.timeSinceLastDown > DOUBLE_TAP_INTERVAL ) {
+      if (this.timeSinceLastDown > DOUBLE_TAP_INTERVAL) {
         this.firstUp = false;
         this.timeSinceLastDown = 0;
       }
     }
 
     // detecting a press and hold
-    if ( this._pointer ) {
-      if ( !this._pointer.listeners.includes( this._attachedPointerListener ) ) {
-        if ( this.holdingTime > PRESS_AND_HOLD_INTERVAL ) {
-
+    if (this._pointer) {
+      if (!this._pointer.listeners.includes(this._attachedPointerListener)) {
+        if (this.holdingTime > PRESS_AND_HOLD_INTERVAL) {
           // user has pressed down for long enough to forward a drag event to the
           // focused node
           const focusedNode = FocusManager.pdomFocusedNode;
-          if ( focusedNode ) {
-
+          if (focusedNode) {
             // remove the listener looking for gestures
-            this._pointer.removeInputListener( this._pointerListener );
+            this._pointer.removeInputListener(this._pointerListener);
             this.holdingTime = 0;
 
             this.focusedNode = focusedNode;
-            this._pointer.addInputListener( this._attachedPointerListener, true );
+            this._pointer.addInputListener(this._attachedPointerListener, true);
 
-            this.focusedNode.swipeStart && this.focusedNode.swipeStart( this.downEvent, this );
+            this.focusedNode.swipeStart &&
+              this.focusedNode.swipeStart(this.downEvent, this);
             this.downEvent = null;
           }
-        }
-        else {
+        } else {
           this.holdingTime += dt;
         }
       }
     }
 
     // determining swipe velocity
-    if ( this.lastPoint !== null && this.currentPoint !== null ) {
-      this.velocity = this.lastPoint.minus( this.currentPoint ).dividedScalar( dt );
+    if (this.lastPoint !== null && this.currentPoint !== null) {
+      this.velocity = this.lastPoint.minus(this.currentPoint).dividedScalar(dt);
     }
   }
 
@@ -298,8 +301,11 @@ class SwipeListener {
     this.holdingTime = 0;
 
     // remove if we haven't been interrupted already
-    if ( this._pointer && this._pointer.listeners.includes( this._pointerListener ) ) {
-      this._pointer.removeInputListener( this._pointerListener );
+    if (
+      this._pointer &&
+      this._pointer.listeners.includes(this._pointerListener)
+    ) {
+      this._pointer.removeInputListener(this._pointerListener);
     }
   }
 
@@ -311,7 +317,7 @@ class SwipeListener {
    * @public
    */
   detachPointerListener() {
-    this._pointer.detach( this._attachedPointerListener );
+    this._pointer.detach(this._attachedPointerListener);
   }
 
   /**
@@ -325,5 +331,5 @@ class SwipeListener {
   }
 }
 
-scenery.register( 'SwipeListener', SwipeListener );
+scenery.register('SwipeListener', SwipeListener);
 export default SwipeListener;

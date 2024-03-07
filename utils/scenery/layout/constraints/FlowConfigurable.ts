@@ -20,22 +20,22 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyEmitter from '../../../../axon/js/TinyEmitter.js';
-import Orientation from '../../../../phet-core/js/Orientation.js';
-import memoize from '../../../../phet-core/js/memoize.js';
-import mutate from '../../../../phet-core/js/mutate.js';
-import { HorizontalLayoutAlign, LayoutAlign, LayoutOrientation, MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS, MarginLayoutConfigurable, MarginLayoutConfigurableOptions, scenery, VerticalLayoutAlign } from '../../imports.js';
-import Constructor from '../../../../phet-core/js/types/Constructor.js';
-import WithoutNull from '../../../../phet-core/js/types/WithoutNull.js';
-import IntentionalAny from '../../../../phet-core/js/types/IntentionalAny.js';
-import TEmitter from '../../../../axon/js/TEmitter.js';
+import TinyEmitter from '../../../axon/TinyEmitter';
+import Orientation from '../../../phet-core/Orientation';
+import memoize from '../../../phet-core/memoize';
+import mutate from '../../../phet-core/mutate';
+import { type HorizontalLayoutAlign, LayoutAlign, type LayoutOrientation, MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS, MarginLayoutConfigurable, type MarginLayoutConfigurableOptions, scenery, type VerticalLayoutAlign } from '../../imports';
+import type Constructor from '../../../phet-core/types/Constructor';
+import type WithoutNull from '../../../phet-core/types/WithoutNull';
+import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
+import type TEmitter from '../../../axon/TEmitter';
 
 const FLOW_CONFIGURABLE_OPTION_KEYS = [
   'orientation',
   'align',
   'stretch',
   'grow'
-].concat( MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS );
+].concat(MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS);
 
 type SelfOptions = {
   // The main orientation of the layout that takes place. Items will be spaced out in this orientation (e.g. if it's
@@ -67,8 +67,8 @@ export type FlowConfigurableOptions = SelfOptions & MarginLayoutConfigurableOpti
 export type ExternalFlowConfigurableOptions = WithoutNull<FlowConfigurableOptions, Exclude<keyof FlowConfigurableOptions, 'minContentWidth' | 'minContentHeight' | 'maxContentWidth' | 'maxContentHeight'>>;
 
 // (scenery-internal)
-const FlowConfigurable = memoize( <SuperType extends Constructor>( type: SuperType ) => {
-  return class FlowConfigurableMixin extends MarginLayoutConfigurable( type ) {
+const FlowConfigurable = memoize(<SuperType extends Constructor>(type: SuperType) => {
+  return class FlowConfigurableMixin extends MarginLayoutConfigurable(type) {
 
     protected _orientation: Orientation = Orientation.HORIZONTAL;
 
@@ -82,17 +82,17 @@ const FlowConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public constructor( ...args: IntentionalAny[] ) {
-      super( ...args );
+    public constructor(...args: IntentionalAny[]) {
+      super(...args);
     }
 
     /**
      * (scenery-internal)
      */
-    public override mutateConfigurable( options?: FlowConfigurableOptions ): void {
-      super.mutateConfigurable( options );
+    public override mutateConfigurable(options?: FlowConfigurableOptions): void {
+      super.mutateConfigurable(options);
 
-      mutate( this, FLOW_CONFIGURABLE_OPTION_KEYS, options );
+      mutate(this, FLOW_CONFIGURABLE_OPTION_KEYS, options);
     }
 
     /**
@@ -140,12 +140,12 @@ const FlowConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set orientation( value: LayoutOrientation ) {
-      assert && assert( value === 'horizontal' || value === 'vertical' );
+    public set orientation(value: LayoutOrientation) {
+      assert && assert(value === 'horizontal' || value === 'vertical');
 
       const enumOrientation = value === 'horizontal' ? Orientation.HORIZONTAL : Orientation.VERTICAL;
 
-      if ( this._orientation !== enumOrientation ) {
+      if (this._orientation !== enumOrientation) {
         this._orientation = enumOrientation;
 
         this.orientationChangedEmitter.emit();
@@ -157,9 +157,9 @@ const FlowConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
      * (scenery-internal)
      */
     public get align(): HorizontalLayoutAlign | VerticalLayoutAlign | null {
-      const result = LayoutAlign.internalToAlign( this._orientation, this._align );
+      const result = LayoutAlign.internalToAlign(this._orientation, this._align);
 
-      assert && assert( result === null || typeof result === 'string' );
+      assert && assert(result === null || typeof result === 'string');
 
       return result;
     }
@@ -167,16 +167,16 @@ const FlowConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set align( value: HorizontalLayoutAlign | VerticalLayoutAlign | null ) {
-      assert && assert( LayoutAlign.getAllowedAligns( this._orientation.opposite ).includes( value ),
-        `align ${value} not supported, with the orientation ${this._orientation}, the valid values are ${LayoutAlign.getAllowedAligns( this._orientation.opposite )}` );
+    public set align(value: HorizontalLayoutAlign | VerticalLayoutAlign | null) {
+      assert && assert(LayoutAlign.getAllowedAligns(this._orientation.opposite).includes(value),
+        `align ${value} not supported, with the orientation ${this._orientation}, the valid values are ${LayoutAlign.getAllowedAligns(this._orientation.opposite)}`);
 
       // remapping align values to an independent set, so they aren't orientation-dependent
-      const mappedValue = LayoutAlign.alignToInternal( this._orientation.opposite, value );
+      const mappedValue = LayoutAlign.alignToInternal(this._orientation.opposite, value);
 
-      assert && assert( mappedValue === null || mappedValue instanceof LayoutAlign );
+      assert && assert(mappedValue === null || mappedValue instanceof LayoutAlign);
 
-      if ( this._align !== mappedValue ) {
+      if (this._align !== mappedValue) {
         this._align = mappedValue;
 
         this.changedEmitter.emit();
@@ -193,8 +193,8 @@ const FlowConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set stretch( value: boolean | null ) {
-      if ( this._stretch !== value ) {
+    public set stretch(value: boolean | null) {
+      if (this._stretch !== value) {
         this._stretch = value;
 
         this.changedEmitter.emit();
@@ -211,18 +211,18 @@ const FlowConfigurable = memoize( <SuperType extends Constructor>( type: SuperTy
     /**
      * (scenery-internal)
      */
-    public set grow( value: number | null ) {
-      assert && assert( value === null || ( typeof value === 'number' && isFinite( value ) && value >= 0 ) );
+    public set grow(value: number | null) {
+      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
 
-      if ( this._grow !== value ) {
+      if (this._grow !== value) {
         this._grow = value;
 
         this.changedEmitter.emit();
       }
     }
   };
-} );
+});
 
-scenery.register( 'FlowConfigurable', FlowConfigurable );
+scenery.register('FlowConfigurable', FlowConfigurable);
 export default FlowConfigurable;
 export { FLOW_CONFIGURABLE_OPTION_KEYS };

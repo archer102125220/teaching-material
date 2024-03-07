@@ -6,20 +6,20 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Pointer, scenery } from '../imports.js';
+import Vector2 from '../../dot/Vector2';
+import { Pointer, scenery } from '../imports';
 
 export default class Pen extends Pointer {
 
   // For tracking which pen is which
   public id: number;
 
-  public constructor( id: number, point: Vector2, event: Event ) {
-    super( point, 'pen' ); // true: pen pointers always start in the down state
+  public constructor(id: number, point: Vector2, event: Event) {
+    super(point, 'pen'); // true: pen pointers always start in the down state
 
     this.id = id;
 
-    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer( `Created ${this.toString()}` );
+    sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`Created ${this.toString()}`);
   }
 
   /**
@@ -27,8 +27,8 @@ export default class Pen extends Pointer {
    *
    * @returns Whether the point changed
    */
-  public move( point: Vector2 ): boolean {
-    const pointChanged = this.hasPointChanged( point );
+  public move(point: Vector2): boolean {
+    const pointChanged = this.hasPointChanged(point);
 
     this.point = point;
 
@@ -47,4 +47,4 @@ export default class Pen extends Pointer {
   }
 }
 
-scenery.register( 'Pen', Pen );
+scenery.register('Pen', Pen);

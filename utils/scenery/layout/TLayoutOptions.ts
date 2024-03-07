@@ -1,6 +1,6 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
-import { FlowCellOptions, GridCellOptions } from '../imports.js';
+import type { FlowCellOptions, GridCellOptions } from '../imports';
 
 /**
  * The main type interface for Node's layoutOptions (for use with Grid/Flow based layouts)

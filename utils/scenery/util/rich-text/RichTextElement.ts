@@ -6,10 +6,10 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-import Pool, { TPoolable } from '../../../../phet-core/js/Pool.js';
-import { Node, RichTextCleanable, RichTextLeaf, RichTextNode, scenery } from '../../imports.js';
+import Pool, { type TPoolable } from '../../../phet-core/Pool';
+import { Node, RichTextCleanable, RichTextLeaf, RichTextNode, scenery } from '../../imports';
 
-export default class RichTextElement extends RichTextCleanable( Node ) implements TPoolable {
+export default class RichTextElement extends RichTextCleanable(Node) implements TPoolable {
 
   private isLTR!: boolean;
 
@@ -21,13 +21,13 @@ export default class RichTextElement extends RichTextCleanable( Node ) implement
    * @param isLTR - Whether this container will lay out elements in the left-to-right order (if false, will be
    *                          right-to-left).
    */
-  public constructor( isLTR: boolean ) {
+  public constructor(isLTR: boolean) {
     super();
 
-    this.initialize( isLTR );
+    this.initialize(isLTR);
   }
 
-  public initialize( isLTR: boolean ): this {
+  public initialize(isLTR: boolean): this {
     this.isLTR = isLTR;
     this.leftSpacing = 0;
     this.rightSpacing = 0;
@@ -40,7 +40,7 @@ export default class RichTextElement extends RichTextCleanable( Node ) implement
    *
    * @returns- Whether the item was actually added.
    */
-  public addElement( element: RichTextElement | RichTextLeaf | RichTextNode ): boolean {
+  public addElement(element: RichTextElement | RichTextLeaf | RichTextNode): boolean {
 
     const hadChild = this.children.length > 0;
     const hasElement = element.width > 0;
@@ -51,13 +51,13 @@ export default class RichTextElement extends RichTextCleanable( Node ) implement
     const rightElementSpacing = element.rightSpacing * elementScale;
 
     // If there is nothing, then no spacing should be handled
-    if ( !hadChild && !hasElement ) {
-      sceneryLog && sceneryLog.RichText && sceneryLog.RichText( 'No child or element, ignoring' );
+    if (!hadChild && !hasElement) {
+      sceneryLog && sceneryLog.RichText && sceneryLog.RichText('No child or element, ignoring');
       return false;
     }
-    else if ( !hadChild ) {
-      sceneryLog && sceneryLog.RichText && sceneryLog.RichText( `First child, ltr:${this.isLTR}, spacing: ${this.isLTR ? rightElementSpacing : leftElementSpacing}` );
-      if ( this.isLTR ) {
+    else if (!hadChild) {
+      sceneryLog && sceneryLog.RichText && sceneryLog.RichText(`First child, ltr:${this.isLTR}, spacing: ${this.isLTR ? rightElementSpacing : leftElementSpacing}`);
+      if (this.isLTR) {
         element.left = 0;
         this.leftSpacing = leftElementSpacing;
         this.rightSpacing = rightElementSpacing;
@@ -67,12 +67,12 @@ export default class RichTextElement extends RichTextCleanable( Node ) implement
         this.leftSpacing = leftElementSpacing;
         this.rightSpacing = rightElementSpacing;
       }
-      this.addChild( element );
+      this.addChild(element);
       return true;
     }
-    else if ( !hasElement ) {
-      sceneryLog && sceneryLog.RichText && sceneryLog.RichText( `No element, adding spacing, ltr:${this.isLTR}, spacing: ${leftElementSpacing + rightElementSpacing}` );
-      if ( this.isLTR ) {
+    else if (!hasElement) {
+      sceneryLog && sceneryLog.RichText && sceneryLog.RichText(`No element, adding spacing, ltr:${this.isLTR}, spacing: ${leftElementSpacing + rightElementSpacing}`);
+      if (this.isLTR) {
         this.rightSpacing += leftElementSpacing + rightElementSpacing;
       }
       else {
@@ -80,17 +80,17 @@ export default class RichTextElement extends RichTextCleanable( Node ) implement
       }
     }
     else {
-      if ( this.isLTR ) {
-        sceneryLog && sceneryLog.RichText && sceneryLog.RichText( `LTR add ${this.rightSpacing} + ${leftElementSpacing}` );
+      if (this.isLTR) {
+        sceneryLog && sceneryLog.RichText && sceneryLog.RichText(`LTR add ${this.rightSpacing} + ${leftElementSpacing}`);
         element.left = this.localRight + this.rightSpacing + leftElementSpacing;
         this.rightSpacing = rightElementSpacing;
       }
       else {
-        sceneryLog && sceneryLog.RichText && sceneryLog.RichText( `RTL add ${this.leftSpacing} + ${rightElementSpacing}` );
+        sceneryLog && sceneryLog.RichText && sceneryLog.RichText(`RTL add ${this.leftSpacing} + ${rightElementSpacing}`);
         element.right = this.localLeft - this.leftSpacing - rightElementSpacing;
         this.leftSpacing = leftElementSpacing;
       }
-      this.addChild( element );
+      this.addChild(element);
       return true;
     }
     return false;
@@ -99,8 +99,8 @@ export default class RichTextElement extends RichTextCleanable( Node ) implement
   /**
    * Adds an amount of spacing to the "before" side.
    */
-  public addExtraBeforeSpacing( amount: number ): void {
-    if ( this.isLTR ) {
+  public addExtraBeforeSpacing(amount: number): void {
+    if (this.isLTR) {
       this.leftSpacing += amount;
     }
     else {
@@ -109,11 +109,11 @@ export default class RichTextElement extends RichTextCleanable( Node ) implement
   }
 
   public freeToPool(): void {
-    RichTextElement.pool.freeToPool( this );
+    RichTextElement.pool.freeToPool(this);
   }
 
-  public static readonly pool = new Pool( RichTextElement );
+  public static readonly pool = new Pool(RichTextElement);
 
 }
 
-scenery.register( 'RichTextElement', RichTextElement );
+scenery.register('RichTextElement', RichTextElement);

@@ -6,31 +6,31 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import { FlowBox, FlowBoxOptions, scenery, Node, HSeparator } from '../../imports.js';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import type StrictOmit from '../../../phet-core/types/StrictOmit';
+import { FlowBox, type FlowBoxOptions, scenery, Node, HSeparator } from '../../imports';
 
 type SelfOptions = EmptySelfOptions;
 export type HBoxOptions = StrictOmit<FlowBoxOptions, 'orientation'>;
 
 export default class HBox extends FlowBox {
-  public constructor( providedOptions?: HBoxOptions ) {
-    assert && assert( !providedOptions || !( providedOptions as FlowBoxOptions ).orientation, 'HBox sets orientation' );
+  public constructor(providedOptions?: HBoxOptions) {
+    assert && assert(!providedOptions || !(providedOptions as FlowBoxOptions).orientation, 'HBox sets orientation');
 
-    super( optionize<HBoxOptions, SelfOptions, FlowBoxOptions>()( {
+    super(optionize<HBoxOptions, SelfOptions, FlowBoxOptions>()({
       orientation: 'horizontal'
-    }, providedOptions ) );
+    }, providedOptions));
   }
 
-  protected override onFlowBoxChildInserted( node: Node, index: number ): void {
-    assert && assert( !( node instanceof HSeparator ), 'HSeparator should not be used in an HBox. Use VSeparator instead' );
+  protected override onFlowBoxChildInserted(node: Node, index: number): void {
+    assert && assert(!(node instanceof HSeparator), 'HSeparator should not be used in an HBox. Use VSeparator instead');
 
-    super.onFlowBoxChildInserted( node, index );
+    super.onFlowBoxChildInserted(node, index);
   }
 
-  public override mutate( options?: HBoxOptions ): this {
-    return super.mutate( options );
+  public override mutate(options?: HBoxOptions): this {
+    return super.mutate(options);
   }
 }
 
-scenery.register( 'HBox', HBox );
+scenery.register('HBox', HBox);
