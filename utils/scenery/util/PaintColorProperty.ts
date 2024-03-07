@@ -35,9 +35,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Property, { PropertyOptions } from '../../../axon/js/Property.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import { Color, TPaint, PaintDef, PaintObserver, scenery } from '../imports.js';
+import Property, { type PropertyOptions } from '../../axon/Property';
+import optionize from '../../phet-core/optionize';
+import { Color, type TPaint, PaintDef, PaintObserver, scenery } from '../imports';
 
 type SelfOptions = {
   // 0 applies no change. Positive numbers brighten the color up to 1 (white). Negative numbers darken
@@ -59,37 +59,37 @@ export default class PaintColorProperty extends Property<Color> {
 
   private _paintObserver: PaintObserver;
 
-  public constructor( paint: TPaint, providedOptions?: PaintColorPropertyOptions ) {
-    const initialColor = PaintDef.toColor( paint );
+  public constructor(paint: TPaint, providedOptions?: PaintColorPropertyOptions) {
+    const initialColor = PaintDef.toColor(paint);
 
-    const options = optionize<PaintColorPropertyOptions, SelfOptions, PropertyOptions<Color>>()( {
+    const options = optionize<PaintColorPropertyOptions, SelfOptions, PropertyOptions<Color>>()({
       luminanceFactor: 0,
 
       // Property options
       valueComparisonStrategy: 'equalsFunction' // We don't need to renotify for equivalent colors
-    }, providedOptions );
+    }, providedOptions);
 
-    super( initialColor, options );
+    super(initialColor, options);
 
     this._paint = null;
     this._luminanceFactor = options.luminanceFactor;
-    this._changeListener = this.invalidatePaint.bind( this );
-    this._paintObserver = new PaintObserver( this._changeListener );
+    this._changeListener = this.invalidatePaint.bind(this);
+    this._paintObserver = new PaintObserver(this._changeListener);
 
-    this.setPaint( paint );
+    this.setPaint(paint);
   }
 
   /**
    * Sets the current paint of the PaintColorProperty.
    */
-  public setPaint( paint: TPaint ): void {
-    assert && assert( PaintDef.isPaintDef( paint ) );
+  public setPaint(paint: TPaint): void {
+    assert && assert(PaintDef.isPaintDef(paint));
 
     this._paint = paint;
-    this._paintObserver.setPrimary( paint );
+    this._paintObserver.setPrimary(paint);
   }
 
-  public set paint( value: TPaint ) { this.setPaint( value ); }
+  public set paint(value: TPaint) { this.setPaint(value); }
 
   public get paint(): TPaint { return this.getPaint(); }
 
@@ -118,17 +118,17 @@ export default class PaintColorProperty extends Property<Color> {
    * With intermediate values basically "interpolated". This uses the `Color` colorUtilsBrightness method to adjust
    * the paint.
    */
-  public setLuminanceFactor( luminanceFactor: number ): void {
-    assert && assert( luminanceFactor >= -1 && luminanceFactor <= 1 );
+  public setLuminanceFactor(luminanceFactor: number): void {
+    assert && assert(luminanceFactor >= -1 && luminanceFactor <= 1);
 
-    if ( this.luminanceFactor !== luminanceFactor ) {
+    if (this.luminanceFactor !== luminanceFactor) {
       this._luminanceFactor = luminanceFactor;
 
       this.invalidatePaint();
     }
   }
 
-  public set luminanceFactor( value: number ) { this.setLuminanceFactor( value ); }
+  public set luminanceFactor(value: number) { this.setLuminanceFactor(value); }
 
   public get luminanceFactor(): number { return this.getLuminanceFactor(); }
 
@@ -145,7 +145,7 @@ export default class PaintColorProperty extends Property<Color> {
    * Updates the value of this Property.
    */
   private invalidatePaint(): void {
-    this.value = PaintDef.toColor( this._paint ).colorUtilsBrightness( this._luminanceFactor );
+    this.value = PaintDef.toColor(this._paint).colorUtilsBrightness(this._luminanceFactor);
   }
 
   /**
@@ -158,4 +158,4 @@ export default class PaintColorProperty extends Property<Color> {
   }
 }
 
-scenery.register( 'PaintColorProperty', PaintColorProperty );
+scenery.register('PaintColorProperty', PaintColorProperty);

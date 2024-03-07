@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 // Copyright 2020-2024, University of Colorado Boulder
 
 /**
@@ -9,18 +10,14 @@
  */
 
 import validate from '../../axon/validate';
-// @ts-expect-error
-import Validation, { Validator } from '../../axon/Validation';
+import Validation, { type Validator } from '../../axon/Validation';
 import optionize from '../../phet-core/optionize';
 import PhetioConstants from '../PhetioConstants';
-// @ts-expect-error
-import TandemConstants, { IOTypeName, PhetioElementMetadata } from '../TandemConstants';
+import TandemConstants, { type IOTypeName, type PhetioElementMetadata } from '../TandemConstants';
 import tandemNamespace from '../tandemNamespace';
-// @ts-expect-error
-import StateSchema, { CompositeSchema, CompositeStateObjectType } from './StateSchema';
+import StateSchema, { type CompositeSchema, type CompositeStateObjectType } from './StateSchema';
 import type PhetioObject from '../PhetioObject';
-// @ts-expect-error
-import IntentionalAny from '../../phet-core/types/IntentionalAny.js';
+import type IntentionalAny from '../../phet-core/types/IntentionalAny.js';
 import PhetioDynamicElementContainer from '../PhetioDynamicElementContainer';
 
 // constants
@@ -41,7 +38,7 @@ export type IOTypeMethod = {
   returnType: IOType;
   parameterTypes: IOType[];
 
-  //the function to execute when this method is called. This function's parameters will be based on `parameterTypes`,
+  // the function to execute when this method is called. This function's parameters will be based on `parameterTypes`,
   // and should return the type specified by `returnType`
   implementation: (...args: IntentionalAny[]) => unknown;
   documentation: string;
@@ -211,7 +208,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
       documentation: `PhET-iO Type for ${getCoreTypeName(typeName)}`,
       isFunctionType: false,
 
-      /**** STATE ****/
+      /** ** STATE ****/
 
       toStateObject: supertype && supertype.toStateObject,
       fromStateObject: supertype && supertype.fromStateObject,
@@ -225,6 +222,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
 
     if (assert && supertype) {
       (Object.keys(options.metadataDefaults) as (keyof PhetioElementMetadata)[]).forEach(metadataDefaultKey => {
+        // eslint-disable-next-line no-prototype-builtins
         assert && supertype.getAllMetadataDefaults().hasOwnProperty(metadataDefaultKey) &&
           assert(supertype.getAllMetadataDefaults()[metadataDefaultKey] !== options.metadataDefaults[metadataDefaultKey],
             `${metadataDefaultKey} should not have the same default value as the ancestor metadata default.`);
@@ -252,7 +250,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
     else {
       const compositeSchema = typeof options.stateSchema === 'function' ? options.stateSchema(this) : options.stateSchema;
 
-      this.stateSchema = new StateSchema<T, SelfStateType>({ compositeSchema: compositeSchema });
+      this.stateSchema = new StateSchema<T, SelfStateType>({ compositeSchema });
     }
 
     // Assert that toStateObject method is provided for value StateSchemas. Do this with the following logic:
@@ -321,6 +319,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
       assert && assert(supertype || this.typeName === 'ObjectIO', 'supertype is required');
       assert && assert(!this.typeName.includes('.'), 'Dots should not appear in type names');
       assert && assert(this.typeName.split(/[<(]/)[0].endsWith(PhetioConstants.IO_TYPE_SUFFIX), `IOType name must end with ${PhetioConstants.IO_TYPE_SUFFIX}`);
+      // eslint-disable-next-line no-prototype-builtins
       assert && assert(this.hasOwnProperty('typeName'), 'this.typeName is required');
 
       // assert that each public method adheres to the expected schema
@@ -332,6 +331,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
       });
       assert && assert(this.documentation.length > 0, 'documentation must be provided');
 
+      // eslint-disable-next-line no-prototype-builtins
       this.methods && this.hasOwnProperty('methodOrder') && this.methodOrder.forEach(methodName => {
         assert && assert(this.methods![methodName], `methodName not in public methods: ${methodName}`);
       });

@@ -10,9 +10,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../../dot/js/toSVGNumber.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { ColorDef, Filter, TColor, PaintDef, scenery } from '../imports.js';
+import toSVGNumber from '../../dot/toSVGNumber';
+import Vector2 from '../../dot/Vector2';
+import { ColorDef, Filter, type TColor, PaintDef, scenery } from '../imports';
 
 export default class DropShadow extends Filter {
 
@@ -27,11 +27,11 @@ export default class DropShadow extends Filter {
    * @param color
    * @param [filterRegionPercentage]
    */
-  public constructor( offset: Vector2, blurRadius: number, color: TColor, filterRegionPercentage = 15 ) {
-    assert && assert( offset.isFinite(), 'DropShadow offset should be finite' );
-    assert && assert( isFinite( blurRadius ), 'DropShadow blurRadius should be finite' );
-    assert && assert( blurRadius >= 0, 'DropShadow blurRadius should be non-negative' );
-    assert && assert( ColorDef.isColorDef( color ), 'DropShadow color should be a ColorDef' );
+  public constructor(offset: Vector2, blurRadius: number, color: TColor, filterRegionPercentage = 15) {
+    assert && assert(offset.isFinite(), 'DropShadow offset should be finite');
+    assert && assert(isFinite(blurRadius), 'DropShadow blurRadius should be finite');
+    assert && assert(blurRadius >= 0, 'DropShadow blurRadius should be non-negative');
+    assert && assert(ColorDef.isColorDef(color), 'DropShadow color should be a ColorDef');
 
     super();
 
@@ -40,7 +40,7 @@ export default class DropShadow extends Filter {
     this.offset = offset;
     this.blurRadius = blurRadius;
     this.color = color;
-    this.colorCSS = PaintDef.toColor( color ).toCSS();
+    this.colorCSS = PaintDef.toColor(color).toCSS();
 
     this.filterRegionPercentageIncrease = filterRegionPercentage;
   }
@@ -51,7 +51,7 @@ export default class DropShadow extends Filter {
    * (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter).
    */
   public getCSSFilterString(): string {
-    return `drop-shadow(${toSVGNumber( this.offset.x )}px ${toSVGNumber( this.offset.y )}px ${toSVGNumber( this.blurRadius )}px ${this.colorCSS})`;
+    return `drop-shadow(${toSVGNumber(this.offset.x)}px ${toSVGNumber(this.offset.y)}px ${toSVGNumber(this.blurRadius)}px ${this.colorCSS})`;
   }
 
   public override isDOMCompatible(): boolean {
@@ -59,12 +59,12 @@ export default class DropShadow extends Filter {
   }
 
   public applyCanvasFilter(): void {
-    throw new Error( 'unimplemented' );
+    throw new Error('unimplemented');
   }
 
-  public applySVGFilter( svgFilter: SVGFilterElement, inName: string, resultName?: string ): void {
-    throw new Error( 'unimplemented' );
+  public applySVGFilter(svgFilter: SVGFilterElement, inName: string, resultName?: string): void {
+    throw new Error('unimplemented');
   }
 }
 
-scenery.register( 'DropShadow', DropShadow );
+scenery.register('DropShadow', DropShadow);

@@ -9,7 +9,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Node, Renderer, scenery } from '../imports.js';
+import { Node, Renderer, scenery } from '../imports';
 
 const summaryBits = [
   // renderer bits ("Is renderer X supported by the entire sub-tree?")
@@ -36,49 +36,57 @@ const summaryBits = [
 ];
 
 const summaryBitIndices = {};
-summaryBits.forEach( ( bit, index ) => {
-  summaryBitIndices[ bit ] = index;
-} );
+summaryBits.forEach((bit, index) => {
+  summaryBitIndices[bit] = index;
+});
 
 const numSummaryBits = summaryBits.length;
 
 // A bitmask with all of the bits set that we record
 let bitmaskAll = 0;
-for ( let l = 0; l < numSummaryBits; l++ ) {
-  bitmaskAll |= summaryBits[ l ];
+for (let l = 0; l < numSummaryBits; l++) {
+  bitmaskAll |= summaryBits[l];
 }
 
 class RendererSummary {
   /**
    * @param {Node} node
    */
-  constructor( node ) {
-    assert && assert( node instanceof Node );
+  constructor(node) {
+    assert && assert(node instanceof Node);
 
     // NOTE: assumes that we are created in the Node constructor
-    assert && assert( node._rendererBitmask === Renderer.bitmaskNodeDefault, 'Node must have a default bitmask when creating a RendererSummary' );
-    assert && assert( node._children.length === 0, 'Node cannot have children when creating a RendererSummary' );
+    assert &&
+      assert(
+        node._rendererBitmask === Renderer.bitmaskNodeDefault,
+        'Node must have a default bitmask when creating a RendererSummary'
+      );
+    assert &&
+      assert(
+        node._children.length === 0,
+        'Node cannot have children when creating a RendererSummary'
+      );
 
     // @private {Node}
     this.node = node;
 
     // @private Int16Array, maps bitmask indices (see summaryBitIndices, the index of the bitmask in summaryBits) to
     // a count of how many children (or self) have that property (e.g. can't renderer all of their contents with Canvas)
-    this._counts = new Int16Array( numSummaryBits );
+    this._counts = new Int16Array(numSummaryBits);
 
     // @public {number} (scenery-internal)
     this.bitmask = bitmaskAll;
 
     // @private {number}
-    this.selfBitmask = RendererSummary.summaryBitmaskForNodeSelf( node );
+    this.selfBitmask = RendererSummary.summaryBitmaskForNodeSelf(node);
 
-    this.summaryChange( this.bitmask, this.selfBitmask );
+    this.summaryChange(this.bitmask, this.selfBitmask);
 
     // required listeners to update our summary based on painted/non-painted information
-    const listener = this.selfChange.bind( this );
-    this.node.filterChangeEmitter.addListener( listener );
-    this.node.clipAreaProperty.lazyLink( listener );
-    this.node.rendererSummaryRefreshEmitter.addListener( listener );
+    const listener = this.selfChange.bind(this);
+    this.node.filterChangeEmitter.addListener(listener);
+    this.node.clipAreaProperty.lazyLink(listener);
+    this.node.rendererSummaryRefreshEmitter.addListener(listener);
   }
 
   /**
@@ -88,66 +96,70 @@ class RendererSummary {
    * @param {number} oldBitmask
    * @param {number} newBitmask
    */
-  summaryChange( oldBitmask, newBitmask ) {
+  summaryChange(oldBitmask, newBitmask) {
     assert && this.audit();
 
     const changeBitmask = oldBitmask ^ newBitmask; // bit set only if it changed
 
     let ancestorOldMask = 0;
     let ancestorNewMask = 0;
-    for ( let i = 0; i < numSummaryBits; i++ ) {
-      const bit = summaryBits[ i ];
-      const bitIndex = summaryBitIndices[ bit ];
+    for (let i = 0; i < numSummaryBits; i++) {
+      const bit = summaryBits[i];
+      const bitIndex = summaryBitIndices[bit];
 
       // If the bit for the renderer has changed
-      if ( bit & changeBitmask ) {
-
+      if (bit & changeBitmask) {
         // If it is now set (wasn't before), gained support for the renderer
-        if ( bit & newBitmask ) {
-          this._counts[ bitIndex ]--; // reduce count, since we count the number of 0s (unsupported)
-          if ( this._counts[ bitIndex ] === 0 ) {
+        if (bit & newBitmask) {
+          this._counts[bitIndex]--; // reduce count, since we count the number of 0s (unsupported)
+          if (this._counts[bitIndex] === 0) {
             ancestorNewMask |= bit; // add our bit to the "new" mask we will send to ancestors
           }
         }
         // It was set before (now isn't), lost support for the renderer
         else {
-          this._counts[ bitIndex ]++; // increment the count, since we count the number of 0s (unsupported)
-          if ( this._counts[ bitIndex ] === 1 ) {
+          this._counts[bitIndex]++; // increment the count, since we count the number of 0s (unsupported)
+          if (this._counts[bitIndex] === 1) {
             ancestorOldMask |= bit; // add our bit to the "old" mask we will send to ancestors
           }
         }
       }
     }
 
-    if ( ancestorOldMask || ancestorNewMask ) {
-
+    if (ancestorOldMask || ancestorNewMask) {
       const oldSubtreeBitmask = this.bitmask;
-      assert && assert( oldSubtreeBitmask !== undefined );
+      assert && assert(oldSubtreeBitmask !== undefined);
 
-      for ( let j = 0; j < numSummaryBits; j++ ) {
-        const ancestorBit = summaryBits[ j ];
+      for (let j = 0; j < numSummaryBits; j++) {
+        const ancestorBit = summaryBits[j];
         // Check for added bits
-        if ( ancestorNewMask & ancestorBit ) {
+        if (ancestorNewMask & ancestorBit) {
           this.bitmask |= ancestorBit;
         }
 
         // Check for removed bits
-        if ( ancestorOldMask & ancestorBit ) {
+        if (ancestorOldMask & ancestorBit) {
           this.bitmask ^= ancestorBit;
-          assert && assert( !( this.bitmask & ancestorBit ),
-            'Should be cleared, doing cheaper XOR assuming it already was set' );
+          assert &&
+            assert(
+              !(this.bitmask & ancestorBit),
+              'Should be cleared, doing cheaper XOR assuming it already was set'
+            );
         }
       }
 
       this.node.instanceRefreshEmitter.emit();
-      this.node.onSummaryChange( oldSubtreeBitmask, this.bitmask );
+      this.node.onSummaryChange(oldSubtreeBitmask, this.bitmask);
 
       const len = this.node._parents.length;
-      for ( let k = 0; k < len; k++ ) {
-        this.node._parents[ k ]._rendererSummary.summaryChange( ancestorOldMask, ancestorNewMask );
+      for (let k = 0; k < len; k++) {
+        this.node._parents[k]._rendererSummary.summaryChange(
+          ancestorOldMask,
+          ancestorNewMask
+        );
       }
 
-      assert && assert( this.bitmask === this.computeBitmask(), 'Sanity check' );
+      assert && assert(this.bitmask === this.computeBitmask(), 'Sanity check');
     }
 
     assert && this.audit();
@@ -158,9 +170,9 @@ class RendererSummary {
    */
   selfChange() {
     const oldBitmask = this.selfBitmask;
-    const newBitmask = RendererSummary.summaryBitmaskForNodeSelf( this.node );
-    if ( oldBitmask !== newBitmask ) {
-      this.summaryChange( oldBitmask, newBitmask );
+    const newBitmask = RendererSummary.summaryBitmaskForNodeSelf(this.node);
+    if (oldBitmask !== newBitmask) {
+      this.summaryChange(oldBitmask, newBitmask);
       this.selfBitmask = newBitmask;
     }
   }
@@ -172,9 +184,9 @@ class RendererSummary {
    */
   computeBitmask() {
     let bitmask = 0;
-    for ( let i = 0; i < numSummaryBits; i++ ) {
-      if ( this._counts[ i ] === 0 ) {
-        bitmask |= summaryBits[ i ];
+    for (let i = 0; i < numSummaryBits; i++) {
+      if (this._counts[i] === 0) {
+        bitmask |= summaryBits[i];
       }
     }
     return bitmask;
@@ -188,8 +200,8 @@ class RendererSummary {
    * @param {number} renderer - Single bit preferred. If multiple bits set, requires ALL painted nodes are compatible
    *                            with ALL of the bits.
    */
-  isSubtreeFullyCompatible( renderer ) {
-    return !!( renderer & this.bitmask );
+  isSubtreeFullyCompatible(renderer) {
+    return !!(renderer & this.bitmask);
   }
 
   /**
@@ -199,8 +211,8 @@ class RendererSummary {
    * @param {number} renderer - Single bit preferred. If multiple bits set, will return if a single painted node is
    *                            compatible with at least one of the bits.
    */
-  isSubtreeContainingCompatible( renderer ) {
-    return !( ( renderer << Renderer.bitmaskLacksShift ) & this.bitmask );
+  isSubtreeContainingCompatible(renderer) {
+    return !((renderer << Renderer.bitmaskLacksShift) & this.bitmask);
   }
 
   /**
@@ -209,7 +221,7 @@ class RendererSummary {
    * @returns {boolean}
    */
   isSingleCanvasSupported() {
-    return !!( Renderer.bitmaskSingleCanvas & this.bitmask );
+    return !!(Renderer.bitmaskSingleCanvas & this.bitmask);
   }
 
   /**
@@ -218,7 +230,7 @@ class RendererSummary {
    * @returns {boolean}
    */
   isSingleSVGSupported() {
-    return !!( Renderer.bitmaskSingleSVG & this.bitmask );
+    return !!(Renderer.bitmaskSingleSVG & this.bitmask);
   }
 
   /**
@@ -227,7 +239,7 @@ class RendererSummary {
    * @returns {boolean}
    */
   isNotPainted() {
-    return !!( Renderer.bitmaskNotPainted & this.bitmask );
+    return !!(Renderer.bitmaskNotPainted & this.bitmask);
   }
 
   /**
@@ -236,7 +248,7 @@ class RendererSummary {
    * @returns {boolean}
    */
   hasNoPDOM() {
-    return !!( Renderer.bitmaskNoPDOM & this.bitmask );
+    return !!(Renderer.bitmaskNoPDOM & this.bitmask);
   }
 
   /**
@@ -245,7 +257,7 @@ class RendererSummary {
    * @returns {boolean}
    */
   areBoundsValid() {
-    return !!( Renderer.bitmaskBoundsValid & this.bitmask );
+    return !!(Renderer.bitmaskBoundsValid & this.bitmask);
   }
 
   /**
@@ -257,25 +269,25 @@ class RendererSummary {
    * @param {number} preferredRenderers
    * @returns {boolean}
    */
-  isSubtreeRenderedExclusivelySVG( preferredRenderers ) {
+  isSubtreeRenderedExclusivelySVG(preferredRenderers) {
     // Check if we have anything that would PREVENT us from having a single SVG block
-    if ( !this.isSingleSVGSupported() ) {
+    if (!this.isSingleSVGSupported()) {
       return false;
     }
 
     // Check for any renderer preferences that would CAUSE us to choose not to display with a single SVG block
-    for ( let i = 0; i < Renderer.numActiveRenderers; i++ ) {
+    for (let i = 0; i < Renderer.numActiveRenderers; i++) {
       // Grab the next-most preferred renderer
-      const renderer = Renderer.bitmaskOrder( preferredRenderers, i );
+      const renderer = Renderer.bitmaskOrder(preferredRenderers, i);
 
       // If it's SVG, congrats! Everything will render in SVG (since SVG is supported, as noted above)
-      if ( Renderer.bitmaskSVG & renderer ) {
+      if (Renderer.bitmaskSVG & renderer) {
         return true;
       }
 
       // Since it's not SVG, if there's a single painted node that supports this renderer (which is preferred over SVG),
       // then it will be rendered with this renderer, NOT SVG.
-      if ( this.isSubtreeContainingCompatible( renderer ) ) {
+      if (this.isSubtreeContainingCompatible(renderer)) {
         return false;
       }
     }
@@ -292,25 +304,25 @@ class RendererSummary {
    * @param {number} preferredRenderers
    * @returns {boolean}
    */
-  isSubtreeRenderedExclusivelyCanvas( preferredRenderers ) {
+  isSubtreeRenderedExclusivelyCanvas(preferredRenderers) {
     // Check if we have anything that would PREVENT us from having a single Canvas block
-    if ( !this.isSingleCanvasSupported() ) {
+    if (!this.isSingleCanvasSupported()) {
       return false;
     }
 
     // Check for any renderer preferences that would CAUSE us to choose not to display with a single Canvas block
-    for ( let i = 0; i < Renderer.numActiveRenderers; i++ ) {
+    for (let i = 0; i < Renderer.numActiveRenderers; i++) {
       // Grab the next-most preferred renderer
-      const renderer = Renderer.bitmaskOrder( preferredRenderers, i );
+      const renderer = Renderer.bitmaskOrder(preferredRenderers, i);
 
       // If it's Canvas, congrats! Everything will render in Canvas (since Canvas is supported, as noted above)
-      if ( Renderer.bitmaskCanvas & renderer ) {
+      if (Renderer.bitmaskCanvas & renderer) {
         return true;
       }
 
       // Since it's not Canvas, if there's a single painted node that supports this renderer (which is preferred over Canvas),
       // then it will be rendered with this renderer, NOT Canvas.
-      if ( this.isSubtreeContainingCompatible( renderer ) ) {
+      if (this.isSubtreeContainingCompatible(renderer)) {
         return false;
       }
     }
@@ -323,12 +335,15 @@ class RendererSummary {
    * @public
    */
   audit() {
-    if ( assert ) {
-      for ( let i = 0; i < numSummaryBits; i++ ) {
-        const bit = summaryBits[ i ];
-        const countIsZero = this._counts[ i ] === 0;
-        const bitmaskContainsBit = !!( this.bitmask & bit );
-        assert( countIsZero === bitmaskContainsBit, 'Bits should be set if count is zero' );
+    if (assert) {
+      for (let i = 0; i < numSummaryBits; i++) {
+        const bit = summaryBits[i];
+        const countIsZero = this._counts[i] === 0;
+        const bitmaskContainsBit = !!(this.bitmask & bit);
+        assert(
+          countIsZero === bitmaskContainsBit,
+          'Bits should be set if count is zero'
+        );
       }
     }
   }
@@ -340,12 +355,12 @@ class RendererSummary {
    * @returns {string}
    */
   toString() {
-    let result = RendererSummary.bitmaskToString( this.bitmask );
-    for ( let i = 0; i < numSummaryBits; i++ ) {
-      const bit = summaryBits[ i ];
-      const countForBit = this._counts[ i ];
-      if ( countForBit !== 0 ) {
-        result += ` ${RendererSummary.bitToString( bit )}:${countForBit}`;
+    let result = RendererSummary.bitmaskToString(this.bitmask);
+    for (let i = 0; i < numSummaryBits; i++) {
+      const bit = summaryBits[i];
+      const countForBit = this._counts[i];
+      if (countForBit !== 0) {
+        result += ` ${RendererSummary.bitToString(bit)}:${countForBit}`;
       }
     }
     return result;
@@ -359,14 +374,17 @@ class RendererSummary {
    *
    * @param {Node} node
    */
-  static summaryBitmaskForNodeSelf( node ) {
+  static summaryBitmaskForNodeSelf(node) {
     let bitmask = node._rendererBitmask;
 
-    if ( node.isPainted() ) {
-      bitmask |= ( ( node._rendererBitmask & Renderer.bitmaskCurrentRendererArea ) ^ Renderer.bitmaskCurrentRendererArea ) << Renderer.bitmaskLacksShift;
-    }
-    else {
-      bitmask |= Renderer.bitmaskCurrentRendererArea << Renderer.bitmaskLacksShift;
+    if (node.isPainted()) {
+      bitmask |=
+        ((node._rendererBitmask & Renderer.bitmaskCurrentRendererArea) ^
+          Renderer.bitmaskCurrentRendererArea) <<
+        Renderer.bitmaskLacksShift;
+    } else {
+      bitmask |=
+        Renderer.bitmaskCurrentRendererArea << Renderer.bitmaskLacksShift;
     }
 
     // NOTE: If changing, see Instance.updateRenderingState
@@ -375,27 +393,33 @@ class RendererSummary {
 
     // Whether this subtree will be able to support a single SVG element
     // NOTE: If changing, see Instance.updateRenderingState
-    if ( !requiresSplit && // Can't have a single SVG element if we are split
-         Renderer.isSVG( node._rendererBitmask ) && // If our node doesn't support SVG, can't do it
-         ( !rendererHint || Renderer.isSVG( rendererHint ) ) ) { // Can't if a renderer hint is set to something else
+    if (
+      !requiresSplit && // Can't have a single SVG element if we are split
+      Renderer.isSVG(node._rendererBitmask) && // If our node doesn't support SVG, can't do it
+      (!rendererHint || Renderer.isSVG(rendererHint))
+    ) {
+      // Can't if a renderer hint is set to something else
       bitmask |= Renderer.bitmaskSingleSVG;
     }
 
     // Whether this subtree will be able to support a single Canvas element
     // NOTE: If changing, see Instance.updateRenderingState
-    if ( !requiresSplit && // Can't have a single SVG element if we are split
-         Renderer.isCanvas( node._rendererBitmask ) && // If our node doesn't support Canvas, can't do it
-         ( !rendererHint || Renderer.isCanvas( rendererHint ) ) ) { // Can't if a renderer hint is set to something else
+    if (
+      !requiresSplit && // Can't have a single SVG element if we are split
+      Renderer.isCanvas(node._rendererBitmask) && // If our node doesn't support Canvas, can't do it
+      (!rendererHint || Renderer.isCanvas(rendererHint))
+    ) {
+      // Can't if a renderer hint is set to something else
       bitmask |= Renderer.bitmaskSingleCanvas;
     }
 
-    if ( !node.isPainted() ) {
+    if (!node.isPainted()) {
       bitmask |= Renderer.bitmaskNotPainted;
     }
-    if ( node.areSelfBoundsValid() ) {
+    if (node.areSelfBoundsValid()) {
       bitmask |= Renderer.bitmaskBoundsValid;
     }
-    if ( !node.hasPDOMContent && !node.hasPDOMOrder() ) {
+    if (!node.hasPDOMContent && !node.hasPDOMOrder()) {
       bitmask |= Renderer.bitmaskNoPDOM;
     }
 
@@ -409,20 +433,46 @@ class RendererSummary {
    * @param {number} bit
    * @returns {string}
    */
-  static bitToString( bit ) {
-    if ( bit === Renderer.bitmaskCanvas ) { return 'Canvas'; }
-    if ( bit === Renderer.bitmaskSVG ) { return 'SVG'; }
-    if ( bit === Renderer.bitmaskDOM ) { return 'DOM'; }
-    if ( bit === Renderer.bitmaskWebGL ) { return 'WebGL'; }
-    if ( bit === Renderer.bitmaskLacksCanvas ) { return '(-Canvas)'; }
-    if ( bit === Renderer.bitmaskLacksSVG ) { return '(-SVG)'; }
-    if ( bit === Renderer.bitmaskLacksDOM ) { return '(-DOM)'; }
-    if ( bit === Renderer.bitmaskLacksWebGL ) { return '(-WebGL)'; }
-    if ( bit === Renderer.bitmaskSingleCanvas ) { return 'SingleCanvas'; }
-    if ( bit === Renderer.bitmaskSingleSVG ) { return 'SingleSVG'; }
-    if ( bit === Renderer.bitmaskNotPainted ) { return 'NotPainted'; }
-    if ( bit === Renderer.bitmaskBoundsValid ) { return 'BoundsValid'; }
-    if ( bit === Renderer.bitmaskNoPDOM ) { return 'NotAccessible'; }
+  static bitToString(bit) {
+    if (bit === Renderer.bitmaskCanvas) {
+      return 'Canvas';
+    }
+    if (bit === Renderer.bitmaskSVG) {
+      return 'SVG';
+    }
+    if (bit === Renderer.bitmaskDOM) {
+      return 'DOM';
+    }
+    if (bit === Renderer.bitmaskWebGL) {
+      return 'WebGL';
+    }
+    if (bit === Renderer.bitmaskLacksCanvas) {
+      return '(-Canvas)';
+    }
+    if (bit === Renderer.bitmaskLacksSVG) {
+      return '(-SVG)';
+    }
+    if (bit === Renderer.bitmaskLacksDOM) {
+      return '(-DOM)';
+    }
+    if (bit === Renderer.bitmaskLacksWebGL) {
+      return '(-WebGL)';
+    }
+    if (bit === Renderer.bitmaskSingleCanvas) {
+      return 'SingleCanvas';
+    }
+    if (bit === Renderer.bitmaskSingleSVG) {
+      return 'SingleSVG';
+    }
+    if (bit === Renderer.bitmaskNotPainted) {
+      return 'NotPainted';
+    }
+    if (bit === Renderer.bitmaskBoundsValid) {
+      return 'BoundsValid';
+    }
+    if (bit === Renderer.bitmaskNoPDOM) {
+      return 'NotAccessible';
+    }
     return '?';
   }
 
@@ -433,12 +483,12 @@ class RendererSummary {
    * @param {number} bitmask
    * @returns {string}
    */
-  static bitmaskToString( bitmask ) {
+  static bitmaskToString(bitmask) {
     let result = '';
-    for ( let i = 0; i < numSummaryBits; i++ ) {
-      const bit = summaryBits[ i ];
-      if ( bitmask & bit ) {
-        result += `${RendererSummary.bitToString( bit )} `;
+    for (let i = 0; i < numSummaryBits; i++) {
+      const bit = summaryBits[i];
+      if (bitmask & bit) {
+        result += `${RendererSummary.bitToString(bit)} `;
       }
     }
     return result;
@@ -448,5 +498,5 @@ class RendererSummary {
 // @public {number}
 RendererSummary.bitmaskAll = bitmaskAll;
 
-scenery.register( 'RendererSummary', RendererSummary );
+scenery.register('RendererSummary', RendererSummary);
 export default RendererSummary;

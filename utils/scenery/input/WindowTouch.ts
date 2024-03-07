@@ -11,4 +11,5 @@
 
 type WindowTouch = Touch;
 
+// @ts-expect-error
 export default WindowTouch;

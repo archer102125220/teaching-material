@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { scenery } from '../imports.js';
+import { scenery } from '../imports';
 
 class PaintSVGState {
   constructor() {
@@ -49,8 +49,8 @@ class PaintSVGState {
    * @private
    */
   releaseFillPaint() {
-    if ( this.fillPaint ) {
-      this.svgBlock.decrementPaint( this.fillPaint );
+    if (this.fillPaint) {
+      this.svgBlock.decrementPaint(this.fillPaint);
       this.fillPaint = null;
     }
   }
@@ -59,8 +59,8 @@ class PaintSVGState {
    * @private
    */
   releaseStrokePaint() {
-    if ( this.strokePaint ) {
-      this.svgBlock.decrementPaint( this.strokePaint );
+    if (this.strokePaint) {
+      this.svgBlock.decrementPaint(this.strokePaint);
       this.strokePaint = null;
     }
   }
@@ -72,26 +72,26 @@ class PaintSVGState {
    * @param {SVGBlock} svgBlock
    * @param {null|string|Color|LinearGradient|RadialGradient|Pattern} fill
    */
-  updateFill( svgBlock, fill ) {
-    assert && assert( this.svgBlock === svgBlock );
+  updateFill(svgBlock, fill) {
+    assert && assert(this.svgBlock === svgBlock);
 
     // NOTE: If fill.isPaint === true, this should be different if we switched to a different SVG block.
-    const fillStyle = paintToSVGStyle( fill, svgBlock );
+    const fillStyle = paintToSVGStyle(fill, svgBlock);
 
     // If our fill paint reference changed
-    if ( fill !== this.fillPaint ) {
+    if (fill !== this.fillPaint) {
       // release the old reference
       this.releaseFillPaint();
 
       // only store a new reference if our new fill is a paint
-      if ( fill && fill.isPaint ) {
+      if (fill && fill.isPaint) {
         this.fillPaint = fill;
-        svgBlock.incrementPaint( fill );
+        svgBlock.incrementPaint(fill);
       }
     }
 
     // If we need to update the SVG style of our fill
-    if ( fillStyle !== this.fillStyle ) {
+    if (fillStyle !== this.fillStyle) {
       this.fillStyle = fillStyle;
       this.updateBaseStyle();
     }
@@ -104,26 +104,26 @@ class PaintSVGState {
    * @param {SVGBlock} svgBlock
    * @param {null|string|Color|LinearGradient|RadialGradient|Pattern} fill
    */
-  updateStroke( svgBlock, stroke ) {
-    assert && assert( this.svgBlock === svgBlock );
+  updateStroke(svgBlock, stroke) {
+    assert && assert(this.svgBlock === svgBlock);
 
     // NOTE: If stroke.isPaint === true, this should be different if we switched to a different SVG block.
-    const strokeStyle = paintToSVGStyle( stroke, svgBlock );
+    const strokeStyle = paintToSVGStyle(stroke, svgBlock);
 
     // If our stroke paint reference changed
-    if ( stroke !== this.strokePaint ) {
+    if (stroke !== this.strokePaint) {
       // release the old reference
       this.releaseStrokePaint();
 
       // only store a new reference if our new stroke is a paint
-      if ( stroke && stroke.isPaint ) {
+      if (stroke && stroke.isPaint) {
         this.strokePaint = stroke;
-        svgBlock.incrementPaint( stroke );
+        svgBlock.incrementPaint(stroke);
       }
     }
 
     // If we need to update the SVG style of our stroke
-    if ( strokeStyle !== this.strokeStyle ) {
+    if (strokeStyle !== this.strokeStyle) {
       this.strokeStyle = strokeStyle;
       this.updateBaseStyle();
     }
@@ -141,29 +141,29 @@ class PaintSVGState {
    *
    * @param {Node} node
    */
-  updateStrokeDetailStyle( node ) {
+  updateStrokeDetailStyle(node) {
     let strokeDetailStyle = '';
 
     const lineWidth = node.getLineWidth();
-    if ( lineWidth !== 1 ) {
+    if (lineWidth !== 1) {
       strokeDetailStyle += `stroke-width: ${lineWidth};`;
     }
 
     const lineCap = node.getLineCap();
-    if ( lineCap !== 'butt' ) {
+    if (lineCap !== 'butt') {
       strokeDetailStyle += `stroke-linecap: ${lineCap};`;
     }
 
     const lineJoin = node.getLineJoin();
-    if ( lineJoin !== 'miter' ) {
+    if (lineJoin !== 'miter') {
       strokeDetailStyle += `stroke-linejoin: ${lineJoin};`;
     }
 
     const miterLimit = node.getMiterLimit();
     strokeDetailStyle += `stroke-miterlimit: ${miterLimit};`;
 
-    if ( node.hasLineDash() ) {
-      strokeDetailStyle += `stroke-dasharray: ${node.getLineDash().join( ',' )};`;
+    if (node.hasLineDash()) {
+      strokeDetailStyle += `stroke-dasharray: ${node.getLineDash().join(',')};`;
       strokeDetailStyle += `stroke-dashoffset: ${node.getLineDashOffset()};`;
     }
 
@@ -176,26 +176,26 @@ class PaintSVGState {
    *
    * @param {SVGBlock} svgBlock
    */
-  updateSVGBlock( svgBlock ) {
+  updateSVGBlock(svgBlock) {
     // remove paints from the old svgBlock
     const oldSvgBlock = this.svgBlock;
-    if ( oldSvgBlock ) {
-      if ( this.fillPaint ) {
-        oldSvgBlock.decrementPaint( this.fillPaint );
+    if (oldSvgBlock) {
+      if (this.fillPaint) {
+        oldSvgBlock.decrementPaint(this.fillPaint);
       }
-      if ( this.strokePaint ) {
-        oldSvgBlock.decrementPaint( this.strokePaint );
+      if (this.strokePaint) {
+        oldSvgBlock.decrementPaint(this.strokePaint);
       }
     }
 
     this.svgBlock = svgBlock;
 
     // add paints to the new svgBlock
-    if ( this.fillPaint ) {
-      svgBlock.incrementPaint( this.fillPaint );
+    if (this.fillPaint) {
+      svgBlock.incrementPaint(this.fillPaint);
     }
-    if ( this.strokePaint ) {
-      svgBlock.incrementPaint( this.strokePaint );
+    if (this.strokePaint) {
+      svgBlock.incrementPaint(this.strokePaint);
     }
   }
 }
@@ -206,25 +206,22 @@ class PaintSVGState {
  * @param {null|string|Color|LinearGradient|RadialGradient|Pattern} paint
  * @param {SVGBlock} svgBlock
  */
-function paintToSVGStyle( paint, svgBlock ) {
-  if ( !paint ) {
+function paintToSVGStyle(paint, svgBlock) {
+  if (!paint) {
     // no paint
     return 'none';
-  }
-  else if ( paint.toCSS ) {
+  } else if (paint.toCSS) {
     // Color object paint
     return paint.toCSS();
-  }
-  else if ( paint.isPaint ) {
+  } else if (paint.isPaint) {
     // reference the SVG definition with a URL
     return `url(#${paint.id}-${svgBlock ? svgBlock.id : 'noblock'})`;
-  }
-  else {
+  } else {
     // plain CSS color
     return paint;
   }
 }
 
-scenery.register( 'PaintSVGState', PaintSVGState );
+scenery.register('PaintSVGState', PaintSVGState);
 
 export default PaintSVGState;

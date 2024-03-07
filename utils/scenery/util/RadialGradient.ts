@@ -8,9 +8,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Vector2 from '../../../dot/js/Vector2.js';
-import platform from '../../../phet-core/js/platform.js';
-import { ColorDef, Gradient, GradientStop, scenery, SVGBlock, SVGRadialGradient, TColor } from '../imports.js';
+import Vector2 from '../../dot/Vector2';
+import platform from '../../phet-core/platform';
+import { ColorDef, Gradient, type GradientStop, scenery, SVGBlock, SVGRadialGradient, type TColor } from '../imports';
 
 export default class RadialGradient extends Gradient {
 
@@ -45,17 +45,17 @@ export default class RadialGradient extends Gradient {
    * @param y1 - Y coordinate of the end point (ratio 1) in the local coordinate frame
    * @param r1 - Radius of the end point (ratio 1) in the local coordinate frame
    */
-  public constructor( x0: number, y0: number, r0: number, x1: number, y1: number, r1: number ) {
+  public constructor(x0: number, y0: number, r0: number, x1: number, y1: number, r1: number) {
     super();
 
-    this.start = new Vector2( x0, y0 );
-    this.end = new Vector2( x1, y1 );
+    this.start = new Vector2(x0, y0);
+    this.end = new Vector2(x1, y1);
 
     // If we are using Safari, we need to work around incorrect gradient handling for now,
     // see https://github.com/phetsims/sun/issues/526
-    if ( platform.safari ) {
-      const x = ( x0 + x1 ) / 2;
-      const y = ( y0 + y1 ) / 2;
+    if (platform.safari) {
+      const x = (x0 + x1) / 2;
+      const y = (y0 + y1) / 2;
       this.start.x = x;
       this.start.y = y;
       this.end.x = x;
@@ -65,20 +65,20 @@ export default class RadialGradient extends Gradient {
     this.startRadius = r0;
     this.endRadius = r1;
 
-    this.focalPoint = this.start.plus( this.end.minus( this.start ).times( this.startRadius / ( this.startRadius - this.endRadius ) ) );
+    this.focalPoint = this.start.plus(this.end.minus(this.start).times(this.startRadius / (this.startRadius - this.endRadius)));
 
     this.startIsLarger = this.startRadius > this.endRadius;
     this.largePoint = this.startIsLarger ? this.start : this.end;
 
-    this.maxRadius = Math.max( this.startRadius, this.endRadius );
-    this.minRadius = Math.min( this.startRadius, this.endRadius );
+    this.maxRadius = Math.max(this.startRadius, this.endRadius);
+    this.minRadius = Math.min(this.startRadius, this.endRadius);
 
     // make sure that the focal point is in both circles. SVG doesn't support rendering outside of them
-    if ( this.startRadius >= this.endRadius ) {
-      assert && assert( this.focalPoint.minus( this.start ).magnitude <= this.startRadius );
+    if (this.startRadius >= this.endRadius) {
+      assert && assert(this.focalPoint.minus(this.start).magnitude <= this.startRadius);
     }
     else {
-      assert && assert( this.focalPoint.minus( this.end ).magnitude <= this.endRadius );
+      assert && assert(this.focalPoint.minus(this.end).magnitude <= this.endRadius);
     }
   }
 
@@ -89,14 +89,14 @@ export default class RadialGradient extends Gradient {
   public createCanvasGradient(): CanvasGradient {
     // use the global scratch canvas instead of creating a new Canvas
     // @ts-expect-error TODO scenery namespace https://github.com/phetsims/scenery/issues/1581
-    return scenery.scratchContext.createRadialGradient( this.start.x, this.start.y, this.startRadius, this.end.x, this.end.y, this.endRadius );
+    return scenery.scratchContext.createRadialGradient(this.start.x, this.start.y, this.startRadius, this.end.x, this.end.y, this.endRadius);
   }
 
   /**
    * Creates an SVG paint object for creating/updating the SVG equivalent definition.
    */
-  public createSVGPaint( svgBlock: SVGBlock ): SVGRadialGradient {
-    return SVGRadialGradient.pool.create( svgBlock, this );
+  public createSVGPaint(svgBlock: SVGBlock): SVGRadialGradient {
+    return SVGRadialGradient.pool.create(svgBlock, this);
   }
 
   /**
@@ -109,32 +109,32 @@ export default class RadialGradient extends Gradient {
     const maxRadius = this.maxRadius;
     const minRadius = this.minRadius;
 
-    //TODO: replace with phet.dot.Utils.linear https://github.com/phetsims/scenery/issues/1581
+    // TODO: replace with phet.dot.Utils.linear https://github.com/phetsims/scenery/issues/1581
     // maps x linearly from [a0,b0] => [a1,b1]
-    function linearMap( a0: number, b0: number, a1: number, b1: number, x: number ): number {
-      return a1 + ( x - a0 ) * ( b1 - a1 ) / ( b0 - a0 );
+    function linearMap(a0: number, b0: number, a1: number, b1: number, x: number): number {
+      return a1 + (x - a0) * (b1 - a1) / (b0 - a0);
     }
 
-    function mapStop( stop: GradientStop ): { ratio: number; color: TColor } {
+    function mapStop(stop: GradientStop): { ratio: number; color: TColor } {
       // flip the stops if the start has a larger radius
       let ratio = startIsLarger ? 1 - stop.ratio : stop.ratio;
 
       // scale the stops properly if the smaller radius isn't 0
-      if ( minRadius > 0 ) {
+      if (minRadius > 0) {
         // scales our ratio from [0,1] => [minRadius/maxRadius,0]
-        ratio = linearMap( 0, 1, minRadius / maxRadius, 1, ratio );
+        ratio = linearMap(0, 1, minRadius / maxRadius, 1, ratio);
       }
 
       return {
-        ratio: ratio,
+        ratio,
         color: stop.color
       };
     }
 
-    const stops = this.stops.map( mapStop );
+    const stops = this.stops.map(mapStop);
 
     // switch the direction we apply stops in, so that the ratios always are increasing.
-    if ( startIsLarger ) {
+    if (startIsLarger) {
       stops.reverse();
     }
 
@@ -147,9 +147,9 @@ export default class RadialGradient extends Gradient {
   public override toString(): string {
     let result = `new phet.scenery.RadialGradient( ${this.start.x}, ${this.start.y}, ${this.startRadius}, ${this.end.x}, ${this.end.y}, ${this.endRadius} )`;
 
-    _.each( this.stops, stop => {
-      result += `.addColorStop( ${stop.ratio}, ${ColorDef.scenerySerialize( stop.color )} )`;
-    } );
+    _.each(this.stops, stop => {
+      result += `.addColorStop( ${stop.ratio}, ${ColorDef.scenerySerialize(stop.color)} )`;
+    });
 
     return result;
   }
@@ -159,4 +159,4 @@ export default class RadialGradient extends Gradient {
 
 RadialGradient.prototype.isRadialGradient = true;
 
-scenery.register( 'RadialGradient', RadialGradient );
+scenery.register('RadialGradient', RadialGradient);

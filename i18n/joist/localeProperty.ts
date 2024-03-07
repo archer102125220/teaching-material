@@ -46,7 +46,6 @@ const validInitialLocale = isLocaleValid(phet.chipper.locale) ? phet.chipper.loc
 phet.chipper.locale = validInitialLocale;
 
 class LocaleProperty extends Property<Locale> {
-  // @ts-expect-error
   protected override unguardedSet(value: Locale): void {
     if (availableRuntimeLocales.includes(value)) {
       super.unguardedSet(value);
@@ -59,7 +58,6 @@ class LocaleProperty extends Property<Locale> {
   }
 }
 
-// @ts-expect-error
 const localeProperty = new LocaleProperty(validInitialLocale, {
   tandem: Tandem.GENERAL_MODEL.createTandem('localeProperty'),
   phetioFeatured: true,
@@ -81,14 +79,11 @@ if (phet?.chipper?.queryParameters?.keyboardLocaleSwitcher) {
       // Ctrl + u in Chrome on Windows is "view source" in a new tab
       event.preventDefault();
 
-      // @ts-expect-error
       const index = availableRuntimeLocales.indexOf(localeProperty.value);
       const nextIndex = (index + delta + availableRuntimeLocales.length) % availableRuntimeLocales.length;
-      // @ts-expect-error
       localeProperty.value = availableRuntimeLocales[nextIndex];
 
       // Indicate the new locale on the console
-      // @ts-expect-error
       console.log(localeProperty.value);
     };
 

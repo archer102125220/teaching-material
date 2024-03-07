@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ReadOnlyProperty from '../../../axon/js/ReadOnlyProperty.js';
-import { Color, Gradient, Paint, scenery } from '../imports.js';
+import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
+import { Color, Gradient, Paint, scenery } from '../imports';
 
 const PaintDef = {
   /**
@@ -17,21 +17,22 @@ const PaintDef = {
    * @param {*} paint
    * @returns {boolean}
    */
-  isPaintDef( paint ) {
+  isPaintDef(paint) {
     // NOTE: Property.<Paint> is not supported. PaintObserver would technically need to listen to 3 different levels if
     // we add that (or could be recursive if we allow Property.<paintDef>. Notably, the Property value could change,
     // Color Properties in the Gradient could change, AND the Colors themselves specified in those Properties could
     // change. So it would be more code and more memory usage in general to support it.
     // See https://github.com/phetsims/scenery-phet/issues/651
-    return paint === null ||
-           typeof paint === 'string' ||
-           paint instanceof Color ||
-           paint instanceof Paint ||
-           ( paint instanceof ReadOnlyProperty && (
-             paint.value === null ||
-             typeof paint.value === 'string' ||
-             paint.value instanceof Color
-           ) );
+    return (
+      paint === null ||
+      typeof paint === 'string' ||
+      paint instanceof Color ||
+      paint instanceof Paint ||
+      (paint instanceof ReadOnlyProperty &&
+        (paint.value === null ||
+          typeof paint.value === 'string' ||
+          paint.value instanceof Color))
+    );
   },
 
   /**
@@ -42,23 +43,23 @@ const PaintDef = {
    * @param {PaintDef} paint
    * @returns {Color}
    */
-  toColor( paint ) {
-    if ( typeof paint === 'string' ) {
-      return new Color( paint );
+  toColor(paint) {
+    if (typeof paint === 'string') {
+      return new Color(paint);
     }
-    if ( paint instanceof Color ) {
+    if (paint instanceof Color) {
       return paint.copy();
     }
-    if ( paint instanceof ReadOnlyProperty ) {
-      return PaintDef.toColor( paint.value );
+    if (paint instanceof ReadOnlyProperty) {
+      return PaintDef.toColor(paint.value);
     }
-    if ( paint instanceof Gradient ) {
+    if (paint instanceof Gradient) {
       // Average the stops
       let color = Color.TRANSPARENT;
       const quantity = 0;
-      paint.stops.forEach( stop => {
-        color = color.blend( PaintDef.toColor( stop.color ), 1 / ( quantity + 1 ) );
-      } );
+      paint.stops.forEach((stop) => {
+        color = color.blend(PaintDef.toColor(stop.color), 1 / (quantity + 1));
+      });
       return color;
     }
 
@@ -67,6 +68,6 @@ const PaintDef = {
   }
 };
 
-scenery.register( 'PaintDef', PaintDef );
+scenery.register('PaintDef', PaintDef);
 
 export default PaintDef;

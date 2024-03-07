@@ -8,20 +8,20 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Pool, { TPoolable } from '../../../phet-core/js/Pool.js';
-import { LinearGradient, scenery, SVGBlock, SVGGradient, svgns } from '../imports.js';
+import Pool, { type TPoolable } from '../../phet-core/Pool';
+import { LinearGradient, scenery, SVGBlock, SVGGradient, svgns } from '../imports';
 
 export default class SVGLinearGradient extends SVGGradient implements TPoolable {
 
-  public constructor( svgBlock: SVGBlock, gradient: LinearGradient ) {
-    super( svgBlock, gradient );
+  public constructor(svgBlock: SVGBlock, gradient: LinearGradient) {
+    super(svgBlock, gradient);
   }
 
-  public override initialize( svgBlock: SVGBlock, gradient: LinearGradient ): this {
-    sceneryLog && sceneryLog.Paints && sceneryLog.Paints( `[SVGLinearGradient] initialize ${gradient.id}` );
+  public override initialize(svgBlock: SVGBlock, gradient: LinearGradient): this {
+    sceneryLog && sceneryLog.Paints && sceneryLog.Paints(`[SVGLinearGradient] initialize ${gradient.id}`);
     sceneryLog && sceneryLog.Paints && sceneryLog.push();
 
-    super.initialize( svgBlock, gradient );
+    super.initialize(svgBlock, gradient);
 
     // seems we need the defs: http://stackoverflow.com/questions/7614209/linear-gradients-in-svg-without-defs
     // SVG: spreadMethod 'pad' 'reflect' 'repeat' - find Canvas usage
@@ -36,10 +36,10 @@ export default class SVGLinearGradient extends SVGGradient implements TPoolable 
 
     // Linear-specific setup
     const linearGradient = gradient as unknown as LinearGradient;
-    this.definition.setAttribute( 'x1', '' + linearGradient.start.x );
-    this.definition.setAttribute( 'y1', '' + linearGradient.start.y );
-    this.definition.setAttribute( 'x2', '' + linearGradient.end.x );
-    this.definition.setAttribute( 'y2', '' + linearGradient.end.y );
+    this.definition.setAttribute('x1', '' + linearGradient.start.x);
+    this.definition.setAttribute('y1', '' + linearGradient.start.y);
+    this.definition.setAttribute('x2', '' + linearGradient.end.x);
+    this.definition.setAttribute('y2', '' + linearGradient.end.y);
 
     sceneryLog && sceneryLog.Paints && sceneryLog.pop();
 
@@ -50,13 +50,13 @@ export default class SVGLinearGradient extends SVGGradient implements TPoolable 
    * Creates the gradient-type-specific definition.
    */
   protected createDefinition(): SVGLinearGradientElement {
-    return document.createElementNS( svgns, 'linearGradient' );
+    return document.createElementNS(svgns, 'linearGradient');
   }
 
   public freeToPool(): void {
-    SVGLinearGradient.pool.freeToPool( this );
+    SVGLinearGradient.pool.freeToPool(this);
   }
 
-  public static readonly pool = new Pool( SVGLinearGradient );
+  public static readonly pool = new Pool(SVGLinearGradient);
 }
-scenery.register( 'SVGLinearGradient', SVGLinearGradient );
+scenery.register('SVGLinearGradient', SVGLinearGradient);

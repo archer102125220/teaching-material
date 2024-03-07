@@ -6,19 +6,19 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Sim, { SimOptions } from '../../joist/js/Sim.js';
-import Tandem from '../../tandem/js/Tandem.js';
-import geometricOptics from './geometricOptics.js';
-import LensScreen from './lens/LensScreen.js';
-import MirrorScreen from './mirror/MirrorScreen.js';
-import GOConstants from './common/GOConstants.js';
-import optionize from '../../phet-core/js/optionize.js';
-import GOPreferencesNode from './common/view/GOPreferencesNode.js';
-import PickOptional from '../../phet-core/js/types/PickOptional.js';
-import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
-import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
-import { Node } from '../../scenery/js/imports.js';
-import GOKeyboardHelpContent from './common/view/GOKeyboardHelpContent.js';
+import Sim, { SimOptions } from '../joist/Sim';
+import Tandem from '../tandem/Tandem';
+import geometricOptics from './geometricOptics';
+import LensScreen from './lens/LensScreen';
+import MirrorScreen from './mirror/MirrorScreen';
+import GOConstants from './common/GOConstants';
+import optionize from '../phet-core/optionize';
+import GOPreferencesNode from './common/view/GOPreferencesNode';
+import PickOptional from '../phet-core/types/PickOptional';
+import PreferencesModel from '../joist/preferences/PreferencesModel';
+import TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import { Node } from '../scenery/imports';
+import GOKeyboardHelpContent from './common/view/GOKeyboardHelpContent';
 
 type SelfOptions = {
 

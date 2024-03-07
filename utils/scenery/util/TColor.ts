@@ -1,8 +1,7 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
-// @ts-expect-error
-import TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import { Color } from '../imports.js';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import { Color } from '../imports';
 
 /**
  * Type representing a ColorDef
@@ -12,6 +11,7 @@ import { Color } from '../imports.js';
  */
 
 type TColor = TReadOnlyProperty<Color | string | null> | TReadOnlyProperty<Color | string> | TReadOnlyProperty<Color> | TReadOnlyProperty<string> | Color | string | null;
+
 
 // @ts-expect-error
 export default TColor;

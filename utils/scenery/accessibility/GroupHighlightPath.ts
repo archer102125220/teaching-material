@@ -8,24 +8,24 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { HighlightPath, HighlightPathOptions, scenery } from '../imports.js';
-import { Shape } from '../../../kite/js/imports.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
+import { HighlightPath, type HighlightPathOptions, scenery } from '../imports';
+import { Shape } from '../../kite/imports';
+import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
 
 type SelfOptions = EmptySelfOptions;
 export type GroupHighlightPathOptions = HighlightPathOptions & SelfOptions;
 
 export default class GroupHighlightPath extends HighlightPath {
-  public constructor( shape: Shape | string | null, providedOptions?: GroupHighlightPathOptions ) {
-    const options = optionize<GroupHighlightPathOptions, SelfOptions, HighlightPathOptions>()( {
+  public constructor(shape: Shape | string | null, providedOptions?: GroupHighlightPathOptions) {
+    const options = optionize<GroupHighlightPathOptions, SelfOptions, HighlightPathOptions>()({
       outerStroke: HighlightPath.OUTER_LIGHT_GROUP_FOCUS_COLOR,
       innerStroke: HighlightPath.INNER_LIGHT_GROUP_FOCUS_COLOR,
       outerLineWidth: HighlightPath.GROUP_OUTER_LINE_WIDTH,
       innerLineWidth: HighlightPath.GROUP_INNER_LINE_WIDTH
-    }, providedOptions );
+    }, providedOptions);
 
-    super( shape, options );
+    super(shape, options);
   }
 }
 
-scenery.register( 'GroupHighlightPath', GroupHighlightPath );
+scenery.register('GroupHighlightPath', GroupHighlightPath);

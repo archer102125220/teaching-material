@@ -9,54 +9,54 @@
  * @author Jesse Greenberg
  */
 
-import SpeechSynthesisAnnouncer, { SpeechSynthesisAnnouncerOptions, SpeechSynthesisInitializeOptions } from '../../../../utterance-queue/js/SpeechSynthesisAnnouncer.js';
-import { globalKeyStateTracker, KeyboardUtils, scenery } from '../../imports.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import TEmitter from '../../../../axon/js/TEmitter.js';
+import SpeechSynthesisAnnouncer, { type SpeechSynthesisAnnouncerOptions, type SpeechSynthesisInitializeOptions } from '../../../utterance-queue/SpeechSynthesisAnnouncer';
+import { globalKeyStateTracker, KeyboardUtils, scenery } from '../../imports';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import type TEmitter from '../../../axon/TEmitter';
 
 type SelfOptions = EmptySelfOptions;
 type VoicingManagerOptions = SelfOptions & SpeechSynthesisAnnouncerOptions;
 
 class VoicingManager extends SpeechSynthesisAnnouncer {
-  public constructor( providedOptions?: VoicingManagerOptions ) {
+  public constructor(providedOptions?: VoicingManagerOptions) {
 
-    const options = optionize<VoicingManagerOptions, SelfOptions, SpeechSynthesisAnnouncerOptions>()( {
+    const options = optionize<VoicingManagerOptions, SelfOptions, SpeechSynthesisAnnouncerOptions>()({
 
       // All VoicingManager instances should respect responseCollector's current state.
       respectResponseCollectorProperties: true,
 
       // phet-io
       phetioDocumentation: 'Announcer that manages the voicing feature, providing audio responses via WebAudio.'
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
   }
 
   /**
    * The initialization with some additional scenery-specific work for voicingManager.
    */
-  public override initialize( userGestureEmitter: TEmitter, options?: SpeechSynthesisInitializeOptions ): void {
-    super.initialize( userGestureEmitter, options );
+  public override initialize(userGestureEmitter: TEmitter, options?: SpeechSynthesisInitializeOptions): void {
+    super.initialize(userGestureEmitter, options);
 
     // The control key will stop the synth from speaking if there is an active utterance. This key was decided because
     // most major screen readers will stop speech when this key is pressed
-    globalKeyStateTracker.keyupEmitter.addListener( domEvent => {
-      if ( KeyboardUtils.isControlKey( domEvent ) ) {
+    globalKeyStateTracker.keyupEmitter.addListener(domEvent => {
+      if (KeyboardUtils.isControlKey(domEvent)) {
         this.cancel();
       }
-    } );
+    });
   }
 
   /**
    * Returns true if voicing is supported for the provided locale. Currently, only English is supported.
    * @param locale - the locale string
    */
-  public voicingSupportedForLocale( locale: string ): boolean {
-    return locale.startsWith( 'en' );
+  public voicingSupportedForLocale(locale: string): boolean {
+    return locale.startsWith('en');
   }
 }
 
 const voicingManager = new VoicingManager();
 
-scenery.register( 'voicingManager', voicingManager );
+scenery.register('voicingManager', voicingManager);
 export default voicingManager;

@@ -9,13 +9,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import Enumeration from '../../../phet-core/js/Enumeration.js';
-import EnumerationValue from '../../../phet-core/js/EnumerationValue.js';
-import Pool from '../../../phet-core/js/Pool.js';
-import { scenery, Sprite } from '../imports.js';
+import Matrix3 from '../../dot/Matrix3';
+import Vector2 from '../../dot/Vector2';
+import { Shape } from '../../kite/imports';
+import Enumeration from '../../phet-core/Enumeration';
+import EnumerationValue from '../../phet-core/EnumerationValue';
+import Pool from '../../phet-core/Pool';
+import { scenery, Sprite } from '../imports';
 
 const scratchVector = new Vector2( 0, 0 );
 const scratchMatrix = Matrix3.IDENTITY.copy();

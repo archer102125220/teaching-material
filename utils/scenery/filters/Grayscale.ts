@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../../dot/js/toSVGNumber.js';
-import { ColorMatrixFilter, scenery } from '../imports.js';
+import toSVGNumber from '../../dot/toSVGNumber';
+import { ColorMatrixFilter, scenery } from '../imports';
 
 export default class Grayscale extends ColorMatrixFilter {
 
@@ -16,10 +16,10 @@ export default class Grayscale extends ColorMatrixFilter {
   /**
    * @param [amount] - The amount of the effect, from 0 (none) to 1 (full)
    */
-  public constructor( amount = 1 ) {
-    assert && assert( isFinite( amount ), 'Grayscale amount should be finite' );
-    assert && assert( amount >= 0, 'Grayscale amount should be non-negative' );
-    assert && assert( amount <= 1, 'Grayscale amount should be no greater than 1' );
+  public constructor(amount = 1) {
+    assert && assert(isFinite(amount), 'Grayscale amount should be finite');
+    assert && assert(amount >= 0, 'Grayscale amount should be non-negative');
+    assert && assert(amount <= 1, 'Grayscale amount should be no greater than 1');
 
     const n = 1 - amount;
 
@@ -44,7 +44,7 @@ export default class Grayscale extends ColorMatrixFilter {
    * (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter).
    */
   public override getCSSFilterString(): string {
-    return `grayscale(${toSVGNumber( this.amount )})`;
+    return `grayscale(${toSVGNumber(this.amount)})`;
   }
 
   public override isDOMCompatible(): boolean {
@@ -52,7 +52,7 @@ export default class Grayscale extends ColorMatrixFilter {
   }
 
   // Turns things fully gray-scale (instead of partially)
-  public static readonly FULL = new Grayscale( 1 );
+  public static readonly FULL = new Grayscale(1);
 }
 
-scenery.register( 'Grayscale', Grayscale );
+scenery.register('Grayscale', Grayscale);

@@ -10,8 +10,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../../dot/js/toSVGNumber.js';
-import { CanvasContextWrapper, Filter, scenery, svgns } from '../imports.js';
+import toSVGNumber from '../../dot/toSVGNumber';
+import { CanvasContextWrapper, Filter, scenery, svgns } from '../imports';
 
 export default class GaussianBlur extends Filter {
 
@@ -21,9 +21,9 @@ export default class GaussianBlur extends Filter {
    * @param standardDeviation
    * @param [filterRegionPercentage]
    */
-  public constructor( standardDeviation: number, filterRegionPercentage = 15 ) {
-    assert && assert( isFinite( standardDeviation ), 'GaussianBlur standardDeviation should be finite' );
-    assert && assert( standardDeviation >= 0, 'GaussianBlur standardDeviation should be non-negative' );
+  public constructor(standardDeviation: number, filterRegionPercentage = 15) {
+    assert && assert(isFinite(standardDeviation), 'GaussianBlur standardDeviation should be finite');
+    assert && assert(standardDeviation >= 0, 'GaussianBlur standardDeviation should be non-negative');
 
     super();
 
@@ -38,7 +38,7 @@ export default class GaussianBlur extends Filter {
    * (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter).
    */
   public getCSSFilterString(): string {
-    return `blur(${toSVGNumber( this.standardDeviation )}px)`;
+    return `blur(${toSVGNumber(this.standardDeviation)}px)`;
   }
 
   /**
@@ -47,18 +47,18 @@ export default class GaussianBlur extends Filter {
    * This effectively mutates the provided filter object, and will be successively called on all Filters to build an
    * SVG filter object.
    */
-  public applySVGFilter( svgFilter: SVGFilterElement, inName: string, resultName?: string ): void {
+  public applySVGFilter(svgFilter: SVGFilterElement, inName: string, resultName?: string): void {
     // e.g. <feGaussianBlur stdDeviation="[radius radius]" edgeMode="[edge mode]" >
-    const feGaussianBlur = document.createElementNS( svgns, 'feGaussianBlur' );
-    feGaussianBlur.setAttribute( 'stdDeviation', toSVGNumber( this.standardDeviation ) );
-    feGaussianBlur.setAttribute( 'edgeMode', 'none' ); // Don't pad things!
-    svgFilter.appendChild( feGaussianBlur );
+    const feGaussianBlur = document.createElementNS(svgns, 'feGaussianBlur');
+    feGaussianBlur.setAttribute('stdDeviation', toSVGNumber(this.standardDeviation));
+    feGaussianBlur.setAttribute('edgeMode', 'none'); // Don't pad things!
+    svgFilter.appendChild(feGaussianBlur);
 
-    feGaussianBlur.setAttribute( 'in', inName );
-    if ( resultName ) {
-      feGaussianBlur.setAttribute( 'result', resultName );
+    feGaussianBlur.setAttribute('in', inName);
+    if (resultName) {
+      feGaussianBlur.setAttribute('result', resultName);
     }
-    svgFilter.appendChild( feGaussianBlur );
+    svgFilter.appendChild(feGaussianBlur);
   }
 
   public override isDOMCompatible(): boolean {
@@ -69,9 +69,9 @@ export default class GaussianBlur extends Filter {
     return true;
   }
 
-  public applyCanvasFilter( wrapper: CanvasContextWrapper ): void {
-    throw new Error( 'unimplemented' );
+  public applyCanvasFilter(wrapper: CanvasContextWrapper): void {
+    throw new Error('unimplemented');
   }
 }
 
-scenery.register( 'GaussianBlur', GaussianBlur );
+scenery.register('GaussianBlur', GaussianBlur);

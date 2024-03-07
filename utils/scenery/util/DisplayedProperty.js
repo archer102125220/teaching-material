@@ -13,9 +13,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import merge from '../../../phet-core/js/merge.js';
-import { scenery } from '../imports.js';
+import BooleanProperty from '../../axon/BooleanProperty';
+import merge from '../../phet-core/merge';
+import { scenery } from '../imports';
 
 class DisplayedProperty extends BooleanProperty {
   /**

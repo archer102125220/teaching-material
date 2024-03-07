@@ -12,20 +12,23 @@
  * @author Jesse Greenberg
  */
 
-import Emitter from '../../../../axon/js/Emitter.js';
-import { scenery } from '../../imports.js';
+import Emitter from '../../../axon/Emitter';
+import { scenery } from '../../imports';
 
 class Reader {
   /**
    * @param {Cursor} cursor
    */
-  constructor( cursor ) {
-
+  constructor(cursor) {
     // @public, listen only, emits an event when the synth begins speaking the utterance
-    this.speakingStartedEmitter = new Emitter( { parameters: [ { valueType: Object } ] } );
+    this.speakingStartedEmitter = new Emitter({
+      parameters: [{ valueType: Object }]
+    });
 
     // @public, listen only, emits an event when the synth has finished speaking the utterance
-    this.speakingEndedEmitter = new Emitter( { parameters: [ { valueType: Object } ] } );
+    this.speakingEndedEmitter = new Emitter({
+      parameters: [{ valueType: Object }]
+    });
 
     // @private, flag for when screen reader is speaking - synth.speaking is unsupported for safari
     this.speaking = false;
@@ -36,34 +39,40 @@ class Reader {
     // windows Chrome needs a temporary workaround to avoid skipping every other utterance
     // TODO: Use platform.js and revisit once platforms fix their bugs https://github.com/phetsims/scenery/issues/1581
     const userAgent = navigator.userAgent;
-    const osWindows = userAgent.match( /Windows/ );
-    const platSafari = !!( userAgent.match( /Version\/[5-9]\./ ) && userAgent.match( /Safari\// ) && userAgent.match( /AppleWebKit/ ) );
+    const osWindows = userAgent.match(/Windows/);
+    const platSafari = !!(
+      userAgent.match(/Version\/[5-9]\./) &&
+      userAgent.match(/Safari\//) &&
+      userAgent.match(/AppleWebKit/)
+    );
 
-    if ( window.speechSynthesis && SpeechSynthesisUtterance && window.speechSynthesis.speak ) {
-
+    if (
+      window.speechSynthesis &&
+      SpeechSynthesisUtterance &&
+      window.speechSynthesis.speak
+    ) {
       // @private - the speech synth
       this.synth = window.speechSynthesis;
 
-      cursor.outputUtteranceProperty.link( outputUtterance => {
-
+      cursor.outputUtteranceProperty.link((outputUtterance) => {
         // create a new utterance
-        const utterThis = new SpeechSynthesisUtterance( outputUtterance.text );
+        const utterThis = new SpeechSynthesisUtterance(outputUtterance.text);
 
-        utterThis.addEventListener( 'start', event => {
-          this.speakingStartedEmitter.emit( outputUtterance );
-        } );
+        utterThis.addEventListener('start', (event) => {
+          this.speakingStartedEmitter.emit(outputUtterance);
+        });
 
-        utterThis.addEventListener( 'end', event => {
-          this.speakingEndedEmitter.emit( outputUtterance );
-        } );
+        utterThis.addEventListener('end', (event) => {
+          this.speakingEndedEmitter.emit(outputUtterance);
+        });
 
         // get the default voice
         let defaultVoice;
-        this.synth.getVoices().forEach( voice => {
-          if ( voice.default ) {
+        this.synth.getVoices().forEach((voice) => {
+          if (voice.default) {
             defaultVoice = voice;
           }
-        } );
+        });
 
         // set the voice, pitch, and rate for the utterance
         utterThis.voice = defaultVoice;
@@ -71,10 +80,11 @@ class Reader {
 
         // TODO: Implement behavior for the various live roles https://github.com/phetsims/scenery/issues/1581
         // see https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions
-        if ( outputUtterance.liveRole === 'assertive' ||
-             outputUtterance.liveRole === 'off' ||
-             !outputUtterance.liveRole ) {
-
+        if (
+          outputUtterance.liveRole === 'assertive' ||
+          outputUtterance.liveRole === 'off' ||
+          !outputUtterance.liveRole
+        ) {
           // empty the queue of polite utterances
           this.politeUtterances = [];
           this.speaking = true;
@@ -86,63 +96,60 @@ class Reader {
           // On Windows, the synth must be paused before cancelation and resumed after speaking,
           // or every other utterance will be skipped.
           // NOTE: This only seems to happen on Windows for the default voice?
-          if ( osWindows ) {
+          if (osWindows) {
             this.synth.pause();
             this.synth.cancel();
-            this.synth.speak( utterThis );
+            this.synth.speak(utterThis);
             this.synth.resume();
-          }
-          else {
+          } else {
             this.synth.cancel();
-            this.synth.speak( utterThis );
+            this.synth.speak(utterThis);
           }
-        }
-        else if ( outputUtterance.liveRole === 'polite' ) {
-
+        } else if (outputUtterance.liveRole === 'polite') {
           // handle the safari specific bug where 'end' and 'start' events are fired on all utterances
           // after they are added to the queue
-          if ( platSafari ) {
-            this.politeUtterances.push( utterThis );
+          if (platSafari) {
+            this.politeUtterances.push(utterThis);
 
             const readPolite = () => {
               this.speaking = true;
               const nextUtterance = this.politeUtterances.shift();
-              if ( nextUtterance ) {
-                this.synth.speak( nextUtterance );
-              }
-              else {
+              if (nextUtterance) {
+                this.synth.speak(nextUtterance);
+              } else {
                 this.speaking = false;
               }
             };
 
             // a small delay will allow the utterance to be read in full, even if
             // added after cancel().
-            if ( this.speaking ) {
-              setTimeout( () => { readPolite(); }, 2000 ); // eslint-disable-line bad-sim-text
-            }
-            else {
-              this.synth.speak( utterThis );
+            if (this.speaking) {
+              setTimeout(() => {
+                readPolite();
+              }, 2000); // eslint-disable-line bad-sim-text
+            } else {
+              this.synth.speak(utterThis);
               // remove from queue
-              const index = this.politeUtterances.indexOf( utterThis );
-              if ( index > 0 ) {
-                this.politeUtterances.splice( index, 1 );
+              const index = this.politeUtterances.indexOf(utterThis);
+              if (index > 0) {
+                this.politeUtterances.splice(index, 1);
               }
             }
-          }
-          else {
+          } else {
             // simply add to the queue
-            this.synth.speak( utterThis );
+            this.synth.speak(utterThis);
           }
         }
-      } );
-    }
-    else {
-      cursor.outputUtteranceProperty.link( () => {
-        this.speakingStartedEmitter.emit( { text: 'Sorry! Web Speech API not supported on this platform.' } );
-      } );
+      });
+    } else {
+      cursor.outputUtteranceProperty.link(() => {
+        this.speakingStartedEmitter.emit({
+          text: 'Sorry! Web Speech API not supported on this platform.'
+        });
+      });
     }
   }
 }
 
-scenery.register( 'Reader', Reader );
+scenery.register('Reader', Reader);
 export default Reader;

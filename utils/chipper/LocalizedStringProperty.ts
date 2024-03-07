@@ -7,7 +7,7 @@
  */
 
 import DynamicProperty from '../axon/DynamicProperty';
-import localeProperty, { Locale } from '@/i18n/localeProperty';;
+import localeProperty, { type Locale } from '@/i18n/joist/localeProperty';
 import Tandem from '../tandem/Tandem';
 import StringIO from '../tandem/types/StringIO';
 import chipper from './chipper';
@@ -16,29 +16,29 @@ import LocalizedString from './LocalizedString';
 
 class LocalizedStringProperty extends DynamicProperty<string, string, Locale> {
 
-  public constructor( public readonly localizedString: LocalizedString, tandem: Tandem, metadata?: Record<string, unknown> ) {
+  public constructor(public readonly localizedString: LocalizedString, tandem: Tandem, metadata?: Record<string, unknown>) {
 
     // Allow phetioReadOnly to be overridden
-    const phetioReadOnly = ( metadata && typeof metadata.phetioReadOnly === 'boolean' ) ? metadata.phetioReadOnly :
-                           TandemConstants.PHET_IO_OBJECT_METADATA_DEFAULTS.phetioReadOnly;
+    const phetioReadOnly = (metadata && typeof metadata.phetioReadOnly === 'boolean') ? metadata.phetioReadOnly :
+      TandemConstants.PHET_IO_OBJECT_METADATA_DEFAULTS.phetioReadOnly;
 
     // All i18n model strings are phetioFeatured by default
-    const phetioFeatured = ( metadata && typeof metadata.phetioFeatured === 'boolean' ) ? metadata.phetioFeatured : true;
+    const phetioFeatured = (metadata && typeof metadata.phetioFeatured === 'boolean') ? metadata.phetioFeatured : true;
 
     // Allow phetioDocumentation to be overridden
-    const phetioDocumentation = ( metadata && typeof metadata.phetioDocumentation === 'string' ) ? metadata.phetioDocumentation :
-                                TandemConstants.PHET_IO_OBJECT_METADATA_DEFAULTS.phetioDocumentation;
+    const phetioDocumentation = (metadata && typeof metadata.phetioDocumentation === 'string') ? metadata.phetioDocumentation :
+      TandemConstants.PHET_IO_OBJECT_METADATA_DEFAULTS.phetioDocumentation;
 
-    super( localeProperty, {
-      derive: ( locale: Locale ) => localizedString.getLocaleSpecificProperty( locale ),
+    super(localeProperty, {
+      derive: (locale: Locale) => localizedString.getLocaleSpecificProperty(locale),
       bidirectional: true,
       phetioValueType: StringIO,
       phetioState: false,
-      tandem: tandem,
-      phetioFeatured: phetioFeatured,
-      phetioReadOnly: phetioReadOnly,
-      phetioDocumentation: phetioDocumentation
-    } );
+      tandem,
+      phetioFeatured,
+      phetioReadOnly,
+      phetioDocumentation
+    });
   }
 
   public get stringKey(): string {
@@ -46,6 +46,6 @@ class LocalizedStringProperty extends DynamicProperty<string, string, Locale> {
   }
 }
 
-chipper.register( 'LocalizedStringProperty', LocalizedStringProperty );
+chipper.register('LocalizedStringProperty', LocalizedStringProperty);
 
 export default LocalizedStringProperty;

@@ -15,5 +15,6 @@
 
 type PickRequired<T, list extends keyof T> = Pick<Required<T>, list>;
 
+
 // @ts-expect-error
 export default PickRequired;

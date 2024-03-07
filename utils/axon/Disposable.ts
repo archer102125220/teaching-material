@@ -14,8 +14,7 @@
  */
 
 import axon from './axon';
-// @ts-expect-error
-import TEmitter from './TEmitter';
+import type TEmitter from './TEmitter';
 import TinyEmitter from './TinyEmitter';
 
 // Used in subclasses to support mutate.
@@ -37,19 +36,19 @@ class Disposable {
   private _isDisposed = false;
 
   // Disposable should only be used by subtypes, no need to instantiate one on its own.
-  protected constructor( providedOptions?: DisposableOptions ) {
+  protected constructor(providedOptions?: DisposableOptions) {
 
-    providedOptions && this.initializeDisposable( providedOptions );
+    providedOptions && this.initializeDisposable(providedOptions);
 
-    if ( assert ) {
+    if (assert) {
 
       // Wrap the prototype dispose method with a check. NOTE: We will not catch devious cases where the dispose() is
       // overridden after the Node constructor (which may happen).
       const protoDispose = this.dispose;
       this.dispose = () => {
-        assert && assert( !this._isDisposed, 'This Disposable has already been disposed, and cannot be disposed again' );
-        protoDispose.call( this );
-        assert && assert( this._isDisposed, 'Disposable.dispose() call is missing from an overridden dispose method' );
+        assert && assert(!this._isDisposed, 'This Disposable has already been disposed, and cannot be disposed again');
+        protoDispose.call(this);
+        assert && assert(this._isDisposed, 'Disposable.dispose() call is missing from an overridden dispose method');
       };
     }
   }
@@ -70,19 +69,20 @@ class Disposable {
     return this._isDisposable;
   }
 
-  public set isDisposable( isDisposable: boolean ) {
+  public set isDisposable(isDisposable: boolean) {
     this._isDisposable = isDisposable;
   }
 
-  public initializeDisposable( options?: DisposableOptions ): void {
-    if ( options && options.hasOwnProperty( 'isDisposable' ) ) {
+  public initializeDisposable(options?: DisposableOptions): void {
+    // eslint-disable-next-line no-prototype-builtins
+    if (options && options.hasOwnProperty('isDisposable')) {
       this._isDisposable = options.isDisposable!;
     }
   }
 
   public dispose(): void {
     assert && !this._isDisposable && Disposable.assertNotDisposable();
-    assert && assert( !this._isDisposed, 'Disposable can only be disposed once' );
+    assert && assert(!this._isDisposed, 'Disposable can only be disposed once');
     this._disposeEmitter.emit();
     this._disposeEmitter.dispose();
     this._isDisposed = true;
@@ -91,9 +91,9 @@ class Disposable {
   public static assertNotDisposable(): void {
 
     // eslint-disable-next-line bad-sim-text
-    assert && assert( false, 'dispose is not supported, exists for the lifetime of the sim' );
+    assert && assert(false, 'dispose is not supported, exists for the lifetime of the sim');
   }
 }
 
-axon.register( 'Disposable', Disposable );
+axon.register('Disposable', Disposable);
 export default Disposable;

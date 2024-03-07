@@ -10,9 +10,9 @@
  * @author Jesse Greenberg
  */
 
-import TProperty from '../../../axon/js/TProperty.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import { Focus, Instance, Node, scenery, TrailVisibilityTracker } from '../imports.js';
+import type TProperty from '../../axon/TProperty';
+import optionize from '../../phet-core/optionize';
+import { Focus, Instance, Node, scenery, TrailVisibilityTracker } from '../imports';
 
 type FocusDisplayedControllerOptions = {
 
@@ -35,37 +35,37 @@ class FocusDisplayedController {
 
   // Bound functions that are called when the displayed state of the Node changes.
   private readonly boundVisibilityListener: () => void;
-  private readonly boundInstancesChangedListener: ( instance: Instance ) => void;
+  private readonly boundInstancesChangedListener: (instance: Instance) => void;
 
   // Handles changes to focus, adding or removing listeners
-  private readonly boundFocusListener: ( focus: Focus | null ) => void;
+  private readonly boundFocusListener: (focus: Focus | null) => void;
 
-  public constructor( focusProperty: TProperty<Focus | null>, providedOptions?: FocusDisplayedControllerOptions ) {
+  public constructor(focusProperty: TProperty<Focus | null>, providedOptions?: FocusDisplayedControllerOptions) {
 
-    const options = optionize<FocusDisplayedControllerOptions>()( {
+    const options = optionize<FocusDisplayedControllerOptions>()({
       onRemoveFocus: _.noop
-    }, providedOptions );
-    assert && assert( typeof options.onRemoveFocus === 'function', 'invalid type for onRemoveFocus' );
+    }, providedOptions);
+    assert && assert(typeof options.onRemoveFocus === 'function', 'invalid type for onRemoveFocus');
 
     this.focusProperty = focusProperty;
     this.onRemoveFocus = options.onRemoveFocus;
 
-    this.boundVisibilityListener = this.handleTrailVisibilityChange.bind( this );
-    this.boundInstancesChangedListener = this.handleInstancesChange.bind( this );
+    this.boundVisibilityListener = this.handleTrailVisibilityChange.bind(this);
+    this.boundInstancesChangedListener = this.handleInstancesChange.bind(this);
 
-    this.boundFocusListener = this.handleFocusChange.bind( this );
-    this.focusProperty.link( this.boundFocusListener );
+    this.boundFocusListener = this.handleFocusChange.bind(this);
+    this.focusProperty.link(this.boundFocusListener);
   }
 
   /**
    * When Focus changes, remove any listeners that were attached from last Focus and
    * add new listeners if focus has a new value.
    */
-  private handleFocusChange( focus: Focus | null ): void {
+  private handleFocusChange(focus: Focus | null): void {
     this.removeDisplayedListeners();
 
-    if ( focus ) {
-      this.addDisplayedListeners( focus );
+    if (focus) {
+      this.addDisplayedListeners(focus);
     }
   }
 
@@ -73,7 +73,7 @@ class FocusDisplayedController {
    * When the Trail becomes invisible, Focus should be set to null.
    */
   private handleTrailVisibilityChange(): void {
-    if ( this.visibilityTracker && !this.visibilityTracker.trailVisibleProperty.value ) {
+    if (this.visibilityTracker && !this.visibilityTracker.trailVisibleProperty.value) {
       this.focusProperty!.value = null;
       this.onRemoveFocus();
     }
@@ -83,8 +83,8 @@ class FocusDisplayedController {
    * If there are no more Instances for the Node with focus it has been removed from
    * the scene graph and so Focus should be set to null.
    */
-  private handleInstancesChange( instance: Instance ): void {
-    if ( instance.node && instance.node.instances.length === 0 ) {
+  private handleInstancesChange(instance: Instance): void {
+    if (instance.node && instance.node.instances.length === 0) {
       this.focusProperty!.value = null;
       this.onRemoveFocus();
     }
@@ -94,15 +94,15 @@ class FocusDisplayedController {
    * Add listeners that watch when the Displayed state of the Node with Focus has changed,
    * including visibility of the trail and attachment to a scene graph.
    */
-  private addDisplayedListeners( focus: Focus ): void {
-    assert && assert( this.visibilityTracker === null, 'creating a new TrailVisibilityTracker but the last one was not disposed' );
-    assert && assert( this.node === null, 'Still a reference to the previously focused Node, possible memory leak' );
+  private addDisplayedListeners(focus: Focus): void {
+    assert && assert(this.visibilityTracker === null, 'creating a new TrailVisibilityTracker but the last one was not disposed');
+    assert && assert(this.node === null, 'Still a reference to the previously focused Node, possible memory leak');
 
-    this.visibilityTracker = new TrailVisibilityTracker( focus.trail );
-    this.visibilityTracker.addListener( this.boundVisibilityListener );
+    this.visibilityTracker = new TrailVisibilityTracker(focus.trail);
+    this.visibilityTracker.addListener(this.boundVisibilityListener);
 
     this.node = focus.trail.lastNode();
-    this.node.changedInstanceEmitter.addListener( this.boundInstancesChangedListener );
+    this.node.changedInstanceEmitter.addListener(this.boundInstancesChangedListener);
   }
 
   /**
@@ -110,13 +110,13 @@ class FocusDisplayedController {
    * state may have changed.
    */
   private removeDisplayedListeners(): void {
-    if ( this.visibilityTracker ) {
-      this.visibilityTracker.removeListener( this.boundVisibilityListener );
+    if (this.visibilityTracker) {
+      this.visibilityTracker.removeListener(this.boundVisibilityListener);
       this.visibilityTracker.dispose();
       this.visibilityTracker = null;
     }
-    if ( this.node ) {
-      this.node.changedInstanceEmitter.removeListener( this.boundInstancesChangedListener );
+    if (this.node) {
+      this.node.changedInstanceEmitter.removeListener(this.boundInstancesChangedListener);
       this.node = null;
     }
   }
@@ -125,7 +125,7 @@ class FocusDisplayedController {
 
     // this disposes the TrailVisibilityTracker and removes any listeners on the Node
     this.removeDisplayedListeners();
-    this.focusProperty!.unlink( this.boundFocusListener );
+    this.focusProperty!.unlink(this.boundFocusListener);
 
     this.node = null;
     this.visibilityTracker = null;
@@ -133,5 +133,5 @@ class FocusDisplayedController {
   }
 }
 
-scenery.register( 'FocusDisplayedController', FocusDisplayedController );
+scenery.register('FocusDisplayedController', FocusDisplayedController);
 export default FocusDisplayedController;

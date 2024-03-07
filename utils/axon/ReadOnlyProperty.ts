@@ -6,8 +6,7 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-// @ts-expect-error
-import PhetioObject, { PhetioObjectOptions } from '../tandem/PhetioObject';
+import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
 import Tandem, { DYNAMIC_ARCHETYPE_NAME } from '../tandem/Tandem';
 import ArrayIO from '../tandem/types/ArrayIO';
 import FunctionIO from '../tandem/types/FunctionIO';
@@ -20,11 +19,12 @@ import PropertyStatePhase from './PropertyStatePhase';
 import TinyProperty from './TinyProperty';
 import units from './units';
 import validate from './validate';
-import TReadOnlyProperty, { PropertyLazyLinkListener, PropertyLinkListener, PropertyListener } from './TReadOnlyProperty';
+import type TReadOnlyProperty from './TReadOnlyProperty';
+import type { PropertyLazyLinkListener, PropertyLinkListener, PropertyListener } from './TReadOnlyProperty';
 import optionize from '../phet-core/optionize';
-import Validation, { Validator } from './Validation';
-import IntentionalAny from '../phet-core/types/IntentionalAny';
-import StrictOmit from '../phet-core/types/StrictOmit';
+import Validation, { type Validator } from './Validation';
+import type IntentionalAny from '../phet-core/types/IntentionalAny';
+import type StrictOmit from '../phet-core/types/StrictOmit';
 import axon from './axon';
 import isClearingPhetioDynamicElementsProperty from '../tandem/isClearingPhetioDynamicElementsProperty';
 import isPhetioStateEngineManagingPropertyValuesProperty from '../tandem/isPhetioStateEngineManagingPropertyValuesProperty';
@@ -65,7 +65,7 @@ type SelfOptions = {
 
   // The IOType function that returns a parameterized IOType based on the valueType. There is a general default, but
   // subtypes can implement their own, more specific IOType.
-  phetioOuterType?: ( parameterType: IOType ) => IOType;
+  phetioOuterType?: (parameterType: IOType) => IOType;
 
   // If specified as true, this flag will ensure that listener order never changes (like via ?listenerOrder=random)
   hasListenerOrderDependencies?: boolean;
@@ -82,9 +82,9 @@ export type LinkOptions = {
 // did not otherwise occur. Because we aren't interested in these corner cases, and because they are difficult to
 // understand and debug, we chose to turn off strictAxonDependencies if listener order is changed.
 // See https://github.com/phetsims/faradays-electromagnetic-lab/issues/57#issuecomment-1909089735
-const strictAxonDependencies = _.hasIn( window, 'phet.chipper.queryParameters' ) &&
-                               phet.chipper.queryParameters.strictAxonDependencies &&
-                               phet.chipper.queryParameters.listenerOrder === 'default';
+const strictAxonDependencies = _.hasIn(window, 'phet.chipper.queryParameters') &&
+  phet.chipper.queryParameters.strictAxonDependencies &&
+  phet.chipper.queryParameters.listenerOrder === 'default';
 export const derivationStack: Array<IntentionalAny> = [];
 
 /**
@@ -129,8 +129,8 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * @param value - the initial value of the property
    * @param [providedOptions]
    */
-  protected constructor( value: T, providedOptions?: PropertyOptions<T> ) {
-    const options = optionize<PropertyOptions<T>, SelfOptions, PhetioObjectOptions>()( {
+  protected constructor(value: T, providedOptions?: PropertyOptions<T>) {
+    const options = optionize<PropertyOptions<T>, SelfOptions, PhetioObjectOptions>()({
       units: null,
       reentrant: false,
       hasListenerOrderDependencies: false,
@@ -138,60 +138,62 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
       // phet-io
       phetioOuterType: ReadOnlyProperty.PropertyIO,
       phetioValueType: IOType.ObjectIO
-    }, providedOptions );
+    }, providedOptions);
 
 
-    assert && options.units && assert( units.isValidUnits( options.units ), `invalid units: ${options.units}` );
-    if ( options.units ) {
+    assert && options.units && assert(units.isValidUnits(options.units), `invalid units: ${options.units}`);
+    if (options.units) {
       options.phetioEventMetadata = options.phetioEventMetadata || {};
-      assert && assert( !options.phetioEventMetadata.hasOwnProperty( 'units' ), 'units should be supplied by Property, not elsewhere' );
+      // eslint-disable-next-line no-prototype-builtins
+      assert && assert(!options.phetioEventMetadata.hasOwnProperty('units'), 'units should be supplied by Property, not elsewhere');
       options.phetioEventMetadata.units = options.units;
     }
 
-    if ( assert && providedOptions ) {
+    if (assert && providedOptions) {
 
       // @ts-expect-error -- for checking JS code
-      assert && assert( !providedOptions.phetioType, 'Set phetioType via phetioValueType' );
+      assert && assert(!providedOptions.phetioType, 'Set phetioType via phetioValueType');
     }
 
     // Construct the IOType
-    if ( options.phetioOuterType && options.phetioValueType ) {
-      options.phetioType = options.phetioOuterType( options.phetioValueType );
+    if (options.phetioOuterType && options.phetioValueType) {
+      options.phetioType = options.phetioOuterType(options.phetioValueType);
     }
 
     // Support non-validated Property
-    if ( !Validation.containsValidatorKey( options ) ) {
+    if (!Validation.containsValidatorKey(options)) {
       options.isValidValue = () => true;
     }
-    super( options );
+    super(options);
     this.id = globalId++;
     this.units = options.units;
 
     // When running as phet-io, if the tandem is specified, the type must be specified.
-    if ( this.isPhetioInstrumented() ) {
+    if (this.isPhetioInstrumented()) {
 
       // This assertion helps in instrumenting code that has the tandem but not type
-      assert && Tandem.VALIDATION && assert( this.phetioType,
-        `phetioType passed to Property must be specified. Tandem.phetioID: ${this.tandem.phetioID}` );
+      assert && Tandem.VALIDATION && assert(this.phetioType,
+        `phetioType passed to Property must be specified. Tandem.phetioID: ${this.tandem.phetioID}`);
 
-      assert && Tandem.VALIDATION && assert( options.phetioType.parameterTypes![ 0 ],
-        `phetioType parameter type must be specified (only one). Tandem.phetioID: ${this.tandem.phetioID}` );
+      assert && Tandem.VALIDATION && assert(options.phetioType.parameterTypes![0],
+        `phetioType parameter type must be specified (only one). Tandem.phetioID: ${this.tandem.phetioID}`);
 
-      assert && assert( options.phetioValueType !== IOType.ObjectIO,
-        'PhET-iO Properties must specify a phetioValueType: ' + this.phetioID );
+      assert && assert(options.phetioValueType !== IOType.ObjectIO,
+        'PhET-iO Properties must specify a phetioValueType: ' + this.phetioID);
     }
 
-    assert && assert( !this.isPhetioInstrumented() ||
-                      options.tandem.name.endsWith( ReadOnlyProperty.TANDEM_NAME_SUFFIX ) ||
-                      options.tandem.name === 'property' ||
-                      options.tandem.name === DYNAMIC_ARCHETYPE_NAME, // It is ok to have dynamic element Properties (which would mean they are archetypes
-      `Property tandem.name must end with Property: ${options.tandem?.phetioID}` );
+    assert && assert(!this.isPhetioInstrumented() ||
+      options.tandem.name.endsWith(ReadOnlyProperty.TANDEM_NAME_SUFFIX) ||
+      options.tandem.name === 'property' ||
+      options.tandem.name === DYNAMIC_ARCHETYPE_NAME, // It is ok to have dynamic element Properties (which would mean they are archetypes
+      `Property tandem.name must end with Property: ${options.tandem?.phetioID}`);
 
     this.validValues = options.validValues;
 
-    this.tinyProperty = new TinyProperty( value, null, options.hasListenerOrderDependencies );
+    this.tinyProperty = new TinyProperty(value, null, options.hasListenerOrderDependencies);
 
     // Since we are already in the heavyweight Property, we always assign TinyProperty.useDeepEquality for clarity.
+    
     // @ts-expect-error
     this.tinyProperty.useDeepEquality = options.valueComparisonStrategy && options.valueComparisonStrategy === 'equalsFunction';
     this.notifying = false;
@@ -200,26 +202,26 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
     this.deferredValue = null;
     this.hasDeferredValue = false;
 
-    this.valueValidator = _.pick( options, Validation.VALIDATOR_KEYS );
+    this.valueValidator = _.pick(options, Validation.VALIDATOR_KEYS);
     this.valueValidator.validationMessage = this.valueValidator.validationMessage || 'Property value not valid';
 
-    if ( this.valueValidator.phetioType ) {
+    if (this.valueValidator.phetioType) {
 
       // Validate the value type's phetioType of the Property, not the PropertyIO itself.
       // For example, for PropertyIO( BooleanIO ), assign this valueValidator's phetioType to be BooleanIO's validator.
-      assert && assert( !!this.valueValidator.phetioType.parameterTypes![ 0 ], 'unexpected number of parameters for Property' );
+      assert && assert(!!this.valueValidator.phetioType.parameterTypes![0], 'unexpected number of parameters for Property');
 
       // This is the validator for the value, not for the Property itself
-      this.valueValidator.phetioType = this.valueValidator.phetioType.parameterTypes![ 0 ];
+      this.valueValidator.phetioType = this.valueValidator.phetioType.parameterTypes![0];
     }
 
     // Assertions regarding value validation
-    if ( assert ) {
+    if (assert) {
 
-      Validation.validateValidator( this.valueValidator );
+      Validation.validateValidator(this.valueValidator);
 
       // validate the initial value as well as any changes in the future
-      validate( value, this.valueValidator, VALIDATE_OPTIONS_FALSE );
+      validate(value, this.valueValidator, VALIDATE_OPTIONS_FALSE);
     }
   }
 
@@ -236,10 +238,10 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * or internal code that must be fast.
    */
   public get(): T {
-    if ( assert && strictAxonDependencies && derivationStack.length > 0 ) {
-      const currentDependencies = derivationStack[ derivationStack.length - 1 ];
-      if ( !currentDependencies.includes( this ) ) {
-        assert && assert( false, 'accessed value outside of dependency tracking' );
+    if (assert && strictAxonDependencies && derivationStack.length > 0) {
+      const currentDependencies = derivationStack[derivationStack.length - 1];
+      if (!currentDependencies.includes(this)) {
+        assert && assert(false, 'accessed value outside of dependency tracking');
       }
     }
     return this.tinyProperty.get();
@@ -251,35 +253,35 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * hasn't changed, this is a no-op.  For PhET-iO instrumented Properties that are phetioState: true, the value is only
    * set by the state and cannot be modified by other code while isSettingPhetioStateProperty === true
    */
-  protected set( value: T ): void {
+  protected set(value: T): void {
 
     // state is managed by the PhetioStateEngine.
     // We still want to set Properties when clearing dynamic elements, see https://github.com/phetsims/phet-io/issues/1906
     const setManagedByPhetioState = isPhetioStateEngineManagingPropertyValuesProperty.value &&
-                                    !isClearingPhetioDynamicElementsProperty.value &&
-                                    this.isPhetioInstrumented() && this.phetioState &&
+      !isClearingPhetioDynamicElementsProperty.value &&
+      this.isPhetioInstrumented() && this.phetioState &&
 
-                                    // However, DerivedProperty should be able to update during PhET-iO state set
-                                    this.isSettable();
+      // However, DerivedProperty should be able to update during PhET-iO state set
+      this.isSettable();
 
-    if ( !setManagedByPhetioState ) {
-      this.unguardedSet( value );
+    if (!setManagedByPhetioState) {
+      this.unguardedSet(value);
     }
   }
 
   /**
    * For usage by the IOType during PhET-iO state setting.
    */
-  protected unguardedSet( value: T ): void {
-    if ( !this.isDisposed ) {
-      if ( this.isDeferred ) {
+  protected unguardedSet(value: T): void {
+    if (!this.isDisposed) {
+      if (this.isDeferred) {
         this.deferredValue = value;
         this.hasDeferredValue = true;
       }
-      else if ( !this.equalsValue( value ) ) {
+      else if (!this.equalsValue(value)) {
         const oldValue = this.get();
-        this.setPropertyValue( value );
-        this._notifyListeners( oldValue );
+        this.setPropertyValue(value);
+        this._notifyListeners(oldValue);
       }
     }
   }
@@ -288,51 +290,51 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * Sets the value without notifying any listeners. This is a place to override if a subtype performs additional work
    * when setting the value.
    */
-  protected setPropertyValue( value: T ): void {
-    this.tinyProperty.setPropertyValue( value );
+  protected setPropertyValue(value: T): void {
+    this.tinyProperty.setPropertyValue(value);
   }
 
   /**
    * Returns true if and only if the specified value equals the value of this property
    */
-  protected equalsValue( value: T ): boolean {
-    return this.areValuesEqual( value, this.get() );
+  protected equalsValue(value: T): boolean {
+    return this.areValuesEqual(value, this.get());
   }
 
   /**
    * See TinyProperty.areValuesEqual
    */
-  public areValuesEqual( a: T, b: T ): boolean {
-    return this.tinyProperty.areValuesEqual( a, b );
+  public areValuesEqual(a: T, b: T): boolean {
+    return this.tinyProperty.areValuesEqual(a, b);
   }
 
   /**
    * NOTE: a few sims are calling this even though they shouldn't
    */
-  private _notifyListeners( oldValue: T | null ): void {
+  private _notifyListeners(oldValue: T | null): void {
     const newValue = this.get();
 
     // validate the before notifying listeners
-    assert && validate( newValue, this.valueValidator, VALIDATE_OPTIONS_FALSE );
+    assert && validate(newValue, this.valueValidator, VALIDATE_OPTIONS_FALSE);
 
     // Although this is not the idiomatic pattern (since it is guarded in the phetioStartEvent), this function is
     // called so many times that it is worth the optimization for PhET brand.
-    Tandem.PHET_IO_ENABLED && this.isPhetioInstrumented() && this.phetioStartEvent( ReadOnlyProperty.CHANGED_EVENT_NAME, {
+    Tandem.PHET_IO_ENABLED && this.isPhetioInstrumented() && this.phetioStartEvent(ReadOnlyProperty.CHANGED_EVENT_NAME, {
       getData: () => {
-        const parameterType = this.phetioType.parameterTypes![ 0 ];
+        const parameterType = this.phetioType.parameterTypes![0];
         return {
-          oldValue: NullableIO( parameterType ).toStateObject( oldValue ),
-          newValue: parameterType.toStateObject( newValue )
+          oldValue: NullableIO(parameterType).toStateObject(oldValue),
+          newValue: parameterType.toStateObject(newValue)
         };
       }
-    } );
+    });
 
     // notify listeners, optionally detect loops where this Property is set again before this completes.
-    assert && assert( !this.notifying || this.reentrant,
-      `reentry detected, value=${newValue}, oldValue=${oldValue}` );
+    assert && assert(!this.notifying || this.reentrant,
+      `reentry detected, value=${newValue}, oldValue=${oldValue}`);
     this.notifying = true;
 
-    this.tinyProperty.emit( newValue, oldValue, this ); // cannot use tinyProperty.notifyListeners because it uses the wrong this
+    this.tinyProperty.emit(newValue, oldValue, this); // cannot use tinyProperty.notifyListeners because it uses the wrong this
     this.notifying = false;
 
     Tandem.PHET_IO_ENABLED && this.isPhetioInstrumented() && this.phetioEndEvent();
@@ -346,7 +348,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * See https://github.com/phetsims/axon/issues/6
    */
   public notifyListenersStatic(): void {
-    this._notifyListeners( null );
+    this._notifyListeners(null);
   }
 
   /**
@@ -358,29 +360,29 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * @returns - function to notify listeners after calling setDeferred(false),
    *          - null if isDeferred is true, or if the value is unchanged since calling setDeferred(true)
    */
-  public setDeferred( isDeferred: boolean ): ( () => void ) | null {
-    assert && assert( !this.isDisposed, 'cannot defer Property if already disposed.' );
-    if ( isDeferred ) {
-      assert && assert( !this.isDeferred, 'Property already deferred' );
+  public setDeferred(isDeferred: boolean): (() => void) | null {
+    assert && assert(!this.isDisposed, 'cannot defer Property if already disposed.');
+    if (isDeferred) {
+      assert && assert(!this.isDeferred, 'Property already deferred');
       this.isDeferred = true;
     }
     else {
-      assert && assert( this.isDeferred, 'Property wasn\'t deferred' );
+      assert && assert(this.isDeferred, 'Property wasn\'t deferred');
       this.isDeferred = false;
 
       const oldValue = this.get();
 
       // Take the new value
-      if ( this.hasDeferredValue ) {
-        this.setPropertyValue( this.deferredValue! );
+      if (this.hasDeferredValue) {
+        this.setPropertyValue(this.deferredValue!);
         this.hasDeferredValue = false;
         this.deferredValue = null;
       }
 
       // If the value has changed, prepare to send out notifications (after all other Properties in this transaction
       // have their final values)
-      if ( !this.equalsValue( oldValue ) ) {
-        return () => !this.isDisposed && this._notifyListeners( oldValue );
+      if (!this.equalsValue(oldValue)) {
+        return () => !this.isDisposed && this._notifyListeners(oldValue);
       }
     }
 
@@ -392,8 +394,8 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
     return this.get();
   }
 
-  protected set value( newValue: T ) {
-    this.set( newValue );
+  protected set value(newValue: T) {
+    this.set(newValue);
   }
 
   /**
@@ -401,16 +403,16 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * setting PhET-iO state, each dependency must take its final value before this Property fires its notifications.
    * See propertyStateHandlerSingleton.registerPhetioOrderDependency and https://github.com/phetsims/axon/issues/276 for more info.
    */
-  public addPhetioStateDependencies( dependencies: Array<TReadOnlyProperty<IntentionalAny>> ): void {
-    assert && assert( Array.isArray( dependencies ), 'Array expected' );
-    for ( let i = 0; i < dependencies.length; i++ ) {
-      const dependencyProperty = dependencies[ i ];
+  public addPhetioStateDependencies(dependencies: Array<TReadOnlyProperty<IntentionalAny>>): void {
+    assert && assert(Array.isArray(dependencies), 'Array expected');
+    for (let i = 0; i < dependencies.length; i++) {
+      const dependencyProperty = dependencies[i];
 
       // only if running in PhET-iO brand and both Properties are instrumenting
-      if ( dependencyProperty instanceof ReadOnlyProperty && dependencyProperty.isPhetioInstrumented() && this.isPhetioInstrumented() ) {
+      if (dependencyProperty instanceof ReadOnlyProperty && dependencyProperty.isPhetioInstrumented() && this.isPhetioInstrumented()) {
 
         // The dependency should undefer (taking deferred value) before this Property notifies.
-        propertyStateHandlerSingleton.registerPhetioOrderDependency( dependencyProperty, PropertyStatePhase.UNDEFER, this, PropertyStatePhase.NOTIFY );
+        propertyStateHandlerSingleton.registerPhetioOrderDependency(dependencyProperty, PropertyStatePhase.UNDEFER, this, PropertyStatePhase.NOTIFY);
       }
     }
   }
@@ -422,31 +424,31 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * @param listener - a function that takes a new value, old value, and this Property as arguments
    * @param [options]
    */
-  public link( listener: PropertyLinkListener<T>, options?: LinkOptions ): void {
-    if ( options && options.phetioDependencies ) {
-      this.addPhetioStateDependencies( options.phetioDependencies );
+  public link(listener: PropertyLinkListener<T>, options?: LinkOptions): void {
+    if (options && options.phetioDependencies) {
+      this.addPhetioStateDependencies(options.phetioDependencies);
     }
 
-    this.tinyProperty.addListener( listener ); // cannot use tinyProperty.link() because of wrong this
-    listener( this.get(), null, this ); // null should be used when an object is expected but unavailable
+    this.tinyProperty.addListener(listener); // cannot use tinyProperty.link() because of wrong this
+    listener(this.get(), null, this); // null should be used when an object is expected but unavailable
   }
 
   /**
    * Add a listener to the Property, without calling it back right away. This is used when you need to register a
    * listener without an immediate callback.
    */
-  public lazyLink( listener: PropertyLazyLinkListener<T>, options?: LinkOptions ): void {
-    if ( options && options.phetioDependencies ) {
-      this.addPhetioStateDependencies( options.phetioDependencies );
+  public lazyLink(listener: PropertyLazyLinkListener<T>, options?: LinkOptions): void {
+    if (options && options.phetioDependencies) {
+      this.addPhetioStateDependencies(options.phetioDependencies);
     }
-    this.tinyProperty.lazyLink( listener );
+    this.tinyProperty.lazyLink(listener);
   }
 
   /**
    * Removes a listener. If listener is not registered, this is a no-op.
    */
-  public unlink( listener: PropertyListener<T> ): void {
-    this.tinyProperty.unlink( listener );
+  public unlink(listener: PropertyListener<T>): void {
+    this.tinyProperty.unlink(listener);
   }
 
   /**
@@ -462,9 +464,9 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    *
    * NOTE: Duplicated with TinyProperty.linkAttribute
    */
-  public linkAttribute( object: IntentionalAny, attributeName: string ): ( value: T ) => void {
-    const handle = ( value: T ) => { object[ attributeName ] = value; };
-    this.link( handle );
+  public linkAttribute(object: IntentionalAny, attributeName: string): (value: T) => void {
+    const handle = (value: T) => { object[attributeName] = value; };
+    this.link(handle);
     return handle;
   }
 
@@ -480,26 +482,26 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * @param name - debug name to be printed on the console
    * @returns - the handle to the linked listener in case it needs to be removed later
    */
-  public debug( name: string ): ( value: T ) => void {
-    const listener = ( value: T ) => console.log( name, value );
-    this.link( listener );
+  public debug(name: string): (value: T) => void {
+    const listener = (value: T) => console.log(name, value);
+    this.link(listener);
     return listener;
   }
 
-  public isValueValid( value: T ): boolean {
-    return this.getValidationError( value ) === null;
+  public isValueValid(value: T): boolean {
+    return this.getValidationError(value) === null;
   }
 
-  public getValidationError( value: T ): string | null {
-    return Validation.getValidationError( value, this.valueValidator, VALIDATE_OPTIONS_FALSE );
+  public getValidationError(value: T): string | null {
+    return Validation.getValidationError(value, this.valueValidator, VALIDATE_OPTIONS_FALSE);
   }
 
   // Ensures that the Property is eligible for GC
   public override dispose(): void {
 
     // unregister any order dependencies for this Property for PhET-iO state
-    if ( this.isPhetioInstrumented() ) {
-      propertyStateHandlerSingleton.unregisterOrderDependenciesForProperty( this );
+    if (this.isPhetioInstrumented()) {
+      propertyStateHandlerSingleton.unregisterOrderDependenciesForProperty(this);
     }
 
     super.dispose();
@@ -509,8 +511,8 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
   /**
    * Checks whether a listener is registered with this Property
    */
-  public hasListener( listener: PropertyLinkListener<T> ): boolean {
-    return this.tinyProperty.hasListener( listener );
+  public hasListener(listener: PropertyLinkListener<T>): boolean {
+    return this.tinyProperty.hasListener(listener);
   }
 
   /**
@@ -524,15 +526,15 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * Invokes a callback once for each listener
    * @param callback - takes the listener as an argument
    */
-  public forEachListener( callback: ( value: ( ...args: [ T, T | null, TinyProperty<T> | ReadOnlyProperty<T> ] ) => void ) => void ): void {
-    this.tinyProperty.forEachListener( callback );
+  public forEachListener(callback: (value: (...args: [T, T | null, TinyProperty<T> | ReadOnlyProperty<T>]) => void) => void): void {
+    this.tinyProperty.forEachListener(callback);
   }
 
   /**
    * Returns true if there are any listeners.
    */
   public hasListeners(): boolean {
-    assert && assert( arguments.length === 0, 'Property.hasListeners should be called without arguments' );
+    assert && assert(arguments.length === 0, 'Property.hasListeners should be called without arguments');
     return this.tinyProperty.hasListeners();
   }
 
@@ -541,42 +543,42 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * An observable Property that triggers notifications when the value changes.
    * This caching implementation should be kept in sync with the other parametric IOType caching implementations.
    */
-  public static PropertyIO<T, StateType>( parameterType: IOType<T, StateType> ): IOType {
-    assert && assert( parameterType, 'PropertyIO needs parameterType' );
+  public static PropertyIO<T, StateType>(parameterType: IOType<T, StateType>): IOType {
+    assert && assert(parameterType, 'PropertyIO needs parameterType');
 
-    if ( !cache.has( parameterType ) ) {
-      cache.set( parameterType, new IOType<ReadOnlyProperty<T>, ReadOnlyPropertyState<StateType>>( `PropertyIO<${parameterType.typeName}>`, {
+    if (!cache.has(parameterType)) {
+      cache.set(parameterType, new IOType<ReadOnlyProperty<T>, ReadOnlyPropertyState<StateType>>(`PropertyIO<${parameterType.typeName}>`, {
 
         // We want PropertyIO to work for DynamicProperty and DerivedProperty, but they extend ReadOnlyProperty
         valueType: ReadOnlyProperty,
         documentation: 'Observable values that send out notifications when the value changes. This differs from the ' +
-                       'traditional listener pattern in that added listeners also receive a callback with the current value ' +
-                       'when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.',
-        methodOrder: [ 'link', 'lazyLink' ],
-        events: [ ReadOnlyProperty.CHANGED_EVENT_NAME ],
-        parameterTypes: [ parameterType ],
+          'traditional listener pattern in that added listeners also receive a callback with the current value ' +
+          'when the listeners are registered. This is a widely-used pattern in PhET-iO simulations.',
+        methodOrder: ['link', 'lazyLink'],
+        events: [ReadOnlyProperty.CHANGED_EVENT_NAME],
+        parameterTypes: [parameterType],
         toStateObject: property => {
-          assert && assert( parameterType.toStateObject, `toStateObject doesn't exist for ${parameterType.typeName}` );
+          assert && assert(parameterType.toStateObject, `toStateObject doesn't exist for ${parameterType.typeName}`);
           return {
-            value: parameterType.toStateObject( property.value ),
-            validValues: NullableIO( ArrayIO( parameterType ) ).toStateObject( property.validValues === undefined ? null : property.validValues ),
-            units: NullableIO( StringIO ).toStateObject( property.units )
+            value: parameterType.toStateObject(property.value),
+            validValues: NullableIO(ArrayIO(parameterType)).toStateObject(property.validValues === undefined ? null : property.validValues),
+            units: NullableIO(StringIO).toStateObject(property.units)
           };
         },
-        applyState: ( property, stateObject ) => {
-          const units = NullableIO( StringIO ).fromStateObject( stateObject.units );
-          assert && assert( property.units === units, 'Property units do not match' );
-          assert && assert( property.isSettable(), 'Property should be settable' );
-          property.unguardedSet( parameterType.fromStateObject( stateObject.value ) );
+        applyState: (property, stateObject) => {
+          const units = NullableIO(StringIO).fromStateObject(stateObject.units);
+          assert && assert(property.units === units, 'Property units do not match');
+          assert && assert(property.isSettable(), 'Property should be settable');
+          property.unguardedSet(parameterType.fromStateObject(stateObject.value));
 
-          if ( stateObject.validValues ) {
-            property.validValues = stateObject.validValues.map( ( validValue: StateType ) => parameterType.fromStateObject( validValue ) );
+          if (stateObject.validValues) {
+            property.validValues = stateObject.validValues.map((validValue: StateType) => parameterType.fromStateObject(validValue));
           }
         },
         stateSchema: {
           value: parameterType,
-          validValues: NullableIO( ArrayIO( parameterType ) ),
-          units: NullableIO( StringIO )
+          validValues: NullableIO(ArrayIO(parameterType)),
+          units: NullableIO(StringIO)
         },
         methods: {
           getValue: {
@@ -586,20 +588,20 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
             documentation: 'Gets the current value.'
           },
           getValidationError: {
-            returnType: NullableIO( StringIO ),
-            parameterTypes: [ parameterType ],
+            returnType: NullableIO(StringIO),
+            parameterTypes: [parameterType],
             implementation: ReadOnlyProperty.prototype.getValidationError,
             documentation: 'Checks to see if a proposed value is valid. Returns the first validation error, or null if the value is valid.'
           },
 
           setValue: {
             returnType: VoidIO,
-            parameterTypes: [ parameterType ],
-            implementation: function( this: ReadOnlyProperty<unknown>, value: T ) {
-              this.set( value );
+            parameterTypes: [parameterType],
+            implementation: function (this: ReadOnlyProperty<unknown>, value: T) {
+              this.set(value);
             },
             documentation: 'Sets the value of the Property. If the value differs from the previous value, listeners are ' +
-                           'notified with the new value.',
+              'notified with the new value.',
             invocableForReadOnlyElements: false
           },
 
@@ -607,42 +609,42 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
             returnType: VoidIO,
 
             // oldValue will start as "null" the first time called
-            parameterTypes: [ FunctionIO( VoidIO, [ parameterType, NullableIO( parameterType ) ] ) ],
+            parameterTypes: [FunctionIO(VoidIO, [parameterType, NullableIO(parameterType)])],
             implementation: ReadOnlyProperty.prototype.link,
             documentation: 'Adds a listener which will be called when the value changes. On registration, the listener is ' +
-                           'also called with the current value. The listener takes two arguments, the new value and the ' +
-                           'previous value.'
+              'also called with the current value. The listener takes two arguments, the new value and the ' +
+              'previous value.'
           },
 
           lazyLink: {
             returnType: VoidIO,
 
             // oldValue will start as "null" the first time called
-            parameterTypes: [ FunctionIO( VoidIO, [ parameterType, NullableIO( parameterType ) ] ) ],
+            parameterTypes: [FunctionIO(VoidIO, [parameterType, NullableIO(parameterType)])],
             implementation: ReadOnlyProperty.prototype.lazyLink,
             documentation: 'Adds a listener which will be called when the value changes. This method is like "link", but ' +
-                           'without the current-value callback on registration. The listener takes two arguments, the new ' +
-                           'value and the previous value.'
+              'without the current-value callback on registration. The listener takes two arguments, the new ' +
+              'value and the previous value.'
           },
           unlink: {
             returnType: VoidIO,
-            parameterTypes: [ FunctionIO( VoidIO, [ parameterType ] ) ],
+            parameterTypes: [FunctionIO(VoidIO, [parameterType])],
             implementation: ReadOnlyProperty.prototype.unlink,
             documentation: 'Removes a listener.'
           }
         }
-      } ) );
+      }));
     }
 
-    return cache.get( parameterType )!;
+    return cache.get(parameterType)!;
   }
 
   /**
    * Support treating ourselves as an autoselectable entity for the "strings" selection mode.
    */
-  public override getPhetioMouseHitTarget( fromLinking = false ): PhetioObject | 'phetioNotSelectable' {
+  public override getPhetioMouseHitTarget(fromLinking = false): PhetioObject | 'phetioNotSelectable' {
 
-    if ( phet.tandem.phetioElementSelectionProperty.value === 'string' ) {
+    if (phet.tandem.phetioElementSelectionProperty.value === 'string') {
 
       // As of this writing, the only way to get to this function is for Properties that have a value of strings, but
       // in the future that may not be the case. SR and MK still think it is preferable to keep this general, as false
@@ -650,11 +652,11 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
       return this.getPhetioMouseHitTargetSelf();
     }
 
-    return super.getPhetioMouseHitTarget( fromLinking );
+    return super.getPhetioMouseHitTarget(fromLinking);
   }
 
 
   public static readonly CHANGED_EVENT_NAME = 'changed';
 }
 
-axon.register( 'ReadOnlyProperty', ReadOnlyProperty );
+axon.register('ReadOnlyProperty', ReadOnlyProperty);

@@ -6,13 +6,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import extendDefined from '../../../phet-core/js/extendDefined.js';
-import { CanvasContextWrapper, CanvasSelfDrawable, CircleCanvasDrawable, CircleDOMDrawable, CircleSVGDrawable, DOMSelfDrawable, Features, TCircleDrawable, Instance, Path, PathOptions, Renderer, scenery, SVGSelfDrawable, VoicingOptions } from '../imports.js';
+import Bounds2 from '../../dot/Bounds2';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import Matrix3 from '../../dot/Matrix3';
+import Vector2 from '../../dot/Vector2';
+import { Shape } from '../../kite/imports';
+import extendDefined from '../../phet-core/extendDefined';
+import { CanvasContextWrapper, CanvasSelfDrawable, CircleCanvasDrawable, CircleDOMDrawable, CircleSVGDrawable, DOMSelfDrawable, Features, type TCircleDrawable, Instance, Path, type PathOptions, Renderer, scenery, SVGSelfDrawable, type VoicingOptions } from '../imports';
 
 const CIRCLE_OPTION_KEYS = [
   'radius' // {number} - see setRadius() for more documentation
@@ -40,29 +40,29 @@ export default class Circle extends Path {
    * @param  [options] - Circle-specific options are documented in CIRCLE_OPTION_KEYS above, and can be provided
    *                     along-side options for Node
    */
-  public constructor( options?: CircleOptions );
-  public constructor( radius: number, options?: CircleOptions );
-  public constructor( radius?: number | CircleOptions, options?: CircleOptions ) {
-    super( null );
+  public constructor(options?: CircleOptions);
+  public constructor(radius: number, options?: CircleOptions);
+  public constructor(radius?: number | CircleOptions, options?: CircleOptions) {
+    super(null);
 
     this._radius = 0;
 
     // Handle new Circle( { radius: ... } )
-    if ( typeof radius === 'object' ) {
+    if (typeof radius === 'object') {
       options = radius;
-      assert && assert( options === undefined || Object.getPrototypeOf( options ) === Object.prototype,
-        'Extra prototype on Node options object is a code smell' );
+      assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+        'Extra prototype on Node options object is a code smell');
     }
     // Handle new Circle( radius, { ... } )
     else {
-      assert && assert( options === undefined || Object.getPrototypeOf( options ) === Object.prototype,
-        'Extra prototype on Node options object is a code smell' );
-      options = extendDefined( {
-        radius: radius
-      }, options );
+      assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+        'Extra prototype on Node options object is a code smell');
+      options = extendDefined({
+        radius
+      }, options);
     }
 
-    this.mutate( options );
+    this.mutate(options);
   }
 
 
@@ -75,7 +75,7 @@ export default class Circle extends Path {
   public override getStrokeRendererBitmask(): number {
     let bitmask = super.getStrokeRendererBitmask();
     // @ts-expect-error TODO isGradient/isPattern better handling https://github.com/phetsims/scenery/issues/1581
-    if ( this.hasStroke() && !this.getStroke()!.isGradient && !this.getStroke()!.isPattern && this.getLineWidth() <= this.getRadius() ) {
+    if (this.hasStroke() && !this.getStroke()!.isGradient && !this.getStroke()!.isPattern && this.getLineWidth() <= this.getRadius()) {
       bitmask |= Renderer.bitmaskDOM;
     }
     return bitmask;
@@ -86,7 +86,7 @@ export default class Circle extends Path {
    */
   public override getPathRendererBitmask(): number {
     // If we can use CSS borderRadius, we can support the DOM renderer.
-    return Renderer.bitmaskCanvas | Renderer.bitmaskSVG | ( Features.borderRadius ? Renderer.bitmaskDOM : 0 );
+    return Renderer.bitmaskCanvas | Renderer.bitmaskSVG | (Features.borderRadius ? Renderer.bitmaskDOM : 0);
   }
 
   /**
@@ -94,7 +94,7 @@ export default class Circle extends Path {
    * shape.
    */
   private invalidateCircle(): void {
-    assert && assert( this._radius >= 0, 'A circle needs a non-negative radius' );
+    assert && assert(this._radius >= 0, 'A circle needs a non-negative radius');
 
     // sets our 'cache' to null, so we don't always have to recompute our shape
     this._shape = null;
@@ -108,7 +108,7 @@ export default class Circle extends Path {
    * when one is needed, without having to do so beforehand.
    */
   private createCircleShape(): Shape {
-    return Shape.circle( 0, 0, this._radius ).makeImmutable();
+    return Shape.circle(0, 0, this._radius).makeImmutable();
   }
 
   /**
@@ -116,20 +116,20 @@ export default class Circle extends Path {
    *
    * @param bounds - Bounds to test, assumed to be in the local coordinate frame.
    */
-  public override intersectsBoundsSelf( bounds: Bounds2 ): boolean {
+  public override intersectsBoundsSelf(bounds: Bounds2): boolean {
     // TODO: handle intersection with somewhat-infinite bounds! https://github.com/phetsims/scenery/issues/1581
-    let x = Math.abs( bounds.centerX );
-    let y = Math.abs( bounds.centerY );
+    let x = Math.abs(bounds.centerX);
+    let y = Math.abs(bounds.centerY);
     const halfWidth = bounds.maxX - x;
     const halfHeight = bounds.maxY - y;
 
     // too far to have a possible intersection
-    if ( x > halfWidth + this._radius || y > halfHeight + this._radius ) {
+    if (x > halfWidth + this._radius || y > halfHeight + this._radius) {
       return false;
     }
 
     // guaranteed intersection
-    if ( x <= halfWidth || y <= halfHeight ) {
+    if (x <= halfWidth || y <= halfHeight) {
       return true;
     }
 
@@ -146,9 +146,9 @@ export default class Circle extends Path {
    * @param wrapper
    * @param matrix - The transformation matrix already applied to the context.
    */
-  protected override canvasPaintSelf( wrapper: CanvasContextWrapper, matrix: Matrix3 ): void {
-    //TODO: Have a separate method for this, instead of touching the prototype. Can make 'this' references too easily. https://github.com/phetsims/scenery/issues/1581
-    CircleCanvasDrawable.prototype.paintCanvas( wrapper, this, matrix );
+  protected override canvasPaintSelf(wrapper: CanvasContextWrapper, matrix: Matrix3): void {
+    // TODO: Have a separate method for this, instead of touching the prototype. Can make 'this' references too easily. https://github.com/phetsims/scenery/issues/1581
+    CircleCanvasDrawable.prototype.paintCanvas(wrapper, this, matrix);
   }
 
   /**
@@ -157,9 +157,9 @@ export default class Circle extends Path {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createDOMDrawable( renderer: number, instance: Instance ): DOMSelfDrawable {
+  public override createDOMDrawable(renderer: number, instance: Instance): DOMSelfDrawable {
     // @ts-expect-error TODO: pooling https://github.com/phetsims/scenery/issues/1581
-    return CircleDOMDrawable.createFromPool( renderer, instance );
+    return CircleDOMDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -168,9 +168,9 @@ export default class Circle extends Path {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createSVGDrawable( renderer: number, instance: Instance ): SVGSelfDrawable {
+  public override createSVGDrawable(renderer: number, instance: Instance): SVGSelfDrawable {
     // @ts-expect-error TODO: pooling https://github.com/phetsims/scenery/issues/1581
-    return CircleSVGDrawable.createFromPool( renderer, instance );
+    return CircleSVGDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -179,31 +179,31 @@ export default class Circle extends Path {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createCanvasDrawable( renderer: number, instance: Instance ): CanvasSelfDrawable {
+  public override createCanvasDrawable(renderer: number, instance: Instance): CanvasSelfDrawable {
     // @ts-expect-error TODO: pooling https://github.com/phetsims/scenery/issues/1581
-    return CircleCanvasDrawable.createFromPool( renderer, instance );
+    return CircleCanvasDrawable.createFromPool(renderer, instance);
   }
 
   /**
    * Sets the radius of the circle.
    */
-  public setRadius( radius: number ): this {
-    assert && assert( radius >= 0, 'A circle needs a non-negative radius' );
-    assert && assert( isFinite( radius ), 'A circle needs a finite radius' );
+  public setRadius(radius: number): this {
+    assert && assert(radius >= 0, 'A circle needs a non-negative radius');
+    assert && assert(isFinite(radius), 'A circle needs a finite radius');
 
-    if ( this._radius !== radius ) {
+    if (this._radius !== radius) {
       this._radius = radius;
       this.invalidateCircle();
 
       const stateLen = this._drawables.length;
-      for ( let i = 0; i < stateLen; i++ ) {
-        ( this._drawables[ i ] as unknown as TCircleDrawable ).markDirtyRadius();
+      for (let i = 0; i < stateLen; i++) {
+        (this._drawables[i] as unknown as TCircleDrawable).markDirtyRadius();
       }
     }
     return this;
   }
 
-  public set radius( value: number ) { this.setRadius( value ); }
+  public set radius(value: number) { this.setRadius(value); }
 
   public get radius(): number { return this.getRadius(); }
 
@@ -218,10 +218,10 @@ export default class Circle extends Path {
    * Computes the bounds of the Circle, including any applied stroke. Overridden for efficiency.
    */
   public override computeShapeBounds(): Bounds2 {
-    let bounds = new Bounds2( -this._radius, -this._radius, this._radius, this._radius );
-    if ( this._stroke ) {
+    let bounds = new Bounds2(-this._radius, -this._radius, this._radius, this._radius);
+    if (this._stroke) {
       // since we are axis-aligned, any stroke will expand our bounds by a guaranteed set amount
-      bounds = bounds.dilated( this.getLineWidth() / 2 );
+      bounds = bounds.dilated(this.getLineWidth() / 2);
     }
     return bounds;
   }
@@ -233,18 +233,18 @@ export default class Circle extends Path {
    *
    * @param point - Considered to be in the local coordinate frame
    */
-  public override containsPointSelf( point: Vector2 ): boolean {
+  public override containsPointSelf(point: Vector2): boolean {
     const magSq = point.x * point.x + point.y * point.y;
     let result = true;
     let iRadius: number;
-    if ( this._strokePickable ) {
+    if (this._strokePickable) {
       iRadius = this.getLineWidth() / 2;
       const outerRadius = this._radius + iRadius;
       result = result && magSq <= outerRadius * outerRadius;
     }
 
-    if ( this._fillPickable ) {
-      if ( this._strokePickable ) {
+    if (this._fillPickable) {
+      if (this._strokePickable) {
         // we were either within the outer radius, or not
         return result;
       }
@@ -253,8 +253,8 @@ export default class Circle extends Path {
         return magSq <= this._radius * this._radius;
       }
     }
-    else if ( this._strokePickable ) {
-      const innerRadius = this._radius - ( iRadius! );
+    else if (this._strokePickable) {
+      const innerRadius = this._radius - (iRadius!);
       return result && magSq >= innerRadius * innerRadius;
     }
     else {
@@ -268,9 +268,9 @@ export default class Circle extends Path {
    *
    * @param shape - Throws an error if it is not null.
    */
-  public override setShape( shape: Shape | null ): this {
-    if ( shape !== null ) {
-      throw new Error( 'Cannot set the shape of a Circle to something non-null' );
+  public override setShape(shape: Shape | null): this {
+    if (shape !== null) {
+      throw new Error('Cannot set the shape of a Circle to something non-null');
     }
     else {
       // probably called from the Path constructor
@@ -286,7 +286,7 @@ export default class Circle extends Path {
    * NOTE: This is created lazily, so don't call it if you don't have to!
    */
   public override getShape(): Shape {
-    if ( !this._shape ) {
+    if (!this._shape) {
       this._shape = this.createCircleShape();
     }
     return this._shape;
@@ -300,8 +300,8 @@ export default class Circle extends Path {
     return true;
   }
 
-  public override mutate( options?: CircleOptions ): this {
-    return super.mutate( options );
+  public override mutate(options?: CircleOptions): this {
+    return super.mutate(options);
   }
 
 }
@@ -313,7 +313,7 @@ export default class Circle extends Path {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-Circle.prototype._mutatorKeys = CIRCLE_OPTION_KEYS.concat( Path.prototype._mutatorKeys );
+Circle.prototype._mutatorKeys = CIRCLE_OPTION_KEYS.concat(Path.prototype._mutatorKeys);
 
 /**
  * {Array.<String>} - List of all dirty flags that should be available on drawables created from this node (or
@@ -322,6 +322,6 @@ Circle.prototype._mutatorKeys = CIRCLE_OPTION_KEYS.concat( Path.prototype._mutat
  * (scenery-internal)
  * @override
  */
-Circle.prototype.drawableMarkFlags = Path.prototype.drawableMarkFlags.concat( [ 'radius' ] ).filter( flag => flag !== 'shape' );
+Circle.prototype.drawableMarkFlags = Path.prototype.drawableMarkFlags.concat(['radius']).filter(flag => flag !== 'shape');
 
-scenery.register( 'Circle', Circle );
+scenery.register('Circle', Circle);

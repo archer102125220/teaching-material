@@ -8,7 +8,7 @@
  */
 
 import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType.js';
+import IOType from './IOType';
 import StateSchema from './StateSchema';
 import ValueIO from './ValueIO';
 

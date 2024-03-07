@@ -7,15 +7,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import IOType from '../../../tandem/js/types/IOType.js';
-import StringIO from '../../../tandem/js/types/StringIO.js';
-import VoidIO from '../../../tandem/js/types/VoidIO.js';
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, TImageDrawable, Imageable, ImageableImage, ImageableOptions, ImageCanvasDrawable, ImageDOMDrawable, ImageSVGDrawable, ImageWebGLDrawable, Instance, Node, NodeOptions, Renderer, scenery, SpriteSheet, SVGSelfDrawable, WebGLSelfDrawable } from '../imports.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../phet-core/js/optionize.js';
+import Bounds2 from '../../dot/Bounds2';
+import IOType from '../../tandem/types/IOType';
+import StringIO from '../../tandem/types/StringIO';
+import VoidIO from '../../tandem/types/VoidIO';
+import Matrix3 from '../../dot/Matrix3';
+import Vector2 from '../../dot/Vector2';
+import { Shape } from '../../kite/imports';
+import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, type TImageDrawable, Imageable, type ImageableImage, type ImageableOptions, ImageCanvasDrawable, ImageDOMDrawable, ImageSVGDrawable, ImageWebGLDrawable, Instance, Node, type NodeOptions, Renderer, scenery, SpriteSheet, SVGSelfDrawable, WebGLSelfDrawable } from '../imports';
+import optionize, { combineOptions, type EmptySelfOptions } from '../../phet-core/optionize';
 
 
 // Image-specific options that can be passed in the constructor or mutate() call.
@@ -40,23 +40,23 @@ type ParentOptions = NodeOptions & ImageableOptions;
 
 export type ImageOptions = SelfOptions & ParentOptions;
 
-export default class Image extends Imageable( Node ) {
+export default class Image extends Imageable(Node) {
 
   // If non-null, determines what is considered "inside" the image for containment and hit-testing.
   private _imageBounds: Bounds2 | null;
 
-  public constructor( image: ImageableImage, providedOptions?: ImageOptions ) {
+  public constructor(image: ImageableImage, providedOptions?: ImageOptions) {
 
     // rely on the setImage call from the super constructor to do the setup
-    const options = optionize<ImageOptions, EmptySelfOptions, ParentOptions>()( {
-      image: image
-    }, providedOptions );
+    const options = optionize<ImageOptions, EmptySelfOptions, ParentOptions>()({
+      image
+    }, providedOptions);
 
     super();
 
     this._imageBounds = null;
 
-    this.mutate( options );
+    this.mutate(options);
 
     this.invalidateSupportedRenderers();
   }
@@ -71,16 +71,16 @@ export default class Image extends Imageable( Node ) {
    * but this is also triggered by our actual image reference changing).
    */
   public override invalidateImage(): void {
-    if ( this._image ) {
-      this.invalidateSelf( this._imageBounds || new Bounds2( 0, 0, this.getImageWidth(), this.getImageHeight() ) );
+    if (this._image) {
+      this.invalidateSelf(this._imageBounds || new Bounds2(0, 0, this.getImageWidth(), this.getImageHeight()));
     }
     else {
-      this.invalidateSelf( Bounds2.NOTHING );
+      this.invalidateSelf(Bounds2.NOTHING);
     }
 
     const stateLen = this._drawables.length;
-    for ( let i = 0; i < stateLen; i++ ) {
-      ( this._drawables[ i ] as unknown as TImageDrawable ).markDirtyImage();
+    for (let i = 0; i < stateLen; i++) {
+      (this._drawables[i] as unknown as TImageDrawable).markDirtyImage();
     }
 
     super.invalidateImage();
@@ -101,18 +101,18 @@ export default class Image extends Imageable( Node ) {
     // function will be called again after the image loads, and would correctly invalidate WebGL, if too large to fit
     // in a SpriteSheet
     const fitsWithinSpriteSheet = this.getImageWidth() <= SpriteSheet.MAX_DIMENSION.width &&
-                                  this.getImageHeight() <= SpriteSheet.MAX_DIMENSION.height;
-    if ( fitsWithinSpriteSheet ) {
+      this.getImageHeight() <= SpriteSheet.MAX_DIMENSION.height;
+    if (fitsWithinSpriteSheet) {
       r |= Renderer.bitmaskWebGL;
     }
 
     // If it is not a canvas, then it can additionally be rendered in SVG or DOM
-    if ( !( this._image instanceof HTMLCanvasElement ) ) {
+    if (!(this._image instanceof HTMLCanvasElement)) {
       // assumes HTMLImageElement
       r |= Renderer.bitmaskSVG | Renderer.bitmaskDOM;
     }
 
-    this.setRendererBitmask( r );
+    this.setRendererBitmask(r);
   }
 
   /**
@@ -123,15 +123,15 @@ export default class Image extends Imageable( Node ) {
    *
    * @param imageOpacity - Should be a number between 0 (transparent) and 1 (opaque), just like normal opacity.
    */
-  public override setImageOpacity( imageOpacity: number ): void {
+  public override setImageOpacity(imageOpacity: number): void {
     const changed = this._imageOpacity !== imageOpacity;
 
-    super.setImageOpacity( imageOpacity );
+    super.setImageOpacity(imageOpacity);
 
-    if ( changed ) {
+    if (changed) {
       const stateLen = this._drawables.length;
-      for ( let i = 0; i < stateLen; i++ ) {
-        ( this._drawables[ i ] as unknown as TImageDrawable ).markDirtyImageOpacity();
+      for (let i = 0; i < stateLen; i++) {
+        (this._drawables[i] as unknown as TImageDrawable).markDirtyImageOpacity();
       }
     }
   }
@@ -143,15 +143,15 @@ export default class Image extends Imageable( Node ) {
    * NOTE: This is accomplished by using any provided imageBounds as the node's own selfBounds. This will affect layout,
    * hit-testing, and anything else using the bounds of this node.
    */
-  public setImageBounds( imageBounds: Bounds2 | null ): void {
-    if ( this._imageBounds !== imageBounds ) {
+  public setImageBounds(imageBounds: Bounds2 | null): void {
+    if (this._imageBounds !== imageBounds) {
       this._imageBounds = imageBounds;
 
       this.invalidateImage();
     }
   }
 
-  public set imageBounds( value: Bounds2 | null ) { this.setImageBounds( value ); }
+  public set imageBounds(value: Bounds2 | null) { this.setImageBounds(value); }
 
   public get imageBounds(): Bounds2 | null { return this._imageBounds; }
 
@@ -177,9 +177,9 @@ export default class Image extends Imageable( Node ) {
    * @param wrapper
    * @param matrix - The transformation matrix already applied to the context.
    */
-  protected override canvasPaintSelf( wrapper: CanvasContextWrapper, matrix: Matrix3 ): void {
-    //TODO: Have a separate method for this, instead of touching the prototype. Can make 'this' references too easily. https://github.com/phetsims/scenery/issues/1581
-    ImageCanvasDrawable.prototype.paintCanvas( wrapper, this, matrix );
+  protected override canvasPaintSelf(wrapper: CanvasContextWrapper, matrix: Matrix3): void {
+    // TODO: Have a separate method for this, instead of touching the prototype. Can make 'this' references too easily. https://github.com/phetsims/scenery/issues/1581
+    ImageCanvasDrawable.prototype.paintCanvas(wrapper, this, matrix);
   }
 
   /**
@@ -188,9 +188,9 @@ export default class Image extends Imageable( Node ) {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createDOMDrawable( renderer: number, instance: Instance ): DOMSelfDrawable {
+  public override createDOMDrawable(renderer: number, instance: Instance): DOMSelfDrawable {
     // @ts-expect-error - Poolable
-    return ImageDOMDrawable.createFromPool( renderer, instance );
+    return ImageDOMDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -199,9 +199,9 @@ export default class Image extends Imageable( Node ) {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createSVGDrawable( renderer: number, instance: Instance ): SVGSelfDrawable {
+  public override createSVGDrawable(renderer: number, instance: Instance): SVGSelfDrawable {
     // @ts-expect-error - Poolable
-    return ImageSVGDrawable.createFromPool( renderer, instance );
+    return ImageSVGDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -210,9 +210,9 @@ export default class Image extends Imageable( Node ) {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createCanvasDrawable( renderer: number, instance: Instance ): CanvasSelfDrawable {
+  public override createCanvasDrawable(renderer: number, instance: Instance): CanvasSelfDrawable {
     // @ts-expect-error - Poolable
-    return ImageCanvasDrawable.createFromPool( renderer, instance );
+    return ImageCanvasDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -221,9 +221,9 @@ export default class Image extends Imageable( Node ) {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createWebGLDrawable( renderer: number, instance: Instance ): WebGLSelfDrawable {
+  public override createWebGLDrawable(renderer: number, instance: Instance): WebGLSelfDrawable {
     // @ts-expect-error - Poolable
-    return ImageWebGLDrawable.createFromPool( renderer, instance );
+    return ImageWebGLDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -231,27 +231,27 @@ export default class Image extends Imageable( Node ) {
    *
    * @param point - Considered to be in the local coordinate frame
    */
-  public override containsPointSelf( point: Vector2 ): boolean {
-    const inBounds = Node.prototype.containsPointSelf.call( this, point );
+  public override containsPointSelf(point: Vector2): boolean {
+    const inBounds = Node.prototype.containsPointSelf.call(this, point);
 
-    if ( !inBounds || !this._hitTestPixels || !this._hitTestImageData ) {
+    if (!inBounds || !this._hitTestPixels || !this._hitTestImageData) {
       return inBounds;
     }
 
-    return Imageable.testHitTestData( this._hitTestImageData, this.imageWidth, this.imageHeight, point );
+    return Imageable.testHitTestData(this._hitTestImageData, this.imageWidth, this.imageHeight, point);
   }
 
   /**
    * Returns a Shape that represents the area covered by containsPointSelf.
    */
   public override getSelfShape(): Shape {
-    if ( this._hitTestPixels && this._hitTestImageData ) {
+    if (this._hitTestPixels && this._hitTestImageData) {
       // If we're hit-testing pixels, return that shape included.
-      return Imageable.hitTestDataToShape( this._hitTestImageData, this.imageWidth, this.imageHeight );
+      return Imageable.hitTestDataToShape(this._hitTestImageData, this.imageWidth, this.imageHeight);
     }
     else {
       // Otherwise the super call will just include the rectangle (bounds).
-      return Node.prototype.getSelfShape.call( this );
+      return Node.prototype.getSelfShape.call(this);
     }
   }
 
@@ -263,22 +263,22 @@ export default class Image extends Imageable( Node ) {
 
     super.invalidateMipmaps();
 
-    if ( markDirty ) {
+    if (markDirty) {
       const stateLen = this._drawables.length;
-      for ( let i = 0; i < stateLen; i++ ) {
-        ( this._drawables[ i ] as unknown as TImageDrawable ).markDirtyMipmap();
+      for (let i = 0; i < stateLen; i++) {
+        (this._drawables[i] as unknown as TImageDrawable).markDirtyMipmap();
       }
     }
   }
 
-  public override mutate( options?: ImageOptions ): this {
-    return super.mutate( options );
+  public override mutate(options?: ImageOptions): this {
+    return super.mutate(options);
   }
 
   public static ImageIO: IOType;
 
   // Initial values for most Node mutator options
-  public static readonly DEFAULT_IMAGE_OPTIONS = combineOptions<ImageOptions>( {}, Node.DEFAULT_NODE_OPTIONS, Imageable.DEFAULT_OPTIONS );
+  public static readonly DEFAULT_IMAGE_OPTIONS = combineOptions<ImageOptions>({}, Node.DEFAULT_NODE_OPTIONS, Imageable.DEFAULT_OPTIONS);
 }
 
 /**
@@ -288,7 +288,7 @@ export default class Image extends Imageable( Node ) {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-Image.prototype._mutatorKeys = [ ...IMAGE_OPTION_KEYS, ...Node.prototype._mutatorKeys ];
+Image.prototype._mutatorKeys = [...IMAGE_OPTION_KEYS, ...Node.prototype._mutatorKeys];
 
 /**
  * {Array.<String>} - List of all dirty flags that should be available on drawables created from this node (or
@@ -297,18 +297,18 @@ Image.prototype._mutatorKeys = [ ...IMAGE_OPTION_KEYS, ...Node.prototype._mutato
  * (scenery-internal)
  * @override
  */
-Image.prototype.drawableMarkFlags = [ ...Node.prototype.drawableMarkFlags, 'image', 'imageOpacity', 'mipmap' ];
+Image.prototype.drawableMarkFlags = [...Node.prototype.drawableMarkFlags, 'image', 'imageOpacity', 'mipmap'];
 
 // NOTE: Not currently in use
-Image.ImageIO = new IOType( 'ImageIO', {
+Image.ImageIO = new IOType('ImageIO', {
   valueType: Image,
   supertype: Node.NodeIO,
-  events: [ 'changed' ],
+  events: ['changed'],
   methods: {
     setImage: {
       returnType: VoidIO,
-      parameterTypes: [ StringIO ],
-      implementation: function( base64Text: string ) {
+      parameterTypes: [StringIO],
+      implementation: function (base64Text: string) {
         const im = new window.Image();
         im.src = base64Text;
         // @ts-expect-error TODO: how would this even work? https://github.com/phetsims/scenery/issues/1581
@@ -318,6 +318,6 @@ Image.ImageIO = new IOType( 'ImageIO', {
       invocableForReadOnlyElements: false
     }
   }
-} );
+});
 
-scenery.register( 'Image', Image );
+scenery.register('Image', Image);

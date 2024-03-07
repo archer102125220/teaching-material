@@ -7,26 +7,25 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-// @ts-expect-error
-import IntentionalAny from '../phet-core/types/IntentionalAny';
+import type IntentionalAny from '../phet-core/types/IntentionalAny';
 import axon from './axon';
-// @ts-expect-error
-import TEmitter, { TEmitterListener, TEmitterParameter } from './TEmitter';
+import type TEmitter from './TEmitter';
+import type { TEmitterListener, TEmitterParameter } from './TEmitter';
 import Random from '../dot/Random';
 import dotRandom from '../dot/dotRandom';
 
 // constants
-const listenerOrder = _.hasIn( window, 'phet.chipper.queryParameters' ) && phet.chipper.queryParameters.listenerOrder;
-const listenerLimit = _.hasIn( window, 'phet.chipper.queryParameters' ) && phet.chipper.queryParameters.listenerLimit;
+const listenerOrder = _.hasIn(window, 'phet.chipper.queryParameters') && phet.chipper.queryParameters.listenerOrder;
+const listenerLimit = _.hasIn(window, 'phet.chipper.queryParameters') && phet.chipper.queryParameters.listenerLimit;
 
 let random: Random | null = null;
-if ( listenerOrder && listenerOrder.startsWith( 'random' ) ) {
+if (listenerOrder && listenerOrder.startsWith('random')) {
 
   // NOTE: this regular expression must be maintained in initialize-globals as well.
-  const match = listenerOrder.match( /random(?:%28|\()(\d+)(?:%29|\))/ );
-  const seed = match ? Number( match[ 1 ] ) : dotRandom.nextInt( 1000000 );
-  random = new Random( { seed: seed } );
-  console.log( 'listenerOrder random seed: ' + random.seed );
+  const match = listenerOrder.match(/random(?:%28|\()(\d+)(?:%29|\))/);
+  const seed = match ? Number(match[1]) : dotRandom.nextInt(1000000);
+  random = new Random({ seed });
+  console.log('listenerOrder random seed: ' + random.seed);
 }
 
 
@@ -42,7 +41,7 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
 
   // Not defined usually because of memory usage. If defined, this will be called when the listener count changes,
   // e.g. changeCount( {number} listenersAddedQuantity ), with the number being negative for listeners removed.
-  public changeCount?: ( count: number ) => void;
+  public changeCount?: (count: number) => void;
 
   // Only defined when assertions are enabled - to keep track if it has been disposed or not
   public isDisposed?: boolean;
@@ -62,13 +61,13 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
   private emitContexts: EmitContext<T>[];
 
   // Null on parameters is a no-op
-  public constructor( onBeforeNotify?: TEmitterListener<T> | null, hasListenerOrderDependencies?: boolean | null ) {
+  public constructor(onBeforeNotify?: TEmitterListener<T> | null, hasListenerOrderDependencies?: boolean | null) {
 
-    if ( onBeforeNotify ) {
+    if (onBeforeNotify) {
       this.onBeforeNotify = onBeforeNotify;
     }
 
-    if ( hasListenerOrderDependencies ) {
+    if (hasListenerOrderDependencies) {
       this.hasListenerOrderDependencies = hasListenerOrderDependencies;
     }
 
@@ -78,7 +77,7 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
     this.emitContexts = [];
 
     // for production memory concerns; no need to keep this around.
-    if ( assert ) {
+    if (assert) {
       this.isDisposed = false;
     }
   }
@@ -89,7 +88,7 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
   public dispose(): void {
     this.removeAllListeners();
 
-    if ( assert ) {
+    if (assert) {
       this.isDisposed = true;
     }
   }
@@ -97,46 +96,46 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
   /**
    * Notify listeners
    */
-  public emit( ...args: T ): void {
-    assert && assert( !this.isDisposed, 'should not be called if disposed' );
+  public emit(...args: T): void {
+    assert && assert(!this.isDisposed, 'should not be called if disposed');
 
     // optional callback, before notifying listeners
-    this.onBeforeNotify && this.onBeforeNotify.apply( null, args );
+    this.onBeforeNotify && this.onBeforeNotify.apply(null, args);
 
     // Support for a query parameter that shuffles listeners, but bury behind assert so it will be stripped out on build
     // so it won't impact production performance.
-    if ( assert && listenerOrder && ( listenerOrder !== 'default' ) && !this.hasListenerOrderDependencies ) {
-      const asArray = Array.from( this.listeners );
+    if (assert && listenerOrder && (listenerOrder !== 'default') && !this.hasListenerOrderDependencies) {
+      const asArray = Array.from(this.listeners);
 
-      const reorderedListeners = listenerOrder.startsWith( 'random' ) ? random!.shuffle( asArray ) : asArray.reverse();
-      this.listeners = new Set( reorderedListeners );
+      const reorderedListeners = listenerOrder.startsWith('random') ? random!.shuffle(asArray) : asArray.reverse();
+      this.listeners = new Set(reorderedListeners);
     }
 
     // Notify wired-up listeners, if any
-    if ( this.listeners.size > 0 ) {
+    if (this.listeners.size > 0) {
 
       const emitContext: EmitContext<T> = {
         index: 0
         // listenerArray: [] // {Array.<function>|undefined} assigned if a mutation is made during emit
       };
-      this.emitContexts.push( emitContext );
+      this.emitContexts.push(emitContext);
 
-      for ( const listener of this.listeners ) {
-        listener( ...args );
+      for (const listener of this.listeners) {
+        listener(...args);
         emitContext.index++;
 
         // If a listener was added or removed, we cannot continue processing the mutated Set, we must switch to
         // iterate over the guarded array
-        if ( emitContext.listenerArray ) {
+        if (emitContext.listenerArray) {
           break;
         }
       }
 
       // If the listeners were guarded during emit, we bailed out on the for..of and continue iterating over the original
       // listeners in order from where we left off.
-      if ( emitContext.listenerArray ) {
-        for ( let i = emitContext.index; i < emitContext.listenerArray.length; i++ ) {
-          emitContext.listenerArray[ i ]( ...args );
+      if (emitContext.listenerArray) {
+        for (let i = emitContext.index; i < emitContext.listenerArray.length; i++) {
+          emitContext.listenerArray[i](...args);
         }
       }
       this.emitContexts.pop();
@@ -146,39 +145,39 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
   /**
    * Adds a listener which will be called during emit.
    */
-  public addListener( listener: TEmitterListener<T> ): void {
-    assert && assert( !this.isDisposed, 'Cannot add a listener to a disposed TinyEmitter' );
-    assert && assert( !this.hasListener( listener ), 'Cannot add the same listener twice' );
+  public addListener(listener: TEmitterListener<T>): void {
+    assert && assert(!this.isDisposed, 'Cannot add a listener to a disposed TinyEmitter');
+    assert && assert(!this.hasListener(listener), 'Cannot add the same listener twice');
 
     // If a listener is added during an emit(), we must make a copy of the current list of listeners--the newly added
     // listener will be available for the next emit() but not the one in progress.  This is to match behavior with
     // removeListener.
     this.guardListeners();
-    this.listeners.add( listener );
+    this.listeners.add(listener);
 
-    this.changeCount && this.changeCount( 1 );
+    this.changeCount && this.changeCount(1);
 
-    if ( assert && listenerLimit && isFinite( listenerLimit ) && maxListenerCount < this.listeners.size ) {
+    if (assert && listenerLimit && isFinite(listenerLimit) && maxListenerCount < this.listeners.size) {
       maxListenerCount = this.listeners.size;
-      console.log( `Max TinyEmitter listeners: ${maxListenerCount}` );
-      assert( maxListenerCount <= listenerLimit, `listener count of ${maxListenerCount} above ?listenerLimit=${listenerLimit}` );
+      console.log(`Max TinyEmitter listeners: ${maxListenerCount}`);
+      assert(maxListenerCount <= listenerLimit, `listener count of ${maxListenerCount} above ?listenerLimit=${listenerLimit}`);
     }
   }
 
   /**
    * Removes a listener
    */
-  public removeListener( listener: TEmitterListener<T> ): void {
+  public removeListener(listener: TEmitterListener<T>): void {
 
     // Throw an error when removing a non-listener (except when the Emitter has already been disposed, see
     // https://github.com/phetsims/sun/issues/394#issuecomment-419998231
-    if ( assert && !this.isDisposed ) {
-      assert( this.listeners.has( listener ), 'tried to removeListener on something that wasn\'t a listener' );
+    if (assert && !this.isDisposed) {
+      assert(this.listeners.has(listener), 'tried to removeListener on something that wasn\'t a listener');
     }
     this.guardListeners();
-    this.listeners.delete( listener );
+    this.listeners.delete(listener);
 
-    this.changeCount && this.changeCount( -1 );
+    this.changeCount && this.changeCount(-1);
   }
 
   /**
@@ -191,7 +190,7 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
     this.guardListeners();
     this.listeners.clear();
 
-    this.changeCount && this.changeCount( -size );
+    this.changeCount && this.changeCount(-size);
   }
 
   /**
@@ -200,17 +199,17 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
    */
   private guardListeners(): void {
 
-    for ( let i = this.emitContexts.length - 1; i >= 0; i-- ) {
+    for (let i = this.emitContexts.length - 1; i >= 0; i--) {
 
       // Once we meet a level that was already guarded, we can stop, since all previous levels were already guarded
-      if ( this.emitContexts[ i ].listenerArray ) {
+      if (this.emitContexts[i].listenerArray) {
         break;
       }
       else {
 
         // Mark copies as 'guarded' so that it will use the original listeners when emit started and not the modified
         // list.
-        this.emitContexts[ i ].listenerArray = Array.from( this.listeners );
+        this.emitContexts[i].listenerArray = Array.from(this.listeners);
       }
     }
   }
@@ -218,16 +217,16 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
   /**
    * Checks whether a listener is registered with this Emitter
    */
-  public hasListener( listener: TEmitterListener<T> ): boolean {
-    assert && assert( arguments.length === 1, 'Emitter.hasListener should be called with 1 argument' );
-    return this.listeners.has( listener );
+  public hasListener(listener: TEmitterListener<T>): boolean {
+    assert && assert(arguments.length === 1, 'Emitter.hasListener should be called with 1 argument');
+    return this.listeners.has(listener);
   }
 
   /**
    * Returns true if there are any listeners.
    */
   public hasListeners(): boolean {
-    assert && assert( arguments.length === 0, 'Emitter.hasListeners should be called without arguments' );
+    assert && assert(arguments.length === 0, 'Emitter.hasListeners should be called without arguments');
     return this.listeners.size > 0;
   }
 
@@ -241,9 +240,9 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
   /**
    * Invokes a callback once for each listener - meant for Property's use
    */
-  public forEachListener( callback: ( listener: TEmitterListener<T> ) => void ): void {
-    this.listeners.forEach( callback );
+  public forEachListener(callback: (listener: TEmitterListener<T>) => void): void {
+    this.listeners.forEach(callback);
   }
 }
 
-axon.register( 'TinyEmitter', TinyEmitter );
+axon.register('TinyEmitter', TinyEmitter);

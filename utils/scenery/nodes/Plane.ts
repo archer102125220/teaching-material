@@ -10,14 +10,14 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import { Rectangle, RectangleOptions, scenery } from '../imports.js';
+import { Rectangle, type RectangleOptions, scenery } from '../imports';
 
 export type PlaneOptions = RectangleOptions;
 
 export default class Plane extends Rectangle {
-  public constructor( options?: PlaneOptions ) {
-    super( -2000, -2000, 6000, 6000, options );
+  public constructor(options?: PlaneOptions) {
+    super(-2000, -2000, 6000, 6000, options);
   }
 }
 
-scenery.register( 'Plane', Plane );
+scenery.register('Plane', Plane);

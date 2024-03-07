@@ -6,18 +6,18 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TProperty from '../../../axon/js/TProperty.js';
-import Property from '../../../axon/js/Property.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import { scenery, SpriteImage } from '../imports.js';
+import type TProperty from '../../axon/TProperty';
+import Property from '../../axon/Property';
+import Vector2 from '../../dot/Vector2';
+import { Shape } from '../../kite/imports';
+import { scenery, SpriteImage } from '../imports';
 
 export default class Sprite {
 
   public readonly imageProperty: TProperty<SpriteImage>;
 
-  public constructor( spriteImage: SpriteImage ) {
-    this.imageProperty = new Property( spriteImage );
+  public constructor(spriteImage: SpriteImage) {
+    this.imageProperty = new Property(spriteImage);
   }
 
   /**
@@ -30,9 +30,9 @@ export default class Sprite {
   /**
    * Returns whether a given point is considered "inside" the Sprite
    */
-  public containsPoint( point: Vector2 ): boolean {
-    return this.imageProperty.value.containsPoint( point );
+  public containsPoint(point: Vector2): boolean {
+    return this.imageProperty.value.containsPoint(point);
   }
 }
 
-scenery.register( 'Sprite', Sprite );
+scenery.register('Sprite', Sprite);

@@ -9,13 +9,13 @@
 
 import DerivedProperty from '@/utils/axon/DerivedProperty';
 import joist from '@/utils/joist/joist';
-// @ts-expect-error
-import localeProperty, { Locale } from './localeProperty';
+import localeProperty, { type Locale } from './localeProperty';
 import fallbackLocalesProperty from './fallbackLocalesProperty';
 
 const FALLBACK_LOCALE = 'en';
 
 const localeOrderProperty = new DerivedProperty([localeProperty, fallbackLocalesProperty],
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (locale: any, fallbackLocales: any) => {
 
     const localeOrder = [locale];

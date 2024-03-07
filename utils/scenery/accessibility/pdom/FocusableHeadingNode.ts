@@ -12,9 +12,9 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import optionize from '../../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import { Node, NodeOptions, scenery } from '../../imports.js';
+import optionize from '../../../phet-core/optionize';
+import type StrictOmit from '../../../phet-core/types/StrictOmit';
+import { Node, type NodeOptions, scenery } from '../../imports';
 
 // Available heading levels, according to DOM spec.
 type HeadingLevelNumber = 1 | 2 | 3 | 4 | 5 | 6;
@@ -32,12 +32,12 @@ class FocusableHeadingNode extends Node {
   // Removes listeners and makes eligible for garbage collection.
   private readonly disposeFocusableHeadingNode: () => void;
 
-  public constructor( providedOptions?: FocusableHeadingNodeOptions ) {
-    const options = optionize<FocusableHeadingNodeOptions, SelfOptions, ParentOptions>()( {
+  public constructor(providedOptions?: FocusableHeadingNodeOptions) {
+    const options = optionize<FocusableHeadingNodeOptions, SelfOptions, ParentOptions>()({
       headingLevel: 1
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.tagName = `h${options.headingLevel}`;
 
@@ -49,10 +49,10 @@ class FocusableHeadingNode extends Node {
     const blurListener = {
       blur: () => { this.focusable = false; }
     };
-    this.addInputListener( blurListener );
+    this.addInputListener(blurListener);
 
     this.disposeFocusableHeadingNode = () => {
-      this.removeInputListener( blurListener );
+      this.removeInputListener(blurListener);
     };
   }
 
@@ -75,5 +75,5 @@ class FocusableHeadingNode extends Node {
   }
 }
 
-scenery.register( 'FocusableHeadingNode', FocusableHeadingNode );
+scenery.register('FocusableHeadingNode', FocusableHeadingNode);
 export default FocusableHeadingNode;

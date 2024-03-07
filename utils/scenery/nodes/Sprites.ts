@@ -7,13 +7,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import { CanvasContextWrapper, CanvasSelfDrawable, Instance, Node, NodeOptions, Renderer, scenery, Sprite, SpriteInstance, SpritesCanvasDrawable, SpritesWebGLDrawable, WebGLSelfDrawable } from '../imports.js';
+import Bounds2 from '../../dot/Bounds2';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import Matrix3 from '../../dot/Matrix3';
+import Vector2 from '../../dot/Vector2';
+import { Shape } from '../../kite/imports';
+import optionize from '../../phet-core/optionize';
+import { CanvasContextWrapper, CanvasSelfDrawable, Instance, Node, type NodeOptions, Renderer, scenery, Sprite, SpriteInstance, SpritesCanvasDrawable, SpritesWebGLDrawable, WebGLSelfDrawable } from '../imports';
 
 type SelfOptions = {
   // Provide a fixed set of Sprite objects that will be used for this node. Currently, it cannot be modified after
@@ -43,16 +43,16 @@ export default class Sprites extends Node {
   private _spriteInstances: SpriteInstance[];
   private _hitTestSprites: boolean;
 
-  public constructor( providedOptions?: SpritesOptions ) {
+  public constructor(providedOptions?: SpritesOptions) {
 
-    const options = optionize<SpritesOptions, SpecifiedSelfOptions, NodeOptions>()( {
+    const options = optionize<SpritesOptions, SpecifiedSelfOptions, NodeOptions>()({
       sprites: [],
       spriteInstances: [],
       hitTestSprites: false,
 
       // Sets the node's default renderer to WebGL (as we'll generally want that when using this type)
       renderer: 'webgl'
-    }, providedOptions );
+    }, providedOptions);
 
     super();
 
@@ -61,9 +61,9 @@ export default class Sprites extends Node {
     this._hitTestSprites = options.hitTestSprites;
 
     // WebGL and Canvas are supported.
-    this.setRendererBitmask( Renderer.bitmaskCanvas | Renderer.bitmaskWebGL );
+    this.setRendererBitmask(Renderer.bitmaskCanvas | Renderer.bitmaskWebGL);
 
-    this.mutate( options );
+    this.mutate(options);
   }
 
   /**
@@ -72,11 +72,11 @@ export default class Sprites extends Node {
    * These bounds should always cover at least the area where the Sprites will draw in. If this is violated, this
    * node may be partially or completely invisible in Scenery's output.
    */
-  public setCanvasBounds( selfBounds: Bounds2 ): void {
-    this.invalidateSelf( selfBounds );
+  public setCanvasBounds(selfBounds: Bounds2): void {
+    this.invalidateSelf(selfBounds);
   }
 
-  public set canvasBounds( value: Bounds2 ) { this.setCanvasBounds( value ); }
+  public set canvasBounds(value: Bounds2) { this.setCanvasBounds(value); }
 
   public get canvasBounds(): Bounds2 { return this.getCanvasBounds(); }
 
@@ -94,8 +94,8 @@ export default class Sprites extends Node {
    * @param wrapper
    * @param matrix - The transformation matrix already applied to the context.
    */
-  protected override canvasPaintSelf( wrapper: CanvasContextWrapper, matrix: Matrix3 ): void {
-    SpritesCanvasDrawable.prototype.paintCanvas( wrapper, this, matrix );
+  protected override canvasPaintSelf(wrapper: CanvasContextWrapper, matrix: Matrix3): void {
+    SpritesCanvasDrawable.prototype.paintCanvas(wrapper, this, matrix);
   }
 
   /**
@@ -104,9 +104,9 @@ export default class Sprites extends Node {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createCanvasDrawable( renderer: number, instance: Instance ): CanvasSelfDrawable {
+  public override createCanvasDrawable(renderer: number, instance: Instance): CanvasSelfDrawable {
     // @ts-expect-error Pooling
-    return SpritesCanvasDrawable.createFromPool( renderer, instance );
+    return SpritesCanvasDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -115,9 +115,9 @@ export default class Sprites extends Node {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createWebGLDrawable( renderer: number, instance: Instance ): WebGLSelfDrawable {
+  public override createWebGLDrawable(renderer: number, instance: Instance): WebGLSelfDrawable {
     // @ts-expect-error Pooling
-    return SpritesWebGLDrawable.createFromPool( renderer, instance );
+    return SpritesWebGLDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -125,14 +125,14 @@ export default class Sprites extends Node {
    *
    * @param point - Considered to be in the local coordinate frame
    */
-  public override containsPointSelf( point: Vector2 ): boolean {
-    const inBounds = super.containsPointSelf( point );
-    if ( !inBounds ) {
+  public override containsPointSelf(point: Vector2): boolean {
+    const inBounds = super.containsPointSelf(point);
+    if (!inBounds) {
       return false;
     }
 
-    if ( this._hitTestSprites ) {
-      return !!this.getSpriteInstanceFromPoint( point );
+    if (this._hitTestSprites) {
+      return !!this.getSpriteInstanceFromPoint(point);
     }
     else {
       return true;
@@ -142,10 +142,10 @@ export default class Sprites extends Node {
   /**
    * Finds which sprite instance is on top under a certain point (or null if none are).
    */
-  public getSpriteInstanceFromPoint( point: Vector2 ): SpriteInstance | null {
-    for ( let i = this._spriteInstances.length - 1; i >= 0; i-- ) {
-      if ( this._spriteInstances[ i ].containsPoint( point ) ) {
-        return this._spriteInstances[ i ];
+  public getSpriteInstanceFromPoint(point: Vector2): SpriteInstance | null {
+    for (let i = this._spriteInstances.length - 1; i >= 0; i--) {
+      if (this._spriteInstances[i].containsPoint(point)) {
+        return this._spriteInstances[i];
       }
     }
     return null;
@@ -155,11 +155,11 @@ export default class Sprites extends Node {
    * Returns a Shape that represents the area covered by containsPointSelf.
    */
   public override getSelfShape(): Shape {
-    if ( this._hitTestSprites ) {
-      return Shape.union( this._spriteInstances.map( instance => instance.getShape() ) );
+    if (this._hitTestSprites) {
+      return Shape.union(this._spriteInstances.map(instance => instance.getShape()));
     }
     else {
-      return Shape.bounds( this.selfBounds );
+      return Shape.bounds(this.selfBounds);
     }
   }
 
@@ -179,13 +179,13 @@ export default class Sprites extends Node {
    */
   public invalidatePaint(): void {
     const stateLen = this._drawables.length;
-    for ( let i = 0; i < stateLen; i++ ) {
-      this._drawables[ i ].markDirty();
+    for (let i = 0; i < stateLen; i++) {
+      this._drawables[i].markDirty();
     }
   }
 
-  public override mutate( options?: SpritesOptions ): this {
-    return super.mutate( options );
+  public override mutate(options?: SpritesOptions): this {
+    return super.mutate(options);
   }
 }
 
@@ -196,6 +196,6 @@ export default class Sprites extends Node {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-Sprites.prototype._mutatorKeys = [ 'canvasBounds' ].concat( Node.prototype._mutatorKeys );
+Sprites.prototype._mutatorKeys = ['canvasBounds'].concat(Node.prototype._mutatorKeys);
 
-scenery.register( 'Sprites', Sprites );
+scenery.register('Sprites', Sprites);

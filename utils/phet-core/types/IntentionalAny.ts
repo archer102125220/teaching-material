@@ -8,5 +8,6 @@
  */
 
 type IntentionalAny = any; // eslint-disable-line @typescript-eslint/no-explicit-any
+
 // @ts-expect-error
 export default IntentionalAny;

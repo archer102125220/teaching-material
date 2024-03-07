@@ -25,18 +25,18 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import DerivedProperty from '../../../axon/js/DerivedProperty.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import Property from '../../../axon/js/Property.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import NullableIO from '../../../tandem/js/types/NullableIO.js';
-import Utterance from '../../../utterance-queue/js/Utterance.js';
-import { Display, Focus, FocusDisplayedController, Node, PDOMInstance, PDOMUtils, ReadingBlockUtterance, scenery, voicingManager } from '../imports.js';
-import { InteractiveHighlightingNode } from './voicing/InteractiveHighlighting.js';
+import BooleanProperty from '../../axon/BooleanProperty';
+import DerivedProperty from '../../axon/DerivedProperty';
+import type TProperty from '../../axon/TProperty';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import Property from '../../axon/Property';
+import Tandem from '../../tandem/Tandem';
+import NullableIO from '../../tandem/types/NullableIO';
+import Utterance from '../../utterance-queue/Utterance';
+import { Display, Focus, FocusDisplayedController, Node, PDOMInstance, PDOMUtils, ReadingBlockUtterance, scenery, voicingManager } from '../imports';
+import { type InteractiveHighlightingNode } from './voicing/InteractiveHighlighting';
 
-type SpeakingListener = ( text: string, utterance: Utterance ) => void;
+type SpeakingListener = (text: string, utterance: Utterance) => void;
 
 export default class FocusManager {
 
@@ -86,70 +86,70 @@ export default class FocusManager {
   private readonly endSpeakingListener: SpeakingListener;
   private readonly pointerFocusDisplayedController: FocusDisplayedController;
 
-  private readonly voicingFullyEnabledListener: ( enabled: boolean ) => void;
+  private readonly voicingFullyEnabledListener: (enabled: boolean) => void;
 
   // References to the window listeners that update when the window has focus. So they can be removed if needed.
-  private static attachedWindowFocusListener: null | ( () => void ) = null;
-  private static attachedWindowBlurListener: null | ( () => void ) = null;
+  private static attachedWindowFocusListener: null | (() => void) = null;
+  private static attachedWindowBlurListener: null | (() => void) = null;
   private static globallyAttached = false;
 
   public constructor() {
-    this.pointerFocusProperty = new Property( null );
-    this.readingBlockFocusProperty = new Property( null );
-    this.lockedPointerFocusProperty = new Property( null );
-    this.pdomFocusHighlightsVisibleProperty = new BooleanProperty( true );
-    this.interactiveHighlightsVisibleProperty = new BooleanProperty( false );
-    this.readingBlockHighlightsVisibleProperty = new BooleanProperty( false );
+    this.pointerFocusProperty = new Property(null);
+    this.readingBlockFocusProperty = new Property(null);
+    this.lockedPointerFocusProperty = new Property(null);
+    this.pdomFocusHighlightsVisibleProperty = new BooleanProperty(true);
+    this.interactiveHighlightsVisibleProperty = new BooleanProperty(false);
+    this.readingBlockHighlightsVisibleProperty = new BooleanProperty(false);
 
     // TODO: perhaps remove once reading blocks are set up to listen instead to Node.canSpeakProperty (voicingVisible), https://github.com/phetsims/scenery/issues/1343
     this.voicingFullyEnabledListener = enabled => {
       this.readingBlockHighlightsVisibleProperty.value = enabled;
     };
-    voicingManager.voicingFullyEnabledProperty.link( this.voicingFullyEnabledListener );
+    voicingManager.voicingFullyEnabledProperty.link(this.voicingFullyEnabledListener);
 
     this.pointerHighlightsVisibleProperty = new DerivedProperty(
-      [ this.interactiveHighlightsVisibleProperty, this.readingBlockHighlightsVisibleProperty ],
-      ( interactiveHighlightsVisible, voicingEnabled ) => {
+      [this.interactiveHighlightsVisibleProperty, this.readingBlockHighlightsVisibleProperty],
+      (interactiveHighlightsVisible, voicingEnabled) => {
         return interactiveHighlightsVisible || voicingEnabled;
-      } );
+      });
 
-    //-----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     // The following section manages control of ReadingBlockFocusProperty. It takes a value whenever the
     // voicingManager starts speaking and the value is cleared when it stops speaking. Focus is also cleared
     // by the FocusDisplayedController.
 
-    this.readingBlockFocusController = new FocusDisplayedController( this.readingBlockFocusProperty );
+    this.readingBlockFocusController = new FocusDisplayedController(this.readingBlockFocusProperty);
 
-    this.startSpeakingListener = ( text, utterance ) => {
+    this.startSpeakingListener = (text, utterance) => {
       this.readingBlockFocusProperty.value = utterance instanceof ReadingBlockUtterance ? utterance.readingBlockFocus : null;
     };
 
     // @ts-expect-error
-    voicingManager.startSpeakingEmitter.addListener( this.startSpeakingListener );
+    voicingManager.startSpeakingEmitter.addListener(this.startSpeakingListener);
 
-    this.endSpeakingListener = ( text, utterance ) => {
-      if ( utterance instanceof ReadingBlockUtterance && this.readingBlockFocusProperty.value ) {
+    this.endSpeakingListener = (text, utterance) => {
+      if (utterance instanceof ReadingBlockUtterance && this.readingBlockFocusProperty.value) {
 
-        assert && assert( utterance.readingBlockFocus, 'should be non null focus' );
+        assert && assert(utterance.readingBlockFocus, 'should be non null focus');
 
         // only clear the readingBlockFocusProperty if the ReadingBlockUtterance has a Focus that matches the
         // current value for readingBlockFocusProperty so that the highlight doesn't disappear every time
         // the speaker stops talking
-        if ( utterance.readingBlockFocus!.trail.equals( this.readingBlockFocusProperty.value.trail ) ) {
+        if (utterance.readingBlockFocus!.trail.equals(this.readingBlockFocusProperty.value.trail)) {
           this.readingBlockFocusProperty.value = null;
         }
       }
     };
 
     // @ts-expect-error
-    voicingManager.endSpeakingEmitter.addListener( this.endSpeakingListener );
+    voicingManager.endSpeakingEmitter.addListener(this.endSpeakingListener);
 
-    //-----------------------------------------------------------------------------------------------------------------
+    // -----------------------------------------------------------------------------------------------------------------
     // The following section manages control of pointerFocusProperty - pointerFocusProperty is set with a Focus
     // by InteractiveHighlighting from listeners on Nodes that use that Trait. But it uses a FocusDisplayedController
     // to remove the focus at the right time.
 
-    this.pointerFocusDisplayedController = new FocusDisplayedController( this.pointerFocusProperty, {
+    this.pointerFocusDisplayedController = new FocusDisplayedController(this.pointerFocusProperty, {
 
       // whenever focus is removed because the last Node of the Focus Trail is no
       // longer displayed, the highlight for Pointer Focus should no longer be locked
@@ -158,16 +158,16 @@ export default class FocusManager {
       onRemoveFocus: () => {
         this.lockedPointerFocusProperty.value = null;
       }
-    } );
+    });
 
-    this.lockedPointerFocusDisplayedController = new FocusDisplayedController( this.lockedPointerFocusProperty );
+    this.lockedPointerFocusDisplayedController = new FocusDisplayedController(this.lockedPointerFocusProperty);
 
     [
       this.pointerFocusProperty,
       this.lockedPointerFocusProperty
-    ].forEach( property => {
-      property.link( this.onPointerFocusChange.bind( this ) );
-    } );
+    ].forEach(property => {
+      property.link(this.onPointerFocusChange.bind(this));
+    });
   }
 
   public dispose(): void {
@@ -183,12 +183,12 @@ export default class FocusManager {
     this.lockedPointerFocusDisplayedController.dispose();
 
     // @ts-expect-error
-    voicingManager.startSpeakingEmitter.removeListener( this.startSpeakingListener );
+    voicingManager.startSpeakingEmitter.removeListener(this.startSpeakingListener);
 
     // @ts-expect-error
-    voicingManager.endSpeakingEmitter.removeListener( this.endSpeakingListener );
+    voicingManager.endSpeakingEmitter.removeListener(this.endSpeakingListener);
 
-    voicingManager.voicingFullyEnabledProperty.unlink( this.voicingFullyEnabledListener );
+    voicingManager.voicingFullyEnabledProperty.unlink(this.voicingFullyEnabledListener);
   }
 
   /**
@@ -202,26 +202,26 @@ export default class FocusManager {
    * @param event - The focusin/focusout event that triggered this update.
    * @param focus - True for focusin event, false for focusout event.
    */
-  public static updatePDOMFocusFromEvent( displays: Display[], event: FocusEvent, focus: boolean ): void {
-    assert && assert( document.activeElement, 'Must be called from focusin, therefore active elemetn expected' );
+  public static updatePDOMFocusFromEvent(displays: Display[], event: FocusEvent, focus: boolean): void {
+    assert && assert(document.activeElement, 'Must be called from focusin, therefore active elemetn expected');
 
-    if ( focus ) {
+    if (focus) {
 
       // Look for the scenery target under the PDOM
-      for ( let i = 0; i < displays.length; i++ ) {
-        const display = displays[ i ];
+      for (let i = 0; i < displays.length; i++) {
+        const display = displays[i];
 
         const activeElement = document.activeElement as HTMLElement;
-        if ( display.isElementUnderPDOM( activeElement ) ) {
-          const uniqueId = activeElement.getAttribute( PDOMUtils.DATA_PDOM_UNIQUE_ID )!;
-          assert && assert( uniqueId, 'Event target must have a unique ID on its data if it is in the PDOM.' );
+        if (display.isElementUnderPDOM(activeElement)) {
+          const uniqueId = activeElement.getAttribute(PDOMUtils.DATA_PDOM_UNIQUE_ID)!;
+          assert && assert(uniqueId, 'Event target must have a unique ID on its data if it is in the PDOM.');
 
-          const trail = PDOMInstance.uniqueIdToTrail( display, uniqueId )!;
-          assert && assert( trail, 'We must have a trail since the target was under the PDOM.' );
+          const trail = PDOMInstance.uniqueIdToTrail(display, uniqueId)!;
+          assert && assert(trail, 'We must have a trail since the target was under the PDOM.');
 
-          const visualTrail = PDOMInstance.guessVisualTrail( trail, display.rootNode );
-          if ( visualTrail.lastNode().focusable ) {
-            FocusManager.pdomFocus = new Focus( display, visualTrail );
+          const visualTrail = PDOMInstance.guessVisualTrail(trail, display.rootNode);
+          if (visualTrail.lastNode().focusable) {
+            FocusManager.pdomFocus = new Focus(display, visualTrail);
           }
           else {
 
@@ -229,7 +229,7 @@ export default class FocusManager {
             // before we receive the `focus` event. In that case, the browser will still try to put focus on the element
             // even though the PDOM element and Node are not in the traversal order. It is more consistent to remove
             // focus in this case.
-            ( event.target as HTMLElement ).blur();
+            (event.target as HTMLElement).blur();
 
             // do not allow any more focus listeners to dispatch, this target should never have been focused in the
             // first place, but the browser did it anyway
@@ -242,15 +242,15 @@ export default class FocusManager {
       }
     }
     else {
-      for ( let i = 0; i < displays.length; i++ ) {
+      for (let i = 0; i < displays.length; i++) {
 
-        const display = displays[ i ];
+        const display = displays[i];
 
         // will be null if it is not in the PDOM or if it is undefined
-        const relatedTargetTrail = display._input!.getRelatedTargetTrail( event );
+        const relatedTargetTrail = display._input!.getRelatedTargetTrail(event);
 
-        if ( relatedTargetTrail && relatedTargetTrail.lastNode().focusable ) {
-          FocusManager.pdomFocus = new Focus( display, PDOMInstance.guessVisualTrail( relatedTargetTrail, display.rootNode ) );
+        if (relatedTargetTrail && relatedTargetTrail.lastNode().focusable) {
+          FocusManager.pdomFocus = new Focus(display, PDOMInstance.guessVisualTrail(relatedTargetTrail, display.rootNode));
         }
         else {
 
@@ -263,7 +263,7 @@ export default class FocusManager {
   }
 
   // Listener to update the "active" highlight state for an interactiveHighlightingNode
-  private onPointerFocusChange( pointerFocus: Focus | null, oldFocus: Focus | null ): void {
+  private onPointerFocusChange(pointerFocus: Focus | null, oldFocus: Focus | null): void {
     const focusNode = pointerFocus?.trail.lastNode() as InteractiveHighlightingNode;
     focusNode && focusNode.isInteractiveHighlighting && focusNode.handleHighlightActiveChange();
     const oldFocusNode = oldFocus?.trail.lastNode() as InteractiveHighlightingNode;
@@ -274,18 +274,18 @@ export default class FocusManager {
    * Set the DOM focus. A DOM limitation is that there can only be one element with focus at a time so this must
    * be a static for the FocusManager.
    */
-  public static set pdomFocus( value: Focus | null ) {
-    if ( FocusManager.pdomFocusProperty.value !== value ) {
+  public static set pdomFocus(value: Focus | null) {
+    if (FocusManager.pdomFocusProperty.value !== value) {
 
       let previousFocus;
-      if ( FocusManager.pdomFocusProperty.value ) {
+      if (FocusManager.pdomFocusProperty.value) {
         previousFocus = FocusManager.pdomFocusedNode;
       }
 
       FocusManager.pdomFocusProperty.value = value;
 
       // if set to null, make sure that the active element is no longer focused
-      if ( previousFocus && !value ) {
+      if (previousFocus && !value) {
         previousFocus.blur();
       }
     }
@@ -305,7 +305,7 @@ export default class FocusManager {
   public static getPDOMFocusedNode(): Node | null {
     let focusedNode = null;
     const focus = FocusManager.pdomFocusProperty.get();
-    if ( focus ) {
+    if (focus) {
       focusedNode = focus.trail.lastNode();
     }
     return focusedNode;
@@ -317,22 +317,22 @@ export default class FocusManager {
   // scenery Node has focus). By passing the tandem and phetioTye, PhET-iO is able to interoperate (save, restore,
   // control, observe what is currently focused). See FocusManager.pdomFocus for setting the focus. Don't set the value
   // of this Property directly.
-  public static readonly pdomFocusProperty = new Property<Focus | null>( null, {
-    tandem: Tandem.GENERAL_MODEL.createTandem( 'pdomFocusProperty' ),
+  public static readonly pdomFocusProperty = new Property<Focus | null>(null, {
+    tandem: Tandem.GENERAL_MODEL.createTandem('pdomFocusProperty'),
     phetioDocumentation: 'Stores the current focus in the Parallel DOM, null if nothing has focus. This is not updated ' +
-                         'based on mouse or touch input, only keyboard and other alternative inputs. Note that this only ' +
-                         'applies to simulations that support alternative input.',
-    phetioValueType: NullableIO( Focus.FocusIO ),
+      'based on mouse or touch input, only keyboard and other alternative inputs. Note that this only ' +
+      'applies to simulations that support alternative input.',
+    phetioValueType: NullableIO(Focus.FocusIO),
     phetioState: false,
     phetioFeatured: true,
     phetioReadOnly: true
-  } );
+  });
 
   /**
    * A Property that lets you know when the window has focus. When the window has focus, it is in the user's foreground.
    * When in the background, the window does not receive keyboard input (important for global keyboard events).
    */
-  private static _windowHasFocusProperty = new BooleanProperty( false );
+  private static _windowHasFocusProperty = new BooleanProperty(false);
   public static windowHasFocusProperty: TReadOnlyProperty<boolean> = FocusManager._windowHasFocusProperty;
 
   /**
@@ -343,7 +343,7 @@ export default class FocusManager {
    * This will be called by scenery for you when you use Display.initializeEvents().
    */
   public static attachToWindow(): void {
-    assert && assert( !FocusManager.globallyAttached, 'Can only be attached statically once.' );
+    assert && assert(!FocusManager.globallyAttached, 'Can only be attached statically once.');
     FocusManager.attachedWindowFocusListener = () => {
       FocusManager._windowHasFocusProperty.value = true;
     };
@@ -352,8 +352,8 @@ export default class FocusManager {
       FocusManager._windowHasFocusProperty.value = false;
     };
 
-    window.addEventListener( 'focus', FocusManager.attachedWindowFocusListener );
-    window.addEventListener( 'blur', FocusManager.attachedWindowBlurListener );
+    window.addEventListener('focus', FocusManager.attachedWindowFocusListener);
+    window.addEventListener('blur', FocusManager.attachedWindowBlurListener);
 
     // value will be updated with window, but we need a proper initial value (this function may be called while
     // the window is not in the foreground).
@@ -366,8 +366,8 @@ export default class FocusManager {
    * Detach all window focus/blur listeners from FocusManager watching for when the window loses focus.
    */
   public static detachFromWindow(): void {
-    window.removeEventListener( 'focus', FocusManager.attachedWindowFocusListener! );
-    window.removeEventListener( 'blur', FocusManager.attachedWindowBlurListener! );
+    window.removeEventListener('focus', FocusManager.attachedWindowFocusListener!);
+    window.removeEventListener('blur', FocusManager.attachedWindowBlurListener!);
 
     // For cleanup, this Property becomes false again when detaching because we will no longer be watching for changes.
     FocusManager._windowHasFocusProperty.value = false;
@@ -376,4 +376,4 @@ export default class FocusManager {
   }
 }
 
-scenery.register( 'FocusManager', FocusManager );
+scenery.register('FocusManager', FocusManager);

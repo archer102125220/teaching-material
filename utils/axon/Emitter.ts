@@ -9,20 +9,21 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import optionize, { EmptySelfOptions } from '../phet-core/optionize';
-import StrictOmit from '../phet-core/types/StrictOmit';
+import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
+import type StrictOmit from '../phet-core/types/StrictOmit';
 import FunctionIO from '../tandem/types/FunctionIO';
-import IOType from '../../tandem/js/types/IOType.js';
-import VoidIO from '../../tandem/js/types/VoidIO.js';
-import PhetioDataHandler, { PhetioDataHandlerOptions } from '../../tandem/js/PhetioDataHandler.js';
-import axon from './axon.js';
-import TinyEmitter from './TinyEmitter.js';
-import Tandem from '../../tandem/js/Tandem.js';
-import TEmitter, { TEmitterListener, TEmitterParameter } from './TEmitter.js';
-import NullableIO from '../../tandem/js/types/NullableIO.js';
-import StringIO from '../../tandem/js/types/StringIO.js';
-import ArrayIO from '../../tandem/js/types/ArrayIO.js';
-import IOTypeCache from '../../tandem/js/IOTypeCache.js';
+import IOType from '../tandem/types/IOType';
+import VoidIO from '../tandem/types/VoidIO';
+import PhetioDataHandler, { type PhetioDataHandlerOptions } from '../tandem/PhetioDataHandler';
+import axon from './axon';
+import TinyEmitter from './TinyEmitter';
+import Tandem from '../tandem/Tandem';
+import type TEmitter from './TEmitter';
+import type { TEmitterListener, TEmitterParameter } from './TEmitter';
+import NullableIO from '../tandem/types/NullableIO';
+import StringIO from '../tandem/types/StringIO';
+import ArrayIO from '../tandem/types/ArrayIO';
+import IOTypeCache from '../tandem/IOTypeCache';
 
 // By default, Emitters are not stateful
 const PHET_IO_STATE_DEFAULT = false;
@@ -35,31 +36,31 @@ export default class Emitter<T extends TEmitterParameter[] = []> extends PhetioD
   // provide Emitter functionality via composition
   private readonly tinyEmitter: TinyEmitter<T>;
 
-  public constructor( providedOptions?: EmitterOptions ) {
+  public constructor(providedOptions?: EmitterOptions) {
 
-    const options = optionize<EmitterOptions, SelfOptions, PhetioDataHandlerOptions>()( {
+    const options = optionize<EmitterOptions, SelfOptions, PhetioDataHandlerOptions>()({
       phetioOuterType: Emitter.EmitterIO,
       phetioState: PHET_IO_STATE_DEFAULT
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
-    this.tinyEmitter = new TinyEmitter( null, options.hasListenerOrderDependencies );
+    super(options);
+    this.tinyEmitter = new TinyEmitter(null, options.hasListenerOrderDependencies);
   }
 
   /**
    * Emit to notify listeners
    */
-  public emit( ...args: T ): void {
-    assert && assert( this.tinyEmitter instanceof TinyEmitter, 'Emitter should not emit until constructor complete' );
-    assert && this.validateArguments( ...args );
+  public emit(...args: T): void {
+    assert && assert(this.tinyEmitter instanceof TinyEmitter, 'Emitter should not emit until constructor complete');
+    assert && this.validateArguments(...args);
 
     // Although this is not the idiomatic pattern (since it is guarded in the phetioStartEvent), this function is
     // called so many times that it is worth the optimization for PhET brand.
-    Tandem.PHET_IO_ENABLED && this.isPhetioInstrumented() && this.phetioStartEvent( 'emitted', {
-      data: this.getPhetioData( ...args )
-    } );
+    Tandem.PHET_IO_ENABLED && this.isPhetioInstrumented() && this.phetioStartEvent('emitted', {
+      data: this.getPhetioData(...args)
+    });
 
-    this.tinyEmitter.emit( ...args );
+    this.tinyEmitter.emit(...args);
 
     Tandem.PHET_IO_ENABLED && this.isPhetioInstrumented() && this.phetioEndEvent();
   }
@@ -75,15 +76,15 @@ export default class Emitter<T extends TEmitterParameter[] = []> extends PhetioD
   /**
    * Adds a listener which will be called during emit.
    */
-  public addListener( listener: TEmitterListener<T> ): void {
-    this.tinyEmitter.addListener( listener );
+  public addListener(listener: TEmitterListener<T>): void {
+    this.tinyEmitter.addListener(listener);
   }
 
   /**
    * Removes a listener
    */
-  public removeListener( listener: TEmitterListener<T> ): void {
-    this.tinyEmitter.removeListener( listener );
+  public removeListener(listener: TEmitterListener<T>): void {
+    this.tinyEmitter.removeListener(listener);
   }
 
   /**
@@ -96,8 +97,8 @@ export default class Emitter<T extends TEmitterParameter[] = []> extends PhetioD
   /**
    * Checks whether a listener is registered with this Emitter
    */
-  public hasListener( listener: TEmitterListener<T> ): boolean {
-    return this.tinyEmitter.hasListener( listener );
+  public hasListener(listener: TEmitterListener<T>): boolean {
+    return this.tinyEmitter.hasListener(listener);
   }
 
   /**
@@ -119,9 +120,9 @@ export default class Emitter<T extends TEmitterParameter[] = []> extends PhetioD
    * @param name - debug name to be printed on the console
    * @returns - the handle to the listener added in case it needs to be removed later
    */
-  public debug( name: string ): TEmitterListener<T> {
-    const listener = ( ...args: T ) => console.log( name, ...args );
-    this.addListener( listener );
+  public debug(name: string): TEmitterListener<T> {
+    const listener = (...args: T) => console.log(name, ...args);
+    this.addListener(listener);
     return listener;
   }
 
@@ -142,62 +143,62 @@ export default class Emitter<T extends TEmitterParameter[] = []> extends PhetioD
    * @author Michael Kauzmann (PhET Interactive Simulations)
    * @author Andrew Adare (PhET Interactive Simulations)
    */
-  public static readonly EmitterIO = ( parameterTypes: IOType[] ): IOType => {
+  public static readonly EmitterIO = (parameterTypes: IOType[]): IOType => {
 
-    const key = parameterTypes.map( getTypeName ).join( ',' );
+    const key = parameterTypes.map(getTypeName).join(',');
 
-    if ( !cache.has( key ) ) {
-      cache.set( key, new IOType( `EmitterIO<${parameterTypes.map( getTypeName ).join( ', ' )}>`, {
+    if (!cache.has(key)) {
+      cache.set(key, new IOType(`EmitterIO<${parameterTypes.map(getTypeName).join(', ')}>`, {
         valueType: Emitter,
         documentation: 'Emits when an event occurs and calls added listeners.',
-        parameterTypes: parameterTypes,
-        events: [ 'emitted' ],
+        parameterTypes,
+        events: ['emitted'],
         metadataDefaults: {
           phetioState: PHET_IO_STATE_DEFAULT
         },
         methods: {
           addListener: {
             returnType: VoidIO,
-            parameterTypes: [ FunctionIO( VoidIO, parameterTypes ) ],
+            parameterTypes: [FunctionIO(VoidIO, parameterTypes)],
             implementation: Emitter.prototype.addListener,
             documentation: 'Adds a listener which will be called when the emitter emits.'
           },
           removeListener: {
             returnType: VoidIO,
-            parameterTypes: [ FunctionIO( VoidIO, parameterTypes ) ],
+            parameterTypes: [FunctionIO(VoidIO, parameterTypes)],
             implementation: Emitter.prototype.removeListener,
             documentation: 'Remove a listener.'
           },
           emit: {
             returnType: VoidIO,
-            parameterTypes: parameterTypes,
+            parameterTypes,
 
             // Match `Emitter.emit`'s dynamic number of arguments
-            implementation: function( this: Emitter<unknown[]>, ...values: unknown[] ) {
-              this.emit( ...values );
+            implementation: function (this: Emitter<unknown[]>, ...values: unknown[]) {
+              this.emit(...values);
             },
             documentation: 'Emits a single event to all listeners.',
             invocableForReadOnlyElements: false
           },
           getValidationErrors: {
-            returnType: ArrayIO( NullableIO( StringIO ) ),
-            parameterTypes: parameterTypes,
-            implementation: function( this: Emitter<unknown[]>, ...values: unknown[] ) {
-              return this.getValidationErrors( ...values );
+            returnType: ArrayIO(NullableIO(StringIO)),
+            parameterTypes,
+            implementation: function (this: Emitter<unknown[]>, ...values: unknown[]) {
+              return this.getValidationErrors(...values);
             },
             documentation: 'Checks to see if the proposed values are valid. Returns an array of length N where each element is an error (string) or null if the value is valid.'
           }
         }
-      } ) );
+      }));
     }
-    return cache.get( key )!;
+    return cache.get(key)!;
   };
 }
 
-const getTypeName = ( ioType: IOType ) => ioType.typeName;
+const getTypeName = (ioType: IOType) => ioType.typeName;
 
 // {Map.<string, IOType>} - Cache each parameterized IOType so that
 // it is only created once.
 const cache = new IOTypeCache<string>();
 
-axon.register( 'Emitter', Emitter );
+axon.register('Emitter', Emitter);

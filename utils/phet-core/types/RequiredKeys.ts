@@ -12,5 +12,6 @@
 
 type RequiredKeys<T> = { [K in keyof T]-?: {} extends Pick<T, K> ? never : K }[keyof T]; // eslint-disable-line @typescript-eslint/ban-types
 
+
 // @ts-expect-error
 export default RequiredKeys;

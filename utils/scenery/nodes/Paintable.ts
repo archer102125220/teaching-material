@@ -6,17 +6,19 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ReadOnlyProperty from '../../../axon/js/ReadOnlyProperty.js';
-import { LINE_STYLE_DEFAULT_OPTIONS, LineCap, LineJoin, LineStyles } from '../../../kite/js/imports.js';
-import arrayRemove from '../../../phet-core/js/arrayRemove.js';
-import assertHasProperties from '../../../phet-core/js/assertHasProperties.js';
-import inheritance from '../../../phet-core/js/inheritance.js';
-import platform from '../../../phet-core/js/platform.js';
-import memoize from '../../../phet-core/js/memoize.js';
-import { CanvasContextWrapper, Color, Gradient, TPaint, TPaintableDrawable, LinearGradient, Node, Paint, PaintDef, Path, Pattern, RadialGradient, Renderer, scenery, Text } from '../imports.js';
-import Constructor from '../../../phet-core/js/types/Constructor.js';
-import IntentionalAny from '../../../phet-core/js/types/IntentionalAny.js';
-import Vector2 from '../../../dot/js/Vector2.js';
+import _ from 'lodash';
+
+import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
+import { LINE_STYLE_DEFAULT_OPTIONS, type LineCap, type LineJoin, LineStyles } from '../../kite/imports';
+import arrayRemove from '../../phet-core/arrayRemove';
+import assertHasProperties from '../../phet-core/assertHasProperties';
+import inheritance from '../../phet-core/inheritance';
+import platform from '../../phet-core/platform';
+import memoize from '../../phet-core/memoize';
+import { CanvasContextWrapper, Color, Gradient, type TPaint, type TPaintableDrawable, LinearGradient, Node, Paint, PaintDef, Path, Pattern, RadialGradient, Renderer, scenery, Text } from '../imports';
+import type Constructor from '../../phet-core/types/Constructor';
+import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import Vector2 from '../../dot/Vector2';
 
 const isSafari5 = platform.safari5;
 
@@ -65,10 +67,10 @@ export type PaintableOptions = {
 // Workaround type since we can't detect mixins in the type system well
 export type PaintableNode = Path | Text;
 
-const PAINTABLE_DRAWABLE_MARK_FLAGS = [ 'fill', 'stroke', 'lineWidth', 'lineOptions', 'cachedPaints' ];
+const PAINTABLE_DRAWABLE_MARK_FLAGS = ['fill', 'stroke', 'lineWidth', 'lineOptions', 'cachedPaints'];
 
-const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperType ) => {
-  assert && assert( _.includes( inheritance( type ), Node ), 'Only Node subtypes should mix Paintable' );
+const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType) => {
+  assert && assert(_.includes(inheritance(type), Node), 'Only Node subtypes should mix Paintable');
 
   return class PaintableMixin extends type {
 
@@ -84,10 +86,10 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
     public _cachedPaints: Paint[];
     public _lineDrawingStyles: LineStyles;
 
-    public constructor( ...args: IntentionalAny[] ) {
-      super( ...args );
+    public constructor(...args: IntentionalAny[]) {
+      super(...args);
 
-      assertHasProperties( this, [ '_drawables' ] );
+      assertHasProperties(this, ['_drawables']);
 
       this._fill = DEFAULT_OPTIONS.fill;
       this._fillPickable = DEFAULT_OPTIONS.fillPickable;
@@ -108,17 +110,17 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      * provided for a single-color flat appearance, and can be wrapped with an Axon Property. Gradients and patterns
      * can also be provided.
      */
-    public setFill( fill: TPaint ): this {
-      assert && assert( PaintDef.isPaintDef( fill ), 'Invalid fill type' );
+    public setFill(fill: TPaint): this {
+      assert && assert(PaintDef.isPaintDef(fill), 'Invalid fill type');
 
-      if ( assert && typeof fill === 'string' ) {
-        Color.checkPaintString( fill );
+      if (assert && typeof fill === 'string') {
+        Color.checkPaintString(fill);
       }
 
       // Instance equality used here since it would be more expensive to parse all CSS
       // colors and compare every time the fill changes. Right now, usually we don't have
       // to parse CSS colors. See https://github.com/phetsims/scenery/issues/255
-      if ( this._fill !== fill ) {
+      if (this._fill !== fill) {
         this._fill = fill;
 
         this.invalidateFill();
@@ -126,7 +128,7 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
       return this;
     }
 
-    public set fill( value: TPaint ) { this.setFill( value ); }
+    public set fill(value: TPaint) { this.setFill(value); }
 
     public get fill(): TPaint { return this.getFill(); }
 
@@ -167,29 +169,29 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      * provided for a single-color flat appearance, and can be wrapped with an Axon Property. Gradients and patterns
      * can also be provided.
      */
-    public setStroke( stroke: TPaint ): this {
-      assert && assert( PaintDef.isPaintDef( stroke ), 'Invalid stroke type' );
+    public setStroke(stroke: TPaint): this {
+      assert && assert(PaintDef.isPaintDef(stroke), 'Invalid stroke type');
 
-      if ( assert && typeof stroke === 'string' ) {
-        Color.checkPaintString( stroke );
+      if (assert && typeof stroke === 'string') {
+        Color.checkPaintString(stroke);
       }
 
       // Instance equality used here since it would be more expensive to parse all CSS
       // colors and compare every time the fill changes. Right now, usually we don't have
       // to parse CSS colors. See https://github.com/phetsims/scenery/issues/255
-      if ( this._stroke !== stroke ) {
+      if (this._stroke !== stroke) {
         this._stroke = stroke;
 
-        if ( assert && stroke instanceof Paint && stroke.transformMatrix ) {
+        if (assert && stroke instanceof Paint && stroke.transformMatrix) {
           const scaleVector = stroke.transformMatrix.getScaleVector();
-          assert( Math.abs( scaleVector.x - scaleVector.y ) < 1e-7, 'You cannot specify a pattern or gradient to a stroke that does not have a symmetric scale.' );
+          assert(Math.abs(scaleVector.x - scaleVector.y) < 1e-7, 'You cannot specify a pattern or gradient to a stroke that does not have a symmetric scale.');
         }
         this.invalidateStroke();
       }
       return this;
     }
 
-    public set stroke( value: TPaint ) { this.setStroke( value ); }
+    public set stroke(value: TPaint) { this.setStroke(value); }
 
     public get stroke(): TPaint { return this.getStroke(); }
 
@@ -230,8 +232,8 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
     /**
      * Sets whether the fill is marked as pickable.
      */
-    public setFillPickable( pickable: boolean ): this {
-      if ( this._fillPickable !== pickable ) {
+    public setFillPickable(pickable: boolean): this {
+      if (this._fillPickable !== pickable) {
         this._fillPickable = pickable;
 
         // TODO: better way of indicating that only the Node under pointers could have changed, but no paint change is needed? https://github.com/phetsims/scenery/issues/1581
@@ -240,7 +242,7 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
       return this;
     }
 
-    public set fillPickable( value: boolean ) { this.setFillPickable( value ); }
+    public set fillPickable(value: boolean) { this.setFillPickable(value); }
 
     public get fillPickable(): boolean { return this.isFillPickable(); }
 
@@ -254,9 +256,9 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
     /**
      * Sets whether the stroke is marked as pickable.
      */
-    public setStrokePickable( pickable: boolean ): this {
+    public setStrokePickable(pickable: boolean): this {
 
-      if ( this._strokePickable !== pickable ) {
+      if (this._strokePickable !== pickable) {
         this._strokePickable = pickable;
 
         // TODO: better way of indicating that only the Node under pointers could have changed, but no paint change is needed? https://github.com/phetsims/scenery/issues/1581
@@ -265,7 +267,7 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
       return this;
     }
 
-    public set strokePickable( value: boolean ) { this.setStrokePickable( value ); }
+    public set strokePickable(value: boolean) { this.setStrokePickable(value); }
 
     public get strokePickable(): boolean { return this.isStrokePickable(); }
 
@@ -279,22 +281,22 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
     /**
      * Sets the line width that will be applied to strokes on this Node.
      */
-    public setLineWidth( lineWidth: number ): this {
-      assert && assert( lineWidth >= 0, `lineWidth should be non-negative instead of ${lineWidth}` );
+    public setLineWidth(lineWidth: number): this {
+      assert && assert(lineWidth >= 0, `lineWidth should be non-negative instead of ${lineWidth}`);
 
-      if ( this.getLineWidth() !== lineWidth ) {
+      if (this.getLineWidth() !== lineWidth) {
         this._lineDrawingStyles.lineWidth = lineWidth;
         this.invalidateStroke();
 
         const stateLen = this._drawables.length;
-        for ( let i = 0; i < stateLen; i++ ) {
-          ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyLineWidth();
+        for (let i = 0; i < stateLen; i++) {
+          (this._drawables[i] as unknown as TPaintableDrawable).markDirtyLineWidth();
         }
       }
       return this;
     }
 
-    public set lineWidth( value: number ) { this.setLineWidth( value ); }
+    public set lineWidth(value: number) { this.setLineWidth(value); }
 
     public get lineWidth(): number { return this.getLineWidth(); }
 
@@ -311,23 +313,23 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      * - 'round' draws a semicircular arc around the end point
      * - 'square' draws a square outline around the end point (like butt, but extended by 1/2 line width out)
      */
-    public setLineCap( lineCap: LineCap ): this {
-      assert && assert( lineCap === 'butt' || lineCap === 'round' || lineCap === 'square',
-        `lineCap should be one of "butt", "round" or "square", not ${lineCap}` );
+    public setLineCap(lineCap: LineCap): this {
+      assert && assert(lineCap === 'butt' || lineCap === 'round' || lineCap === 'square',
+        `lineCap should be one of "butt", "round" or "square", not ${lineCap}`);
 
-      if ( this._lineDrawingStyles.lineCap !== lineCap ) {
+      if (this._lineDrawingStyles.lineCap !== lineCap) {
         this._lineDrawingStyles.lineCap = lineCap;
         this.invalidateStroke();
 
         const stateLen = this._drawables.length;
-        for ( let i = 0; i < stateLen; i++ ) {
-          ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyLineOptions();
+        for (let i = 0; i < stateLen; i++) {
+          (this._drawables[i] as unknown as TPaintableDrawable).markDirtyLineOptions();
         }
       }
       return this;
     }
 
-    public set lineCap( value: LineCap ) { this.setLineCap( value ); }
+    public set lineCap(value: LineCap) { this.setLineCap(value); }
 
     public get lineCap(): LineCap { return this.getLineCap(); }
 
@@ -345,23 +347,23 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      * - 'round' draws a circular arc to connect the two stroked areas.
      * - 'bevel' connects with a single line segment.
      */
-    public setLineJoin( lineJoin: LineJoin ): this {
-      assert && assert( lineJoin === 'miter' || lineJoin === 'round' || lineJoin === 'bevel',
-        `lineJoin should be one of "miter", "round" or "bevel", not ${lineJoin}` );
+    public setLineJoin(lineJoin: LineJoin): this {
+      assert && assert(lineJoin === 'miter' || lineJoin === 'round' || lineJoin === 'bevel',
+        `lineJoin should be one of "miter", "round" or "bevel", not ${lineJoin}`);
 
-      if ( this._lineDrawingStyles.lineJoin !== lineJoin ) {
+      if (this._lineDrawingStyles.lineJoin !== lineJoin) {
         this._lineDrawingStyles.lineJoin = lineJoin;
         this.invalidateStroke();
 
         const stateLen = this._drawables.length;
-        for ( let i = 0; i < stateLen; i++ ) {
-          ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyLineOptions();
+        for (let i = 0; i < stateLen; i++) {
+          (this._drawables[i] as unknown as TPaintableDrawable).markDirtyLineOptions();
         }
       }
       return this;
     }
 
-    public set lineJoin( value: LineJoin ) { this.setLineJoin( value ); }
+    public set lineJoin(value: LineJoin) { this.setLineJoin(value); }
 
     public get lineJoin(): LineJoin { return this.getLineJoin(); }
 
@@ -376,22 +378,22 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      * Sets the miterLimit value. This determines how sharp a corner with lineJoin: 'miter' will need to be before
      * it gets cut off to the 'bevel' behavior.
      */
-    public setMiterLimit( miterLimit: number ): this {
-      assert && assert( isFinite( miterLimit ), 'miterLimit should be a finite number' );
+    public setMiterLimit(miterLimit: number): this {
+      assert && assert(isFinite(miterLimit), 'miterLimit should be a finite number');
 
-      if ( this._lineDrawingStyles.miterLimit !== miterLimit ) {
+      if (this._lineDrawingStyles.miterLimit !== miterLimit) {
         this._lineDrawingStyles.miterLimit = miterLimit;
         this.invalidateStroke();
 
         const stateLen = this._drawables.length;
-        for ( let i = 0; i < stateLen; i++ ) {
-          ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyLineOptions();
+        for (let i = 0; i < stateLen; i++) {
+          (this._drawables[i] as unknown as TPaintableDrawable).markDirtyLineOptions();
         }
       }
       return this;
     }
 
-    public set miterLimit( value: number ) { this.setMiterLimit( value ); }
+    public set miterLimit(value: number) { this.setMiterLimit(value); }
 
     public get miterLimit(): number { return this.getMiterLimit(); }
 
@@ -406,23 +408,23 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      * Sets the line dash pattern. Should be an array of numbers "on" and "off" alternating. An empty array
      * indicates no dashing.
      */
-    public setLineDash( lineDash: number[] ): this {
-      assert && assert( Array.isArray( lineDash ) && lineDash.every( n => typeof n === 'number' && isFinite( n ) && n >= 0 ),
-        'lineDash should be an array of finite non-negative numbers' );
+    public setLineDash(lineDash: number[]): this {
+      assert && assert(Array.isArray(lineDash) && lineDash.every(n => typeof n === 'number' && isFinite(n) && n >= 0),
+        'lineDash should be an array of finite non-negative numbers');
 
-      if ( this._lineDrawingStyles.lineDash !== lineDash ) {
+      if (this._lineDrawingStyles.lineDash !== lineDash) {
         this._lineDrawingStyles.lineDash = lineDash || [];
         this.invalidateStroke();
 
         const stateLen = this._drawables.length;
-        for ( let i = 0; i < stateLen; i++ ) {
-          ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyLineOptions();
+        for (let i = 0; i < stateLen; i++) {
+          (this._drawables[i] as unknown as TPaintableDrawable).markDirtyLineOptions();
         }
       }
       return this;
     }
 
-    public set lineDash( value: number[] ) { this.setLineDash( value ); }
+    public set lineDash(value: number[]) { this.setLineDash(value); }
 
     public get lineDash(): number[] { return this.getLineDash(); }
 
@@ -443,23 +445,23 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
     /**
      * Sets the offset of the line dash pattern from the start of the stroke. Defaults to 0.
      */
-    public setLineDashOffset( lineDashOffset: number ): this {
-      assert && assert( isFinite( lineDashOffset ),
-        `lineDashOffset should be a number, not ${lineDashOffset}` );
+    public setLineDashOffset(lineDashOffset: number): this {
+      assert && assert(isFinite(lineDashOffset),
+        `lineDashOffset should be a number, not ${lineDashOffset}`);
 
-      if ( this._lineDrawingStyles.lineDashOffset !== lineDashOffset ) {
+      if (this._lineDrawingStyles.lineDashOffset !== lineDashOffset) {
         this._lineDrawingStyles.lineDashOffset = lineDashOffset;
         this.invalidateStroke();
 
         const stateLen = this._drawables.length;
-        for ( let i = 0; i < stateLen; i++ ) {
-          ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyLineOptions();
+        for (let i = 0; i < stateLen; i++) {
+          (this._drawables[i] as unknown as TPaintableDrawable).markDirtyLineOptions();
         }
       }
       return this;
     }
 
-    public set lineDashOffset( value: number ) { this.setLineDashOffset( value ); }
+    public set lineDashOffset(value: number) { this.setLineDashOffset(value); }
 
     public get lineDashOffset(): number { return this.getLineDashOffset(); }
 
@@ -473,13 +475,13 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
     /**
      * Sets the LineStyles object (it determines stroke appearance). The passed-in object will be mutated as needed.
      */
-    public setLineStyles( lineStyles: LineStyles ): this {
+    public setLineStyles(lineStyles: LineStyles): this {
       this._lineDrawingStyles = lineStyles;
       this.invalidateStroke();
       return this;
     }
 
-    public set lineStyles( value: LineStyles ) { this.setLineStyles( value ); }
+    public set lineStyles(value: LineStyles) { this.setLineStyles(value); }
 
     public get lineStyles(): LineStyles { return this.getLineStyles(); }
 
@@ -500,18 +502,18 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      *
      * Also note that duplicate paints are acceptable, and don't need to be filtered out before-hand.
      */
-    public setCachedPaints( paints: TPaint[] ): this {
-      this._cachedPaints = paints.filter( ( paint: TPaint ): paint is Paint => paint instanceof Paint );
+    public setCachedPaints(paints: TPaint[]): this {
+      this._cachedPaints = paints.filter((paint: TPaint): paint is Paint => paint instanceof Paint);
 
       const stateLen = this._drawables.length;
-      for ( let i = 0; i < stateLen; i++ ) {
-        ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyCachedPaints();
+      for (let i = 0; i < stateLen; i++) {
+        (this._drawables[i] as unknown as TPaintableDrawable).markDirtyCachedPaints();
       }
 
       return this;
     }
 
-    public set cachedPaints( value: TPaint[] ) { this.setCachedPaints( value ); }
+    public set cachedPaints(value: TPaint[]) { this.setCachedPaints(value); }
 
     public get cachedPaints(): TPaint[] { return this.getCachedPaints(); }
 
@@ -532,13 +534,13 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      *
      * Also note that duplicate paints are acceptable, and don't need to be filtered out before-hand.
      */
-    public addCachedPaint( paint: TPaint ): void {
-      if ( paint instanceof Paint ) {
-        this._cachedPaints.push( paint );
+    public addCachedPaint(paint: TPaint): void {
+      if (paint instanceof Paint) {
+        this._cachedPaints.push(paint);
 
         const stateLen = this._drawables.length;
-        for ( let i = 0; i < stateLen; i++ ) {
-          ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyCachedPaints();
+        for (let i = 0; i < stateLen; i++) {
+          (this._drawables[i] as unknown as TPaintableDrawable).markDirtyCachedPaints();
         }
       }
     }
@@ -552,15 +554,15 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      * <defs> element, so that we can switch quickly to use the given paint (instead of having to create it on the
      * SVG-side whenever the switch is made).
      */
-    public removeCachedPaint( paint: TPaint ): void {
-      if ( paint instanceof Paint ) {
-        assert && assert( _.includes( this._cachedPaints, paint ) );
+    public removeCachedPaint(paint: TPaint): void {
+      if (paint instanceof Paint) {
+        assert && assert(_.includes(this._cachedPaints, paint));
 
-        arrayRemove( this._cachedPaints, paint );
+        arrayRemove(this._cachedPaints, paint);
 
         const stateLen = this._drawables.length;
-        for ( let i = 0; i < stateLen; i++ ) {
-          ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyCachedPaints();
+        for (let i = 0; i < stateLen; i++) {
+          (this._drawables[i] as unknown as TPaintableDrawable).markDirtyCachedPaints();
         }
       }
     }
@@ -568,28 +570,30 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
     /**
      * Applies the fill to a Canvas context wrapper, before filling. (scenery-internal)
      */
-    public beforeCanvasFill( wrapper: CanvasContextWrapper ): void {
-      assert && assert( this.getFillValue() !== null );
+    public beforeCanvasFill(wrapper: CanvasContextWrapper): void {
+      assert && assert(this.getFillValue() !== null);
 
       const fillValue = this.getFillValue()!;
 
-      wrapper.setFillStyle( fillValue );
+      wrapper.setFillStyle(fillValue);
       // @ts-expect-error - For performance, we could check this by ruling out string and 'transformMatrix' in fillValue
-      if ( fillValue.transformMatrix ) {
+      if (fillValue.transformMatrix) {
         wrapper.context.save();
+        
         // @ts-expect-error
-        fillValue.transformMatrix.canvasAppendTransform( wrapper.context );
+        fillValue.transformMatrix.canvasAppendTransform(wrapper.context);
       }
     }
 
     /**
      * Un-applies the fill to a Canvas context wrapper, after filling. (scenery-internal)
      */
-    public afterCanvasFill( wrapper: CanvasContextWrapper ): void {
+    public afterCanvasFill(wrapper: CanvasContextWrapper): void {
       const fillValue = this.getFillValue();
 
+      
       // @ts-expect-error
-      if ( fillValue.transformMatrix ) {
+      if (fillValue.transformMatrix) {
         wrapper.context.restore();
       }
     }
@@ -597,47 +601,49 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
     /**
      * Applies the stroke to a Canvas context wrapper, before stroking. (scenery-internal)
      */
-    public beforeCanvasStroke( wrapper: CanvasContextWrapper ): void {
+    public beforeCanvasStroke(wrapper: CanvasContextWrapper): void {
       const strokeValue = this.getStrokeValue();
 
       // TODO: is there a better way of not calling so many things on each stroke? https://github.com/phetsims/scenery/issues/1581
-      wrapper.setStrokeStyle( this._stroke );
-      wrapper.setLineCap( this.getLineCap() );
-      wrapper.setLineJoin( this.getLineJoin() );
+      wrapper.setStrokeStyle(this._stroke);
+      wrapper.setLineCap(this.getLineCap());
+      wrapper.setLineJoin(this.getLineJoin());
 
       // @ts-expect-error - for performance
-      if ( strokeValue.transformMatrix ) {
+      if (strokeValue.transformMatrix) {
 
+        
         // @ts-expect-error
         const scaleVector: Vector2 = strokeValue.transformMatrix.getScaleVector();
-        assert && assert( Math.abs( scaleVector.x - scaleVector.y ) < 1e-7, 'You cannot specify a pattern or gradient to a stroke that does not have a symmetric scale.' );
+        assert && assert(Math.abs(scaleVector.x - scaleVector.y) < 1e-7, 'You cannot specify a pattern or gradient to a stroke that does not have a symmetric scale.');
         const matrixMultiplier = 1 / scaleVector.x;
 
         wrapper.context.save();
+        
         // @ts-expect-error
-        strokeValue.transformMatrix.canvasAppendTransform( wrapper.context );
+        strokeValue.transformMatrix.canvasAppendTransform(wrapper.context);
 
-        wrapper.setLineWidth( this.getLineWidth() * matrixMultiplier );
-        wrapper.setMiterLimit( this.getMiterLimit() * matrixMultiplier );
-        wrapper.setLineDash( this.getLineDash().map( dash => dash * matrixMultiplier ) );
-        wrapper.setLineDashOffset( this.getLineDashOffset() * matrixMultiplier );
+        wrapper.setLineWidth(this.getLineWidth() * matrixMultiplier);
+        wrapper.setMiterLimit(this.getMiterLimit() * matrixMultiplier);
+        wrapper.setLineDash(this.getLineDash().map(dash => dash * matrixMultiplier));
+        wrapper.setLineDashOffset(this.getLineDashOffset() * matrixMultiplier);
       }
       else {
-        wrapper.setLineWidth( this.getLineWidth() );
-        wrapper.setMiterLimit( this.getMiterLimit() );
-        wrapper.setLineDash( this.getLineDash() );
-        wrapper.setLineDashOffset( this.getLineDashOffset() );
+        wrapper.setLineWidth(this.getLineWidth());
+        wrapper.setMiterLimit(this.getMiterLimit());
+        wrapper.setLineDash(this.getLineDash());
+        wrapper.setLineDashOffset(this.getLineDashOffset());
       }
     }
 
     /**
      * Un-applies the stroke to a Canvas context wrapper, after stroking. (scenery-internal)
      */
-    public afterCanvasStroke( wrapper: CanvasContextWrapper ): void {
+    public afterCanvasStroke(wrapper: CanvasContextWrapper): void {
       const strokeValue = this.getStrokeValue();
 
       // @ts-expect-error - for performance
-      if ( strokeValue.transformMatrix ) {
+      if (strokeValue.transformMatrix) {
         wrapper.context.restore();
       }
     }
@@ -650,7 +656,7 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
       // if it's a Color object, get the corresponding CSS
       // 'transparent' will make us invisible if the fill is null
       // @ts-expect-error - toCSS checks for color, left for performance
-      return fillValue ? ( fillValue.toCSS ? fillValue.toCSS() : fillValue ) : 'transparent';
+      return fillValue ? (fillValue.toCSS ? fillValue.toCSS() : fillValue) : 'transparent';
     }
 
     /**
@@ -661,7 +667,7 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
       // if it's a Color object, get the corresponding CSS
       // 'transparent' will make us invisible if the fill is null
       // @ts-expect-error - toCSS checks for color, left for performance
-      return strokeValue ? ( strokeValue.toCSS ? strokeValue.toCSS() : strokeValue ) : 'transparent';
+      return strokeValue ? (strokeValue.toCSS ? strokeValue.toCSS() : strokeValue) : 'transparent';
     }
 
     /**
@@ -670,12 +676,12 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      * @param spaces - Whitespace to add
      * @param result
      */
-    public appendFillablePropString( spaces: string, result: string ): string {
-      if ( this._fill ) {
-        if ( result ) {
+    public appendFillablePropString(spaces: string, result: string): string {
+      if (this._fill) {
+        if (result) {
           result += ',\n';
         }
-        if ( typeof this.getFillValue() === 'string' ) {
+        if (typeof this.getFillValue() === 'string') {
           result += `${spaces}fill: '${this.getFillValue()}'`;
         }
         else {
@@ -692,12 +698,12 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
      * @param spaces - Whitespace to add
      * @param result
      */
-    public appendStrokablePropString( spaces: string, result: string ): string {
-      function addProp( key: string, value: string, nowrap?: boolean ): void {
-        if ( result ) {
+    public appendStrokablePropString(spaces: string, result: string): string {
+      function addProp(key: string, value: string, nowrap?: boolean): void {
+        if (result) {
           result += ',\n';
         }
-        if ( !nowrap && typeof value === 'string' ) {
+        if (!nowrap && typeof value === 'string') {
           result += `${spaces + key}: '${value}'`;
         }
         else {
@@ -705,26 +711,28 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
         }
       }
 
-      if ( this._stroke ) {
+      if (this._stroke) {
         const defaultStyles = new LineStyles();
         const strokeValue = this.getStrokeValue();
-        if ( typeof strokeValue === 'string' ) {
-          addProp( 'stroke', strokeValue );
+        if (typeof strokeValue === 'string') {
+          addProp('stroke', strokeValue);
         }
         else {
-          addProp( 'stroke', strokeValue ? strokeValue.toString() : 'null', true );
+          addProp('stroke', strokeValue ? strokeValue.toString() : 'null', true);
         }
 
-        _.each( [ 'lineWidth', 'lineCap', 'miterLimit', 'lineJoin', 'lineDashOffset' ], prop => {
+        _.each(['lineWidth', 'lineCap', 'miterLimit', 'lineJoin', 'lineDashOffset'], prop => {
+          
           // @ts-expect-error
-          if ( this[ prop ] !== defaultStyles[ prop ] ) {
+          if (this[prop] !== defaultStyles[prop]) {
+            
             // @ts-expect-error
-            addProp( prop, this[ prop ] );
+            addProp(prop, this[prop]);
           }
-        } );
+        });
 
-        if ( this.lineDash.length ) {
-          addProp( 'lineDash', JSON.stringify( this.lineDash ), true );
+        if (this.lineDash.length) {
+          addProp('lineDash', JSON.stringify(this.lineDash), true);
         }
       }
 
@@ -744,22 +752,22 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
       let bitmask = 0;
 
       // Safari 5 has buggy issues with SVG gradients
-      if ( !( isSafari5 && this._fill instanceof Gradient ) ) {
+      if (!(isSafari5 && this._fill instanceof Gradient)) {
         bitmask |= Renderer.bitmaskSVG;
       }
 
       // we always have Canvas support?
       bitmask |= Renderer.bitmaskCanvas;
 
-      if ( !this.hasFill() ) {
+      if (!this.hasFill()) {
         // if there is no fill, it is supported by DOM and WebGL
         bitmask |= Renderer.bitmaskDOM;
         bitmask |= Renderer.bitmaskWebGL;
       }
-      else if ( this._fill instanceof Pattern ) {
+      else if (this._fill instanceof Pattern) {
         // no pattern support for DOM or WebGL (for now!)
       }
-      else if ( this._fill instanceof Gradient ) {
+      else if (this._fill instanceof Gradient) {
         // no gradient support for DOM or WebGL (for now!)
       }
       else {
@@ -788,7 +796,7 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
       // always have SVG support (for now?)
       bitmask |= Renderer.bitmaskSVG;
 
-      if ( !this.hasStroke() ) {
+      if (!this.hasStroke()) {
         // allow DOM support if there is no stroke (since the fill will determine what is available)
         bitmask |= Renderer.bitmaskDOM;
         bitmask |= Renderer.bitmaskWebGL;
@@ -804,8 +812,8 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
       this.invalidateSupportedRenderers();
 
       const stateLen = this._drawables.length;
-      for ( let i = 0; i < stateLen; i++ ) {
-        ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyFill();
+      for (let i = 0; i < stateLen; i++) {
+        (this._drawables[i] as unknown as TPaintableDrawable).markDirtyFill();
       }
     }
 
@@ -816,14 +824,15 @@ const Paintable = memoize( <SuperType extends Constructor<Node>>( type: SuperTyp
       this.invalidateSupportedRenderers();
 
       const stateLen = this._drawables.length;
-      for ( let i = 0; i < stateLen; i++ ) {
-        ( this._drawables[ i ] as unknown as TPaintableDrawable ).markDirtyStroke();
+      for (let i = 0; i < stateLen; i++) {
+        (this._drawables[i] as unknown as TPaintableDrawable).markDirtyStroke();
       }
     }
   };
-} );
+});
 
-scenery.register( 'Paintable', Paintable );
+scenery.register('Paintable', Paintable);
+
 
 // @ts-expect-error
 Paintable.DEFAULT_OPTIONS = DEFAULT_OPTIONS;

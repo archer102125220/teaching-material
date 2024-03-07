@@ -17,12 +17,9 @@
 
 import phetCore from './phetCore';
 import merge from './merge';
-// @ts-expect-error
-import IntentionalAny from './types/IntentionalAny';
-// @ts-expect-error
-import RequiredKeys from './types/RequiredKeys';
-// @ts-expect-error
-import OptionalKeys from './types/OptionalKeys';
+import type IntentionalAny from './types/IntentionalAny';
+import type RequiredKeys from './types/RequiredKeys';
+import type OptionalKeys from './types/OptionalKeys';
 
 // Gets the parts of an object that are optional
 type Options<T> = Pick<T, OptionalKeys<T>>;
@@ -38,7 +35,7 @@ type EmptySelfOptionsKeys = keyof EmptySelfOptions;
 // This is the type for the `defaults` argument to optionize
 type OptionizeDefaults<SelfOptions = EmptySelfOptions, ParentOptions = EmptySelfOptions, ProvidedOptions = EmptySelfOptions> =
 
-// Everything optional from SelfOptions must have a default specified
+  // Everything optional from SelfOptions must have a default specified
   Omit<Required<Options<SelfOptions>>, EmptySelfOptionsKeys> & // eslint-disable-line @typescript-eslint/ban-types
 
   // Anything required in the ProvidedOptions should not show up in the "defaults" object
@@ -51,7 +48,7 @@ type OptionizeDefaults<SelfOptions = EmptySelfOptions, ParentOptions = EmptySelf
   & Required<Omit<Pick<ParentOptions, RequiredKeys<ParentOptions>>, RequiredKeys<ProvidedOptions>>>; // eslint-disable-line @typescript-eslint/ban-types
 
 // Factor out the merge arrow closure to avoid heap/cpu at runtime
-const merge4 = ( a: IntentionalAny, b?: IntentionalAny, c?: IntentionalAny, d?: IntentionalAny ) => merge( a, b, c, d );
+const merge4 = (a: IntentionalAny, b?: IntentionalAny, c?: IntentionalAny, d?: IntentionalAny) => merge(a, b, c, d);
 
 // ProvidedOptions = The type of this class's public API (type of the providedOptions parameter in the constructor)
 // SelfOptions = Options that are defined by "this" class. Anything optional in this block must have a default provided in "defaults"
@@ -60,7 +57,7 @@ const merge4 = ( a: IntentionalAny, b?: IntentionalAny, c?: IntentionalAny, d?: 
 export default function optionize<ProvidedOptions,
   SelfOptions = ProvidedOptions, // By default, every optional option in the ProvidedOptions must have a default unless you specify another object for SelfOptions
   ParentOptions = Record<never, never>>():
-  <KeysUsedInSubclassConstructor extends keyof ( ParentOptions )>(
+  <KeysUsedInSubclassConstructor extends keyof (ParentOptions) >(
     defaults: OptionizeDefaults<SelfOptions, ParentOptions, ProvidedOptions>,
     providedOptions?: ProvidedOptions
   ) => OptionizeDefaults<SelfOptions, ParentOptions> & ProvidedOptions & Required<Pick<ParentOptions, KeysUsedInSubclassConstructor>> {
@@ -71,7 +68,7 @@ export default function optionize<ProvidedOptions,
 export function optionize3<ProvidedOptions,
   SelfOptions = ProvidedOptions, // By default, every optional option in the ProvidedOptions must have a default unless you specify another object for SelfOptions
   ParentOptions = Record<never, never>>():
-  <KeysUsedInSubclassConstructor extends keyof ( ParentOptions )>(
+  <KeysUsedInSubclassConstructor extends keyof (ParentOptions) >(
     emptyObject: ObjectWithNoKeys,
     defaults: OptionizeDefaults<SelfOptions, ParentOptions>,
     providedOptions?: ProvidedOptions
@@ -97,7 +94,7 @@ export function optionize3<ProvidedOptions,
 export function optionize4<ProvidedOptions,
   SelfOptions = ProvidedOptions,
   ParentOptions = object>():
-  <KeysUsedInSubclassConstructor extends keyof ( ParentOptions )>(
+  <KeysUsedInSubclassConstructor extends keyof (ParentOptions) >(
     emptyObject: ObjectWithNoKeys,
     defaults1: Partial<ParentOptions>,
     defaults2: OptionizeDefaults<SelfOptions, ParentOptions>,
@@ -107,8 +104,8 @@ export function optionize4<ProvidedOptions,
 }
 
 // Use combineOptions to combine object literals (typically options) that all have the same type.
-export function combineOptions<Type extends object>( target: Partial<Type>, ...sources: Array<Partial<Type> | undefined> ): Type {
-  return merge4( target, ...sources );
+export function combineOptions<Type extends object>(target: Partial<Type>, ...sources: Array<Partial<Type> | undefined>): Type {
+  return merge4(target, ...sources);
 }
 
 
@@ -169,5 +166,5 @@ const optionize = <S, P = EmptySelfOptions, M extends keyof P = never, A = S & P
 };
  */
 
-phetCore.register( 'optionize', optionize );
+phetCore.register('optionize', optionize);
 export type { OptionizeDefaults };

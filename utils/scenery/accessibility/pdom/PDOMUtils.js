@@ -10,12 +10,12 @@
  * @author Jesse Greenberg
  */
 
-import { isTReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
-import validate from '../../../../axon/js/validate.js';
-import Validation from '../../../../axon/js/Validation.js';
-import merge from '../../../../phet-core/js/merge.js';
-import stripEmbeddingMarks from '../../../../phet-core/js/stripEmbeddingMarks.js';
-import { PDOMSiblingStyle, scenery } from '../../imports.js';
+import { isTReadOnlyProperty } from '../../../axon/TReadOnlyProperty';
+import validate from '../../../axon/validate';
+import Validation from '../../../axon/Validation';
+import merge from '../../../phet-core/merge';
+import stripEmbeddingMarks from '../../../phet-core/stripEmbeddingMarks';
+import { PDOMSiblingStyle, scenery } from '../../imports';
 
 // constants
 const NEXT = 'NEXT';

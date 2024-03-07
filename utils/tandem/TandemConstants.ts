@@ -1,9 +1,8 @@
+/* eslint-disable no-use-before-define */
 // Copyright 2021-2024, University of Colorado Boulder
 
-// @ts-expect-error
-import IntentionalAny from '../phet-core/types/IntentionalAny';
-// @ts-expect-error
-import PickRequired from '../phet-core/types/PickRequired';
+import type IntentionalAny from '../phet-core/types/IntentionalAny';
+import type PickRequired from '../phet-core/types/PickRequired';
 import tandemNamespace from './tandemNamespace';
 
 /**
@@ -33,7 +32,7 @@ export type PhetioElement = {
 export type PhetioElements = {
 
   // Each string is a component name of a PhetioID
-  [ name: string ]: PhetioElements;
+  [name: string]: PhetioElements;
 } & PhetioElement;
 
 export type Method = {
@@ -140,8 +139,8 @@ const BASE_DYNAMIC_TANDEM_CHARACTER_CLASS = `${BASE_TANDEM_CHARACTER_CLASS}_`;
 const BASE_DERIVED_TANDEM_CHARACTER_CLASS = `${BASE_DYNAMIC_TANDEM_CHARACTER_CLASS}\\-`;
 
 const TandemConstants = {
-  OBJECT_IO_TYPE_NAME: OBJECT_IO_TYPE_NAME,
-  EVENT_TYPE_MODEL: EVENT_TYPE_MODEL,
+  OBJECT_IO_TYPE_NAME,
+  EVENT_TYPE_MODEL,
 
   // Default metadata set for an ObjectIO in the PhET-iO API.  These are used as the default options in PhetioObject
   // and when outputting an API (since values that match the defaults are omitted)
@@ -150,10 +149,10 @@ const TandemConstants = {
   METADATA_KEY_NAME: '_metadata',
   DATA_KEY_NAME: '_data',
 
-  BASE_TANDEM_CHARACTER_CLASS: BASE_TANDEM_CHARACTER_CLASS,
-  BASE_DYNAMIC_TANDEM_CHARACTER_CLASS: BASE_DYNAMIC_TANDEM_CHARACTER_CLASS,
-  BASE_DERIVED_TANDEM_CHARACTER_CLASS: BASE_DERIVED_TANDEM_CHARACTER_CLASS
+  BASE_TANDEM_CHARACTER_CLASS,
+  BASE_DYNAMIC_TANDEM_CHARACTER_CLASS,
+  BASE_DERIVED_TANDEM_CHARACTER_CLASS
 } as const;
 
-tandemNamespace.register( 'TandemConstants', TandemConstants );
+tandemNamespace.register('TandemConstants', TandemConstants);
 export default TandemConstants;

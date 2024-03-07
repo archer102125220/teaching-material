@@ -15,8 +15,8 @@
  * @author Jesse Greenberg
  */
 
-import Property from '../../../../axon/js/Property.js';
-import { scenery } from '../../imports.js';
+import Property from '../../../axon/Property';
+import { scenery } from '../../imports';
 
 // constants
 const SPACE = ' '; // space to insert between words of text content
@@ -30,17 +30,18 @@ class Cursor {
   /**
    * @param {Element} domElement
    */
-  constructor( domElement ) {
-
+  constructor(domElement) {
     const self = this;
 
     // the output utterance for the cursor, to be read by the synth and handled in various ways
     // initial output is the document title
     // @public (read-only)
-    this.outputUtteranceProperty = new Property( new Utterance( document.title, 'off' ) );
+    this.outputUtteranceProperty = new Property(
+      new Utterance(document.title, 'off')
+    );
 
     // @private - a linear representation of the DOM which is navigated by the user
-    this.linearDOM = this.getLinearDOMElements( domElement );
+    this.linearDOM = this.getLinearDOMElements(domElement);
 
     // @private - the active element is element that is under navigation in the parallel DOM
     this.activeElement = null;
@@ -77,10 +78,9 @@ class Cursor {
     // for a list of common navigation strategies
     //
     // TODO: Use this.keyState object instead of referencing the event directly https://github.com/phetsims/scenery/issues/1581
-    document.addEventListener( 'keydown', event => {
-
+    document.addEventListener('keydown', (event) => {
       // update the keystate object
-      this.keyState[ event.keyCode ] = true;
+      this.keyState[event.keyCode] = true;
 
       // store the output text here
       let outputText;
@@ -94,143 +94,128 @@ class Cursor {
       const direction = shiftKeyDown ? PREVIOUS : NEXT;
 
       // the dom can change at any time, make sure that we are reading a copy that is up to date
-      this.linearDOM = this.getLinearDOMElements( domElement );
+      this.linearDOM = this.getLinearDOMElements(domElement);
 
       // update the list of live elements
       this.updateLiveElementList();
 
       // if the element has an 'application' like behavior, keyboard should be free for the application
       // TODO: This may be insufficient if we need the 'arrow' keys to continue to work for an application role https://github.com/phetsims/scenery/issues/1581
-      if ( this.activeElement && this.activeElement.getAttribute( 'role' ) === 'application' ) {
+      if (
+        this.activeElement &&
+        this.activeElement.getAttribute('role') === 'application'
+      ) {
         return;
       }
 
       // otherwise, handle all key events here
-      if ( this.keyState[ 40 ] && !this.keyState[ 45 ] ) {
+      if (this.keyState[40] && !this.keyState[45]) {
         // read the next line on 'down arrow'
-        outputText = this.readNextPreviousLine( NEXT );
-      }
-      else if ( this.keyState[ 38 ] && !this.keyState[ 45 ] ) {
+        outputText = this.readNextPreviousLine(NEXT);
+      } else if (this.keyState[38] && !this.keyState[45]) {
         // read the previous line on 'up arrow'
-        outputText = this.readNextPreviousLine( PREVIOUS );
-      }
-      else if ( this.keyState[ 72 ] ) {
+        outputText = this.readNextPreviousLine(PREVIOUS);
+      } else if (this.keyState[72]) {
         // read the previous or next headings depending on whether the shift key is pressed
-        const headingLevels = [ 'H1', 'H2', 'H3', 'H4', 'H5', 'H6' ];
-        outputText = this.readNextPreviousHeading( headingLevels, direction );
-      }
-      else if ( this.keyState[ 9 ] ) {
+        const headingLevels = ['H1', 'H2', 'H3', 'H4', 'H5', 'H6'];
+        outputText = this.readNextPreviousHeading(headingLevels, direction);
+      } else if (this.keyState[9]) {
         // let the browser naturally handle 'tab' for forms elements and elements with a tabIndex
-      }
-      else if ( this.keyState[ 39 ] && !this.keyState[ 17 ] ) {
+      } else if (this.keyState[39] && !this.keyState[17]) {
         // read the next character of the active line on 'right arrow'
-        outputText = this.readNextPreviousCharacter( NEXT );
-      }
-      else if ( this.keyState[ 37 ] && !this.keyState[ 17 ] ) {
+        outputText = this.readNextPreviousCharacter(NEXT);
+      } else if (this.keyState[37] && !this.keyState[17]) {
         // read the previous character on 'left arrow'
-        outputText = this.readNextPreviousCharacter( PREVIOUS );
-      }
-      else if ( this.keyState[ 37 ] && this.keyState[ 17 ] ) {
+        outputText = this.readNextPreviousCharacter(PREVIOUS);
+      } else if (this.keyState[37] && this.keyState[17]) {
         // read the previous word on 'control + left arrow'
-        outputText = this.readNextPreviousWord( PREVIOUS );
-      }
-      else if ( this.keyState[ 39 ] && this.keyState[ 17 ] ) {
+        outputText = this.readNextPreviousWord(PREVIOUS);
+      } else if (this.keyState[39] && this.keyState[17]) {
         // read the next word on 'control + right arrow'
-        outputText = this.readNextPreviousWord( NEXT );
-      }
-      else if ( this.keyState[ 45 ] && this.keyState[ 38 ] ) {
+        outputText = this.readNextPreviousWord(NEXT);
+      } else if (this.keyState[45] && this.keyState[38]) {
         // repeat the active line on 'insert + up arrow'
         outputText = this.readActiveLine();
-      }
-      else if ( this.keyState[ 49 ] ) {
+      } else if (this.keyState[49]) {
         // find the previous/next heading level 1 on '1'
-        outputText = this.readNextPreviousHeading( [ 'H1' ], direction );
-      }
-      else if ( this.keyState[ 50 ] ) {
+        outputText = this.readNextPreviousHeading(['H1'], direction);
+      } else if (this.keyState[50]) {
         // find the previous/next heading level 2 on '2'
-        outputText = this.readNextPreviousHeading( [ 'H2' ], direction );
-      }
-      else if ( this.keyState[ 51 ] ) {
+        outputText = this.readNextPreviousHeading(['H2'], direction);
+      } else if (this.keyState[51]) {
         // find the previous/next heading level 3 on '3'
-        outputText = this.readNextPreviousHeading( [ 'H3' ], direction );
-      }
-      else if ( this.keyState[ 52 ] ) {
+        outputText = this.readNextPreviousHeading(['H3'], direction);
+      } else if (this.keyState[52]) {
         // find the previous/next heading level 4 on '4'
-        outputText = this.readNextPreviousHeading( [ 'H4' ], direction );
-      }
-      else if ( this.keyState[ 53 ] ) {
+        outputText = this.readNextPreviousHeading(['H4'], direction);
+      } else if (this.keyState[53]) {
         // find the previous/next heading level 5 on '5'
-        outputText = this.readNextPreviousHeading( [ 'H5' ], direction );
-      }
-      else if ( this.keyState[ 54 ] ) {
+        outputText = this.readNextPreviousHeading(['H5'], direction);
+      } else if (this.keyState[54]) {
         // find the previous/next heading level 6 on '6'
-        outputText = this.readNextPreviousHeading( [ 'H6' ], direction );
-      }
-      else if ( this.keyState[ 70 ] ) {
+        outputText = this.readNextPreviousHeading(['H6'], direction);
+      } else if (this.keyState[70]) {
         // find the previous/next form element on 'f'
-        outputText = this.readNextPreviousFormElement( direction );
-      }
-      else if ( this.keyState[ 66 ] ) {
+        outputText = this.readNextPreviousFormElement(direction);
+      } else if (this.keyState[66]) {
         // find the previous/next button element on 'b'
-        outputText = this.readNextPreviousButton( direction );
-      }
-      else if ( this.keyState[ 76 ] ) {
+        outputText = this.readNextPreviousButton(direction);
+      } else if (this.keyState[76]) {
         // find the previous/next list on 'L'
-        outputText = this.readNextPreviousList( direction );
-      }
-      else if ( this.keyState[ 73 ] ) {
+        outputText = this.readNextPreviousList(direction);
+      } else if (this.keyState[73]) {
         // find the previous/next list item on 'I'
-        outputText = this.readNextPreviousListItem( direction );
-      }
-      else if ( this.keyState[ 45 ] && this.keyState[ 40 ] ) {
+        outputText = this.readNextPreviousListItem(direction);
+      } else if (this.keyState[45] && this.keyState[40]) {
         // read entire document on 'insert + down arrow'
         this.readEntireDocument();
       }
 
       // if the active element is focusable, set the focus to it so that the virtual cursor can
       // directly interact with elements
-      if ( this.activeElement && this.isFocusable( this.activeElement ) ) {
+      if (this.activeElement && this.isFocusable(this.activeElement)) {
         this.activeElement.focus();
       }
 
       // if the output text is a space, we want it to be read as 'blank' or 'space'
-      if ( outputText === SPACE ) {
+      if (outputText === SPACE) {
         outputText = 'space';
       }
 
-      if ( outputText ) {
+      if (outputText) {
         // for now, all utterances are off for aria-live
-        this.outputUtteranceProperty.set( new Utterance( outputText, 'off' ) );
+        this.outputUtteranceProperty.set(new Utterance(outputText, 'off'));
       }
 
       // TODO: everything else in https://dequeuniversity.com/screenreaders/nvda-keyboard-shortcuts https://github.com/phetsims/scenery/issues/1581
-
-    } );
+    });
 
     // update the keystate object on keyup to handle multiple key presses at once
-    document.addEventListener( 'keyup', event => {
-      this.keyState[ event.keyCode ] = false;
-    } );
+    document.addEventListener('keyup', (event) => {
+      this.keyState[event.keyCode] = false;
+    });
 
     // listen for when an element is about to receive focus
     // we are using focusin (and not focus) because we want the event to bubble up the document
     // this will handle both tab navigation AND programatic focus by the simulation
-    document.addEventListener( 'focusin', function( event ) {
-
+    document.addEventListener('focusin', function (event) {
       // anounce the new focus if it is different from the active element
-      if ( event.target !== self.activeElement ) {
+      if (event.target !== self.activeElement) {
         self.activeElement = event.target;
 
         // so read out all content from aria markup since focus moved via application behavior
         const withApplicationContent = true;
-        const outputText = self.getAccessibleText( this.activeElement, withApplicationContent );
+        const outputText = self.getAccessibleText(
+          this.activeElement,
+          withApplicationContent
+        );
 
-        if ( outputText ) {
-          const liveRole = self.activeElement.getAttribute( 'aria-live' );
-          self.outputUtteranceProperty.set( new Utterance( outputText, liveRole ) );
+        if (outputText) {
+          const liveRole = self.activeElement.getAttribute('aria-live');
+          self.outputUtteranceProperty.set(new Utterance(outputText, liveRole));
         }
       }
-    } );
+    });
   }
 
   /**
@@ -242,14 +227,14 @@ class Cursor {
    * @param  {HTMLElement} domElement - the parent element to linearize
    * @returns {Array.<HTMLElement>}
    */
-  getLinearDOMElements( domElement ) {
+  getLinearDOMElements(domElement) {
     // gets ALL descendent children for the element
-    const children = domElement.getElementsByTagName( '*' );
+    const children = domElement.getElementsByTagName('*');
 
     const linearDOM = [];
-    for ( let i = 0; i < children.length; i++ ) {
-      if ( children[ i ].nodeType === Node.ELEMENT_NODE ) {
-        linearDOM[ i ] = ( children[ i ] );
+    for (let i = 0; i < children.length; i++) {
+      if (children[i].nodeType === Node.ELEMENT_NODE) {
+        linearDOM[i] = children[i];
       }
     }
     return linearDOM;
@@ -262,18 +247,30 @@ class Cursor {
    * @param {HTMLElement} domElement
    * @returns {string}
    */
-  getLiveRole( domElement ) {
+  getLiveRole(domElement) {
     let liveRole = null;
 
     // collection of all roles that can produce 'live region' behavior
     // see https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions
-    const roles = [ 'log', 'status', 'alert', 'progressbar', 'marquee', 'timer', 'assertive', 'polite' ];
+    const roles = [
+      'log',
+      'status',
+      'alert',
+      'progressbar',
+      'marquee',
+      'timer',
+      'assertive',
+      'polite'
+    ];
 
-    roles.forEach( role => {
-      if ( domElement.getAttribute( 'aria-live' ) === role || domElement.getAttribute( 'role' ) === role ) {
+    roles.forEach((role) => {
+      if (
+        domElement.getAttribute('aria-live') === role ||
+        domElement.getAttribute('role') === role
+      ) {
         liveRole = role;
       }
-    } );
+    });
 
     return liveRole;
   }
@@ -285,16 +282,16 @@ class Cursor {
    * @param {[type]} direction - NEXT || PREVIOUS
    * @returns {HTMLElement}
    */
-  getNextPreviousElement( direction ) {
-    if ( !this.activeElement ) {
-      this.activeElement = this.linearDOM[ 0 ];
+  getNextPreviousElement(direction) {
+    if (!this.activeElement) {
+      this.activeElement = this.linearDOM[0];
     }
 
     const searchDelta = direction === 'NEXT' ? 1 : -1;
-    const activeIndex = this.linearDOM.indexOf( this.activeElement );
+    const activeIndex = this.linearDOM.indexOf(this.activeElement);
 
     const nextIndex = activeIndex + searchDelta;
-    return this.linearDOM[ nextIndex ];
+    return this.linearDOM[nextIndex];
   }
 
   /**
@@ -304,17 +301,17 @@ class Cursor {
    * @param {string} id
    * @returns {HTMLElement}
    */
-  getLabel( id ) {
-    const labels = document.getElementsByTagName( 'label' );
+  getLabel(id) {
+    const labels = document.getElementsByTagName('label');
 
     // loop through NodeList
     let labelWithId;
-    Array.prototype.forEach.call( labels, label => {
-      if ( label.getAttribute( 'for' ) ) {
+    Array.prototype.forEach.call(labels, (label) => {
+      if (label.getAttribute('for')) {
         labelWithId = label;
       }
-    } );
-    assert && assert( labelWithId, 'No label found for id' );
+    });
+    assert && assert(labelWithId, 'No label found for id');
 
     return labelWithId;
   }
@@ -328,106 +325,103 @@ class Cursor {
    * @param {boolean} withApplicationContent - do you want to include all aria text content?
    * @returns {string}
    */
-  getAccessibleText( element, withApplicationContent ) {
-
+  getAccessibleText(element, withApplicationContent) {
     // placeholder for the text content that we will build up from the markup
     let textContent = '';
 
     // if the element is undefined, we have reached the end of the document
-    if ( !element ) {
+    if (!element) {
       return END_OF_DOCUMENT;
     }
 
     // filter out structural elements that do not have accessible text
-    if ( element.getAttribute( 'class' ) === 'ScreenView' ) {
+    if (element.getAttribute('class') === 'ScreenView') {
       return null;
     }
-    if ( element.tagName === 'HEADER' ) {
+    if (element.tagName === 'HEADER') {
       // TODO: Headers should have some behavior https://github.com/phetsims/scenery/issues/1581
       return null;
     }
-    if ( element.tagName === 'SECTION' ) {
+    if (element.tagName === 'SECTION') {
       // TODO: What do you we do for sections? Read section + aria-labelledby? https://github.com/phetsims/scenery/issues/1581
       return null;
     }
-    if ( element.tagName === 'LABEL' ) {
+    if (element.tagName === 'LABEL') {
       // label content is added like 'aria-describedby', do not read this yet
       return null;
     }
 
     // search up through the ancestors to see if this element should be hidden
     let childElement = element;
-    while ( childElement.parentElement ) {
-      if ( childElement.getAttribute( 'aria-hidden' ) || childElement.hidden ) {
+    while (childElement.parentElement) {
+      if (childElement.getAttribute('aria-hidden') || childElement.hidden) {
         return null;
+      } else {
+        childElement = childElement.parentElement;
       }
-      else { childElement = childElement.parentElement; }
     }
 
     // search for elements that will have content and should be read
-    if ( element.tagName === 'P' ) {
+    if (element.tagName === 'P') {
       textContent += element.textContent;
     }
-    if ( element.tagName === 'H1' ) {
+    if (element.tagName === 'H1') {
       textContent += `Heading Level 1, ${element.textContent}`;
     }
-    if ( element.tagName === 'H2' ) {
+    if (element.tagName === 'H2') {
       textContent += `Heading Level 2, ${element.textContent}`;
     }
-    if ( element.tagName === 'H3' ) {
+    if (element.tagName === 'H3') {
       textContent += `Heading Level 3, ${element.textContent}`;
     }
-    if ( element.tagName === 'UL' ) {
+    if (element.tagName === 'UL') {
       const listLength = element.children.length;
       textContent += `List with ${listLength} items`;
     }
-    if ( element.tagName === 'LI' ) {
+    if (element.tagName === 'LI') {
       textContent += `List Item: ${element.textContent}`;
     }
-    if ( element.tagName === 'BUTTON' ) {
+    if (element.tagName === 'BUTTON') {
       const buttonLabel = ' Button';
       // check to see if this is a 'toggle' button with the 'aria-pressed' attribute
-      if ( element.getAttribute( 'aria-pressed' ) ) {
+      if (element.getAttribute('aria-pressed')) {
         let toggleLabel = ' toggle';
         const pressedLabel = ' pressed';
         const notLabel = ' not';
 
         // insert a comma for readibility of the synth
         toggleLabel += buttonLabel + COMMA;
-        if ( element.getAttribute( 'aria-pressed' ) === 'true' ) {
+        if (element.getAttribute('aria-pressed') === 'true') {
           toggleLabel += pressedLabel;
-        }
-        else {
+        } else {
           toggleLabel += notLabel + pressedLabel;
         }
         textContent += element.textContent + COMMA + toggleLabel;
-      }
-      else {
+      } else {
         textContent += element.textContent + buttonLabel;
       }
     }
-    if ( element.tagName === 'INPUT' ) {
-      if ( element.type === 'reset' ) {
-        textContent += `${element.getAttribute( 'value' )} Button`;
+    if (element.tagName === 'INPUT') {
+      if (element.type === 'reset') {
+        textContent += `${element.getAttribute('value')} Button`;
       }
-      if ( element.type === 'checkbox' ) {
+      if (element.type === 'checkbox') {
         // the checkbox should have a label - find the correct one
-        const checkboxLabel = this.getLabel( element.id );
+        const checkboxLabel = this.getLabel(element.id);
         const labelContent = checkboxLabel.textContent;
 
         // describe as a switch if it has the role
-        if ( element.getAttribute( 'role' ) === 'switch' ) {
+        if (element.getAttribute('role') === 'switch') {
           // required for a checkbox
-          const ariaChecked = element.getAttribute( 'aria-checked' );
-          if ( ariaChecked ) {
-            const switchedString = ( ariaChecked === 'true' ) ? 'On' : 'Off';
+          const ariaChecked = element.getAttribute('aria-checked');
+          if (ariaChecked) {
+            const switchedString = ariaChecked === 'true' ? 'On' : 'Off';
             textContent += `${labelContent + COMMA + SPACE}switch${COMMA}${SPACE}${switchedString}`;
+          } else {
+            assert &&
+              assert(false, 'checkbox switch must have aria-checked attribute');
           }
-          else {
-            assert && assert( false, 'checkbox switch must have aria-checked attribute' );
-          }
-        }
-        else {
+        } else {
           const checkedString = element.checked ? ' Checked' : ' Not Checked';
           textContent += `${element.textContent} Checkbox${checkedString}`;
         }
@@ -439,25 +433,23 @@ class Cursor {
     // Order of additions to textContent is important, and is designed to make sense
     // when textContent is read continuously
     // TODO: support more markup! https://github.com/phetsims/scenery/issues/1581
-    if ( withApplicationContent ) {
-
+    if (withApplicationContent) {
       // insert a comma at the end of the content to enhance the output of the synth
-      if ( textContent.length > 0 ) {
+      if (textContent.length > 0) {
         textContent += COMMA;
       }
 
       // look for an aria-label
-      const ariaLabel = element.getAttribute( 'aria-label' );
-      if ( ariaLabel ) {
+      const ariaLabel = element.getAttribute('aria-label');
+      if (ariaLabel) {
         textContent += SPACE + ariaLabel + COMMA;
       }
 
       // look for an aria-labelledBy attribute to see if there is another element in the DOM that
       // describes this one
-      const ariaLabelledById = element.getAttribute( 'aria-labelledBy' );
-      if ( ariaLabelledById ) {
-
-        const ariaLabelledBy = document.getElementById( ariaLabelledById );
+      const ariaLabelledById = element.getAttribute('aria-labelledBy');
+      if (ariaLabelledById) {
+        const ariaLabelledBy = document.getElementById(ariaLabelledById);
         const ariaLabelledByText = ariaLabelledBy.textContent;
 
         textContent += SPACE + ariaLabelledByText + COMMA;
@@ -467,57 +459,57 @@ class Cursor {
       // TODO: Factor out into a searchUp type of function. https://github.com/phetsims/scenery/issues/1581
       childElement = element;
       let role;
-      while ( childElement.parentElement ) {
-        role = childElement.getAttribute( 'role' );
-        if ( role === 'document' || role === 'application' ) {
+      while (childElement.parentElement) {
+        role = childElement.getAttribute('role');
+        if (role === 'document' || role === 'application') {
           textContent += SPACE + role + COMMA;
           break;
+        } else {
+          childElement = childElement.parentElement;
         }
-        else { childElement = childElement.parentElement; }
       }
 
       // check to see if this element has an aria-role
-      if ( element.getAttribute( 'role' ) ) {
-        role = element.getAttribute( 'role' );
+      if (element.getAttribute('role')) {
+        role = element.getAttribute('role');
         // TODO handle all the different roles! https://github.com/phetsims/scenery/issues/1581
 
         // label if the role is a button
-        if ( role === 'button' ) {
+        if (role === 'button') {
           textContent += `${SPACE}Button`;
         }
       }
 
       // check to see if this element is draggable
-      if ( element.draggable ) {
+      if (element.draggable) {
         textContent += `${SPACE}draggable${COMMA}`;
       }
 
       // look for aria-grabbed markup to let the user know if the element is grabbed
-      if ( element.getAttribute( 'aria-grabbed' ) === 'true' ) {
+      if (element.getAttribute('aria-grabbed') === 'true') {
         textContent += `${SPACE}grabbed${COMMA}`;
       }
 
       // look for an element in the DOM that describes this one
-      const ariaDescribedBy = element.getAttribute( 'aria-describedby' );
-      if ( ariaDescribedBy ) {
+      const ariaDescribedBy = element.getAttribute('aria-describedby');
+      if (ariaDescribedBy) {
         // the aria spec supports multiple description ID's for a single element
-        const descriptionIDs = ariaDescribedBy.split( SPACE );
+        const descriptionIDs = ariaDescribedBy.split(SPACE);
 
         let descriptionElement;
         let descriptionText;
-        descriptionIDs.forEach( descriptionID => {
-          descriptionElement = document.getElementById( descriptionID );
+        descriptionIDs.forEach((descriptionID) => {
+          descriptionElement = document.getElementById(descriptionID);
           descriptionText = descriptionElement.textContent;
 
           textContent += SPACE + descriptionText;
-        } );
-
+        });
       }
     }
 
     // delete the trailing comma if it exists at the end of the textContent
-    if ( textContent[ textContent.length - 1 ] === ',' ) {
-      textContent = textContent.slice( 0, -1 );
+    if (textContent[textContent.length - 1] === ',') {
+      textContent = textContent.slice(0, -1);
     }
 
     return textContent;
@@ -531,12 +523,12 @@ class Cursor {
    * @param  {string} direction - NEXT || PREVIOUS
    * @returns {HTMLElement}
    */
-  getNextPreviousElementWithPDOMContent( direction ) {
+  getNextPreviousElementWithPDOMContent(direction) {
     let pdomContent;
-    while ( !pdomContent ) {
+    while (!pdomContent) {
       // set the selected element to the next element in the DOM
-      this.activeElement = this.getNextPreviousElement( direction );
-      pdomContent = this.getAccessibleText( this.activeElement, false );
+      this.activeElement = this.getNextPreviousElement(direction);
+      pdomContent = this.getAccessibleText(this.activeElement, false);
     }
 
     return this.activeElement;
@@ -551,30 +543,33 @@ class Cursor {
    * @param  {[type]} direction - direction flag for to search through the DOM - NEXT || PREVIOUS
    * @returns {HTMLElement}
    */
-  getNextPreviousElementWithRole( roles, direction ) {
-
+  getNextPreviousElementWithRole(roles, direction) {
     let element = null;
-    const searchDelta = ( direction === NEXT ) ? 1 : -1;
+    const searchDelta = direction === NEXT ? 1 : -1;
 
     // if there is not an active element, use the first element in the DOM.
-    if ( !this.activeElement ) {
-      this.activeElement = this.linearDOM[ 0 ];
+    if (!this.activeElement) {
+      this.activeElement = this.linearDOM[0];
     }
 
     // start search from the next or previous element and set up the traversal conditions
-    let searchIndex = this.linearDOM.indexOf( this.activeElement ) + searchDelta;
-    while ( this.linearDOM[ searchIndex ] ) {
-      for ( let j = 0; j < roles.length; j++ ) {
-        const elementTag = this.linearDOM[ searchIndex ].tagName;
-        const elementType = this.linearDOM[ searchIndex ].type;
-        const elementRole = this.linearDOM[ searchIndex ].getAttribute( 'role' );
-        const searchRole = roles[ j ];
-        if ( elementTag === searchRole || elementRole === searchRole || elementType === searchRole ) {
-          element = this.linearDOM[ searchIndex ];
+    let searchIndex = this.linearDOM.indexOf(this.activeElement) + searchDelta;
+    while (this.linearDOM[searchIndex]) {
+      for (let j = 0; j < roles.length; j++) {
+        const elementTag = this.linearDOM[searchIndex].tagName;
+        const elementType = this.linearDOM[searchIndex].type;
+        const elementRole = this.linearDOM[searchIndex].getAttribute('role');
+        const searchRole = roles[j];
+        if (
+          elementTag === searchRole ||
+          elementRole === searchRole ||
+          elementType === searchRole
+        ) {
+          element = this.linearDOM[searchIndex];
           break;
         }
       }
-      if ( element ) {
+      if (element) {
         // we have alread found an element, break out
         break;
       }
@@ -590,7 +585,7 @@ class Cursor {
    * @param {string} direction
    * @returns {string}
    */
-  readNextPreviousLine( direction ) {
+  readNextPreviousLine(direction) {
     let line = '';
 
     // reset the content letter and word positions because we are reading a new line
@@ -598,20 +593,24 @@ class Cursor {
     this.wordPosition = 0;
 
     // if there is no active element, set to the next element with accessible content
-    if ( !this.activeElement ) {
-      this.activeElement = this.getNextPreviousElementWithPDOMContent( direction );
+    if (!this.activeElement) {
+      this.activeElement =
+        this.getNextPreviousElementWithPDOMContent(direction);
     }
 
     // get the accessible content for the active element, without any 'application' content, and split into words
-    let accessibleText = this.getAccessibleText( this.activeElement, false ).split( SPACE );
+    let accessibleText = this.getAccessibleText(
+      this.activeElement,
+      false
+    ).split(SPACE);
 
     // if traversing backwards, position in line needs be at the start of previous line
-    if ( direction === PREVIOUS ) {
+    if (direction === PREVIOUS) {
       this.positionInLine = this.positionInLine - 2 * LINE_WORD_LENGTH;
     }
 
     // if there is no content at the line position, it is time to find the next element
-    if ( !accessibleText[ this.positionInLine ] ) {
+    if (!accessibleText[this.positionInLine]) {
       // reset the position in the line
       this.positionInLine = 0;
 
@@ -619,30 +618,33 @@ class Cursor {
       const previousElement = this.activeElement;
 
       // update the active element and set the accessible content from this element
-      this.activeElement = this.getNextPreviousElementWithPDOMContent( direction );
+      this.activeElement =
+        this.getNextPreviousElementWithPDOMContent(direction);
 
-      accessibleText = this.getAccessibleText( this.activeElement, false ).split( ' ' );
+      accessibleText = this.getAccessibleText(this.activeElement, false).split(
+        ' '
+      );
 
       // restore the previous active element if we are at the end of the document
-      if ( !this.activeElement ) {
+      if (!this.activeElement) {
         this.activeElement = previousElement;
       }
     }
 
     // read the next line of the accessible content
     const lineLimit = this.positionInLine + LINE_WORD_LENGTH;
-    for ( let i = this.positionInLine; i < lineLimit; i++ ) {
-      if ( accessibleText[ i ] ) {
-        line += accessibleText[ i ];
+    for (let i = this.positionInLine; i < lineLimit; i++) {
+      if (accessibleText[i]) {
+        line += accessibleText[i];
         this.positionInLine += 1;
 
-        if ( accessibleText[ i + 1 ] ) {
+        if (accessibleText[i + 1]) {
           line += SPACE;
-        }
-        else {
+        } else {
           // we have reached the end of this content, there are no more words
           // wrap the line position to the end so we can easily read back the previous line
-          this.positionInLine += LINE_WORD_LENGTH - this.positionInLine % LINE_WORD_LENGTH;
+          this.positionInLine +=
+            LINE_WORD_LENGTH - (this.positionInLine % LINE_WORD_LENGTH);
           break;
         }
       }
@@ -659,27 +661,25 @@ class Cursor {
    * @returns {[type]} [description]
    */
   readActiveLine() {
-
     let line = '';
 
     // if there is no active line, find the next one
-    if ( !this.activeLine ) {
-      this.activeLine = this.readNextPreviousLine( NEXT );
+    if (!this.activeLine) {
+      this.activeLine = this.readNextPreviousLine(NEXT);
     }
 
     // split up the active line into an array of words
-    const activeWords = this.activeLine.split( SPACE );
+    const activeWords = this.activeLine.split(SPACE);
 
     // read this line of content
-    for ( let i = 0; i < LINE_WORD_LENGTH; i++ ) {
-      if ( activeWords[ i ] ) {
-        line += activeWords[ i ];
+    for (let i = 0; i < LINE_WORD_LENGTH; i++) {
+      if (activeWords[i]) {
+        line += activeWords[i];
 
-        if ( activeWords[ i + 1 ] ) {
+        if (activeWords[i + 1]) {
           // add space if there are more words
           line += SPACE;
-        }
-        else {
+        } else {
           // we have reached the end of the line, there are no more words
           break;
         }
@@ -695,34 +695,33 @@ class Cursor {
    * @param {string} direction
    * @returns {string}
    */
-  readNextPreviousWord( direction ) {
+  readNextPreviousWord(direction) {
     // if there is no active line, find the next one
-    if ( !this.activeLine ) {
-      this.activeLine = this.readNextPreviousLine( direction );
+    if (!this.activeLine) {
+      this.activeLine = this.readNextPreviousLine(direction);
     }
 
     // split the active line into an array of words
-    const activeWords = this.activeLine.split( SPACE );
+    const activeWords = this.activeLine.split(SPACE);
 
     // direction dependent variables
     let searchDelta;
     let contentEnd;
-    if ( direction === NEXT ) {
+    if (direction === NEXT) {
       contentEnd = activeWords.length;
       searchDelta = 1;
-    }
-    else if ( direction === PREVIOUS ) {
+    } else if (direction === PREVIOUS) {
       contentEnd = 0;
       searchDelta = -2;
     }
 
     // if there is no more content, read the next/previous line
-    if ( this.wordPosition === contentEnd ) {
-      this.activeLine = this.readNextPreviousLine( direction );
+    if (this.wordPosition === contentEnd) {
+      this.activeLine = this.readNextPreviousLine(direction);
     }
 
     // get the word to read update word position
-    const outputText = activeWords[ this.wordPosition ];
+    const outputText = activeWords[this.wordPosition];
     this.wordPosition += searchDelta;
 
     return outputText;
@@ -737,8 +736,7 @@ class Cursor {
    * @param  {[type]} direction - direction of traversal through the DOM - NEXT || PREVIOUS
    * @returns {string}
    */
-  readNextPreviousHeading( headingLevels, direction ) {
-
+  readNextPreviousHeading(headingLevels, direction) {
     // get the next element in the DOM with one of the above heading levels which has accessible content
     // to read
     let accessibleText;
@@ -747,28 +745,38 @@ class Cursor {
     // track the previous element - if there are no more headings, store it here
     let previousElement;
 
-    while ( !accessibleText ) {
+    while (!accessibleText) {
       previousElement = this.activeElement;
-      nextElement = this.getNextPreviousElementWithRole( headingLevels, direction );
+      nextElement = this.getNextPreviousElementWithRole(
+        headingLevels,
+        direction
+      );
       this.activeElement = nextElement;
-      accessibleText = this.getAccessibleText( nextElement );
+      accessibleText = this.getAccessibleText(nextElement);
     }
 
-    if ( !nextElement ) {
+    if (!nextElement) {
       // restore the active element
       this.activeElement = previousElement;
       // let the user know that there are no more headings at the desired level
-      const directionDescriptionString = ( direction === NEXT ) ? 'more' : 'previous';
-      if ( headingLevels.length === 1 ) {
+      const directionDescriptionString =
+        direction === NEXT ? 'more' : 'previous';
+      if (headingLevels.length === 1) {
         const noNextHeadingString = `No ${directionDescriptionString} headings at `;
 
-        const headingLevel = headingLevels[ 0 ];
-        const levelString = headingLevel === 'H1' ? 'Level 1' :
-                            headingLevel === 'H2' ? 'Level 2' :
-                            headingLevel === 'H3' ? 'Level 3' :
-                            headingLevel === 'H4' ? 'Level 4' :
-                            headingLevel === 'H5' ? 'Level 5' :
-                            'Level 6';
+        const headingLevel = headingLevels[0];
+        const levelString =
+          headingLevel === 'H1'
+            ? 'Level 1'
+            : headingLevel === 'H2'
+              ? 'Level 2'
+              : headingLevel === 'H3'
+                ? 'Level 3'
+                : headingLevel === 'H4'
+                  ? 'Level 4'
+                  : headingLevel === 'H5'
+                    ? 'Level 5'
+                    : 'Level 6';
         return noNextHeadingString + levelString;
       }
       return `No ${directionDescriptionString} headings`;
@@ -787,26 +795,27 @@ class Cursor {
    * @param  {string}} direction
    * @returns {HTMLElement}
    */
-  readNextPreviousButton( direction ) {
+  readNextPreviousButton(direction) {
     // the following roles should handle 'role=button', 'type=button', 'tagName=BUTTON'
-    const roles = [ 'button', 'BUTTON', 'submit', 'reset' ];
+    const roles = ['button', 'BUTTON', 'submit', 'reset'];
 
     let nextElement;
     let accessibleText;
     let previousElement;
 
-    while ( !accessibleText ) {
+    while (!accessibleText) {
       previousElement = this.activeElement;
-      nextElement = this.getNextPreviousElementWithRole( roles, direction );
+      nextElement = this.getNextPreviousElementWithRole(roles, direction);
       this.activeElement = nextElement;
 
       // get the accessible text with application descriptions
-      accessibleText = this.getAccessibleText( nextElement, true );
+      accessibleText = this.getAccessibleText(nextElement, true);
     }
 
-    if ( !nextElement ) {
+    if (!nextElement) {
       this.activeElement = previousElement;
-      const directionDescriptionString = direction === NEXT ? 'more' : 'previous';
+      const directionDescriptionString =
+        direction === NEXT ? 'more' : 'previous';
       return `No ${directionDescriptionString} buttons`;
     }
 
@@ -820,11 +829,11 @@ class Cursor {
    * @param {string} direction
    * @returns {string}
    */
-  readNextPreviousFormElement( direction ) {
+  readNextPreviousFormElement(direction) {
     // TODO: support more form elements! https://github.com/phetsims/scenery/issues/1581
-    const tagNames = [ 'INPUT', 'BUTTON' ];
-    const ariaRoles = [ 'button' ];
-    const roles = tagNames.concat( ariaRoles );
+    const tagNames = ['INPUT', 'BUTTON'];
+    const ariaRoles = ['button'];
+    const roles = tagNames.concat(ariaRoles);
 
     let nextElement;
     let accessibleText;
@@ -832,18 +841,19 @@ class Cursor {
     // track the previous element - if there are no more form elements it will need to be restored
     let previousElement;
 
-    while ( !accessibleText ) {
+    while (!accessibleText) {
       previousElement = this.activeElement;
-      nextElement = this.getNextPreviousElementWithRole( roles, direction );
+      nextElement = this.getNextPreviousElementWithRole(roles, direction);
       this.activeElement = nextElement;
 
       // get the accessible text with aria descriptions
-      accessibleText = this.getAccessibleText( nextElement, true );
+      accessibleText = this.getAccessibleText(nextElement, true);
     }
 
-    if ( accessibleText === END_OF_DOCUMENT ) {
+    if (accessibleText === END_OF_DOCUMENT) {
       this.activeElement = previousElement;
-      const directionDescriptionString = direction === NEXT ? 'next' : 'previous';
+      const directionDescriptionString =
+        direction === NEXT ? 'next' : 'previous';
       return `No ${directionDescriptionString} form field`;
     }
 
@@ -857,43 +867,49 @@ class Cursor {
    * @param {string} direction
    * @returns {string}
    */
-  readNextPreviousListItem( direction ) {
-    if ( !this.activeElement ) {
-      this.activeElement = this.getNextPreviousElementWithPDOMContent( direction );
+  readNextPreviousListItem(direction) {
+    if (!this.activeElement) {
+      this.activeElement =
+        this.getNextPreviousElementWithPDOMContent(direction);
     }
 
     let accessibleText;
 
     // if we are inside of a list, get the next peer, or find the next list
     const parentElement = this.activeElement.parentElement;
-    if ( parentElement.tagName === 'UL' || parentElement.tagName === 'OL' ) {
-
+    if (parentElement.tagName === 'UL' || parentElement.tagName === 'OL') {
       const searchDelta = direction === NEXT ? 1 : -1;
 
       // Array.prototype must be used on the NodeList
-      let searchIndex = Array.prototype.indexOf.call( parentElement.children, this.activeElement ) + searchDelta;
+      let searchIndex =
+        Array.prototype.indexOf.call(
+          parentElement.children,
+          this.activeElement
+        ) + searchDelta;
 
-      while ( parentElement.children[ searchIndex ] ) {
-        accessibleText = this.getAccessibleText( parentElement.children[ searchIndex ] );
-        if ( accessibleText ) {
-          this.activeElement = parentElement.children[ searchIndex ];
+      while (parentElement.children[searchIndex]) {
+        accessibleText = this.getAccessibleText(
+          parentElement.children[searchIndex]
+        );
+        if (accessibleText) {
+          this.activeElement = parentElement.children[searchIndex];
           break;
         }
         searchIndex += searchDelta;
       }
 
-      if ( !accessibleText ) {
+      if (!accessibleText) {
         // there was no accessible text in the list items, so read the next / previous list
-        accessibleText = this.readNextPreviousList( direction );
+        accessibleText = this.readNextPreviousList(direction);
       }
-    }
-    else {
+    } else {
       // not inside of a list, so read the next/previous one and its first item
-      accessibleText = this.readNextPreviousList( direction );
+      accessibleText = this.readNextPreviousList(direction);
     }
 
-    if ( !accessibleText ) {
-      const directionDescriptionString = ( direction === NEXT ) ? 'more' : 'previous';
+    if (!accessibleText) {
+      const directionDescriptionString =
+        direction === NEXT ? 'more' : 'previous';
       return `No ${directionDescriptionString} list items`;
     }
 
@@ -906,43 +922,47 @@ class Cursor {
    * @param {string} direction
    * @returns {string}
    */
-  readNextPreviousList( direction ) {
-    if ( !this.activeElement ) {
-      this.activeElement = this.getNextPreviousElementWithPDOMContent( direction );
+  readNextPreviousList(direction) {
+    if (!this.activeElement) {
+      this.activeElement =
+        this.getNextPreviousElementWithPDOMContent(direction);
     }
 
     // if we are inside of a list already, step out of it to begin searching there
     const parentElement = this.activeElement.parentElement;
     let activeElement;
-    if ( parentElement.tagName === 'UL' || parentElement.tagName === 'OL' ) {
+    if (parentElement.tagName === 'UL' || parentElement.tagName === 'OL') {
       // save the previous active element - if there are no more lists, this should not change
       activeElement = this.activeElement;
 
       this.activeElement = parentElement;
     }
 
-    const listElement = this.getNextPreviousElementWithRole( [ 'UL', 'OL' ], direction );
+    const listElement = this.getNextPreviousElementWithRole(
+      ['UL', 'OL'],
+      direction
+    );
 
-    if ( !listElement ) {
-
+    if (!listElement) {
       // restore the previous active element
-      if ( activeElement ) {
+      if (activeElement) {
         this.activeElement = activeElement;
       }
 
       // let the user know that there are no more lists and move to the next element
-      const directionDescriptionString = direction === NEXT ? 'more' : 'previous';
+      const directionDescriptionString =
+        direction === NEXT ? 'more' : 'previous';
       return `No ${directionDescriptionString} lists`;
     }
 
     // get the content from the list element
-    const listText = this.getAccessibleText( listElement );
+    const listText = this.getAccessibleText(listElement);
 
     // include the content from the first item in the list
     let itemText = '';
-    const firstItem = listElement.children[ 0 ];
-    if ( firstItem ) {
-      itemText = this.getAccessibleText( firstItem );
+    const firstItem = listElement.children[0];
+    if (firstItem) {
+      itemText = this.getAccessibleText(firstItem);
       this.activeElement = firstItem;
     }
 
@@ -955,22 +975,21 @@ class Cursor {
    * @param {string} direction
    * @returns {string}
    */
-  readNextPreviousCharacter( direction ) {
+  readNextPreviousCharacter(direction) {
     // if there is no active line, find the next one
-    if ( !this.activeLine ) {
-      this.activeLine = this.readNextPreviousLine( NEXT );
+    if (!this.activeLine) {
+      this.activeLine = this.readNextPreviousLine(NEXT);
     }
 
     // directional dependent variables
     let contentEnd;
     let searchDelta;
     let normalizeDirection;
-    if ( direction === NEXT ) {
+    if (direction === NEXT) {
       contentEnd = this.activeLine.length;
       searchDelta = 1;
       normalizeDirection = 0;
-    }
-    else if ( direction === PREVIOUS ) {
+    } else if (direction === PREVIOUS) {
       // for backwards traversal, read from two characters behind
       contentEnd = 2;
       searchDelta = -1;
@@ -978,15 +997,16 @@ class Cursor {
     }
 
     // if we are at the end of the content, read the next/previous line
-    if ( this.letterPosition === contentEnd ) {
-      this.activeLine = this.readNextPreviousLine( direction );
+    if (this.letterPosition === contentEnd) {
+      this.activeLine = this.readNextPreviousLine(direction);
 
       // if reading backwards, letter position should be at the end of the active line
       this.letterPosition = this.activeLine.length;
     }
 
     // get the letter to read and increment the letter position
-    const outputText = this.activeLine[ this.letterPosition + normalizeDirection ];
+    const outputText =
+      this.activeLine[this.letterPosition + normalizeDirection];
     this.letterPosition += searchDelta;
 
     return outputText;
@@ -999,12 +1019,11 @@ class Cursor {
    * @private
    */
   updateLiveElementList() {
-
     // remove all previous observers
     // TODO: only update the observer list if necessary https://github.com/phetsims/scenery/issues/1581
-    for ( let i = 0; i < this.observers.length; i++ ) {
-      if ( this.observers[ i ] ) {
-        this.observers[ i ].disconnect();
+    for (let i = 0; i < this.observers.length; i++) {
+      if (this.observers[i]) {
+        this.observers[i].disconnect();
       }
     }
 
@@ -1012,41 +1031,43 @@ class Cursor {
     this.observers = [];
 
     // search through the DOM, looking for elements with a 'live region' attribute
-    for ( let i = 0; i < this.linearDOM.length; i++ ) {
-      const domElement = this.linearDOM[ i ];
-      const liveRole = this.getLiveRole( domElement );
+    for (let i = 0; i < this.linearDOM.length; i++) {
+      const domElement = this.linearDOM[i];
+      const liveRole = this.getLiveRole(domElement);
 
-      if ( liveRole ) {
-        const mutationObserverCallback = mutations => {
-          mutations.forEach( mutation => {
+      if (liveRole) {
+        const mutationObserverCallback = (mutations) => {
+          mutations.forEach((mutation) => {
             let liveRole;
             let mutatedElement = mutation.target;
 
             // look for the type of live role that is associated with this mutation
             // if the target has no live attribute, search through the element's ancestors to find the attribute
-            while ( !liveRole ) {
-              liveRole = this.getLiveRole( mutatedElement );
+            while (!liveRole) {
+              liveRole = this.getLiveRole(mutatedElement);
               mutatedElement = mutatedElement.parentElement;
             }
 
             // we only care about nodes added
-            if ( mutation.addedNodes[ 0 ] ) {
-              const updatedText = mutation.addedNodes[ 0 ].data;
-              this.outputUtteranceProperty.set( new Utterance( updatedText, liveRole ) );
+            if (mutation.addedNodes[0]) {
+              const updatedText = mutation.addedNodes[0].data;
+              this.outputUtteranceProperty.set(
+                new Utterance(updatedText, liveRole)
+              );
             }
-          } );
+          });
         };
 
         // create a mutation observer for this live element
-        const observer = new MutationObserver( mutations => {
-          mutationObserverCallback( mutations );
-        } );
+        const observer = new MutationObserver((mutations) => {
+          mutationObserverCallback(mutations);
+        });
 
         // listen for changes to the subtree in case children of the aria-live parent change their textContent
         const observerConfig = { childList: true, subtree: true };
 
-        observer.observe( domElement, observerConfig );
-        this.observers.push( observer );
+        observer.observe(domElement, observerConfig);
+        this.observers.push(observer);
       }
     }
   }
@@ -1061,19 +1082,18 @@ class Cursor {
    * @returns {string}
    */
   readEntireDocument() {
-
     const liveRole = 'polite';
-    let outputText = this.getAccessibleText( this.activeElement );
+    let outputText = this.getAccessibleText(this.activeElement);
     let activeElement = this.activeElement;
 
-    while ( outputText !== END_OF_DOCUMENT ) {
+    while (outputText !== END_OF_DOCUMENT) {
       activeElement = this.activeElement;
-      outputText = this.readNextPreviousLine( NEXT );
+      outputText = this.readNextPreviousLine(NEXT);
 
-      if ( outputText === END_OF_DOCUMENT ) {
+      if (outputText === END_OF_DOCUMENT) {
         this.activeElement = activeElement;
       }
-      this.outputUtteranceProperty.set( new Utterance( outputText, liveRole ) );
+      this.outputUtteranceProperty.set(new Utterance(outputText, liveRole));
     }
   }
 
@@ -1086,28 +1106,24 @@ class Cursor {
    * @param  {HTMLElement} domElement
    * @returns {boolean}
    */
-  isFocusable( domElement ) {
+  isFocusable(domElement) {
     // list of attributes and tag names which should be in the navigation order
     // TODO: more roles! https://github.com/phetsims/scenery/issues/1581
-    const focusableRoles = [ 'tabindex', 'BUTTON', 'INPUT' ];
+    const focusableRoles = ['tabindex', 'BUTTON', 'INPUT'];
 
     let focusable = false;
-    focusableRoles.forEach( role => {
-
-      if ( domElement.getAttribute( role ) ) {
+    focusableRoles.forEach((role) => {
+      if (domElement.getAttribute(role)) {
         focusable = true;
-
-      }
-      else if ( domElement.tagName === role ) {
+      } else if (domElement.tagName === role) {
         focusable = true;
-
       }
-    } );
+    });
     return focusable;
   }
 }
 
-scenery.register( 'Cursor', Cursor );
+scenery.register('Cursor', Cursor);
 
 class Utterance {
   /**
@@ -1122,11 +1138,9 @@ class Utterance {
    * @param {string} text - the text to be read as the utterance for the synth
    * @param {string} liveRole - see https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Live_Regions
    */
-  constructor( text, liveRole ) {
-
+  constructor(text, liveRole) {
     this.text = text;
     this.liveRole = liveRole;
-
   }
 }
 

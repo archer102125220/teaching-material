@@ -8,8 +8,7 @@
 
 import arrayRemove from '../phet-core/arrayRemove';
 import phetCore from './phetCore';
-// @ts-expect-error
-import IntentionalAny from './types/IntentionalAny';
+import type IntentionalAny from './types/IntentionalAny';
 
 type AsyncLoaderListener = () => void;
 type AsyncLoaderLock = () => void;

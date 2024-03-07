@@ -6,12 +6,12 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { CanvasContextWrapper, CanvasSelfDrawable, Instance, TPathDrawable, Node, NodeOptions, Paint, Paintable, PAINTABLE_DRAWABLE_MARK_FLAGS, PAINTABLE_OPTION_KEYS, PaintableOptions, PathCanvasDrawable, PathSVGDrawable, Renderer, scenery, SVGSelfDrawable } from '../imports.js';
-import optionize, { combineOptions } from '../../../phet-core/js/optionize.js';
+import Bounds2 from '../../dot/Bounds2';
+import { Shape } from '../../kite/imports';
+import Matrix3 from '../../dot/Matrix3';
+import Vector2 from '../../dot/Vector2';
+import { CanvasContextWrapper, CanvasSelfDrawable, Instance, type TPathDrawable, Node, type NodeOptions, Paint, Paintable, PAINTABLE_DRAWABLE_MARK_FLAGS, PAINTABLE_OPTION_KEYS, type PaintableOptions, PathCanvasDrawable, PathSVGDrawable, Renderer, scenery, SVGSelfDrawable } from '../imports';
+import optionize, { combineOptions } from '../../phet-core/optionize';
 
 const PATH_OPTION_KEYS = [
   'boundsMethod',
@@ -67,7 +67,7 @@ type SelfOptions = {
 type ParentOptions = PaintableOptions & NodeOptions;
 export type PathOptions = SelfOptions & ParentOptions;
 
-export default class Path extends Paintable( Node ) {
+export default class Path extends Paintable(Node) {
 
   // The Shape used for displaying this Path.
   // NOTE: _shape can be lazily constructed in subtypes (may be null) if hasShape() is overridden to return true,
@@ -103,58 +103,58 @@ export default class Path extends Paintable( Node ) {
    * @param [providedOptions] - Path-specific options are documented in PATH_OPTION_KEYS above, and can be provided
    *                             along-side options for Node
    */
-  public constructor( shape: Shape | string | null, providedOptions?: PathOptions ) {
-    assert && assert( providedOptions === undefined || Object.getPrototypeOf( providedOptions ) === Object.prototype,
-      'Extra prototype on Node options object is a code smell' );
+  public constructor(shape: Shape | string | null, providedOptions?: PathOptions) {
+    assert && assert(providedOptions === undefined || Object.getPrototypeOf(providedOptions) === Object.prototype,
+      'Extra prototype on Node options object is a code smell');
 
-    if ( shape || providedOptions?.shape ) {
-      assert && assert( !shape || !providedOptions?.shape, 'Do not define shape twice. Check constructor and providedOptions.' );
+    if (shape || providedOptions?.shape) {
+      assert && assert(!shape || !providedOptions?.shape, 'Do not define shape twice. Check constructor and providedOptions.');
     }
 
-    const options = optionize<PathOptions, SelfOptions, ParentOptions>()( {
-      shape: shape,
+    const options = optionize<PathOptions, SelfOptions, ParentOptions>()({
+      shape,
       boundsMethod: DEFAULT_OPTIONS.boundsMethod
-    }, providedOptions );
+    }, providedOptions);
 
     super();
 
     this._shape = DEFAULT_OPTIONS.shape;
     this._strokedShape = null;
     this._boundsMethod = DEFAULT_OPTIONS.boundsMethod;
-    this._invalidShapeListener = this.invalidateShape.bind( this );
+    this._invalidShapeListener = this.invalidateShape.bind(this);
     this._invalidShapeListenerAttached = false;
 
     this.invalidateSupportedRenderers();
 
-    this.mutate( options );
+    this.mutate(options);
   }
 
-  public setShape( shape: Shape | string | null ): this {
-    assert && assert( shape === null || typeof shape === 'string' || shape instanceof Shape,
-      'A path\'s shape should either be null, a string, or a Shape' );
+  public setShape(shape: Shape | string | null): this {
+    assert && assert(shape === null || typeof shape === 'string' || shape instanceof Shape,
+      'A path\'s shape should either be null, a string, or a Shape');
 
-    if ( this._shape !== shape ) {
+    if (this._shape !== shape) {
       // Remove Shape invalidation listener if applicable
-      if ( this._invalidShapeListenerAttached ) {
+      if (this._invalidShapeListenerAttached) {
         this.detachShapeListener();
       }
 
-      if ( typeof shape === 'string' ) {
+      if (typeof shape === 'string') {
         // be content with setShape always invalidating the shape?
-        shape = new Shape( shape );
+        shape = new Shape(shape);
       }
       this._shape = shape;
       this.invalidateShape();
 
       // Add Shape invalidation listener if applicable
-      if ( this._shape && !this._shape.isImmutable() ) {
+      if (this._shape && !this._shape.isImmutable()) {
         this.attachShapeListener();
       }
     }
     return this;
   }
 
-  public set shape( value: Shape | string | null ) { this.setShape( value ); }
+  public set shape(value: Shape | string | null) { this.setShape(value); }
 
   public get shape(): Shape | null { return this.getShape(); }
 
@@ -177,11 +177,11 @@ export default class Path extends Paintable( Node ) {
    *       the shape is set to null).
    */
   public getStrokedShape(): Shape {
-    assert && assert( this.hasShape(), 'We cannot stroke a non-existing shape' );
+    assert && assert(this.hasShape(), 'We cannot stroke a non-existing shape');
 
     // Lazily compute the stroked shape. It should be set to null when we need to recompute it
-    if ( !this._strokedShape ) {
-      this._strokedShape = this.getShape()!.getStrokedShape( this._lineDrawingStyles );
+    if (!this._strokedShape) {
+      this._strokedShape = this.getShape()!.getStrokedShape(this._lineDrawingStyles);
     }
 
     return this._strokedShape;
@@ -206,7 +206,7 @@ export default class Path extends Paintable( Node ) {
    * be the shape, properties of the strokes or fills, etc.)
    */
   public override invalidateSupportedRenderers(): void {
-    this.setRendererBitmask( this.getFillRendererBitmask() & this.getStrokeRendererBitmask() & this.getPathRendererBitmask() );
+    this.setRendererBitmask(this.getFillRendererBitmask() & this.getStrokeRendererBitmask() & this.getPathRendererBitmask());
   }
 
   /**
@@ -219,13 +219,13 @@ export default class Path extends Paintable( Node ) {
     this.invalidatePath();
 
     const stateLen = this._drawables.length;
-    for ( let i = 0; i < stateLen; i++ ) {
-      ( this._drawables[ i ] as unknown as TPathDrawable ).markDirtyShape(); // subtypes of Path may not have this, but it's called during construction
+    for (let i = 0; i < stateLen; i++) {
+      (this._drawables[i] as unknown as TPathDrawable).markDirtyShape(); // subtypes of Path may not have this, but it's called during construction
     }
 
     // Disconnect our Shape listener if our Shape has become immutable.
     // see https://github.com/phetsims/sun/issues/270#issuecomment-250266174
-    if ( this._invalidShapeListenerAttached && this._shape && this._shape.isImmutable() ) {
+    if (this._invalidShapeListenerAttached && this._shape && this._shape.isImmutable()) {
       this.detachShapeListener();
     }
   }
@@ -245,11 +245,11 @@ export default class Path extends Paintable( Node ) {
    * Attaches a listener to our Shape that will be called whenever the Shape changes.
    */
   private attachShapeListener(): void {
-    assert && assert( !this._invalidShapeListenerAttached, 'We do not want to have two listeners attached!' );
+    assert && assert(!this._invalidShapeListenerAttached, 'We do not want to have two listeners attached!');
 
     // Do not attach shape listeners if we are disposed
-    if ( !this.isDisposed ) {
-      this._shape!.invalidatedEmitter.addListener( this._invalidShapeListener );
+    if (!this.isDisposed) {
+      this._shape!.invalidatedEmitter.addListener(this._invalidShapeListener);
       this._invalidShapeListenerAttached = true;
     }
   }
@@ -258,9 +258,9 @@ export default class Path extends Paintable( Node ) {
    * Detaches a previously-attached listener added to our Shape (see attachShapeListener).
    */
   private detachShapeListener(): void {
-    assert && assert( this._invalidShapeListenerAttached, 'We cannot detach an unattached listener' );
+    assert && assert(this._invalidShapeListenerAttached, 'We cannot detach an unattached listener');
 
-    this._shape!.invalidatedEmitter.removeListener( this._invalidShapeListener );
+    this._shape!.invalidatedEmitter.removeListener(this._invalidShapeListener);
     this._invalidShapeListenerAttached = false;
   }
 
@@ -271,20 +271,20 @@ export default class Path extends Paintable( Node ) {
    */
   protected override updateSelfBounds(): boolean {
     const selfBounds = this.hasShape() ? this.computeShapeBounds() : Bounds2.NOTHING;
-    const changed = !selfBounds.equals( this.selfBoundsProperty._value );
-    if ( changed ) {
-      this.selfBoundsProperty._value.set( selfBounds );
+    const changed = !selfBounds.equals(this.selfBoundsProperty._value);
+    if (changed) {
+      this.selfBoundsProperty._value.set(selfBounds);
     }
     return changed;
   }
 
-  public setBoundsMethod( boundsMethod: PathBoundsMethod ): this {
-    assert && assert( boundsMethod === 'accurate' ||
-                      boundsMethod === 'unstroked' ||
-                      boundsMethod === 'tightPadding' ||
-                      boundsMethod === 'safePadding' ||
-                      boundsMethod === 'none' );
-    if ( this._boundsMethod !== boundsMethod ) {
+  public setBoundsMethod(boundsMethod: PathBoundsMethod): this {
+    assert && assert(boundsMethod === 'accurate' ||
+      boundsMethod === 'unstroked' ||
+      boundsMethod === 'tightPadding' ||
+      boundsMethod === 'safePadding' ||
+      boundsMethod === 'none');
+    if (this._boundsMethod !== boundsMethod) {
       this._boundsMethod = boundsMethod;
       this.invalidatePath();
 
@@ -293,7 +293,7 @@ export default class Path extends Paintable( Node ) {
     return this;
   }
 
-  public set boundsMethod( value: PathBoundsMethod ) { this.setBoundsMethod( value ); }
+  public set boundsMethod(value: PathBoundsMethod) { this.setBoundsMethod(value); }
 
   public get boundsMethod(): PathBoundsMethod { return this.getBoundsMethod(); }
 
@@ -312,36 +312,38 @@ export default class Path extends Paintable( Node ) {
   public computeShapeBounds(): Bounds2 {
     const shape = this.getShape();
     // boundsMethod: 'none' will return no bounds
-    if ( this._boundsMethod === 'none' || !shape ) {
+    if (this._boundsMethod === 'none' || !shape) {
       return Bounds2.NOTHING;
     }
     else {
       // boundsMethod: 'unstroked', or anything without a stroke will then just use the normal shape bounds
-      if ( !this.hasPaintableStroke() || this._boundsMethod === 'unstroked' ) {
+      // eslint-disable-next-line no-lonely-if
+      if (!this.hasPaintableStroke() || this._boundsMethod === 'unstroked') {
         return shape.bounds;
       }
       else {
         // 'accurate' will always require computing the full stroked shape, and taking its bounds
-        if ( this._boundsMethod === 'accurate' ) {
-          return shape.getStrokedBounds( this.getLineStyles() );
+        // eslint-disable-next-line no-lonely-if
+        if (this._boundsMethod === 'accurate') {
+          return shape.getStrokedBounds(this.getLineStyles());
         }
-          // Otherwise we compute bounds based on 'tightPadding' and 'safePadding', the one difference being that
-          // 'safePadding' will include whatever bounds necessary to include miters. Square line-cap requires a
+        // Otherwise we compute bounds based on 'tightPadding' and 'safePadding', the one difference being that
+        // 'safePadding' will include whatever bounds necessary to include miters. Square line-cap requires a
         // slightly extended bounds in either case.
         else {
           let factor;
           // If miterLength (inside corner to outside corner) exceeds miterLimit * strokeWidth, it will get turned to
           // a bevel, so our factor will be based just on the miterLimit.
-          if ( this._boundsMethod === 'safePadding' && this.getLineJoin() === 'miter' ) {
+          if (this._boundsMethod === 'safePadding' && this.getLineJoin() === 'miter') {
             factor = this.getMiterLimit();
           }
-          else if ( this.getLineCap() === 'square' ) {
+          else if (this.getLineCap() === 'square') {
             factor = Math.SQRT2;
           }
           else {
             factor = 1;
           }
-          return shape.bounds.dilated( factor * this.getLineWidth() / 2 );
+          return shape.bounds.dilated(factor * this.getLineWidth() / 2);
         }
       }
     }
@@ -354,10 +356,10 @@ export default class Path extends Paintable( Node ) {
    * If this value would potentially change, please trigger the event 'selfBoundsValid'.
    */
   public override areSelfBoundsValid(): boolean {
-    if ( this._boundsMethod === 'accurate' || this._boundsMethod === 'safePadding' ) {
+    if (this._boundsMethod === 'accurate' || this._boundsMethod === 'safePadding') {
       return true;
     }
-    else if ( this._boundsMethod === 'none' ) {
+    else if (this._boundsMethod === 'none') {
       return false;
     }
     else {
@@ -368,17 +370,17 @@ export default class Path extends Paintable( Node ) {
   /**
    * Returns our self bounds when our rendered self is transformed by the matrix.
    */
-  public override getTransformedSelfBounds( matrix: Matrix3 ): Bounds2 {
-    assert && assert( this.hasShape() );
+  public override getTransformedSelfBounds(matrix: Matrix3): Bounds2 {
+    assert && assert(this.hasShape());
 
-    return ( this._stroke ? this.getStrokedShape() : this.getShape() )!.getBoundsWithTransform( matrix );
+    return (this._stroke ? this.getStrokedShape() : this.getShape())!.getBoundsWithTransform(matrix);
   }
 
   /**
    * Returns our safe self bounds when our rendered self is transformed by the matrix.
    */
-  public override getTransformedSafeSelfBounds( matrix: Matrix3 ): Bounds2 {
-    return this.getTransformedSelfBounds( matrix );
+  public override getTransformedSafeSelfBounds(matrix: Matrix3): Bounds2 {
+    return this.getTransformedSelfBounds(matrix);
   }
 
   /**
@@ -407,9 +409,9 @@ export default class Path extends Paintable( Node ) {
    * @param wrapper
    * @param matrix - The transformation matrix already applied to the context.
    */
-  protected override canvasPaintSelf( wrapper: CanvasContextWrapper, matrix: Matrix3 ): void {
-    //TODO: Have a separate method for this, instead of touching the prototype. Can make 'this' references too easily. https://github.com/phetsims/scenery/issues/1581
-    PathCanvasDrawable.prototype.paintCanvas( wrapper, this, matrix );
+  protected override canvasPaintSelf(wrapper: CanvasContextWrapper, matrix: Matrix3): void {
+    // TODO: Have a separate method for this, instead of touching the prototype. Can make 'this' references too easily. https://github.com/phetsims/scenery/issues/1581
+    PathCanvasDrawable.prototype.paintCanvas(wrapper, this, matrix);
   }
 
   /**
@@ -418,9 +420,10 @@ export default class Path extends Paintable( Node ) {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createSVGDrawable( renderer: number, instance: Instance ): SVGSelfDrawable {
+  public override createSVGDrawable(renderer: number, instance: Instance): SVGSelfDrawable {
+
     // @ts-expect-error
-    return PathSVGDrawable.createFromPool( renderer, instance );
+    return PathSVGDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -429,9 +432,10 @@ export default class Path extends Paintable( Node ) {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createCanvasDrawable( renderer: number, instance: Instance ): CanvasSelfDrawable {
+  public override createCanvasDrawable(renderer: number, instance: Instance): CanvasSelfDrawable {
+
     // @ts-expect-error
-    return PathCanvasDrawable.createFromPool( renderer, instance );
+    return PathCanvasDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -447,20 +451,20 @@ export default class Path extends Paintable( Node ) {
    *
    * @param point - Considered to be in the local coordinate frame
    */
-  public override containsPointSelf( point: Vector2 ): boolean {
+  public override containsPointSelf(point: Vector2): boolean {
     let result = false;
-    if ( !this.hasShape() ) {
+    if (!this.hasShape()) {
       return result;
     }
 
     // if this node is fillPickable, we will return true if the point is inside our fill area
-    if ( this._fillPickable ) {
-      result = this.getShape()!.containsPoint( point );
+    if (this._fillPickable) {
+      result = this.getShape()!.containsPoint(point);
     }
 
     // also include the stroked region in the hit area if strokePickable
-    if ( !result && this._strokePickable ) {
-      result = this.getStrokedShape().containsPoint( point );
+    if (!result && this._strokePickable) {
+      result = this.getStrokedShape().containsPoint(point);
     }
     return result;
   }
@@ -469,10 +473,10 @@ export default class Path extends Paintable( Node ) {
    * Returns a Shape that represents the area covered by containsPointSelf.
    */
   public override getSelfShape(): Shape {
-    return Shape.union( [
-      ...( ( this.hasShape() && this._fillPickable ) ? [ this.getShape()! ] : [] ),
-      ...( ( this.hasShape() && this._strokePickable ) ? [ this.getStrokedShape() ] : [] )
-    ] );
+    return Shape.union([
+      ...((this.hasShape() && this._fillPickable) ? [this.getShape()!] : []),
+      ...((this.hasShape() && this._strokePickable) ? [this.getStrokedShape()] : [])
+    ]);
   }
 
   /**
@@ -480,9 +484,9 @@ export default class Path extends Paintable( Node ) {
    *
    * @param bounds - Bounds to test, assumed to be in the local coordinate frame.
    */
-  public override intersectsBoundsSelf( bounds: Bounds2 ): boolean {
+  public override intersectsBoundsSelf(bounds: Bounds2): boolean {
     // TODO: should a shape's stroke be included? https://github.com/phetsims/scenery/issues/1581
-    return this._shape ? this._shape.intersectsBounds( bounds ) : false;
+    return this._shape ? this._shape.intersectsBounds(bounds) : false;
   }
 
   /**
@@ -490,12 +494,12 @@ export default class Path extends Paintable( Node ) {
    * only applies when we have a pattern or gradient (e.g. subtypes of Paint).
    */
   private requiresSVGBoundsWorkaround(): boolean {
-    if ( !this._stroke || !( this._stroke instanceof Paint ) || !this.hasShape() ) {
+    if (!this._stroke || !(this._stroke instanceof Paint) || !this.hasShape()) {
       return false;
     }
 
     const bounds = this.computeShapeBounds();
-    return ( bounds.width * bounds.height ) === 0; // at least one of them was zero, so the bounding box has no area
+    return (bounds.width * bounds.height) === 0; // at least one of them was zero, so the bounding box has no area
   }
 
   /**
@@ -509,19 +513,19 @@ export default class Path extends Paintable( Node ) {
    * Disposes the path, releasing shape listeners if needed (and preventing new listeners from being added).
    */
   public override dispose(): void {
-    if ( this._invalidShapeListenerAttached ) {
+    if (this._invalidShapeListenerAttached) {
       this.detachShapeListener();
     }
 
     super.dispose();
   }
 
-  public override mutate( options?: PathOptions ): this {
-    return super.mutate( options );
+  public override mutate(options?: PathOptions): this {
+    return super.mutate(options);
   }
 
   // Initial values for most Node mutator options
-  public static readonly DEFAULT_PATH_OPTIONS = combineOptions<PathOptions>( {}, Node.DEFAULT_NODE_OPTIONS, DEFAULT_OPTIONS );
+  public static readonly DEFAULT_PATH_OPTIONS = combineOptions<PathOptions>({}, Node.DEFAULT_NODE_OPTIONS, DEFAULT_OPTIONS);
 }
 
 /**
@@ -531,7 +535,7 @@ export default class Path extends Paintable( Node ) {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-Path.prototype._mutatorKeys = [ ...PAINTABLE_OPTION_KEYS, ...PATH_OPTION_KEYS, ...Node.prototype._mutatorKeys ];
+Path.prototype._mutatorKeys = [...PAINTABLE_OPTION_KEYS, ...PATH_OPTION_KEYS, ...Node.prototype._mutatorKeys];
 
 /**
  * {Array.<String>} - List of all dirty flags that should be available on drawables created from this node (or
@@ -540,6 +544,6 @@ Path.prototype._mutatorKeys = [ ...PAINTABLE_OPTION_KEYS, ...PATH_OPTION_KEYS, .
  * (scenery-internal)
  * @override
  */
-Path.prototype.drawableMarkFlags = [ ...Node.prototype.drawableMarkFlags, ...PAINTABLE_DRAWABLE_MARK_FLAGS, 'shape' ];
+Path.prototype.drawableMarkFlags = [...Node.prototype.drawableMarkFlags, ...PAINTABLE_DRAWABLE_MARK_FLAGS, 'shape'];
 
-scenery.register( 'Path', Path );
+scenery.register('Path', Path);

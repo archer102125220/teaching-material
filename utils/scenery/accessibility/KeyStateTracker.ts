@@ -10,15 +10,15 @@
  * @author Michael Barlow
  */
 
-import PhetioAction from '../../../tandem/js/PhetioAction.js';
-import Emitter from '../../../axon/js/Emitter.js';
-import stepTimer from '../../../axon/js/stepTimer.js';
-import EventType from '../../../tandem/js/EventType.js';
-import { EventIO, KeyboardUtils, scenery } from '../imports.js';
-import { PhetioObjectOptions } from '../../../tandem/js/PhetioObject.js';
-import PickOptional from '../../../phet-core/js/types/PickOptional.js';
-import TEmitter from '../../../axon/js/TEmitter.js';
-import platform from '../../../phet-core/js/platform.js';
+import PhetioAction from '../../tandem/PhetioAction';
+import Emitter from '../../axon/Emitter';
+import stepTimer from '../../axon/stepTimer';
+import EventType from '../../tandem/EventType';
+import { EventIO, KeyboardUtils, scenery } from '../imports';
+import { type PhetioObjectOptions } from '../../tandem/PhetioObject';
+import PickOptional from '../../phet-core/types/PickOptional';
+import type TEmitter from '../../axon/TEmitter';
+import platform from '../../phet-core/platform';
 
 // Type describing the state of a single key in the KeyState.
 type KeyStateInfo = {
@@ -51,55 +51,55 @@ class KeyStateTracker {
   private attachedToDocument = false;
 
   // Listeners potentially attached to the document to update the state of this KeyStateTracker, see attachToWindow()
-  private documentKeyupListener: null | ( ( event: KeyboardEvent ) => void ) = null;
-  private documentKeydownListener: null | ( ( event: KeyboardEvent ) => void ) = null;
+  private documentKeyupListener: null | ((event: KeyboardEvent) => void) = null;
+  private documentKeydownListener: null | ((event: KeyboardEvent) => void) = null;
 
   // If the KeyStateTracker is enabled. If disabled, keyState is cleared and listeners noop.
   private _enabled = true;
 
   // Emits events when keyup/keydown updates are received. These will emit after any updates to the
   // keyState so that keyState is correct in time for listeners. Note the valueType is a native KeyboardEvent event.
-  public readonly keydownEmitter: TEmitter<[ KeyboardEvent ]> = new Emitter( { parameters: [ { valueType: KeyboardEvent } ] } );
-  public readonly keyupEmitter: TEmitter<[ KeyboardEvent ]> = new Emitter( { parameters: [ { valueType: KeyboardEvent } ] } );
+  public readonly keydownEmitter: TEmitter<[KeyboardEvent]> = new Emitter({ parameters: [{ valueType: KeyboardEvent }] });
+  public readonly keyupEmitter: TEmitter<[KeyboardEvent]> = new Emitter({ parameters: [{ valueType: KeyboardEvent }] });
 
   // Action which updates the KeyStateTracker, when it is time to do so - the update is wrapped by an Action so that
   // the KeyStateTracker state is captured for PhET-iO.
-  public readonly keydownUpdateAction: PhetioAction<[ KeyboardEvent ]>;
+  public readonly keydownUpdateAction: PhetioAction<[KeyboardEvent]>;
 
   // Action which updates the state of the KeyStateTracker on key release. This is wrapped in an Action so that state
   // is captured for PhET-iO.
-  public readonly keyupUpdateAction: PhetioAction<[ KeyboardEvent ]>;
+  public readonly keyupUpdateAction: PhetioAction<[KeyboardEvent]>;
 
   private readonly disposeKeyStateTracker: () => void;
 
-  public constructor( options?: KeyStateTrackerOptions ) {
+  public constructor(options?: KeyStateTrackerOptions) {
 
-    this.keydownUpdateAction = new PhetioAction( domEvent => {
+    this.keydownUpdateAction = new PhetioAction(domEvent => {
 
       // Not all keys have a code for the browser to use, we need to be graceful and do nothing if there isn't one.
-      const key = KeyboardUtils.getEventCode( domEvent );
-      if ( key ) {
+      const key = KeyboardUtils.getEventCode(domEvent);
+      if (key) {
 
         // The dom event might have a modifier key that we weren't able to catch, if that is the case update the keyState.
         // This is likely to happen when pressing browser key commands like "ctrl + tab" to switch tabs.
-        this.correctModifierKeys( domEvent );
+        this.correctModifierKeys(domEvent);
 
-        if ( assert && !KeyboardUtils.isShiftKey( domEvent ) ) {
-          assert( domEvent.shiftKey === this.shiftKeyDown, 'shift key inconsistency between event and keyState.' );
+        if (assert && !KeyboardUtils.isShiftKey(domEvent)) {
+          assert(domEvent.shiftKey === this.shiftKeyDown, 'shift key inconsistency between event and keyState.');
         }
-        if ( assert && !KeyboardUtils.isAltKey( domEvent ) ) {
-          assert( domEvent.altKey === this.altKeyDown, 'alt key inconsistency between event and keyState.' );
+        if (assert && !KeyboardUtils.isAltKey(domEvent)) {
+          assert(domEvent.altKey === this.altKeyDown, 'alt key inconsistency between event and keyState.');
         }
-        if ( assert && !KeyboardUtils.isControlKey( domEvent ) ) {
-          assert( domEvent.ctrlKey === this.ctrlKeyDown, 'ctrl key inconsistency between event and keyState.' );
+        if (assert && !KeyboardUtils.isControlKey(domEvent)) {
+          assert(domEvent.ctrlKey === this.ctrlKeyDown, 'ctrl key inconsistency between event and keyState.');
         }
 
         // if the key is already down, don't do anything else (we don't want to create a new keyState object
         // for a key that is already being tracked and down)
-        if ( !this.isKeyDown( key ) ) {
-          const key = KeyboardUtils.getEventCode( domEvent )!;
-          assert && assert( key, 'Could not find key from domEvent' );
-          this.keyState[ key ] = {
+        if (!this.isKeyDown(key)) {
+          const key = KeyboardUtils.getEventCode(domEvent)!;
+          assert && assert(key, 'Could not find key from domEvent');
+          this.keyState[key] = {
             keyDown: true,
             key: key,
             timeDown: 0 // in ms
@@ -109,59 +109,59 @@ class KeyStateTracker {
         this._lastKeyDown = key;
 
         // keydown update received, notify listeners
-        this.keydownEmitter.emit( domEvent );
+        this.keydownEmitter.emit(domEvent);
       }
 
     }, {
       phetioPlayback: true,
-      tandem: options?.tandem?.createTandem( 'keydownUpdateAction' ),
-      parameters: [ { name: 'event', phetioType: EventIO } ],
+      tandem: options?.tandem?.createTandem('keydownUpdateAction'),
+      parameters: [{ name: 'event', phetioType: EventIO }],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Action that executes whenever a keydown occurs from the input listeners this keyStateTracker adds (most likely to the document).'
-    } );
+    });
 
-    this.keyupUpdateAction = new PhetioAction( domEvent => {
+    this.keyupUpdateAction = new PhetioAction(domEvent => {
 
       // Not all keys have a code for the browser to use, we need to be graceful and do nothing if there isn't one.
-      const key = KeyboardUtils.getEventCode( domEvent );
-      if ( key ) {
+      const key = KeyboardUtils.getEventCode(domEvent);
+      if (key) {
 
         // correct keyState in case browser didn't receive keydown/keyup events for a modifier key
-        this.correctModifierKeys( domEvent );
+        this.correctModifierKeys(domEvent);
 
         // Remove this key data from the state - There are many cases where we might receive a keyup before keydown like
         // on first tab into scenery Display or when using specific operating system keys with the browser or PrtScn so
         // an assertion for this is too strict. See https://github.com/phetsims/scenery/issues/918
-        if ( this.isKeyDown( key ) ) {
-          delete this.keyState[ key ];
+        if (this.isKeyDown(key)) {
+          delete this.keyState[key];
         }
 
         // On MacOS, we will not get key keyup events while a meta key is pressed. So the keystate will be inaccurate
         // until the meta keys are released. If both meta keys are pressed, We just We will not get a keyup event until
         // BOTH keys are released, so this should be safe in that case.
         // See https://github.com/phetsims/scenery/issues/1555
-        if ( platform.mac && KeyboardUtils.isMetaKey( domEvent ) ) {
+        if (platform.mac && KeyboardUtils.isMetaKey(domEvent)) {
           this.clearState();
         }
 
         // keyup event received, notify listeners
-        this.keyupEmitter.emit( domEvent );
+        this.keyupEmitter.emit(domEvent);
       }
     }, {
       phetioPlayback: true,
-      tandem: options?.tandem?.createTandem( 'keyupUpdateAction' ),
-      parameters: [ { name: 'event', phetioType: EventIO } ],
+      tandem: options?.tandem?.createTandem('keyupUpdateAction'),
+      parameters: [{ name: 'event', phetioType: EventIO }],
       phetioEventType: EventType.USER,
       phetioDocumentation: 'Action that executes whenever a keyup occurs from the input listeners this keyStateTracker adds (most likely to the document).'
-    } );
+    });
 
-    const stepListener = this.step.bind( this );
-    stepTimer.addListener( stepListener );
+    const stepListener = this.step.bind(this);
+    stepTimer.addListener(stepListener);
 
     this.disposeKeyStateTracker = () => {
-      stepTimer.removeListener( stepListener );
+      stepTimer.removeListener(stepListener);
 
-      if ( this.attachedToDocument ) {
+      if (this.attachedToDocument) {
         this.detachFromDocument();
       }
     };
@@ -175,35 +175,35 @@ class KeyStateTracker {
    * `Node.addInputListener` only supports type properties as event listeners, and not the event keys as
    * prototype methods. Please see https://github.com/phetsims/scenery/issues/851 for more information.
    */
-  public keydownUpdate( domEvent: KeyboardEvent ): void {
-    this.enabled && this.keydownUpdateAction.execute( domEvent );
+  public keydownUpdate(domEvent: KeyboardEvent): void {
+    this.enabled && this.keydownUpdateAction.execute(domEvent);
   }
 
   /**
    * Modifier keys might be part of the domEvent but the browser may or may not have received a keydown/keyup event
    * with specifically for the modifier key. This will add or remove modifier keys in that case.
    */
-  private correctModifierKeys( domEvent: KeyboardEvent ): void {
-    const key = KeyboardUtils.getEventCode( domEvent )!;
-    assert && assert( key, 'key not found from domEvent' );
+  private correctModifierKeys(domEvent: KeyboardEvent): void {
+    const key = KeyboardUtils.getEventCode(domEvent)!;
+    assert && assert(key, 'key not found from domEvent');
 
     // add modifier keys if they aren't down
-    if ( domEvent.shiftKey && !KeyboardUtils.isShiftKey( domEvent ) && !this.shiftKeyDown ) {
-      this.keyState[ KeyboardUtils.KEY_SHIFT_LEFT ] = {
+    if (domEvent.shiftKey && !KeyboardUtils.isShiftKey(domEvent) && !this.shiftKeyDown) {
+      this.keyState[KeyboardUtils.KEY_SHIFT_LEFT] = {
         keyDown: true,
         key: key,
         timeDown: 0 // in ms
       };
     }
-    if ( domEvent.altKey && !KeyboardUtils.isAltKey( domEvent ) && !this.altKeyDown ) {
-      this.keyState[ KeyboardUtils.KEY_ALT_LEFT ] = {
+    if (domEvent.altKey && !KeyboardUtils.isAltKey(domEvent) && !this.altKeyDown) {
+      this.keyState[KeyboardUtils.KEY_ALT_LEFT] = {
         keyDown: true,
         key: key,
         timeDown: 0 // in ms
       };
     }
-    if ( domEvent.ctrlKey && !KeyboardUtils.isControlKey( domEvent ) && !this.ctrlKeyDown ) {
-      this.keyState[ KeyboardUtils.KEY_CONTROL_LEFT ] = {
+    if (domEvent.ctrlKey && !KeyboardUtils.isControlKey(domEvent) && !this.ctrlKeyDown) {
+      this.keyState[KeyboardUtils.KEY_CONTROL_LEFT] = {
         keyDown: true,
         key: key,
         timeDown: 0 // in ms
@@ -211,17 +211,17 @@ class KeyStateTracker {
     }
 
     // delete modifier keys if we think they are down
-    if ( !domEvent.shiftKey && this.shiftKeyDown ) {
-      delete this.keyState[ KeyboardUtils.KEY_SHIFT_LEFT ];
-      delete this.keyState[ KeyboardUtils.KEY_SHIFT_RIGHT ];
+    if (!domEvent.shiftKey && this.shiftKeyDown) {
+      delete this.keyState[KeyboardUtils.KEY_SHIFT_LEFT];
+      delete this.keyState[KeyboardUtils.KEY_SHIFT_RIGHT];
     }
-    if ( !domEvent.altKey && this.altKeyDown ) {
-      delete this.keyState[ KeyboardUtils.KEY_ALT_LEFT ];
-      delete this.keyState[ KeyboardUtils.KEY_ALT_RIGHT ];
+    if (!domEvent.altKey && this.altKeyDown) {
+      delete this.keyState[KeyboardUtils.KEY_ALT_LEFT];
+      delete this.keyState[KeyboardUtils.KEY_ALT_RIGHT];
     }
-    if ( !domEvent.ctrlKey && this.ctrlKeyDown ) {
-      delete this.keyState[ KeyboardUtils.KEY_CONTROL_LEFT ];
-      delete this.keyState[ KeyboardUtils.KEY_CONTROL_RIGHT ];
+    if (!domEvent.ctrlKey && this.ctrlKeyDown) {
+      delete this.keyState[KeyboardUtils.KEY_CONTROL_LEFT];
+      delete this.keyState[KeyboardUtils.KEY_CONTROL_RIGHT];
     }
   }
 
@@ -233,15 +233,15 @@ class KeyStateTracker {
    * `Node.addInputListener` only supports type properties as event listeners, and not the event keys as
    * prototype methods. Please see https://github.com/phetsims/scenery/issues/851 for more information.
    */
-  public keyupUpdate( domEvent: KeyboardEvent ): void {
-    this.enabled && this.keyupUpdateAction.execute( domEvent );
+  public keyupUpdate(domEvent: KeyboardEvent): void {
+    this.enabled && this.keyupUpdateAction.execute(domEvent);
   }
 
   /**
    * Returns true if any of the movement keys are down (arrow keys or WASD keys).
    */
   public get movementKeysDown(): boolean {
-    return this.isAnyKeyInListDown( KeyboardUtils.MOVEMENT_KEYS );
+    return this.isAnyKeyInListDown(KeyboardUtils.MOVEMENT_KEYS);
   }
 
   /**
@@ -254,22 +254,22 @@ class KeyStateTracker {
   /**
    * Returns true if a key with the KeyboardEvent.code is currently down.
    */
-  public isKeyDown( key: string ): boolean {
-    if ( !this.keyState[ key ] ) {
+  public isKeyDown(key: string): boolean {
+    if (!this.keyState[key]) {
 
       // key hasn't been pressed once yet
       return false;
     }
 
-    return this.keyState[ key ].keyDown;
+    return this.keyState[key].keyDown;
   }
 
   /**
    * Returns true if any of the keys in the list are currently down. Keys are the KeyboardEvent.code strings.
    */
-  public isAnyKeyInListDown( keyList: string[] ): boolean {
-    for ( let i = 0; i < keyList.length; i++ ) {
-      if ( this.isKeyDown( keyList[ i ] ) ) {
+  public isAnyKeyInListDown(keyList: string[]): boolean {
+    for (let i = 0; i < keyList.length; i++) {
+      if (this.isKeyDown(keyList[i])) {
         return true;
       }
     }
@@ -281,10 +281,10 @@ class KeyStateTracker {
    * Returns true if ALL of the keys in the list are currently down. Values of the keyList array are the
    * KeyboardEvent.code for the keys you are interested in.
    */
-  public areKeysDown( keyList: string[] ): boolean {
+  public areKeysDown(keyList: string[]): boolean {
     const keysDown = true;
-    for ( let i = 0; i < keyList.length; i++ ) {
-      if ( !this.isKeyDown( keyList[ i ] ) ) {
+    for (let i = 0; i < keyList.length; i++) {
+      if (!this.isKeyDown(keyList[i])) {
         return false;
       }
     }
@@ -299,27 +299,27 @@ class KeyStateTracker {
    *
    * (scenery-internal)
    */
-  public areKeysExclusivelyDown( keyList: string [] ): boolean {
-    const keyStateKeys = Object.keys( this.keyState );
+  public areKeysExclusivelyDown(keyList: string[]): boolean {
+    const keyStateKeys = Object.keys(this.keyState);
 
     // quick sanity check for equality first
-    if ( keyStateKeys.length !== keyList.length ) {
+    if (keyStateKeys.length !== keyList.length) {
       return false;
     }
 
     // Now make sure that every key in the list is in the keyState
     let onlyKeyListDown = true;
-    for ( let i = 0; i < keyList.length; i++ ) {
-      const initialKey = keyList[ i ];
-      let keysToCheck = [ initialKey ];
+    for (let i = 0; i < keyList.length; i++) {
+      const initialKey = keyList[i];
+      let keysToCheck = [initialKey];
 
       // If a modifier key, need to look for the equivalent pair of left/right KeyboardEvent.codes in the list
       // because KeyStateTracker works exclusively with codes.
-      if ( KeyboardUtils.isModifierKey( initialKey ) ) {
-        keysToCheck = KeyboardUtils.MODIFIER_KEY_TO_CODE_MAP.get( initialKey )!;
+      if (KeyboardUtils.isModifierKey(initialKey)) {
+        keysToCheck = KeyboardUtils.MODIFIER_KEY_TO_CODE_MAP.get(initialKey)!;
       }
 
-      if ( _.intersection( keyStateKeys, keysToCheck ).length === 0 ) {
+      if (_.intersection(keyStateKeys, keysToCheck).length === 0) {
         onlyKeyListDown = false;
       }
     }
@@ -342,62 +342,62 @@ class KeyStateTracker {
    *
    * @param keyList - List of KeyboardEvent.code strings for keys you are interested in.
    */
-  public areKeysDownWithoutExtraModifiers( keyList: string[] ): boolean {
+  public areKeysDownWithoutExtraModifiers(keyList: string[]): boolean {
 
     // If any modifier keys are down that are not in the keyList, return false
-    for ( let i = 0; i < KeyboardUtils.MODIFIER_KEY_CODES.length; i++ ) {
-      const modifierKey = KeyboardUtils.MODIFIER_KEY_CODES[ i ];
-      if ( this.isKeyDown( modifierKey ) && !keyList.includes( modifierKey ) ) {
+    for (let i = 0; i < KeyboardUtils.MODIFIER_KEY_CODES.length; i++) {
+      const modifierKey = KeyboardUtils.MODIFIER_KEY_CODES[i];
+      if (this.isKeyDown(modifierKey) && !keyList.includes(modifierKey)) {
         return false;
       }
     }
 
     // Modifier state seems OK so return true if all keys in the list are down
-    return this.areKeysDown( keyList );
+    return this.areKeysDown(keyList);
   }
 
   /**
    * Returns true if any keys are down according to teh keyState.
    */
   public keysAreDown(): boolean {
-    return Object.keys( this.keyState ).length > 0;
+    return Object.keys(this.keyState).length > 0;
   }
 
   /**
    * Returns true if the "Enter" key is currently down.
    */
   public get enterKeyDown(): boolean {
-    return this.isKeyDown( KeyboardUtils.KEY_ENTER );
+    return this.isKeyDown(KeyboardUtils.KEY_ENTER);
   }
 
   /**
    * Returns true if the shift key is currently down.
    */
   public get shiftKeyDown(): boolean {
-    return this.isAnyKeyInListDown( KeyboardUtils.SHIFT_KEYS );
+    return this.isAnyKeyInListDown(KeyboardUtils.SHIFT_KEYS);
   }
 
   /**
    * Returns true if the alt key is currently down.
    */
   public get altKeyDown(): boolean {
-    return this.isAnyKeyInListDown( KeyboardUtils.ALT_KEYS );
+    return this.isAnyKeyInListDown(KeyboardUtils.ALT_KEYS);
   }
 
   /**
    * Returns true if the control key is currently down.
    */
   public get ctrlKeyDown(): boolean {
-    return this.isAnyKeyInListDown( KeyboardUtils.CONTROL_KEYS );
+    return this.isAnyKeyInListDown(KeyboardUtils.CONTROL_KEYS);
   }
 
   /**
    * Returns the amount of time that the provided key has been held down. Error if the key is not currently down.
    * @param key - KeyboardEvent.code for the key you are inspecting.
    */
-  public timeDownForKey( key: string ): number {
-    assert && assert( this.isKeyDown( key ), 'cannot get timeDown on a key that is not pressed down' );
-    return this.keyState[ key ].timeDown;
+  public timeDownForKey(key: string): number {
+    assert && assert(this.isKeyDown(key), 'cannot get timeDown on a key that is not pressed down');
+    return this.keyState[key].timeDown;
   }
 
   /**
@@ -414,17 +414,17 @@ class KeyStateTracker {
    *
    * @param dt - time in seconds that has passed since the last update
    */
-  private step( dt: number ): void {
+  private step(dt: number): void {
 
     // no-op unless a key is down
-    if ( this.keysAreDown() ) {
+    if (this.keysAreDown()) {
       const ms = dt * 1000;
 
       // for each key that is still down, increment the tracked time that has been down
-      for ( const i in this.keyState ) {
-        if ( this.keyState.hasOwnProperty( i ) ) {
-          if ( this.keyState[ i ].keyDown ) {
-            this.keyState[ i ].timeDown += ms;
+      for (const i in this.keyState) {
+        if (this.keyState.hasOwnProperty(i)) {
+          if (this.keyState[i].keyDown) {
+            this.keyState[i].timeDown += ms;
           }
         }
       }
@@ -436,32 +436,32 @@ class KeyStateTracker {
    * useful if you want to observe key presses while DOM focus not within the PDOM root.
    */
   public attachToWindow(): void {
-    assert && assert( !this.attachedToDocument, 'KeyStateTracker is already attached to document.' );
+    assert && assert(!this.attachedToDocument, 'KeyStateTracker is already attached to document.');
 
     this.documentKeydownListener = event => {
-      this.keydownUpdate( event );
+      this.keydownUpdate(event);
     };
 
     this.documentKeyupListener = event => {
-      this.keyupUpdate( event );
+      this.keyupUpdate(event);
     };
 
     const addListenersToDocument = () => {
 
       // attach with useCapture so that the keyStateTracker is updated before the events dispatch within Scenery
-      window.addEventListener( 'keyup', this.documentKeyupListener!, { capture: true } );
-      window.addEventListener( 'keydown', this.documentKeydownListener!, { capture: true } );
+      window.addEventListener('keyup', this.documentKeyupListener!, { capture: true });
+      window.addEventListener('keydown', this.documentKeydownListener!, { capture: true });
       this.attachedToDocument = true;
     };
 
-    if ( !document ) {
+    if (!document) {
 
       // attach listeners on window load to ensure that the document is defined
       const loadListener = () => {
         addListenersToDocument();
-        window.removeEventListener( 'load', loadListener );
+        window.removeEventListener('load', loadListener);
       };
-      window.addEventListener( 'load', loadListener );
+      window.addEventListener('load', loadListener);
     }
     else {
 
@@ -473,8 +473,8 @@ class KeyStateTracker {
   /**
    * The KeyState is cleared when the tracker is disabled.
    */
-  public setEnabled( enabled: boolean ): void {
-    if ( this._enabled !== enabled ) {
+  public setEnabled(enabled: boolean): void {
+    if (this._enabled !== enabled) {
       this._enabled = enabled;
 
       // clear state when disabled
@@ -482,7 +482,7 @@ class KeyStateTracker {
     }
   }
 
-  public set enabled( enabled: boolean ) { this.setEnabled( enabled ); }
+  public set enabled(enabled: boolean) { this.setEnabled(enabled); }
 
   public get enabled(): boolean { return this.isEnabled(); }
 
@@ -492,12 +492,12 @@ class KeyStateTracker {
    * Detach listeners from the document that would update the state of this KeyStateTracker on key presses.
    */
   public detachFromDocument(): void {
-    assert && assert( this.attachedToDocument, 'KeyStateTracker is not attached to window.' );
-    assert && assert( this.documentKeyupListener, 'keyup listener was not created or attached to window' );
-    assert && assert( this.documentKeydownListener, 'keydown listener was not created or attached to window.' );
+    assert && assert(this.attachedToDocument, 'KeyStateTracker is not attached to window.');
+    assert && assert(this.documentKeyupListener, 'keyup listener was not created or attached to window');
+    assert && assert(this.documentKeydownListener, 'keydown listener was not created or attached to window.');
 
-    window.removeEventListener( 'keyup', this.documentKeyupListener! );
-    window.removeEventListener( 'keydown', this.documentKeydownListener! );
+    window.removeEventListener('keyup', this.documentKeyupListener!);
+    window.removeEventListener('keydown', this.documentKeydownListener!);
 
     this.documentKeyupListener = null;
     this.documentKeydownListener = null;
@@ -510,5 +510,5 @@ class KeyStateTracker {
   }
 }
 
-scenery.register( 'KeyStateTracker', KeyStateTracker );
+scenery.register('KeyStateTracker', KeyStateTracker);
 export default KeyStateTracker;

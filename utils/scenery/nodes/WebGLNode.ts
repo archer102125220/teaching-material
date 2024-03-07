@@ -11,11 +11,11 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import { CanvasContextWrapper, Instance, Node, NodeOptions, Renderer, scenery, Utils, WebGLNodeDrawable, WebGLSelfDrawable } from '../imports.js';
+import Bounds2 from '../../dot/Bounds2';
+import Matrix3 from '../../dot/Matrix3';
+import Vector2 from '../../dot/Vector2';
+import { Shape } from '../../kite/imports';
+import { CanvasContextWrapper, Instance, Node, type NodeOptions, Renderer, scenery, Utils, WebGLNodeDrawable, WebGLSelfDrawable } from '../imports';
 
 const WEBGL_NODE_OPTION_KEYS = [
   'canvasBounds' // {Bounds2} - Sets the available Canvas bounds that content will show up in. See setCanvasBounds()
@@ -29,11 +29,11 @@ export type WebGLNodeOptions = SelfOptions & NodeOptions;
 export type WebGLNodePainterResult = 0 | 1;
 
 export type WebGLNodePainter = {
-  paint: ( modelViewMatrix: Matrix3, projectionMatrix: Matrix3 ) => WebGLNodePainterResult;
+  paint: (modelViewMatrix: Matrix3, projectionMatrix: Matrix3) => WebGLNodePainterResult;
   dispose: () => void;
 };
 // NOTE: the `node` will be the `this` type, but there doesn't seem to be a good way to annotate that
-type WebGLNodePainterType = new ( gl: WebGLRenderingContext, node: never ) => WebGLNodePainter;
+type WebGLNodePainterType = new (gl: WebGLRenderingContext, node: never) => WebGLNodePainter;
 
 export default abstract class WebGLNode extends Node {
 
@@ -66,11 +66,11 @@ export default abstract class WebGLNode extends Node {
    * @param [options] - WebGLNode-specific options are documented in LINE_OPTION_KEYS above, and can be
    *                    provided along-side options for Node
    */
-  public constructor( painterType: WebGLNodePainterType, options?: WebGLNodeOptions ) {
-    super( options );
+  public constructor(painterType: WebGLNodePainterType, options?: WebGLNodeOptions) {
+    super(options);
 
     // Only support rendering in WebGL
-    this.setRendererBitmask( Renderer.bitmaskWebGL );
+    this.setRendererBitmask(Renderer.bitmaskWebGL);
 
     this.painterType = painterType;
   }
@@ -81,13 +81,13 @@ export default abstract class WebGLNode extends Node {
    * These bounds should always cover at least the area where the WebGLNode will draw in. If this is violated, this
    * node may be partially or completely invisible in Scenery's output.
    */
-  public setCanvasBounds( selfBounds: Bounds2 ): this {
-    this.invalidateSelf( selfBounds );
+  public setCanvasBounds(selfBounds: Bounds2): this {
+    this.invalidateSelf(selfBounds);
 
     return this;
   }
 
-  public set canvasBounds( value: Bounds2 ) { this.setCanvasBounds( value ); }
+  public set canvasBounds(value: Bounds2) { this.setCanvasBounds(value); }
 
   public get canvasBounds(): Bounds2 { return this.getCanvasBounds(); }
 
@@ -114,8 +114,8 @@ export default abstract class WebGLNode extends Node {
    */
   public invalidatePaint(): void {
     const stateLen = this._drawables.length;
-    for ( let i = 0; i < stateLen; i++ ) {
-      this._drawables[ i ].markDirty();
+    for (let i = 0; i < stateLen; i++) {
+      this._drawables[i].markDirty();
     }
   }
 
@@ -126,7 +126,7 @@ export default abstract class WebGLNode extends Node {
    *
    * @param point - Considered to be in the local coordinate frame
    */
-  public override containsPointSelf( point: Vector2 ): boolean {
+  public override containsPointSelf(point: Vector2): boolean {
     return false;
   }
 
@@ -144,9 +144,9 @@ export default abstract class WebGLNode extends Node {
    * @param wrapper
    * @param matrix - The transformation matrix already applied to the context.
    */
-  protected override canvasPaintSelf( wrapper: CanvasContextWrapper, matrix: Matrix3 ): void {
+  protected override canvasPaintSelf(wrapper: CanvasContextWrapper, matrix: Matrix3): void {
     // TODO: see https://github.com/phetsims/scenery/issues/308
-    assert && assert( false, 'unimplemented: canvasPaintSelf in WebGLNode' );
+    assert && assert(false, 'unimplemented: canvasPaintSelf in WebGLNode');
   }
 
   /**
@@ -155,39 +155,39 @@ export default abstract class WebGLNode extends Node {
    * @param wrapper
    * @param matrix - The current transformation matrix associated with the wrapper
    */
-  public override renderToCanvasSelf( wrapper: CanvasContextWrapper, matrix: Matrix3 ): void {
+  public override renderToCanvasSelf(wrapper: CanvasContextWrapper, matrix: Matrix3): void {
     const width = wrapper.canvas.width;
     const height = wrapper.canvas.height;
 
     // TODO: Can we reuse the same Canvas? That might save some context creations? https://github.com/phetsims/scenery/issues/1581
-    const scratchCanvas = document.createElement( 'canvas' );
+    const scratchCanvas = document.createElement('canvas');
     scratchCanvas.width = width;
     scratchCanvas.height = height;
     const contextOptions = {
       antialias: true,
       preserveDrawingBuffer: true // so we can get the data and render it to the Canvas
     };
-    const gl = ( scratchCanvas.getContext( 'webgl', contextOptions ) || scratchCanvas.getContext( 'experimental-webgl', contextOptions ) ) as WebGLRenderingContext;
-    Utils.applyWebGLContextDefaults( gl ); // blending, etc.
+    const gl = (scratchCanvas.getContext('webgl', contextOptions) || scratchCanvas.getContext('experimental-webgl', contextOptions)) as WebGLRenderingContext;
+    Utils.applyWebGLContextDefaults(gl); // blending, etc.
 
     const projectionMatrix = new Matrix3().rowMajor(
       2 / width, 0, -1,
       0, -2 / height, 1,
-      0, 0, 1 );
-    gl.viewport( 0, 0, width, height );
+      0, 0, 1);
+    gl.viewport(0, 0, width, height);
 
     const PainterType = this.painterType;
-    const painter = new PainterType( gl, this as never );
+    const painter = new PainterType(gl, this as never);
 
-    painter.paint( matrix, projectionMatrix );
+    painter.paint(matrix, projectionMatrix);
     painter.dispose();
 
     projectionMatrix.freeToPool();
 
     gl.flush();
 
-    wrapper.context.setTransform( 1, 0, 0, 1, 0, 0 ); // identity
-    wrapper.context.drawImage( scratchCanvas, 0, 0 );
+    wrapper.context.setTransform(1, 0, 0, 1, 0, 0); // identity
+    wrapper.context.drawImage(scratchCanvas, 0, 0);
     wrapper.context.restore();
   }
 
@@ -197,13 +197,13 @@ export default abstract class WebGLNode extends Node {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createWebGLDrawable( renderer: number, instance: Instance ): WebGLSelfDrawable {
+  public override createWebGLDrawable(renderer: number, instance: Instance): WebGLSelfDrawable {
     // @ts-expect-error TODO: pooling https://github.com/phetsims/scenery/issues/1581
-    return WebGLNodeDrawable.createFromPool( renderer, instance );
+    return WebGLNodeDrawable.createFromPool(renderer, instance);
   }
 
-  public override mutate( options?: WebGLNodeOptions ): this {
-    return super.mutate( options );
+  public override mutate(options?: WebGLNodeOptions): this {
+    return super.mutate(options);
   }
 
   // Return code from painter.paint() when nothing was painted to the WebGL context.
@@ -220,6 +220,6 @@ export default abstract class WebGLNode extends Node {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-WebGLNode.prototype._mutatorKeys = WEBGL_NODE_OPTION_KEYS.concat( Node.prototype._mutatorKeys );
+WebGLNode.prototype._mutatorKeys = WEBGL_NODE_OPTION_KEYS.concat(Node.prototype._mutatorKeys);
 
-scenery.register( 'WebGLNode', WebGLNode );
+scenery.register('WebGLNode', WebGLNode);

@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../phet-core/js/Poolable.js';
-import { scenery } from '../imports.js';
+import Poolable from '../../phet-core/Poolable';
+import { scenery } from '../imports';
 
 class CountMap {
   /**

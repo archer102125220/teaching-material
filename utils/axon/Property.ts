@@ -1,9 +1,7 @@
 // Copyright 2022, University of Colorado Boulder
 
-// @ts-expect-error
-import TProperty from './TProperty';
-// @ts-expect-error
-import ReadOnlyProperty, { PropertyOptions } from './ReadOnlyProperty';
+import type TProperty from './TProperty';
+import ReadOnlyProperty, { type PropertyOptions } from './ReadOnlyProperty';
 import axon from './axon';
 
 /**

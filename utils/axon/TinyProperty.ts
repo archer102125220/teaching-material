@@ -12,14 +12,15 @@
 
 import axon from './axon';
 import TinyEmitter from './TinyEmitter';
-import TProperty from './TProperty';
-import TReadOnlyProperty, { PropertyLazyLinkListener, PropertyLinkListener, PropertyListener } from './TReadOnlyProperty';
+import type TProperty from './TProperty';
+import type TReadOnlyProperty from './TReadOnlyProperty';
+import type { PropertyLazyLinkListener, PropertyLinkListener, PropertyListener } from './TReadOnlyProperty';
 
 export type ComparableObject = {
-  equals: ( a: unknown ) => boolean;
+  equals: (a: unknown) => boolean;
 };
-export type TinyPropertyEmitterParameters<T> = [ T, T | null, TReadOnlyProperty<T> ];
-export type TinyPropertyOnBeforeNotify<T> = ( ...args: TinyPropertyEmitterParameters<T> ) => void;
+export type TinyPropertyEmitterParameters<T> = [T, T | null, TReadOnlyProperty<T>];
+export type TinyPropertyOnBeforeNotify<T> = (...args: TinyPropertyEmitterParameters<T>) => void;
 
 export default class TinyProperty<T> extends TinyEmitter<TinyPropertyEmitterParameters<T>> implements TProperty<T> {
 
@@ -29,8 +30,8 @@ export default class TinyProperty<T> extends TinyEmitter<TinyPropertyEmitterPara
   // check in this type too. Not defining in the general case for memory usage, only using if we notice this flag set.
   protected useDeepEquality?: boolean;
 
-  public constructor( value: T, onBeforeNotify?: TinyPropertyOnBeforeNotify<T> | null, hasListenerOrderDependencies?: boolean ) {
-    super( onBeforeNotify, hasListenerOrderDependencies );
+  public constructor(value: T, onBeforeNotify?: TinyPropertyOnBeforeNotify<T> | null, hasListenerOrderDependencies?: boolean) {
+    super(onBeforeNotify, hasListenerOrderDependencies);
 
     this._value = value;
   }
@@ -55,8 +56,8 @@ export default class TinyProperty<T> extends TinyEmitter<TinyPropertyEmitterPara
   /**
    * Sets the value.
    */
-  public set value( newValue: T ) {
-    this.set( newValue );
+  public set value(newValue: T) {
+    this.set(newValue);
   }
 
   /**
@@ -64,13 +65,13 @@ export default class TinyProperty<T> extends TinyEmitter<TinyPropertyEmitterPara
    * (property.value) but this means is provided for inner loops or internal code that must be fast. If the value
    * hasn't changed, this is a no-op.
    */
-  public set( value: T ): void {
-    if ( !this.equalsValue( value ) ) {
+  public set(value: T): void {
+    if (!this.equalsValue(value)) {
       const oldValue = this._value;
 
-      this.setPropertyValue( value );
+      this.setPropertyValue(value);
 
-      this.notifyListeners( oldValue );
+      this.notifyListeners(oldValue);
     }
   }
 
@@ -78,15 +79,15 @@ export default class TinyProperty<T> extends TinyEmitter<TinyPropertyEmitterPara
    * Sets the value without notifying any listeners. This is a place to override if a subtype performs additional work
    * when setting the value.
    */
-  public setPropertyValue( value: T ): void {
+  public setPropertyValue(value: T): void {
     this._value = value;
   }
 
   /**
    * Returns true if and only if the specified value equals the value of this property
    */
-  protected equalsValue( value: T ): boolean {
-    return this.areValuesEqual( value, this._value );
+  protected equalsValue(value: T): boolean {
+    return this.areValuesEqual(value, this._value);
   }
 
   /**
@@ -100,16 +101,16 @@ export default class TinyProperty<T> extends TinyEmitter<TinyPropertyEmitterPara
    * Alternatively different implementation can be provided by subclasses or instances to change the equals
    * definition. See #10 and #73 and #115
    */
-  public areValuesEqual( a: T, b: T ): boolean {
-    if ( this.useDeepEquality ) {
+  public areValuesEqual(a: T, b: T): boolean {
+    if (this.useDeepEquality) {
       const aObject = a as unknown as ComparableObject;
       const bObject = b as unknown as ComparableObject;
 
-      if ( aObject && bObject && aObject.constructor === bObject.constructor ) {
-        assert && assert( !!aObject.equals, 'no equals function for 1st arg' );
-        assert && assert( !!bObject.equals, 'no equals function for 2nd arg' );
-        assert && assert( aObject.equals( bObject ) === bObject.equals( aObject ), 'incompatible equality checks' );
-        return aObject.equals( bObject );
+      if (aObject && bObject && aObject.constructor === bObject.constructor) {
+        assert && assert(!!aObject.equals, 'no equals function for 1st arg');
+        assert && assert(!!bObject.equals, 'no equals function for 2nd arg');
+        assert && assert(aObject.equals(bObject) === bObject.equals(aObject), 'incompatible equality checks');
+        return aObject.equals(bObject);
       }
     }
 
@@ -120,34 +121,34 @@ export default class TinyProperty<T> extends TinyEmitter<TinyPropertyEmitterPara
   /**
    * Directly notifies listeners of changes.
    */
-  public notifyListeners( oldValue: T ): void {
+  public notifyListeners(oldValue: T): void {
     // We use this._value here for performance, AND to avoid calling onAccessAttempt unnecessarily.
-    this.emit( this._value, oldValue, this );
+    this.emit(this._value, oldValue, this);
   }
 
   /**
    * Adds listener and calls it immediately. If listener is already registered, this is a no-op. The initial
    * notification provides the current value for newValue and null for oldValue.
    */
-  public link( listener: PropertyLinkListener<T> ): void {
-    this.addListener( listener );
+  public link(listener: PropertyLinkListener<T>): void {
+    this.addListener(listener);
 
-    listener( this._value, null, this ); // null should be used when an object is expected but unavailable
+    listener(this._value, null, this); // null should be used when an object is expected but unavailable
   }
 
   /**
    * Add an listener to the TinyProperty, without calling it back right away. This is used when you need to register a
    * listener without an immediate callback.
    */
-  public lazyLink( listener: PropertyLazyLinkListener<T> ): void {
-    this.addListener( listener as PropertyLinkListener<T> ); // Because it's a lazy link, it will never be called with null
+  public lazyLink(listener: PropertyLazyLinkListener<T>): void {
+    this.addListener(listener as PropertyLinkListener<T>); // Because it's a lazy link, it will never be called with null
   }
 
   /**
    * Removes a listener. If listener is not registered, this is a no-op.
    */
-  public unlink( listener: PropertyListener<T> ): void {
-    this.removeListener( listener as PropertyLinkListener<T> );
+  public unlink(listener: PropertyListener<T>): void {
+    this.removeListener(listener as PropertyLinkListener<T>);
   }
 
   /**
@@ -164,9 +165,9 @@ export default class TinyProperty<T> extends TinyEmitter<TinyPropertyEmitterPara
    *
    * NOTE: Duplicated with Property.linkAttribute
    */
-  public linkAttribute<Attr extends string>( object: { [key in Attr]: T }, attributeName: Attr ): ( value: T ) => void {
-    const handle = ( value: T ) => { object[ attributeName ] = value; };
-    this.link( handle );
+  public linkAttribute<Attr extends string>(object: { [key in Attr]: T }, attributeName: Attr): (value: T) => void {
+    const handle = (value: T) => { object[attributeName] = value; };
+    this.link(handle);
     return handle;
   }
 
@@ -189,4 +190,4 @@ export default class TinyProperty<T> extends TinyEmitter<TinyPropertyEmitterPara
   }
 }
 
-axon.register( 'TinyProperty', TinyProperty );
+axon.register('TinyProperty', TinyProperty);

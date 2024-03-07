@@ -411,7 +411,7 @@ export { default as PointerOverlay } from './overlays/PointerOverlay';
 export { default as Instance } from './display/Instance';
 export type { default as TOverlay } from './overlays/TOverlay';
 export { default as Display } from './display/Display';
-export type{ DisplayOptions } from './display/Display';
+export type { DisplayOptions } from './display/Display';
 
 export { default as IndexedNodeIO } from './nodes/IndexedNodeIO';
 export type { IndexedNodeIOParent } from './nodes/IndexedNodeIO';

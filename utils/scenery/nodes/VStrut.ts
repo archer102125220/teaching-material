@@ -7,7 +7,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { scenery, Spacer, SpacerOptions } from '../imports.js';
+import { scenery, Spacer, type SpacerOptions } from '../imports';
 
 export type VStrutOptions = SpacerOptions;
 
@@ -18,9 +18,9 @@ export default class VStrut extends Spacer {
    * @param height - Height of the strut
    * @param [options] - Passed to Spacer/Node
    */
-  public constructor( height: number, options?: VStrutOptions ) {
-    super( 0, height, options );
+  public constructor(height: number, options?: VStrutOptions) {
+    super(0, height, options);
   }
 }
 
-scenery.register( 'VStrut', VStrut );
+scenery.register('VStrut', VStrut);

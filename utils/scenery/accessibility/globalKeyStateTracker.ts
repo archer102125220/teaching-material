@@ -8,19 +8,19 @@
  * @author Jesse Greenberg
  */
 
-import Tandem from '../../../tandem/js/Tandem.js';
-import { KeyStateTracker, scenery } from '../imports.js';
-import { KeyStateTrackerOptions } from './KeyStateTracker.js';
+import Tandem from '../../tandem/Tandem';
+import { KeyStateTracker, scenery } from '../imports';
+import { type KeyStateTrackerOptions } from './KeyStateTracker';
 
 class GlobalKeyStateTracker extends KeyStateTracker {
-  public constructor( options?: KeyStateTrackerOptions ) {
-    super( options );
+  public constructor(options?: KeyStateTrackerOptions) {
+    super(options);
   }
 }
 
-const globalKeyStateTracker = new GlobalKeyStateTracker( {
-  tandem: Tandem.GENERAL_CONTROLLER.createTandem( 'keyStateTracker' )
-} );
+const globalKeyStateTracker = new GlobalKeyStateTracker({
+  tandem: Tandem.GENERAL_CONTROLLER.createTandem('keyStateTracker')
+});
 
-scenery.register( 'globalKeyStateTracker', globalKeyStateTracker );
+scenery.register('globalKeyStateTracker', globalKeyStateTracker);
 export default globalKeyStateTracker;

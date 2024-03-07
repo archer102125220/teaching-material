@@ -52,10 +52,12 @@ class Namespace {
     if ( key.includes( '.' ) ) {
       if ( !isHMR ) {
 
+        
         // @ts-expect-error
         assert && assert( !this[ key ], `${key} is already registered for namespace ${this.name}` );
       }
 
+      
       // @ts-expect-error
       this[ key ] = value;
     }
@@ -68,11 +70,13 @@ class Namespace {
       for ( let i = 0; i < keys.length - 1; i++ ) { // for all but the last key
 
         if ( !isHMR ) {
+          
           // @ts-expect-error
           assert && assert( !!parent[ keys[ i ] ],
             `${[ this.name ].concat( keys.slice( 0, i + 1 ) ).join( '.' )} needs to be defined to register ${key}` );
         }
 
+        
         // @ts-expect-error
         parent = parent[ keys[ i ] ];
       }
@@ -81,10 +85,12 @@ class Namespace {
       const lastKey = keys[ keys.length - 1 ];
 
       if ( !isHMR ) {
+        
         // @ts-expect-error
         assert && assert( !parent[ lastKey ], `${key} is already registered for namespace ${this.name}` );
       }
 
+      
       // @ts-expect-error
       parent[ lastKey ] = value;
     }

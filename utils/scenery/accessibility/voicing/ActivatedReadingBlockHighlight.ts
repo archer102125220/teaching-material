@@ -7,8 +7,8 @@
  * @author Jesse Greenberg
  */
 
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { HighlightFromNode, HighlightFromNodeOptions, Node, scenery } from '../../imports.js';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import { HighlightFromNode, type HighlightFromNodeOptions, Node, scenery } from '../../imports';
 
 // constants
 const ACTIVATED_HIGHLIGHT_COLOR = 'rgba(255,255,0,0.5)';
@@ -20,17 +20,17 @@ type ActivatedReadingBlockHighlightOptions = SelfOptions & HighlightFromNodeOpti
 class ActivatedReadingBlockHighlight extends HighlightFromNode {
   public static readonly ACTIVATED_HIGHLIGHT_COLOR = ACTIVATED_HIGHLIGHT_COLOR;
 
-  public constructor( node: Node | null, providedOptions?: ActivatedReadingBlockHighlightOptions ) {
+  public constructor(node: Node | null, providedOptions?: ActivatedReadingBlockHighlightOptions) {
 
-    const options = optionize<ActivatedReadingBlockHighlightOptions, SelfOptions, HighlightFromNodeOptions>()( {
+    const options = optionize<ActivatedReadingBlockHighlightOptions, SelfOptions, HighlightFromNodeOptions>()({
       innerStroke: null,
       outerStroke: null,
       fill: ACTIVATED_HIGHLIGHT_COLOR
-    }, providedOptions );
+    }, providedOptions);
 
-    super( node, options );
+    super(node, options);
   }
 }
 
-scenery.register( 'ActivatedReadingBlockHighlight', ActivatedReadingBlockHighlight );
+scenery.register('ActivatedReadingBlockHighlight', ActivatedReadingBlockHighlight);
 export default ActivatedReadingBlockHighlight;

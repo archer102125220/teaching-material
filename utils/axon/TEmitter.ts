@@ -8,27 +8,27 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-// @ts-expect-error
-import IntentionalAny from '../phet-core/types/IntentionalAny';
+import type IntentionalAny from '../phet-core/types/IntentionalAny';
 
 // undefined and never are not allowed as parameters to Emitter
 export type TEmitterParameter = Exclude<IntentionalAny, undefined | never>;
 
-export type TEmitterListener<T extends TEmitterParameter[]> = ( ...args: T ) => void;
+export type TEmitterListener<T extends TEmitterParameter[]> = (...args: T) => void;
 
 export type TEmitter<T extends TEmitterParameter[] = []> = {
 
   // For all the methods, please see documentation in Emitter.ts
-  emit: ( ...args: T ) => void;
+  emit: (...args: T) => void;
 
-  addListener: ( listener: TEmitterListener<T> ) => void;
-  hasListener: ( listener: TEmitterListener<T> ) => boolean;
+  addListener: (listener: TEmitterListener<T>) => void;
+  hasListener: (listener: TEmitterListener<T>) => boolean;
 
-  removeListener: ( listener: TEmitterListener<T> ) => void;
+  removeListener: (listener: TEmitterListener<T>) => void;
   removeAllListeners: () => void;
 
   dispose: () => void;
 };
+
 
 // @ts-expect-error
 export default TEmitter;

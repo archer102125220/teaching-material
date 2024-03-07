@@ -18,15 +18,11 @@ import Tandem from '../tandem/Tandem';
 import CouldNotYetDeserializeError from '../tandem/CouldNotYetDeserializeError';
 import IOType from '../tandem/types/IOType';
 import ObjectLiteralIO from '../tandem/types/ObjectLiteralIO';
-// @ts-expect-error
-import LocalizedString, { LocalizedStringStateDelta, StringsStateStateObject } from './LocalizedString';
-// @ts-expect-error
-import TReadOnlyProperty from '../axon/TReadOnlyProperty';
-// @ts-expect-error
-import { Locale } from '@/i18n/joist/localeProperty';
+import LocalizedString, { type LocalizedStringStateDelta, type StringsStateStateObject } from './LocalizedString';
+import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
+import { type Locale } from '@/i18n/joist/localeProperty';
 import localeInfoModule from '@/assets/chipper/localeInfoModule';
-// @ts-expect-error
-import { PhetioID } from '../tandem/TandemConstants';
+import { type PhetioID } from '../tandem/TandemConstants';
 
 const locale: string = ((window.location?.search || '').substring(1).split('&').find((searchString: string) => searchString.split('=')?.[0] === 'locale')?.split('=')?.[1] || '');
 
@@ -48,7 +44,7 @@ window.phet.chipper.setAllStrings = (str: string) => {
   });
 };
 
-console.log(window.location, { FALLBACK_LOCALE: FALLBACK_LOCALE, locale: locale });
+console.log(window.location, { FALLBACK_LOCALE, locale });
 
 const stringKeyToTandemName = (key: string) => {
   return key.replace(/(?:[-_\s]\w)/g, word => word[1].toUpperCase());
@@ -68,7 +64,7 @@ const StringStateIOType = new IOType<PhetioObject, StringsStateStateObject>('Str
       }
     });
     return {
-      data: data // Data nested for a valid schema
+      data // Data nested for a valid schema
     };
   },
   stateSchema: {
@@ -131,6 +127,7 @@ const getStringModule = (requirejsNamespace: string): object => {
   // TODO: https://github.com/phetsims/phet-io/issues/1877 What will happen if this is stale? How will a developer know
   // to update it? Should it run in daily-grunt-work?
   if (phet.chipper.usedStringsEN) {
+    // eslint-disable-next-line no-prototype-builtins
     allStringKeysInRepo = allStringKeysInRepo.filter(stringKey => phet.chipper.usedStringsEN.hasOwnProperty(stringKey));
   }
 

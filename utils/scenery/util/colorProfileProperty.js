@@ -10,26 +10,32 @@
  *
  * @author Sam Reid (PhET Interactive Simulations)
  */
-import StringProperty from '../../../axon/js/StringProperty.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import { scenery, SceneryConstants } from '../imports.js';
+import _ from 'lodash';
+import StringProperty from '../../axon/StringProperty';
+import Tandem from '../../tandem/Tandem';
+import { scenery, SceneryConstants } from '../imports';
 
 // Use the color profile specified in query parameters, or default to 'default'
-const initialProfileName = _.hasIn( window, 'phet.chipper.queryParameters.colorProfile' ) ?
-                           phet.chipper.queryParameters.colorProfile :
-                           SceneryConstants.DEFAULT_COLOR_PROFILE;
+const initialProfileName = _.hasIn(
+  window,
+  'phet.chipper.queryParameters.colorProfile'
+)
+  ? window.phet.chipper.queryParameters.colorProfile
+  : SceneryConstants.DEFAULT_COLOR_PROFILE;
 
 // List of all supported colorProfiles for this simulation
-const colorProfiles = _.hasIn( window, 'phet.chipper.colorProfiles' ) ? phet.chipper.colorProfiles : [ SceneryConstants.DEFAULT_COLOR_PROFILE ];
+const colorProfiles = _.hasIn(window, 'phet.chipper.colorProfiles')
+  ? window.phet.chipper.colorProfiles
+  : [SceneryConstants.DEFAULT_COLOR_PROFILE];
 
 // @public {Property.<string>}
 // The current profile name. Change this Property's value to change which profile is currently active.
-const colorProfileProperty = new StringProperty( initialProfileName, {
-  tandem: Tandem.GENERAL_VIEW.createTandem( 'colorProfileProperty' ),
+const colorProfileProperty = new StringProperty(initialProfileName, {
+  tandem: Tandem.GENERAL_VIEW.createTandem('colorProfileProperty'),
   phetioFeatured: true,
   validValues: colorProfiles
-} );
+});
 
-scenery.register( 'colorProfileProperty', colorProfileProperty );
+scenery.register('colorProfileProperty', colorProfileProperty);
 
 export default colorProfileProperty;

@@ -18,6 +18,7 @@ let phetioEngine: null = null;
 
 const unlockBrand = asyncLoader.createLock({ name: 'brand' });
 import( /* webpackMode: "eager" */ `../../brand/${window.phet.chipper.brand}/js/Brand.js`) // 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   .then(module => unlockBrand())
   .catch(err => console.log(err));
 

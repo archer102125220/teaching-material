@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../../dot/js/toSVGNumber.js';
-import { CanvasContextWrapper, Filter, scenery } from '../imports.js';
+import toSVGNumber from '../../dot/toSVGNumber';
+import { CanvasContextWrapper, Filter, scenery } from '../imports';
 
 export default class Opacity extends Filter {
 
@@ -18,10 +18,10 @@ export default class Opacity extends Filter {
    *
    * @param amount - The amount of opacity, from 0 (invisible) to 1 (fully visible)
    */
-  public constructor( amount: number ) {
-    assert && assert( isFinite( amount ), 'Opacity amount should be finite' );
-    assert && assert( amount >= 0, 'Opacity amount should be non-negative' );
-    assert && assert( amount <= 1, 'Opacity amount should be no greater than 1' );
+  public constructor(amount: number) {
+    assert && assert(isFinite(amount), 'Opacity amount should be finite');
+    assert && assert(amount >= 0, 'Opacity amount should be non-negative');
+    assert && assert(amount <= 1, 'Opacity amount should be no greater than 1');
 
     super();
 
@@ -34,20 +34,20 @@ export default class Opacity extends Filter {
    * (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter).
    */
   public getCSSFilterString(): string {
-    return `opacity(${toSVGNumber( this.amount )})`;
+    return `opacity(${toSVGNumber(this.amount)})`;
   }
 
   public override isDOMCompatible(): boolean {
     return true;
   }
 
-  public applyCanvasFilter( wrapper: CanvasContextWrapper ): void {
-    throw new Error( 'unimplemented' );
+  public applyCanvasFilter(wrapper: CanvasContextWrapper): void {
+    throw new Error('unimplemented');
   }
 
-  public applySVGFilter( svgFilter: SVGFilterElement, inName: string, resultName?: string ): void {
-    throw new Error( 'unimplemented' );
+  public applySVGFilter(svgFilter: SVGFilterElement, inName: string, resultName?: string): void {
+    throw new Error('unimplemented');
   }
 }
 
-scenery.register( 'Opacity', Opacity );
+scenery.register('Opacity', Opacity);

@@ -6,7 +6,7 @@
  * @author Jesse Greenberg
  */
 
-import { KeyboardUtils, scenery } from '../imports.js';
+import { KeyboardUtils, scenery } from '../imports';
 
 const KeyboardZoomUtils = {
 
@@ -16,7 +16,7 @@ const KeyboardZoomUtils = {
    * TODO: Move to platform if generally useful? https://github.com/phetsims/scenery/issues/1581
    */
   isPlatformMac: (): boolean => {
-    return _.includes( window.navigator.platform, 'Mac' );
+    return _.includes(window.navigator.platform, 'Mac');
   },
 
   /**
@@ -35,24 +35,24 @@ const KeyboardZoomUtils = {
    * @param event
    * @param zoomIn - do you want to check for zoom in or zoom out?
    */
-  isZoomCommand: ( event: Event, zoomIn: boolean ): boolean => {
+  isZoomCommand: (event: Event, zoomIn: boolean): boolean => {
     const zoomKey = zoomIn ? KeyboardUtils.KEY_EQUALS : KeyboardUtils.KEY_MINUS;
     const metaKey = KeyboardZoomUtils.getPlatformZoomMetaKey();
 
     // @ts-expect-error
-    return event[ metaKey ] && KeyboardUtils.isKeyEvent( event, zoomKey );
+    return event[metaKey] && KeyboardUtils.isKeyEvent(event, zoomKey);
   },
 
   /**
    * Returns true if the keyboard command indicates a "zoom reset". This is ctrl + 0 on Win and cmd + 0 on mac.
    */
-  isZoomResetCommand: ( event: Event ): boolean => {
+  isZoomResetCommand: (event: Event): boolean => {
     const metaKey = KeyboardZoomUtils.getPlatformZoomMetaKey();
 
     // @ts-expect-error
-    return event[ metaKey ] && KeyboardUtils.isKeyEvent( event, KeyboardUtils.KEY_0 );
+    return event[metaKey] && KeyboardUtils.isKeyEvent(event, KeyboardUtils.KEY_0);
   }
 };
 
-scenery.register( 'KeyboardZoomUtils', KeyboardZoomUtils );
+scenery.register('KeyboardZoomUtils', KeyboardZoomUtils);
 export default KeyboardZoomUtils;

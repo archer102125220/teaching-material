@@ -6,9 +6,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import extendDefined from '../../../phet-core/js/extendDefined.js';
-import { DOMDrawable, DOMSelfDrawable, Instance, Node, NodeOptions, Renderer, scenery } from '../imports.js';
+import JQuery from 'JQuery';
+import Bounds2 from '../../dot/Bounds2';
+import extendDefined from '../../phet-core/extendDefined';
+import { DOMDrawable, DOMSelfDrawable, Instance, Node, type NodeOptions, Renderer, scenery } from '../imports';
 
 const DOM_OPTION_KEYS = [
   'element', // {HTMLElement} - Sets the element, see setElement() for more documentation
@@ -23,7 +24,7 @@ type SelfOptions = {
 export type DOMOptions = SelfOptions & NodeOptions;
 
 // User-defined type guard
-const isJQueryElement = ( element: Element | JQuery ): element is JQuery => !!( element && ( element as JQuery ).jquery );
+const isJQueryElement = (element: Element | JQuery): element is JQuery => !!(element && (element as JQuery).jquery);
 
 export default class DOM extends Node {
 
@@ -48,41 +49,41 @@ export default class DOM extends Node {
    * @param [options] - DOM-specific options are documented in DOM_OPTION_KEYS above, and can be provided
    *                             along-side options for Node
    */
-  public constructor( element: Element | JQuery, options?: DOMOptions ) {
-    assert && assert( options === undefined || Object.getPrototypeOf( options ) === Object.prototype,
-      'Extra prototype on Node options object is a code smell' );
+  public constructor(element: Element | JQuery, options?: DOMOptions) {
+    assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+      'Extra prototype on Node options object is a code smell');
 
-    assert && assert( element instanceof window.Element || element.jquery, 'DOM nodes need to be passed an HTML/DOM element or a jQuery selection like $( ... )' );
+    assert && assert(element instanceof window.Element || element.jquery, 'DOM nodes need to be passed an HTML/DOM element or a jQuery selection like $( ... )');
 
     // unwrap from jQuery if that is passed in, for consistency
-    if ( isJQueryElement( element ) ) {
-      element = element[ 0 ];
+    if (isJQueryElement(element)) {
+      element = element[0];
 
-      assert && assert( element instanceof window.Element );
+      assert && assert(element instanceof window.Element);
     }
 
     super();
 
-    this._container = document.createElement( 'div' );
+    this._container = document.createElement('div');
 
-    this._$container = $( this._container );
-    this._$container.css( 'position', 'absolute' );
-    this._$container.css( 'left', 0 );
-    this._$container.css( 'top', 0 );
+    this._$container = $(this._container);
+    this._$container.css('position', 'absolute');
+    this._$container.css('left', 0);
+    this._$container.css('top', 0);
 
     this.invalidateDOMLock = false;
     this._preventTransform = false;
 
     // Have mutate() call setElement() in the proper order
-    options = extendDefined<DOMOptions>( {
-      element: element
-    }, options );
+    options = extendDefined<DOMOptions>({
+      element
+    }, options);
 
     // will set the element after initializing
-    this.mutate( options );
+    this.mutate(options);
 
     // Only renderer supported, no need to dynamically compute
-    this.setRendererBitmask( Renderer.bitmaskDOM );
+    this.setRendererBitmask(Renderer.bitmaskDOM);
   }
 
 
@@ -95,8 +96,8 @@ export default class DOM extends Node {
    * Alternative getBoundingClientRect explored, but did not seem sufficient (possibly due to CSS transforms)?
    */
   protected calculateDOMBounds(): Bounds2 {
-    const $element = $( this._element );
-    return new Bounds2( 0, 0, $element.width()!, $element.height()! );
+    const $element = $(this._element);
+    return new Bounds2(0, 0, $element.width()!, $element.height()!);
   }
 
   /**
@@ -107,14 +108,14 @@ export default class DOM extends Node {
    */
   public invalidateDOM(): void {
     // prevent this from being executed as a side-effect from inside one of its own calls
-    if ( this.invalidateDOMLock ) {
+    if (this.invalidateDOMLock) {
       return;
     }
     this.invalidateDOMLock = true;
 
     // we will place ourselves in a temporary container to get our real desired bounds
-    const temporaryContainer = document.createElement( 'div' );
-    $( temporaryContainer ).css( {
+    const temporaryContainer = document.createElement('div');
+    $(temporaryContainer).css({
       display: 'hidden',
       padding: '0 !important',
       margin: '0 !important',
@@ -123,23 +124,23 @@ export default class DOM extends Node {
       top: 0,
       width: 65535,
       height: 65535
-    } );
+    });
 
     // move to the temporary container
-    this._container.removeChild( this._element );
-    temporaryContainer.appendChild( this._element );
-    document.body.appendChild( temporaryContainer );
+    this._container.removeChild(this._element);
+    temporaryContainer.appendChild(this._element);
+    document.body.appendChild(temporaryContainer);
 
     // bounds computation and resize our container to fit precisely
     const selfBounds = this.calculateDOMBounds();
-    this.invalidateSelf( selfBounds );
-    this._$container.width( selfBounds.getWidth() );
-    this._$container.height( selfBounds.getHeight() );
+    this.invalidateSelf(selfBounds);
+    this._$container.width(selfBounds.getWidth());
+    this._$container.height(selfBounds.getHeight());
 
     // move back to the main container
-    document.body.removeChild( temporaryContainer );
-    temporaryContainer.removeChild( this._element );
-    this._container.appendChild( this._element );
+    document.body.removeChild(temporaryContainer);
+    temporaryContainer.removeChild(this._element);
+    this._container.appendChild(this._element);
 
     // unlock
     this.invalidateDOMLock = false;
@@ -151,9 +152,9 @@ export default class DOM extends Node {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createDOMDrawable( renderer: number, instance: Instance ): DOMSelfDrawable {
+  public override createDOMDrawable(renderer: number, instance: Instance): DOMSelfDrawable {
     // @ts-expect-error Poolable
-    return DOMDrawable.createFromPool( renderer, instance );
+    return DOMDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -167,17 +168,17 @@ export default class DOM extends Node {
   /**
    * Changes the DOM element of this DOM node to another element.
    */
-  public setElement( element: HTMLElement ): this {
-    assert && assert( !this._element, 'We should only ever attach one DOMElement to a DOM node' );
+  public setElement(element: HTMLElement): this {
+    assert && assert(!this._element, 'We should only ever attach one DOMElement to a DOM node');
 
-    if ( this._element !== element ) {
-      if ( this._element ) {
-        this._container.removeChild( this._element );
+    if (this._element !== element) {
+      if (this._element) {
+        this._container.removeChild(this._element);
       }
 
       this._element = element;
 
-      this._container.appendChild( this._element );
+      this._container.appendChild(this._element);
 
       this.invalidateDOM();
     }
@@ -185,7 +186,7 @@ export default class DOM extends Node {
     return this; // allow chaining
   }
 
-  public set element( value: HTMLElement ) { this.setElement( value ); }
+  public set element(value: HTMLElement) { this.setElement(value); }
 
   public get element(): HTMLElement { return this.getElement(); }
 
@@ -203,13 +204,13 @@ export default class DOM extends Node {
    * instead it will be at the upper-left (0,0) of the Scenery Display. The client will be responsible for sizing or
    * positioning this element instead.
    */
-  public setPreventTransform( preventTransform: boolean ): void {
-    if ( this._preventTransform !== preventTransform ) {
+  public setPreventTransform(preventTransform: boolean): void {
+    if (this._preventTransform !== preventTransform) {
       this._preventTransform = preventTransform;
     }
   }
 
-  public set preventTransform( value: boolean ) { this.setPreventTransform( value ); }
+  public set preventTransform(value: boolean) { this.setPreventTransform(value); }
 
   public get preventTransform(): boolean { return this.isTransformPrevented(); }
 
@@ -222,8 +223,8 @@ export default class DOM extends Node {
     return this._preventTransform;
   }
 
-  public override mutate( options?: DOMOptions ): this {
-    return super.mutate( options );
+  public override mutate(options?: DOMOptions): this {
+    return super.mutate(options);
   }
 }
 
@@ -234,6 +235,6 @@ export default class DOM extends Node {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-DOM.prototype._mutatorKeys = DOM_OPTION_KEYS.concat( Node.prototype._mutatorKeys );
+DOM.prototype._mutatorKeys = DOM_OPTION_KEYS.concat(Node.prototype._mutatorKeys);
 
-scenery.register( 'DOM', DOM );
+scenery.register('DOM', DOM);

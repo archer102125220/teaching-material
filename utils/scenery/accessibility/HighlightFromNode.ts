@@ -10,12 +10,12 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import TProperty from '../../../axon/js/TProperty.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import { HighlightPath, HighlightPathOptions, Node, scenery } from '../imports.js';
+import type TProperty from '../../axon/TProperty';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import Bounds2 from '../../dot/Bounds2';
+import { Shape } from '../../kite/imports';
+import optionize from '../../phet-core/optionize';
+import { HighlightPath, type HighlightPathOptions, Node, scenery } from '../imports';
 
 type SelfOptions = {
 
@@ -46,26 +46,26 @@ class HighlightFromNode extends HighlightPath {
   private observedBoundsProperty: null | TProperty<Bounds2> = null;
 
   // Listener that sets the shape of this highlight when the Node bounds change. Referenced so it can be removed later.
-  private boundsListener: null | ( ( bounds: Bounds2 ) => void ) = null;
+  private boundsListener: null | ((bounds: Bounds2) => void) = null;
 
-  public constructor( node: Node | null, providedOptions?: HighlightFromNodeOptions ) {
+  public constructor(node: Node | null, providedOptions?: HighlightFromNodeOptions) {
 
-    const options = optionize<HighlightFromNodeOptions, SelfOptions, HighlightPathOptions>()( {
+    const options = optionize<HighlightFromNodeOptions, SelfOptions, HighlightPathOptions>()({
       useLocalBounds: true,
       dilationCoefficient: null,
       useGroupDilation: false
-    }, providedOptions );
+    }, providedOptions);
 
     options.transformSourceNode = node;
 
-    super( null, options );
+    super(null, options);
 
     this.useLocalBounds = options.useLocalBounds;
     this.useGroupDilation = options.useGroupDilation;
     this.dilationCoefficient = options.dilationCoefficient;
 
-    if ( node ) {
-      this.setShapeFromNode( node );
+    if (node) {
+      this.setShapeFromNode(node);
     }
   }
 
@@ -76,12 +76,12 @@ class HighlightFromNode extends HighlightPath {
    * that is dependent on whether or not this highlight is for group content or for the node itself. See
    * ParallelDOM.setGroupFocusHighlight() for more information on group highlights.
    */
-  public setShapeFromNode( node: Node ): void {
+  public setShapeFromNode(node: Node): void {
 
     // cleanup the previous listener
-    if ( this.observedBoundsProperty ) {
-      assert && assert( this.boundsListener, 'should be a listener if there is a previous focusHighlightNode' );
-      this.observedBoundsProperty.unlink( this.boundsListener! );
+    if (this.observedBoundsProperty) {
+      assert && assert(this.boundsListener, 'should be a listener if there is a previous focusHighlightNode');
+      this.observedBoundsProperty.unlink(this.boundsListener!);
     }
 
     // The HighlightOverlay updates highlight positioning with a TransformTracker so the local bounds accurately
@@ -91,7 +91,7 @@ class HighlightFromNode extends HighlightPath {
     this.boundsListener = localBounds => {
 
       // Ignore setting the shape if we don't yet have finite bounds.
-      if ( !localBounds.isFinite() ) {
+      if (!localBounds.isFinite()) {
         return;
       }
 
@@ -99,32 +99,32 @@ class HighlightFromNode extends HighlightPath {
 
       // Figure out how much dilation to apply to the focus highlight around the node, calculated unless specified
       // with options
-      if ( this.dilationCoefficient === null ) {
-        dilationCoefficient = ( this.useGroupDilation ? HighlightPath.getGroupDilationCoefficient( node ) :
-                                HighlightPath.getDilationCoefficient( node ) );
+      if (this.dilationCoefficient === null) {
+        dilationCoefficient = (this.useGroupDilation ? HighlightPath.getGroupDilationCoefficient(node) :
+          HighlightPath.getDilationCoefficient(node));
       }
 
       const visibleBounds = this.useLocalBounds ? node.getVisibleLocalBounds() : node.getVisibleBounds();
-      const dilatedVisibleBounds = visibleBounds.dilated( dilationCoefficient! );
+      const dilatedVisibleBounds = visibleBounds.dilated(dilationCoefficient!);
 
       // Update the line width of the focus highlight based on the transform of the node
-      this.updateLineWidthFromNode( node );
-      this.setShape( Shape.bounds( dilatedVisibleBounds ) );
+      this.updateLineWidthFromNode(node);
+      this.setShape(Shape.bounds(dilatedVisibleBounds));
     };
-    this.observedBoundsProperty.link( this.boundsListener );
+    this.observedBoundsProperty.link(this.boundsListener);
   }
 
   /**
    * Update the line width of both inner and outer highlights based on transform of the Node.
    */
-  private updateLineWidthFromNode( node: Node ): void {
+  private updateLineWidthFromNode(node: Node): void {
 
     // Note that lineWidths provided by options can override width determined from Node transform.
-    this.lineWidth = this.getOuterLineWidth( node );
-    this.innerHighlightPath.lineWidth = this.getInnerLineWidth( node );
+    this.lineWidth = this.getOuterLineWidth(node);
+    this.innerHighlightPath.lineWidth = this.getInnerLineWidth(node);
   }
 }
 
-scenery.register( 'HighlightFromNode', HighlightFromNode );
+scenery.register('HighlightFromNode', HighlightFromNode);
 
 export default HighlightFromNode;

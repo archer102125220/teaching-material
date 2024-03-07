@@ -16,6 +16,14 @@ module.exports = {
   },
   plugins: ['vue','typescript'],
   ignorePatterns: ['.eslintrc.js'],
+  overrides: [
+    {
+      files: ['*.{ts,tsx}'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint'],
+      extends: ['plugin:@typescript-eslint/recommended']
+    }
+  ],
   rules: {
     'vue/no-deprecated-destroyed-lifecycle': 1,
     'vue/no-v-for-template-key-on-child': 0,

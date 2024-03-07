@@ -1,3 +1,5 @@
+/* eslint-disable no-prototype-builtins */
+/* eslint-disable no-use-before-define */
 // Copyright 2015-2024, University of Colorado Boulder
 
 /**
@@ -12,24 +14,23 @@ import arrayRemove from '../phet-core/arrayRemove';
 import merge from '../phet-core/merge';
 import optionize from '../phet-core/optionize';
 import PhetioObject from './PhetioObject';
-// @ts-expect-error
-import TandemConstants, { PhetioID } from './TandemConstants';
+import TandemConstants, { type PhetioID } from './TandemConstants';
 import tandemNamespace from './tandemNamespace';
 
 // constants
 // Tandem can't depend on joist, so cannot use packageJSON module
-const packageJSON = _.hasIn( window, 'phet.chipper.packageObject' ) ? phet.chipper.packageObject : { name: 'placeholder' };
+const packageJSON = _.hasIn(window, 'phet.chipper.packageObject') ? phet.chipper.packageObject : { name: 'placeholder' };
 
-const PHET_IO_ENABLED = _.hasIn( window, 'phet.preloads.phetio' );
+const PHET_IO_ENABLED = _.hasIn(window, 'phet.preloads.phetio');
 const PRINT_MISSING_TANDEMS = PHET_IO_ENABLED && phet.preloads.phetio.queryParameters.phetioPrintMissingTandems;
 
 // Validation defaults to true, but can be overridden to be false in package.json.
-const IS_VALIDATION_DEFAULT = _.hasIn( packageJSON, 'phet.phet-io.validation' ) ? !!packageJSON.phet[ 'phet-io' ].validation : true;
+const IS_VALIDATION_DEFAULT = _.hasIn(packageJSON, 'phet.phet-io.validation') ? !!packageJSON.phet['phet-io'].validation : true;
 
 // The default value for validation can be overridden with a query parameter ?phetioValidation={true|false}.
-const IS_VALIDATION_QUERY_PARAMETER_SPECIFIED = window.QueryStringMachine && QueryStringMachine.containsKey( 'phetioValidation' );
-const IS_VALIDATION_SPECIFIED = ( PHET_IO_ENABLED && IS_VALIDATION_QUERY_PARAMETER_SPECIFIED ) ? !!phet.preloads.phetio.queryParameters.phetioValidation :
-                                ( PHET_IO_ENABLED && IS_VALIDATION_DEFAULT );
+const IS_VALIDATION_QUERY_PARAMETER_SPECIFIED = window.QueryStringMachine && QueryStringMachine.containsKey('phetioValidation');
+const IS_VALIDATION_SPECIFIED = (PHET_IO_ENABLED && IS_VALIDATION_QUERY_PARAMETER_SPECIFIED) ? !!phet.preloads.phetio.queryParameters.phetioValidation :
+  (PHET_IO_ENABLED && IS_VALIDATION_DEFAULT);
 
 const VALIDATION = PHET_IO_ENABLED && IS_VALIDATION_SPECIFIED && !PRINT_MISSING_TANDEMS;
 
@@ -64,8 +65,8 @@ const missingTandems: {
 };
 
 type PhetioObjectListener = {
-  addPhetioObject: ( phetioObject: PhetioObject ) => void;
-  removePhetioObject: ( phetioObject: PhetioObject ) => void;
+  addPhetioObject: (phetioObject: PhetioObject) => void;
+  removePhetioObject: (phetioObject: PhetioObject) => void;
 };
 
 // Listeners that will be notified when items are registered/deregistered. See doc in addPhetioObjectListener
@@ -77,7 +78,7 @@ const launchListeners: Array<() => void> = [];
 export type TandemOptions = {
   required?: boolean;
   supplied?: boolean;
-  isValidTandemName?: ( name: string ) => boolean;
+  isValidTandemName?: (name: string) => boolean;
 };
 
 class Tandem {
@@ -106,20 +107,20 @@ class Tandem {
    * @param name - component name for this level, like 'resetAllButton'
    * @param [providedOptions]
    */
-  public constructor( parentTandem: Tandem | null, name: string, providedOptions?: TandemOptions ) {
-    assert && assert( parentTandem === null || parentTandem instanceof Tandem, 'parentTandem should be null or Tandem' );
-    assert && assert( name !== Tandem.METADATA_KEY, 'name cannot match Tandem.METADATA_KEY' );
+  public constructor(parentTandem: Tandem | null, name: string, providedOptions?: TandemOptions) {
+    assert && assert(parentTandem === null || parentTandem instanceof Tandem, 'parentTandem should be null or Tandem');
+    assert && assert(name !== Tandem.METADATA_KEY, 'name cannot match Tandem.METADATA_KEY');
 
     this.parentTandem = parentTandem;
     this.name = name;
 
-    this.phetioID = this.parentTandem ? window.phetio.PhetioIDUtils.append( this.parentTandem.phetioID, this.name )
-                                      : this.name;
+    this.phetioID = this.parentTandem ? window.phetio.PhetioIDUtils.append(this.parentTandem.phetioID, this.name)
+      : this.name;
 
     // options (even subtype options) must be stored so they can be passed through to children
     // Note: Make sure that added options here are also added to options for inheritance and/or for composition
     // (createTandem/parentTandem/getExtendedOptions) as appropriate.
-    const options = optionize<TandemOptions>()( {
+    const options = optionize<TandemOptions>()({
 
       // required === false means it is an optional tandem
       required: true,
@@ -127,19 +128,19 @@ class Tandem {
       // if the tandem is required but not supplied, an error will be thrown.
       supplied: true,
 
-      isValidTandemName: ( name: string ) => Tandem.getRegexFromCharacterClass().test( name )
-    }, providedOptions );
+      isValidTandemName: (name: string) => Tandem.getRegexFromCharacterClass().test(name)
+    }, providedOptions);
 
-    assert && assert( options.isValidTandemName( name ), `invalid tandem name: ${name}` );
+    assert && assert(options.isValidTandemName(name), `invalid tandem name: ${name}`);
 
-    assert && assert( !options.supplied || FORBIDDEN_SUPPLIED_TANDEM_NAMES.every( forbiddenName => !name.includes( forbiddenName ) ),
-      `forbidden supplied tandem name: ${name}. If a tandem is not supplied, its name should not be used to create a supplied tandem.` );
+    assert && assert(!options.supplied || FORBIDDEN_SUPPLIED_TANDEM_NAMES.every(forbiddenName => !name.includes(forbiddenName)),
+      `forbidden supplied tandem name: ${name}. If a tandem is not supplied, its name should not be used to create a supplied tandem.`);
 
     this.children = {};
 
-    if ( this.parentTandem ) {
-      assert && assert( !this.parentTandem.hasChild( name ), `parent should not have child: ${name}` );
-      this.parentTandem.addChild( name, this );
+    if (this.parentTandem) {
+      assert && assert(!this.parentTandem.hasChild(name), `parent should not have child: ${name}`);
+      this.parentTandem.addChild(name, this);
     }
 
     this.required = options.required;
@@ -149,30 +150,31 @@ class Tandem {
 
   // Get the regex to test for a valid tandem name, given the char class for your specific tandem. In the regex
   // language. In this function we will wrap it in `[]+` brackets forming the actual "class".
-  protected static getRegexFromCharacterClass( tandemCharacterClass: string = TandemConstants.BASE_TANDEM_CHARACTER_CLASS ): RegExp {
-    return new RegExp( `^[${tandemCharacterClass}]+$` );
+  protected static getRegexFromCharacterClass(tandemCharacterClass: string = TandemConstants.BASE_TANDEM_CHARACTER_CLASS): RegExp {
+    return new RegExp(`^[${tandemCharacterClass}]+$`);
   }
 
   /**
    * If the provided tandem is not supplied, support the ?printMissingTandems query parameter for extra logging during
    * initial instrumentation.
    */
-  public static onMissingTandem( tandem: Tandem ): void {
+  public static onMissingTandem(tandem: Tandem): void {
 
     // When the query parameter phetioPrintMissingTandems is true, report tandems that are required but not supplied
-    if ( PRINT_MISSING_TANDEMS && !tandem.supplied ) {
+    if (PRINT_MISSING_TANDEMS && !tandem.supplied) {
 
       const stackTrace = Tandem.captureStackTrace();
 
-      if ( tandem.required ) {
-        missingTandems.required.push( { phetioID: tandem.phetioID, stack: stackTrace } );
+      if (tandem.required) {
+        missingTandems.required.push({ phetioID: tandem.phetioID, stack: stackTrace });
       }
       else {
 
         // When the query parameter phetioPrintMissingTandems is true, report tandems that are optional but not
         // supplied, but not for Fonts because they are too numerous.
-        if ( !stackTrace.includes( 'Font' ) ) {
-          missingTandems.optional.push( { phetioID: tandem.phetioID, stack: stackTrace } );
+        // eslint-disable-next-line no-lonely-if
+        if (!stackTrace.includes('Font')) {
+          missingTandems.optional.push({ phetioID: tandem.phetioID, stack: stackTrace });
         }
       }
     }
@@ -184,30 +186,32 @@ class Tandem {
    * where we are in common code (like for knowing where to provide a Tandem  for PhET-iO instrumentation).
    * @param limit - set to Error.stackTraceLimit just for a single stack trace, then return to the previous value after.
    */
-  private static captureStackTrace( limit = Infinity ): string {
+  private static captureStackTrace(limit = Infinity): string {
 
     // Check if Error.stackTraceLimit exists and is writable
-    const descriptor = Object.getOwnPropertyDescriptor( Error, 'stackTraceLimit' );
-    const stackTraceWritable = descriptor && ( descriptor.writable || ( descriptor.set && typeof descriptor.set === 'function' ) );
+    const descriptor = Object.getOwnPropertyDescriptor(Error, 'stackTraceLimit');
+    const stackTraceWritable = descriptor && (descriptor.writable || (descriptor.set && typeof descriptor.set === 'function'));
 
-    if ( stackTraceWritable ) {
+    if (stackTraceWritable) {
 
       // Save the original stackTraceLimit before changing it
-      // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error, @typescript-eslint/ban-ts-comment
       // @ts-ignore
       const originalStackTraceLimit = Error.stackTraceLimit;
 
-      // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error, @typescript-eslint/ban-ts-comment
       // @ts-ignore
       Error.stackTraceLimit = limit;
+      // eslint-disable-next-line unicorn/error-message
       const stackTrace = new Error().stack!;
 
-      // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error
+      // eslint-disable-next-line @typescript-eslint/prefer-ts-expect-error, @typescript-eslint/ban-ts-comment
       // @ts-ignore
       Error.stackTraceLimit = originalStackTraceLimit;
       return stackTrace;
     }
     else {
+      // eslint-disable-next-line unicorn/error-message
       return new Error().stack!;
     }
   }
@@ -216,26 +220,26 @@ class Tandem {
    * Adds a PhetioObject.  For example, it could be an axon Property, SCENERY/Node or SUN/RoundPushButton.
    * phetioEngine listens for when PhetioObjects are added and removed to keep track of them for PhET-iO.
    */
-  public addPhetioObject( phetioObject: PhetioObject ): void {
+  public addPhetioObject(phetioObject: PhetioObject): void {
 
-    if ( PHET_IO_ENABLED ) {
+    if (PHET_IO_ENABLED) {
 
       // Throw an error if the tandem is required but not supplied
-      assert && Tandem.VALIDATION && assert( !( this.required && !this.supplied ), 'Tandem was required but not supplied' );
+      assert && Tandem.VALIDATION && assert(!(this.required && !this.supplied), 'Tandem was required but not supplied');
 
       // If tandem is optional and not supplied, then ignore it.
-      if ( !this.required && !this.supplied ) {
+      if (!this.required && !this.supplied) {
 
         // Optionally instrumented types without tandems are not added.
         return;
       }
 
-      if ( !Tandem.launched ) {
-        Tandem.bufferedPhetioObjects.push( phetioObject );
+      if (!Tandem.launched) {
+        Tandem.bufferedPhetioObjects.push(phetioObject);
       }
       else {
-        for ( let i = 0; i < phetioObjectListeners.length; i++ ) {
-          phetioObjectListeners[ i ].addPhetioObject( phetioObject );
+        for (let i = 0; i < phetioObjectListeners.length; i++) {
+          phetioObjectListeners[i].addPhetioObject(phetioObject);
         }
       }
     }
@@ -244,29 +248,29 @@ class Tandem {
   /**
    * Returns true if this Tandem has the specified ancestor Tandem.
    */
-  public hasAncestor( ancestor: Tandem ): boolean {
-    return this.parentTandem === ancestor || !!( this.parentTandem && this.parentTandem.hasAncestor( ancestor ) );
+  public hasAncestor(ancestor: Tandem): boolean {
+    return this.parentTandem === ancestor || !!(this.parentTandem && this.parentTandem.hasAncestor(ancestor));
   }
 
   /**
    * Removes a PhetioObject and signifies to listeners that it has been removed.
    */
-  public removePhetioObject( phetioObject: PhetioObject ): void {
+  public removePhetioObject(phetioObject: PhetioObject): void {
 
     // No need to handle this case for uninstrumented objects being removed
-    if ( !this.supplied ) {
+    if (!this.supplied) {
       return;
     }
 
     // Only active when running as phet-io
-    if ( PHET_IO_ENABLED ) {
-      if ( !Tandem.launched ) {
-        assert && assert( Tandem.bufferedPhetioObjects.includes( phetioObject ), 'should contain item' );
-        arrayRemove( Tandem.bufferedPhetioObjects, phetioObject );
+    if (PHET_IO_ENABLED) {
+      if (!Tandem.launched) {
+        assert && assert(Tandem.bufferedPhetioObjects.includes(phetioObject), 'should contain item');
+        arrayRemove(Tandem.bufferedPhetioObjects, phetioObject);
       }
       else {
-        for ( let i = 0; i < phetioObjectListeners.length; i++ ) {
-          phetioObjectListeners[ i ].removePhetioObject( phetioObject );
+        for (let i = 0; i < phetioObjectListeners.length; i++) {
+          phetioObjectListeners[i].removePhetioObject(phetioObject);
         }
       }
     }
@@ -277,33 +281,33 @@ class Tandem {
   /**
    * Used for creating new tandems, extends this Tandem's options with the passed-in options.
    */
-  public getExtendedOptions( options?: TandemOptions ): TandemOptions {
+  public getExtendedOptions(options?: TandemOptions): TandemOptions {
 
     // Any child of something should be passed all inherited options. Make sure that this extend call includes all
     // that make sense from the constructor's extend call.
-    return merge( {
+    return merge({
       supplied: this.supplied,
       required: this.required
-    }, options );
+    }, options);
   }
 
   /**
    * Create a new Tandem by appending the given id, or if the child Tandem already exists, return it instead.
    */
-  public createTandem( name: string, options?: TandemOptions ): Tandem {
-    assert && Tandem.VALIDATION && assert( !UNALLOWED_TANDEM_NAMES.includes( name ), 'tandem name is not allowed: ' + name );
+  public createTandem(name: string, options?: TandemOptions): Tandem {
+    assert && Tandem.VALIDATION && assert(!UNALLOWED_TANDEM_NAMES.includes(name), 'tandem name is not allowed: ' + name);
 
-    options = this.getExtendedOptions( options );
+    options = this.getExtendedOptions(options);
 
     // re-use the child if it already exists, but make sure it behaves the same.
-    if ( this.hasChild( name ) ) {
-      const currentChild = this.children[ name ];
-      assert && assert( currentChild.required === options.required );
-      assert && assert( currentChild.supplied === options.supplied );
+    if (this.hasChild(name)) {
+      const currentChild = this.children[name];
+      assert && assert(currentChild.required === options.required);
+      assert && assert(currentChild.supplied === options.supplied);
       return currentChild;
     }
     else {
-      return new Tandem( this, name, options ); // eslint-disable-line bad-sim-text
+      return new Tandem(this, name, options); // eslint-disable-line bad-sim-text
     }
   }
 
@@ -313,40 +317,40 @@ class Tandem {
    * For example:
    * - createTandem( 'foo', 0 ) => 'foo1'
    */
-  public createTandem1Indexed( name: string, index: number, options?: TandemOptions ): Tandem {
-    return this.createTandem( `${name}${index + 1}`, options );
+  public createTandem1Indexed(name: string, index: number, options?: TandemOptions): Tandem {
+    return this.createTandem(`${name}${index + 1}`, options);
   }
 
-  public hasChild( name: string ): boolean {
-    return this.children.hasOwnProperty( name );
+  public hasChild(name: string): boolean {
+    return this.children.hasOwnProperty(name);
   }
 
-  public addChild( name: string, tandem: Tandem ): void {
-    assert && assert( !this.hasChild( name ) );
-    this.children[ name ] = tandem;
+  public addChild(name: string, tandem: Tandem): void {
+    assert && assert(!this.hasChild(name));
+    this.children[name] = tandem;
   }
 
   /**
    * Fire a callback on all descendants of this Tandem
    */
-  public iterateDescendants( callback: ( t: Tandem ) => void ): void {
-    for ( const childName in this.children ) {
-      if ( this.children.hasOwnProperty( childName ) ) {
-        callback( this.children[ childName ] );
-        this.children[ childName ].iterateDescendants( callback );
+  public iterateDescendants(callback: (t: Tandem) => void): void {
+    for (const childName in this.children) {
+      if (this.children.hasOwnProperty(childName)) {
+        callback(this.children[childName]);
+        this.children[childName].iterateDescendants(callback);
       }
     }
   }
 
-  private removeChild( childName: string ): void {
-    assert && assert( this.hasChild( childName ) );
-    delete this.children[ childName ];
+  private removeChild(childName: string): void {
+    assert && assert(this.hasChild(childName));
+    delete this.children[childName];
   }
 
   private dispose(): void {
-    assert && assert( !this.isDisposed, 'already disposed' );
+    assert && assert(!this.isDisposed, 'already disposed');
 
-    this.parentTandem!.removeChild( this.name );
+    this.parentTandem!.removeChild(this.name);
     this.parentTandem = null;
 
     this.isDisposed = true;
@@ -357,7 +361,7 @@ class Tandem {
    * PhetioObjects have the trivial case where its archetypal phetioID is the same as its phetioID.
    */
   public getArchetypalPhetioID(): PhetioID {
-    return window.phetio.PhetioIDUtils.getArchetypalPhetioID( this.phetioID );
+    return window.phetio.PhetioIDUtils.getArchetypalPhetioID(this.phetioID);
   }
 
   /**
@@ -370,22 +374,22 @@ class Tandem {
    * Used for arrays, observable arrays, or when many elements of the same type are created and they do not otherwise
    * have unique identifiers.
    */
-  public createGroupTandem( name: string ): GroupTandem {
-    if ( this.children[ name ] ) {
-      return this.children[ name ] as GroupTandem;
+  public createGroupTandem(name: string): GroupTandem {
+    if (this.children[name]) {
+      return this.children[name] as GroupTandem;
     }
-    return new GroupTandem( this, name );
+    return new GroupTandem(this, name);
   }
 
-  public equals( tandem: Tandem ): boolean {
+  public equals(tandem: Tandem): boolean {
     return this.phetioID === tandem.phetioID;
   }
 
   /**
    * Adds a listener that will be notified when items are registered/deregistered
    */
-  public static addPhetioObjectListener( phetioObjectListener: PhetioObjectListener ): void {
-    phetioObjectListeners.push( phetioObjectListener );
+  public static addPhetioObjectListener(phetioObjectListener: PhetioObjectListener): void {
+    phetioObjectListeners.push(phetioObjectListener);
   }
 
   /**
@@ -393,13 +397,13 @@ class Tandem {
    * and subsequent PhetioObjects will be registered directly.
    */
   public static launch(): void {
-    assert && assert( !Tandem.launched, 'Tandem cannot be launched twice' );
+    assert && assert(!Tandem.launched, 'Tandem cannot be launched twice');
     Tandem.launched = true;
 
-    while ( launchListeners.length > 0 ) {
+    while (launchListeners.length > 0) {
       launchListeners.shift()!();
     }
-    assert && assert( launchListeners.length === 0 );
+    assert && assert(launchListeners.length === 0);
   }
 
   /**
@@ -415,9 +419,9 @@ class Tandem {
   /**
    * Add a listener that will fire when Tandem is launched
    */
-  public static addLaunchListener( listener: () => void ): void {
-    assert && assert( !Tandem.launched, 'tandem has already been launched, cannot add listener for that hook.' );
-    launchListeners.push( listener );
+  public static addLaunchListener(listener: () => void): void {
+    assert && assert(!Tandem.launched, 'tandem has already been launched, cannot add listener for that hook.');
+    launchListeners.push(listener);
   }
 
   /**
@@ -434,8 +438,8 @@ class Tandem {
   /**
    * When generating an API (whether to output a file or for in-memory comparison), this is marked as true.
    */
-  public static readonly API_GENERATION = Tandem.PHET_IO_ENABLED && ( phet.preloads.phetio.queryParameters.phetioPrintAPI ||
-                                                                      phet.preloads.phetio.queryParameters.phetioCompareAPI );
+  public static readonly API_GENERATION = Tandem.PHET_IO_ENABLED && (phet.preloads.phetio.queryParameters.phetioPrintAPI ||
+    phet.preloads.phetio.queryParameters.phetioCompareAPI);
 
   /**
    * If PhET-iO is running with validation enabled.
@@ -459,10 +463,10 @@ class Tandem {
   // a list of PhetioObjects ready to be sent out to listeners, but can't because Tandem hasn't been launched yet.
   public static readonly bufferedPhetioObjects: PhetioObject[] = [];
 
-  public createTandemFromPhetioID( phetioID: PhetioID ): Tandem {
-    return this.createTandem( phetioID.split( window.phetio.PhetioIDUtils.SEPARATOR ).join( INTER_TERM_SEPARATOR ), {
-      isValidTandemName: ( name: string ) => Tandem.getRegexFromCharacterClass( TandemConstants.BASE_DERIVED_TANDEM_CHARACTER_CLASS ).test( name )
-    } );
+  public createTandemFromPhetioID(phetioID: PhetioID): Tandem {
+    return this.createTandem(phetioID.split(window.phetio.PhetioIDUtils.SEPARATOR).join(INTER_TERM_SEPARATOR), {
+      isValidTandemName: (name: string) => Tandem.getRegexFromCharacterClass(TandemConstants.BASE_DERIVED_TANDEM_CHARACTER_CLASS).test(name)
+    });
   }
 
   private static readonly RootTandem = class RootTandem extends Tandem {
@@ -470,25 +474,25 @@ class Tandem {
     /**
      * RootTandems only accept specifically named children.
      */
-    public override createTandem( name: string, options?: TandemOptions ): Tandem {
-      if ( Tandem.VALIDATION ) {
+    public override createTandem(name: string, options?: TandemOptions): Tandem {
+      if (Tandem.VALIDATION) {
         const allowedOnRoot = name === window.phetio.PhetioIDUtils.GLOBAL_COMPONENT_NAME ||
-                              name === REQUIRED_TANDEM_NAME ||
-                              name === OPTIONAL_TANDEM_NAME ||
-                              name === TEST_TANDEM_NAME ||
-                              name === window.phetio.PhetioIDUtils.GENERAL_COMPONENT_NAME ||
-                              _.endsWith( name, Tandem.SCREEN_TANDEM_NAME_SUFFIX );
-        assert && assert( allowedOnRoot, `tandem name not allowed on root: "${name}"; perhaps try putting it under general or global` );
+          name === REQUIRED_TANDEM_NAME ||
+          name === OPTIONAL_TANDEM_NAME ||
+          name === TEST_TANDEM_NAME ||
+          name === window.phetio.PhetioIDUtils.GENERAL_COMPONENT_NAME ||
+          _.endsWith(name, Tandem.SCREEN_TANDEM_NAME_SUFFIX);
+        assert && assert(allowedOnRoot, `tandem name not allowed on root: "${name}"; perhaps try putting it under general or global`);
       }
 
-      return super.createTandem( name, options );
+      return super.createTandem(name, options);
     }
   };
 
   /**
    * The root tandem for a simulation
    */
-  public static readonly ROOT = new Tandem.RootTandem( null, _.camelCase( packageJSON.name ) );
+  public static readonly ROOT = new Tandem.RootTandem(null, _.camelCase(packageJSON.name));
 
   /**
    * Many simulation elements are nested under "general". This tandem is for elements that exists in all sims. For a
@@ -497,27 +501,27 @@ class Tandem {
    * @constant
    * @type {Tandem}
    */
-  private static readonly GENERAL = Tandem.ROOT.createTandem( window.phetio.PhetioIDUtils.GENERAL_COMPONENT_NAME );
+  private static readonly GENERAL = Tandem.ROOT.createTandem(window.phetio.PhetioIDUtils.GENERAL_COMPONENT_NAME);
 
   /**
    * Used in unit tests
    */
-  public static readonly ROOT_TEST = Tandem.ROOT.createTandem( TEST_TANDEM_NAME );
+  public static readonly ROOT_TEST = Tandem.ROOT.createTandem(TEST_TANDEM_NAME);
 
   /**
    * Tandem for model simulation elements that are general to all sims.
    */
-  public static readonly GENERAL_MODEL = Tandem.GENERAL.createTandem( window.phetio.PhetioIDUtils.MODEL_COMPONENT_NAME );
+  public static readonly GENERAL_MODEL = Tandem.GENERAL.createTandem(window.phetio.PhetioIDUtils.MODEL_COMPONENT_NAME);
 
   /**
    * Tandem for view simulation elements that are general to all sims.
    */
-  public static readonly GENERAL_VIEW = Tandem.GENERAL.createTandem( window.phetio.PhetioIDUtils.VIEW_COMPONENT_NAME );
+  public static readonly GENERAL_VIEW = Tandem.GENERAL.createTandem(window.phetio.PhetioIDUtils.VIEW_COMPONENT_NAME);
 
   /**
    * Tandem for controller simulation elements that are general to all sims.
    */
-  public static readonly GENERAL_CONTROLLER = Tandem.GENERAL.createTandem( window.phetio.PhetioIDUtils.CONTROLLER_COMPONENT_NAME );
+  public static readonly GENERAL_CONTROLLER = Tandem.GENERAL.createTandem(window.phetio.PhetioIDUtils.CONTROLLER_COMPONENT_NAME);
 
   /**
    * Simulation elements that don't belong in screens should be nested under "global". Note that this tandem should only
@@ -528,45 +532,45 @@ class Tandem {
    * @constant
    * @type {Tandem}
    */
-  private static readonly GLOBAL = Tandem.ROOT.createTandem( window.phetio.PhetioIDUtils.GLOBAL_COMPONENT_NAME );
+  private static readonly GLOBAL = Tandem.ROOT.createTandem(window.phetio.PhetioIDUtils.GLOBAL_COMPONENT_NAME);
 
   /**
    * Model simulation elements that don't belong in specific screens should be nested under this Tandem. Note that this
    * tandem should only have simulation specific elements in them.
    */
-  public static readonly GLOBAL_MODEL = Tandem.GLOBAL.createTandem( window.phetio.PhetioIDUtils.MODEL_COMPONENT_NAME );
+  public static readonly GLOBAL_MODEL = Tandem.GLOBAL.createTandem(window.phetio.PhetioIDUtils.MODEL_COMPONENT_NAME);
 
   /**
    * View simulation elements that don't belong in specific screens should be nested under this Tandem. Note that this
    * tandem should only have simulation specific elements in them.
    */
-  public static readonly GLOBAL_VIEW = Tandem.GLOBAL.createTandem( window.phetio.PhetioIDUtils.VIEW_COMPONENT_NAME );
+  public static readonly GLOBAL_VIEW = Tandem.GLOBAL.createTandem(window.phetio.PhetioIDUtils.VIEW_COMPONENT_NAME);
 
   /**
    * Colors used in the simulation.
    */
-  public static readonly COLORS = Tandem.GLOBAL_VIEW.createTandem( window.phetio.PhetioIDUtils.COLORS_COMPONENT_NAME );
+  public static readonly COLORS = Tandem.GLOBAL_VIEW.createTandem(window.phetio.PhetioIDUtils.COLORS_COMPONENT_NAME);
 
   /**
    * Colors used in the simulation.
    */
 
-  public static readonly STRINGS = Tandem.GENERAL_MODEL.createTandem( window.phetio.PhetioIDUtils.STRINGS_COMPONENT_NAME );
+  public static readonly STRINGS = Tandem.GENERAL_MODEL.createTandem(window.phetio.PhetioIDUtils.STRINGS_COMPONENT_NAME);
 
   /**
    * Get the Tandem location for model strings. Provide the camelCased repo name for where the string should be
    * organized. This will default to the sim's name. See https://github.com/phetsims/tandem/issues/298
    */
-  public static getStringsTandem( moduleName: string = Tandem.ROOT.name ): Tandem {
-    return Tandem.STRINGS.createTandem( moduleName );
+  public static getStringsTandem(moduleName: string = Tandem.ROOT.name): Tandem {
+    return Tandem.STRINGS.createTandem(moduleName);
   }
 
   /**
    * Get the Tandem location for derived model strings. Provide the camelCased repo name for where the string should be
    * organized. This will default to the sim's name. See https://github.com/phetsims/tandem/issues/298
    */
-  public static getDerivedStringsTandem( moduleName: string = Tandem.ROOT.name ): Tandem {
-    return Tandem.getStringsTandem( moduleName ).createTandem( 'derivedStrings' );
+  public static getDerivedStringsTandem(moduleName: string = Tandem.ROOT.name): Tandem {
+    return Tandem.getStringsTandem(moduleName).createTandem('derivedStrings');
   }
 
   /**
@@ -574,10 +578,10 @@ class Tandem {
    * Used to indicate a common code component that supports tandem, but doesn't require it.  If a tandem is not
    * passed in, then it will not be instrumented.
    */
-  public static readonly OPTIONAL = Tandem.ROOT.createTandem( OPTIONAL_TANDEM_NAME, {
+  public static readonly OPTIONAL = Tandem.ROOT.createTandem(OPTIONAL_TANDEM_NAME, {
     required: false,
     supplied: false
-  } );
+  });
 
   /**
    * To be used exclusively to opt out of situations where a tandem is required, see https://github.com/phetsims/tandem/issues/97.
@@ -587,31 +591,31 @@ class Tandem {
   /**
    * Some common code (such as Checkbox or RadioButton) must always be instrumented.
    */
-  public static readonly REQUIRED = Tandem.ROOT.createTandem( REQUIRED_TANDEM_NAME, {
+  public static readonly REQUIRED = Tandem.ROOT.createTandem(REQUIRED_TANDEM_NAME, {
 
     // let phetioPrintMissingTandems bypass this
     required: VALIDATION || PRINT_MISSING_TANDEMS,
     supplied: false
-  } );
+  });
 
   /**
    * Use this as the parent tandem for Properties that are related to sim-specific preferences.
    */
-  public static readonly PREFERENCES = Tandem.GLOBAL_MODEL.createTandem( 'preferences' );
+  public static readonly PREFERENCES = Tandem.GLOBAL_MODEL.createTandem('preferences');
 
   /**
    * Use this as the parent tandem for RegionAndCulturePortrayal instances in your sim.
    */
-  public static readonly REGION_CULTURE_PORTRAYALS = Tandem.PREFERENCES.createTandem( 'regionAndCulturePortrayals' );
+  public static readonly REGION_CULTURE_PORTRAYALS = Tandem.PREFERENCES.createTandem('regionAndCulturePortrayals');
 }
 
-Tandem.addLaunchListener( () => {
-  while ( Tandem.bufferedPhetioObjects.length > 0 ) {
+Tandem.addLaunchListener(() => {
+  while (Tandem.bufferedPhetioObjects.length > 0) {
     const phetioObject = Tandem.bufferedPhetioObjects.shift();
-    phetioObject!.tandem.addPhetioObject( phetioObject! );
+    phetioObject!.tandem.addPhetioObject(phetioObject!);
   }
-  assert && assert( Tandem.bufferedPhetioObjects.length === 0, 'bufferedPhetioObjects should be empty' );
-} );
+  assert && assert(Tandem.bufferedPhetioObjects.length === 0, 'bufferedPhetioObjects should be empty');
+});
 
 /**
  * Group Tandem -- Declared in the same file to avoid circular reference errors in module loading.
@@ -625,8 +629,8 @@ class GroupTandem extends Tandem {
   /**
    * create with Tandem.createGroupTandem
    */
-  public constructor( parentTandem: Tandem, name: string ) {
-    super( parentTandem, name );
+  public constructor(parentTandem: Tandem, name: string) {
+    super(parentTandem, name);
 
     this.groupName = name;
     this.groupMemberIndex = 0;
@@ -636,11 +640,11 @@ class GroupTandem extends Tandem {
    * Creates the next tandem in the group.
    */
   public createNextTandem(): Tandem {
-    const tandem = this.parentTandem!.createTandem( `${this.groupName}${this.groupMemberIndex}` );
+    const tandem = this.parentTandem!.createTandem(`${this.groupName}${this.groupMemberIndex}`);
     this.groupMemberIndex++;
     return tandem;
   }
 }
 
-tandemNamespace.register( 'Tandem', Tandem );
+tandemNamespace.register('Tandem', Tandem);
 export default Tandem;

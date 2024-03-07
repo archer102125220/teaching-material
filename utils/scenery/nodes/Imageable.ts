@@ -6,18 +6,18 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyEmitter from '../../../axon/js/TinyEmitter.js';
-import Utils from '../../../dot/js/Utils.js';
-import { Shape } from '../../../kite/js/imports.js';
-import cleanArray from '../../../phet-core/js/cleanArray.js';
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { scenery, svgns, xlinkns } from '../imports.js';
-import IntentionalAny from '../../../phet-core/js/types/IntentionalAny.js';
-import TEmitter from '../../../axon/js/TEmitter.js';
+import TinyEmitter from '../../axon/TinyEmitter';
+import Utils from '../../dot/Utils';
+import { Shape } from '../../kite/imports';
+import cleanArray from '../../phet-core/cleanArray';
+import Matrix3 from '../../dot/Matrix3';
+import Vector2 from '../../dot/Vector2';
+import { scenery, svgns, xlinkns } from '../imports';
+import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import type TEmitter from '../../axon/TEmitter';
 
 // Need to poly-fill on some browsers
-const log2 = Math.log2 || function( x: number ) { return Math.log( x ) / Math.LN2; };
+const log2 = Math.log2 || function (x: number) { return Math.log(x) / Math.LN2; };
 
 const DEFAULT_OPTIONS = {
   imageOpacity: 1,
@@ -34,21 +34,21 @@ const DEFAULT_OPTIONS = {
 let scratchCanvas: HTMLCanvasElement | null = null;
 let scratchContext: CanvasRenderingContext2D | null = null;
 const getScratchCanvas = (): HTMLCanvasElement => {
-  if ( !scratchCanvas ) {
-    scratchCanvas = document.createElement( 'canvas' );
+  if (!scratchCanvas) {
+    scratchCanvas = document.createElement('canvas');
   }
   return scratchCanvas;
 };
 const getScratchContext = () => {
-  if ( !scratchContext ) {
-    scratchContext = getScratchCanvas().getContext( '2d', {
+  if (!scratchContext) {
+    scratchContext = getScratchCanvas().getContext('2d', {
       willReadFrequently: true
-    } )!;
+    })!;
   }
   return scratchContext;
 };
 
-type Constructor<T = object> = new ( ...args: IntentionalAny[] ) => T;
+type Constructor<T = object> = new (...args: IntentionalAny[]) => T;
 
 export type Mipmap = {
   width: number;
@@ -73,7 +73,7 @@ export type ImageableOptions = {
   hitTestPixels?: boolean;
 };
 
-const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
+const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
   return class ImageableMixin extends type {
 
     // (scenery-internal) Internal stateful value, see setImage()
@@ -128,9 +128,9 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
     // For compatibility
     public isDisposed?: boolean;
 
-    public constructor( ...args: IntentionalAny[] ) {
+    public constructor(...args: IntentionalAny[]) {
 
-      super( ...args );
+      super(...args);
 
       this._image = null;
       this._initialWidth = DEFAULT_OPTIONS.initialWidth;
@@ -144,7 +144,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
       this._mipmapCanvases = [];
       this._mipmapURLs = [];
       this._mipmapData = null;
-      this._imageLoadListener = this._onImageLoad.bind( this );
+      this._imageLoadListener = this._onImageLoad.bind(this);
       this._imageLoadListenerAttached = false;
       this._hitTestImageData = null;
       this.mipmapEmitter = new TinyEmitter();
@@ -206,30 +206,30 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      *  Also note that if the underlying image (like Canvas data) has changed, it is recommended to call
      *  invalidateImage() instead of changing the image reference (calling setImage() multiple times)
      */
-    public setImage( image: ImageableImage ): this {
-      assert && assert( image, 'image should be available' );
+    public setImage(image: ImageableImage): this {
+      assert && assert(image, 'image should be available');
 
       // Generally, if a different value for image is provided, it has changed
       let hasImageChanged = this._image !== image;
 
       // Except in some cases, where the provided image is a string. If our current image has the same .src as the
       // "new" image, it's basically the same (as we promote string images to HTMLImageElements).
-      if ( hasImageChanged && typeof image === 'string' && this._image && this._image instanceof HTMLImageElement && image === this._image.src ) {
+      if (hasImageChanged && typeof image === 'string' && this._image && this._image instanceof HTMLImageElement && image === this._image.src) {
         hasImageChanged = false;
       }
 
       // Or if our current mipmap data is the same as the input, then we aren't changing it
-      if ( hasImageChanged && image === this._mipmapData ) {
+      if (hasImageChanged && image === this._mipmapData) {
         hasImageChanged = false;
       }
 
-      if ( hasImageChanged ) {
+      if (hasImageChanged) {
         // Reset the initial dimensions, since we have a new image that may have different dimensions.
         this._initialWidth = 0;
         this._initialHeight = 0;
 
         // Don't leak memory by referencing old images
-        if ( this._image && this._imageLoadListenerAttached ) {
+        if (this._image && this._imageLoadListenerAttached) {
           this._detachImageLoadListener();
         }
 
@@ -237,17 +237,17 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
         this._mipmapData = null;
 
         // Convert string => HTMLImageElement
-        if ( typeof image === 'string' ) {
+        if (typeof image === 'string') {
           // create an image with the assumed URL
           const src = image;
-          image = document.createElement( 'img' );
+          image = document.createElement('img');
           image.src = src;
         }
         // Handle the provided mipmap
-        else if ( Array.isArray( image ) ) {
+        else if (Array.isArray(image)) {
           // mipmap data!
           this._mipmapData = image;
-          image = image[ 0 ].img!; // presumes we are already loaded
+          image = image[0].img!; // presumes we are already loaded
 
           // force initialization of mipmapping parameters, since invalidateMipmaps() is guaranteed to run below
           this._mipmapInitialLevel = this._mipmapMaxLevel = this._mipmapData.length;
@@ -258,7 +258,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
         this._image = image;
 
         // If our image is an HTML image that hasn't loaded yet, attach a load listener.
-        if ( this._image instanceof HTMLImageElement && ( !this._image.width || !this._image.height ) ) {
+        if (this._image instanceof HTMLImageElement && (!this._image.width || !this._image.height)) {
           this._attachImageLoadListener();
         }
 
@@ -268,7 +268,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
       return this;
     }
 
-    public set image( value: ImageableImage ) { this.setImage( value ); }
+    public set image(value: ImageableImage) { this.setImage(value); }
 
     public get image(): HTMLImageElement | HTMLCanvasElement { return this.getImage(); }
 
@@ -280,7 +280,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      *       TODO: return the original result instead. https://github.com/phetsims/scenery/issues/1581
      */
     public getImage(): HTMLImageElement | HTMLCanvasElement {
-      assert && assert( this._image !== null );
+      assert && assert(this._image !== null);
 
       return this._image!;
     }
@@ -313,13 +313,13 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * @param width - Initial width of the image. See setInitialWidth() for more documentation
      * @param height - Initial height of the image. See setInitialHeight() for more documentation
      */
-    public setImageWithSize( image: string | HTMLImageElement | HTMLCanvasElement | Mipmap, width: number, height: number ): this {
+    public setImageWithSize(image: string | HTMLImageElement | HTMLCanvasElement | Mipmap, width: number, height: number): this {
       // First, setImage(), as it will reset the initial width and height
-      this.setImage( image );
+      this.setImage(image);
 
       // Then apply the initial dimensions
-      this.setInitialWidth( width );
-      this.setInitialHeight( height );
+      this.setInitialWidth(width);
+      this.setInitialHeight(height);
 
       return this;
     }
@@ -333,16 +333,16 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * @param imageOpacity - Should be a number between 0 (transparent) and 1 (opaque), just like normal
      *                                opacity.
      */
-    public setImageOpacity( imageOpacity: number ): void {
-      assert && assert( isFinite( imageOpacity ) && imageOpacity >= 0 && imageOpacity <= 1,
-        `imageOpacity out of range: ${imageOpacity}` );
+    public setImageOpacity(imageOpacity: number): void {
+      assert && assert(isFinite(imageOpacity) && imageOpacity >= 0 && imageOpacity <= 1,
+        `imageOpacity out of range: ${imageOpacity}`);
 
-      if ( this._imageOpacity !== imageOpacity ) {
+      if (this._imageOpacity !== imageOpacity) {
         this._imageOpacity = imageOpacity;
       }
     }
 
-    public set imageOpacity( value: number ) { this.setImageOpacity( value ); }
+    public set imageOpacity(value: number) { this.setImageOpacity(value); }
 
     public get imageOpacity(): number { return this.getImageOpacity(); }
 
@@ -373,10 +373,10 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      *
      * @param width - Expected width of the image's unloaded content
      */
-    public setInitialWidth( width: number ): this {
-      assert && assert( width >= 0 && ( width % 1 === 0 ), 'initialWidth should be a non-negative integer' );
+    public setInitialWidth(width: number): this {
+      assert && assert(width >= 0 && (width % 1 === 0), 'initialWidth should be a non-negative integer');
 
-      if ( width !== this._initialWidth ) {
+      if (width !== this._initialWidth) {
         this._initialWidth = width;
 
         this.invalidateImage();
@@ -385,7 +385,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
       return this;
     }
 
-    public set initialWidth( value: number ) { this.setInitialWidth( value ); }
+    public set initialWidth(value: number) { this.setInitialWidth(value); }
 
     public get initialWidth(): number { return this.getInitialWidth(); }
 
@@ -416,10 +416,10 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      *
      * @param height - Expected height of the image's unloaded content
      */
-    public setInitialHeight( height: number ): this {
-      assert && assert( height >= 0 && ( height % 1 === 0 ), 'initialHeight should be a non-negative integer' );
+    public setInitialHeight(height: number): this {
+      assert && assert(height >= 0 && (height % 1 === 0), 'initialHeight should be a non-negative integer');
 
-      if ( height !== this._initialHeight ) {
+      if (height !== this._initialHeight) {
         this._initialHeight = height;
 
         this.invalidateImage();
@@ -428,7 +428,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
       return this;
     }
 
-    public set initialHeight( value: number ) { this.setInitialHeight( value ); }
+    public set initialHeight(value: number) { this.setInitialHeight(value); }
 
     public get initialHeight(): number { return this.getInitialHeight(); }
 
@@ -452,8 +452,8 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      *
      * @param mipmap - Whether mipmapping is supported
      */
-    public setMipmap( mipmap: boolean ): this {
-      if ( this._mipmap !== mipmap ) {
+    public setMipmap(mipmap: boolean): this {
+      if (this._mipmap !== mipmap) {
         this._mipmap = mipmap;
 
         this.invalidateMipmaps();
@@ -462,7 +462,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
       return this;
     }
 
-    public set mipmap( value: boolean ) { this.setMipmap( value ); }
+    public set mipmap(value: boolean) { this.setMipmap(value); }
 
     public get mipmap(): boolean { return this.isMipmap(); }
 
@@ -489,8 +489,8 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * This is done approximately like the following formula:
      *   mipmapLevel = Utils.roundSymmetric( computedMipmapLevel + mipmapBias )
      */
-    public setMipmapBias( bias: number ): this {
-      if ( this._mipmapBias !== bias ) {
+    public setMipmapBias(bias: number): this {
+      if (this._mipmapBias !== bias) {
         this._mipmapBias = bias;
 
         this.invalidateMipmaps();
@@ -499,7 +499,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
       return this;
     }
 
-    public set mipmapBias( value: number ) { this.setMipmapBias( value ); }
+    public set mipmapBias(value: number) { this.setMipmapBias(value); }
 
     public get mipmapBias(): number { return this.getMipmapBias(); }
 
@@ -518,11 +518,11 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      *
      * @param level - A non-negative integer representing the number of mipmap levels to precompute.
      */
-    public setMipmapInitialLevel( level: number ): this {
-      assert && assert( level % 1 === 0 && level >= 0,
-        'mipmapInitialLevel should be a non-negative integer' );
+    public setMipmapInitialLevel(level: number): this {
+      assert && assert(level % 1 === 0 && level >= 0,
+        'mipmapInitialLevel should be a non-negative integer');
 
-      if ( this._mipmapInitialLevel !== level ) {
+      if (this._mipmapInitialLevel !== level) {
         this._mipmapInitialLevel = level;
 
         this.invalidateMipmaps();
@@ -531,7 +531,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
       return this;
     }
 
-    public set mipmapInitialLevel( value: number ) { this.setMipmapInitialLevel( value ); }
+    public set mipmapInitialLevel(value: number) { this.setMipmapInitialLevel(value); }
 
     public get mipmapInitialLevel(): number { return this.getMipmapInitialLevel(); }
 
@@ -553,11 +553,11 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      *
      * @param level - A non-negative integer representing the maximum mipmap level to compute.
      */
-    public setMipmapMaxLevel( level: number ): this {
-      assert && assert( level % 1 === 0 && level >= 0,
-        'mipmapMaxLevel should be a non-negative integer' );
+    public setMipmapMaxLevel(level: number): this {
+      assert && assert(level % 1 === 0 && level >= 0,
+        'mipmapMaxLevel should be a non-negative integer');
 
-      if ( this._mipmapMaxLevel !== level ) {
+      if (this._mipmapMaxLevel !== level) {
         this._mipmapMaxLevel = level;
 
         this.invalidateMipmaps();
@@ -566,7 +566,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
       return this;
     }
 
-    public set mipmapMaxLevel( value: number ) { this.setMipmapMaxLevel( value ); }
+    public set mipmapMaxLevel(value: number) { this.setMipmapMaxLevel(value); }
 
     public get mipmapMaxLevel(): number { return this.getMipmapMaxLevel(); }
 
@@ -585,9 +585,9 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      *
      * See https://github.com/phetsims/scenery/issues/1049 for more information.
      */
-    public setHitTestPixels( hitTestPixels: boolean ): this {
+    public setHitTestPixels(hitTestPixels: boolean): this {
 
-      if ( this._hitTestPixels !== hitTestPixels ) {
+      if (this._hitTestPixels !== hitTestPixels) {
         this._hitTestPixels = hitTestPixels;
 
         this._invalidateHitTestData();
@@ -596,7 +596,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
       return this;
     }
 
-    public set hitTestPixels( value: boolean ) { this.setHitTestPixels( value ); }
+    public set hitTestPixels(value: boolean) { this.setHitTestPixels(value); }
 
     public get hitTestPixels(): boolean { return this.getHitTestPixels(); }
 
@@ -614,23 +614,23 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      */
     private _constructNextMipmap(): void {
       const level = this._mipmapCanvases.length;
-      const biggerCanvas = this._mipmapCanvases[ level - 1 ];
+      const biggerCanvas = this._mipmapCanvases[level - 1];
 
       // ignore any 1x1 canvases (or smaller?!?)
-      if ( biggerCanvas.width * biggerCanvas.height > 2 ) {
-        const canvas = document.createElement( 'canvas' );
-        canvas.width = Math.ceil( biggerCanvas.width / 2 );
-        canvas.height = Math.ceil( biggerCanvas.height / 2 );
+      if (biggerCanvas.width * biggerCanvas.height > 2) {
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.ceil(biggerCanvas.width / 2);
+        canvas.height = Math.ceil(biggerCanvas.height / 2);
 
         // sanity check
-        if ( canvas.width > 0 && canvas.height > 0 ) {
+        if (canvas.width > 0 && canvas.height > 0) {
           // Draw half-scale into the smaller Canvas
-          const context = canvas.getContext( '2d' )!;
-          context.scale( 0.5, 0.5 );
-          context.drawImage( biggerCanvas, 0, 0 );
+          const context = canvas.getContext('2d')!;
+          context.scale(0.5, 0.5);
+          context.drawImage(biggerCanvas, 0, 0);
 
-          this._mipmapCanvases.push( canvas );
-          this._mipmapURLs.push( canvas.toDataURL() );
+          this._mipmapCanvases.push(canvas);
+          this._mipmapURLs.push(canvas.toDataURL());
         }
       }
     }
@@ -640,36 +640,36 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      */
     public invalidateMipmaps(): void {
       // Clean output arrays
-      cleanArray( this._mipmapCanvases );
-      cleanArray( this._mipmapURLs );
+      cleanArray(this._mipmapCanvases);
+      cleanArray(this._mipmapURLs);
 
-      if ( this._image && this._mipmap ) {
+      if (this._image && this._mipmap) {
         // If we have mipmap data as an input
-        if ( this._mipmapData ) {
-          for ( let k = 0; k < this._mipmapData.length; k++ ) {
-            const url = this._mipmapData[ k ].url;
-            this._mipmapURLs.push( url );
-            const updateCanvas = this._mipmapData[ k ].updateCanvas;
+        if (this._mipmapData) {
+          for (let k = 0; k < this._mipmapData.length; k++) {
+            const url = this._mipmapData[k].url;
+            this._mipmapURLs.push(url);
+            const updateCanvas = this._mipmapData[k].updateCanvas;
             updateCanvas && updateCanvas();
-            this._mipmapCanvases.push( this._mipmapData[ k ].canvas! );
+            this._mipmapCanvases.push(this._mipmapData[k].canvas!);
           }
         }
         // Otherwise, we have an image (not mipmap) as our input, so we'll need to construct mipmap levels.
         else {
-          const baseCanvas = document.createElement( 'canvas' );
+          const baseCanvas = document.createElement('canvas');
           baseCanvas.width = this.getImageWidth();
           baseCanvas.height = this.getImageHeight();
 
           // if we are not loaded yet, just ignore
-          if ( baseCanvas.width && baseCanvas.height ) {
-            const baseContext = baseCanvas.getContext( '2d' )!;
-            baseContext.drawImage( this._image, 0, 0 );
+          if (baseCanvas.width && baseCanvas.height) {
+            const baseContext = baseCanvas.getContext('2d')!;
+            baseContext.drawImage(this._image, 0, 0);
 
-            this._mipmapCanvases.push( baseCanvas );
-            this._mipmapURLs.push( baseCanvas.toDataURL() );
+            this._mipmapCanvases.push(baseCanvas);
+            this._mipmapURLs.push(baseCanvas.toDataURL());
 
             let level = 0;
-            while ( ++level < this._mipmapInitialLevel ) {
+            while (++level < this._mipmapInitialLevel) {
               this._constructNextMipmap();
             }
           }
@@ -685,47 +685,47 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * @param matrix - The relative transformation matrix of the node.
      * @param [additionalBias] - Can be provided to get per-call bias (we want some of this for Canvas output)
      */
-    public getMipmapLevel( matrix: Matrix3, additionalBias = 0 ): number {
-      assert && assert( this._mipmap, 'Assumes mipmaps can be used' );
+    public getMipmapLevel(matrix: Matrix3, additionalBias = 0): number {
+      assert && assert(this._mipmap, 'Assumes mipmaps can be used');
 
       // Handle high-dpi devices like retina with correct mipmap levels.
-      const scale = Imageable.getApproximateMatrixScale( matrix ) * ( window.devicePixelRatio || 1 );
+      const scale = Imageable.getApproximateMatrixScale(matrix) * (window.devicePixelRatio || 1);
 
-      return this.getMipmapLevelFromScale( scale, additionalBias );
+      return this.getMipmapLevelFromScale(scale, additionalBias);
     }
 
     /**
      * Returns the desired mipmap level (0-indexed) that should be used for the particular scale
      */
-    public getMipmapLevelFromScale( scale: number, additionalBias = 0 ): number {
-      assert && assert( scale > 0, 'scale should be a positive number' );
+    public getMipmapLevelFromScale(scale: number, additionalBias = 0): number {
+      assert && assert(scale > 0, 'scale should be a positive number');
 
       // If we are shown larger than scale, ALWAYS choose the highest resolution
-      if ( scale >= 1 ) {
+      if (scale >= 1) {
         return 0;
       }
 
       // our approximate level of detail
-      let level = log2( 1 / scale );
+      let level = log2(1 / scale);
 
       // convert to an integer level (-0.7 is a good default)
-      level = Utils.roundSymmetric( level + this._mipmapBias + additionalBias - 0.7 );
+      level = Utils.roundSymmetric(level + this._mipmapBias + additionalBias - 0.7);
 
-      if ( level < 0 ) {
+      if (level < 0) {
         level = 0;
       }
-      if ( level > this._mipmapMaxLevel ) {
+      if (level > this._mipmapMaxLevel) {
         level = this._mipmapMaxLevel;
       }
 
       // If necessary, do lazy construction of the mipmap level
-      if ( this.mipmap && !this._mipmapCanvases[ level ] ) {
+      if (this.mipmap && !this._mipmapCanvases[level]) {
         let currentLevel = this._mipmapCanvases.length - 1;
-        while ( ++currentLevel <= level ) {
+        while (++currentLevel <= level) {
           this._constructNextMipmap();
         }
         // Sanity check, since _constructNextMipmap() may have had to bail out. We had to compute some, so use the last
-        return Math.min( level, this._mipmapCanvases.length - 1 );
+        return Math.min(level, this._mipmapCanvases.length - 1);
       }
       // Should already be constructed, or isn't needed
       else {
@@ -739,18 +739,18 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * @param level - Non-negative integer representing the mipmap level
      * @returns - Matching <canvas> for the level of detail
      */
-    public getMipmapCanvas( level: number ): HTMLCanvasElement {
-      assert && assert( level >= 0 &&
-      level < this._mipmapCanvases.length &&
-      ( level % 1 ) === 0 );
+    public getMipmapCanvas(level: number): HTMLCanvasElement {
+      assert && assert(level >= 0 &&
+        level < this._mipmapCanvases.length &&
+        (level % 1) === 0);
 
       // Sanity check to make sure we have copied the image data in if necessary.
-      if ( this._mipmapData ) {
+      if (this._mipmapData) {
         // level may not exist (it was generated), and updateCanvas may not exist
-        const updateCanvas = this._mipmapData[ level ] && this._mipmapData[ level ].updateCanvas;
+        const updateCanvas = this._mipmapData[level] && this._mipmapData[level].updateCanvas;
         updateCanvas && updateCanvas();
       }
-      return this._mipmapCanvases[ level ];
+      return this._mipmapCanvases[level];
     }
 
     /**
@@ -759,12 +759,12 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * @param level - Non-negative integer representing the mipmap level
      * @returns - Matching data URL for the level of detail
      */
-    public getMipmapURL( level: number ): string {
-      assert && assert( level >= 0 &&
-      level < this._mipmapCanvases.length &&
-      ( level % 1 ) === 0 );
+    public getMipmapURL(level: number): string {
+      assert && assert(level >= 0 &&
+        level < this._mipmapCanvases.length &&
+        (level % 1) === 0);
 
-      return this._mipmapURLs[ level ];
+      return this._mipmapURLs[level];
     }
 
     /**
@@ -779,12 +779,12 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      */
     private _invalidateHitTestData(): void {
       // Only compute this if we are hit-testing pixels
-      if ( !this._hitTestPixels ) {
+      if (!this._hitTestPixels) {
         return;
       }
 
-      if ( this._image !== null ) {
-        this._hitTestImageData = Imageable.getHitTestData( this._image, this.imageWidth, this.imageHeight );
+      if (this._image !== null) {
+        this._hitTestImageData = Imageable.getHitTestData(this._image, this.imageWidth, this.imageHeight);
       }
     }
 
@@ -794,16 +794,16 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * NOTE: If the image is not loaded and an initialWidth was provided, that width will be used.
      */
     public getImageWidth(): number {
-      if ( this._image === null ) {
+      if (this._image === null) {
         return 0;
       }
 
-      const detectedWidth = this._mipmapData ? this._mipmapData[ 0 ].width : ( ( 'naturalWidth' in this._image ? this._image.naturalWidth : 0 ) || this._image.width );
-      if ( detectedWidth === 0 ) {
+      const detectedWidth = this._mipmapData ? this._mipmapData[0].width : (('naturalWidth' in this._image ? this._image.naturalWidth : 0) || this._image.width);
+      if (detectedWidth === 0) {
         return this._initialWidth; // either 0 (default), or the overridden value
       }
       else {
-        assert && assert( this._initialWidth === 0 || this._initialWidth === detectedWidth, 'Bad Image.initialWidth' );
+        assert && assert(this._initialWidth === 0 || this._initialWidth === detectedWidth, 'Bad Image.initialWidth');
 
         return detectedWidth;
       }
@@ -817,16 +817,16 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * NOTE: If the image is not loaded and an initialHeight was provided, that height will be used.
      */
     public getImageHeight(): number {
-      if ( this._image === null ) {
+      if (this._image === null) {
         return 0;
       }
 
-      const detectedHeight = this._mipmapData ? this._mipmapData[ 0 ].height : ( ( 'naturalHeight' in this._image ? this._image.naturalHeight : 0 ) || this._image.height );
-      if ( detectedHeight === 0 ) {
+      const detectedHeight = this._mipmapData ? this._mipmapData[0].height : (('naturalHeight' in this._image ? this._image.naturalHeight : 0) || this._image.height);
+      if (detectedHeight === 0) {
         return this._initialHeight; // either 0 (default), or the overridden value
       }
       else {
-        assert && assert( this._initialHeight === 0 || this._initialHeight === detectedHeight, 'Bad Image.initialHeight' );
+        assert && assert(this._initialHeight === 0 || this._initialHeight === detectedHeight, 'Bad Image.initialHeight');
 
         return detectedHeight;
       }
@@ -838,19 +838,19 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * If our provided image is an HTMLImageElement, returns its URL (src). (scenery-internal)
      */
     public getImageURL(): string {
-      assert && assert( this._image instanceof HTMLImageElement, 'Only supported for HTML image elements' );
+      assert && assert(this._image instanceof HTMLImageElement, 'Only supported for HTML image elements');
 
-      return ( this._image as HTMLImageElement ).src;
+      return (this._image as HTMLImageElement).src;
     }
 
     /**
      * Attaches our on-load listener to our current image.
      */
     private _attachImageLoadListener(): void {
-      assert && assert( !this._imageLoadListenerAttached, 'Should only be attached to one thing at a time' );
+      assert && assert(!this._imageLoadListenerAttached, 'Should only be attached to one thing at a time');
 
-      if ( !this.isDisposed ) {
-        ( this._image as HTMLImageElement ).addEventListener( 'load', this._imageLoadListener );
+      if (!this.isDisposed) {
+        (this._image as HTMLImageElement).addEventListener('load', this._imageLoadListener);
         this._imageLoadListenerAttached = true;
       }
     }
@@ -859,9 +859,9 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * Detaches our on-load listener from our current image.
      */
     private _detachImageLoadListener(): void {
-      assert && assert( this._imageLoadListenerAttached, 'Needs to be attached first to be detached.' );
+      assert && assert(this._imageLoadListenerAttached, 'Needs to be attached first to be detached.');
 
-      ( this._image as HTMLImageElement ).removeEventListener( 'load', this._imageLoadListener );
+      (this._image as HTMLImageElement).removeEventListener('load', this._imageLoadListener);
       this._imageLoadListenerAttached = false;
     }
 
@@ -869,7 +869,7 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * Called when our image has loaded (it was not yet loaded with then listener was added)
      */
     private _onImageLoad(): void {
-      assert && assert( this._imageLoadListenerAttached, 'If _onImageLoad is firing, it should be attached' );
+      assert && assert(this._imageLoadListenerAttached, 'If _onImageLoad is firing, it should be attached');
 
       this.invalidateImage();
       this._detachImageLoadListener();
@@ -879,10 +879,11 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
      * Disposes the path, releasing image listeners if needed (and preventing new listeners from being added).
      */
     public dispose(): void {
-      if ( this._image && this._imageLoadListenerAttached ) {
+      if (this._image && this._imageLoadListenerAttached) {
         this._detachImageLoadListener();
       }
 
+      
       // @ts-expect-error
       super.dispose && super.dispose();
     }
@@ -896,9 +897,9 @@ const Imageable = <SuperType extends Constructor>( type: SuperType ) => { // esl
  * @param width - logical width of the image
  * @param height - logical height of the image
  */
-Imageable.getHitTestData = ( image: HTMLImageElement | HTMLCanvasElement, width: number, height: number ): ImageData | null => {
+Imageable.getHitTestData = (image: HTMLImageElement | HTMLCanvasElement, width: number, height: number): ImageData | null => {
   // If the image isn't loaded yet, we don't want to try loading anything
-  if ( !( ( 'naturalWidth' in image ? image.naturalWidth : 0 ) || image.width ) || !( ( 'naturalHeight' in image ? image.naturalHeight : 0 ) || image.height ) ) {
+  if (!(('naturalWidth' in image ? image.naturalWidth : 0) || image.width) || !(('naturalHeight' in image ? image.naturalHeight : 0) || image.height)) {
     return null;
   }
 
@@ -907,9 +908,9 @@ Imageable.getHitTestData = ( image: HTMLImageElement | HTMLCanvasElement, width:
 
   canvas.width = width;
   canvas.height = height;
-  context.drawImage( image, 0, 0 );
+  context.drawImage(image, 0, 0);
 
-  return context.getImageData( 0, 0, width, height );
+  return context.getImageData(0, 0, width, height);
 };
 
 /**
@@ -920,14 +921,14 @@ Imageable.getHitTestData = ( image: HTMLImageElement | HTMLCanvasElement, width:
  * @param height - logical height of the image
  * @param point
  */
-Imageable.testHitTestData = ( imageData: ImageData, width: number, height: number, point: Vector2 ): boolean => {
+Imageable.testHitTestData = (imageData: ImageData, width: number, height: number, point: Vector2): boolean => {
   // For sanity, map it based on the image dimensions and image data dimensions, and carefully clamp in case things are weird.
-  const x = Utils.clamp( Math.floor( ( point.x / width ) * imageData.width ), 0, imageData.width - 1 );
-  const y = Utils.clamp( Math.floor( ( point.y / height ) * imageData.height ), 0, imageData.height - 1 );
+  const x = Utils.clamp(Math.floor((point.x / width) * imageData.width), 0, imageData.width - 1);
+  const y = Utils.clamp(Math.floor((point.y / height) * imageData.height), 0, imageData.height - 1);
 
-  const index = 4 * ( x + y * imageData.width ) + 3;
+  const index = 4 * (x + y * imageData.width) + 3;
 
-  return imageData.data[ index ] !== 0;
+  return imageData.data[index] !== 0;
 };
 
 /**
@@ -937,7 +938,7 @@ Imageable.testHitTestData = ( imageData: ImageData, width: number, height: numbe
  * @param width - logical width of the image
  * @param height - logical height of the image
  */
-Imageable.hitTestDataToShape = ( imageData: ImageData, width: number, height: number ): Shape => {
+Imageable.hitTestDataToShape = (imageData: ImageData, width: number, height: number): Shape => {
   const widthScale = width / imageData.width;
   const heightScale = height / imageData.height;
 
@@ -951,27 +952,27 @@ Imageable.hitTestDataToShape = ( imageData: ImageData, width: number, height: nu
   // NOTE: Rows are more helpful for CAG, even though columns would have better cache behavior when accessing the
   // imageData.
 
-  for ( let y = 0; y < imageData.height; y++ ) {
-    for ( let x = 0; x < imageData.width; x++ ) {
-      const index = 4 * ( x + y * imageData.width ) + 3;
+  for (let y = 0; y < imageData.height; y++) {
+    for (let x = 0; x < imageData.width; x++) {
+      const index = 4 * (x + y * imageData.width) + 3;
 
-      if ( imageData.data[ index ] !== 0 ) {
+      if (imageData.data[index] !== 0) {
         // If our last pixel was empty, and now we're "on", start our rectangle
-        if ( !active ) {
+        if (!active) {
           active = true;
           min = x;
         }
       }
-      else if ( active ) {
+      else if (active) {
         // Finish a rectangle once we reach an "off" pixel
         active = false;
-        shape.rect( min * widthScale, y * widthScale, widthScale * ( x - min ), heightScale );
+        shape.rect(min * widthScale, y * widthScale, widthScale * (x - min), heightScale);
       }
     }
-    if ( active ) {
+    if (active) {
       // We'll need to finish rectangles at the end of each row anyway.
       active = false;
-      shape.rect( min * widthScale, y * widthScale, widthScale * ( imageData.width - min ), heightScale );
+      shape.rect(min * widthScale, y * widthScale, widthScale * (imageData.width - min), heightScale);
     }
   }
 
@@ -985,18 +986,18 @@ Imageable.hitTestDataToShape = ( imageData: ImageData, width: number, height: nu
  * @param width - Non-negative integer for the image's width
  * @param height - Non-negative integer for the image's height
  */
-Imageable.createSVGImage = ( url: string, width: number, height: number ): SVGImageElement => {
-  assert && assert( isFinite( width ) && width >= 0 && ( width % 1 ) === 0,
-    'width should be a non-negative finite integer' );
-  assert && assert( isFinite( height ) && height >= 0 && ( height % 1 ) === 0,
-    'height should be a non-negative finite integer' );
+Imageable.createSVGImage = (url: string, width: number, height: number): SVGImageElement => {
+  assert && assert(isFinite(width) && width >= 0 && (width % 1) === 0,
+    'width should be a non-negative finite integer');
+  assert && assert(isFinite(height) && height >= 0 && (height % 1) === 0,
+    'height should be a non-negative finite integer');
 
-  const element = document.createElementNS( svgns, 'image' );
-  element.setAttribute( 'x', '0' );
-  element.setAttribute( 'y', '0' );
-  element.setAttribute( 'width', `${width}px` );
-  element.setAttribute( 'height', `${height}px` );
-  element.setAttributeNS( xlinkns, 'xlink:href', url );
+  const element = document.createElementNS(svgns, 'image');
+  element.setAttribute('x', '0');
+  element.setAttribute('y', '0');
+  element.setAttribute('width', `${width}px`);
+  element.setAttribute('height', `${height}px`);
+  element.setAttributeNS(xlinkns, 'xlink:href', url);
 
   return element;
 };
@@ -1004,7 +1005,7 @@ Imageable.createSVGImage = ( url: string, width: number, height: number ): SVGIm
 /**
  * Creates an object suitable to be passed to Image as a mipmap (from a Canvas)
  */
-Imageable.createFastMipmapFromCanvas = ( baseCanvas: HTMLCanvasElement ): Mipmap => {
+Imageable.createFastMipmapFromCanvas = (baseCanvas: HTMLCanvasElement): Mipmap => {
   const mipmaps: Mipmap = [];
 
   const baseURL = baseCanvas.toDataURL();
@@ -1012,30 +1013,30 @@ Imageable.createFastMipmapFromCanvas = ( baseCanvas: HTMLCanvasElement ): Mipmap
   baseImage.src = baseURL;
 
   // base level
-  mipmaps.push( {
+  mipmaps.push({
     img: baseImage,
     url: baseURL,
     width: baseCanvas.width,
     height: baseCanvas.height,
     canvas: baseCanvas
-  } );
+  });
 
   let largeCanvas = baseCanvas;
-  while ( largeCanvas.width >= 2 && largeCanvas.height >= 2 ) {
+  while (largeCanvas.width >= 2 && largeCanvas.height >= 2) {
 
     // draw half-size
-    const canvas = document.createElement( 'canvas' );
-    canvas.width = Math.ceil( largeCanvas.width / 2 );
-    canvas.height = Math.ceil( largeCanvas.height / 2 );
-    const context = canvas.getContext( '2d' )!;
-    context.setTransform( 0.5, 0, 0, 0.5, 0, 0 );
-    context.drawImage( largeCanvas, 0, 0 );
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.ceil(largeCanvas.width / 2);
+    canvas.height = Math.ceil(largeCanvas.height / 2);
+    const context = canvas.getContext('2d')!;
+    context.setTransform(0.5, 0, 0, 0.5, 0, 0);
+    context.drawImage(largeCanvas, 0, 0);
 
     // smaller level
     const mipmapLevel = {
       width: canvas.width,
       height: canvas.height,
-      canvas: canvas,
+      canvas,
       url: canvas.toDataURL(),
       img: new window.Image()
     };
@@ -1043,7 +1044,7 @@ Imageable.createFastMipmapFromCanvas = ( baseCanvas: HTMLCanvasElement ): Mipmap
     mipmapLevel.img.src = mipmapLevel.url;
 
     largeCanvas = canvas;
-    mipmaps.push( mipmapLevel );
+    mipmaps.push(mipmapLevel);
   }
 
   return mipmaps;
@@ -1052,9 +1053,9 @@ Imageable.createFastMipmapFromCanvas = ( baseCanvas: HTMLCanvasElement ): Mipmap
 /**
  * Returns a sense of "average" scale, which should be exact if there is no asymmetric scale/shear applied
  */
-Imageable.getApproximateMatrixScale = ( matrix: Matrix3 ): number => {
-  return ( Math.sqrt( matrix.m00() * matrix.m00() + matrix.m10() * matrix.m10() ) +
-           Math.sqrt( matrix.m01() * matrix.m01() + matrix.m11() * matrix.m11() ) ) / 2;
+Imageable.getApproximateMatrixScale = (matrix: Matrix3): number => {
+  return (Math.sqrt(matrix.m00() * matrix.m00() + matrix.m10() * matrix.m10()) +
+    Math.sqrt(matrix.m01() * matrix.m01() + matrix.m11() * matrix.m11())) / 2;
 };
 
 // {number} - We include this for additional smoothing that seems to be needed for Canvas image quality
@@ -1063,5 +1064,5 @@ Imageable.CANVAS_MIPMAP_BIAS_ADJUSTMENT = 0.5;
 // {Object} - Initial values for most Node mutator options
 Imageable.DEFAULT_OPTIONS = DEFAULT_OPTIONS;
 
-scenery.register( 'Imageable', Imageable );
+scenery.register('Imageable', Imageable);
 export default Imageable;

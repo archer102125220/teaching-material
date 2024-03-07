@@ -14,10 +14,10 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import BinPacker, { Bin } from '../../../dot/js/BinPacker.js';
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import Dimension2 from '../../../dot/js/Dimension2.js';
-import { scenery } from '../imports.js';
+import BinPacker, { Bin } from '../../dot/BinPacker';
+import Bounds2 from '../../dot/Bounds2';
+import Dimension2 from '../../dot/Dimension2';
+import { scenery } from '../imports';
 
 // constants
 // The max SpriteSheet size was selected to minimize memory overhead while still accommodating many large images

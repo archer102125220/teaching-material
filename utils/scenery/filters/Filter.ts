@@ -27,7 +27,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { CanvasContextWrapper, Features, scenery, svgns } from '../imports.js';
+import { CanvasContextWrapper, Features, scenery, svgns } from '../imports';
 
 let globalId = 1;
 
@@ -58,14 +58,14 @@ export default abstract class Filter {
    * This effectively mutates the provided filter object, and will be successively called on all Filters to build an
    * SVG filter object.
    */
-  public abstract applySVGFilter( svgFilter: SVGFilterElement, inName: string, resultName?: string ): void;
+  public abstract applySVGFilter(svgFilter: SVGFilterElement, inName: string, resultName?: string): void;
 
   /**
    * Given a specific canvas/context wrapper, this method should mutate its state so that the canvas now holds the
    * filtered content. Usually this would be by using getImageData/putImageData, however redrawing or other operations
    * are also possible.
    */
-  public abstract applyCanvasFilter( wrapper: CanvasContextWrapper ): void;
+  public abstract applyCanvasFilter(wrapper: CanvasContextWrapper): void;
 
   public isDOMCompatible(): boolean {
     // TODO: We can browser-check on things like color matrix? But we want to disallow things that we can't guarantee we https://github.com/phetsims/scenery/issues/1581
@@ -95,22 +95,22 @@ export default abstract class Filter {
   /**
    * Applies a color matrix effect into an existing SVG filter.
    */
-  public static applyColorMatrix( matrixValues: string, svgFilter: SVGFilterElement, inName: string, resultName?: string ): void {
-    const feColorMatrix = document.createElementNS( svgns, 'feColorMatrix' );
+  public static applyColorMatrix(matrixValues: string, svgFilter: SVGFilterElement, inName: string, resultName?: string): void {
+    const feColorMatrix = document.createElementNS(svgns, 'feColorMatrix');
 
-    feColorMatrix.setAttribute( 'type', 'matrix' );
-    feColorMatrix.setAttribute( 'values', matrixValues );
-    feColorMatrix.setAttribute( 'in', inName );
+    feColorMatrix.setAttribute('type', 'matrix');
+    feColorMatrix.setAttribute('values', matrixValues);
+    feColorMatrix.setAttribute('in', inName);
 
     // Since the DOM effects are done with sRGB and we can't manipulate that, we'll instead adjust SVG to apply the
     // effects in sRGB so that we have consistency
-    feColorMatrix.setAttribute( 'color-interpolation-filters', 'sRGB' );
+    feColorMatrix.setAttribute('color-interpolation-filters', 'sRGB');
 
-    if ( resultName ) {
-      feColorMatrix.setAttribute( 'result', resultName );
+    if (resultName) {
+      feColorMatrix.setAttribute('result', resultName);
     }
-    svgFilter.appendChild( feColorMatrix );
+    svgFilter.appendChild(feColorMatrix);
   }
 }
 
-scenery.register( 'Filter', Filter );
+scenery.register('Filter', Filter);

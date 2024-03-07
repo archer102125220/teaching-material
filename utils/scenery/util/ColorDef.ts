@@ -7,43 +7,43 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Property from '../../../axon/js/Property.js';
-import ReadOnlyProperty from '../../../axon/js/ReadOnlyProperty.js';
-import IOType from '../../../tandem/js/types/IOType.js';
-import NullableIO from '../../../tandem/js/types/NullableIO.js';
-import OrIO from '../../../tandem/js/types/OrIO.js';
-import ReferenceIO from '../../../tandem/js/types/ReferenceIO.js';
-import StringIO from '../../../tandem/js/types/StringIO.js';
-import { Color, TColor, scenery } from '../imports.js';
+import Property from '../../axon/Property';
+import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
+import IOType from '../../tandem/types/IOType';
+import NullableIO from '../../tandem/types/NullableIO';
+import OrIO from '../../tandem/types/OrIO';
+import ReferenceIO from '../../tandem/types/ReferenceIO';
+import StringIO from '../../tandem/types/StringIO';
+import { Color, type TColor, scenery } from '../imports';
 
 const ColorDef = {
   /**
    * Returns whether the parameter is considered to be a ColorDef.
    */
-  isColorDef( color: unknown ): color is TColor {
+  isColorDef(color: unknown): color is TColor {
     return color === null ||
-           typeof color === 'string' ||
-           color instanceof Color ||
-           ( color instanceof ReadOnlyProperty && (
-             color.value === null ||
-             typeof color.value === 'string' ||
-             color.value instanceof Color
-           ) );
+      typeof color === 'string' ||
+      color instanceof Color ||
+      (color instanceof ReadOnlyProperty && (
+        color.value === null ||
+        typeof color.value === 'string' ||
+        color.value instanceof Color
+      ));
   },
 
-  scenerySerialize( color: TColor ): string {
-    if ( color === null ) {
+  scenerySerialize(color: TColor): string {
+    if (color === null) {
       return 'null';
     }
-    else if ( color instanceof Color ) {
+    else if (color instanceof Color) {
       return `'${color.toCSS()}'`;
     }
-    else if ( typeof color === 'string' ) {
+    else if (typeof color === 'string') {
       return `'${color}'`;
     }
     else {
       // Property fallback
-      return ColorDef.scenerySerialize( color.value );
+      return ColorDef.scenerySerialize(color.value);
     }
   },
 
@@ -51,11 +51,11 @@ const ColorDef = {
   ColorDefIO: null as unknown as IOType // Defined below, typed here
 };
 
-ColorDef.ColorDefIO = new IOType( 'ColorDefIO', {
+ColorDef.ColorDefIO = new IOType('ColorDefIO', {
   isValidValue: ColorDef.isColorDef,
-  supertype: NullableIO( OrIO( [ StringIO, Color.ColorIO, ReferenceIO( Property.PropertyIO( NullableIO( OrIO( [ StringIO, Color.ColorIO ] ) ) ) ) ] ) )
-} );
+  supertype: NullableIO(OrIO([StringIO, Color.ColorIO, ReferenceIO(Property.PropertyIO(NullableIO(OrIO([StringIO, Color.ColorIO]))))]))
+});
 
-scenery.register( 'ColorDef', ColorDef );
+scenery.register('ColorDef', ColorDef);
 
 export default ColorDef;

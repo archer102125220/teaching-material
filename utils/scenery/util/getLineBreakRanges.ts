@@ -6,9 +6,9 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-import { scenery } from '../imports.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import Range from '../../../dot/js/Range.js';
+import { scenery } from '../imports';
+import optionize from '../../phet-core/optionize';
+import Range from '../../dot/Range';
 
 export type GetLineBreaksOptions = {
   // Line breaks can be "required" or "optional". If this is true, ranges will only be given for required line breaks.

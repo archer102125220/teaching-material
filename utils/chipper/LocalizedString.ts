@@ -8,14 +8,14 @@
 
 import TinyProperty from '../axon/TinyProperty';
 import TinyOverrideProperty from '../axon/TinyOverrideProperty';
-import { Locale } from '@/i18n/localeProperty';;
-import localeOrderProperty from '../joist/i18n/localeOrderProperty';
+import { type Locale } from '@/i18n/joist/localeProperty';
+import localeOrderProperty from '@/i18n/joist/localeOrderProperty';
 import Tandem from '../tandem/Tandem';
 import chipper from './chipper';
-import TProperty from '../axon/TProperty';
+import type TProperty from '../axon/TProperty';
 import { localizedStrings } from './getStringModule';
 import arrayRemove from '../phet-core/arrayRemove';
-import { PhetioID } from '../tandem/TandemConstants';
+import { type PhetioID } from '../tandem/TandemConstants';
 import LocalizedStringProperty from './LocalizedStringProperty';
 
 // constants
@@ -39,31 +39,31 @@ class LocalizedString {
   // Uses lazy creation of locales
   private readonly localePropertyMap = new Map<Locale, TinyOverrideProperty<TranslationString>>();
 
-  private readonly localeOrderListener: ( locales: Locale[] ) => void;
+  private readonly localeOrderListener: (locales: Locale[]) => void;
 
   // Store initial values, so we can handle state deltas
   private readonly initialValues: LocalizedStringStateDelta = {};
 
-  public constructor( public readonly stringKey: string, englishValue: TranslationString, tandem: Tandem, metadata?: Record<string, unknown> ) {
+  public constructor(public readonly stringKey: string, englishValue: TranslationString, tandem: Tandem, metadata?: Record<string, unknown>) {
 
-    this.englishProperty = new TinyProperty( englishValue );
-    this.initialValues[ FALLBACK_LOCALE ] = englishValue;
+    this.englishProperty = new TinyProperty(englishValue);
+    this.initialValues[FALLBACK_LOCALE] = englishValue;
 
-    this.localeOrderListener = this.onLocaleOrderChange.bind( this );
-    localeOrderProperty.lazyLink( this.localeOrderListener );
+    this.localeOrderListener = this.onLocaleOrderChange.bind(this);
+    localeOrderProperty.lazyLink(this.localeOrderListener);
 
-    this.property = new LocalizedStringProperty( this, tandem, metadata );
+    this.property = new LocalizedStringProperty(this, tandem, metadata);
 
     // Add to a global list to support PhET-iO serialization and internal testing
-    localizedStrings.push( this );
+    localizedStrings.push(this);
   }
 
   /**
    * Sets the initial value of a translated string (so that there will be no fallback for that locale/string combo)
    */
-  public setInitialValue( locale: Locale, value: TranslationString ): void {
-    this.initialValues[ locale ] = value;
-    this.getLocaleSpecificProperty( locale ).value = value;
+  public setInitialValue(locale: Locale, value: TranslationString): void {
+    this.initialValues[locale] = value;
+    this.getLocaleSpecificProperty(locale).value = value;
   }
 
   /**
@@ -73,12 +73,12 @@ class LocalizedString {
   public getStateDelta(): LocalizedStringStateDelta {
     const result: LocalizedStringStateDelta = {};
 
-    this.usedLocales.forEach( locale => {
-      const rawString = this.getRawStringValue( locale );
-      if ( rawString !== null && rawString !== this.initialValues[ locale ] ) {
-        result[ locale ] = rawString;
+    this.usedLocales.forEach(locale => {
+      const rawString = this.getRawStringValue(locale);
+      if (rawString !== null && rawString !== this.initialValues[locale]) {
+        result[locale] = rawString;
       }
-    } );
+    });
 
     return result;
   }
@@ -86,22 +86,22 @@ class LocalizedString {
   /**
    * Take a state from getStateDelta, and apply it.
    */
-  public setStateDelta( state: LocalizedStringStateDelta ): void {
+  public setStateDelta(state: LocalizedStringStateDelta): void {
 
     // Create potential new locales (since locale-specific Properties are lazily created as needed
-    Object.keys( state ).forEach( locale => this.getLocaleSpecificProperty( locale as Locale ) );
+    Object.keys(state).forEach(locale => this.getLocaleSpecificProperty(locale as Locale));
 
-    this.usedLocales.forEach( locale => {
-      const localeSpecificProperty = this.getLocaleSpecificProperty( locale );
-      const initialValue: string | null = this.initialValues[ locale ] !== undefined ? this.initialValues[ locale ]! : null;
-      const stateValue: string | null = state[ locale ] !== undefined ? state[ locale ]! : null;
+    this.usedLocales.forEach(locale => {
+      const localeSpecificProperty = this.getLocaleSpecificProperty(locale);
+      const initialValue: string | null = this.initialValues[locale] !== undefined ? this.initialValues[locale]! : null;
+      const stateValue: string | null = state[locale] !== undefined ? state[locale]! : null;
 
       // If not specified in the state
-      if ( stateValue === null ) {
+      if (stateValue === null) {
 
         // If we have no initial value, we'll want to set it to fall back
-        if ( initialValue === null ) {
-          ( localeSpecificProperty as TinyOverrideProperty<string> ).clearOverride();
+        if (initialValue === null) {
+          (localeSpecificProperty as TinyOverrideProperty<string>).clearOverride();
         }
         else {
           localeSpecificProperty.value = initialValue;
@@ -110,16 +110,16 @@ class LocalizedString {
       else {
         localeSpecificProperty.value = stateValue;
       }
-    } );
+    });
   }
 
   /**
    * Returns the specific translation for a locale (no fallbacks), or null if that string is not translated in the
    * exact locale
    */
-  private getRawStringValue( locale: Locale ): string | null {
-    const property = this.getLocaleSpecificProperty( locale );
-    if ( property instanceof TinyOverrideProperty ) {
+  private getRawStringValue(locale: Locale): string | null {
+    const property = this.getLocaleSpecificProperty(locale);
+    if (property instanceof TinyOverrideProperty) {
       return property.isOverridden ? property.value : null;
     }
     else {
@@ -131,10 +131,10 @@ class LocalizedString {
   private get usedLocales(): Locale[] {
     // NOTE: order matters, we want the fallback to be first so that in onLocaleOrderChange we don't run into infinite
     // loops.
-    return [ FALLBACK_LOCALE, ...this.localePropertyMap.keys() ];
+    return [FALLBACK_LOCALE, ...this.localePropertyMap.keys()];
   }
 
-  private onLocaleOrderChange( localeOrder: Locale[] ): void {
+  private onLocaleOrderChange(localeOrder: Locale[]): void {
 
     // Do this in reverse order to AVOID infinite loops.
     // For example, if localeOrder1=ar,es localeOrder2=es,ar) then we could run into the case temporarily where the
@@ -147,11 +147,11 @@ class LocalizedString {
       // Yes, this duplicates some, but it should be a no-op and saves code length
       ...localeOrder
     ];
-    for ( let i = locales.length - 1; i >= 0; i-- ) {
-      const locale = locales[ i ];
-      const localeProperty = this.getLocaleSpecificProperty( locale );
-      if ( localeProperty instanceof TinyOverrideProperty ) {
-        localeProperty.targetProperty = this.getLocaleSpecificProperty( LocalizedString.getFallbackLocale( locale ) );
+    for (let i = locales.length - 1; i >= 0; i--) {
+      const locale = locales[i];
+      const localeProperty = this.getLocaleSpecificProperty(locale);
+      if (localeProperty instanceof TinyOverrideProperty) {
+        localeProperty.targetProperty = this.getLocaleSpecificProperty(LocalizedString.getFallbackLocale(locale));
       }
     }
   }
@@ -159,40 +159,40 @@ class LocalizedString {
   /**
    * Returns the locale-specific Property for any locale (lazily creating it if necessary)
    */
-  public getLocaleSpecificProperty( locale: Locale ): TProperty<string> {
-    if ( locale === 'en' ) {
+  public getLocaleSpecificProperty(locale: Locale): TProperty<string> {
+    if (locale === 'en') {
       return this.englishProperty;
     }
 
     // Lazy creation
-    if ( !this.localePropertyMap.has( locale ) ) {
-      this.localePropertyMap.set( locale, new TinyOverrideProperty( this.getLocaleSpecificProperty( LocalizedString.getFallbackLocale( locale ) ) ) );
+    if (!this.localePropertyMap.has(locale)) {
+      this.localePropertyMap.set(locale, new TinyOverrideProperty(this.getLocaleSpecificProperty(LocalizedString.getFallbackLocale(locale))));
     }
 
-    return this.localePropertyMap.get( locale )!;
+    return this.localePropertyMap.get(locale)!;
   }
 
   /**
    * What should be the next-most fallback locale for a given locale. Our global localeOrder is used, and otherwise it
    * defaults to our normal fallback mechanism.
    */
-  public static getFallbackLocale( locale: Locale ): Locale {
-    if ( locale === 'en' ) {
+  public static getFallbackLocale(locale: Locale): Locale {
+    if (locale === 'en') {
       return 'en'; // can be its own fallback
     }
 
     const localeOrder = localeOrderProperty.value;
 
-    const index = localeOrder.indexOf( locale );
-    if ( index >= 0 ) {
-      assert && assert( localeOrder[ localeOrder.length - 1 ] === 'en' );
-      assert && assert( index + 1 < localeOrder.length );
-      return localeOrder[ index + 1 ];
+    const index = localeOrder.indexOf(locale);
+    if (index >= 0) {
+      assert && assert(localeOrder[localeOrder.length - 1] === 'en');
+      assert && assert(index + 1 < localeOrder.length);
+      return localeOrder[index + 1];
     }
     else {
       // doesn't exist in those
-      if ( locale.includes( '_' ) ) {
-        return locale.slice( 0, 2 ) as Locale; // zh_CN => zh
+      if (locale.includes('_')) {
+        return locale.slice(0, 2) as Locale; // zh_CN => zh
       }
       else {
         return 'en';
@@ -201,21 +201,21 @@ class LocalizedString {
   }
 
   public dispose(): void {
-    localeOrderProperty.unlink( this.localeOrderListener );
+    localeOrderProperty.unlink(this.localeOrderListener);
 
     this.property.dispose();
-    arrayRemove( localizedStrings, this );
+    arrayRemove(localizedStrings, this);
   }
 
   /**
    * Reset to the initial value for the specified locale, used for testing.
    */
-  public restoreInitialValue( locale: Locale ): void {
-    assert && assert( typeof this.initialValues[ locale ] === 'string', 'initial value expected for', locale );
-    this.property.value = this.initialValues[ locale ]!;
+  public restoreInitialValue(locale: Locale): void {
+    assert && assert(typeof this.initialValues[locale] === 'string', 'initial value expected for', locale);
+    this.property.value = this.initialValues[locale]!;
   }
 }
 
-chipper.register( 'LocalizedString', LocalizedString );
+chipper.register('LocalizedString', LocalizedString);
 
 export default LocalizedString;

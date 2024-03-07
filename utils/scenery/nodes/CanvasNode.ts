@@ -10,11 +10,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import { CanvasContextWrapper, CanvasNodeDrawable, CanvasSelfDrawable, Instance, Node, NodeOptions, Renderer, scenery } from '../imports.js';
+import Bounds2 from '../../dot/Bounds2';
+import Matrix3 from '../../dot/Matrix3';
+import Vector2 from '../../dot/Vector2';
+import { Shape } from '../../kite/imports';
+import { CanvasContextWrapper, CanvasNodeDrawable, CanvasSelfDrawable, Instance, Node, type NodeOptions, Renderer, scenery } from '../imports';
 
 const CANVAS_NODE_OPTION_KEYS = [
   'canvasBounds'
@@ -27,11 +27,11 @@ type SelfOptions = {
 export type CanvasNodeOptions = SelfOptions & NodeOptions;
 
 export default abstract class CanvasNode extends Node {
-  public constructor( options?: CanvasNodeOptions ) {
-    super( options );
+  public constructor(options?: CanvasNodeOptions) {
+    super(options);
 
     // This shouldn't change, as we only support one renderer
-    this.setRendererBitmask( Renderer.bitmaskCanvas );
+    this.setRendererBitmask(Renderer.bitmaskCanvas);
   }
 
   /**
@@ -40,11 +40,11 @@ export default abstract class CanvasNode extends Node {
    * These bounds should always cover at least the area where the CanvasNode will draw in. If this is violated, this
    * node may be partially or completely invisible in Scenery's output.
    */
-  public setCanvasBounds( selfBounds: Bounds2 ): void {
-    this.invalidateSelf( selfBounds );
+  public setCanvasBounds(selfBounds: Bounds2): void {
+    this.invalidateSelf(selfBounds);
   }
 
-  public set canvasBounds( value: Bounds2 ) { this.setCanvasBounds( value ); }
+  public set canvasBounds(value: Bounds2) { this.setCanvasBounds(value); }
 
   public get canvasBounds(): Bounds2 { return this.getCanvasBounds(); }
 
@@ -70,7 +70,7 @@ export default abstract class CanvasNode extends Node {
    * or mutate any Scenery nodes (particularly anything that would cause something to be marked as needing a repaint).
    * Ideally, this function should have no outside effects other than painting to the Canvas provided.
    */
-  public abstract paintCanvas( context: CanvasRenderingContext2D ): void;
+  public abstract paintCanvas(context: CanvasRenderingContext2D): void;
 
   /**
    * Should be called when this node needs to be repainted. When not called, Scenery assumes that this node does
@@ -80,8 +80,8 @@ export default abstract class CanvasNode extends Node {
    */
   public invalidatePaint(): void {
     const stateLen = this._drawables.length;
-    for ( let i = 0; i < stateLen; i++ ) {
-      this._drawables[ i ].markDirty();
+    for (let i = 0; i < stateLen; i++) {
+      this._drawables[i].markDirty();
     }
   }
 
@@ -92,8 +92,8 @@ export default abstract class CanvasNode extends Node {
    * @param wrapper
    * @param matrix - The transformation matrix already applied to the context.
    */
-  protected override canvasPaintSelf( wrapper: CanvasContextWrapper, matrix: Matrix3 ): void {
-    this.paintCanvas( wrapper.context );
+  protected override canvasPaintSelf(wrapper: CanvasContextWrapper, matrix: Matrix3): void {
+    this.paintCanvas(wrapper.context);
   }
 
   /**
@@ -103,7 +103,7 @@ export default abstract class CanvasNode extends Node {
    *
    * @param point - Considered to be in the local coordinate frame
    */
-  public override containsPointSelf( point: Vector2 ): boolean {
+  public override containsPointSelf(point: Vector2): boolean {
     return false;
   }
 
@@ -120,13 +120,13 @@ export default abstract class CanvasNode extends Node {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createCanvasDrawable( renderer: number, instance: Instance ): CanvasSelfDrawable {
+  public override createCanvasDrawable(renderer: number, instance: Instance): CanvasSelfDrawable {
     // @ts-expect-error
-    return CanvasNodeDrawable.createFromPool( renderer, instance );
+    return CanvasNodeDrawable.createFromPool(renderer, instance);
   }
 
-  public override mutate( options?: CanvasNodeOptions ): this {
-    return super.mutate( options );
+  public override mutate(options?: CanvasNodeOptions): this {
+    return super.mutate(options);
   }
 }
 
@@ -137,6 +137,6 @@ export default abstract class CanvasNode extends Node {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-CanvasNode.prototype._mutatorKeys = CANVAS_NODE_OPTION_KEYS.concat( Node.prototype._mutatorKeys );
+CanvasNode.prototype._mutatorKeys = CANVAS_NODE_OPTION_KEYS.concat(Node.prototype._mutatorKeys);
 
-scenery.register( 'CanvasNode', CanvasNode );
+scenery.register('CanvasNode', CanvasNode);

@@ -7,15 +7,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { InteractiveHighlighting, InteractiveHighlightingOptions, Node, NodeOptions, scenery } from '../../../imports.js';
+import { InteractiveHighlighting, type InteractiveHighlightingOptions, Node, type NodeOptions, scenery } from '../../../imports';
 
 export type InteractiveHighlightingNodeOptions = InteractiveHighlightingOptions & NodeOptions;
 
-class InteractiveHighlightingNode extends InteractiveHighlighting( Node ) {
-  public constructor( options?: InteractiveHighlightingNodeOptions ) {
-    super( options );
+class InteractiveHighlightingNode extends InteractiveHighlighting(Node) {
+  public constructor(options?: InteractiveHighlightingNodeOptions) {
+    super(options);
   }
 }
 
-scenery.register( 'InteractiveHighlightingNode', InteractiveHighlightingNode );
+scenery.register('InteractiveHighlightingNode', InteractiveHighlightingNode);
 export default InteractiveHighlightingNode;

@@ -8,22 +8,22 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import StringProperty, { StringPropertyOptions } from '../../../axon/js/StringProperty.js';
-import TinyForwardingProperty from '../../../axon/js/TinyForwardingProperty.js';
-import escapeHTML from '../../../phet-core/js/escapeHTML.js';
-import extendDefined from '../../../phet-core/js/extendDefined.js';
-import platform from '../../../phet-core/js/platform.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import IOType from '../../../tandem/js/types/IOType.js';
-import PhetioObject, { PhetioObjectOptions } from '../../../tandem/js/PhetioObject.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, Font, FontStretch, FontStyle, FontWeight, Instance, Node, NodeOptions, Paintable, PAINTABLE_DRAWABLE_MARK_FLAGS, PAINTABLE_OPTION_KEYS, PaintableOptions, Renderer, scenery, SVGSelfDrawable, TextBounds, TextCanvasDrawable, TextDOMDrawable, TextSVGDrawable, TTextDrawable } from '../imports.js';
-import { PropertyOptions } from '../../../axon/js/Property.js';
-import { combineOptions } from '../../../phet-core/js/optionize.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import phetioElementSelectionProperty from '../../../tandem/js/phetioElementSelectionProperty.js';
+import StringProperty, { type StringPropertyOptions } from '../../axon/StringProperty';
+import TinyForwardingProperty from '../../axon/TinyForwardingProperty';
+import escapeHTML from '../../phet-core/escapeHTML';
+import extendDefined from '../../phet-core/extendDefined';
+import platform from '../../phet-core/platform';
+import Tandem from '../../tandem/Tandem';
+import IOType from '../../tandem/types/IOType';
+import PhetioObject, { type PhetioObjectOptions } from '../../tandem/PhetioObject';
+import type TProperty from '../../axon/TProperty';
+import Matrix3 from '../../dot/Matrix3';
+import Bounds2 from '../../dot/Bounds2';
+import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, Font, type FontStretch, type FontStyle, type FontWeight, Instance, Node, type NodeOptions, Paintable, PAINTABLE_DRAWABLE_MARK_FLAGS, PAINTABLE_OPTION_KEYS, type PaintableOptions, Renderer, scenery, SVGSelfDrawable, TextBounds, TextCanvasDrawable, TextDOMDrawable, TextSVGDrawable, type TTextDrawable } from '../imports';
+import { type PropertyOptions } from '../../axon/Property';
+import { combineOptions } from '../../phet-core/optionize';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import phetioElementSelectionProperty from '../../tandem/phetioElementSelectionProperty';
 
 const STRING_PROPERTY_NAME = 'stringProperty'; // eslint-disable-line bad-sim-text
 
@@ -43,8 +43,8 @@ const TEXT_OPTION_KEYS = [
 // SVG bounds seems to be malfunctioning for Safari 5. Since we don't have a reproducible test machine for
 // fast iteration, we'll guess the user agent and use DOM bounds instead of SVG.
 // Hopefully the two constraints rule out any future Safari versions (fairly safe, but not impossible!)
-const useDOMAsFastBounds = window.navigator.userAgent.includes( 'like Gecko) Version/5' ) &&
-                           window.navigator.userAgent.includes( 'Safari/' );
+const useDOMAsFastBounds = window.navigator.userAgent.includes('like Gecko) Version/5') &&
+  window.navigator.userAgent.includes('Safari/');
 
 export type TextBoundsMethod = 'fast' | 'fastCanvas' | 'accurate' | 'hybrid';
 type SelfOptions = {
@@ -62,7 +62,7 @@ type SelfOptions = {
 type ParentOptions = PaintableOptions & NodeOptions;
 export type TextOptions = SelfOptions & ParentOptions;
 
-export default class Text extends Paintable( Node ) {
+export default class Text extends Paintable(Node) {
 
   // The string to display
   private readonly _stringProperty: TinyForwardingProperty<string>;
@@ -89,49 +89,49 @@ export default class Text extends Paintable( Node ) {
    * @param [options] - Text-specific options are documented in TEXT_OPTION_KEYS above, and can be provided
    *                             along-side options for Node
    */
-  public constructor( string: string | number | TReadOnlyProperty<string>, options?: TextOptions ) {
-    assert && assert( options === undefined || Object.getPrototypeOf( options ) === Object.prototype,
-      'Extra prototype on Node options object is a code smell' );
+  public constructor(string: string | number | TReadOnlyProperty<string>, options?: TextOptions) {
+    assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+      'Extra prototype on Node options object is a code smell');
 
     super();
 
     // We'll initialize this by mutating.
-    this._stringProperty = new TinyForwardingProperty( '', true, this.onStringPropertyChange.bind( this ) );
+    this._stringProperty = new TinyForwardingProperty('', true, this.onStringPropertyChange.bind(this));
     this._font = Font.DEFAULT;
     this._boundsMethod = 'hybrid';
     this._isHTML = false; // TODO: clean this up https://github.com/phetsims/scenery/issues/1581
     this._cachedRenderedText = null;
 
-    const definedOptions = extendDefined<TextOptions>( {
+    const definedOptions = extendDefined<TextOptions>({
       fill: '#000000', // Default to black filled string
 
       // phet-io
       tandemNameSuffix: 'Text',
       phetioType: Text.TextIO,
       phetioVisiblePropertyInstrumented: false
-    }, options );
+    }, options);
 
-    assert && assert( !definedOptions.hasOwnProperty( 'string' ) && !definedOptions.hasOwnProperty( Text.STRING_PROPERTY_TANDEM_NAME ),
-      'provide string and stringProperty through constructor arg please' );
+    assert && assert(!definedOptions.hasOwnProperty('string') && !definedOptions.hasOwnProperty(Text.STRING_PROPERTY_TANDEM_NAME),
+      'provide string and stringProperty through constructor arg please');
 
-    if ( typeof string === 'string' || typeof string === 'number' ) {
+    if (typeof string === 'string' || typeof string === 'number') {
       definedOptions.string = string;
     }
     else {
       definedOptions.stringProperty = string;
     }
 
-    this.mutate( definedOptions );
+    this.mutate(definedOptions);
 
     this.invalidateSupportedRenderers(); // takes care of setting up supported renderers
   }
 
-  public override mutate( options?: TextOptions ): this {
+  public override mutate(options?: TextOptions): this {
 
-    if ( assert && options && options.hasOwnProperty( 'string' ) && options.hasOwnProperty( STRING_PROPERTY_NAME ) ) {
-      assert && assert( options.stringProperty!.value === options.string, 'If both string and stringProperty are provided, then values should match' );
+    if (assert && options && options.hasOwnProperty('string') && options.hasOwnProperty(STRING_PROPERTY_NAME)) {
+      assert && assert(options.stringProperty!.value === options.string, 'If both string and stringProperty are provided, then values should match');
     }
-    return super.mutate( options );
+    return super.mutate(options);
   }
 
   /**
@@ -139,18 +139,18 @@ export default class Text extends Paintable( Node ) {
    *
    * @param string - The string to display. If it's a number, it will be cast to a string
    */
-  public setString( string: string | number ): this {
-    assert && assert( string !== null && string !== undefined, 'String should be defined and non-null. Use the empty string if needed.' );
+  public setString(string: string | number): this {
+    assert && assert(string !== null && string !== undefined, 'String should be defined and non-null. Use the empty string if needed.');
 
     // cast it to a string (for numbers, etc., and do it before the change guard so we don't accidentally trigger on non-changed string)
     string = `${string}`;
 
-    this._stringProperty.set( string );
+    this._stringProperty.set(string);
 
     return this;
   }
 
-  public set string( value: string | number ) { this.setString( value ); }
+  public set string(value: string | number) { this.setString(value); }
 
   public get string(): string { return this.getString(); }
 
@@ -168,13 +168,13 @@ export default class Text extends Paintable( Node ) {
    * and embedding marks are potentially simplified.
    */
   public getRenderedText(): string {
-    if ( this._cachedRenderedText === null ) {
+    if (this._cachedRenderedText === null) {
       // Using the non-breaking space (&nbsp;) encoded as 0x00A0 in UTF-8
-      this._cachedRenderedText = this.string.replace( ' ', '\xA0' );
+      this._cachedRenderedText = this.string.replace(' ', '\xA0');
 
-      if ( platform.edge ) {
+      if (platform.edge) {
         // Simplify embedding marks to work around an Edge bug, see https://github.com/phetsims/scenery/issues/520
-        this._cachedRenderedText = Text.simplifyEmbeddingMarks( this._cachedRenderedText );
+        this._cachedRenderedText = Text.simplifyEmbeddingMarks(this._cachedRenderedText);
       }
     }
 
@@ -190,8 +190,8 @@ export default class Text extends Paintable( Node ) {
     this._cachedRenderedText = null;
 
     const stateLen = this._drawables.length;
-    for ( let i = 0; i < stateLen; i++ ) {
-      ( this._drawables[ i ] as unknown as TTextDrawable ).markDirtyText();
+    for (let i = 0; i < stateLen; i++) {
+      (this._drawables[i] as unknown as TTextDrawable).markDirtyText();
     }
 
     this.invalidateText();
@@ -200,11 +200,11 @@ export default class Text extends Paintable( Node ) {
   /**
    * See documentation for Node.setVisibleProperty, except this is for the text string.
    */
-  public setStringProperty( newTarget: TReadOnlyProperty<string> | null ): this {
-    return this._stringProperty.setTargetProperty( this, Text.STRING_PROPERTY_TANDEM_NAME, newTarget as TProperty<string> );
+  public setStringProperty(newTarget: TReadOnlyProperty<string> | null): this {
+    return this._stringProperty.setTargetProperty(this, Text.STRING_PROPERTY_TANDEM_NAME, newTarget as TProperty<string>);
   }
 
-  public set stringProperty( property: TReadOnlyProperty<string> | null ) { this.setStringProperty( property ); }
+  public set stringProperty(property: TReadOnlyProperty<string> | null) { this.setStringProperty(property); }
 
   public get stringProperty(): TProperty<string> { return this.getStringProperty(); }
 
@@ -219,24 +219,24 @@ export default class Text extends Paintable( Node ) {
   /**
    * See documentation and comments in Node.initializePhetioObject
    */
-  protected override initializePhetioObject( baseOptions: Partial<PhetioObjectOptions>, config: TextOptions ): void {
+  protected override initializePhetioObject(baseOptions: Partial<PhetioObjectOptions>, config: TextOptions): void {
 
     // Track this, so we only override our stringProperty once.
     const wasInstrumented = this.isPhetioInstrumented();
 
-    super.initializePhetioObject( baseOptions, config );
+    super.initializePhetioObject(baseOptions, config);
 
-    if ( Tandem.PHET_IO_ENABLED && !wasInstrumented && this.isPhetioInstrumented() ) {
-      this._stringProperty.initializePhetio( this, Text.STRING_PROPERTY_TANDEM_NAME, () => {
-          return new StringProperty( this.string, combineOptions<StringPropertyOptions>( {
+    if (Tandem.PHET_IO_ENABLED && !wasInstrumented && this.isPhetioInstrumented()) {
+      this._stringProperty.initializePhetio(this, Text.STRING_PROPERTY_TANDEM_NAME, () => {
+        return new StringProperty(this.string, combineOptions<StringPropertyOptions>({
 
-            // by default, texts should be readonly. Editable texts most likely pass in editable Properties from i18n model Properties, see https://github.com/phetsims/scenery/issues/1443
-            phetioReadOnly: true,
-            tandem: this.tandem.createTandem( Text.STRING_PROPERTY_TANDEM_NAME ),
-            phetioDocumentation: 'Property for the displayed text'
+          // by default, texts should be readonly. Editable texts most likely pass in editable Properties from i18n model Properties, see https://github.com/phetsims/scenery/issues/1443
+          phetioReadOnly: true,
+          tandem: this.tandem.createTandem(Text.STRING_PROPERTY_TANDEM_NAME),
+          phetioDocumentation: 'Property for the displayed text'
 
-          }, config.stringPropertyOptions ) );
-        }
+        }, config.stringPropertyOptions));
+      }
       );
     }
   }
@@ -245,19 +245,19 @@ export default class Text extends Paintable( Node ) {
    * Text supports a "string" selection mode, in which it will map to its stringProperty (if applicable), otherwise is
    * uses the default mouse-hit target from the supertype.
    */
-  public override getPhetioMouseHitTarget( fromLinking = false ): PhetioObject | 'phetioNotSelectable' {
+  public override getPhetioMouseHitTarget(fromLinking = false): PhetioObject | 'phetioNotSelectable' {
     return phetioElementSelectionProperty.value === 'string' ?
-           this.getStringPropertyPhetioMouseHitTarget( fromLinking ) :
-           super.getPhetioMouseHitTarget( fromLinking );
+      this.getStringPropertyPhetioMouseHitTarget(fromLinking) :
+      super.getPhetioMouseHitTarget(fromLinking);
   }
 
-  private getStringPropertyPhetioMouseHitTarget( fromLinking = false ): PhetioObject | 'phetioNotSelectable' {
+  private getStringPropertyPhetioMouseHitTarget(fromLinking = false): PhetioObject | 'phetioNotSelectable' {
     const targetStringProperty = this._stringProperty.getTargetProperty();
 
     // Even if this isn't PhET-iO instrumented, it still qualifies as this RichText's hit
     return targetStringProperty instanceof PhetioObject ?
-           targetStringProperty.getPhetioMouseHitTarget( fromLinking ) :
-           'phetioNotSelectable';
+      targetStringProperty.getPhetioMouseHitTarget(fromLinking) :
+      'phetioNotSelectable';
   }
 
   /**
@@ -278,15 +278,15 @@ export default class Text extends Paintable( Node ) {
    *       and fast/canvasCanvas/hybrid will always return the same vertical bounds (top and bottom) for a given font
    *       when the text isn't the empty string.
    */
-  public setBoundsMethod( method: TextBoundsMethod ): this {
-    assert && assert( method === 'fast' || method === 'fastCanvas' || method === 'accurate' || method === 'hybrid', 'Unknown Text boundsMethod' );
-    if ( method !== this._boundsMethod ) {
+  public setBoundsMethod(method: TextBoundsMethod): this {
+    assert && assert(method === 'fast' || method === 'fastCanvas' || method === 'accurate' || method === 'hybrid', 'Unknown Text boundsMethod');
+    if (method !== this._boundsMethod) {
       this._boundsMethod = method;
       this.invalidateSupportedRenderers();
 
       const stateLen = this._drawables.length;
-      for ( let i = 0; i < stateLen; i++ ) {
-        ( this._drawables[ i ] as unknown as TTextDrawable ).markDirtyBounds();
+      for (let i = 0; i < stateLen; i++) {
+        (this._drawables[i] as unknown as TTextDrawable).markDirtyBounds();
       }
 
       this.invalidateText();
@@ -296,7 +296,7 @@ export default class Text extends Paintable( Node ) {
     return this;
   }
 
-  public set boundsMethod( value: TextBoundsMethod ) { this.setBoundsMethod( value ); }
+  public set boundsMethod(value: TextBoundsMethod) { this.setBoundsMethod(value); }
 
   public get boundsMethod(): TextBoundsMethod { return this.getBoundsMethod(); }
 
@@ -316,10 +316,10 @@ export default class Text extends Paintable( Node ) {
     let bitmask = 0;
 
     // canvas support (fast bounds may leak out of dirty rectangles)
-    if ( this._boundsMethod !== 'fast' && !this._isHTML ) {
+    if (this._boundsMethod !== 'fast' && !this._isHTML) {
       bitmask |= Renderer.bitmaskCanvas;
     }
-    if ( !this._isHTML ) {
+    if (!this._isHTML) {
       bitmask |= Renderer.bitmaskSVG;
     }
 
@@ -335,7 +335,7 @@ export default class Text extends Paintable( Node ) {
    * be isHTML, boundsMethod, etc.)
    */
   public override invalidateSupportedRenderers(): void {
-    this.setRendererBitmask( this.getFillRendererBitmask() & this.getStrokeRendererBitmask() & this.getTextRendererBitmask() );
+    this.setRendererBitmask(this.getFillRendererBitmask() & this.getStrokeRendererBitmask() & this.getTextRendererBitmask());
   }
 
   /**
@@ -347,8 +347,8 @@ export default class Text extends Paintable( Node ) {
 
     // TODO: consider replacing this with a general dirty flag notification, and have DOM update bounds every frame? https://github.com/phetsims/scenery/issues/1581
     const stateLen = this._drawables.length;
-    for ( let i = 0; i < stateLen; i++ ) {
-      ( this._drawables[ i ] as unknown as TTextDrawable ).markDirtyBounds();
+    for (let i = 0; i < stateLen; i++) {
+      (this._drawables[i] as unknown as TTextDrawable).markDirtyBounds();
     }
 
     // we may have changed renderers if parameters were changed!
@@ -365,28 +365,28 @@ export default class Text extends Paintable( Node ) {
     let selfBounds;
 
     // investigate http://mudcu.be/journal/2011/01/html5-typographic-metrics/
-    if ( this._isHTML || ( useDOMAsFastBounds && this._boundsMethod !== 'accurate' ) ) {
-      selfBounds = TextBounds.approximateDOMBounds( this._font, this.getDOMTextNode() );
+    if (this._isHTML || (useDOMAsFastBounds && this._boundsMethod !== 'accurate')) {
+      selfBounds = TextBounds.approximateDOMBounds(this._font, this.getDOMTextNode());
     }
-    else if ( this._boundsMethod === 'hybrid' ) {
-      selfBounds = TextBounds.approximateHybridBounds( this._font, this.renderedText );
+    else if (this._boundsMethod === 'hybrid') {
+      selfBounds = TextBounds.approximateHybridBounds(this._font, this.renderedText);
     }
-    else if ( this._boundsMethod === 'accurate' ) {
-      selfBounds = TextBounds.accurateCanvasBounds( this );
+    else if (this._boundsMethod === 'accurate') {
+      selfBounds = TextBounds.accurateCanvasBounds(this);
     }
     else {
-      assert && assert( this._boundsMethod === 'fast' || this._boundsMethod === 'fastCanvas' );
-      selfBounds = TextBounds.approximateSVGBounds( this._font, this.renderedText );
+      assert && assert(this._boundsMethod === 'fast' || this._boundsMethod === 'fastCanvas');
+      selfBounds = TextBounds.approximateSVGBounds(this._font, this.renderedText);
     }
 
     // for now, just add extra on, ignoring the possibility of mitered joints passing beyond
-    if ( this.hasStroke() ) {
-      selfBounds.dilate( this.getLineWidth() / 2 );
+    if (this.hasStroke()) {
+      selfBounds.dilate(this.getLineWidth() / 2);
     }
 
-    const changed = !selfBounds.equals( this.selfBoundsProperty._value );
-    if ( changed ) {
-      this.selfBoundsProperty._value.set( selfBounds );
+    const changed = !selfBounds.equals(this.selfBoundsProperty._value);
+    if (changed) {
+      this.selfBoundsProperty._value.set(selfBounds);
     }
     return changed;
   }
@@ -420,9 +420,9 @@ export default class Text extends Paintable( Node ) {
    * @param wrapper
    * @param matrix - The transformation matrix already applied to the context.
    */
-  protected override canvasPaintSelf( wrapper: CanvasContextWrapper, matrix: Matrix3 ): void {
-    //TODO: Have a separate method for this, instead of touching the prototype. Can make 'this' references too easily. https://github.com/phetsims/scenery/issues/1581
-    TextCanvasDrawable.prototype.paintCanvas( wrapper, this, matrix );
+  protected override canvasPaintSelf(wrapper: CanvasContextWrapper, matrix: Matrix3): void {
+    // TODO: Have a separate method for this, instead of touching the prototype. Can make 'this' references too easily. https://github.com/phetsims/scenery/issues/1581
+    TextCanvasDrawable.prototype.paintCanvas(wrapper, this, matrix);
   }
 
   /**
@@ -431,9 +431,9 @@ export default class Text extends Paintable( Node ) {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createDOMDrawable( renderer: number, instance: Instance ): DOMSelfDrawable {
+  public override createDOMDrawable(renderer: number, instance: Instance): DOMSelfDrawable {
     // @ts-expect-error
-    return TextDOMDrawable.createFromPool( renderer, instance );
+    return TextDOMDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -442,9 +442,9 @@ export default class Text extends Paintable( Node ) {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createSVGDrawable( renderer: number, instance: Instance ): SVGSelfDrawable {
+  public override createSVGDrawable(renderer: number, instance: Instance): SVGSelfDrawable {
     // @ts-expect-error
-    return TextSVGDrawable.createFromPool( renderer, instance );
+    return TextSVGDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -453,9 +453,9 @@ export default class Text extends Paintable( Node ) {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createCanvasDrawable( renderer: number, instance: Instance ): CanvasSelfDrawable {
+  public override createCanvasDrawable(renderer: number, instance: Instance): CanvasSelfDrawable {
     // @ts-expect-error
-    return TextCanvasDrawable.createFromPool( renderer, instance );
+    return TextCanvasDrawable.createFromPool(renderer, instance);
   }
 
   /**
@@ -464,13 +464,13 @@ export default class Text extends Paintable( Node ) {
    * This is needed since we have to handle HTML text differently.
    */
   public getDOMTextNode(): Element {
-    if ( this._isHTML ) {
-      const span = document.createElement( 'span' );
+    if (this._isHTML) {
+      const span = document.createElement('span');
       span.innerHTML = this.string;
       return span;
     }
     else {
-      return document.createTextNode( this.renderedText ) as unknown as Element;
+      return document.createTextNode(this.renderedText) as unknown as Element;
     }
   }
 
@@ -487,7 +487,7 @@ export default class Text extends Paintable( Node ) {
     const selfBounds = this.getSelfBounds();
 
     // NOTE: we'll keep this as an estimate for the bounds including stroke miters
-    return selfBounds.dilatedXY( expansionFactor * selfBounds.width, expansionFactor * selfBounds.height );
+    return selfBounds.dilatedXY(expansionFactor * selfBounds.width, expansionFactor * selfBounds.height);
   }
 
   /**
@@ -497,18 +497,18 @@ export default class Text extends Paintable( Node ) {
    * is basically the CSS3 font shortcut format. If a string is provided, it will be wrapped with a new (immutable)
    * Scenery Font object.
    */
-  public setFont( font: Font | string ): this {
+  public setFont(font: Font | string): this {
 
     // We need to detect whether things have updated in a different way depending on whether we are passed a string
     // or a Font object.
-    const changed = font !== ( ( typeof font === 'string' ) ? this._font.toCSS() : this._font );
-    if ( changed ) {
+    const changed = font !== ((typeof font === 'string') ? this._font.toCSS() : this._font);
+    if (changed) {
       // Wrap so that our _font is of type {Font}
-      this._font = ( typeof font === 'string' ) ? Font.fromCSS( font ) : font;
+      this._font = (typeof font === 'string') ? Font.fromCSS(font) : font;
 
       const stateLen = this._drawables.length;
-      for ( let i = 0; i < stateLen; i++ ) {
-        ( this._drawables[ i ] as unknown as TTextDrawable ).markDirtyFont();
+      for (let i = 0; i < stateLen; i++) {
+        (this._drawables[i] as unknown as TTextDrawable).markDirtyFont();
       }
 
       this.invalidateText();
@@ -516,7 +516,7 @@ export default class Text extends Paintable( Node ) {
     return this;
   }
 
-  public set font( value: Font | string ) { this.setFont( value ); }
+  public set font(value: Font | string) { this.setFont(value); }
 
   public get font(): string { return this.getFont(); }
 
@@ -540,13 +540,13 @@ export default class Text extends Paintable( Node ) {
    *   'normal', 'bold', 'bolder', 'lighter', '100', '200', '300', '400', '500', '600', '700', '800', '900',
    *   or a number that when cast to a string will be one of the strings above.
    */
-  public setFontWeight( weight: FontWeight | number ): this {
-    return this.setFont( this._font.copy( {
-      weight: weight
-    } ) );
+  public setFontWeight(weight: FontWeight | number): this {
+    return this.setFont(this._font.copy({
+      weight
+    }));
   }
 
-  public set fontWeight( value: FontWeight | number ) { this.setFontWeight( value ); }
+  public set fontWeight(value: FontWeight | number) { this.setFontWeight(value); }
 
   public get fontWeight(): FontWeight { return this.getFontWeight(); }
 
@@ -567,13 +567,13 @@ export default class Text extends Paintable( Node ) {
    *                 is any question about escaping (such as spaces in a font name), the family should be
    *                 surrounded by double quotes.
    */
-  public setFontFamily( family: string ): this {
-    return this.setFont( this._font.copy( {
-      family: family
-    } ) );
+  public setFontFamily(family: string): this {
+    return this.setFont(this._font.copy({
+      family
+    }));
   }
 
-  public set fontFamily( value: string ) { this.setFontFamily( value ); }
+  public set fontFamily(value: string) { this.setFontFamily(value); }
 
   public get fontFamily(): string { return this.getFontFamily(); }
 
@@ -591,13 +591,13 @@ export default class Text extends Paintable( Node ) {
    *   'normal', 'ultra-condensed', 'extra-condensed', 'condensed', 'semi-condensed',
    *   'semi-expanded', 'expanded', 'extra-expanded' or 'ultra-expanded'
    */
-  public setFontStretch( stretch: FontStretch ): this {
-    return this.setFont( this._font.copy( {
-      stretch: stretch
-    } ) );
+  public setFontStretch(stretch: FontStretch): this {
+    return this.setFont(this._font.copy({
+      stretch
+    }));
   }
 
-  public set fontStretch( value: FontStretch ) { this.setFontStretch( value ); }
+  public set fontStretch(value: FontStretch) { this.setFontStretch(value); }
 
   public get fontStretch(): FontStretch { return this.getFontStretch(); }
 
@@ -613,13 +613,13 @@ export default class Text extends Paintable( Node ) {
    *
    * The font style supports the following options: 'normal', 'italic' or 'oblique'
    */
-  public setFontStyle( style: FontStyle ): this {
-    return this.setFont( this._font.copy( {
-      style: style
-    } ) );
+  public setFontStyle(style: FontStyle): this {
+    return this.setFont(this._font.copy({
+      style
+    }));
   }
 
-  public set fontStyle( value: FontStyle ) { this.setFontStyle( value ); }
+  public set fontStyle(value: FontStyle) { this.setFontStyle(value); }
 
   public get fontStyle(): FontStyle { return this.getFontStyle(); }
 
@@ -636,13 +636,13 @@ export default class Text extends Paintable( Node ) {
    * The size can either be a number (created as a quantity of 'px'), or any general CSS font-size string (for
    * example, '30pt', '5em', etc.)
    */
-  public setFontSize( size: string | number ): this {
-    return this.setFont( this._font.copy( {
-      size: size
-    } ) );
+  public setFontSize(size: string | number): this {
+    return this.setFont(this._font.copy({
+      size
+    }));
   }
 
-  public set fontSize( value: string | number ) { this.setFontSize( value ); }
+  public set fontSize(value: string | number) { this.setFontSize(value); }
 
   public get fontSize(): string { return this.getFontSize(); }
 
@@ -678,7 +678,7 @@ export default class Text extends Paintable( Node ) {
    * Override for extra information in the debugging output (from Display.getDebugHTML()). (scenery-internal)
    */
   public override getDebugHTMLExtras(): string {
-    return ` "${escapeHTML( this.renderedText )}"${this._isHTML ? ' (html)' : ''}`;
+    return ` "${escapeHTML(this.renderedText)}"${this._isHTML ? ' (html)' : ''}`;
   }
 
   public override dispose(): void {
@@ -692,8 +692,8 @@ export default class Text extends Paintable( Node ) {
    *
    * @returns - With embedding marks replaced.
    */
-  public static embeddedDebugString( string: string ): string {
-    return string.replace( /\u202a/g, '[LTR]' ).replace( /\u202b/g, '[RTL]' ).replace( /\u202c/g, '[POP]' );
+  public static embeddedDebugString(string: string): string {
+    return string.replace(/\u202A/g, '[LTR]').replace(/\u202B/g, '[RTL]').replace(/\u202C/g, '[POP]');
   }
 
   /**
@@ -714,14 +714,14 @@ export default class Text extends Paintable( Node ) {
    *
    * TODO: A stack-based implementation that doesn't create a bunch of objects/closures would be nice for performance.
    */
-  public static simplifyEmbeddingMarks( string: string ): string {
+  public static simplifyEmbeddingMarks(string: string): string {
     // First, we'll convert the string into a tree form, where each node is either a string object OR an object of the
     // node type { dir: {LTR||RTL}, children: {Array.<node>}, parent: {null|node} }. Thus each LTR...POP and RTL...POP
     // become a node with their interiors becoming children.
 
     type EmbedNode = {
-      dir: null | '\u202a' | '\u202b';
-      children: ( EmbedNode | string )[];
+      dir: null | '\u202A' | '\u202B';
+      children: (EmbedNode | string)[];
       parent: EmbedNode | null;
     };
 
@@ -732,94 +732,94 @@ export default class Text extends Paintable( Node ) {
       parent: null
     } as EmbedNode;
     let current: EmbedNode = root;
-    for ( let i = 0; i < string.length; i++ ) {
-      const chr = string.charAt( i );
+    for (let i = 0; i < string.length; i++) {
+      const chr = string.charAt(i);
 
       // Push a direction
-      if ( chr === LTR || chr === RTL ) {
+      if (chr === LTR || chr === RTL) {
         const node = {
           dir: chr,
           children: [],
           parent: current
         } as EmbedNode;
-        current.children.push( node );
+        current.children.push(node);
         current = node;
       }
       // Pop a direction
-      else if ( chr === POP ) {
-        assert && assert( current.parent, `Bad nesting of embedding marks: ${Text.embeddedDebugString( string )}` );
+      else if (chr === POP) {
+        assert && assert(current.parent, `Bad nesting of embedding marks: ${Text.embeddedDebugString(string)}`);
         current = current.parent!;
       }
       // Append characters to the current direction
       else {
-        current.children.push( chr );
+        current.children.push(chr);
       }
     }
-    assert && assert( current === root, `Bad nesting of embedding marks: ${Text.embeddedDebugString( string )}` );
+    assert && assert(current === root, `Bad nesting of embedding marks: ${Text.embeddedDebugString(string)}`);
 
     // Remove redundant nesting (e.g. [LTR][LTR]...[POP][POP])
-    function collapseNesting( node: EmbedNode ): void {
-      for ( let i = node.children.length - 1; i >= 0; i-- ) {
-        const child = node.children[ i ];
-        if ( typeof child !== 'string' && node.dir === child.dir ) {
-          node.children.splice( i, 1, ...child.children );
+    function collapseNesting(node: EmbedNode): void {
+      for (let i = node.children.length - 1; i >= 0; i--) {
+        const child = node.children[i];
+        if (typeof child !== 'string' && node.dir === child.dir) {
+          node.children.splice(i, 1, ...child.children);
         }
       }
     }
 
     // Remove overridden nesting (e.g. [LTR][RTL]...[POP][POP]), since the outer one is not needed
-    function collapseUnnecessary( node: EmbedNode ): void {
-      if ( node.children.length === 1 && typeof node.children[ 0 ] !== 'string' && node.children[ 0 ].dir ) {
-        node.dir = node.children[ 0 ].dir;
-        node.children = node.children[ 0 ].children;
+    function collapseUnnecessary(node: EmbedNode): void {
+      if (node.children.length === 1 && typeof node.children[0] !== 'string' && node.children[0].dir) {
+        node.dir = node.children[0].dir;
+        node.children = node.children[0].children;
       }
     }
 
     // Collapse adjacent matching dirs, e.g. [LTR]...[POP][LTR]...[POP]
-    function collapseAdjacent( node: EmbedNode ): void {
-      for ( let i = node.children.length - 1; i >= 1; i-- ) {
-        const previousChild = node.children[ i - 1 ];
-        const child = node.children[ i ];
-        if ( typeof child !== 'string' && typeof previousChild !== 'string' && child.dir && previousChild.dir === child.dir ) {
-          previousChild.children = previousChild.children.concat( child.children );
-          node.children.splice( i, 1 );
+    function collapseAdjacent(node: EmbedNode): void {
+      for (let i = node.children.length - 1; i >= 1; i--) {
+        const previousChild = node.children[i - 1];
+        const child = node.children[i];
+        if (typeof child !== 'string' && typeof previousChild !== 'string' && child.dir && previousChild.dir === child.dir) {
+          previousChild.children = previousChild.children.concat(child.children);
+          node.children.splice(i, 1);
 
           // Now try to collapse adjacent items in the child, since we combined children arrays
-          collapseAdjacent( previousChild );
+          collapseAdjacent(previousChild);
         }
       }
     }
 
     // Simplifies the tree using the above functions
-    function simplify( node: EmbedNode | string ): string | EmbedNode {
-      if ( typeof node !== 'string' ) {
-        for ( let i = 0; i < node.children.length; i++ ) {
-          simplify( node.children[ i ] );
+    function simplify(node: EmbedNode | string): string | EmbedNode {
+      if (typeof node !== 'string') {
+        for (let i = 0; i < node.children.length; i++) {
+          simplify(node.children[i]);
         }
 
-        collapseUnnecessary( node );
-        collapseNesting( node );
-        collapseAdjacent( node );
+        collapseUnnecessary(node);
+        collapseNesting(node);
+        collapseAdjacent(node);
       }
 
       return node;
     }
 
     // Turns a tree into a string
-    function stringify( node: EmbedNode | string ): string {
-      if ( typeof node === 'string' ) {
+    function stringify(node: EmbedNode | string): string {
+      if (typeof node === 'string') {
         return node;
       }
-      const childString = node.children.map( stringify ).join( '' );
-      if ( node.dir ) {
-        return `${node.dir + childString}\u202c`;
+      const childString = node.children.map(stringify).join('');
+      if (node.dir) {
+        return `${node.dir + childString}\u202C`;
       }
       else {
         return childString;
       }
     }
 
-    return stringify( simplify( root ) );
+    return stringify(simplify(root));
   }
 
   public static TextIO: IOType;
@@ -832,7 +832,7 @@ export default class Text extends Paintable( Node ) {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-Text.prototype._mutatorKeys = [ ...PAINTABLE_OPTION_KEYS, ...TEXT_OPTION_KEYS, ...Node.prototype._mutatorKeys ];
+Text.prototype._mutatorKeys = [...PAINTABLE_OPTION_KEYS, ...TEXT_OPTION_KEYS, ...Node.prototype._mutatorKeys];
 
 /**
  * {Array.<String>} - List of all dirty flags that should be available on drawables created from this node (or
@@ -841,22 +841,22 @@ Text.prototype._mutatorKeys = [ ...PAINTABLE_OPTION_KEYS, ...TEXT_OPTION_KEYS, .
  * (scenery-internal)
  * @override
  */
-Text.prototype.drawableMarkFlags = [ ...Node.prototype.drawableMarkFlags, ...PAINTABLE_DRAWABLE_MARK_FLAGS, 'text', 'font', 'bounds' ];
+Text.prototype.drawableMarkFlags = [...Node.prototype.drawableMarkFlags, ...PAINTABLE_DRAWABLE_MARK_FLAGS, 'text', 'font', 'bounds'];
 
-scenery.register( 'Text', Text );
+scenery.register('Text', Text);
 
 // Unicode embedding marks that we can combine to work around the Edge issue.
 // See https://github.com/phetsims/scenery/issues/520
-const LTR = '\u202a';
-const RTL = '\u202b';
-const POP = '\u202c';
+const LTR = '\u202A';
+const RTL = '\u202B';
+const POP = '\u202C';
 
 // Initialize computation of hybrid text
 TextBounds.initializeTextBounds();
 
-Text.TextIO = new IOType( 'TextIO', {
+Text.TextIO = new IOType('TextIO', {
   valueType: Text,
   supertype: Node.NodeIO,
   documentation: 'Text that is displayed in the simulation. TextIO has a nested PropertyIO.&lt;String&gt; for ' +
-                 'the current string value.'
-} );
+    'the current string value.'
+});

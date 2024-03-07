@@ -8,15 +8,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import UtteranceQueue from '../../../../utterance-queue/js/UtteranceQueue.js';
-import { scenery, voicingManager } from '../../imports.js';
+import UtteranceQueue from '../../../utterance-queue/UtteranceQueue';
+import { scenery, voicingManager } from '../../imports';
 
-const voicingUtteranceQueue = new UtteranceQueue( voicingManager, {
+const voicingUtteranceQueue = new UtteranceQueue(voicingManager, {
   featureSpecificAnnouncingControlPropertyName: 'voicingCanAnnounceProperty'
-} );
+});
 
 // voicingUtteranceQueue should be disabled until requested
 voicingUtteranceQueue.enabled = false;
 
-scenery.register( 'voicingUtteranceQueue', voicingUtteranceQueue );
+scenery.register('voicingUtteranceQueue', voicingUtteranceQueue);
 export default voicingUtteranceQueue;

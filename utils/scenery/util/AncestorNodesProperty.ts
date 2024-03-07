@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyEmitter from '../../../axon/js/TinyEmitter.js';
-import TinyProperty from '../../../axon/js/TinyProperty.js';
-import { Node, scenery } from '../imports.js';
+import TinyEmitter from '../../axon/TinyEmitter';
+import TinyProperty from '../../axon/TinyProperty';
+import { Node, scenery } from '../imports';
 
 export default class AncestorNodesProperty extends TinyProperty<Set<Node>> {
 
@@ -20,20 +20,20 @@ export default class AncestorNodesProperty extends TinyProperty<Set<Node>> {
   // Fired whenever we need to update the internal value (i.e. a parent was added or removed somewhere in the chain)
   public readonly updateEmitter = new TinyEmitter();
 
-  public constructor( public readonly node: Node ) {
-    super( new Set() );
+  public constructor(public readonly node: Node) {
+    super(new Set());
 
-    this._nodeUpdateListener = this.update.bind( this );
+    this._nodeUpdateListener = this.update.bind(this);
 
     // Listen to our own parent changes too (even though we aren't an ancestor)
-    this.addNodeListener( node );
+    this.addNodeListener(node);
 
     this.update();
   }
 
-  public override areValuesEqual( a: Set<Node>, b: Set<Node> ): boolean {
+  public override areValuesEqual(a: Set<Node>, b: Set<Node>): boolean {
     // Don't fire notifications if it hasn't changed.
-    return a.size === b.size && _.every( [ ...a ], node => b.has( node ) );
+    return a.size === b.size && _.every([...a], node => b.has(node));
   }
 
   private update(): void {
@@ -42,53 +42,53 @@ export default class AncestorNodesProperty extends TinyProperty<Set<Node>> {
     const nodeSet = new Set<Node>();
 
     // Recursively scan to identify all ancestors
-    ( function recurse( node: Node ) {
+    (function recurse(node: Node) {
       const parents = node.parents;
 
-      parents.forEach( parent => {
-        nodeSet.add( parent );
-        recurse( parent );
-      } );
-    } )( this.node );
+      parents.forEach(parent => {
+        nodeSet.add(parent);
+        recurse(parent);
+      });
+    })(this.node);
 
     // Add in new needed listeners
-    nodeSet.forEach( node => {
-      if ( !this.listenedNodeSet.has( node ) ) {
-        this.addNodeListener( node );
+    nodeSet.forEach(node => {
+      if (!this.listenedNodeSet.has(node)) {
+        this.addNodeListener(node);
       }
-    } );
+    });
 
     // Remove listeners not needed anymore
-    this.listenedNodeSet.forEach( node => {
+    this.listenedNodeSet.forEach(node => {
       // NOTE: do NOT remove the listener that is listening to our node for changes (it's not an ancestor, and won't
       // come up in this list)
-      if ( !nodeSet.has( node ) && node !== this.node ) {
-        this.removeNodeListener( node );
+      if (!nodeSet.has(node) && node !== this.node) {
+        this.removeNodeListener(node);
       }
-    } );
+    });
 
     this.value = nodeSet;
 
     this.updateEmitter.emit();
   }
 
-  private addNodeListener( node: Node ): void {
-    this.listenedNodeSet.add( node );
-    node.parentAddedEmitter.addListener( this._nodeUpdateListener );
-    node.parentRemovedEmitter.addListener( this._nodeUpdateListener );
+  private addNodeListener(node: Node): void {
+    this.listenedNodeSet.add(node);
+    node.parentAddedEmitter.addListener(this._nodeUpdateListener);
+    node.parentRemovedEmitter.addListener(this._nodeUpdateListener);
   }
 
-  private removeNodeListener( node: Node ): void {
-    this.listenedNodeSet.delete( node );
-    node.parentAddedEmitter.removeListener( this._nodeUpdateListener );
-    node.parentRemovedEmitter.removeListener( this._nodeUpdateListener );
+  private removeNodeListener(node: Node): void {
+    this.listenedNodeSet.delete(node);
+    node.parentAddedEmitter.removeListener(this._nodeUpdateListener);
+    node.parentRemovedEmitter.removeListener(this._nodeUpdateListener);
   }
 
   public override dispose(): void {
-    this.listenedNodeSet.forEach( node => this.removeNodeListener( node ) );
+    this.listenedNodeSet.forEach(node => this.removeNodeListener(node));
 
     super.dispose();
   }
 }
 
-scenery.register( 'AncestorNodesProperty', AncestorNodesProperty );
+scenery.register('AncestorNodesProperty', AncestorNodesProperty);

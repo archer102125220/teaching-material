@@ -6,12 +6,12 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import { Leaf, Node, NodeOptions, scenery } from '../imports.js';
+import Bounds2 from '../../dot/Bounds2';
+import { Leaf, Node, type NodeOptions, scenery } from '../imports';
 
 export type SpacerOptions = NodeOptions;
 
-export default class Spacer extends Leaf( Node ) {
+export default class Spacer extends Leaf(Node) {
   /**
    * Creates a spacer taking up a rectangular area from x: [0,width] and y: [0,height]. Use x/y in options to control
    * its position.
@@ -20,17 +20,17 @@ export default class Spacer extends Leaf( Node ) {
    * @param height - The height of the spacer
    * @param [options] - Passed to Node
    */
-  public constructor( width: number, height: number, options?: SpacerOptions ) {
-    assert && assert( isFinite( width ), 'width should be a finite number' );
-    assert && assert( isFinite( height ), 'height should be a finite number' );
+  public constructor(width: number, height: number, options?: SpacerOptions) {
+    assert && assert(isFinite(width), 'width should be a finite number');
+    assert && assert(isFinite(height), 'height should be a finite number');
 
     super();
 
     // override the local bounds to our area
-    this.localBounds = new Bounds2( 0, 0, width, height );
+    this.localBounds = new Bounds2(0, 0, width, height);
 
-    this.mutate( options );
+    this.mutate(options);
   }
 }
 
-scenery.register( 'Spacer', Spacer );
+scenery.register('Spacer', Spacer);

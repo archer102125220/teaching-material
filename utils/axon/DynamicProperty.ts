@@ -97,17 +97,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-// @ts-expect-error
-import KeysMatching from '../phet-core/types/KeysMatching';
+import type KeysMatching from '../phet-core/types/KeysMatching';
 import axon from './axon';
-// @ts-expect-error
-import TProperty from './TProperty';
-// @ts-expect-error
-import Property, { PropertyOptions } from './Property';
+import type TProperty from './TProperty';
+import Property, { type PropertyOptions } from './Property';
 import ReadOnlyProperty from './ReadOnlyProperty';
 import optionize from '../phet-core/optionize';
-// @ts-expect-error
-import TReadOnlyProperty from './TReadOnlyProperty';
+import type TReadOnlyProperty from './TReadOnlyProperty';
 
 export type TNullableProperty<T> = TReadOnlyProperty<T | null> | TReadOnlyProperty<T>;
 
@@ -126,12 +122,12 @@ type SelfOptions<ThisValueType, InnerValueType, OuterValueType> = {
   // NOTE: This accepts TReadOnlyProperty, but if you have bidirectional:true it must be a full TProperty.
   // This is not currently type checked.
   // NOTE there are constraints using derive: 'string' when using parametric type parameters. See https://github.com/phetsims/projectile-data-lab/issues/10
-  derive?: ( ( outerValue: OuterValueType ) => TReadOnlyProperty<InnerValueType> ) | KeysMatching<OuterValueType, TReadOnlyProperty<InnerValueType>>;
+  derive?: ((outerValue: OuterValueType) => TReadOnlyProperty<InnerValueType>) | KeysMatching<OuterValueType, TReadOnlyProperty<InnerValueType>>;
 
   // Maps our input Property value to/from this Property's value. See top-level documentation for usage.
   // If it's a string, it will grab that named property out (e.g. it's like passing u => u[ derive ])
-  map?: ( ( innerValue: InnerValueType ) => ThisValueType ) | KeysMatching<InnerValueType, ThisValueType>;
-  inverseMap?: ( ( value: ThisValueType ) => InnerValueType ) | KeysMatching<ThisValueType, InnerValueType>;
+  map?: ((innerValue: InnerValueType) => ThisValueType) | KeysMatching<InnerValueType, ThisValueType>;
+  inverseMap?: ((value: ThisValueType) => InnerValueType) | KeysMatching<ThisValueType, InnerValueType>;
 };
 
 export type DynamicPropertyOptions<ThisValueType, InnerValueType, OuterValueType> = SelfOptions<ThisValueType, InnerValueType, OuterValueType> & PropertyOptions<ThisValueType>;
@@ -153,13 +149,13 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
   private isExternallyChanging: boolean;
 
   private defaultValue: InnerValueType;
-  protected derive: ( u: OuterValueType ) => TReadOnlyProperty<InnerValueType>;
-  protected map: ( v: InnerValueType ) => ThisValueType;
-  protected inverseMap: ( t: ThisValueType ) => InnerValueType;
+  protected derive: (u: OuterValueType) => TReadOnlyProperty<InnerValueType>;
+  protected map: (v: InnerValueType) => ThisValueType;
+  protected inverseMap: (t: ThisValueType) => InnerValueType;
   protected bidirectional: boolean;
   private valuePropertyProperty: TNullableProperty<OuterValueType>;
-  private propertyPropertyListener: ( value: InnerValueType, oldValue: InnerValueType | null, innerProperty: TReadOnlyProperty<InnerValueType> | null ) => void;
-  private propertyListener: ( newPropertyValue: OuterValueType | null, oldPropertyValue: OuterValueType | null | undefined ) => void;
+  private propertyPropertyListener: (value: InnerValueType, oldValue: InnerValueType | null, innerProperty: TReadOnlyProperty<InnerValueType> | null) => void;
+  private propertyListener: (newPropertyValue: OuterValueType | null, oldPropertyValue: OuterValueType | null | undefined) => void;
 
   // We store the last propertyProperty's value as a workaround because Property is currently firing re-entrant Property
   // changes in the incorrect order, see https://github.com/phetsims/axon/issues/447
@@ -169,30 +165,30 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
    * @param valuePropertyProperty - If the value is null, it is considered disconnected.
    * @param [providedOptions] - options
    */
-  public constructor( valuePropertyProperty: TNullableProperty<OuterValueType> | TReadOnlyProperty<OuterValueType>, providedOptions?: DynamicPropertyOptions<ThisValueType, InnerValueType, OuterValueType> ) {
+  public constructor(valuePropertyProperty: TNullableProperty<OuterValueType> | TReadOnlyProperty<OuterValueType>, providedOptions?: DynamicPropertyOptions<ThisValueType, InnerValueType, OuterValueType>) {
 
-    const options = optionize<DynamicPropertyOptions<ThisValueType, InnerValueType, OuterValueType>, SelfOptions<ThisValueType, InnerValueType, OuterValueType>, PropertyOptions<ThisValueType>>()( {
+    const options = optionize<DynamicPropertyOptions<ThisValueType, InnerValueType, OuterValueType>, SelfOptions<ThisValueType, InnerValueType, OuterValueType>, PropertyOptions<ThisValueType>>()({
       bidirectional: false,
       defaultValue: null as unknown as InnerValueType,
       derive: _.identity,
       map: _.identity,
       inverseMap: _.identity
-    }, providedOptions );
+    }, providedOptions);
 
     const optionsDerive = options.derive;
     const optionsMap = options.map;
     const optionsInverseMap = options.inverseMap;
 
-    const derive: ( ( u: OuterValueType ) => TReadOnlyProperty<InnerValueType> ) = typeof optionsDerive === 'function' ? optionsDerive : ( ( u: OuterValueType ) => u[ optionsDerive ] as unknown as TProperty<InnerValueType> );
-    const map: ( ( v: InnerValueType ) => ThisValueType ) = typeof optionsMap === 'function' ? optionsMap : ( ( v: InnerValueType ) => v[ optionsMap ] as unknown as ThisValueType );
-    const inverseMap: ( ( t: ThisValueType ) => InnerValueType ) = typeof optionsInverseMap === 'function' ? optionsInverseMap : ( ( t: ThisValueType ) => t[ optionsInverseMap ] as unknown as InnerValueType );
+    const derive: ((u: OuterValueType) => TReadOnlyProperty<InnerValueType>) = typeof optionsDerive === 'function' ? optionsDerive : ((u: OuterValueType) => u[optionsDerive] as unknown as TProperty<InnerValueType>);
+    const map: ((v: InnerValueType) => ThisValueType) = typeof optionsMap === 'function' ? optionsMap : ((v: InnerValueType) => v[optionsMap] as unknown as ThisValueType);
+    const inverseMap: ((t: ThisValueType) => InnerValueType) = typeof optionsInverseMap === 'function' ? optionsInverseMap : ((t: ThisValueType) => t[optionsInverseMap] as unknown as InnerValueType);
 
     // Use the Property's initial value
     const initialValue = valuePropertyProperty.value === null ?
-                         map( options.defaultValue ) :
-                         map( derive( valuePropertyProperty.value ).value );
+      map(options.defaultValue) :
+      map(derive(valuePropertyProperty.value).value);
 
-    super( initialValue, options );
+    super(initialValue, options);
 
     this.defaultValue = options.defaultValue;
     this.derive = derive;
@@ -202,16 +198,16 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
     this.valuePropertyProperty = valuePropertyProperty;
     this.isExternallyChanging = false;
 
-    this.propertyPropertyListener = this.onPropertyPropertyChange.bind( this );
-    this.propertyListener = this.onPropertyChange.bind( this );
+    this.propertyPropertyListener = this.onPropertyPropertyChange.bind(this);
+    this.propertyListener = this.onPropertyChange.bind(this);
 
     // Rehook our listener to whatever is the active Property.
-    valuePropertyProperty.link( this.propertyListener );
+    valuePropertyProperty.link(this.propertyListener);
 
     // If we aren't bidirectional, we should never add this listener.
-    if ( options.bidirectional ) {
+    if (options.bidirectional) {
       // No unlink needed, since our own disposal will remove this listener.
-      this.lazyLink( this.onSelfChange.bind( this ) );
+      this.lazyLink(this.onSelfChange.bind(this));
     }
   }
 
@@ -223,23 +219,23 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
    * @param oldValue - Ignored for our purposes, but is the 2nd parameter for Property listeners.
    * @param innerProperty
    */
-  private onPropertyPropertyChange( value: InnerValueType, oldValue: InnerValueType | null, innerProperty: TReadOnlyProperty<InnerValueType> | null ): void {
+  private onPropertyPropertyChange(value: InnerValueType, oldValue: InnerValueType | null, innerProperty: TReadOnlyProperty<InnerValueType> | null): void {
 
     // If the value of the inner Property is already the inverse of our value, we will never attempt to update our
     // own value in an attempt to limit "ping-ponging" cases mainly due to numerical error. Otherwise it would be
     // possible, given certain values and map/inverse, for both Properties to toggle back-and-forth.
     // See https://github.com/phetsims/axon/issues/197 for more details.
-    if ( this.bidirectional && this.valuePropertyProperty.value !== null && innerProperty ) {
-      const currentProperty = this.derive( this.valuePropertyProperty.value );
+    if (this.bidirectional && this.valuePropertyProperty.value !== null && innerProperty) {
+      const currentProperty = this.derive(this.valuePropertyProperty.value);
       // Notably, we only want to cancel interactions if the Property that sent the notification is still the Property
       // we are paying attention to.
-      if ( currentProperty === innerProperty && innerProperty.areValuesEqual( this.inverseMap( this.value ), innerProperty.get() ) ) {
+      if (currentProperty === innerProperty && innerProperty.areValuesEqual(this.inverseMap(this.value), innerProperty.get())) {
         return;
       }
     }
 
     // Since we override the setter here, we need to call the version on the prototype
-    super.set( this.map( value ) );
+    super.set(this.map(value));
   }
 
   /**
@@ -250,39 +246,39 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
    *                                              We additionally handle the initial link() case where this is
    *                                              undefined.
    */
-  private onPropertyChange( newPropertyValue: OuterValueType | null, oldPropertyValue: OuterValueType | null | undefined ): void {
-    if ( this.lastPropertyPropertyValue ) {
-      this.derive( this.lastPropertyPropertyValue ).unlink( this.propertyPropertyListener );
+  private onPropertyChange(newPropertyValue: OuterValueType | null, oldPropertyValue: OuterValueType | null | undefined): void {
+    if (this.lastPropertyPropertyValue) {
+      this.derive(this.lastPropertyPropertyValue).unlink(this.propertyPropertyListener);
       this.lastPropertyPropertyValue = null;
     }
 
-    if ( newPropertyValue ) {
-      this.derive( newPropertyValue ).link( this.propertyPropertyListener );
+    if (newPropertyValue) {
+      this.derive(newPropertyValue).link(this.propertyPropertyListener);
       this.lastPropertyPropertyValue = newPropertyValue;
     }
     else {
       // Switch to null when our Property's value is null.
-      this.onPropertyPropertyChange( this.defaultValue, null, null );
+      this.onPropertyPropertyChange(this.defaultValue, null, null);
     }
   }
 
   /**
    * Listener added to ourself when we are bidirectional
    */
-  private onSelfChange( value: ThisValueType ): void {
-    assert && assert( this.bidirectional );
+  private onSelfChange(value: ThisValueType): void {
+    assert && assert(this.bidirectional);
 
-    if ( this.valuePropertyProperty.value !== null ) {
-      const innerProperty = this.derive( this.valuePropertyProperty.value );
+    if (this.valuePropertyProperty.value !== null) {
+      const innerProperty = this.derive(this.valuePropertyProperty.value);
 
       // If our new value is the result of map() from the inner Property's value, we don't want to propagate that
       // change back to the innerProperty in the case where the map/inverseMap are not exact matches (generally due
       // to floating-point issues).
       // See https://github.com/phetsims/axon/issues/197 for more details.
-      if ( !this.areValuesEqual( value, this.map( innerProperty.value ) ) ) {
+      if (!this.areValuesEqual(value, this.map(innerProperty.value))) {
         // We'll fail at runtime if needed, this cast is needed since sometimes we can do non-bidirectional work on
         // things like a DerivedProperty
-        ( innerProperty as TProperty<InnerValueType> ).value = this.inverseMap( value );
+        (innerProperty as TProperty<InnerValueType>).value = this.inverseMap(value);
       }
     }
   }
@@ -291,10 +287,10 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
    * Disposes this Property
    */
   public override dispose(): void {
-    this.valuePropertyProperty.unlink( this.propertyListener );
+    this.valuePropertyProperty.unlink(this.propertyListener);
 
-    if ( this.lastPropertyPropertyValue ) {
-      this.derive( this.lastPropertyPropertyValue ).unlink( this.propertyPropertyListener );
+    if (this.lastPropertyPropertyValue) {
+      this.derive(this.lastPropertyPropertyValue).unlink(this.propertyPropertyListener);
       this.lastPropertyPropertyValue = null;
     }
 
@@ -305,23 +301,23 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
    * Resets the current property (if it's a Property instead of a TinyProperty)
    */
   public reset(): void {
-    assert && assert( this.bidirectional, 'Cannot reset a non-bidirectional DynamicProperty' );
+    assert && assert(this.bidirectional, 'Cannot reset a non-bidirectional DynamicProperty');
 
-    if ( this.valuePropertyProperty.value !== null ) {
-      const property = this.derive( this.valuePropertyProperty.value );
-      ( property as Property<InnerValueType> ).reset();
+    if (this.valuePropertyProperty.value !== null) {
+      const property = this.derive(this.valuePropertyProperty.value);
+      (property as Property<InnerValueType>).reset();
     }
   }
 
   /**
    * Prevent setting this Property manually if it is not marked as bidirectional.
    */
-  public override set( value: ThisValueType ): void {
-    assert && assert( this.bidirectional,
-      `Cannot set values directly to a non-bidirectional DynamicProperty, tried to set: ${value}` );
+  public override set(value: ThisValueType): void {
+    assert && assert(this.bidirectional,
+      `Cannot set values directly to a non-bidirectional DynamicProperty, tried to set: ${value}`);
 
     this.isExternallyChanging = true;
-    super.set( value );
+    super.set(value);
 
     this.isExternallyChanging = false;
   }
@@ -338,8 +334,8 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
    * We ran performance tests on Chrome, and determined that calling super.value = newValue is statistically significantly
    * slower at the p = 0.10 level( looping over 10,000 value calls). Therefore, we prefer this optimization.
    */
-  public override set value( value: ThisValueType ) {
-    this.set( value );
+  public override set value(value: ThisValueType) {
+    this.set(value);
   }
 
   /**
@@ -350,4 +346,4 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
   }
 }
 
-axon.register( 'DynamicProperty', DynamicProperty );
+axon.register('DynamicProperty', DynamicProperty);

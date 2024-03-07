@@ -7,27 +7,27 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-// @ts-expect-error
-import ReadOnlyProperty, { LinkOptions } from './ReadOnlyProperty';
-import TinyProperty from './TinyProperty.js';
-// @ts-expect-error
-import IntentionalAny from '../phet-core/types/IntentionalAny';
+import ReadOnlyProperty, { type LinkOptions } from './ReadOnlyProperty';
+import TinyProperty from './TinyProperty';
+import type IntentionalAny from '../phet-core/types/IntentionalAny';
 
-export type PropertyLinkListener<T> = ( value: T, oldValue: T | null, tinyProperty: TReadOnlyProperty<T> ) => void;
-export type PropertyLazyLinkListener<T> = ( value: T, oldValue: T, tinyProperty: TReadOnlyProperty<T> ) => void;
+// eslint-disable-next-line no-use-before-define
+export type PropertyLinkListener<T> = (value: T, oldValue: T | null, tinyProperty: TReadOnlyProperty<T>) => void;
+// eslint-disable-next-line no-use-before-define
+export type PropertyLazyLinkListener<T> = (value: T, oldValue: T, tinyProperty: TReadOnlyProperty<T>) => void;
 export type PropertyListener<T> = PropertyLinkListener<T> | PropertyLazyLinkListener<T>;
 
 // See comments in Property.ts / TinyProperty.ts
 type TReadOnlyProperty<T> = {
   get: () => T;
   get value(): T;
-  areValuesEqual( a: T, b: T ): boolean;
-  link( listener: PropertyLinkListener<T>, options?: LinkOptions ): void;
-  lazyLink( listener: PropertyLazyLinkListener<T>, options?: LinkOptions ): void;
-  linkAttribute<Attr extends string>( object: { [key in Attr]: T }, attributeName: Attr ): void;
-  unlink( listener: PropertyListener<T> ): void;
+  areValuesEqual(a: T, b: T): boolean;
+  link(listener: PropertyLinkListener<T>, options?: LinkOptions): void;
+  lazyLink(listener: PropertyLazyLinkListener<T>, options?: LinkOptions): void;
+  linkAttribute<Attr extends string>(object: { [key in Attr]: T }, attributeName: Attr): void;
+  unlink(listener: PropertyListener<T>): void;
   unlinkAll(): void;
-  hasListener( listener: PropertyLinkListener<T> ): boolean;
+  hasListener(listener: PropertyLinkListener<T>): boolean;
   isSettable(): boolean;
   dispose(): void;
 
@@ -35,9 +35,10 @@ type TReadOnlyProperty<T> = {
   toString(): string;
 };
 
-export function isTReadOnlyProperty( something: IntentionalAny ): something is TReadOnlyProperty<unknown> {
+export function isTReadOnlyProperty(something: IntentionalAny): something is TReadOnlyProperty<unknown> {
   return something instanceof ReadOnlyProperty || something instanceof TinyProperty;
 }
+
 
 // @ts-expect-error
 export default TReadOnlyProperty;

@@ -25,30 +25,31 @@ import IOTypeCache from '../IOTypeCache';
 // Cache each parameterized IOType so that it is only created once
 const cache = new IOTypeCache();
 
-const NullableIO = <ParameterType, ParameterStateType extends PatternStateSelfType, PatternStateSelfType>( parameterType: IOType<ParameterType, ParameterStateType, PatternStateSelfType> ): IOType => {
+// eslint-disable-next-line no-use-before-define
+const NullableIO = <ParameterType, ParameterStateType extends PatternStateSelfType, PatternStateSelfType>(parameterType: IOType<ParameterType, ParameterStateType, PatternStateSelfType>): IOType => {
 
-  assert && assert( parameterType, 'NullableIO needs parameterType' );
+  assert && assert(parameterType, 'NullableIO needs parameterType');
 
-  if ( !cache.has( parameterType ) ) {
-    cache.set( parameterType, new IOType<ParameterType | null, ParameterStateType | null>( `NullableIO<${parameterType.typeName}>`, {
+  if (!cache.has(parameterType)) {
+    cache.set(parameterType, new IOType<ParameterType | null, ParameterStateType | null>(`NullableIO<${parameterType.typeName}>`, {
       documentation: 'A PhET-iO Type adding support for null in addition to the behavior of its parameter.',
-      isValidValue: instance => instance === null || Validation.isValueValid( instance, parameterType.validator ),
-      parameterTypes: [ parameterType ],
+      isValidValue: instance => instance === null || Validation.isValueValid(instance, parameterType.validator),
+      parameterTypes: [parameterType],
 
       // If the argument is null, returns null. Otherwise, converts the instance to a state object for serialization.
-      toStateObject: instance => instance === null ? null : parameterType.toStateObject( instance ),
+      toStateObject: instance => instance === null ? null : parameterType.toStateObject(instance),
 
       // If the argument is null, returns null. Otherwise, converts a state object to an instance of the underlying type.
-      fromStateObject: stateObject => stateObject === null ? null : parameterType.fromStateObject( stateObject ),
-      stateSchema: StateSchema.asValue( `null|<${parameterType.typeName}>`, {
-          isValidValue: value => value === null || parameterType.isStateObjectValid( value )
-        }
+      fromStateObject: stateObject => stateObject === null ? null : parameterType.fromStateObject(stateObject),
+      stateSchema: StateSchema.asValue(`null|<${parameterType.typeName}>`, {
+        isValidValue: value => value === null || parameterType.isStateObjectValid(value)
+      }
       )
-    } ) );
+    }));
   }
 
-  return cache.get( parameterType )!;
+  return cache.get(parameterType)!;
 };
 
-tandemNamespace.register( 'NullableIO', NullableIO );
+tandemNamespace.register('NullableIO', NullableIO);
 export default NullableIO;

@@ -8,8 +8,8 @@
  * @author Jesse Greenberg
  */
 
-import Utterance, { UtteranceOptions } from '../../../../utterance-queue/js/Utterance.js';
-import { Focus, scenery } from '../../imports.js';
+import Utterance, { type UtteranceOptions } from '../../../utterance-queue/Utterance';
+import { Focus, scenery } from '../../imports';
 
 export type ReadingBlockUtteranceOptions = UtteranceOptions;
 
@@ -18,11 +18,11 @@ class ReadingBlockUtterance extends Utterance {
   // Can be set and change to support reusing this ReadingBlockUtterance.
   public readingBlockFocus: Focus | null;
 
-  public constructor( focus: Focus | null, options?: ReadingBlockUtteranceOptions ) {
-    super( options );
+  public constructor(focus: Focus | null, options?: ReadingBlockUtteranceOptions) {
+    super(options);
     this.readingBlockFocus = focus;
   }
 }
 
-scenery.register( 'ReadingBlockUtterance', ReadingBlockUtterance );
+scenery.register('ReadingBlockUtterance', ReadingBlockUtterance);
 export default ReadingBlockUtterance;

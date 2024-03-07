@@ -7,8 +7,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyProperty from '../../../axon/js/TinyProperty.js';
-import { Node, scenery, Trail } from '../imports.js';
+import TinyProperty from '../../axon/TinyProperty';
+import { Node, scenery, Trail } from '../imports';
 
 export default class TrailsBetweenProperty extends TinyProperty<Trail[]> {
 
@@ -17,13 +17,13 @@ export default class TrailsBetweenProperty extends TinyProperty<Trail[]> {
   public readonly listenedNodeSet: Set<Node> = new Set<Node>();
   private readonly _trailUpdateListener: () => void;
 
-  public constructor( rootNode: Node, leafNode: Node ) {
-    super( [] );
+  public constructor(rootNode: Node, leafNode: Node) {
+    super([]);
 
     this.rootNode = rootNode;
     this.leafNode = leafNode;
 
-    this._trailUpdateListener = this.update.bind( this );
+    this._trailUpdateListener = this.update.bind(this);
 
     this.update();
   }
@@ -37,74 +37,74 @@ export default class TrailsBetweenProperty extends TinyProperty<Trail[]> {
     const nodeSet = new Set<Node>();
 
     // Modified in-place during the search
-    const trail = new Trail( this.leafNode );
+    const trail = new Trail(this.leafNode);
 
     const rootNode = this.rootNode;
-    ( function recurse() {
+    (function recurse() {
       const root = trail.rootNode();
 
-      nodeSet.add( root );
+      nodeSet.add(root);
 
-      if ( root === rootNode ) {
+      if (root === rootNode) {
         // Create a permanent copy that won't be mutated
-        trails.push( trail.copy() );
+        trails.push(trail.copy());
       }
 
-      root.parents.forEach( parent => {
-        trail.addAncestor( parent );
+      root.parents.forEach(parent => {
+        trail.addAncestor(parent);
         recurse();
         trail.removeAncestor();
-      } );
-    } )();
+      });
+    })();
 
     // Add in new needed listeners
-    nodeSet.forEach( node => {
-      if ( !this.listenedNodeSet.has( node ) ) {
-        this.addNodeListener( node );
+    nodeSet.forEach(node => {
+      if (!this.listenedNodeSet.has(node)) {
+        this.addNodeListener(node);
       }
-    } );
+    });
 
     // Remove listeners not needed anymore
-    this.listenedNodeSet.forEach( node => {
-      if ( !nodeSet.has( node ) ) {
-        this.removeNodeListener( node );
+    this.listenedNodeSet.forEach(node => {
+      if (!nodeSet.has(node)) {
+        this.removeNodeListener(node);
       }
-    } );
+    });
 
     // Guard in a way that deepEquality on the Property wouldn't (because of the Array wrapper)
     const currentTrails = this.value;
     let trailsEqual = currentTrails.length === trails.length;
-    if ( trailsEqual ) {
-      for ( let i = 0; i < trails.length; i++ ) {
-        if ( !currentTrails[ i ].equals( trails[ i ] ) ) {
+    if (trailsEqual) {
+      for (let i = 0; i < trails.length; i++) {
+        if (!currentTrails[i].equals(trails[i])) {
           trailsEqual = false;
           break;
         }
       }
     }
 
-    if ( !trailsEqual ) {
+    if (!trailsEqual) {
       this.value = trails;
     }
   }
 
-  private addNodeListener( node: Node ): void {
-    this.listenedNodeSet.add( node );
-    node.parentAddedEmitter.addListener( this._trailUpdateListener );
-    node.parentRemovedEmitter.addListener( this._trailUpdateListener );
+  private addNodeListener(node: Node): void {
+    this.listenedNodeSet.add(node);
+    node.parentAddedEmitter.addListener(this._trailUpdateListener);
+    node.parentRemovedEmitter.addListener(this._trailUpdateListener);
   }
 
-  private removeNodeListener( node: Node ): void {
-    this.listenedNodeSet.delete( node );
-    node.parentAddedEmitter.removeListener( this._trailUpdateListener );
-    node.parentRemovedEmitter.removeListener( this._trailUpdateListener );
+  private removeNodeListener(node: Node): void {
+    this.listenedNodeSet.delete(node);
+    node.parentAddedEmitter.removeListener(this._trailUpdateListener);
+    node.parentRemovedEmitter.removeListener(this._trailUpdateListener);
   }
 
   public override dispose(): void {
-    this.listenedNodeSet.forEach( node => this.removeNodeListener( node ) );
+    this.listenedNodeSet.forEach(node => this.removeNodeListener(node));
 
     super.dispose();
   }
 }
 
-scenery.register( 'TrailsBetweenProperty', TrailsBetweenProperty );
+scenery.register('TrailsBetweenProperty', TrailsBetweenProperty);

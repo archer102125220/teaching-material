@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import { CanvasContextWrapper, Font, scenery, svgns, Utils } from '../imports.js';
+import Bounds2 from '../../dot/Bounds2';
+import { CanvasContextWrapper, Font, scenery, svgns, Utils } from '../imports';
 
 // @private {string} - ID for a container for our SVG test element (determined to find the size of text elements with SVG)
 const TEXT_SIZE_CONTAINER_ID = 'sceneryTextSizeContainer';
@@ -39,31 +39,39 @@ const TextBounds = {
    * @param {string} renderedText - Text to display (with any special characters replaced)
    * @returns {Bounds2}
    */
-  approximateSVGBounds( font, renderedText ) {
-    assert && assert( font instanceof Font, 'Font required' );
-    assert && assert( typeof renderedText === 'string', 'renderedText required' );
+  approximateSVGBounds(font, renderedText) {
+    assert && assert(font instanceof Font, 'Font required');
+    assert && assert(typeof renderedText === 'string', 'renderedText required');
 
-    if ( !svgTextSizeContainer.parentNode ) {
-      if ( document.body ) {
-        document.body.appendChild( svgTextSizeContainer );
-      }
-      else {
-        throw new Error( 'No document.body and trying to get approximate SVG bounds of a Text node' );
+    if (!svgTextSizeContainer.parentNode) {
+      if (document.body) {
+        document.body.appendChild(svgTextSizeContainer);
+      } else {
+        throw new Error(
+          'No document.body and trying to get approximate SVG bounds of a Text node'
+        );
       }
     }
-    TextBounds.setSVGTextAttributes( svgTextSizeElement, font, renderedText );
+    TextBounds.setSVGTextAttributes(svgTextSizeElement, font, renderedText);
     const rect = svgTextSizeElement.getBBox();
 
-    if ( rect.width === 0 && rect.height === 0 && renderedText.length > 0 ) {
-      if ( !deliveredWarning ) {
+    if (rect.width === 0 && rect.height === 0 && renderedText.length > 0) {
+      if (!deliveredWarning) {
         deliveredWarning = true;
 
-        console.log( 'WARNING: Guessing text bounds, is the simulation hidden? See https://github.com/phetsims/chipper/issues/768' );
+        console.log(
+          'WARNING: Guessing text bounds, is the simulation hidden? See https://github.com/phetsims/chipper/issues/768'
+        );
       }
-      return TextBounds.guessSVGBounds( font, renderedText );
+      return TextBounds.guessSVGBounds(font, renderedText);
     }
 
-    return new Bounds2( rect.x, rect.y, rect.x + rect.width, rect.y + rect.height );
+    return new Bounds2(
+      rect.x,
+      rect.y,
+      rect.x + rect.width,
+      rect.y + rect.height
+    );
   },
 
   /**
@@ -74,13 +82,18 @@ const TextBounds = {
    * @param {string} renderedText
    * @returns {Bounds2}
    */
-  guessSVGBounds( font, renderedText ) {
+  guessSVGBounds(font, renderedText) {
     const px = font.getNumericSize();
     const isBold = font.weight === 'bold';
 
     // Our best guess, based on PhetFont in macOS Chrome. Things may differ, but hopefully this approximation
     // is useful.
-    return new Bounds2( 0, -0.9 * px, ( isBold ? 0.435 : 0.4 ) * px * renderedText.length, 0.22 * px );
+    return new Bounds2(
+      0,
+      -0.9 * px,
+      (isBold ? 0.435 : 0.4) * px * renderedText.length,
+      0.22 * px
+    );
   },
 
   /**
@@ -92,11 +105,11 @@ const TextBounds = {
    * @param {scenery.Text} text - The Text node
    * @returns {Bounds2}
    */
-  accurateCanvasBounds( text ) {
+  accurateCanvasBounds(text) {
     const context = scenery.scratchContext;
     context.font = text._font.toCSS();
     context.direction = 'ltr';
-    const metrics = context.measureText( text.renderedText );
+    const metrics = context.measureText(text.renderedText);
     return new Bounds2(
       -metrics.actualBoundingBoxLeft,
       -metrics.actualBoundingBoxAscent,
@@ -117,31 +130,44 @@ const TextBounds = {
    * @param {scenery.Text} text - The Text node
    * @returns {Bounds2}
    */
-  accurateCanvasBoundsFallback( text ) {
+  accurateCanvasBoundsFallback(text) {
     // this seems to be slower than expected, mostly due to Font getters
-    const svgBounds = TextBounds.approximateSVGBounds( text._font, text.renderedText );
+    const svgBounds = TextBounds.approximateSVGBounds(
+      text._font,
+      text.renderedText
+    );
 
-    //If svgBounds are zero, then return the zero bounds
-    if ( !text.renderedText.length || svgBounds.width === 0 ) {
+    // If svgBounds are zero, then return the zero bounds
+    if (!text.renderedText.length || svgBounds.width === 0) {
       return svgBounds;
     }
 
     // NOTE: should return new instance, so that it can be mutated later
-    const accurateBounds = Utils.canvasAccurateBounds( context => {
-      context.font = text._font.toCSS();
-      context.direction = 'ltr';
-      context.fillText( text.renderedText, 0, 0 );
-      if ( text.hasPaintableStroke() ) {
-        const fakeWrapper = new CanvasContextWrapper( null, context );
-        text.beforeCanvasStroke( fakeWrapper );
-        context.strokeText( text.renderedText, 0, 0 );
-        text.afterCanvasStroke( fakeWrapper );
+    const accurateBounds = Utils.canvasAccurateBounds(
+      (context) => {
+        context.font = text._font.toCSS();
+        context.direction = 'ltr';
+        context.fillText(text.renderedText, 0, 0);
+        if (text.hasPaintableStroke()) {
+          const fakeWrapper = new CanvasContextWrapper(null, context);
+          text.beforeCanvasStroke(fakeWrapper);
+          context.strokeText(text.renderedText, 0, 0);
+          text.afterCanvasStroke(fakeWrapper);
+        }
+      },
+      {
+        precision: 0.5,
+        resolution: 128,
+        initialScale:
+          32 /
+          Math.max(
+            Math.abs(svgBounds.minX),
+            Math.abs(svgBounds.minY),
+            Math.abs(svgBounds.maxX),
+            Math.abs(svgBounds.maxY)
+          )
       }
-    }, {
-      precision: 0.5,
-      resolution: 128,
-      initialScale: 32 / Math.max( Math.abs( svgBounds.minX ), Math.abs( svgBounds.minY ), Math.abs( svgBounds.maxX ), Math.abs( svgBounds.maxY ) )
-    } );
+    );
     // Try falling back to SVG bounds if our accurate bounds are not finite
     return accurateBounds.isFinite() ? accurateBounds : svgBounds;
   },
@@ -155,15 +181,16 @@ const TextBounds = {
    * @param {Font} font - The font of the text
    * @returns {Bounds2}
    */
-  getVerticalBounds( font ) {
-    assert && assert( font instanceof Font, 'Font required' );
+  getVerticalBounds(font) {
+    assert && assert(font instanceof Font, 'Font required');
 
     const css = font.toCSS();
 
     // Cache these, as it's more expensive
-    let verticalBounds = hybridFontVerticalCache[ css ];
-    if ( !verticalBounds ) {
-      verticalBounds = hybridFontVerticalCache[ css ] = TextBounds.approximateSVGBounds( font, 'm' );
+    let verticalBounds = hybridFontVerticalCache[css];
+    if (!verticalBounds) {
+      verticalBounds = hybridFontVerticalCache[css] =
+        TextBounds.approximateSVGBounds(font, 'm');
     }
 
     return verticalBounds;
@@ -177,14 +204,14 @@ const TextBounds = {
    * @param {string} renderedText - Text to display (with any special characters replaced)
    * @returns {number}
    */
-  approximateCanvasWidth( font, renderedText ) {
-    assert && assert( font instanceof Font, 'Font required' );
-    assert && assert( typeof renderedText === 'string', 'renderedText required' );
+  approximateCanvasWidth(font, renderedText) {
+    assert && assert(font instanceof Font, 'Font required');
+    assert && assert(typeof renderedText === 'string', 'renderedText required');
 
     const context = scenery.scratchContext;
     context.font = font.toCSS();
     context.direction = 'ltr';
-    return context.measureText( renderedText ).width;
+    return context.measureText(renderedText).width;
   },
 
   /**
@@ -199,16 +226,21 @@ const TextBounds = {
    * @param {string} renderedText - Text to display (with any special characters replaced)
    * @returns {Bounds2}
    */
-  approximateHybridBounds( font, renderedText ) {
-    assert && assert( font instanceof Font, 'Font required' );
-    assert && assert( typeof renderedText === 'string', 'renderedText required' );
+  approximateHybridBounds(font, renderedText) {
+    assert && assert(font instanceof Font, 'Font required');
+    assert && assert(typeof renderedText === 'string', 'renderedText required');
 
-    const verticalBounds = TextBounds.getVerticalBounds( font );
+    const verticalBounds = TextBounds.getVerticalBounds(font);
 
-    const canvasWidth = TextBounds.approximateCanvasWidth( font, renderedText );
+    const canvasWidth = TextBounds.approximateCanvasWidth(font, renderedText);
 
     // it seems that SVG bounds generally have x=0, so we hard code that here
-    return new Bounds2( 0, verticalBounds.minY, canvasWidth, verticalBounds.maxY );
+    return new Bounds2(
+      0,
+      verticalBounds.minY,
+      canvasWidth,
+      verticalBounds.maxY
+    );
   },
 
   /**
@@ -221,47 +253,52 @@ const TextBounds = {
    * @param {Element} element - DOM element created for the text. This is required, as the text handles HTML and non-HTML text differently.
    * @returns {Bounds2}
    */
-  approximateDOMBounds( font, element ) {
-    assert && assert( font instanceof Font, 'Font required' );
+  approximateDOMBounds(font, element) {
+    assert && assert(font instanceof Font, 'Font required');
 
     const maxHeight = 1024; // technically this will fail if the font is taller than this!
 
     // <div style="position: absolute; left: 0; top: 0; padding: 0 !important; margin: 0 !important;"><span id="baselineSpan" style="font-family: Verdana; font-size: 25px;">QuipTaQiy</span><div style="vertical-align: baseline; display: inline-block; width: 0; height: 500px; margin: 0 important!; padding: 0 important!;"></div></div>
 
-    const div = document.createElement( 'div' );
-    $( div ).css( {
+    const div = document.createElement('div');
+    $(div).css({
       position: 'absolute',
       left: 0,
       top: 0,
       padding: '0 !important',
       margin: '0 !important',
       display: 'hidden'
-    } );
+    });
 
-    const span = document.createElement( 'span' );
-    $( span ).css( 'font', font.toCSS() );
-    span.appendChild( element );
-    span.setAttribute( 'direction', 'ltr' );
+    const span = document.createElement('span');
+    $(span).css('font', font.toCSS());
+    span.appendChild(element);
+    span.setAttribute('direction', 'ltr');
 
-    const fakeImage = document.createElement( 'div' );
-    $( fakeImage ).css( {
+    const fakeImage = document.createElement('div');
+    $(fakeImage).css({
       'vertical-align': 'baseline',
       display: 'inline-block',
       width: 0,
       height: `${maxHeight}px`,
       margin: '0 !important',
       padding: '0 !important'
-    } );
+    });
 
-    div.appendChild( span );
-    div.appendChild( fakeImage );
+    div.appendChild(span);
+    div.appendChild(fakeImage);
 
-    document.body.appendChild( div );
+    document.body.appendChild(div);
     const rect = span.getBoundingClientRect();
     const divRect = div.getBoundingClientRect();
     // add 1 pixel to rect.right to prevent HTML text wrapping
-    const result = new Bounds2( rect.left, rect.top - maxHeight, rect.right + 1, rect.bottom - maxHeight ).shiftedXY( -divRect.left, -divRect.top );
-    document.body.removeChild( div );
+    const result = new Bounds2(
+      rect.left,
+      rect.top - maxHeight,
+      rect.right + 1,
+      rect.bottom - maxHeight
+    ).shiftedXY(-divRect.left, -divRect.top);
+    document.body.removeChild(div);
 
     return result;
   },
@@ -278,11 +315,11 @@ const TextBounds = {
    * @param {Element} element - DOM element created for the text. This is required, as the text handles HTML and non-HTML text differently.
    * @returns {Bounds2}
    */
-  approximateImprovedDOMBounds( font, element ) {
-    assert && assert( font instanceof Font, 'Font required' );
+  approximateImprovedDOMBounds(font, element) {
+    assert && assert(font instanceof Font, 'Font required');
 
     // TODO: reuse this div? https://github.com/phetsims/scenery/issues/1581
-    const div = document.createElement( 'div' );
+    const div = document.createElement('div');
     div.style.display = 'inline-block';
     div.style.font = font.toCSS();
     div.style.color = 'transparent';
@@ -291,16 +328,21 @@ const TextBounds = {
     div.style.position = 'absolute';
     div.style.left = '0';
     div.style.top = '0';
-    div.setAttribute( 'direction', 'ltr' );
-    div.appendChild( element );
+    div.setAttribute('direction', 'ltr');
+    div.appendChild(element);
 
-    document.body.appendChild( div );
-    const bounds = new Bounds2( div.offsetLeft, div.offsetTop, div.offsetLeft + div.offsetWidth + 1, div.offsetTop + div.offsetHeight + 1 );
-    document.body.removeChild( div );
+    document.body.appendChild(div);
+    const bounds = new Bounds2(
+      div.offsetLeft,
+      div.offsetTop,
+      div.offsetLeft + div.offsetWidth + 1,
+      div.offsetTop + div.offsetHeight + 1
+    );
+    document.body.removeChild(div);
 
     // Compensate for the baseline alignment
-    const verticalBounds = TextBounds.getVerticalBounds( font );
-    return bounds.shiftedY( verticalBounds.minY );
+    const verticalBounds = TextBounds.getVerticalBounds(font);
+    return bounds.shiftedY(verticalBounds.minY);
   },
 
   /**
@@ -311,16 +353,16 @@ const TextBounds = {
    * @param {Font} font - The font of the text
    * @param {string} renderedText - Text to display (with any special characters replaced)
    */
-  setSVGTextAttributes( textElement, font, renderedText ) {
-    assert && assert( font instanceof Font, 'Font required' );
-    assert && assert( typeof renderedText === 'string', 'renderedText required' );
+  setSVGTextAttributes(textElement, font, renderedText) {
+    assert && assert(font instanceof Font, 'Font required');
+    assert && assert(typeof renderedText === 'string', 'renderedText required');
 
-    textElement.setAttribute( 'direction', 'ltr' );
-    textElement.setAttribute( 'font-family', font.getFamily() );
-    textElement.setAttribute( 'font-size', font.getSize() );
-    textElement.setAttribute( 'font-style', font.getStyle() );
-    textElement.setAttribute( 'font-weight', font.getWeight() );
-    textElement.setAttribute( 'font-stretch', font.getStretch() );
+    textElement.setAttribute('direction', 'ltr');
+    textElement.setAttribute('font-family', font.getFamily());
+    textElement.setAttribute('font-size', font.getSize());
+    textElement.setAttribute('font-style', font.getStyle());
+    textElement.setAttribute('font-weight', font.getWeight());
+    textElement.setAttribute('font-stretch', font.getStretch());
     textElement.lastChild.nodeValue = renderedText;
   },
 
@@ -329,32 +371,39 @@ const TextBounds = {
    * @public
    */
   initializeTextBounds() {
-    svgTextSizeContainer = document.getElementById( TEXT_SIZE_CONTAINER_ID );
+    svgTextSizeContainer = document.getElementById(TEXT_SIZE_CONTAINER_ID);
 
-    if ( !svgTextSizeContainer ) {
+    if (!svgTextSizeContainer) {
       // set up the container and text for testing text bounds quickly (using approximateSVGBounds)
-      svgTextSizeContainer = document.createElementNS( svgns, 'svg' );
-      svgTextSizeContainer.setAttribute( 'width', '2' );
-      svgTextSizeContainer.setAttribute( 'height', '2' );
-      svgTextSizeContainer.setAttribute( 'id', TEXT_SIZE_CONTAINER_ID );
-      svgTextSizeContainer.setAttribute( 'style', 'visibility: hidden; pointer-events: none; position: absolute; left: -65535px; right: -65535px;' ); // so we don't flash it in a visible way to the user
+      svgTextSizeContainer = document.createElementNS(svgns, 'svg');
+      svgTextSizeContainer.setAttribute('width', '2');
+      svgTextSizeContainer.setAttribute('height', '2');
+      svgTextSizeContainer.setAttribute('id', TEXT_SIZE_CONTAINER_ID);
+      svgTextSizeContainer.setAttribute(
+        'style',
+        'visibility: hidden; pointer-events: none; position: absolute; left: -65535px; right: -65535px;'
+      ); // so we don't flash it in a visible way to the user
     }
 
-    svgTextSizeElement = document.getElementById( TEXT_SIZE_ELEMENT_ID );
+    svgTextSizeElement = document.getElementById(TEXT_SIZE_ELEMENT_ID);
 
     // NOTE! copies createSVGElement
-    if ( !svgTextSizeElement ) {
-      svgTextSizeElement = document.createElementNS( svgns, 'text' );
-      svgTextSizeElement.appendChild( document.createTextNode( '' ) );
-      svgTextSizeElement.setAttribute( 'dominant-baseline', 'alphabetic' ); // to match Canvas right now
-      svgTextSizeElement.setAttribute( 'text-rendering', 'geometricPrecision' );
-      svgTextSizeElement.setAttributeNS( 'http://www.w3.org/XML/1998/namespace', 'xml:space', 'preserve' );
-      svgTextSizeElement.setAttribute( 'id', TEXT_SIZE_ELEMENT_ID );
-      svgTextSizeContainer.appendChild( svgTextSizeElement );
+    if (!svgTextSizeElement) {
+      svgTextSizeElement = document.createElementNS(svgns, 'text');
+      svgTextSizeElement.appendChild(document.createTextNode(''));
+      svgTextSizeElement.setAttribute('dominant-baseline', 'alphabetic'); // to match Canvas right now
+      svgTextSizeElement.setAttribute('text-rendering', 'geometricPrecision');
+      svgTextSizeElement.setAttributeNS(
+        'http://www.w3.org/XML/1998/namespace',
+        'xml:space',
+        'preserve'
+      );
+      svgTextSizeElement.setAttribute('id', TEXT_SIZE_ELEMENT_ID);
+      svgTextSizeContainer.appendChild(svgTextSizeElement);
     }
   }
 };
 
-scenery.register( 'TextBounds', TextBounds );
+scenery.register('TextBounds', TextBounds);
 
 export default TextBounds;

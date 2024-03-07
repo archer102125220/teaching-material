@@ -9,23 +9,23 @@
  * @author Jesse Greenberg
  */
 
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { HighlightFromNode, HighlightFromNodeOptions, Node, scenery } from '../../imports.js';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import { HighlightFromNode, type HighlightFromNodeOptions, Node, scenery } from '../../imports';
 
 type SelfOptions = EmptySelfOptions;
 type ReadingBlockHighlightOptions = SelfOptions & HighlightFromNodeOptions;
 
 class ReadingBlockHighlight extends HighlightFromNode {
-  public constructor( node: Node, providedOptions?: ReadingBlockHighlightOptions ) {
+  public constructor(node: Node, providedOptions?: ReadingBlockHighlightOptions) {
 
-    const options = optionize<ReadingBlockHighlightOptions, SelfOptions, HighlightFromNodeOptions>()( {
+    const options = optionize<ReadingBlockHighlightOptions, SelfOptions, HighlightFromNodeOptions>()({
       outerStroke: 'grey',
       innerStroke: 'black'
-    }, providedOptions );
+    }, providedOptions);
 
-    super( node, options );
+    super(node, options);
   }
 }
 
-scenery.register( 'ReadingBlockHighlight', ReadingBlockHighlight );
+scenery.register('ReadingBlockHighlight', ReadingBlockHighlight);
 export default ReadingBlockHighlight;

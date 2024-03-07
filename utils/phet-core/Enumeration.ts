@@ -26,9 +26,11 @@
  */
 
 import phetCore from './phetCore';
+// @ts-expect-error
 import TEnumeration from './TEnumeration';
 import EnumerationValue from './EnumerationValue';
 import inheritance from './inheritance';
+// @ts-expect-error
 import Constructor from './types/Constructor';
 import optionize from './optionize';
 

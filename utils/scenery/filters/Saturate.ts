@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../../dot/js/toSVGNumber.js';
-import { ColorMatrixFilter, scenery } from '../imports.js';
+import toSVGNumber from '../../dot/toSVGNumber';
+import { ColorMatrixFilter, scenery } from '../imports';
 
 export default class Saturate extends ColorMatrixFilter {
 
@@ -16,9 +16,9 @@ export default class Saturate extends ColorMatrixFilter {
   /**
    * @param amount - The amount of the effect, from 0 (no saturation), 1 (normal), or higher to over-saturate
    */
-  public constructor( amount: number ) {
-    assert && assert( isFinite( amount ), 'Saturate amount should be finite' );
-    assert && assert( amount >= 0, 'Saturate amount should be non-negative' );
+  public constructor(amount: number) {
+    assert && assert(isFinite(amount), 'Saturate amount should be finite');
+    assert && assert(amount >= 0, 'Saturate amount should be non-negative');
 
     // near https://drafts.fxtf.org/filter-effects/#attr-valuedef-type-huerotate
     super(
@@ -37,7 +37,7 @@ export default class Saturate extends ColorMatrixFilter {
    * (https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/filter).
    */
   public override getCSSFilterString(): string {
-    return `saturate(${toSVGNumber( this.amount )})`;
+    return `saturate(${toSVGNumber(this.amount)})`;
   }
 
   public override isDOMCompatible(): boolean {
@@ -45,4 +45,4 @@ export default class Saturate extends ColorMatrixFilter {
   }
 }
 
-scenery.register( 'Saturate', Saturate );
+scenery.register('Saturate', Saturate);

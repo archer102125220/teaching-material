@@ -8,8 +8,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Vector2 from '../../../dot/js/Vector2.js';
-import { ColorDef, Gradient, scenery, SVGBlock, SVGLinearGradient } from '../imports.js';
+import Vector2 from '../../dot/Vector2';
+import { ColorDef, Gradient, scenery, SVGBlock, SVGLinearGradient } from '../imports';
 
 export default class LinearGradient extends Gradient {
 
@@ -24,13 +24,13 @@ export default class LinearGradient extends Gradient {
    * @param x1 - X coordinate of the end point (ratio 1) in the local coordinate frame
    * @param y1 - Y coordinate of the end point (ratio 1) in the local coordinate frame
    */
-  public constructor( x0: number, y0: number, x1: number, y1: number ) {
-    assert && assert( isFinite( x0 ) && isFinite( y0 ) && isFinite( x1 ) && isFinite( y1 ) );
+  public constructor(x0: number, y0: number, x1: number, y1: number) {
+    assert && assert(isFinite(x0) && isFinite(y0) && isFinite(x1) && isFinite(y1));
 
     super();
 
-    this.start = new Vector2( x0, y0 );
-    this.end = new Vector2( x1, y1 );
+    this.start = new Vector2(x0, y0);
+    this.end = new Vector2(x1, y1);
   }
 
 
@@ -40,14 +40,14 @@ export default class LinearGradient extends Gradient {
   public createCanvasGradient(): CanvasGradient {
     // use the global scratch canvas instead of creating a new Canvas
     // @ts-expect-error TODO scenery namespace https://github.com/phetsims/scenery/issues/1581
-    return scenery.scratchContext.createLinearGradient( this.start.x, this.start.y, this.end.x, this.end.y );
+    return scenery.scratchContext.createLinearGradient(this.start.x, this.start.y, this.end.x, this.end.y);
   }
 
   /**
    * Creates an SVG paint object for creating/updating the SVG equivalent definition.
    */
-  public createSVGPaint( svgBlock: SVGBlock ): SVGLinearGradient {
-    return SVGLinearGradient.pool.create( svgBlock, this );
+  public createSVGPaint(svgBlock: SVGBlock): SVGLinearGradient {
+    return SVGLinearGradient.pool.create(svgBlock, this);
   }
 
   /**
@@ -56,9 +56,9 @@ export default class LinearGradient extends Gradient {
   public override toString(): string {
     let result = `new phet.scenery.LinearGradient( ${this.start.x}, ${this.start.y}, ${this.end.x}, ${this.end.y} )`;
 
-    _.each( this.stops, stop => {
-      result += `.addColorStop( ${stop.ratio}, ${ColorDef.scenerySerialize( stop.color )} )`;
-    } );
+    _.each(this.stops, stop => {
+      result += `.addColorStop( ${stop.ratio}, ${ColorDef.scenerySerialize(stop.color)} )`;
+    });
 
     return result;
   }
@@ -68,4 +68,4 @@ export default class LinearGradient extends Gradient {
 
 LinearGradient.prototype.isLinearGradient = true;
 
-scenery.register( 'LinearGradient', LinearGradient );
+scenery.register('LinearGradient', LinearGradient);

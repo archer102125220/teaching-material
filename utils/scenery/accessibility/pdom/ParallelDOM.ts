@@ -123,24 +123,25 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import TinyEmitter from '../../../../axon/js/TinyEmitter.js';
-import validate from '../../../../axon/js/validate.js';
-import Validation from '../../../../axon/js/Validation.js';
-import { Shape } from '../../../../kite/js/imports.js';
-import arrayDifference from '../../../../phet-core/js/arrayDifference.js';
-import PhetioObject, { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import UtteranceQueue from '../../../../utterance-queue/js/UtteranceQueue.js';
-import { TAlertable } from '../../../../utterance-queue/js/Utterance.js';
-import { Node, PDOMDisplaysInfo, PDOMInstance, PDOMPeer, PDOMTree, PDOMUtils, scenery, Trail } from '../../imports.js';
-import { Highlight } from '../../overlays/HighlightOverlay.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import TEmitter from '../../../../axon/js/TEmitter.js';
-import TReadOnlyProperty, { isTReadOnlyProperty } from '../../../../axon/js/TReadOnlyProperty.js';
-import ReadOnlyProperty from '../../../../axon/js/ReadOnlyProperty.js';
-import TProperty from '../../../../axon/js/TProperty.js';
-import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
+import TinyEmitter from '../../../axon/TinyEmitter';
+import validate from '../../../axon/validate';
+import Validation from '../../../axon/Validation';
+import { Shape } from '../../../kite/imports';
+import arrayDifference from '../../../phet-core/arrayDifference';
+import PhetioObject, { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
+import UtteranceQueue from '../../../utterance-queue/UtteranceQueue';
+import { type TAlertable } from '../../../utterance-queue/Utterance';
+import { Node, PDOMDisplaysInfo, PDOMInstance, PDOMPeer, PDOMTree, PDOMUtils, scenery, Trail } from '../../imports';
+import { type Highlight } from '../../overlays/HighlightOverlay';
+import optionize from '../../../phet-core/optionize';
+import Tandem from '../../../tandem/Tandem';
+import type TEmitter from '../../../axon/TEmitter';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import { isTReadOnlyProperty } from '../../../axon/TReadOnlyProperty';
+import ReadOnlyProperty from '../../../axon/ReadOnlyProperty';
+import type TProperty from '../../../axon/TProperty';
+import isSettingPhetioStateProperty from '../../../tandem/isSettingPhetioStateProperty';
+import Bounds2 from '../../../dot/Bounds2';
 
 const INPUT_TAG = PDOMUtils.TAGS.INPUT;
 const P_TAG = PDOMUtils.TAGS.P;
@@ -153,17 +154,17 @@ export type PDOMValueType = string | TReadOnlyProperty<string>;
 export type LimitPanDirection = 'horizontal' | 'vertical';
 
 // see setPDOMHeadingBehavior for more details
-const DEFAULT_PDOM_HEADING_BEHAVIOR = ( node: Node, options: ParallelDOMOptions, heading: PDOMValueType ) => {
+const DEFAULT_PDOM_HEADING_BEHAVIOR = (node: Node, options: ParallelDOMOptions, heading: PDOMValueType) => {
 
   options.labelTagName = `h${node.headingLevel}`; // TODO: make sure heading level change fires a full peer rebuild, see https://github.com/phetsims/scenery/issues/867
   options.labelContent = heading;
   return options;
 };
 
-const unwrapProperty = ( valueOrProperty: PDOMValueType | null ): string | null => {
-  const result = valueOrProperty === null ? null : ( typeof valueOrProperty === 'string' ? valueOrProperty : valueOrProperty.value );
+const unwrapProperty = (valueOrProperty: PDOMValueType | null): string | null => {
+  const result = valueOrProperty === null ? null : (typeof valueOrProperty === 'string' ? valueOrProperty : valueOrProperty.value);
 
-  assert && assert( result === null || typeof result === 'string' );
+  assert && assert(result === null || typeof result === 'string');
 
   return result;
 };
@@ -277,10 +278,10 @@ export type ParallelDOMOptions = {
   appendDescription?: boolean; // Sets the description sibling to come after the primary sibling in the PDOM
 
   focusHighlight?: Highlight; // Sets the focus highlight for the node
-  focusHighlightLayerable?: boolean; //lag to determine if the focus highlight node can be layered in the scene graph
+  focusHighlightLayerable?: boolean; // lag to determine if the focus highlight node can be layered in the scene graph
   groupFocusHighlight?: Node | boolean; // Sets the outer focus highlight for this node when a descendant has focus
   pdomVisible?: boolean; // Sets whether or not the node's DOM element is visible in the parallel DOM
-  pdomOrder?: ( Node | null )[] | null; // Modifies the order of accessible navigation
+  pdomOrder?: (Node | null)[] | null; // Modifies the order of accessible navigation
 
   ariaLabelledbyAssociations?: Association[]; // sets the list of aria-labelledby associations between from this node to others (including itself)
   ariaDescribedbyAssociations?: Association[]; // sets the list of aria-describedby associations between from this node to others (including itself)
@@ -297,7 +298,7 @@ export type ParallelDOMOptions = {
 type PDOMAttribute = {
   attribute: string;
   value: PDOMValueType | boolean | number;
-  listener: ( ( rawValue: string | boolean | number ) => void ) | null;
+  listener: ((rawValue: string | boolean | number) => void) | null;
   options: SetPDOMAttributeOptions;
 };
 
@@ -346,7 +347,7 @@ type RemovePDOMClassOptions = {
  * this list for execution after this Node is fully created. See discussion in https://github.com/phetsims/sun/issues/503#issuecomment-676541373
  * @returns the options that have been mutated by the behavior function.
  */
-export type PDOMBehaviorFunction = ( node: Node, options: ParallelDOMOptions, value: PDOMValueType, callbacksForOtherNodes: ( () => void )[] ) => ParallelDOMOptions;
+export type PDOMBehaviorFunction = (node: Node, options: ParallelDOMOptions, value: PDOMValueType, callbacksForOtherNodes: (() => void)[]) => ParallelDOMOptions;
 
 export default class ParallelDOM extends PhetioObject {
 
@@ -499,7 +500,7 @@ export default class ParallelDOM extends PhetioObject {
   // (and optionally arbitrary subtrees). If not provided, the focus order will default to the rendering order
   // (first children first, last children last) determined by the children array.
   // See setPDOMOrder() for more documentation.
-  private _pdomOrder: ( Node | null )[] | null;
+  private _pdomOrder: (Node | null)[] | null;
 
   // If this node is specified in another node's pdomOrder, then this will have the value of that other (PDOM parent)
   // Node. Otherwise it's null.
@@ -566,7 +567,7 @@ export default class ParallelDOM extends PhetioObject {
   public readonly pdomDisplaysEmitter: TEmitter;
 
   // PDOM specific enabled listener
-  protected pdomBoundInputEnabledListener: ( enabled: boolean ) => void;
+  protected pdomBoundInputEnabledListener: (enabled: boolean) => void;
 
   protected _onPDOMContentChangeListener: () => void;
   protected _onInputValueChangeListener: () => void;
@@ -576,17 +577,17 @@ export default class ParallelDOM extends PhetioObject {
   protected _onDescriptionContentChangeListener: () => void;
   protected _onInnerContentChangeListener: () => void;
 
-  protected constructor( options?: PhetioObjectOptions ) {
+  protected constructor(options?: PhetioObjectOptions) {
 
-    super( options );
+    super(options);
 
-    this._onPDOMContentChangeListener = this.onPDOMContentChange.bind( this );
-    this._onInputValueChangeListener = this.invalidatePeerInputValue.bind( this );
-    this._onAriaLabelChangeListener = this.onAriaLabelChange.bind( this );
-    this._onAriaValueTextChangeListener = this.onAriaValueTextChange.bind( this );
-    this._onLabelContentChangeListener = this.invalidatePeerLabelSiblingContent.bind( this );
-    this._onDescriptionContentChangeListener = this.invalidatePeerDescriptionSiblingContent.bind( this );
-    this._onInnerContentChangeListener = this.onInnerContentPropertyChange.bind( this );
+    this._onPDOMContentChangeListener = this.onPDOMContentChange.bind(this);
+    this._onInputValueChangeListener = this.invalidatePeerInputValue.bind(this);
+    this._onAriaLabelChangeListener = this.onAriaLabelChange.bind(this);
+    this._onAriaValueTextChangeListener = this.onAriaValueTextChange.bind(this);
+    this._onLabelContentChangeListener = this.invalidatePeerLabelSiblingContent.bind(this);
+    this._onDescriptionContentChangeListener = this.invalidatePeerDescriptionSiblingContent.bind(this);
+    this._onInnerContentChangeListener = this.onInnerContentPropertyChange.bind(this);
 
     this._tagName = null;
     this._containerTagName = null;
@@ -618,7 +619,7 @@ export default class ParallelDOM extends PhetioObject {
     this._pdomTransformSourceNode = null;
     this._focusPanTargetBoundsProperty = null;
     this._limitPanDirection = null;
-    this._pdomDisplaysInfo = new PDOMDisplaysInfo( this as unknown as Node );
+    this._pdomDisplaysInfo = new PDOMDisplaysInfo(this as unknown as Node);
     this._pdomInstances = [];
     this._positionInPDOM = false;
     this.excludeLabelSiblingFromInput = false;
@@ -631,7 +632,7 @@ export default class ParallelDOM extends PhetioObject {
     this._pdomHeadingBehavior = DEFAULT_PDOM_HEADING_BEHAVIOR;
     this.focusHighlightChangedEmitter = new TinyEmitter();
     this.pdomDisplaysEmitter = new TinyEmitter();
-    this.pdomBoundInputEnabledListener = this.pdomInputEnabledListener.bind( this );
+    this.pdomBoundInputEnabledListener = this.pdomInputEnabledListener.bind(this);
   }
 
   /***********************************************************************************************************/
@@ -645,84 +646,84 @@ export default class ParallelDOM extends PhetioObject {
    */
   protected disposeParallelDOM(): void {
 
-    if ( isTReadOnlyProperty( this._accessibleName ) && !this._accessibleName.isDisposed ) {
-      this._accessibleName.unlink( this._onPDOMContentChangeListener );
+    if (isTReadOnlyProperty(this._accessibleName) && !this._accessibleName.isDisposed) {
+      this._accessibleName.unlink(this._onPDOMContentChangeListener);
       this._accessibleName = null;
     }
 
-    if ( isTReadOnlyProperty( this._helpText ) && !this._helpText.isDisposed ) {
-      this._helpText.unlink( this._onPDOMContentChangeListener );
+    if (isTReadOnlyProperty(this._helpText) && !this._helpText.isDisposed) {
+      this._helpText.unlink(this._onPDOMContentChangeListener);
       this._helpText = null;
     }
 
-    if ( isTReadOnlyProperty( this._pdomHeading ) && !this._pdomHeading.isDisposed ) {
-      this._pdomHeading.unlink( this._onPDOMContentChangeListener );
+    if (isTReadOnlyProperty(this._pdomHeading) && !this._pdomHeading.isDisposed) {
+      this._pdomHeading.unlink(this._onPDOMContentChangeListener);
       this._pdomHeading = null;
     }
 
-    if ( isTReadOnlyProperty( this._inputValue ) && !this._inputValue.isDisposed ) {
-      this._inputValue.unlink( this._onPDOMContentChangeListener );
+    if (isTReadOnlyProperty(this._inputValue) && !this._inputValue.isDisposed) {
+      this._inputValue.unlink(this._onPDOMContentChangeListener);
       this._inputValue = null;
     }
 
-    if ( isTReadOnlyProperty( this._ariaLabel ) && !this._ariaLabel.isDisposed ) {
-      this._ariaLabel.unlink( this._onAriaLabelChangeListener );
+    if (isTReadOnlyProperty(this._ariaLabel) && !this._ariaLabel.isDisposed) {
+      this._ariaLabel.unlink(this._onAriaLabelChangeListener);
     }
 
-    if ( isTReadOnlyProperty( this._ariaValueText ) && !this._ariaValueText.isDisposed ) {
-      this._ariaValueText.unlink( this._onAriaValueTextChangeListener );
+    if (isTReadOnlyProperty(this._ariaValueText) && !this._ariaValueText.isDisposed) {
+      this._ariaValueText.unlink(this._onAriaValueTextChangeListener);
     }
 
-    if ( isTReadOnlyProperty( this._innerContent ) && !this._innerContent.isDisposed ) {
-      this._innerContent.unlink( this._onInnerContentChangeListener );
+    if (isTReadOnlyProperty(this._innerContent) && !this._innerContent.isDisposed) {
+      this._innerContent.unlink(this._onInnerContentChangeListener);
     }
 
-    if ( isTReadOnlyProperty( this._labelContent ) && !this._labelContent.isDisposed ) {
-      this._labelContent.unlink( this._onLabelContentChangeListener );
+    if (isTReadOnlyProperty(this._labelContent) && !this._labelContent.isDisposed) {
+      this._labelContent.unlink(this._onLabelContentChangeListener);
     }
 
-    if ( isTReadOnlyProperty( this._descriptionContent ) && !this._descriptionContent.isDisposed ) {
-      this._descriptionContent.unlink( this._onDescriptionContentChangeListener );
+    if (isTReadOnlyProperty(this._descriptionContent) && !this._descriptionContent.isDisposed) {
+      this._descriptionContent.unlink(this._onDescriptionContentChangeListener);
     }
 
-    ( this as unknown as Node ).inputEnabledProperty.unlink( this.pdomBoundInputEnabledListener );
+    (this as unknown as Node).inputEnabledProperty.unlink(this.pdomBoundInputEnabledListener);
 
     // To prevent memory leaks, we want to clear our order (since otherwise nodes in our order will reference
     // this node).
     this.pdomOrder = null;
 
     // clear references to the pdomTransformSourceNode
-    this.setPDOMTransformSourceNode( null );
+    this.setPDOMTransformSourceNode(null);
 
     // Clear out aria association attributes, which hold references to other nodes.
-    this.setAriaLabelledbyAssociations( [] );
-    this.setAriaDescribedbyAssociations( [] );
-    this.setActiveDescendantAssociations( [] );
+    this.setAriaLabelledbyAssociations([]);
+    this.setAriaDescribedbyAssociations([]);
+    this.setActiveDescendantAssociations([]);
 
     // PDOM attributes can potentially have listeners, so we will clear those out.
     this.removePDOMAttributes();
   }
 
-  private pdomInputEnabledListener( enabled: boolean ): void {
+  private pdomInputEnabledListener(enabled: boolean): void {
 
     // Mark this Node as disabled in the ParallelDOM
-    this.setPDOMAttribute( 'aria-disabled', !enabled );
+    this.setPDOMAttribute('aria-disabled', !enabled);
 
     // By returning false, we prevent the component from toggling native HTML element attributes that convey state.
     // For example,this will prevent a checkbox from changing `checked` property while it is disabled. This way
     // we can keep the component in traversal order and don't need to add the `disabled` attribute. See
     // https://github.com/phetsims/sun/issues/519 and https://github.com/phetsims/sun/issues/640
     // This solution was found at https://stackoverflow.com/a/12267350/3408502
-    this.setPDOMAttribute( 'onclick', enabled ? '' : 'return false' );
+    this.setPDOMAttribute('onclick', enabled ? '' : 'return false');
   }
 
   /**
    * Get whether this Node's primary DOM element currently has focus.
    */
   public isFocused(): boolean {
-    for ( let i = 0; i < this._pdomInstances.length; i++ ) {
-      const peer = this._pdomInstances[ i ].peer!;
-      if ( peer.isFocused() ) {
+    for (let i = 0; i < this._pdomInstances.length; i++) {
+      const peer = this._pdomInstances[i].peer!;
+      if (peer.isFocused()) {
         return true;
       }
     }
@@ -741,16 +742,16 @@ export default class ParallelDOM extends PhetioObject {
 
     // if a sim is running without accessibility enabled, there will be no accessible instances, but focus() might
     // still be called without accessibility enabled
-    if ( this._pdomInstances.length > 0 ) {
+    if (this._pdomInstances.length > 0) {
 
       // when accessibility is widely used, this assertion can be added back in
       // assert && assert( this._pdomInstances.length > 0, 'there must be pdom content for the node to receive focus' );
-      assert && assert( this.focusable, 'trying to set focus on a node that is not focusable' );
-      assert && assert( this._pdomVisible, 'trying to set focus on a node with invisible pdom content' );
-      assert && assert( this._pdomInstances.length === 1, 'focus() unsupported for Nodes using DAG, pdom content is not unique' );
+      assert && assert(this.focusable, 'trying to set focus on a node that is not focusable');
+      assert && assert(this._pdomVisible, 'trying to set focus on a node with invisible pdom content');
+      assert && assert(this._pdomInstances.length === 1, 'focus() unsupported for Nodes using DAG, pdom content is not unique');
 
-      const peer = this._pdomInstances[ 0 ].peer!;
-      assert && assert( peer, 'must have a peer to focus' );
+      const peer = this._pdomInstances[0].peer!;
+      assert && assert(peer, 'must have a peer to focus');
       peer.focus();
     }
   }
@@ -760,10 +761,10 @@ export default class ParallelDOM extends PhetioObject {
    * keyboard events when it doesn't have focus.
    */
   public blur(): void {
-    if ( this._pdomInstances.length > 0 ) {
-      assert && assert( this._pdomInstances.length === 1, 'blur() unsupported for Nodes using DAG, pdom content is not unique' );
-      const peer = this._pdomInstances[ 0 ].peer!;
-      assert && assert( peer, 'must have a peer to blur' );
+    if (this._pdomInstances.length > 0) {
+      assert && assert(this._pdomInstances.length === 1, 'blur() unsupported for Nodes using DAG, pdom content is not unique');
+      const peer = this._pdomInstances[0].peer!;
+      assert && assert(peer, 'must have a peer to blur');
       peer.blur();
     }
   }
@@ -776,23 +777,23 @@ export default class ParallelDOM extends PhetioObject {
    */
   public pdomAudit(): void {
 
-    if ( this.hasPDOMContent && assert ) {
+    if (this.hasPDOMContent && assert) {
 
-      this._inputType && assert( this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support inputType' );
-      this._pdomChecked && assert( this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support pdomChecked.' );
-      this._inputValue && assert( this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support inputValue' );
-      this._pdomChecked && assert( INPUT_TYPES_THAT_SUPPORT_CHECKED.includes( this._inputType!.toUpperCase() ), `inputType does not support checked attribute: ${this._inputType}` );
-      this._focusHighlightLayerable && assert( this.focusHighlight instanceof Node, 'focusHighlight must be Node if highlight is layerable' );
-      this._tagName!.toUpperCase() === INPUT_TAG && assert( typeof this._inputType === 'string', ' inputType expected for input' );
+      this._inputType && assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support inputType');
+      this._pdomChecked && assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support pdomChecked.');
+      this._inputValue && assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support inputValue');
+      this._pdomChecked && assert(INPUT_TYPES_THAT_SUPPORT_CHECKED.includes(this._inputType!.toUpperCase()), `inputType does not support checked attribute: ${this._inputType}`);
+      this._focusHighlightLayerable && assert(this.focusHighlight instanceof Node, 'focusHighlight must be Node if highlight is layerable');
+      this._tagName!.toUpperCase() === INPUT_TAG && assert(typeof this._inputType === 'string', ' inputType expected for input');
 
       // note that most things that are not focusable by default need innerContent to be focusable on VoiceOver,
       // but this will catch most cases since often things that get added to the focus order have the application
       // role for custom input. Note that accessibleName will not be checked that it specifically changes innerContent, it is up to the dev to do this.
-      this.ariaRole === 'application' && assert( this.innerContent || this.accessibleName, 'must have some innerContent or element will never be focusable in VoiceOver' );
+      this.ariaRole === 'application' && assert(this.innerContent || this.accessibleName, 'must have some innerContent or element will never be focusable in VoiceOver');
     }
 
-    for ( let i = 0; i < ( this as unknown as Node ).children.length; i++ ) {
-      ( this as unknown as Node ).children[ i ].pdomAudit();
+    for (let i = 0; i < (this as unknown as Node).children.length; i++) {
+      (this as unknown as Node).children[i].pdomAudit();
     }
   }
 
@@ -811,23 +812,23 @@ export default class ParallelDOM extends PhetioObject {
    *
    * @experimental - NOTE: use with caution, a11y team reserves the right to change API (though unlikely). Not yet fully implemented, see https://github.com/phetsims/scenery/issues/867
    */
-  public setAccessibleName( accessibleName: PDOMValueType | null ): void {
-    if ( accessibleName !== this._accessibleName ) {
-      if ( isTReadOnlyProperty( this._accessibleName ) && !this._accessibleName.isDisposed ) {
-        this._accessibleName.unlink( this._onPDOMContentChangeListener );
+  public setAccessibleName(accessibleName: PDOMValueType | null): void {
+    if (accessibleName !== this._accessibleName) {
+      if (isTReadOnlyProperty(this._accessibleName) && !this._accessibleName.isDisposed) {
+        this._accessibleName.unlink(this._onPDOMContentChangeListener);
       }
 
       this._accessibleName = accessibleName;
 
-      if ( isTReadOnlyProperty( accessibleName ) ) {
-        accessibleName.lazyLink( this._onPDOMContentChangeListener );
+      if (isTReadOnlyProperty(accessibleName)) {
+        accessibleName.lazyLink(this._onPDOMContentChangeListener);
       }
 
       this.onPDOMContentChange();
     }
   }
 
-  public set accessibleName( accessibleName: PDOMValueType | null ) { this.setAccessibleName( accessibleName ); }
+  public set accessibleName(accessibleName: PDOMValueType | null) { this.setAccessibleName(accessibleName); }
 
   public get accessibleName(): string | null { return this.getAccessibleName(); }
 
@@ -837,7 +838,7 @@ export default class ParallelDOM extends PhetioObject {
    * @experimental - NOTE: use with caution, a11y team reserves the right to change API (though unlikely). Not yet fully implemented, see https://github.com/phetsims/scenery/issues/867
    */
   public getAccessibleName(): string | null {
-    if ( isTReadOnlyProperty( this._accessibleName ) ) {
+    if (isTReadOnlyProperty(this._accessibleName)) {
       return this._accessibleName.value;
     }
     else {
@@ -850,7 +851,7 @@ export default class ParallelDOM extends PhetioObject {
    * pdom content.
    */
   public removeFromPDOM(): void {
-    assert && assert( this._tagName !== null, 'There is no pdom content to clear from the PDOM' );
+    assert && assert(this._tagName !== null, 'There is no pdom content to clear from the PDOM');
     this.tagName = null;
   }
 
@@ -877,9 +878,9 @@ export default class ParallelDOM extends PhetioObject {
    * @experimental - NOTE: use with caution, a11y team reserves the right to change API (though unlikely).
    *                 Not yet fully implemented, see https://github.com/phetsims/scenery/issues/867
    */
-  public setAccessibleNameBehavior( accessibleNameBehavior: PDOMBehaviorFunction ): void {
+  public setAccessibleNameBehavior(accessibleNameBehavior: PDOMBehaviorFunction): void {
 
-    if ( this._accessibleNameBehavior !== accessibleNameBehavior ) {
+    if (this._accessibleNameBehavior !== accessibleNameBehavior) {
 
       this._accessibleNameBehavior = accessibleNameBehavior;
 
@@ -887,7 +888,7 @@ export default class ParallelDOM extends PhetioObject {
     }
   }
 
-  public set accessibleNameBehavior( accessibleNameBehavior: PDOMBehaviorFunction ) { this.setAccessibleNameBehavior( accessibleNameBehavior ); }
+  public set accessibleNameBehavior(accessibleNameBehavior: PDOMBehaviorFunction) { this.setAccessibleNameBehavior(accessibleNameBehavior); }
 
   public get accessibleNameBehavior(): PDOMBehaviorFunction { return this.getAccessibleNameBehavior(); }
 
@@ -908,23 +909,23 @@ export default class ParallelDOM extends PhetioObject {
    * @experimental - NOTE: use with caution, a11y team reserves the right to change API (though unlikely).
    *                 Not yet fully implemented, see https://github.com/phetsims/scenery/issues/867
    */
-  public setPDOMHeading( pdomHeading: PDOMValueType | null ): void {
-    if ( pdomHeading !== this._pdomHeading ) {
-      if ( isTReadOnlyProperty( this._pdomHeading ) && !this._pdomHeading.isDisposed ) {
-        this._pdomHeading.unlink( this._onPDOMContentChangeListener );
+  public setPDOMHeading(pdomHeading: PDOMValueType | null): void {
+    if (pdomHeading !== this._pdomHeading) {
+      if (isTReadOnlyProperty(this._pdomHeading) && !this._pdomHeading.isDisposed) {
+        this._pdomHeading.unlink(this._onPDOMContentChangeListener);
       }
 
       this._pdomHeading = pdomHeading;
 
-      if ( isTReadOnlyProperty( pdomHeading ) ) {
-        pdomHeading.lazyLink( this._onPDOMContentChangeListener );
+      if (isTReadOnlyProperty(pdomHeading)) {
+        pdomHeading.lazyLink(this._onPDOMContentChangeListener);
       }
 
       this.onPDOMContentChange();
     }
   }
 
-  public set pdomHeading( pdomHeading: PDOMValueType | null ) { this.setPDOMHeading( pdomHeading ); }
+  public set pdomHeading(pdomHeading: PDOMValueType | null) { this.setPDOMHeading(pdomHeading); }
 
   public get pdomHeading(): string | null { return this.getPDOMHeading(); }
 
@@ -935,7 +936,7 @@ export default class ParallelDOM extends PhetioObject {
    *                 Not yet fully implemented, see https://github.com/phetsims/scenery/issues/867
    */
   public getPDOMHeading(): string | null {
-    if ( isTReadOnlyProperty( this._pdomHeading ) ) {
+    if (isTReadOnlyProperty(this._pdomHeading)) {
       return this._pdomHeading.value;
     }
     else {
@@ -950,9 +951,9 @@ export default class ParallelDOM extends PhetioObject {
    * @experimental - NOTE: use with caution, a11y team reserves the right to change API (though unlikely).
    *                 Not yet fully implemented, see https://github.com/phetsims/scenery/issues/867
    */
-  public setPDOMHeadingBehavior( pdomHeadingBehavior: PDOMBehaviorFunction ): void {
+  public setPDOMHeadingBehavior(pdomHeadingBehavior: PDOMBehaviorFunction): void {
 
-    if ( this._pdomHeadingBehavior !== pdomHeadingBehavior ) {
+    if (this._pdomHeadingBehavior !== pdomHeadingBehavior) {
 
       this._pdomHeadingBehavior = pdomHeadingBehavior;
 
@@ -960,7 +961,7 @@ export default class ParallelDOM extends PhetioObject {
     }
   }
 
-  public set pdomHeadingBehavior( pdomHeadingBehavior: PDOMBehaviorFunction ) { this.setPDOMHeadingBehavior( pdomHeadingBehavior ); }
+  public set pdomHeadingBehavior(pdomHeadingBehavior: PDOMBehaviorFunction) { this.setPDOMHeadingBehavior(pdomHeadingBehavior); }
 
   public get pdomHeadingBehavior(): PDOMBehaviorFunction { return this.getPDOMHeadingBehavior(); }
 
@@ -1000,15 +1001,15 @@ export default class ParallelDOM extends PhetioObject {
     // TODO: assert??? assert( this.headingLevel || this._pdomParent); see https://github.com/phetsims/scenery/issues/855
     // Either ^ which may break during construction, or V (below)
     //  base case to heading level 1
-    if ( !this._pdomParent ) {
-      if ( this.pdomHeading ) {
+    if (!this._pdomParent) {
+      if (this.pdomHeading) {
         this._headingLevel = 1;
         return 1;
       }
       return 0; // so that the first node with a heading is headingLevel 1
     }
 
-    if ( this.pdomHeading ) {
+    if (this.pdomHeading) {
       const level = this._pdomParent.computeHeadingLevel() + 1;
       this._headingLevel = level;
       return level;
@@ -1025,23 +1026,23 @@ export default class ParallelDOM extends PhetioObject {
    * @experimental - NOTE: use with caution, a11y team reserves the right to change API (though unlikely).
    *                 Not yet fully implemented, see https://github.com/phetsims/scenery/issues/867
    */
-  public setHelpText( helpText: PDOMValueType | null ): void {
-    if ( helpText !== this._helpText ) {
-      if ( isTReadOnlyProperty( this._helpText ) && !this._helpText.isDisposed ) {
-        this._helpText.unlink( this._onPDOMContentChangeListener );
+  public setHelpText(helpText: PDOMValueType | null): void {
+    if (helpText !== this._helpText) {
+      if (isTReadOnlyProperty(this._helpText) && !this._helpText.isDisposed) {
+        this._helpText.unlink(this._onPDOMContentChangeListener);
       }
 
       this._helpText = helpText;
 
-      if ( isTReadOnlyProperty( helpText ) ) {
-        helpText.lazyLink( this._onPDOMContentChangeListener );
+      if (isTReadOnlyProperty(helpText)) {
+        helpText.lazyLink(this._onPDOMContentChangeListener);
       }
 
       this.onPDOMContentChange();
     }
   }
 
-  public set helpText( helpText: PDOMValueType | null ) { this.setHelpText( helpText ); }
+  public set helpText(helpText: PDOMValueType | null) { this.setHelpText(helpText); }
 
   public get helpText(): string | null { return this.getHelpText(); }
 
@@ -1052,7 +1053,7 @@ export default class ParallelDOM extends PhetioObject {
    *                 Not yet fully implemented, see https://github.com/phetsims/scenery/issues/867
    */
   public getHelpText(): string | null {
-    if ( isTReadOnlyProperty( this._helpText ) ) {
+    if (isTReadOnlyProperty(this._helpText)) {
       return this._helpText.value;
     }
     else {
@@ -1067,9 +1068,9 @@ export default class ParallelDOM extends PhetioObject {
    * @experimental - NOTE: use with caution, a11y team reserves the right to change API (though unlikely).
    *                 Not yet fully implemented, see https://github.com/phetsims/scenery/issues/867
    */
-  public setHelpTextBehavior( helpTextBehavior: PDOMBehaviorFunction ): void {
+  public setHelpTextBehavior(helpTextBehavior: PDOMBehaviorFunction): void {
 
-    if ( this._helpTextBehavior !== helpTextBehavior ) {
+    if (this._helpTextBehavior !== helpTextBehavior) {
 
       this._helpTextBehavior = helpTextBehavior;
 
@@ -1077,7 +1078,7 @@ export default class ParallelDOM extends PhetioObject {
     }
   }
 
-  public set helpTextBehavior( helpTextBehavior: PDOMBehaviorFunction ) { this.setHelpTextBehavior( helpTextBehavior ); }
+  public set helpTextBehavior(helpTextBehavior: PDOMBehaviorFunction) { this.setHelpTextBehavior(helpTextBehavior); }
 
   public get helpTextBehavior(): PDOMBehaviorFunction { return this.getHelpTextBehavior(); }
 
@@ -1104,10 +1105,10 @@ export default class ParallelDOM extends PhetioObject {
    * This is the "entry point" for Parallel DOM content. When a Node has a tagName it will appear in the Parallel DOM
    * and other attributes can be set. Without it, nothing will appear in the Parallel DOM.
    */
-  public setTagName( tagName: string | null ): void {
-    assert && assert( tagName === null || typeof tagName === 'string' );
+  public setTagName(tagName: string | null): void {
+    assert && assert(tagName === null || typeof tagName === 'string');
 
-    if ( tagName !== this._tagName ) {
+    if (tagName !== this._tagName) {
       this._tagName = tagName;
 
       // TODO: this could be setting PDOM content twice https://github.com/phetsims/scenery/issues/1581
@@ -1115,7 +1116,7 @@ export default class ParallelDOM extends PhetioObject {
     }
   }
 
-  public set tagName( tagName: string | null ) { this.setTagName( tagName ); }
+  public set tagName(tagName: string | null) { this.setTagName(tagName); }
 
   public get tagName(): string | null { return this.getTagName(); }
 
@@ -1132,17 +1133,17 @@ export default class ParallelDOM extends PhetioObject {
    * labelContent is specified without calling this method, then the DEFAULT_LABEL_TAG_NAME will be used as the
    * tag name for the label sibling. Use null to clear the label sibling element from the PDOM.
    */
-  public setLabelTagName( tagName: string | null ): void {
-    assert && assert( tagName === null || typeof tagName === 'string' );
+  public setLabelTagName(tagName: string | null): void {
+    assert && assert(tagName === null || typeof tagName === 'string');
 
-    if ( tagName !== this._labelTagName ) {
+    if (tagName !== this._labelTagName) {
       this._labelTagName = tagName;
 
       this.onPDOMContentChange();
     }
   }
 
-  public set labelTagName( tagName: string | null ) { this.setLabelTagName( tagName ); }
+  public set labelTagName(tagName: string | null) { this.setLabelTagName(tagName); }
 
   public get labelTagName(): string | null { return this.getLabelTagName(); }
 
@@ -1161,10 +1162,10 @@ export default class ParallelDOM extends PhetioObject {
    *
    * Passing 'null' will clear away the description sibling.
    */
-  public setDescriptionTagName( tagName: string | null ): void {
-    assert && assert( tagName === null || typeof tagName === 'string' );
+  public setDescriptionTagName(tagName: string | null): void {
+    assert && assert(tagName === null || typeof tagName === 'string');
 
-    if ( tagName !== this._descriptionTagName ) {
+    if (tagName !== this._descriptionTagName) {
 
       this._descriptionTagName = tagName;
 
@@ -1172,7 +1173,7 @@ export default class ParallelDOM extends PhetioObject {
     }
   }
 
-  public set descriptionTagName( tagName: string | null ) { this.setDescriptionTagName( tagName ); }
+  public set descriptionTagName(tagName: string | null) { this.setDescriptionTagName(tagName); }
 
   public get descriptionTagName(): string | null { return this.getDescriptionTagName(); }
 
@@ -1187,28 +1188,28 @@ export default class ParallelDOM extends PhetioObject {
    * Sets the type for an input element.  Element must have the INPUT tag name. The input attribute is not
    * specified as readonly, so invalidating pdom content is not necessary.
    */
-  public setInputType( inputType: string | null ): void {
-    assert && assert( inputType === null || typeof inputType === 'string' );
-    assert && this.tagName && assert( this._tagName!.toUpperCase() === INPUT_TAG, 'tag name must be INPUT to support inputType' );
+  public setInputType(inputType: string | null): void {
+    assert && assert(inputType === null || typeof inputType === 'string');
+    assert && this.tagName && assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tag name must be INPUT to support inputType');
 
-    if ( inputType !== this._inputType ) {
+    if (inputType !== this._inputType) {
 
       this._inputType = inputType;
-      for ( let i = 0; i < this._pdomInstances.length; i++ ) {
-        const peer = this._pdomInstances[ i ].peer!;
+      for (let i = 0; i < this._pdomInstances.length; i++) {
+        const peer = this._pdomInstances[i].peer!;
 
         // remove the attribute if cleared by setting to 'null'
-        if ( inputType === null ) {
-          peer.removeAttributeFromElement( 'type' );
+        if (inputType === null) {
+          peer.removeAttributeFromElement('type');
         }
         else {
-          peer.setAttributeToElement( 'type', inputType );
+          peer.setAttributeToElement('type', inputType);
         }
       }
     }
   }
 
-  public set inputType( inputType: string | null ) { this.setInputType( inputType ); }
+  public set inputType(inputType: string | null) { this.setInputType(inputType); }
 
   public get inputType(): string | null { return this.getInputType(); }
 
@@ -1230,16 +1231,16 @@ export default class ParallelDOM extends PhetioObject {
    *   <description sibling/>
    * </container>
    */
-  public setAppendLabel( appendLabel: boolean ): void {
+  public setAppendLabel(appendLabel: boolean): void {
 
-    if ( this._appendLabel !== appendLabel ) {
+    if (this._appendLabel !== appendLabel) {
       this._appendLabel = appendLabel;
 
       this.onPDOMContentChange();
     }
   }
 
-  public set appendLabel( appendLabel: boolean ) { this.setAppendLabel( appendLabel ); }
+  public set appendLabel(appendLabel: boolean) { this.setAppendLabel(appendLabel); }
 
   public get appendLabel(): boolean { return this.getAppendLabel(); }
 
@@ -1261,16 +1262,16 @@ export default class ParallelDOM extends PhetioObject {
    *   <description sibling/>
    * </container>
    */
-  public setAppendDescription( appendDescription: boolean ): void {
+  public setAppendDescription(appendDescription: boolean): void {
 
-    if ( this._appendDescription !== appendDescription ) {
+    if (this._appendDescription !== appendDescription) {
       this._appendDescription = appendDescription;
 
       this.onPDOMContentChange();
     }
   }
 
-  public set appendDescription( appendDescription: boolean ) { this.setAppendDescription( appendDescription ); }
+  public set appendDescription(appendDescription: boolean) { this.setAppendDescription(appendDescription); }
 
   public get appendDescription(): boolean { return this.getAppendDescription(); }
 
@@ -1296,16 +1297,16 @@ export default class ParallelDOM extends PhetioObject {
    *   <p>Button description</p>
    * </section>
    */
-  public setContainerTagName( tagName: string | null ): void {
-    assert && assert( tagName === null || typeof tagName === 'string', `invalid tagName argument: ${tagName}` );
+  public setContainerTagName(tagName: string | null): void {
+    assert && assert(tagName === null || typeof tagName === 'string', `invalid tagName argument: ${tagName}`);
 
-    if ( this._containerTagName !== tagName ) {
+    if (this._containerTagName !== tagName) {
       this._containerTagName = tagName;
       this.onPDOMContentChange();
     }
   }
 
-  public set containerTagName( tagName: string | null ) { this.setContainerTagName( tagName ); }
+  public set containerTagName(tagName: string | null) { this.setContainerTagName(tagName); }
 
   public get containerTagName(): string | null { return this.getContainerTagName(); }
 
@@ -1320,13 +1321,13 @@ export default class ParallelDOM extends PhetioObject {
     const labelContent = this.labelContent;
 
     // if trying to set labelContent, make sure that there is a labelTagName default
-    if ( !this._labelTagName ) {
-      this.setLabelTagName( DEFAULT_LABEL_TAG_NAME );
+    if (!this._labelTagName) {
+      this.setLabelTagName(DEFAULT_LABEL_TAG_NAME);
     }
 
-    for ( let i = 0; i < this._pdomInstances.length; i++ ) {
-      const peer = this._pdomInstances[ i ].peer!;
-      peer.setLabelSiblingContent( labelContent );
+    for (let i = 0; i < this._pdomInstances.length; i++) {
+      const peer = this._pdomInstances[i].peer!;
+      peer.setLabelSiblingContent(labelContent);
     }
   }
 
@@ -1340,23 +1341,23 @@ export default class ParallelDOM extends PhetioObject {
    *
    * Passing a null label value will not clear the whole label sibling, just the inner content of the DOM Element.
    */
-  public setLabelContent( labelContent: PDOMValueType | null ): void {
-    if ( labelContent !== this._labelContent ) {
-      if ( isTReadOnlyProperty( this._labelContent ) && !this._labelContent.isDisposed ) {
-        this._labelContent.unlink( this._onLabelContentChangeListener );
+  public setLabelContent(labelContent: PDOMValueType | null): void {
+    if (labelContent !== this._labelContent) {
+      if (isTReadOnlyProperty(this._labelContent) && !this._labelContent.isDisposed) {
+        this._labelContent.unlink(this._onLabelContentChangeListener);
       }
 
       this._labelContent = labelContent;
 
-      if ( isTReadOnlyProperty( labelContent ) ) {
-        labelContent.lazyLink( this._onLabelContentChangeListener );
+      if (isTReadOnlyProperty(labelContent)) {
+        labelContent.lazyLink(this._onLabelContentChangeListener);
       }
 
       this.invalidatePeerLabelSiblingContent();
     }
   }
 
-  public set labelContent( label: PDOMValueType | null ) { this.setLabelContent( label ); }
+  public set labelContent(label: PDOMValueType | null) { this.setLabelContent(label); }
 
   public get labelContent(): string | null { return this.getLabelContent(); }
 
@@ -1364,15 +1365,15 @@ export default class ParallelDOM extends PhetioObject {
    * Get the content for this Node's label sibling DOM element.
    */
   public getLabelContent(): string | null {
-    return unwrapProperty( this._labelContent );
+    return unwrapProperty(this._labelContent);
   }
 
   private onInnerContentPropertyChange(): void {
     const value = this.innerContent;
 
-    for ( let i = 0; i < this._pdomInstances.length; i++ ) {
-      const peer = this._pdomInstances[ i ].peer!;
-      peer.setPrimarySiblingContent( value );
+    for (let i = 0; i < this._pdomInstances.length; i++) {
+      const peer = this._pdomInstances[i].peer!;
+      peer.setPrimarySiblingContent(value);
     }
   }
 
@@ -1381,23 +1382,23 @@ export default class ParallelDOM extends PhetioObject {
    * unless content is html which uses exclusively formatting tags. A node with inner content cannot
    * have accessible descendants because this content will override the HTML of descendants of this node.
    */
-  public setInnerContent( innerContent: PDOMValueType | null ): void {
-    if ( innerContent !== this._innerContent ) {
-      if ( isTReadOnlyProperty( this._innerContent ) && !this._innerContent.isDisposed ) {
-        this._innerContent.unlink( this._onInnerContentChangeListener );
+  public setInnerContent(innerContent: PDOMValueType | null): void {
+    if (innerContent !== this._innerContent) {
+      if (isTReadOnlyProperty(this._innerContent) && !this._innerContent.isDisposed) {
+        this._innerContent.unlink(this._onInnerContentChangeListener);
       }
 
       this._innerContent = innerContent;
 
-      if ( isTReadOnlyProperty( innerContent ) ) {
-        innerContent.lazyLink( this._onInnerContentChangeListener );
+      if (isTReadOnlyProperty(innerContent)) {
+        innerContent.lazyLink(this._onInnerContentChangeListener);
       }
 
       this.onInnerContentPropertyChange();
     }
   }
 
-  public set innerContent( content: PDOMValueType | null ) { this.setInnerContent( content ); }
+  public set innerContent(content: PDOMValueType | null) { this.setInnerContent(content); }
 
   public get innerContent(): string | null { return this.getInnerContent(); }
 
@@ -1405,20 +1406,20 @@ export default class ParallelDOM extends PhetioObject {
    * Get the inner content, the string that is the innerHTML or innerText for the Node's primary sibling.
    */
   public getInnerContent(): string | null {
-    return unwrapProperty( this._innerContent );
+    return unwrapProperty(this._innerContent);
   }
 
   private invalidatePeerDescriptionSiblingContent(): void {
     const descriptionContent = this.descriptionContent;
 
     // if there is no description element, assume that a paragraph element should be used
-    if ( !this._descriptionTagName ) {
-      this.setDescriptionTagName( DEFAULT_DESCRIPTION_TAG_NAME );
+    if (!this._descriptionTagName) {
+      this.setDescriptionTagName(DEFAULT_DESCRIPTION_TAG_NAME);
     }
 
-    for ( let i = 0; i < this._pdomInstances.length; i++ ) {
-      const peer = this._pdomInstances[ i ].peer!;
-      peer.setDescriptionSiblingContent( descriptionContent );
+    for (let i = 0; i < this._pdomInstances.length; i++) {
+      const peer = this._pdomInstances[i].peer!;
+      peer.setDescriptionSiblingContent(descriptionContent);
     }
   }
 
@@ -1427,23 +1428,23 @@ export default class ParallelDOM extends PhetioObject {
    * innerHTML and textContent. If a description element does not exist yet, a default
    * DEFAULT_LABEL_TAG_NAME will be assigned to the descriptionTagName.
    */
-  public setDescriptionContent( descriptionContent: PDOMValueType | null ): void {
-    if ( descriptionContent !== this._descriptionContent ) {
-      if ( isTReadOnlyProperty( this._descriptionContent ) && !this._descriptionContent.isDisposed ) {
-        this._descriptionContent.unlink( this._onDescriptionContentChangeListener );
+  public setDescriptionContent(descriptionContent: PDOMValueType | null): void {
+    if (descriptionContent !== this._descriptionContent) {
+      if (isTReadOnlyProperty(this._descriptionContent) && !this._descriptionContent.isDisposed) {
+        this._descriptionContent.unlink(this._onDescriptionContentChangeListener);
       }
 
       this._descriptionContent = descriptionContent;
 
-      if ( isTReadOnlyProperty( descriptionContent ) ) {
-        descriptionContent.lazyLink( this._onDescriptionContentChangeListener );
+      if (isTReadOnlyProperty(descriptionContent)) {
+        descriptionContent.lazyLink(this._onDescriptionContentChangeListener);
       }
 
       this.invalidatePeerDescriptionSiblingContent();
     }
   }
 
-  public set descriptionContent( textContent: PDOMValueType | null ) { this.setDescriptionContent( textContent ); }
+  public set descriptionContent(textContent: PDOMValueType | null) { this.setDescriptionContent(textContent); }
 
   public get descriptionContent(): string | null { return this.getDescriptionContent(); }
 
@@ -1451,7 +1452,7 @@ export default class ParallelDOM extends PhetioObject {
    * Get the content for this Node's description sibling DOM Element.
    */
   public getDescriptionContent(): string | null {
-    return unwrapProperty( this._descriptionContent );
+    return unwrapProperty(this._descriptionContent);
   }
 
   /**
@@ -1466,23 +1467,23 @@ export default class ParallelDOM extends PhetioObject {
    *                            https://www.w3.org/TR/html-aria/#allowed-aria-roles-states-and-properties
    *                            for a list of roles, states, and properties.
    */
-  public setAriaRole( ariaRole: string | null ): void {
-    assert && assert( ariaRole === null || typeof ariaRole === 'string' );
+  public setAriaRole(ariaRole: string | null): void {
+    assert && assert(ariaRole === null || typeof ariaRole === 'string');
 
-    if ( this._ariaRole !== ariaRole ) {
+    if (this._ariaRole !== ariaRole) {
 
       this._ariaRole = ariaRole;
 
-      if ( ariaRole !== null ) {
-        this.setPDOMAttribute( 'role', ariaRole );
+      if (ariaRole !== null) {
+        this.setPDOMAttribute('role', ariaRole);
       }
       else {
-        this.removePDOMAttribute( 'role' );
+        this.removePDOMAttribute('role');
       }
     }
   }
 
-  public set ariaRole( ariaRole: string | null ) { this.setAriaRole( ariaRole ); }
+  public set ariaRole(ariaRole: string | null) { this.setAriaRole(ariaRole); }
 
   public get ariaRole(): string | null { return this.getAriaRole(); }
 
@@ -1502,30 +1503,30 @@ export default class ParallelDOM extends PhetioObject {
    *                            https://www.w3.org/TR/html-aria/#allowed-aria-roles-states-and-properties
    *                            for a list of roles, states, and properties.
    */
-  public setContainerAriaRole( ariaRole: string | null ): void {
-    assert && assert( ariaRole === null || typeof ariaRole === 'string' );
+  public setContainerAriaRole(ariaRole: string | null): void {
+    assert && assert(ariaRole === null || typeof ariaRole === 'string');
 
-    if ( this._containerAriaRole !== ariaRole ) {
+    if (this._containerAriaRole !== ariaRole) {
 
       this._containerAriaRole = ariaRole;
 
       // clear out the attribute
-      if ( ariaRole === null ) {
-        this.removePDOMAttribute( 'role', {
+      if (ariaRole === null) {
+        this.removePDOMAttribute('role', {
           elementName: PDOMPeer.CONTAINER_PARENT
-        } );
+        });
       }
 
       // add the attribute
       else {
-        this.setPDOMAttribute( 'role', ariaRole, {
+        this.setPDOMAttribute('role', ariaRole, {
           elementName: PDOMPeer.CONTAINER_PARENT
-        } );
+        });
       }
     }
   }
 
-  public set containerAriaRole( ariaRole: string | null ) { this.setContainerAriaRole( ariaRole ); }
+  public set containerAriaRole(ariaRole: string | null) { this.setContainerAriaRole(ariaRole); }
 
   public get containerAriaRole(): string | null { return this.getContainerAriaRole(); }
 
@@ -1539,14 +1540,14 @@ export default class ParallelDOM extends PhetioObject {
   private onAriaValueTextChange(): void {
     const ariaValueText = this.ariaValueText;
 
-    if ( ariaValueText === null ) {
-      if ( this._hasAppliedAriaLabel ) {
-        this.removePDOMAttribute( 'aria-valuetext' );
+    if (ariaValueText === null) {
+      if (this._hasAppliedAriaLabel) {
+        this.removePDOMAttribute('aria-valuetext');
         this._hasAppliedAriaLabel = false;
       }
     }
     else {
-      this.setPDOMAttribute( 'aria-valuetext', ariaValueText );
+      this.setPDOMAttribute('aria-valuetext', ariaValueText);
       this._hasAppliedAriaLabel = true;
     }
   }
@@ -1555,23 +1556,23 @@ export default class ParallelDOM extends PhetioObject {
    * Set the aria-valuetext of this Node independently from the changing value, if necessary. Setting to null will
    * clear this attribute.
    */
-  public setAriaValueText( ariaValueText: PDOMValueType | null ): void {
-    if ( this._ariaValueText !== ariaValueText ) {
-      if ( isTReadOnlyProperty( this._ariaValueText ) && !this._ariaValueText.isDisposed ) {
-        this._ariaValueText.unlink( this._onAriaValueTextChangeListener );
+  public setAriaValueText(ariaValueText: PDOMValueType | null): void {
+    if (this._ariaValueText !== ariaValueText) {
+      if (isTReadOnlyProperty(this._ariaValueText) && !this._ariaValueText.isDisposed) {
+        this._ariaValueText.unlink(this._onAriaValueTextChangeListener);
       }
 
       this._ariaValueText = ariaValueText;
 
-      if ( isTReadOnlyProperty( ariaValueText ) ) {
-        ariaValueText.lazyLink( this._onAriaValueTextChangeListener );
+      if (isTReadOnlyProperty(ariaValueText)) {
+        ariaValueText.lazyLink(this._onAriaValueTextChangeListener);
       }
 
       this.onAriaValueTextChange();
     }
   }
 
-  public set ariaValueText( ariaValueText: PDOMValueType | null ) { this.setAriaValueText( ariaValueText ); }
+  public set ariaValueText(ariaValueText: PDOMValueType | null) { this.setAriaValueText(ariaValueText); }
 
   public get ariaValueText(): string | null { return this.getAriaValueText(); }
 
@@ -1580,7 +1581,7 @@ export default class ParallelDOM extends PhetioObject {
    * has not been set on the primary sibling.
    */
   public getAriaValueText(): string | null {
-    return unwrapProperty( this._ariaValueText );
+    return unwrapProperty(this._ariaValueText);
   }
 
   /**
@@ -1594,10 +1595,10 @@ export default class ParallelDOM extends PhetioObject {
    *
    * @param pdomNamespace - Null indicates no namespace.
    */
-  public setPDOMNamespace( pdomNamespace: string | null ): this {
-    assert && assert( pdomNamespace === null || typeof pdomNamespace === 'string' );
+  public setPDOMNamespace(pdomNamespace: string | null): this {
+    assert && assert(pdomNamespace === null || typeof pdomNamespace === 'string');
 
-    if ( this._pdomNamespace !== pdomNamespace ) {
+    if (this._pdomNamespace !== pdomNamespace) {
       this._pdomNamespace = pdomNamespace;
 
       // If the namespace changes, tear down the view and redraw the whole thing, there is no easy mutable solution here.
@@ -1607,7 +1608,7 @@ export default class ParallelDOM extends PhetioObject {
     return this;
   }
 
-  public set pdomNamespace( value: string | null ) { this.setPDOMNamespace( value ); }
+  public set pdomNamespace(value: string | null) { this.setPDOMNamespace(value); }
 
   public get pdomNamespace(): string | null { return this.getPDOMNamespace(); }
 
@@ -1621,14 +1622,14 @@ export default class ParallelDOM extends PhetioObject {
   private onAriaLabelChange(): void {
     const ariaLabel = this.ariaLabel;
 
-    if ( ariaLabel === null ) {
-      if ( this._hasAppliedAriaLabel ) {
-        this.removePDOMAttribute( 'aria-label' );
+    if (ariaLabel === null) {
+      if (this._hasAppliedAriaLabel) {
+        this.removePDOMAttribute('aria-label');
         this._hasAppliedAriaLabel = false;
       }
     }
     else {
-      this.setPDOMAttribute( 'aria-label', ariaLabel );
+      this.setPDOMAttribute('aria-label', ariaLabel);
       this._hasAppliedAriaLabel = true;
     }
   }
@@ -1640,23 +1641,23 @@ export default class ParallelDOM extends PhetioObject {
    *
    * @param ariaLabel - the text for the aria label attribute
    */
-  public setAriaLabel( ariaLabel: PDOMValueType | null ): void {
-    if ( this._ariaLabel !== ariaLabel ) {
-      if ( isTReadOnlyProperty( this._ariaLabel ) && !this._ariaLabel.isDisposed ) {
-        this._ariaLabel.unlink( this._onAriaLabelChangeListener );
+  public setAriaLabel(ariaLabel: PDOMValueType | null): void {
+    if (this._ariaLabel !== ariaLabel) {
+      if (isTReadOnlyProperty(this._ariaLabel) && !this._ariaLabel.isDisposed) {
+        this._ariaLabel.unlink(this._onAriaLabelChangeListener);
       }
 
       this._ariaLabel = ariaLabel;
 
-      if ( isTReadOnlyProperty( ariaLabel ) ) {
-        ariaLabel.lazyLink( this._onAriaLabelChangeListener );
+      if (isTReadOnlyProperty(ariaLabel)) {
+        ariaLabel.lazyLink(this._onAriaLabelChangeListener);
       }
 
       this.onAriaLabelChange();
     }
   }
 
-  public set ariaLabel( ariaLabel: PDOMValueType | null ) { this.setAriaLabel( ariaLabel ); }
+  public set ariaLabel(ariaLabel: PDOMValueType | null) { this.setAriaLabel(ariaLabel); }
 
   public get ariaLabel(): string | null { return this.getAriaLabel(); }
 
@@ -1664,7 +1665,7 @@ export default class ParallelDOM extends PhetioObject {
    * Get the value of the aria-label attribute for this Node's primary sibling.
    */
   public getAriaLabel(): string | null {
-    return unwrapProperty( this._ariaLabel );
+    return unwrapProperty(this._ariaLabel);
   }
 
   /**
@@ -1674,26 +1675,26 @@ export default class ParallelDOM extends PhetioObject {
    *
    * Use the local coordinate frame when drawing a custom highlight for this Node.
    */
-  public setFocusHighlight( focusHighlight: Highlight ): void {
-    if ( this._focusHighlight !== focusHighlight ) {
+  public setFocusHighlight(focusHighlight: Highlight): void {
+    if (this._focusHighlight !== focusHighlight) {
       this._focusHighlight = focusHighlight;
 
       // if the focus highlight is layerable in the scene graph, update visibility so that it is only
       // visible when associated node has focus
-      if ( this._focusHighlightLayerable ) {
+      if (this._focusHighlightLayerable) {
 
         // if focus highlight is layerable, it must be a node in the scene graph
-        assert && assert( focusHighlight instanceof Node ); // eslint-disable-line no-simple-type-checking-assertions
+        assert && assert(focusHighlight instanceof Node); // eslint-disable-line no-simple-type-checking-assertions
 
         // the highlight starts off invisible, HighlightOverlay will make it visible when this Node has DOM focus
-        ( focusHighlight as Node ).visible = false;
+        (focusHighlight as Node).visible = false;
       }
 
       this.focusHighlightChangedEmitter.emit();
     }
   }
 
-  public set focusHighlight( focusHighlight: Highlight ) { this.setFocusHighlight( focusHighlight ); }
+  public set focusHighlight(focusHighlight: Highlight) { this.setFocusHighlight(focusHighlight); }
 
   public get focusHighlight(): Highlight { return this.getFocusHighlight(); }
 
@@ -1709,16 +1710,16 @@ export default class ParallelDOM extends PhetioObject {
    * This will set the visibility of the layered focus highlight, it will always be invisible until this node has
    * focus.
    */
-  public setFocusHighlightLayerable( focusHighlightLayerable: boolean ): void {
+  public setFocusHighlightLayerable(focusHighlightLayerable: boolean): void {
 
-    if ( this._focusHighlightLayerable !== focusHighlightLayerable ) {
+    if (this._focusHighlightLayerable !== focusHighlightLayerable) {
       this._focusHighlightLayerable = focusHighlightLayerable;
 
       // if a focus highlight is defined (it must be a node), update its visibility so it is linked to focus
       // of the associated node
-      if ( this._focusHighlight ) {
-        assert && assert( this._focusHighlight instanceof Node );
-        ( this._focusHighlight as Node ).visible = false;
+      if (this._focusHighlight) {
+        assert && assert(this._focusHighlight instanceof Node);
+        (this._focusHighlight as Node).visible = false;
 
         // emit that the highlight has changed and we may need to update its visual representation
         this.focusHighlightChangedEmitter.emit();
@@ -1726,7 +1727,7 @@ export default class ParallelDOM extends PhetioObject {
     }
   }
 
-  public set focusHighlightLayerable( focusHighlightLayerable: boolean ) { this.setFocusHighlightLayerable( focusHighlightLayerable ); }
+  public set focusHighlightLayerable(focusHighlightLayerable: boolean) { this.setFocusHighlightLayerable(focusHighlightLayerable); }
 
   public get focusHighlightLayerable(): boolean { return this.getFocusHighlightLayerable(); }
 
@@ -1745,11 +1746,11 @@ export default class ParallelDOM extends PhetioObject {
    *
    * TODO: Support more than one group focus highlight (multiple ancestors could have groupFocusHighlight), see https://github.com/phetsims/scenery/issues/1608
    */
-  public setGroupFocusHighlight( groupHighlight: Node | boolean ): void {
+  public setGroupFocusHighlight(groupHighlight: Node | boolean): void {
     this._groupFocusHighlight = groupHighlight;
   }
 
-  public set groupFocusHighlight( groupHighlight: Node | boolean ) { this.setGroupFocusHighlight( groupHighlight ); }
+  public set groupFocusHighlight(groupHighlight: Node | boolean) { this.setGroupFocusHighlight(groupHighlight); }
 
   public get groupFocusHighlight(): Node | boolean { return this.getGroupFocusHighlight(); }
 
@@ -1764,20 +1765,20 @@ export default class ParallelDOM extends PhetioObject {
    * Very similar algorithm to setChildren in Node.js
    * @param ariaLabelledbyAssociations - list of associationObjects, see this._ariaLabelledbyAssociations.
    */
-  public setAriaLabelledbyAssociations( ariaLabelledbyAssociations: Association[] ): void {
+  public setAriaLabelledbyAssociations(ariaLabelledbyAssociations: Association[]): void {
     let associationObject;
     let i;
 
     // validation if assert is enabled
-    if ( assert ) {
-      assert( Array.isArray( ariaLabelledbyAssociations ) );
-      for ( i = 0; i < ariaLabelledbyAssociations.length; i++ ) {
-        associationObject = ariaLabelledbyAssociations[ i ];
+    if (assert) {
+      assert(Array.isArray(ariaLabelledbyAssociations));
+      for (i = 0; i < ariaLabelledbyAssociations.length; i++) {
+        associationObject = ariaLabelledbyAssociations[i];
       }
     }
 
     // no work to be done if both are empty, return early
-    if ( ariaLabelledbyAssociations.length === 0 && this._ariaLabelledbyAssociations.length === 0 ) {
+    if (ariaLabelledbyAssociations.length === 0 && this._ariaLabelledbyAssociations.length === 0) {
       return;
     }
 
@@ -1786,25 +1787,25 @@ export default class ParallelDOM extends PhetioObject {
     const inBoth: Association[] = []; // Child nodes that "stay". Will be ordered for the "after" case.
 
     // get a difference of the desired new list, and the old
-    arrayDifference( ariaLabelledbyAssociations, this._ariaLabelledbyAssociations, afterOnly, beforeOnly, inBoth );
+    arrayDifference(ariaLabelledbyAssociations, this._ariaLabelledbyAssociations, afterOnly, beforeOnly, inBoth);
 
     // remove each current associationObject that isn't in the new list
-    for ( i = 0; i < beforeOnly.length; i++ ) {
-      associationObject = beforeOnly[ i ];
-      this.removeAriaLabelledbyAssociation( associationObject );
+    for (i = 0; i < beforeOnly.length; i++) {
+      associationObject = beforeOnly[i];
+      this.removeAriaLabelledbyAssociation(associationObject);
     }
 
-    assert && assert( this._ariaLabelledbyAssociations.length === inBoth.length,
-      'Removing associations should not have triggered other association changes' );
+    assert && assert(this._ariaLabelledbyAssociations.length === inBoth.length,
+      'Removing associations should not have triggered other association changes');
 
     // add each association from the new list that hasn't been added yet
-    for ( i = 0; i < afterOnly.length; i++ ) {
-      const ariaLabelledbyAssociation = ariaLabelledbyAssociations[ i ];
-      this.addAriaLabelledbyAssociation( ariaLabelledbyAssociation );
+    for (i = 0; i < afterOnly.length; i++) {
+      const ariaLabelledbyAssociation = ariaLabelledbyAssociations[i];
+      this.addAriaLabelledbyAssociation(ariaLabelledbyAssociation);
     }
   }
 
-  public set ariaLabelledbyAssociations( ariaLabelledbyAssociations: Association[] ) { this.setAriaLabelledbyAssociations( ariaLabelledbyAssociations ); }
+  public set ariaLabelledbyAssociations(ariaLabelledbyAssociations: Association[]) { this.setAriaLabelledbyAssociations(ariaLabelledbyAssociations); }
 
   public get ariaLabelledbyAssociations(): Association[] { return this.getAriaLabelledbyAssociations(); }
 
@@ -1821,15 +1822,15 @@ export default class ParallelDOM extends PhetioObject {
    * There can be more than one association because an aria-labelledby attribute's value can be a space separated
    * list of HTML ids, and not just a single id, see https://www.w3.org/WAI/GL/wiki/Using_aria-labelledby_to_concatenate_a_label_from_several_text_nodes
    */
-  public addAriaLabelledbyAssociation( associationObject: Association ): void {
+  public addAriaLabelledbyAssociation(associationObject: Association): void {
 
     // TODO: assert if this associationObject is already in the association objects list! https://github.com/phetsims/scenery/issues/832
 
-    this._ariaLabelledbyAssociations.push( associationObject ); // Keep track of this association.
+    this._ariaLabelledbyAssociations.push(associationObject); // Keep track of this association.
 
     // Flag that this node is is being labelled by the other node, so that if the other node changes it can tell
     // this node to restore the association appropriately.
-    associationObject.otherNode._nodesThatAreAriaLabelledbyThisNode.push( this as unknown as Node );
+    associationObject.otherNode._nodesThatAreAriaLabelledbyThisNode.push(this as unknown as Node);
 
     this.updateAriaLabelledbyAssociationsInPeers();
   }
@@ -1837,14 +1838,14 @@ export default class ParallelDOM extends PhetioObject {
   /**
    * Remove an aria-labelledby association object, see addAriaLabelledbyAssociation for more details
    */
-  public removeAriaLabelledbyAssociation( associationObject: Association ): void {
-    assert && assert( _.includes( this._ariaLabelledbyAssociations, associationObject ) );
+  public removeAriaLabelledbyAssociation(associationObject: Association): void {
+    assert && assert(_.includes(this._ariaLabelledbyAssociations, associationObject));
 
     // remove the
-    const removedObject = this._ariaLabelledbyAssociations.splice( _.indexOf( this._ariaLabelledbyAssociations, associationObject ), 1 );
+    const removedObject = this._ariaLabelledbyAssociations.splice(_.indexOf(this._ariaLabelledbyAssociations, associationObject), 1);
 
     // remove the reference from the other node back to this node because we don't need it anymore
-    removedObject[ 0 ].otherNode.removeNodeThatIsAriaLabelledByThisNode( this as unknown as Node );
+    removedObject[0].otherNode.removeNodeThatIsAriaLabelledByThisNode(this as unknown as Node);
 
     this.updateAriaLabelledbyAssociationsInPeers();
   }
@@ -1852,18 +1853,18 @@ export default class ParallelDOM extends PhetioObject {
   /**
    * Remove the reference to the node that is using this Node's ID as an aria-labelledby value (scenery-internal)
    */
-  public removeNodeThatIsAriaLabelledByThisNode( node: Node ): void {
-    const indexOfNode = _.indexOf( this._nodesThatAreAriaLabelledbyThisNode, node );
-    assert && assert( indexOfNode >= 0 );
-    this._nodesThatAreAriaLabelledbyThisNode.splice( indexOfNode, 1 );
+  public removeNodeThatIsAriaLabelledByThisNode(node: Node): void {
+    const indexOfNode = _.indexOf(this._nodesThatAreAriaLabelledbyThisNode, node);
+    assert && assert(indexOfNode >= 0);
+    this._nodesThatAreAriaLabelledbyThisNode.splice(indexOfNode, 1);
   }
 
   /**
    * Trigger the view update for each PDOMPeer
    */
   public updateAriaLabelledbyAssociationsInPeers(): void {
-    for ( let i = 0; i < this.pdomInstances.length; i++ ) {
-      const peer = this.pdomInstances[ i ].peer!;
+    for (let i = 0; i < this.pdomInstances.length; i++) {
+      const peer = this.pdomInstances[i].peer!;
       peer.onAriaLabelledbyAssociationChange();
     }
   }
@@ -1875,8 +1876,8 @@ export default class ParallelDOM extends PhetioObject {
 
     // if any other nodes are aria-labelledby this Node, update those associations too. Since this node's
     // pdom content needs to be recreated, they need to update their aria-labelledby associations accordingly.
-    for ( let i = 0; i < this._nodesThatAreAriaLabelledbyThisNode.length; i++ ) {
-      const otherNode = this._nodesThatAreAriaLabelledbyThisNode[ i ];
+    for (let i = 0; i < this._nodesThatAreAriaLabelledbyThisNode.length; i++) {
+      const otherNode = this._nodesThatAreAriaLabelledbyThisNode[i];
       otherNode.updateAriaLabelledbyAssociationsInPeers();
     }
   }
@@ -1891,17 +1892,17 @@ export default class ParallelDOM extends PhetioObject {
 
   public get nodesThatAreAriaLabelledbyThisNode(): Node[] { return this.getNodesThatAreAriaLabelledbyThisNode(); }
 
-  public setAriaDescribedbyAssociations( ariaDescribedbyAssociations: Association[] ): void {
+  public setAriaDescribedbyAssociations(ariaDescribedbyAssociations: Association[]): void {
     let associationObject;
-    if ( assert ) {
-      assert( Array.isArray( ariaDescribedbyAssociations ) );
-      for ( let j = 0; j < ariaDescribedbyAssociations.length; j++ ) {
-        associationObject = ariaDescribedbyAssociations[ j ];
+    if (assert) {
+      assert(Array.isArray(ariaDescribedbyAssociations));
+      for (let j = 0; j < ariaDescribedbyAssociations.length; j++) {
+        associationObject = ariaDescribedbyAssociations[j];
       }
     }
 
     // no work to be done if both are empty
-    if ( ariaDescribedbyAssociations.length === 0 && this._ariaDescribedbyAssociations.length === 0 ) {
+    if (ariaDescribedbyAssociations.length === 0 && this._ariaDescribedbyAssociations.length === 0) {
       return;
     }
 
@@ -1911,25 +1912,25 @@ export default class ParallelDOM extends PhetioObject {
     let i;
 
     // get a difference of the desired new list, and the old
-    arrayDifference( ariaDescribedbyAssociations, this._ariaDescribedbyAssociations, afterOnly, beforeOnly, inBoth );
+    arrayDifference(ariaDescribedbyAssociations, this._ariaDescribedbyAssociations, afterOnly, beforeOnly, inBoth);
 
     // remove each current associationObject that isn't in the new list
-    for ( i = 0; i < beforeOnly.length; i++ ) {
-      associationObject = beforeOnly[ i ];
-      this.removeAriaDescribedbyAssociation( associationObject );
+    for (i = 0; i < beforeOnly.length; i++) {
+      associationObject = beforeOnly[i];
+      this.removeAriaDescribedbyAssociation(associationObject);
     }
 
-    assert && assert( this._ariaDescribedbyAssociations.length === inBoth.length,
-      'Removing associations should not have triggered other association changes' );
+    assert && assert(this._ariaDescribedbyAssociations.length === inBoth.length,
+      'Removing associations should not have triggered other association changes');
 
     // add each association from the new list that hasn't been added yet
-    for ( i = 0; i < afterOnly.length; i++ ) {
-      const ariaDescribedbyAssociation = ariaDescribedbyAssociations[ i ];
-      this.addAriaDescribedbyAssociation( ariaDescribedbyAssociation );
+    for (i = 0; i < afterOnly.length; i++) {
+      const ariaDescribedbyAssociation = ariaDescribedbyAssociations[i];
+      this.addAriaDescribedbyAssociation(ariaDescribedbyAssociation);
     }
   }
 
-  public set ariaDescribedbyAssociations( ariaDescribedbyAssociations: Association[] ) { this.setAriaDescribedbyAssociations( ariaDescribedbyAssociations ); }
+  public set ariaDescribedbyAssociations(ariaDescribedbyAssociations: Association[]) { this.setAriaDescribedbyAssociations(ariaDescribedbyAssociations); }
 
   public get ariaDescribedbyAssociations(): Association[] { return this.getAriaDescribedbyAssociations(); }
 
@@ -1946,14 +1947,14 @@ export default class ParallelDOM extends PhetioObject {
    * There can be more than one association because an aria-describedby attribute's value can be a space separated
    * list of HTML ids, and not just a single id, see https://www.w3.org/WAI/GL/wiki/Using_aria-labelledby_to_concatenate_a_label_from_several_text_nodes
    */
-  public addAriaDescribedbyAssociation( associationObject: Association ): void {
-    assert && assert( !_.includes( this._ariaDescribedbyAssociations, associationObject ), 'describedby association already registed' );
+  public addAriaDescribedbyAssociation(associationObject: Association): void {
+    assert && assert(!_.includes(this._ariaDescribedbyAssociations, associationObject), 'describedby association already registed');
 
-    this._ariaDescribedbyAssociations.push( associationObject ); // Keep track of this association.
+    this._ariaDescribedbyAssociations.push(associationObject); // Keep track of this association.
 
     // Flag that this node is is being described by the other node, so that if the other node changes it can tell
     // this node to restore the association appropriately.
-    associationObject.otherNode._nodesThatAreAriaDescribedbyThisNode.push( this as unknown as Node );
+    associationObject.otherNode._nodesThatAreAriaDescribedbyThisNode.push(this as unknown as Node);
 
     // update the PDOMPeers with this aria-describedby association
     this.updateAriaDescribedbyAssociationsInPeers();
@@ -1962,21 +1963,21 @@ export default class ParallelDOM extends PhetioObject {
   /**
    * Is this object already in the describedby association list
    */
-  public hasAriaDescribedbyAssociation( associationObject: Association ): boolean {
-    return _.includes( this._ariaDescribedbyAssociations, associationObject );
+  public hasAriaDescribedbyAssociation(associationObject: Association): boolean {
+    return _.includes(this._ariaDescribedbyAssociations, associationObject);
   }
 
   /**
    * Remove an aria-describedby association object, see addAriaDescribedbyAssociation for more details
    */
-  public removeAriaDescribedbyAssociation( associationObject: Association ): void {
-    assert && assert( _.includes( this._ariaDescribedbyAssociations, associationObject ) );
+  public removeAriaDescribedbyAssociation(associationObject: Association): void {
+    assert && assert(_.includes(this._ariaDescribedbyAssociations, associationObject));
 
     // remove the
-    const removedObject = this._ariaDescribedbyAssociations.splice( _.indexOf( this._ariaDescribedbyAssociations, associationObject ), 1 );
+    const removedObject = this._ariaDescribedbyAssociations.splice(_.indexOf(this._ariaDescribedbyAssociations, associationObject), 1);
 
     // remove the reference from the other node back to this node because we don't need it anymore
-    removedObject[ 0 ].otherNode.removeNodeThatIsAriaDescribedByThisNode( this as unknown as Node );
+    removedObject[0].otherNode.removeNodeThatIsAriaDescribedByThisNode(this as unknown as Node);
 
     this.updateAriaDescribedbyAssociationsInPeers();
   }
@@ -1984,18 +1985,18 @@ export default class ParallelDOM extends PhetioObject {
   /**
    * Remove the reference to the node that is using this Node's ID as an aria-describedby value (scenery-internal)
    */
-  public removeNodeThatIsAriaDescribedByThisNode( node: Node ): void {
-    const indexOfNode = _.indexOf( this._nodesThatAreAriaDescribedbyThisNode, node );
-    assert && assert( indexOfNode >= 0 );
-    this._nodesThatAreAriaDescribedbyThisNode.splice( indexOfNode, 1 );
+  public removeNodeThatIsAriaDescribedByThisNode(node: Node): void {
+    const indexOfNode = _.indexOf(this._nodesThatAreAriaDescribedbyThisNode, node);
+    assert && assert(indexOfNode >= 0);
+    this._nodesThatAreAriaDescribedbyThisNode.splice(indexOfNode, 1);
   }
 
   /**
    * Trigger the view update for each PDOMPeer
    */
   public updateAriaDescribedbyAssociationsInPeers(): void {
-    for ( let i = 0; i < this.pdomInstances.length; i++ ) {
-      const peer = this.pdomInstances[ i ].peer!;
+    for (let i = 0; i < this.pdomInstances.length; i++) {
+      const peer = this.pdomInstances[i].peer!;
       peer.onAriaDescribedbyAssociationChange();
     }
   }
@@ -2008,8 +2009,8 @@ export default class ParallelDOM extends PhetioObject {
     // if any other nodes are aria-describedby this Node, update those associations too. Since this node's
     // pdom content needs to be recreated, they need to update their aria-describedby associations accordingly.
     // TODO: only use unique elements of the array (_.unique) https://github.com/phetsims/scenery/issues/1581
-    for ( let i = 0; i < this._nodesThatAreAriaDescribedbyThisNode.length; i++ ) {
-      const otherNode = this._nodesThatAreAriaDescribedbyThisNode[ i ];
+    for (let i = 0; i < this._nodesThatAreAriaDescribedbyThisNode.length; i++) {
+      const otherNode = this._nodesThatAreAriaDescribedbyThisNode[i];
       otherNode.updateAriaDescribedbyAssociationsInPeers();
     }
   }
@@ -2024,18 +2025,18 @@ export default class ParallelDOM extends PhetioObject {
 
   public get nodesThatAreAriaDescribedbyThisNode(): Node[] { return this.getNodesThatAreAriaDescribedbyThisNode(); }
 
-  public setActiveDescendantAssociations( activeDescendantAssociations: Association[] ): void {
+  public setActiveDescendantAssociations(activeDescendantAssociations: Association[]): void {
 
     let associationObject;
-    if ( assert ) {
-      assert( Array.isArray( activeDescendantAssociations ) );
-      for ( let j = 0; j < activeDescendantAssociations.length; j++ ) {
-        associationObject = activeDescendantAssociations[ j ];
+    if (assert) {
+      assert(Array.isArray(activeDescendantAssociations));
+      for (let j = 0; j < activeDescendantAssociations.length; j++) {
+        associationObject = activeDescendantAssociations[j];
       }
     }
 
     // no work to be done if both are empty, safe to return early
-    if ( activeDescendantAssociations.length === 0 && this._activeDescendantAssociations.length === 0 ) {
+    if (activeDescendantAssociations.length === 0 && this._activeDescendantAssociations.length === 0) {
       return;
     }
 
@@ -2045,25 +2046,25 @@ export default class ParallelDOM extends PhetioObject {
     let i;
 
     // get a difference of the desired new list, and the old
-    arrayDifference( activeDescendantAssociations, this._activeDescendantAssociations, afterOnly, beforeOnly, inBoth );
+    arrayDifference(activeDescendantAssociations, this._activeDescendantAssociations, afterOnly, beforeOnly, inBoth);
 
     // remove each current associationObject that isn't in the new list
-    for ( i = 0; i < beforeOnly.length; i++ ) {
-      associationObject = beforeOnly[ i ];
-      this.removeActiveDescendantAssociation( associationObject );
+    for (i = 0; i < beforeOnly.length; i++) {
+      associationObject = beforeOnly[i];
+      this.removeActiveDescendantAssociation(associationObject);
     }
 
-    assert && assert( this._activeDescendantAssociations.length === inBoth.length,
-      'Removing associations should not have triggered other association changes' );
+    assert && assert(this._activeDescendantAssociations.length === inBoth.length,
+      'Removing associations should not have triggered other association changes');
 
     // add each association from the new list that hasn't been added yet
-    for ( i = 0; i < afterOnly.length; i++ ) {
-      const activeDescendantAssociation = activeDescendantAssociations[ i ];
-      this.addActiveDescendantAssociation( activeDescendantAssociation );
+    for (i = 0; i < afterOnly.length; i++) {
+      const activeDescendantAssociation = activeDescendantAssociations[i];
+      this.addActiveDescendantAssociation(activeDescendantAssociation);
     }
   }
 
-  public set activeDescendantAssociations( activeDescendantAssociations: Association[] ) { this.setActiveDescendantAssociations( activeDescendantAssociations ); }
+  public set activeDescendantAssociations(activeDescendantAssociations: Association[]) { this.setActiveDescendantAssociations(activeDescendantAssociations); }
 
   public get activeDescendantAssociations(): Association[] { return this.getActiveDescendantAssociations(); }
 
@@ -2077,14 +2078,14 @@ export default class ParallelDOM extends PhetioObject {
    * aria-activeDescendant attribute with a value that includes the `otherNode`'s peer HTMLElement's id (specified with
    * `otherElementName`)."
    */
-  public addActiveDescendantAssociation( associationObject: Association ): void {
+  public addActiveDescendantAssociation(associationObject: Association): void {
 
     // TODO: assert if this associationObject is already in the association objects list! https://github.com/phetsims/scenery/issues/832
-    this._activeDescendantAssociations.push( associationObject ); // Keep track of this association.
+    this._activeDescendantAssociations.push(associationObject); // Keep track of this association.
 
     // Flag that this node is is being described by the other node, so that if the other node changes it can tell
     // this node to restore the association appropriately.
-    associationObject.otherNode._nodesThatAreActiveDescendantToThisNode.push( this as unknown as Node );
+    associationObject.otherNode._nodesThatAreActiveDescendantToThisNode.push(this as unknown as Node);
 
     // update the pdomPeers with this aria-activeDescendant association
     this.updateActiveDescendantAssociationsInPeers();
@@ -2093,14 +2094,14 @@ export default class ParallelDOM extends PhetioObject {
   /**
    * Remove an aria-activeDescendant association object, see addActiveDescendantAssociation for more details
    */
-  public removeActiveDescendantAssociation( associationObject: Association ): void {
-    assert && assert( _.includes( this._activeDescendantAssociations, associationObject ) );
+  public removeActiveDescendantAssociation(associationObject: Association): void {
+    assert && assert(_.includes(this._activeDescendantAssociations, associationObject));
 
     // remove the
-    const removedObject = this._activeDescendantAssociations.splice( _.indexOf( this._activeDescendantAssociations, associationObject ), 1 );
+    const removedObject = this._activeDescendantAssociations.splice(_.indexOf(this._activeDescendantAssociations, associationObject), 1);
 
     // remove the reference from the other node back to this node because we don't need it anymore
-    removedObject[ 0 ].otherNode.removeNodeThatIsActiveDescendantThisNode( this as unknown as Node );
+    removedObject[0].otherNode.removeNodeThatIsActiveDescendantThisNode(this as unknown as Node);
 
     this.updateActiveDescendantAssociationsInPeers();
   }
@@ -2108,10 +2109,10 @@ export default class ParallelDOM extends PhetioObject {
   /**
    * Remove the reference to the node that is using this Node's ID as an aria-activeDescendant value (scenery-internal)
    */
-  private removeNodeThatIsActiveDescendantThisNode( node: Node ): void {
-    const indexOfNode = _.indexOf( this._nodesThatAreActiveDescendantToThisNode, node );
-    assert && assert( indexOfNode >= 0 );
-    this._nodesThatAreActiveDescendantToThisNode.splice( indexOfNode, 1 );
+  private removeNodeThatIsActiveDescendantThisNode(node: Node): void {
+    const indexOfNode = _.indexOf(this._nodesThatAreActiveDescendantToThisNode, node);
+    assert && assert(indexOfNode >= 0);
+    this._nodesThatAreActiveDescendantToThisNode.splice(indexOfNode, 1);
 
   }
 
@@ -2119,8 +2120,8 @@ export default class ParallelDOM extends PhetioObject {
    * Trigger the view update for each PDOMPeer
    */
   private updateActiveDescendantAssociationsInPeers(): void {
-    for ( let i = 0; i < this.pdomInstances.length; i++ ) {
-      const peer = this.pdomInstances[ i ].peer!;
+    for (let i = 0; i < this.pdomInstances.length; i++) {
+      const peer = this.pdomInstances[i].peer!;
       peer.onActiveDescendantAssociationChange();
     }
   }
@@ -2133,8 +2134,8 @@ export default class ParallelDOM extends PhetioObject {
     // if any other nodes are aria-activeDescendant this Node, update those associations too. Since this node's
     // pdom content needs to be recreated, they need to update their aria-activeDescendant associations accordingly.
     // TODO: only use unique elements of the array (_.unique) https://github.com/phetsims/scenery/issues/1581
-    for ( let i = 0; i < this._nodesThatAreActiveDescendantToThisNode.length; i++ ) {
-      const otherNode = this._nodesThatAreActiveDescendantToThisNode[ i ];
+    for (let i = 0; i < this._nodesThatAreActiveDescendantToThisNode.length; i++) {
+      const otherNode = this._nodesThatAreActiveDescendantToThisNode[i];
       otherNode.updateActiveDescendantAssociationsInPeers();
     }
   }
@@ -2203,41 +2204,41 @@ export default class ParallelDOM extends PhetioObject {
    * See https://github.com/phetsims/scenery-phet/issues/365#issuecomment-381302583 for more information on the
    * decisions and design for this feature.
    */
-  public setPDOMOrder( pdomOrder: ( Node | null )[] | null ): void {
-    assert && assert( Array.isArray( pdomOrder ) || pdomOrder === null,
-      `Array or null expected, received: ${pdomOrder}` );
-    assert && pdomOrder && pdomOrder.forEach( ( node, index ) => {
-      assert && assert( node === null || node instanceof Node,
-        `Elements of pdomOrder should be either a Node or null. Element at index ${index} is: ${node}` );
-    } );
-    assert && pdomOrder && assert( ( this as unknown as Node ).getTrails( node => _.includes( pdomOrder, node ) ).length === 0, 'pdomOrder should not include any ancestors or the node itself' );
+  public setPDOMOrder(pdomOrder: (Node | null)[] | null): void {
+    assert && assert(Array.isArray(pdomOrder) || pdomOrder === null,
+      `Array or null expected, received: ${pdomOrder}`);
+    assert && pdomOrder && pdomOrder.forEach((node, index) => {
+      assert && assert(node === null || node instanceof Node,
+        `Elements of pdomOrder should be either a Node or null. Element at index ${index} is: ${node}`);
+    });
+    assert && pdomOrder && assert((this as unknown as Node).getTrails(node => _.includes(pdomOrder, node)).length === 0, 'pdomOrder should not include any ancestors or the node itself');
 
     // Only update if it has changed
-    if ( this._pdomOrder !== pdomOrder ) {
+    if (this._pdomOrder !== pdomOrder) {
       const oldPDOMOrder = this._pdomOrder;
 
       // Store our own reference to this, so client modifications to the input array won't silently break things.
       // See https://github.com/phetsims/scenery/issues/786
       this._pdomOrder = pdomOrder === null ? null : pdomOrder.slice();
 
-      PDOMTree.pdomOrderChange( this as unknown as Node, oldPDOMOrder, pdomOrder );
+      PDOMTree.pdomOrderChange(this as unknown as Node, oldPDOMOrder, pdomOrder);
 
-      ( this as unknown as Node ).rendererSummaryRefreshEmitter.emit();
+      (this as unknown as Node).rendererSummaryRefreshEmitter.emit();
     }
   }
 
-  public set pdomOrder( value: ( Node | null )[] | null ) { this.setPDOMOrder( value ); }
+  public set pdomOrder(value: (Node | null)[] | null) { this.setPDOMOrder(value); }
 
-  public get pdomOrder(): ( Node | null )[] | null { return this.getPDOMOrder(); }
+  public get pdomOrder(): (Node | null)[] | null { return this.getPDOMOrder(); }
 
   /**
    * Returns the pdom (focus) order for this node.
    * If there is an existing array, this returns a copy of that array. This is important because clients may then
    * modify the array, and call setPDOMOrder - which is a no-op unless the array reference is different.
    */
-  public getPDOMOrder(): ( Node | null )[] | null {
-    if ( this._pdomOrder ) {
-      return this._pdomOrder.slice( 0 ); // create a defensive copy
+  public getPDOMOrder(): (Node | null)[] | null {
+    if (this._pdomOrder) {
+      return this._pdomOrder.slice(0); // create a defensive copy
     }
     return this._pdomOrder;
   }
@@ -2251,8 +2252,8 @@ export default class ParallelDOM extends PhetioObject {
    */
   public hasPDOMOrder(): boolean {
     return this._pdomOrder !== null &&
-           this._pdomOrder.length !== 0 &&
-           ( this._pdomOrder.length > 1 || this._pdomOrder[ 0 ] !== null );
+      this._pdomOrder.length !== 0 &&
+      (this._pdomOrder.length > 1 || this._pdomOrder[0] !== null);
   }
 
   /**
@@ -2283,31 +2284,31 @@ export default class ParallelDOM extends PhetioObject {
   public getEffectiveChildren(): Node[] {
     // Find all children without PDOM parents.
     const nonOrderedChildren = [];
-    for ( let i = 0; i < ( this as unknown as Node )._children.length; i++ ) {
-      const child = ( this as unknown as Node )._children[ i ];
+    for (let i = 0; i < (this as unknown as Node)._children.length; i++) {
+      const child = (this as unknown as Node)._children[i];
 
-      if ( !child._pdomParent ) {
-        nonOrderedChildren.push( child );
+      if (!child._pdomParent) {
+        nonOrderedChildren.push(child);
       }
     }
 
     // Override the order, and replace the placeholder if it exists.
-    if ( this.hasPDOMOrder() ) {
+    if (this.hasPDOMOrder()) {
       const effectiveChildren = this.pdomOrder!.slice();
 
-      const placeholderIndex = effectiveChildren.indexOf( null );
+      const placeholderIndex = effectiveChildren.indexOf(null);
 
       // If we have a placeholder, replace its content with the children
-      if ( placeholderIndex >= 0 ) {
+      if (placeholderIndex >= 0) {
         // for efficiency
-        nonOrderedChildren.unshift( placeholderIndex, 1 );
+        nonOrderedChildren.unshift(placeholderIndex, 1);
 
         // @ts-expect-error - TODO: best way to type? https://github.com/phetsims/scenery/issues/1581
-        Array.prototype.splice.apply( effectiveChildren, nonOrderedChildren );
+        Array.prototype.splice.apply(effectiveChildren, nonOrderedChildren);
       }
       // Otherwise, just add the normal things at the end
       else {
-        Array.prototype.push.apply( effectiveChildren, nonOrderedChildren );
+        Array.prototype.push.apply(effectiveChildren, nonOrderedChildren);
       }
 
       return effectiveChildren as Node[];
@@ -2323,15 +2324,15 @@ export default class ParallelDOM extends PhetioObject {
    * should be hidden so that all PDOM elements are hidden as well.  Hiding the element will remove it from the focus
    * order.
    */
-  public setPDOMVisible( visible: boolean ): void {
-    if ( this._pdomVisible !== visible ) {
+  public setPDOMVisible(visible: boolean): void {
+    if (this._pdomVisible !== visible) {
       this._pdomVisible = visible;
 
-      this._pdomDisplaysInfo.onPDOMVisibilityChange( visible );
+      this._pdomDisplaysInfo.onPDOMVisibilityChange(visible);
     }
   }
 
-  public set pdomVisible( visible: boolean ) { this.setPDOMVisible( visible ); }
+  public set pdomVisible(visible: boolean) { this.setPDOMVisible(visible); }
 
   public get pdomVisible(): boolean { return this.isPDOMVisible(); }
 
@@ -2348,8 +2349,8 @@ export default class ParallelDOM extends PhetioObject {
    * updated synchronously, so this returns the most up-to-date information without requiring Display.updateDisplay
    */
   public isPDOMDisplayed(): boolean {
-    for ( let i = 0; i < this._pdomInstances.length; i++ ) {
-      if ( this._pdomInstances[ i ].isGloballyVisible() ) {
+    for (let i = 0; i < this._pdomInstances.length; i++) {
+      if (this._pdomInstances[i].isGloballyVisible()) {
         return true;
       }
     }
@@ -2359,8 +2360,8 @@ export default class ParallelDOM extends PhetioObject {
   public get pdomDisplayed(): boolean { return this.isPDOMDisplayed(); }
 
   private invalidatePeerInputValue(): void {
-    for ( let i = 0; i < this.pdomInstances.length; i++ ) {
-      const peer = this.pdomInstances[ i ].peer!;
+    for (let i = 0; i < this.pdomInstances.length; i++) {
+      const peer = this.pdomInstances[i].peer!;
       peer.onInputValueChange();
     }
   }
@@ -2369,25 +2370,25 @@ export default class ParallelDOM extends PhetioObject {
    * Set the value of an input element.  Element must be a form element to support the value attribute. The input
    * value is converted to string since input values are generally string for HTML.
    */
-  public setInputValue( inputValue: PDOMValueType | number | null ): void {
-    assert && this._tagName && assert( _.includes( FORM_ELEMENTS, this._tagName.toUpperCase() ), 'dom element must be a form element to support value' );
+  public setInputValue(inputValue: PDOMValueType | number | null): void {
+    assert && this._tagName && assert(_.includes(FORM_ELEMENTS, this._tagName.toUpperCase()), 'dom element must be a form element to support value');
 
-    if ( inputValue !== this._inputValue ) {
-      if ( isTReadOnlyProperty( this._inputValue ) && !this._inputValue.isDisposed ) {
-        this._inputValue.unlink( this._onPDOMContentChangeListener );
+    if (inputValue !== this._inputValue) {
+      if (isTReadOnlyProperty(this._inputValue) && !this._inputValue.isDisposed) {
+        this._inputValue.unlink(this._onPDOMContentChangeListener);
       }
 
       this._inputValue = inputValue;
 
-      if ( isTReadOnlyProperty( inputValue ) ) {
-        inputValue.lazyLink( this._onPDOMContentChangeListener );
+      if (isTReadOnlyProperty(inputValue)) {
+        inputValue.lazyLink(this._onPDOMContentChangeListener);
       }
 
       this.invalidatePeerInputValue();
     }
   }
 
-  public set inputValue( value: PDOMValueType | number | null ) { this.setInputValue( value ); }
+  public set inputValue(value: PDOMValueType | number | null) { this.setInputValue(value); }
 
   public get inputValue(): string | number | null { return this.getInputValue(); }
 
@@ -2396,7 +2397,7 @@ export default class ParallelDOM extends PhetioObject {
    */
   public getInputValue(): string | null {
     let value: string | number | null;
-    if ( isTReadOnlyProperty( this._inputValue ) ) {
+    if (isTReadOnlyProperty(this._inputValue)) {
       value = this._inputValue.value;
     }
     else {
@@ -2410,25 +2411,25 @@ export default class ParallelDOM extends PhetioObject {
    * pdom content.  This is only useful for inputs of type 'radio' and 'checkbox'. A 'checked' input
    * is considered selected to the browser and assistive technology.
    */
-  public setPDOMChecked( checked: boolean ): void {
+  public setPDOMChecked(checked: boolean): void {
 
-    if ( this._tagName ) {
-      assert && assert( this._tagName.toUpperCase() === INPUT_TAG, 'Cannot set checked on a non input tag.' );
+    if (this._tagName) {
+      assert && assert(this._tagName.toUpperCase() === INPUT_TAG, 'Cannot set checked on a non input tag.');
     }
-    if ( this._inputType ) {
-      assert && assert( INPUT_TYPES_THAT_SUPPORT_CHECKED.includes( this._inputType.toUpperCase() ), `inputType does not support checked: ${this._inputType}` );
+    if (this._inputType) {
+      assert && assert(INPUT_TYPES_THAT_SUPPORT_CHECKED.includes(this._inputType.toUpperCase()), `inputType does not support checked: ${this._inputType}`);
     }
 
-    if ( this._pdomChecked !== checked ) {
+    if (this._pdomChecked !== checked) {
       this._pdomChecked = checked;
 
-      this.setPDOMAttribute( 'checked', checked, {
+      this.setPDOMAttribute('checked', checked, {
         asProperty: true
-      } );
+      });
     }
   }
 
-  public set pdomChecked( checked: boolean ) { this.setPDOMChecked( checked ); }
+  public set pdomChecked(checked: boolean) { this.setPDOMChecked(checked); }
 
   public get pdomChecked(): boolean { return this.getPDOMChecked(); }
 
@@ -2443,7 +2444,7 @@ export default class ParallelDOM extends PhetioObject {
    * Get an array containing all pdom attributes that have been added to this Node's primary sibling.
    */
   public getPDOMAttributes(): PDOMAttribute[] {
-    return this._pdomAttributes.slice( 0 ); // defensive copy
+    return this._pdomAttributes.slice(0); // defensive copy
   }
 
   public get pdomAttributes(): PDOMAttribute[] { return this.getPDOMAttributes(); }
@@ -2456,12 +2457,12 @@ export default class ParallelDOM extends PhetioObject {
    * @param value - the value for the attribute, if boolean, then it will be set as a javascript property on the HTMLElement rather than an attribute
    * @param [providedOptions]
    */
-  public setPDOMAttribute( attribute: string, value: PDOMValueType | boolean | number, providedOptions?: SetPDOMAttributeOptions ): void {
+  public setPDOMAttribute(attribute: string, value: PDOMValueType | boolean | number, providedOptions?: SetPDOMAttributeOptions): void {
 
-    assert && providedOptions && assert( Object.getPrototypeOf( providedOptions ) === Object.prototype,
-      'Extra prototype on pdomAttribute options object is a code smell' );
+    assert && providedOptions && assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
+      'Extra prototype on pdomAttribute options object is a code smell');
 
-    const options = optionize<SetPDOMAttributeOptions>()( {
+    const options = optionize<SetPDOMAttributeOptions>()({
 
       // {string|null} - If non-null, will set the attribute with the specified namespace. This can be required
       // for setting certain attributes (e.g. MathML).
@@ -2471,54 +2472,54 @@ export default class ParallelDOM extends PhetioObject {
       asProperty: false,
 
       elementName: PDOMPeer.PRIMARY_SIBLING // see PDOMPeer.getElementName() for valid values, default to the primary sibling
-    }, providedOptions );
+    }, providedOptions);
 
-    assert && assert( !ASSOCIATION_ATTRIBUTES.includes( attribute ), 'setPDOMAttribute does not support association attributes' );
+    assert && assert(!ASSOCIATION_ATTRIBUTES.includes(attribute), 'setPDOMAttribute does not support association attributes');
 
     // if the pdom attribute already exists in the list, remove it - no need
     // to remove from the peers, existing attributes will simply be replaced in the DOM
-    for ( let i = 0; i < this._pdomAttributes.length; i++ ) {
-      const currentAttribute = this._pdomAttributes[ i ];
-      if ( currentAttribute.attribute === attribute &&
-           currentAttribute.options.namespace === options.namespace &&
-           currentAttribute.options.elementName === options.elementName ) {
+    for (let i = 0; i < this._pdomAttributes.length; i++) {
+      const currentAttribute = this._pdomAttributes[i];
+      if (currentAttribute.attribute === attribute &&
+        currentAttribute.options.namespace === options.namespace &&
+        currentAttribute.options.elementName === options.elementName) {
 
-        if ( currentAttribute.options.asProperty === options.asProperty ) {
-          this._pdomAttributes.splice( i, 1 );
+        if (currentAttribute.options.asProperty === options.asProperty) {
+          this._pdomAttributes.splice(i, 1);
         }
         else {
 
           // Swapping asProperty setting strategies should remove the attribute so it can be set as a property.
-          this.removePDOMAttribute( currentAttribute.attribute, currentAttribute.options );
+          this.removePDOMAttribute(currentAttribute.attribute, currentAttribute.options);
         }
       }
     }
 
-    let listener: ( ( rawValue: string | boolean | number ) => void ) | null = ( rawValue: string | boolean | number ) => {
-      assert && typeof rawValue === 'string' && validate( rawValue, Validation.STRING_WITHOUT_TEMPLATE_VARS_VALIDATOR );
+    let listener: ((rawValue: string | boolean | number) => void) | null = (rawValue: string | boolean | number) => {
+      assert && typeof rawValue === 'string' && validate(rawValue, Validation.STRING_WITHOUT_TEMPLATE_VARS_VALIDATOR);
 
-      for ( let j = 0; j < this._pdomInstances.length; j++ ) {
-        const peer = this._pdomInstances[ j ].peer!;
-        peer.setAttributeToElement( attribute, rawValue, options );
+      for (let j = 0; j < this._pdomInstances.length; j++) {
+        const peer = this._pdomInstances[j].peer!;
+        peer.setAttributeToElement(attribute, rawValue, options);
       }
     };
 
-    if ( isTReadOnlyProperty( value ) ) {
+    if (isTReadOnlyProperty(value)) {
       // should run it once initially
-      value.link( listener );
+      value.link(listener);
     }
     else {
       // run it once and toss it, so we don't need to store the reference or unlink it later
-      listener( value );
+      listener(value);
       listener = null;
     }
 
-    this._pdomAttributes.push( {
-      attribute: attribute,
-      value: value,
-      listener: listener,
-      options: options
-    } );
+    this._pdomAttributes.push({
+      attribute,
+      value,
+      listener,
+      options
+    });
 
   }
 
@@ -2531,39 +2532,39 @@ export default class ParallelDOM extends PhetioObject {
    * @param attribute - name of the attribute to remove
    * @param [providedOptions]
    */
-  public removePDOMAttribute( attribute: string, providedOptions?: RemovePDOMAttributeOptions ): void {
-    assert && providedOptions && assert( Object.getPrototypeOf( providedOptions ) === Object.prototype,
-      'Extra prototype on pdomAttribute options object is a code smell' );
+  public removePDOMAttribute(attribute: string, providedOptions?: RemovePDOMAttributeOptions): void {
+    assert && providedOptions && assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
+      'Extra prototype on pdomAttribute options object is a code smell');
 
-    const options = optionize<RemovePDOMAttributeOptions>()( {
+    const options = optionize<RemovePDOMAttributeOptions>()({
 
       // {string|null} - If non-null, will remove the attribute with the specified namespace. This can be required
       // for removing certain attributes (e.g. MathML).
       namespace: null,
 
       elementName: PDOMPeer.PRIMARY_SIBLING // see PDOMPeer.getElementName() for valid values, default to the primary sibling
-    }, providedOptions );
+    }, providedOptions);
 
     let attributeRemoved = false;
-    for ( let i = 0; i < this._pdomAttributes.length; i++ ) {
-      if ( this._pdomAttributes[ i ].attribute === attribute &&
-           this._pdomAttributes[ i ].options.namespace === options.namespace &&
-           this._pdomAttributes[ i ].options.elementName === options.elementName ) {
+    for (let i = 0; i < this._pdomAttributes.length; i++) {
+      if (this._pdomAttributes[i].attribute === attribute &&
+        this._pdomAttributes[i].options.namespace === options.namespace &&
+        this._pdomAttributes[i].options.elementName === options.elementName) {
 
-        const oldAttribute = this._pdomAttributes[ i ];
-        if ( oldAttribute.listener && isTReadOnlyProperty( oldAttribute.value ) && !oldAttribute.value.isDisposed ) {
-          oldAttribute.value.unlink( oldAttribute.listener );
+        const oldAttribute = this._pdomAttributes[i];
+        if (oldAttribute.listener && isTReadOnlyProperty(oldAttribute.value) && !oldAttribute.value.isDisposed) {
+          oldAttribute.value.unlink(oldAttribute.listener);
         }
 
-        this._pdomAttributes.splice( i, 1 );
+        this._pdomAttributes.splice(i, 1);
         attributeRemoved = true;
       }
     }
-    assert && assert( attributeRemoved, `Node does not have pdom attribute ${attribute}` );
+    assert && assert(attributeRemoved, `Node does not have pdom attribute ${attribute}`);
 
-    for ( let j = 0; j < this._pdomInstances.length; j++ ) {
-      const peer = this._pdomInstances[ j ].peer!;
-      peer.removeAttributeFromElement( attribute, options );
+    for (let j = 0; j < this._pdomInstances.length; j++) {
+      const peer = this._pdomInstances[j].peer!;
+      peer.removeAttributeFromElement(attribute, options);
     }
   }
 
@@ -2575,9 +2576,9 @@ export default class ParallelDOM extends PhetioObject {
     // all attributes currently on this Node's primary sibling
     const attributes = this.getPDOMAttributes();
 
-    for ( let i = 0; i < attributes.length; i++ ) {
-      const attribute = attributes[ i ].attribute;
-      this.removePDOMAttribute( attribute );
+    for (let i = 0; i < attributes.length; i++) {
+      const attribute = attributes[i].attribute;
+      this.removePDOMAttribute(attribute);
     }
   }
 
@@ -2587,24 +2588,24 @@ export default class ParallelDOM extends PhetioObject {
    * @param attribute - name of the attribute to remove
    * @param [providedOptions]
    */
-  public hasPDOMAttribute( attribute: string, providedOptions?: HasPDOMAttributeOptions ): boolean {
-    assert && providedOptions && assert( Object.getPrototypeOf( providedOptions ) === Object.prototype,
-      'Extra prototype on pdomAttribute options object is a code smell' );
+  public hasPDOMAttribute(attribute: string, providedOptions?: HasPDOMAttributeOptions): boolean {
+    assert && providedOptions && assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
+      'Extra prototype on pdomAttribute options object is a code smell');
 
-    const options = optionize<HasPDOMAttributeOptions>()( {
+    const options = optionize<HasPDOMAttributeOptions>()({
 
       // {string|null} - If non-null, will remove the attribute with the specified namespace. This can be required
       // for removing certain attributes (e.g. MathML).
       namespace: null,
 
       elementName: PDOMPeer.PRIMARY_SIBLING // see PDOMPeer.getElementName() for valid values, default to the primary sibling
-    }, providedOptions );
+    }, providedOptions);
 
     let attributeFound = false;
-    for ( let i = 0; i < this._pdomAttributes.length; i++ ) {
-      if ( this._pdomAttributes[ i ].attribute === attribute &&
-           this._pdomAttributes[ i ].options.namespace === options.namespace &&
-           this._pdomAttributes[ i ].options.elementName === options.elementName ) {
+    for (let i = 0; i < this._pdomAttributes.length; i++) {
+      if (this._pdomAttributes[i].attribute === attribute &&
+        this._pdomAttributes[i].options.namespace === options.namespace &&
+        this._pdomAttributes[i].options.elementName === options.elementName) {
         attributeFound = true;
       }
     }
@@ -2616,50 +2617,50 @@ export default class ParallelDOM extends PhetioObject {
    * but some styling occasionally has an impact on semantics so it is necessary to set styles.
    * Add a class with this function and define the style in stylesheets (likely SceneryStyle).
    */
-  public setPDOMClass( className: string, providedOptions?: SetPDOMClassOptions ): void {
+  public setPDOMClass(className: string, providedOptions?: SetPDOMClassOptions): void {
 
-    const options = optionize<SetPDOMClassOptions>()( {
+    const options = optionize<SetPDOMClassOptions>()({
       elementName: PDOMPeer.PRIMARY_SIBLING
-    }, providedOptions );
+    }, providedOptions);
 
     // if we already have the provided className set to the sibling, do nothing
-    for ( let i = 0; i < this._pdomClasses.length; i++ ) {
-      const currentClass = this._pdomClasses[ i ];
-      if ( currentClass.className === className && currentClass.options.elementName === options.elementName ) {
+    for (let i = 0; i < this._pdomClasses.length; i++) {
+      const currentClass = this._pdomClasses[i];
+      if (currentClass.className === className && currentClass.options.elementName === options.elementName) {
         return;
       }
     }
 
-    this._pdomClasses.push( { className: className, options: options } );
+    this._pdomClasses.push({ className, options });
 
-    for ( let j = 0; j < this._pdomInstances.length; j++ ) {
-      const peer = this._pdomInstances[ j ].peer!;
-      peer.setClassToElement( className, options );
+    for (let j = 0; j < this._pdomInstances.length; j++) {
+      const peer = this._pdomInstances[j].peer!;
+      peer.setClassToElement(className, options);
     }
   }
 
   /**
    * Remove a class from the classList of one of the elements for this Node.
    */
-  public removePDOMClass( className: string, providedOptions?: RemovePDOMClassOptions ): void {
+  public removePDOMClass(className: string, providedOptions?: RemovePDOMClassOptions): void {
 
-    const options = optionize<RemovePDOMClassOptions>()( {
+    const options = optionize<RemovePDOMClassOptions>()({
       elementName: PDOMPeer.PRIMARY_SIBLING // see PDOMPeer.getElementName() for valid values, default to the primary sibling
-    }, providedOptions );
+    }, providedOptions);
 
     let classRemoved = false;
-    for ( let i = 0; i < this._pdomClasses.length; i++ ) {
-      if ( this._pdomClasses[ i ].className === className &&
-           this._pdomClasses[ i ].options.elementName === options.elementName ) {
-        this._pdomClasses.splice( i, 1 );
+    for (let i = 0; i < this._pdomClasses.length; i++) {
+      if (this._pdomClasses[i].className === className &&
+        this._pdomClasses[i].options.elementName === options.elementName) {
+        this._pdomClasses.splice(i, 1);
         classRemoved = true;
       }
     }
-    assert && assert( classRemoved, `Node does not have pdom attribute ${className}` );
+    assert && assert(classRemoved, `Node does not have pdom attribute ${className}`);
 
-    for ( let j = 0; j < this._pdomClasses.length; j++ ) {
-      const peer = this.pdomInstances[ j ].peer!;
-      peer.removeClassFromElement( className, options );
+    for (let j = 0; j < this._pdomClasses.length; j++) {
+      const peer = this.pdomInstances[j].peer!;
+      peer.removeClassFromElement(className, options);
     }
   }
 
@@ -2667,7 +2668,7 @@ export default class ParallelDOM extends PhetioObject {
    * Get the list of classes assigned to PDOM elements for this Node.
    */
   public getPDOMClasses(): PDOMClass[] {
-    return this._pdomClasses.slice( 0 ); // defensive copy
+    return this._pdomClasses.slice(0); // defensive copy
   }
 
   public get pdomClasses(): PDOMClass[] { return this.getPDOMClasses(); }
@@ -2680,24 +2681,24 @@ export default class ParallelDOM extends PhetioObject {
    *
    * @param focusable - null to use the default browser focus for the primary element
    */
-  public setFocusable( focusable: boolean | null ): void {
-    assert && assert( focusable === null || typeof focusable === 'boolean' );
+  public setFocusable(focusable: boolean | null): void {
+    assert && assert(focusable === null || typeof focusable === 'boolean');
 
-    if ( this._focusableOverride !== focusable ) {
+    if (this._focusableOverride !== focusable) {
       this._focusableOverride = focusable;
 
-      for ( let i = 0; i < this._pdomInstances.length; i++ ) {
+      for (let i = 0; i < this._pdomInstances.length; i++) {
 
         // after the override is set, update the focusability of the peer based on this node's value for focusable
         // which may be true or false (but not null)
         // assert && assert( typeof this.focusable === 'boolean' );
-        assert && assert( this._pdomInstances[ i ].peer, 'Peer required to set focusable.' );
-        this._pdomInstances[ i ].peer!.setFocusable( this.focusable );
+        assert && assert(this._pdomInstances[i].peer, 'Peer required to set focusable.');
+        this._pdomInstances[i].peer!.setFocusable(this.focusable);
       }
     }
   }
 
-  public set focusable( isFocusable: boolean | null ) { this.setFocusable( isFocusable ); }
+  public set focusable(isFocusable: boolean | null) { this.setFocusable(isFocusable); }
 
   public get focusable(): boolean { return this.isFocusable(); }
 
@@ -2706,16 +2707,16 @@ export default class ParallelDOM extends PhetioObject {
    * focusable elements.
    */
   public isFocusable(): boolean {
-    if ( this._focusableOverride !== null ) {
+    if (this._focusableOverride !== null) {
       return this._focusableOverride;
     }
 
     // if there isn't a tagName yet, then there isn't an element, so we aren't focusable. To support option order.
-    else if ( this._tagName === null ) {
+    else if (this._tagName === null) {
       return false;
     }
     else {
-      return PDOMUtils.tagIsDefaultFocusable( this._tagName );
+      return PDOMUtils.tagIsDefaultFocusable(this._tagName);
     }
   }
 
@@ -2730,15 +2731,15 @@ export default class ParallelDOM extends PhetioObject {
    * graph but still need the other Node's PDOM content positioned over the visual node. For example, this could
    * be required to catch all fake pointer events that may come from certain types of screen readers.
    */
-  public setPDOMTransformSourceNode( node: Node | null ): void {
+  public setPDOMTransformSourceNode(node: Node | null): void {
     this._pdomTransformSourceNode = node;
 
-    for ( let i = 0; i < this._pdomInstances.length; i++ ) {
-      this._pdomInstances[ i ].peer!.setPDOMTransformSourceNode( this._pdomTransformSourceNode );
+    for (let i = 0; i < this._pdomInstances.length; i++) {
+      this._pdomInstances[i].peer!.setPDOMTransformSourceNode(this._pdomTransformSourceNode);
     }
   }
 
-  public set pdomTransformSourceNode( node: Node | null ) { this.setPDOMTransformSourceNode( node ); }
+  public set pdomTransformSourceNode(node: Node | null) { this.setPDOMTransformSourceNode(node); }
 
   public get pdomTransformSourceNode(): Node | null { return this.getPDOMTransformSourceNode(); }
 
@@ -2758,11 +2759,11 @@ export default class ParallelDOM extends PhetioObject {
    *
    * At this time, the Property cannot be changed after it is set.
    */
-  public setFocusPanTargetBoundsProperty( boundsProperty: null | TReadOnlyProperty<Bounds2> ): void {
+  public setFocusPanTargetBoundsProperty(boundsProperty: null | TReadOnlyProperty<Bounds2>): void {
 
     // We may call this more than once with mutate
-    if ( boundsProperty !== this._focusPanTargetBoundsProperty ) {
-      assert && assert( !this._focusPanTargetBoundsProperty, 'Cannot change focusPanTargetBoundsProperty after it is set.' );
+    if (boundsProperty !== this._focusPanTargetBoundsProperty) {
+      assert && assert(!this._focusPanTargetBoundsProperty, 'Cannot change focusPanTargetBoundsProperty after it is set.');
       this._focusPanTargetBoundsProperty = boundsProperty;
     }
   }
@@ -2778,8 +2779,8 @@ export default class ParallelDOM extends PhetioObject {
   /**
    * See setFocusPanTargetBoundsProperty for more information.
    */
-  public set focusPanTargetBoundsProperty( boundsProperty: null | TReadOnlyProperty<Bounds2> ) {
-    this.setFocusPanTargetBoundsProperty( boundsProperty );
+  public set focusPanTargetBoundsProperty(boundsProperty: null | TReadOnlyProperty<Bounds2>) {
+    this.setFocusPanTargetBoundsProperty(boundsProperty);
   }
 
   /**
@@ -2796,7 +2797,7 @@ export default class ParallelDOM extends PhetioObject {
    *
    * Set to null for default behavior (panning in all directions).
    */
-  public setLimitPanDirection( limitPanDirection: LimitPanDirection | null ): void {
+  public setLimitPanDirection(limitPanDirection: LimitPanDirection | null): void {
     this._limitPanDirection = limitPanDirection;
   }
 
@@ -2811,8 +2812,8 @@ export default class ParallelDOM extends PhetioObject {
    * See setLimitPanDirection for more information.
    * @param limitPanDirection
    */
-  public set limitPanDirection( limitPanDirection: LimitPanDirection ) {
-    this.setLimitPanDirection( limitPanDirection );
+  public set limitPanDirection(limitPanDirection: LimitPanDirection) {
+    this.setLimitPanDirection(limitPanDirection);
   }
 
   /**
@@ -2832,15 +2833,15 @@ export default class ParallelDOM extends PhetioObject {
    * location of the Node in global coordinates. Do not position elements that use click listeners since activation
    * will fire twice (once for the pointer event listeners and once for the click event listeners).
    */
-  public setPositionInPDOM( positionInPDOM: boolean ): void {
+  public setPositionInPDOM(positionInPDOM: boolean): void {
     this._positionInPDOM = positionInPDOM;
 
-    for ( let i = 0; i < this._pdomInstances.length; i++ ) {
-      this._pdomInstances[ i ].peer!.setPositionInPDOM( positionInPDOM );
+    for (let i = 0; i < this._pdomInstances.length; i++) {
+      this._pdomInstances[i].peer!.setPositionInPDOM(positionInPDOM);
     }
   }
 
-  public set positionInPDOM( positionInPDOM: boolean ) { this.setPositionInPDOM( positionInPDOM ); }
+  public set positionInPDOM(positionInPDOM: boolean) { this.setPositionInPDOM(positionInPDOM); }
 
   public get positionInPDOM(): boolean { return this.getPositionInPDOM(); }
 
@@ -2869,12 +2870,12 @@ export default class ParallelDOM extends PhetioObject {
    * Return true if this Node is a PhET-iO archetype or it is a Node descendant of a PhET-iO archetype.
    * See https://github.com/phetsims/joist/issues/817
    */
-  public isInsidePhetioArchetype( node: Node = ( this as unknown as Node ) ): boolean {
-    if ( node.isPhetioInstrumented() ) {
+  public isInsidePhetioArchetype(node: Node = (this as unknown as Node)): boolean {
+    if (node.isPhetioInstrumented()) {
       return node.phetioIsArchetype;
     }
-    for ( let i = 0; i < node.parents.length; i++ ) {
-      if ( this.isInsidePhetioArchetype( node.parents[ i ] ) ) {
+    for (let i = 0; i < node.parents.length; i++) {
+      if (this.isInsidePhetioArchetype(node.parents[i])) {
         return true;
       }
     }
@@ -2886,25 +2887,25 @@ export default class ParallelDOM extends PhetioObject {
    * Node.getConnectedDisplays. Note that if your Node is not connected to a Display, this function will have
    * no effect.
    */
-  public alertDescriptionUtterance( utterance: TAlertable ): void {
+  public alertDescriptionUtterance(utterance: TAlertable): void {
 
     // No description should be alerted if setting PhET-iO state, see https://github.com/phetsims/scenery/issues/1397
-    if ( isSettingPhetioStateProperty.value ) {
+    if (isSettingPhetioStateProperty.value) {
       return;
     }
 
     // No description should be alerted if an archetype of a PhET-iO dynamic element, see https://github.com/phetsims/joist/issues/817
-    if ( Tandem.PHET_IO_ENABLED && this.isInsidePhetioArchetype() ) {
+    if (Tandem.PHET_IO_ENABLED && this.isInsidePhetioArchetype()) {
       return;
     }
 
-    const connectedDisplays = ( this as unknown as Node ).getConnectedDisplays();
-    for ( let i = 0; i < connectedDisplays.length; i++ ) {
-      const display = connectedDisplays[ i ];
-      if ( display.isAccessible() ) {
+    const connectedDisplays = (this as unknown as Node).getConnectedDisplays();
+    for (let i = 0; i < connectedDisplays.length; i++) {
+      const display = connectedDisplays[i];
+      if (display.isAccessible()) {
 
         // Don't use `forEachUtterance` to prevent creating a closure for each usage of this function
-        display.descriptionUtteranceQueue.addToBack( utterance );
+        display.descriptionUtteranceQueue.addToBack(utterance);
       }
     }
   }
@@ -2913,18 +2914,18 @@ export default class ParallelDOM extends PhetioObject {
    * Apply a callback on each utteranceQueue that this Node has a connection to (via Display). Note that only
    * accessible Displays have utteranceQueues that this function will interface with.
    */
-  public forEachUtteranceQueue( callback: ( queue: UtteranceQueue ) => void ): void {
-    const connectedDisplays = ( this as unknown as Node ).getConnectedDisplays();
+  public forEachUtteranceQueue(callback: (queue: UtteranceQueue) => void): void {
+    const connectedDisplays = (this as unknown as Node).getConnectedDisplays();
 
     // If you run into this assertion, talk to @jessegreenberg and @zepumph, because it is quite possible we would
     // remove this assertion for your case.
-    assert && assert( connectedDisplays.length > 0,
-      'must be connected to a display to use UtteranceQueue features' );
+    assert && assert(connectedDisplays.length > 0,
+      'must be connected to a display to use UtteranceQueue features');
 
-    for ( let i = 0; i < connectedDisplays.length; i++ ) {
-      const display = connectedDisplays[ i ];
-      if ( display.isAccessible() ) {
-        callback( display.descriptionUtteranceQueue );
+    for (let i = 0; i < connectedDisplays.length; i++) {
+      const display = connectedDisplays[i];
+      if (display.isAccessible()) {
+        callback(display.descriptionUtteranceQueue);
       }
     }
   }
@@ -2943,11 +2944,11 @@ export default class ParallelDOM extends PhetioObject {
 
     const currentOptions: ParallelDOMOptions = {};
 
-    for ( let i = 0; i < ACCESSIBILITY_OPTION_KEYS.length; i++ ) {
-      const optionName = ACCESSIBILITY_OPTION_KEYS[ i ];
+    for (let i = 0; i < ACCESSIBILITY_OPTION_KEYS.length; i++) {
+      const optionName = ACCESSIBILITY_OPTION_KEYS[i];
 
       // @ts-expect-error - Not sure of a great way to do this
-      currentOptions[ optionName ] = this[ optionName ];
+      currentOptions[optionName] = this[optionName];
     }
 
     return currentOptions;
@@ -2959,7 +2960,7 @@ export default class ParallelDOM extends PhetioObject {
    * structure. (scenery-internal)
    */
   public getNestedPDOMOrder(): { trail: Trail; children: Node[] }[] {
-    const currentTrail = new Trail( this as unknown as Node );
+    const currentTrail = new Trail(this as unknown as Node);
     let pruneStack: Node[] = []; // A list of nodes to prune
 
     // {Array.<Item>} - The main result we will be returning. It is the top-level array where child items will be
@@ -2969,79 +2970,80 @@ export default class ParallelDOM extends PhetioObject {
     // {Array.<Array.<Item>>} A stack of children arrays, where we should be inserting items into the top array.
     // We will start out with the result, and as nested levels are added, the children arrays of those items will be
     // pushed and poppped, so that the top array on this stack is where we should insert our next child item.
-    const nestedChildStack = [ result ];
+    const nestedChildStack = [result];
 
-    function addTrailsForNode( node: Node, overridePruning: boolean ): void {
+    function addTrailsForNode(node: Node, overridePruning: boolean): void {
       // If subtrees were specified with pdomOrder, they should be skipped from the ordering of ancestor subtrees,
       // otherwise we could end up having multiple references to the same trail (which should be disallowed).
       let pruneCount = 0;
       // count the number of times our node appears in the pruneStack
-      _.each( pruneStack, pruneNode => {
-        if ( node === pruneNode ) {
+      _.each(pruneStack, pruneNode => {
+        if (node === pruneNode) {
           pruneCount++;
         }
-      } );
+      });
 
       // If overridePruning is set, we ignore one reference to our node in the prune stack. If there are two copies,
       // however, it means a node was specified in a pdomOrder that already needs to be pruned (so we skip it instead
       // of creating duplicate references in the traversal order).
-      if ( pruneCount > 1 || ( pruneCount === 1 && !overridePruning ) ) {
+      if (pruneCount > 1 || (pruneCount === 1 && !overridePruning)) {
         return;
       }
 
       // Pushing item and its children array, if has pdom content
-      if ( node.hasPDOMContent ) {
+      if (node.hasPDOMContent) {
         const item = {
           trail: currentTrail.copy(),
           children: []
         };
-        nestedChildStack[ nestedChildStack.length - 1 ].push( item );
-        nestedChildStack.push( item.children );
+        nestedChildStack[nestedChildStack.length - 1].push(item);
+        nestedChildStack.push(item.children);
       }
 
       const arrayPDOMOrder = node._pdomOrder === null ? [] : node._pdomOrder;
 
       // push specific focused nodes to the stack
-      pruneStack = pruneStack.concat( arrayPDOMOrder as Node[] );
+      pruneStack = pruneStack.concat(arrayPDOMOrder as Node[]);
 
       // Visiting trails to ordered nodes.
+      
       // @ts-expect-error
-      _.each( arrayPDOMOrder, ( descendant: Node ) => {
+      _.each(arrayPDOMOrder, (descendant: Node) => {
         // Find all descendant references to the node.
         // NOTE: We are not reordering trails (due to descendant constraints) if there is more than one instance for
         // this descendant node.
-        _.each( node.getLeafTrailsTo( descendant ), descendantTrail => {
+        _.each(node.getLeafTrailsTo(descendant), descendantTrail => {
           descendantTrail.removeAncestor(); // strip off 'node', so that we handle only children
 
           // same as the normal order, but adding a full trail (since we may be referencing a descendant node)
-          currentTrail.addDescendantTrail( descendantTrail );
-          addTrailsForNode( descendant, true ); // 'true' overrides one reference in the prune stack (added above)
-          currentTrail.removeDescendantTrail( descendantTrail );
-        } );
-      } );
+          currentTrail.addDescendantTrail(descendantTrail);
+          addTrailsForNode(descendant, true); // 'true' overrides one reference in the prune stack (added above)
+          currentTrail.removeDescendantTrail(descendantTrail);
+        });
+      });
 
       // Visit everything. If there is a pdomOrder, those trails were already visited, and will be excluded.
       const numChildren = node._children.length;
-      for ( let i = 0; i < numChildren; i++ ) {
-        const child = node._children[ i ];
+      for (let i = 0; i < numChildren; i++) {
+        const child = node._children[i];
 
-        currentTrail.addDescendant( child, i );
-        addTrailsForNode( child, false );
+        currentTrail.addDescendant(child, i);
+        addTrailsForNode(child, false);
         currentTrail.removeDescendant();
       }
 
       // pop focused nodes from the stack (that were added above)
-      _.each( arrayPDOMOrder, () => {
+      _.each(arrayPDOMOrder, () => {
         pruneStack.pop();
-      } );
+      });
 
       // Popping children array if has pdom content
-      if ( node.hasPDOMContent ) {
+      if (node.hasPDOMContent) {
         nestedChildStack.pop();
       }
     }
 
-    addTrailsForNode( ( this as unknown as Node ), false );
+    addTrailsForNode((this as unknown as Node), false);
 
     return result;
   }
@@ -3052,12 +3054,12 @@ export default class ParallelDOM extends PhetioObject {
    */
   private onPDOMContentChange(): void {
 
-    PDOMTree.pdomContentChange( this as unknown as Node );
+    PDOMTree.pdomContentChange(this as unknown as Node);
 
     // recompute the heading level for this node if it is using the pdomHeading API.
     this.pdomHeading && this.computeHeadingLevel();
 
-    ( this as unknown as Node ).rendererSummaryRefreshEmitter.emit();
+    (this as unknown as Node).rendererSummaryRefreshEmitter.emit();
   }
 
   /**
@@ -3072,23 +3074,23 @@ export default class ParallelDOM extends PhetioObject {
    * Called when the node is added as a child to this node AND the node's subtree contains pdom content.
    * We need to notify all Displays that can see this change, so that they can update the PDOMInstance tree.
    */
-  protected onPDOMAddChild( node: Node ): void {
-    sceneryLog && sceneryLog.ParallelDOM && sceneryLog.ParallelDOM( `onPDOMAddChild n#${node.id} (parent:n#${( this as unknown as Node ).id})` );
+  protected onPDOMAddChild(node: Node): void {
+    sceneryLog && sceneryLog.ParallelDOM && sceneryLog.ParallelDOM(`onPDOMAddChild n#${node.id} (parent:n#${(this as unknown as Node).id})`);
     sceneryLog && sceneryLog.ParallelDOM && sceneryLog.push();
 
     // Find descendants with pdomOrders and check them against all of their ancestors/self
-    assert && ( function recur( descendant ) {
+    assert && (function recur(descendant) {
       // Prune the search (because milliseconds don't grow on trees, even if we do have assertions enabled)
-      if ( descendant._rendererSummary.hasNoPDOM() ) { return; }
+      if (descendant._rendererSummary.hasNoPDOM()) { return; }
 
-      descendant.pdomOrder && assert( descendant.getTrails( node => _.includes( descendant.pdomOrder, node ) ).length === 0, 'pdomOrder should not include any ancestors or the node itself' );
-    } )( node );
+      descendant.pdomOrder && assert(descendant.getTrails(node => _.includes(descendant.pdomOrder, node)).length === 0, 'pdomOrder should not include any ancestors or the node itself');
+    })(node);
 
-    assert && PDOMTree.auditNodeForPDOMCycles( this as unknown as Node );
+    assert && PDOMTree.auditNodeForPDOMCycles(this as unknown as Node);
 
-    this._pdomDisplaysInfo.onAddChild( node );
+    this._pdomDisplaysInfo.onAddChild(node);
 
-    PDOMTree.addChild( this as unknown as Node, node );
+    PDOMTree.addChild(this as unknown as Node, node);
 
     sceneryLog && sceneryLog.ParallelDOM && sceneryLog.pop();
   }
@@ -3097,13 +3099,13 @@ export default class ParallelDOM extends PhetioObject {
    * Called when the node is removed as a child from this node AND the node's subtree contains pdom content.
    * We need to notify all Displays that can see this change, so that they can update the PDOMInstance tree.
    */
-  protected onPDOMRemoveChild( node: Node ): void {
-    sceneryLog && sceneryLog.ParallelDOM && sceneryLog.ParallelDOM( `onPDOMRemoveChild n#${node.id} (parent:n#${( this as unknown as Node ).id})` );
+  protected onPDOMRemoveChild(node: Node): void {
+    sceneryLog && sceneryLog.ParallelDOM && sceneryLog.ParallelDOM(`onPDOMRemoveChild n#${node.id} (parent:n#${(this as unknown as Node).id})`);
     sceneryLog && sceneryLog.ParallelDOM && sceneryLog.push();
 
-    this._pdomDisplaysInfo.onRemoveChild( node );
+    this._pdomDisplaysInfo.onRemoveChild(node);
 
-    PDOMTree.removeChild( this as unknown as Node, node );
+    PDOMTree.removeChild(this as unknown as Node, node);
 
     // make sure that the associations for aria-labelledby and aria-describedby are updated for nodes associated
     // to this Node (they are pointing to this Node's IDs). https://github.com/phetsims/scenery/issues/816
@@ -3118,10 +3120,10 @@ export default class ParallelDOM extends PhetioObject {
    * Called when this node's children are reordered (with nothing added/removed).
    */
   protected onPDOMReorderedChildren(): void {
-    sceneryLog && sceneryLog.ParallelDOM && sceneryLog.ParallelDOM( `onPDOMReorderedChildren (parent:n#${( this as unknown as Node ).id})` );
+    sceneryLog && sceneryLog.ParallelDOM && sceneryLog.ParallelDOM(`onPDOMReorderedChildren (parent:n#${(this as unknown as Node).id})`);
     sceneryLog && sceneryLog.ParallelDOM && sceneryLog.push();
 
-    PDOMTree.childrenOrderChange( this as unknown as Node );
+    PDOMTree.childrenOrderChange(this as unknown as Node);
 
     sceneryLog && sceneryLog.ParallelDOM && sceneryLog.pop();
   }
@@ -3129,23 +3131,23 @@ export default class ParallelDOM extends PhetioObject {
   /**
    * Handles linking and checking child PhET-iO Properties such as Node.visibleProperty and Node.enabledProperty.
    */
-  public updateLinkedElementForProperty<T>( tandemName: string, oldProperty?: TProperty<T> | null, newProperty?: TProperty<T> | null ): void {
-    assert && assert( oldProperty !== newProperty, 'should not be called on same values' );
+  public updateLinkedElementForProperty<T>(tandemName: string, oldProperty?: TProperty<T> | null, newProperty?: TProperty<T> | null): void {
+    assert && assert(oldProperty !== newProperty, 'should not be called on same values');
 
     // Only update linked elements if this Node is instrumented for PhET-iO
-    if ( this.isPhetioInstrumented() ) {
+    if (this.isPhetioInstrumented()) {
 
-      oldProperty && oldProperty instanceof ReadOnlyProperty && oldProperty.isPhetioInstrumented() && oldProperty instanceof PhetioObject && this.removeLinkedElements( oldProperty );
+      oldProperty && oldProperty instanceof ReadOnlyProperty && oldProperty.isPhetioInstrumented() && oldProperty instanceof PhetioObject && this.removeLinkedElements(oldProperty);
 
-      const tandem = this.tandem.createTandem( tandemName );
+      const tandem = this.tandem.createTandem(tandemName);
 
-      if ( newProperty && newProperty instanceof ReadOnlyProperty && newProperty.isPhetioInstrumented() && newProperty instanceof PhetioObject && tandem !== newProperty.tandem ) {
-        this.addLinkedElement( newProperty, { tandemName: tandemName } );
+      if (newProperty && newProperty instanceof ReadOnlyProperty && newProperty.isPhetioInstrumented() && newProperty instanceof PhetioObject && tandem !== newProperty.tandem) {
+        this.addLinkedElement(newProperty, { tandemName });
       }
     }
   }
 
-  /*---------------------------------------------------------------------------*/
+  /* --------------------------------------------------------------------------- */
   //
   // PDOM Instance handling
 
@@ -3161,25 +3163,25 @@ export default class ParallelDOM extends PhetioObject {
   /**
    * Adds a PDOMInstance reference to our array. (scenery-internal)
    */
-  public addPDOMInstance( pdomInstance: PDOMInstance ): void {
-    this._pdomInstances.push( pdomInstance );
+  public addPDOMInstance(pdomInstance: PDOMInstance): void {
+    this._pdomInstances.push(pdomInstance);
   }
 
   /**
    * Removes a PDOMInstance reference from our array. (scenery-internal)
    */
-  public removePDOMInstance( pdomInstance: PDOMInstance ): void {
-    const index = _.indexOf( this._pdomInstances, pdomInstance );
-    assert && assert( index !== -1, 'Cannot remove a PDOMInstance from a Node if it was not there' );
-    this._pdomInstances.splice( index, 1 );
+  public removePDOMInstance(pdomInstance: PDOMInstance): void {
+    const index = _.indexOf(this._pdomInstances, pdomInstance);
+    assert && assert(index !== -1, 'Cannot remove a PDOMInstance from a Node if it was not there');
+    this._pdomInstances.splice(index, 1);
   }
 
-  public static BASIC_ACCESSIBLE_NAME_BEHAVIOR( node: Node, options: ParallelDOMOptions, accessibleName: PDOMValueType ): ParallelDOMOptions {
-    if ( node.tagName === 'input' ) {
+  public static BASIC_ACCESSIBLE_NAME_BEHAVIOR(node: Node, options: ParallelDOMOptions, accessibleName: PDOMValueType): ParallelDOMOptions {
+    if (node.tagName === 'input') {
       options.labelTagName = 'label';
       options.labelContent = accessibleName;
     }
-    else if ( PDOMUtils.tagNameSupportsContent( node.tagName! ) ) {
+    else if (PDOMUtils.tagNameSupportsContent(node.tagName!)) {
       options.innerContent = accessibleName;
     }
     else {
@@ -3188,14 +3190,14 @@ export default class ParallelDOM extends PhetioObject {
     return options;
   }
 
-  public static HELP_TEXT_BEFORE_CONTENT( node: Node, options: ParallelDOMOptions, helpText: PDOMValueType ): ParallelDOMOptions {
+  public static HELP_TEXT_BEFORE_CONTENT(node: Node, options: ParallelDOMOptions, helpText: PDOMValueType): ParallelDOMOptions {
     options.descriptionTagName = PDOMUtils.DEFAULT_DESCRIPTION_TAG_NAME;
     options.descriptionContent = helpText;
     options.appendDescription = false;
     return options;
   }
 
-  public static HELP_TEXT_AFTER_CONTENT( node: Node, options: ParallelDOMOptions, helpText: PDOMValueType ): ParallelDOMOptions {
+  public static HELP_TEXT_AFTER_CONTENT(node: Node, options: ParallelDOMOptions, helpText: PDOMValueType): ParallelDOMOptions {
     options.descriptionTagName = PDOMUtils.DEFAULT_DESCRIPTION_TAG_NAME;
     options.descriptionContent = helpText;
     options.appendDescription = true;
@@ -3203,5 +3205,5 @@ export default class ParallelDOM extends PhetioObject {
   }
 }
 
-scenery.register( 'ParallelDOM', ParallelDOM );
+scenery.register('ParallelDOM', ParallelDOM);
 export { ACCESSIBILITY_OPTION_KEYS };

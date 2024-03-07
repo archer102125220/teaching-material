@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import { scenery, SVGBlock, SVGGradient, SVGPattern } from '../imports.js';
+import Matrix3 from '../../dot/Matrix3';
+import { scenery, SVGBlock, SVGGradient, SVGPattern } from '../imports';
 
 let globalId = 1;
 
@@ -38,8 +38,8 @@ export default abstract class Paint {
    * NOTE: The scale should be symmetric if it will be used as a stroke. It is difficult to set a different x and y scale
    * for canvas at the same time.
    */
-  public setTransformMatrix( transformMatrix: Matrix3 ): this {
-    if ( this.transformMatrix !== transformMatrix ) {
+  public setTransformMatrix(transformMatrix: Matrix3): this {
+    if (this.transformMatrix !== transformMatrix) {
       this.transformMatrix = transformMatrix;
     }
     return this;
@@ -48,7 +48,7 @@ export default abstract class Paint {
   /**
    * Creates an SVG paint object for creating/updating the SVG equivalent definition.
    */
-  public abstract createSVGPaint( svgBlock: SVGBlock ): SVGGradient | SVGPattern;
+  public abstract createSVGPaint(svgBlock: SVGBlock): SVGGradient | SVGPattern;
 
   /**
    * Returns a string form of this object
@@ -63,4 +63,4 @@ export default abstract class Paint {
 // TODO: can we remove this in favor of type checks? https://github.com/phetsims/scenery/issues/1581
 Paint.prototype.isPaint = true;
 
-scenery.register( 'Paint', Paint );
+scenery.register('Paint', Paint);
