@@ -27,6 +27,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import dotRandom from '../../../dot/dotRandom';
 import cleanArray from '../../../phet-core/cleanArray';
 import Enumeration from '../../../phet-core/Enumeration';

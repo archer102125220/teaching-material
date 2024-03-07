@@ -6,6 +6,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import TinyEmitter from '../../../axon/TinyEmitter';
 import type Constructor from '../../../phet-core/types/Constructor';
 import type IntentionalAny from '../../../phet-core/types/IntentionalAny';

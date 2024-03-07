@@ -6,14 +6,20 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import inheritance from '../../../../phet-core/js/inheritance.js';
-import memoize from '../../../../phet-core/js/memoize.js';
-import { PaintableStatelessDrawable, scenery, SelfDrawable } from '../../imports.js';
+import _ from 'lodash';
 
-const LineStatelessDrawable = memoize( type => {
-  assert && assert( _.includes( inheritance( type ), SelfDrawable ) );
+import inheritance from '../../../phet-core/inheritance';
+import memoize from '../../../phet-core/memoize';
+import {
+  PaintableStatelessDrawable,
+  scenery,
+  SelfDrawable
+} from '../../imports';
 
-  return class extends PaintableStatelessDrawable( type ) {
+const LineStatelessDrawable = memoize((type) => {
+  assert && assert(_.includes(inheritance(type), SelfDrawable));
+
+  return class extends PaintableStatelessDrawable(type) {
     /**
      * @public
      * @override
@@ -21,8 +27,8 @@ const LineStatelessDrawable = memoize( type => {
      * @param {number} renderer
      * @param {Instance} instance
      */
-    initialize( renderer, instance, ...args ) {
-      super.initialize( renderer, instance, ...args );
+    initialize(renderer, instance, ...args) {
+      super.initialize(renderer, instance, ...args);
 
       // @protected {boolean} - Flag marked as true if ANY of the drawable dirty flags are set (basically everything except for transforms, as we
       //                        need to accelerate the transform case.
@@ -91,7 +97,7 @@ const LineStatelessDrawable = memoize( type => {
       this.markPaintDirty();
     }
   };
-} );
+});
 
-scenery.register( 'LineStatelessDrawable', LineStatelessDrawable );
+scenery.register('LineStatelessDrawable', LineStatelessDrawable);
 export default LineStatelessDrawable;

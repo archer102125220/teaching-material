@@ -7,8 +7,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { CanvasSelfDrawable, scenery } from '../../imports.js';
+import Poolable from '../../../phet-core/Poolable';
+import { CanvasSelfDrawable, scenery } from '../../imports';
 
 const emptyArray = []; // constant, used for line-dash
 
@@ -26,11 +26,17 @@ class CanvasNodeDrawable extends CanvasSelfDrawable {
    * @param {Node} node - Our node that is being drawn
    * @param {Matrix3} matrix - The transformation matrix applied for this node's coordinate system.
    */
-  paintCanvas( wrapper, node, matrix ) {
-    assert && assert( !node.selfBounds.isEmpty(), `${'CanvasNode should not be used with an empty canvasBounds. ' +
-                                                     'Please set canvasBounds (or use setCanvasBounds()) on '}${node.constructor.name}` );
+  paintCanvas(wrapper, node, matrix) {
+    assert &&
+      assert(
+        !node.selfBounds.isEmpty(),
+        `${
+          'CanvasNode should not be used with an empty canvasBounds. ' +
+          'Please set canvasBounds (or use setCanvasBounds()) on '
+        }${node.constructor.name}`
+      );
 
-    if ( !node.selfBounds.isEmpty() ) {
+    if (!node.selfBounds.isEmpty()) {
       const context = wrapper.context;
       context.save();
 
@@ -45,15 +51,15 @@ class CanvasNodeDrawable extends CanvasSelfDrawable {
       context.lineDashOffset = 0;
       context.miterLimit = 10;
 
-      node.paintCanvas( context );
+      node.paintCanvas(context);
 
       context.restore();
     }
   }
 }
 
-scenery.register( 'CanvasNodeDrawable', CanvasNodeDrawable );
+scenery.register('CanvasNodeDrawable', CanvasNodeDrawable);
 
-Poolable.mixInto( CanvasNodeDrawable );
+Poolable.mixInto(CanvasNodeDrawable);
 
 export default CanvasNodeDrawable;

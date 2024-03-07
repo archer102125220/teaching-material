@@ -31,6 +31,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import EnumerationDeprecated from '../phet-core/EnumerationDeprecated';
 // @ts-expect-error
 import IntentionalAny from '../phet-core/types/IntentionalAny';

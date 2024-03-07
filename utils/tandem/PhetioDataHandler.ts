@@ -9,6 +9,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import assertMutuallyExclusiveOptions from '../phet-core/assertMutuallyExclusiveOptions';
 import optionize from '../phet-core/optionize';
 import PhetioObject, { type PhetioObjectOptions } from './PhetioObject';

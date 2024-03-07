@@ -1,5 +1,7 @@
 // Copyright 2021-2024, University of Colorado Boulder
 
+import _ from 'lodash';
+
 // @ts-expect-error
 import IntentionalAny from '../../phet-core/types/IntentionalAny';
 import tandemNamespace from '../tandemNamespace';

@@ -163,6 +163,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import PhetioAction from '../../tandem/PhetioAction';
 import TinyEmitter from '../../axon/TinyEmitter';
 import Vector2 from '../../dot/Vector2';

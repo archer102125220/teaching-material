@@ -7,6 +7,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Property from '../../../axon/Property';
 import type StrictOmit from '../../../phet-core/types/StrictOmit';
 import TinyProperty from '../../../axon/TinyProperty';

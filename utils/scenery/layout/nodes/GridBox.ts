@@ -46,6 +46,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
 import type StrictOmit from '../../../phet-core/types/StrictOmit';
 import optionize from '../../../phet-core/optionize';

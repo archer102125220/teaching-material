@@ -10,6 +10,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import Emitter from '../../axon/Emitter';
 import type StrictOmit from '../../phet-core/types/StrictOmit';
 import Vector2 from '../../dot/Vector2';

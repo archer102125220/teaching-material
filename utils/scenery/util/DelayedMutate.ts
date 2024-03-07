@@ -28,6 +28,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import { Node, type NodeOptions, scenery } from '../imports';
 import type Constructor from '../../phet-core/types/Constructor';
 import { combineOptions } from '../../phet-core/optionize';

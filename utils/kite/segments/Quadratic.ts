@@ -8,6 +8,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Bounds2 from '../../dot/Bounds2';
 import Matrix3 from '../../dot/Matrix3';
 import Ray2 from '../../dot/Ray2';
@@ -20,7 +22,7 @@ const solveQuadraticRootsReal = Utils.solveQuadraticRootsReal;
 const arePointsCollinear = Utils.arePointsCollinear;
 
 // Used in multiple filters
-function isBetween0And1( t: number ): boolean {
+function isBetween0And1(t: number): boolean {
   return t >= 0 && t <= 1;
 }
 
@@ -53,7 +55,7 @@ export default class Quadratic extends Segment {
    * @param control - Control point (curve usually doesn't go through here)
    * @param end - End point of the quadratic bezier
    */
-  public constructor( start: Vector2, control: Vector2, end: Vector2 ) {
+  public constructor(start: Vector2, control: Vector2, end: Vector2) {
     super();
 
     this._start = start;
@@ -66,17 +68,17 @@ export default class Quadratic extends Segment {
   /**
    * Sets the start point of the Quadratic.
    */
-  public setStart( start: Vector2 ): this {
-    assert && assert( start.isFinite(), `Quadratic start should be finite: ${start.toString()}` );
+  public setStart(start: Vector2): this {
+    assert && assert(start.isFinite(), `Quadratic start should be finite: ${start.toString()}`);
 
-    if ( !this._start.equals( start ) ) {
+    if (!this._start.equals(start)) {
       this._start = start;
       this.invalidate();
     }
     return this; // allow chaining
   }
 
-  public set start( value: Vector2 ) { this.setStart( value ); }
+  public set start(value: Vector2) { this.setStart(value); }
 
   public get start(): Vector2 { return this.getStart(); }
 
@@ -91,17 +93,17 @@ export default class Quadratic extends Segment {
   /**
    * Sets the control point of the Quadratic.
    */
-  public setControl( control: Vector2 ): this {
-    assert && assert( control.isFinite(), `Quadratic control should be finite: ${control.toString()}` );
+  public setControl(control: Vector2): this {
+    assert && assert(control.isFinite(), `Quadratic control should be finite: ${control.toString()}`);
 
-    if ( !this._control.equals( control ) ) {
+    if (!this._control.equals(control)) {
       this._control = control;
       this.invalidate();
     }
     return this; // allow chaining
   }
 
-  public set control( value: Vector2 ) { this.setControl( value ); }
+  public set control(value: Vector2) { this.setControl(value); }
 
   public get control(): Vector2 { return this.getControl(); }
 
@@ -116,17 +118,17 @@ export default class Quadratic extends Segment {
   /**
    * Sets the end point of the Quadratic.
    */
-  public setEnd( end: Vector2 ): this {
-    assert && assert( end.isFinite(), `Quadratic end should be finite: ${end.toString()}` );
+  public setEnd(end: Vector2): this {
+    assert && assert(end.isFinite(), `Quadratic end should be finite: ${end.toString()}`);
 
-    if ( !this._end.equals( end ) ) {
+    if (!this._end.equals(end)) {
       this._end = end;
       this.invalidate();
     }
     return this; // allow chaining
   }
 
-  public set end( value: Vector2 ) { this.setEnd( value ); }
+  public set end(value: Vector2) { this.setEnd(value); }
 
   public get end(): Vector2 { return this.getEnd(); }
 
@@ -146,14 +148,14 @@ export default class Quadratic extends Segment {
    *
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
-  public positionAt( t: number ): Vector2 {
-    assert && assert( t >= 0, 'positionAt t should be non-negative' );
-    assert && assert( t <= 1, 'positionAt t should be no greater than 1' );
+  public positionAt(t: number): Vector2 {
+    assert && assert(t >= 0, 'positionAt t should be non-negative');
+    assert && assert(t <= 1, 'positionAt t should be no greater than 1');
 
     const mt = 1 - t;
     // described from t=[0,1] as: (1-t)^2 start + 2(1-t)t control + t^2 end
     // TODO: allocation reduction https://github.com/phetsims/kite/issues/76
-    return this._start.times( mt * mt ).plus( this._control.times( 2 * mt * t ) ).plus( this._end.times( t * t ) );
+    return this._start.times(mt * mt).plus(this._control.times(2 * mt * t)).plus(this._end.times(t * t));
   }
 
   /**
@@ -164,13 +166,13 @@ export default class Quadratic extends Segment {
    *
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
-  public tangentAt( t: number ): Vector2 {
-    assert && assert( t >= 0, 'tangentAt t should be non-negative' );
-    assert && assert( t <= 1, 'tangentAt t should be no greater than 1' );
+  public tangentAt(t: number): Vector2 {
+    assert && assert(t >= 0, 'tangentAt t should be non-negative');
+    assert && assert(t <= 1, 'tangentAt t should be no greater than 1');
 
     // For a quadratic curve, the derivative is given by : 2(1-t)( control - start ) + 2t( end - control )
     // TODO: allocation reduction https://github.com/phetsims/kite/issues/76
-    return this._control.minus( this._start ).times( 2 * ( 1 - t ) ).plus( this._end.minus( this._control ).times( 2 * t ) );
+    return this._control.minus(this._start).times(2 * (1 - t)).plus(this._end.minus(this._control).times(2 * t));
   }
 
   /**
@@ -184,25 +186,25 @@ export default class Quadratic extends Segment {
    *
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
-  public curvatureAt( t: number ): number {
-    assert && assert( t >= 0, 'curvatureAt t should be non-negative' );
-    assert && assert( t <= 1, 'curvatureAt t should be no greater than 1' );
+  public curvatureAt(t: number): number {
+    assert && assert(t >= 0, 'curvatureAt t should be non-negative');
+    assert && assert(t <= 1, 'curvatureAt t should be no greater than 1');
 
     // see http://cagd.cs.byu.edu/~557/text/ch2.pdf p31
     // TODO: remove code duplication with Cubic https://github.com/phetsims/kite/issues/76
     const epsilon = 0.0000001;
-    if ( Math.abs( t - 0.5 ) > 0.5 - epsilon ) {
+    if (Math.abs(t - 0.5) > 0.5 - epsilon) {
       const isZero = t < 0.5;
       const p0 = isZero ? this._start : this._end;
       const p1 = this._control;
       const p2 = isZero ? this._end : this._start;
-      const d10 = p1.minus( p0 );
+      const d10 = p1.minus(p0);
       const a = d10.magnitude;
-      const h = ( isZero ? -1 : 1 ) * d10.perpendicular.normalized().dot( p2.minus( p1 ) );
-      return ( h * ( this.degree - 1 ) ) / ( this.degree * a * a );
+      const h = (isZero ? -1 : 1) * d10.perpendicular.normalized().dot(p2.minus(p1));
+      return (h * (this.degree - 1)) / (this.degree * a * a);
     }
     else {
-      return this.subdivided( t )[ 0 ].curvatureAt( 1 );
+      return this.subdivided(t)[0].curvatureAt(1);
     }
   }
 
@@ -212,22 +214,22 @@ export default class Quadratic extends Segment {
    *
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
-  public subdivided( t: number ): Quadratic[] {
-    assert && assert( t >= 0, 'subdivided t should be non-negative' );
-    assert && assert( t <= 1, 'subdivided t should be no greater than 1' );
+  public subdivided(t: number): Quadratic[] {
+    assert && assert(t >= 0, 'subdivided t should be non-negative');
+    assert && assert(t <= 1, 'subdivided t should be no greater than 1');
 
     // If t is 0 or 1, we only need to return 1 segment
-    if ( t === 0 || t === 1 ) {
-      return [ this ];
+    if (t === 0 || t === 1) {
+      return [this];
     }
 
     // de Casteljau method
-    const leftMid = this._start.blend( this._control, t );
-    const rightMid = this._control.blend( this._end, t );
-    const mid = leftMid.blend( rightMid, t );
+    const leftMid = this._start.blend(this._control, t);
+    const rightMid = this._control.blend(this._end, t);
+    const mid = leftMid.blend(rightMid, t);
     return [
-      new Quadratic( this._start, leftMid, mid ),
-      new Quadratic( mid, rightMid, this._end )
+      new Quadratic(this._start, leftMid, mid),
+      new Quadratic(mid, rightMid, this._end)
     ];
   }
 
@@ -235,12 +237,12 @@ export default class Quadratic extends Segment {
    * Clears cached information, should be called when any of the 'constructor arguments' are mutated.
    */
   public invalidate(): void {
-    assert && assert( this._start instanceof Vector2, `Quadratic start should be a Vector2: ${this._start}` );
-    assert && assert( this._start.isFinite(), `Quadratic start should be finite: ${this._start.toString()}` );
-    assert && assert( this._control instanceof Vector2, `Quadratic control should be a Vector2: ${this._control}` );
-    assert && assert( this._control.isFinite(), `Quadratic control should be finite: ${this._control.toString()}` );
-    assert && assert( this._end instanceof Vector2, `Quadratic end should be a Vector2: ${this._end}` );
-    assert && assert( this._end.isFinite(), `Quadratic end should be finite: ${this._end.toString()}` );
+    assert && assert(this._start instanceof Vector2, `Quadratic start should be a Vector2: ${this._start}`);
+    assert && assert(this._start.isFinite(), `Quadratic start should be finite: ${this._start.toString()}`);
+    assert && assert(this._control instanceof Vector2, `Quadratic control should be a Vector2: ${this._control}`);
+    assert && assert(this._control.isFinite(), `Quadratic control should be finite: ${this._control.toString()}`);
+    assert && assert(this._end instanceof Vector2, `Quadratic end should be a Vector2: ${this._end}`);
+    assert && assert(this._end.isFinite(), `Quadratic end should be finite: ${this._end.toString()}`);
 
     // Lazily-computed derived information
     this._startTangent = null;
@@ -258,12 +260,12 @@ export default class Quadratic extends Segment {
    * Returns the tangent vector (normalized) to the segment at the start, pointing in the direction of motion (from start to end)
    */
   public getStartTangent(): Vector2 {
-    if ( this._startTangent === null ) {
-      const controlIsStart = this._start.equals( this._control );
+    if (this._startTangent === null) {
+      const controlIsStart = this._start.equals(this._control);
       // TODO: allocation reduction https://github.com/phetsims/kite/issues/76
       this._startTangent = controlIsStart ?
-                           this._end.minus( this._start ).normalized() :
-                           this._control.minus( this._start ).normalized();
+        this._end.minus(this._start).normalized() :
+        this._control.minus(this._start).normalized();
     }
     return this._startTangent;
   }
@@ -274,12 +276,12 @@ export default class Quadratic extends Segment {
    * Returns the tangent vector (normalized) to the segment at the end, pointing in the direction of motion (from start to end)
    */
   public getEndTangent(): Vector2 {
-    if ( this._endTangent === null ) {
-      const controlIsEnd = this._end.equals( this._control );
+    if (this._endTangent === null) {
+      const controlIsEnd = this._end.equals(this._control);
       // TODO: allocation reduction https://github.com/phetsims/kite/issues/76
       this._endTangent = controlIsEnd ?
-                         this._end.minus( this._start ).normalized() :
-                         this._end.minus( this._control ).normalized();
+        this._end.minus(this._start).normalized() :
+        this._end.minus(this._control).normalized();
     }
     return this._endTangent;
   }
@@ -288,8 +290,8 @@ export default class Quadratic extends Segment {
 
   public getTCriticalX(): number {
     // compute x where the derivative is 0 (used for bounds and other things)
-    if ( this._tCriticalX === null ) {
-      this._tCriticalX = Quadratic.extremaT( this._start.x, this._control.x, this._end.x );
+    if (this._tCriticalX === null) {
+      this._tCriticalX = Quadratic.extremaT(this._start.x, this._control.x, this._end.x);
     }
     return this._tCriticalX;
   }
@@ -298,8 +300,8 @@ export default class Quadratic extends Segment {
 
   public getTCriticalY(): number {
     // compute y where the derivative is 0 (used for bounds and other things)
-    if ( this._tCriticalY === null ) {
-      this._tCriticalY = Quadratic.extremaT( this._start.y, this._control.y, this._end.y );
+    if (this._tCriticalY === null) {
+      this._tCriticalY = Quadratic.extremaT(this._start.y, this._control.y, this._end.y);
     }
     return this._tCriticalY;
   }
@@ -315,49 +317,49 @@ export default class Quadratic extends Segment {
     const control = this._control;
     const end = this._end;
 
-    const startIsEnd = start.equals( end );
-    const startIsControl = start.equals( control );
-    const endIsControl = start.equals( control );
+    const startIsEnd = start.equals(end);
+    const startIsControl = start.equals(control);
+    const endIsControl = start.equals(control);
 
-    if ( startIsEnd && startIsControl ) {
+    if (startIsEnd && startIsControl) {
       // all same points
       return [];
     }
-    else if ( startIsEnd ) {
+    else if (startIsEnd) {
       // this is a special collinear case, we basically line out to the farthest point and back
-      const halfPoint = this.positionAt( 0.5 );
+      const halfPoint = this.positionAt(0.5);
       return [
-        new Line( start, halfPoint ),
-        new Line( halfPoint, end )
+        new Line(start, halfPoint),
+        new Line(halfPoint, end)
       ];
     }
-    else if ( arePointsCollinear( start, control, end ) ) {
+    else if (arePointsCollinear(start, control, end)) {
       // if they are collinear, we can reduce to start->control and control->end, or if control is between, just one line segment
       // also, start !== end (handled earlier)
-      if ( startIsControl || endIsControl ) {
+      if (startIsControl || endIsControl) {
         // just a line segment!
-        return [ new Line( start, end ) ]; // no extra nondegenerate check since start !== end
+        return [new Line(start, end)]; // no extra nondegenerate check since start !== end
       }
       // now control point must be unique. we check to see if our rendered path will be outside of the start->end line segment
-      const delta = end.minus( start );
-      const p1d = control.minus( start ).dot( delta.normalized() ) / delta.magnitude;
-      const t = Quadratic.extremaT( 0, p1d, 1 );
-      if ( !isNaN( t ) && t > 0 && t < 1 ) {
+      const delta = end.minus(start);
+      const p1d = control.minus(start).dot(delta.normalized()) / delta.magnitude;
+      const t = Quadratic.extremaT(0, p1d, 1);
+      if (!isNaN(t) && t > 0 && t < 1) {
         // we have a local max inside the range, indicating that our extrema point is outside of start->end
         // we'll line to and from it
-        const pt = this.positionAt( t );
-        return _.flatten( [
-          new Line( start, pt ).getNondegenerateSegments(),
-          new Line( pt, end ).getNondegenerateSegments()
-        ] );
+        const pt = this.positionAt(t);
+        return _.flatten([
+          new Line(start, pt).getNondegenerateSegments(),
+          new Line(pt, end).getNondegenerateSegments()
+        ]);
       }
       else {
         // just provide a line segment, our rendered path doesn't go outside of this
-        return [ new Line( start, end ) ]; // no extra nondegenerate check since start !== end
+        return [new Line(start, end)]; // no extra nondegenerate check since start !== end
       }
     }
     else {
-      return [ this ];
+      return [this];
     }
   }
 
@@ -366,18 +368,18 @@ export default class Quadratic extends Segment {
    */
   public getBounds(): Bounds2 {
     // calculate our temporary guaranteed lower bounds based on the end points
-    if ( this._bounds === null ) {
-      this._bounds = new Bounds2( Math.min( this._start.x, this._end.x ), Math.min( this._start.y, this._end.y ), Math.max( this._start.x, this._end.x ), Math.max( this._start.y, this._end.y ) );
+    if (this._bounds === null) {
+      this._bounds = new Bounds2(Math.min(this._start.x, this._end.x), Math.min(this._start.y, this._end.y), Math.max(this._start.x, this._end.x), Math.max(this._start.y, this._end.y));
 
       // compute x and y where the derivative is 0, so we can include this in the bounds
       const tCriticalX = this.getTCriticalX();
       const tCriticalY = this.getTCriticalY();
 
-      if ( !isNaN( tCriticalX ) && tCriticalX > 0 && tCriticalX < 1 ) {
-        this._bounds = this._bounds.withPoint( this.positionAt( tCriticalX ) );
+      if (!isNaN(tCriticalX) && tCriticalX > 0 && tCriticalX < 1) {
+        this._bounds = this._bounds.withPoint(this.positionAt(tCriticalX));
       }
-      if ( !isNaN( tCriticalY ) && tCriticalY > 0 && tCriticalY < 1 ) {
-        this._bounds = this._bounds.withPoint( this.positionAt( tCriticalY ) );
+      if (!isNaN(tCriticalY) && tCriticalY > 0 && tCriticalY < 1) {
+        this._bounds = this._bounds.withPoint(this.positionAt(tCriticalY));
       }
     }
     return this._bounds;
@@ -394,22 +396,22 @@ export default class Quadratic extends Segment {
    * @param r - distance
    * @param reverse
    */
-  public offsetTo( r: number, reverse: boolean ): Quadratic[] {
+  public offsetTo(r: number, reverse: boolean): Quadratic[] {
     // TODO: implement more accurate method at http://www.antigrain.com/research/adaptive_bezier/index.html https://github.com/phetsims/kite/issues/76
     // TODO: or more recently (and relevantly): http://www.cis.usouthal.edu/~hain/general/Publications/Bezier/BezierFlattening.pdf https://github.com/phetsims/kite/issues/76
-    let curves: Quadratic[] = [ this ];
+    let curves: Quadratic[] = [this];
 
     // subdivide this curve
     const depth = 5; // generates 2^depth curves
-    for ( let i = 0; i < depth; i++ ) {
-      curves = _.flatten( _.map( curves, ( curve: Quadratic ) => curve.subdivided( 0.5 ) ) );
+    for (let i = 0; i < depth; i++) {
+      curves = _.flatten(_.map(curves, (curve: Quadratic) => curve.subdivided(0.5)));
     }
 
-    let offsetCurves = _.map( curves, ( curve: Quadratic ) => curve.approximateOffset( r ) );
+    let offsetCurves = _.map(curves, (curve: Quadratic) => curve.approximateOffset(r));
 
-    if ( reverse ) {
+    if (reverse) {
       offsetCurves.reverse();
-      offsetCurves = _.map( offsetCurves, ( curve: Quadratic ) => curve.reversed() );
+      offsetCurves = _.map(offsetCurves, (curve: Quadratic) => curve.reversed());
     }
 
     return offsetCurves;
@@ -422,8 +424,8 @@ export default class Quadratic extends Segment {
     // TODO: allocation reduction https://github.com/phetsims/kite/issues/76
     return new Cubic(
       this._start,
-      this._start.plus( this._control.timesScalar( 2 ) ).dividedScalar( 3 ),
-      this._end.plus( this._control.timesScalar( 2 ) ).dividedScalar( 3 ),
+      this._start.plus(this._control.timesScalar(2)).dividedScalar(3),
+      this._end.plus(this._control.timesScalar(2)).dividedScalar(3),
       this._end
     );
   }
@@ -431,11 +433,11 @@ export default class Quadratic extends Segment {
   /**
    * @param r - distance
    */
-  public approximateOffset( r: number ): Quadratic {
+  public approximateOffset(r: number): Quadratic {
     return new Quadratic(
-      this._start.plus( ( this._start.equals( this._control ) ? this._end.minus( this._start ) : this._control.minus( this._start ) ).perpendicular.normalized().times( r ) ),
-      this._control.plus( this._end.minus( this._start ).perpendicular.normalized().times( r ) ),
-      this._end.plus( ( this._end.equals( this._control ) ? this._end.minus( this._start ) : this._end.minus( this._control ) ).perpendicular.normalized().times( r ) )
+      this._start.plus((this._start.equals(this._control) ? this._end.minus(this._start) : this._control.minus(this._start)).perpendicular.normalized().times(r)),
+      this._control.plus(this._end.minus(this._start).perpendicular.normalized().times(r)),
+      this._end.plus((this._end.equals(this._control) ? this._end.minus(this._start) : this._end.minus(this._control)).perpendicular.normalized().times(r))
     );
   }
 
@@ -444,17 +446,16 @@ export default class Quadratic extends Segment {
    */
   public getSVGPathFragment(): string {
     let oldPathFragment;
-    if ( assert ) {
+    if (assert) {
       oldPathFragment = this._svgPathFragment;
       this._svgPathFragment = null;
     }
-    if ( !this._svgPathFragment ) {
-      this._svgPathFragment = `Q ${svgNumber( this._control.x )} ${svgNumber( this._control.y )} ${
-        svgNumber( this._end.x )} ${svgNumber( this._end.y )}`;
+    if (!this._svgPathFragment) {
+      this._svgPathFragment = `Q ${svgNumber(this._control.x)} ${svgNumber(this._control.y)} ${svgNumber(this._end.x)} ${svgNumber(this._end.y)}`;
     }
-    if ( assert ) {
-      if ( oldPathFragment ) {
-        assert( oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()' );
+    if (assert) {
+      if (oldPathFragment) {
+        assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
       }
     }
     return this._svgPathFragment;
@@ -463,15 +464,15 @@ export default class Quadratic extends Segment {
   /**
    * Returns an array of lines that will draw an offset curve on the logical left side
    */
-  public strokeLeft( lineWidth: number ): Quadratic[] {
-    return this.offsetTo( -lineWidth / 2, false );
+  public strokeLeft(lineWidth: number): Quadratic[] {
+    return this.offsetTo(-lineWidth / 2, false);
   }
 
   /**
    * Returns an array of lines that will draw an offset curve on the logical right side
    */
-  public strokeRight( lineWidth: number ): Quadratic[] {
-    return this.offsetTo( lineWidth / 2, true );
+  public strokeRight(lineWidth: number): Quadratic[] {
+    return this.offsetTo(lineWidth / 2, true);
   }
 
   public getInteriorExtremaTs(): number[] {
@@ -482,11 +483,11 @@ export default class Quadratic extends Segment {
     const criticalX = this.getTCriticalX();
     const criticalY = this.getTCriticalY();
 
-    if ( !isNaN( criticalX ) && criticalX > epsilon && criticalX < 1 - epsilon ) {
-      result.push( this.tCriticalX );
+    if (!isNaN(criticalX) && criticalX > epsilon && criticalX < 1 - epsilon) {
+      result.push(this.tCriticalX);
     }
-    if ( !isNaN( criticalY ) && criticalY > epsilon && criticalY < 1 - epsilon ) {
-      result.push( this.tCriticalY );
+    if (!isNaN(criticalY) && criticalY > epsilon && criticalY < 1 - epsilon) {
+      result.push(this.tCriticalY);
     }
     return result.sort();
   }
@@ -495,65 +496,65 @@ export default class Quadratic extends Segment {
    * Hit-tests this segment with the ray. An array of all intersections of the ray with this segment will be returned.
    * For details, see the documentation in Segment
    */
-  public intersection( ray: Ray2 ): RayIntersection[] {
+  public intersection(ray: Ray2): RayIntersection[] {
     const result: RayIntersection[] = [];
 
     // find the rotation that will put our ray in the direction of the x-axis so we can only solve for y=0 for intersections
-    const inverseMatrix = Matrix3.rotation2( -ray.direction.angle ).timesMatrix( Matrix3.translation( -ray.position.x, -ray.position.y ) );
+    const inverseMatrix = Matrix3.rotation2(-ray.direction.angle).timesMatrix(Matrix3.translation(-ray.position.x, -ray.position.y));
 
-    const p0 = inverseMatrix.timesVector2( this._start );
-    const p1 = inverseMatrix.timesVector2( this._control );
-    const p2 = inverseMatrix.timesVector2( this._end );
+    const p0 = inverseMatrix.timesVector2(this._start);
+    const p1 = inverseMatrix.timesVector2(this._control);
+    const p2 = inverseMatrix.timesVector2(this._end);
 
-    //(1-t)^2 start + 2(1-t)t control + t^2 end
+    // (1-t)^2 start + 2(1-t)t control + t^2 end
     const a = p0.y - 2 * p1.y + p2.y;
     const b = -2 * p0.y + 2 * p1.y;
     const c = p0.y;
 
-    const ts = solveQuadraticRootsReal( a, b, c );
+    const ts = solveQuadraticRootsReal(a, b, c);
 
-    _.each( ts, t => {
-      if ( t >= 0 && t <= 1 ) {
-        const hitPoint = this.positionAt( t );
-        const unitTangent = this.tangentAt( t ).normalized();
+    _.each(ts, t => {
+      if (t >= 0 && t <= 1) {
+        const hitPoint = this.positionAt(t);
+        const unitTangent = this.tangentAt(t).normalized();
         const perp = unitTangent.perpendicular;
-        const toHit = hitPoint.minus( ray.position );
+        const toHit = hitPoint.minus(ray.position);
 
         // make sure it's not behind the ray
-        if ( toHit.dot( ray.direction ) > 0 ) {
-          const normal = perp.dot( ray.direction ) > 0 ? perp.negated() : perp;
-          const wind = ray.direction.perpendicular.dot( unitTangent ) < 0 ? 1 : -1;
-          result.push( new RayIntersection( toHit.magnitude, hitPoint, normal, wind, t ) );
+        if (toHit.dot(ray.direction) > 0) {
+          const normal = perp.dot(ray.direction) > 0 ? perp.negated() : perp;
+          const wind = ray.direction.perpendicular.dot(unitTangent) < 0 ? 1 : -1;
+          result.push(new RayIntersection(toHit.magnitude, hitPoint, normal, wind, t));
         }
       }
-    } );
+    });
     return result;
   }
 
   /**
    * Returns the winding number for intersection with a ray
    */
-  public windingIntersection( ray: Ray2 ): number {
+  public windingIntersection(ray: Ray2): number {
     let wind = 0;
-    const hits = this.intersection( ray );
-    _.each( hits, hit => {
+    const hits = this.intersection(ray);
+    _.each(hits, hit => {
       wind += hit.wind;
-    } );
+    });
     return wind;
   }
 
   /**
    * Draws the segment to the 2D Canvas context, assuming the context's current location is already at the start point
    */
-  public writeToContext( context: CanvasRenderingContext2D ): void {
-    context.quadraticCurveTo( this._control.x, this._control.y, this._end.x, this._end.y );
+  public writeToContext(context: CanvasRenderingContext2D): void {
+    context.quadraticCurveTo(this._control.x, this._control.y, this._end.x, this._end.y);
   }
 
   /**
    * Returns a new quadratic that represents this quadratic after transformation by the matrix
    */
-  public transformed( matrix: Matrix3 ): Quadratic {
-    return new Quadratic( matrix.timesVector2( this._start ), matrix.timesVector2( this._control ), matrix.timesVector2( this._end ) );
+  public transformed(matrix: Matrix3): Quadratic {
+    return new Quadratic(matrix.timesVector2(this._start), matrix.timesVector2(this._control), matrix.timesVector2(this._end));
   }
 
   /**
@@ -563,35 +564,35 @@ export default class Quadratic extends Segment {
    */
   public getSignedAreaFragment(): number {
     return 1 / 6 * (
-      this._start.x * ( 2 * this._control.y + this._end.y ) +
-      this._control.x * ( -2 * this._start.y + 2 * this._end.y ) +
-      this._end.x * ( -this._start.y - 2 * this._control.y )
+      this._start.x * (2 * this._control.y + this._end.y) +
+      this._control.x * (-2 * this._start.y + 2 * this._end.y) +
+      this._end.x * (-this._start.y - 2 * this._control.y)
     );
   }
 
   /**
    * Given the current curve parameterized by t, will return a curve parameterized by x where t = a * x + b
    */
-  public reparameterized( a: number, b: number ): Quadratic {
+  public reparameterized(a: number, b: number): Quadratic {
     // to the polynomial pt^2 + qt + r:
-    const p = this._start.plus( this._end.plus( this._control.timesScalar( -2 ) ) );
-    const q = this._control.minus( this._start ).timesScalar( 2 );
+    const p = this._start.plus(this._end.plus(this._control.timesScalar(-2)));
+    const q = this._control.minus(this._start).timesScalar(2);
     const r = this._start;
 
     // to the polynomial alpha*x^2 + beta*x + gamma:
-    const alpha = p.timesScalar( a * a );
-    const beta = p.timesScalar( a * b ).timesScalar( 2 ).plus( q.timesScalar( a ) );
-    const gamma = p.timesScalar( b * b ).plus( q.timesScalar( b ) ).plus( r );
+    const alpha = p.timesScalar(a * a);
+    const beta = p.timesScalar(a * b).timesScalar(2).plus(q.timesScalar(a));
+    const gamma = p.timesScalar(b * b).plus(q.timesScalar(b)).plus(r);
 
     // back to the form start,control,end
-    return new Quadratic( gamma, beta.timesScalar( 0.5 ).plus( gamma ), alpha.plus( beta ).plus( gamma ) );
+    return new Quadratic(gamma, beta.timesScalar(0.5).plus(gamma), alpha.plus(beta).plus(gamma));
   }
 
   /**
    * Returns a reversed copy of this segment (mapping the parametrization from [0,1] => [1,0]).
    */
   public reversed(): Quadratic {
-    return new Quadratic( this._end, this._control, this._start );
+    return new Quadratic(this._end, this._control, this._start);
   }
 
   /**
@@ -617,9 +618,9 @@ export default class Quadratic extends Segment {
    * @param [epsilon] - Will return overlaps only if no two corresponding points differ by this amount or more in one component.
    * @returns - The solution, if there is one (and only one)
    */
-  public getOverlaps( segment: Segment, epsilon = 1e-6 ): Overlap[] | null {
-    if ( segment instanceof Quadratic ) {
-      return Quadratic.getOverlaps( this, segment );
+  public getOverlaps(segment: Segment, epsilon = 1e-6): Overlap[] | null {
+    if (segment instanceof Quadratic) {
+      return Quadratic.getOverlaps(this, segment);
     }
 
     return null;
@@ -628,20 +629,20 @@ export default class Quadratic extends Segment {
   /**
    * Returns a Quadratic from the serialized representation.
    */
-  public static override deserialize( obj: SerializedQuadratic ): Quadratic {
-    assert && assert( obj.type === 'Quadratic' );
+  public static override deserialize(obj: SerializedQuadratic): Quadratic {
+    assert && assert(obj.type === 'Quadratic');
 
-    return new Quadratic( new Vector2( obj.startX, obj.startY ), new Vector2( obj.controlX, obj.controlY ), new Vector2( obj.endX, obj.endY ) );
+    return new Quadratic(new Vector2(obj.startX, obj.startY), new Vector2(obj.controlX, obj.controlY), new Vector2(obj.endX, obj.endY));
   }
 
   /**
    * One-dimensional solution to extrema
    */
-  public static extremaT( start: number, control: number, end: number ): number {
+  public static extremaT(start: number, control: number, end: number): number {
     // compute t where the derivative is 0 (used for bounds and other things)
-    const divisorX = 2 * ( end - 2 * control + start );
-    if ( divisorX !== 0 ) {
-      return -2 * ( control - start ) / divisorX;
+    const divisorX = 2 * (end - 2 * control + start);
+    if (divisorX !== 0) {
+      return -2 * (control - start) / divisorX;
     }
     else {
       return NaN;
@@ -661,7 +662,7 @@ export default class Quadratic extends Segment {
    *                             in one component.
    * @returns - The solution, if there is one (and only one)
    */
-  public static getOverlaps( quadratic1: Quadratic, quadratic2: Quadratic, epsilon = 1e-6 ): Overlap[] {
+  public static getOverlaps(quadratic1: Quadratic, quadratic2: Quadratic, epsilon = 1e-6): Overlap[] {
 
     /*
      * NOTE: For implementation details in this function, please see Cubic.getOverlaps. It goes over all of the
@@ -691,24 +692,24 @@ export default class Quadratic extends Segment {
     const q2y = quadratic2._start.y - 2 * quadratic2._control.y + quadratic2._end.y;
 
     // Determine the candidate overlap (preferring the dimension with the largest variation)
-    const xSpread = Math.abs( Math.max( quadratic1._start.x, quadratic1._control.x, quadratic1._end.x,
-                                quadratic2._start.x, quadratic2._control.x, quadratic2._end.x ) -
-                              Math.min( quadratic1._start.x, quadratic1._control.x, quadratic1._end.x,
-                                quadratic2._start.x, quadratic2._control.x, quadratic2._end.x ) );
-    const ySpread = Math.abs( Math.max( quadratic1._start.y, quadratic1._control.y, quadratic1._end.y,
-                                quadratic2._start.y, quadratic2._control.y, quadratic2._end.y ) -
-                              Math.min( quadratic1._start.y, quadratic1._control.y, quadratic1._end.y,
-                                quadratic2._start.y, quadratic2._control.y, quadratic2._end.y ) );
-    const xOverlap = Segment.polynomialGetOverlapQuadratic( p0x, p1x, p2x, q0x, q1x, q2x );
-    const yOverlap = Segment.polynomialGetOverlapQuadratic( p0y, p1y, p2y, q0y, q1y, q2y );
+    const xSpread = Math.abs(Math.max(quadratic1._start.x, quadratic1._control.x, quadratic1._end.x,
+      quadratic2._start.x, quadratic2._control.x, quadratic2._end.x) -
+      Math.min(quadratic1._start.x, quadratic1._control.x, quadratic1._end.x,
+        quadratic2._start.x, quadratic2._control.x, quadratic2._end.x));
+    const ySpread = Math.abs(Math.max(quadratic1._start.y, quadratic1._control.y, quadratic1._end.y,
+      quadratic2._start.y, quadratic2._control.y, quadratic2._end.y) -
+      Math.min(quadratic1._start.y, quadratic1._control.y, quadratic1._end.y,
+        quadratic2._start.y, quadratic2._control.y, quadratic2._end.y));
+    const xOverlap = Segment.polynomialGetOverlapQuadratic(p0x, p1x, p2x, q0x, q1x, q2x);
+    const yOverlap = Segment.polynomialGetOverlapQuadratic(p0y, p1y, p2y, q0y, q1y, q2y);
     let overlap;
-    if ( xSpread > ySpread ) {
-      overlap = ( xOverlap === null || xOverlap === true ) ? yOverlap : xOverlap;
+    if (xSpread > ySpread) {
+      overlap = (xOverlap === null || xOverlap === true) ? yOverlap : xOverlap;
     }
     else {
-      overlap = ( yOverlap === null || yOverlap === true ) ? xOverlap : yOverlap;
+      overlap = (yOverlap === null || yOverlap === true) ? xOverlap : yOverlap;
     }
-    if ( overlap === null || overlap === true ) {
+    if (overlap === null || overlap === true) {
       return noOverlap; // No way to pin down an overlap
     }
 
@@ -729,22 +730,22 @@ export default class Quadratic extends Segment {
 
     // Find the t values where extremes lie in the [0,1] range for each 1-dimensional quadratic. We do this by
     // differentiating the quadratic and finding the roots of the resulting line.
-    const xRoots = Utils.solveLinearRootsReal( 2 * d2x, d1x );
-    const yRoots = Utils.solveLinearRootsReal( 2 * d2y, d1y );
-    const xExtremeTs = _.uniq( [ 0, 1 ].concat( xRoots ? xRoots.filter( isBetween0And1 ) : [] ) );
-    const yExtremeTs = _.uniq( [ 0, 1 ].concat( yRoots ? yRoots.filter( isBetween0And1 ) : [] ) );
+    const xRoots = Utils.solveLinearRootsReal(2 * d2x, d1x);
+    const yRoots = Utils.solveLinearRootsReal(2 * d2y, d1y);
+    const xExtremeTs = _.uniq([0, 1].concat(xRoots ? xRoots.filter(isBetween0And1) : []));
+    const yExtremeTs = _.uniq([0, 1].concat(yRoots ? yRoots.filter(isBetween0And1) : []));
 
     // Examine the single-coordinate distances between the "overlaps" at each extreme T value. If the distance is larger
     // than our epsilon, then the "overlap" would not be valid.
-    for ( let i = 0; i < xExtremeTs.length; i++ ) {
-      const t = xExtremeTs[ i ];
-      if ( Math.abs( ( d2x * t + d1x ) * t + d0x ) > epsilon ) {
+    for (let i = 0; i < xExtremeTs.length; i++) {
+      const t = xExtremeTs[i];
+      if (Math.abs((d2x * t + d1x) * t + d0x) > epsilon) {
         return noOverlap;
       }
     }
-    for ( let i = 0; i < yExtremeTs.length; i++ ) {
-      const t = yExtremeTs[ i ];
-      if ( Math.abs( ( d2y * t + d1y ) * t + d0y ) > epsilon ) {
+    for (let i = 0; i < yExtremeTs.length; i++) {
+      const t = yExtremeTs[i];
+      if (Math.abs((d2y * t + d1y) * t + d0y) > epsilon) {
         return noOverlap;
       }
     }
@@ -753,11 +754,11 @@ export default class Quadratic extends Segment {
     const qt1 = a + b;
 
     // TODO: do we want an epsilon in here to be permissive? https://github.com/phetsims/kite/issues/76
-    if ( ( qt0 > 1 && qt1 > 1 ) || ( qt0 < 0 && qt1 < 0 ) ) {
+    if ((qt0 > 1 && qt1 > 1) || (qt0 < 0 && qt1 < 0)) {
       return noOverlap;
     }
 
-    return [ new Overlap( a, b ) ];
+    return [new Overlap(a, b)];
   }
 
   // Degree of the polynomial (quadratic)
@@ -766,4 +767,4 @@ export default class Quadratic extends Segment {
 
 Quadratic.prototype.degree = 2;
 
-kite.register( 'Quadratic', Quadratic );
+kite.register('Quadratic', Quadratic);

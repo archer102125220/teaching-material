@@ -10,6 +10,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import arrayRemove from '../phet-core/arrayRemove';
 import type StrictOmit from '../phet-core/types/StrictOmit';
 import assertMutuallyExclusiveOptions from '../phet-core/assertMutuallyExclusiveOptions';

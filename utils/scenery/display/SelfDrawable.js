@@ -1,13 +1,12 @@
 // Copyright 2014-2022, University of Colorado Boulder
 
-
 /**
  * A drawable that will paint a single instance.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Drawable, scenery } from '../imports.js';
+import { Drawable, scenery } from '../imports';
 
 class SelfDrawable extends Drawable {
   /**
@@ -16,13 +15,13 @@ class SelfDrawable extends Drawable {
    * @param {number} renderer
    * @param {Instance} instance
    */
-  constructor( renderer, instance ) {
-    assert && assert( typeof renderer === 'number' );
-    assert && assert( instance );
+  constructor(renderer, instance) {
+    assert && assert(typeof renderer === 'number');
+    assert && assert(instance);
 
     super();
 
-    this.initialize( renderer, instance );
+    this.initialize(renderer, instance);
   }
 
   /**
@@ -32,20 +31,23 @@ class SelfDrawable extends Drawable {
    * @param {Instance} instance
    * @returns {SelfDrawable}
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer );
+  initialize(renderer, instance) {
+    super.initialize(renderer);
 
     // @private {function}
-    this.drawableVisibilityListener = this.drawableVisibilityListener || this.updateSelfVisibility.bind( this );
+    this.drawableVisibilityListener =
+      this.drawableVisibilityListener || this.updateSelfVisibility.bind(this);
 
     // @public {Instance}
     this.instance = instance;
 
     // @public {Node}
     this.node = instance.trail.lastNode();
-    this.node.attachDrawable( this );
+    this.node.attachDrawable(this);
 
-    this.instance.selfVisibleEmitter.addListener( this.drawableVisibilityListener );
+    this.instance.selfVisibleEmitter.addListener(
+      this.drawableVisibilityListener
+    );
 
     this.updateSelfVisibility();
 
@@ -58,9 +60,11 @@ class SelfDrawable extends Drawable {
    * @override
    */
   dispose() {
-    this.instance.selfVisibleEmitter.removeListener( this.drawableVisibilityListener );
+    this.instance.selfVisibleEmitter.removeListener(
+      this.drawableVisibilityListener
+    );
 
-    this.node.detachDrawable( this );
+    this.node.detachDrawable(this);
 
     // free references
     this.instance = null;
@@ -89,6 +93,6 @@ class SelfDrawable extends Drawable {
   }
 }
 
-scenery.register( 'SelfDrawable', SelfDrawable );
+scenery.register('SelfDrawable', SelfDrawable);
 
 export default SelfDrawable;

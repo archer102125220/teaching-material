@@ -21,6 +21,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import PhetioAction from '../../tandem/PhetioAction';
 import BooleanProperty from '../../axon/BooleanProperty';
 import DerivedProperty from '../../axon/DerivedProperty';

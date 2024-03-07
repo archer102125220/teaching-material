@@ -6,6 +6,8 @@
  * @author Jesse Greenberg
  */
 
+import _ from 'lodash';
+
 import { KeyboardUtils, scenery } from '../imports';
 
 const KeyboardZoomUtils = {

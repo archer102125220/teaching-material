@@ -6,35 +6,35 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import { Display, TOverlay, Node, scenery, ShapeBasedOverlay, Trail } from '../imports.js';
+import Bounds2 from '../../dot/Bounds2';
+import { Shape } from '../../kite/imports';
+import { Display, type TOverlay, Node, scenery, ShapeBasedOverlay, Trail } from '../imports';
 
 export default class PointerAreaOverlay extends ShapeBasedOverlay implements TOverlay {
-  public constructor( display: Display, rootNode: Node ) {
-    super( display, rootNode, 'mouseTouchAreaOverlay' );
+  public constructor(display: Display, rootNode: Node) {
+    super(display, rootNode, 'mouseTouchAreaOverlay');
   }
 
   public addShapes(): void {
-    new Trail( this.rootNode ).eachTrailUnder( trail => {
+    new Trail(this.rootNode).eachTrailUnder(trail => {
       const node = trail.lastNode();
-      if ( !node.isVisible() ) {
+      if (!node.isVisible()) {
         // skip this subtree if the node is invisible
         return true;
       }
-      if ( ( node.mouseArea || node.touchArea ) && trail.isVisible() ) {
+      if ((node.mouseArea || node.touchArea) && trail.isVisible()) {
         const transform = trail.getTransform();
 
-        if ( node.mouseArea ) {
-          this.addShape( transform.transformShape( node.mouseArea instanceof Bounds2 ? Shape.bounds( node.mouseArea ) : node.mouseArea ), 'rgba(0,0,255,0.8)', true );
+        if (node.mouseArea) {
+          this.addShape(transform.transformShape(node.mouseArea instanceof Bounds2 ? Shape.bounds(node.mouseArea) : node.mouseArea), 'rgba(0,0,255,0.8)', true);
         }
-        if ( node.touchArea ) {
-          this.addShape( transform.transformShape( node.touchArea instanceof Bounds2 ? Shape.bounds( node.touchArea ) : node.touchArea ), 'rgba(255,0,0,0.8)', false );
+        if (node.touchArea) {
+          this.addShape(transform.transformShape(node.touchArea instanceof Bounds2 ? Shape.bounds(node.touchArea) : node.touchArea), 'rgba(255,0,0,0.8)', false);
         }
       }
       return false;
-    } );
+    });
   }
 }
 
-scenery.register( 'PointerAreaOverlay', PointerAreaOverlay );
+scenery.register('PointerAreaOverlay', PointerAreaOverlay);

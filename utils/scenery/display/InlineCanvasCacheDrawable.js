@@ -6,17 +6,17 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Drawable, scenery } from '../imports.js';
+import { Drawable, scenery } from '../imports';
 
 class InlineCanvasCacheDrawable extends Drawable {
   /**
    * @param {number} renderer
    * @param {Instance} instance
    */
-  constructor( renderer, instance ) {
+  constructor(renderer, instance) {
     super();
 
-    this.initialize( renderer, instance );
+    this.initialize(renderer, instance);
   }
 
   /**
@@ -26,8 +26,8 @@ class InlineCanvasCacheDrawable extends Drawable {
    * @param {number} renderer
    * @param {Instance} instance
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer );
+  initialize(renderer, instance) {
+    super.initialize(renderer);
 
     // TODO: NOTE: may have to separate into separate drawables for separate group renderers https://github.com/phetsims/scenery/issues/1581
 
@@ -45,10 +45,10 @@ class InlineCanvasCacheDrawable extends Drawable {
    * @param {ChangeInterval} firstChangeInterval
    * @param {ChangeInterval} lastChangeInterval
    */
-  stitch( firstDrawable, lastDrawable, firstChangeInterval, lastChangeInterval ) {
+  stitch(firstDrawable, lastDrawable, firstChangeInterval, lastChangeInterval) {
     //OHTWO TODO: called when we have a change in our drawables https://github.com/phetsims/scenery/issues/1581
   }
 }
 
-scenery.register( 'InlineCanvasCacheDrawable', InlineCanvasCacheDrawable );
+scenery.register('InlineCanvasCacheDrawable', InlineCanvasCacheDrawable);
 export default InlineCanvasCacheDrawable;

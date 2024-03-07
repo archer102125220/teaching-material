@@ -17,36 +17,38 @@
  * @author Jesse Greenberg
  */
 
-import BooleanProperty from '../../axon/js/BooleanProperty.js';
-import DerivedProperty from '../../axon/js/DerivedProperty.js';
-import Emitter from '../../axon/js/Emitter.js';
-import EnabledComponent from '../../axon/js/EnabledComponent.js';
-import TProperty from '../../axon/js/TProperty.js';
-import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
-import NumberProperty from '../../axon/js/NumberProperty.js';
-import Property from '../../axon/js/Property.js';
-import Range from '../../dot/js/Range.js';
-import optionize, { optionize3, OptionizeDefaults } from '../../phet-core/js/optionize.js';
-import stripEmbeddingMarks from '../../phet-core/js/stripEmbeddingMarks.js';
-import Announcer, { AnnouncerOptions } from '../../utterance-queue/js/Announcer.js';
-import Utterance from '../../utterance-queue/js/Utterance.js';
-import SpeechSynthesisParentPolyfill from './SpeechSynthesisParentPolyfill.js';
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
-import { ResolvedResponse } from './ResponsePacket.js';
-import stepTimer from '../../axon/js/stepTimer.js';
-import platform from '../../phet-core/js/platform.js';
-import Multilink from '../../axon/js/Multilink.js';
-import TEmitter from '../../axon/js/TEmitter.js';
-import IOType from '../../tandem/js/types/IOType.js';
-import NullableIO from '../../tandem/js/types/NullableIO.js';
-import validate from '../../axon/js/validate.js';
-import Validation from '../../axon/js/Validation.js';
-import { Locale } from '../../joist/js/i18n/localeProperty.js';
+import _ from 'lodash';
+
+import BooleanProperty from '../axon/BooleanProperty';
+import DerivedProperty from '../axon/DerivedProperty';
+import Emitter from '../axon/Emitter';
+import EnabledComponent from '../axon/EnabledComponent';
+import type TProperty from '../axon/TProperty';
+import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
+import NumberProperty from '../axon/NumberProperty';
+import Property from '../axon/Property';
+import Range from '../dot/Range';
+import optionize, { optionize3, type OptionizeDefaults } from '../phet-core/optionize';
+import stripEmbeddingMarks from '../phet-core/stripEmbeddingMarks';
+import Announcer, { type AnnouncerOptions } from '../utterance-queue/Announcer';
+import Utterance from '../utterance-queue/Utterance';
+import SpeechSynthesisParentPolyfill from './SpeechSynthesisParentPolyfill';
+import utteranceQueueNamespace from './utteranceQueueNamespace';
+import { type ResolvedResponse } from './ResponsePacket';
+import stepTimer from '../axon/stepTimer';
+import platform from '../phet-core/platform';
+import Multilink from '../axon/Multilink';
+import type TEmitter from '../axon/TEmitter';
+import IOType from '../tandem/types/IOType';
+import NullableIO from '../tandem/types/NullableIO';
+import validate from '../axon/validate';
+import Validation from '../axon/Validation';
+import { type Locale } from '@/i18n/joist/localeProperty';
 
 // If a polyfill for SpeechSynthesis is requested, try to initialize it here before SpeechSynthesis usages. For
 // now this is a PhET specific feature, available by query parameter in initialize-globals. QueryStringMachine
 // cannot be used for this, see https://github.com/phetsims/scenery/issues/1366
-if ( window.phet && phet.chipper && phet.chipper.queryParameters && phet.chipper.queryParameters.speechSynthesisFromParent ) {
+if (window.phet && phet.chipper && phet.chipper.queryParameters && phet.chipper.queryParameters.speechSynthesisFromParent) {
   SpeechSynthesisParentPolyfill.initialize();
 }
 
@@ -188,8 +190,8 @@ class SpeechSynthesisAnnouncer extends Announcer {
 
   // emits events when the speaker starts/stops speaking, with the Utterance that is
   // either starting or stopping
-  public readonly startSpeakingEmitter: TEmitter<[ ResolvedResponse, Utterance ]>;
-  public readonly endSpeakingEmitter: TEmitter<[ ResolvedResponse, Utterance ]>;
+  public readonly startSpeakingEmitter: TEmitter<[ResolvedResponse, Utterance]>;
+  public readonly endSpeakingEmitter: TEmitter<[ResolvedResponse, Utterance]>;
 
   // To get around multiple inheritance issues, create enabledProperty via composition instead, then create
   // a reference on this component for the enabledProperty
@@ -232,53 +234,53 @@ class SpeechSynthesisAnnouncer extends Announcer {
   private canSpeakProperty: TReadOnlyProperty<boolean> | null;
 
   // bound so we can link and unlink to this.canSpeakProperty when the SpeechSynthesisAnnouncer becomes initialized.
-  private readonly boundHandleCanSpeakChange: ( canSpeak: boolean ) => void;
+  private readonly boundHandleCanSpeakChange: (canSpeak: boolean) => void;
 
   // A listener that will cancel the Utterance that is being announced if its canAnnounceProperty becomes false.
   // Set when this Announcer begins to announce a new Utterance and cleared when the Utterance is finished/cancelled.
   // Bound so that the listener can be added and removed on Utterances without creating many closures.
-  private readonly boundHandleCanAnnounceChange: ( canAnnounce: boolean ) => void;
+  private readonly boundHandleCanAnnounceChange: (canAnnounce: boolean) => void;
 
   // Switch to true to enable debugging features (like logging)
   private readonly debug: boolean;
 
-  public constructor( providedOptions?: SpeechSynthesisAnnouncerOptions ) {
+  public constructor(providedOptions?: SpeechSynthesisAnnouncerOptions) {
 
-    const options = optionize<SpeechSynthesisAnnouncerOptions, SelfOptions, AnnouncerOptions>()( {
+    const options = optionize<SpeechSynthesisAnnouncerOptions, SelfOptions, AnnouncerOptions>()({
 
       // {boolean} - SpeechSynthesisAnnouncer generally doesn't care about ResponseCollectorProperties,
       // that is more specific to the Voicing feature.
       respectResponseCollectorProperties: false,
 
       debug: false
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.debug = options.debug;
 
-    this.voiceProperty = new Property<null | SpeechSynthesisVoice>( null, {
-      tandem: options.tandem?.createTandem( 'voiceProperty' ),
-      phetioValueType: NullableIO( SpeechSynthesisVoiceIO ),
+    this.voiceProperty = new Property<null | SpeechSynthesisVoice>(null, {
+      tandem: options.tandem?.createTandem('voiceProperty'),
+      phetioValueType: NullableIO(SpeechSynthesisVoiceIO),
       phetioState: false,
       phetioReadOnly: true,
       phetioDocumentation: 'the voice that is currently voicing responses'
-    } );
-    this.voiceRateProperty = new NumberProperty( 1.0, {
-      range: new Range( 0.75, 2 ),
-      tandem: options.tandem?.createTandem( 'voiceRateProperty' ),
+    });
+    this.voiceRateProperty = new NumberProperty(1.0, {
+      range: new Range(0.75, 2),
+      tandem: options.tandem?.createTandem('voiceRateProperty'),
       phetioState: false,
       phetioDocumentation: 'changes the rate of the voicing-feature voice'
-    } );
-    this.voicePitchProperty = new NumberProperty( 1.0, {
-      range: new Range( 0.5, 2 ),
-      tandem: options.tandem?.createTandem( 'voicePitchProperty' ),
+    });
+    this.voicePitchProperty = new NumberProperty(1.0, {
+      range: new Range(0.5, 2),
+      tandem: options.tandem?.createTandem('voicePitchProperty'),
       phetioState: false,
       phetioDocumentation: 'changes the pitch of the voicing-feature voice'
-    } );
-    this.voiceVolumeProperty = new NumberProperty( 1.0, {
-      range: new Range( 0, 1 )
-    } );
+    });
+    this.voiceVolumeProperty = new NumberProperty(1.0, {
+      range: new Range(0, 1)
+    });
 
     // Indicates whether speech using SpeechSynthesis has been requested at least once.
     // The first time speech is requested, it must be done synchronously from user input with absolutely no delay.
@@ -293,10 +295,10 @@ class SpeechSynthesisAnnouncer extends Announcer {
 
     this.timeSinceUtteranceEnd = VOICING_UTTERANCE_INTERVAL;
 
-    this.startSpeakingEmitter = new Emitter( { parameters: [ { valueType: 'string' }, { valueType: Utterance } ] } );
-    this.endSpeakingEmitter = new Emitter( { parameters: [ { valueType: 'string' }, { valueType: Utterance } ] } );
+    this.startSpeakingEmitter = new Emitter({ parameters: [{ valueType: 'string' }, { valueType: Utterance }] });
+    this.endSpeakingEmitter = new Emitter({ parameters: [{ valueType: 'string' }, { valueType: Utterance }] });
 
-    this.enabledComponentImplementation = new EnabledComponent( {
+    this.enabledComponentImplementation = new EnabledComponent({
 
       // initial value for the enabledProperty, false because speech should not happen until requested by user
       enabled: false,
@@ -307,41 +309,41 @@ class SpeechSynthesisAnnouncer extends Announcer {
         phetioState: false,
         phetioFeatured: false
       }
-    } );
+    });
 
-    assert && assert( this.enabledComponentImplementation.enabledProperty.isSettable(), 'enabledProperty must be settable' );
+    assert && assert(this.enabledComponentImplementation.enabledProperty.isSettable(), 'enabledProperty must be settable');
     this.enabledProperty = this.enabledComponentImplementation.enabledProperty;
 
-    this.mainWindowVoicingEnabledProperty = new BooleanProperty( true, {
-      tandem: options.tandem?.createTandem( 'mainWindowVoicingEnabledProperty' ),
+    this.mainWindowVoicingEnabledProperty = new BooleanProperty(true, {
+      tandem: options.tandem?.createTandem('mainWindowVoicingEnabledProperty'),
       phetioState: false,
       phetioDocumentation: 'toggles the voicing feature on and off for the simulation screen (not the voicing preferences and toolbar controls)'
-    } );
+    });
 
-    this.voicingFullyEnabledProperty = DerivedProperty.and( [ this.enabledProperty, this.mainWindowVoicingEnabledProperty ] );
+    this.voicingFullyEnabledProperty = DerivedProperty.and([this.enabledProperty, this.mainWindowVoicingEnabledProperty]);
 
-    this._speechAllowedAndFullyEnabledProperty = new BooleanProperty( false );
+    this._speechAllowedAndFullyEnabledProperty = new BooleanProperty(false);
     this.speechAllowedAndFullyEnabledProperty = this._speechAllowedAndFullyEnabledProperty;
 
     this.synth = null;
-    this.voicesProperty = new Property( [] );
+    this.voicesProperty = new Property([]);
 
     this.speakingSpeechSynthesisUtteranceWrapper = null;
-    this.isInitializedProperty = new BooleanProperty( false );
+    this.isInitializedProperty = new BooleanProperty(false);
     this.canSpeakProperty = null;
-    this.boundHandleCanSpeakChange = this.handleCanSpeakChange.bind( this );
-    this.boundHandleCanAnnounceChange = this.handleCanAnnounceChange.bind( this );
+    this.boundHandleCanSpeakChange = this.handleCanSpeakChange.bind(this);
+    this.boundHandleCanAnnounceChange = this.handleCanAnnounceChange.bind(this);
 
-    if ( this.debug ) {
-      this.announcementCompleteEmitter.addListener( ( utterance, string ) => {
-        console.log( 'announcement complete', string );
-      } );
-      this.startSpeakingEmitter.addListener( string => {
-        this.debug && console.log( 'startSpeakingListener', string );
-      } );
-      this.endSpeakingEmitter.addListener( string => {
-        this.debug && console.log( 'endSpeakingListener', string );
-      } );
+    if (this.debug) {
+      this.announcementCompleteEmitter.addListener((utterance, string) => {
+        console.log('announcement complete', string);
+      });
+      this.startSpeakingEmitter.addListener(string => {
+        this.debug && console.log('startSpeakingListener', string);
+      });
+      this.endSpeakingEmitter.addListener(string => {
+        this.debug && console.log('endSpeakingListener', string);
+      });
     }
   }
 
@@ -357,42 +359,42 @@ class SpeechSynthesisAnnouncer extends Announcer {
    *                                       allowed to use SpeechSynthesis for the first time.
    * @param [providedOptions]
    */
-  public initialize( userGestureEmitter: TEmitter, providedOptions?: SpeechSynthesisInitializeOptions ): void {
-    assert && assert( !this.initialized, 'can only be initialized once' );
-    assert && assert( SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'trying to initialize speech, but speech is not supported on this platform.' );
+  public initialize(userGestureEmitter: TEmitter, providedOptions?: SpeechSynthesisInitializeOptions): void {
+    assert && assert(!this.initialized, 'can only be initialized once');
+    assert && assert(SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'trying to initialize speech, but speech is not supported on this platform.');
 
     // See top level type documentation.
-    assert && assert( initializeCount === 0, 'Only one instance of SpeechSynthesisAnnouncer can be initialized at a time.' );
+    assert && assert(initializeCount === 0, 'Only one instance of SpeechSynthesisAnnouncer can be initialized at a time.');
     initializeCount++;
 
-    const options = optionize<SpeechSynthesisInitializeOptions>()( {
+    const options = optionize<SpeechSynthesisInitializeOptions>()({
 
       // {BooleanProperty|DerivedProperty.<boolean>} - Controls whether speech is allowed with speech synthesis.
       // Combined into another DerivedProperty with this.enabledProperty so you don't have to use that as one
       // of the Properties that derive speechAllowedProperty, if you are passing in a DerivedProperty.
-      speechAllowedProperty: new BooleanProperty( true )
-    }, providedOptions );
+      speechAllowedProperty: new BooleanProperty(true)
+    }, providedOptions);
 
     this.synth = window.speechSynthesis;
 
     // whether the optional Property indicating speech is allowed and the SpeechSynthesisAnnouncer is enabled
-    this.canSpeakProperty = DerivedProperty.and( [ options.speechAllowedProperty, this.enabledProperty ] );
-    this.canSpeakProperty.link( this.boundHandleCanSpeakChange );
+    this.canSpeakProperty = DerivedProperty.and([options.speechAllowedProperty, this.enabledProperty]);
+    this.canSpeakProperty.link(this.boundHandleCanSpeakChange);
 
     // Set the speechAllowedAndFullyEnabledProperty when dependency Properties update
     Multilink.multilink(
-      [ options.speechAllowedProperty, this.voicingFullyEnabledProperty ],
-      ( speechAllowed, voicingFullyEnabled ) => {
+      [options.speechAllowedProperty, this.voicingFullyEnabledProperty],
+      (speechAllowed, voicingFullyEnabled) => {
         this._speechAllowedAndFullyEnabledProperty.value = speechAllowed && voicingFullyEnabled;
-      } );
+      });
 
     // browsers tend to generate the list of voices lazily, so the list of voices may be empty until speech is first
     // requested. Some browsers don't have an addEventListener function on speechSynthesis so check to see if it exists
     // before trying to call it.
     const synth = this.getSynth()!;
-    synth.addEventListener && synth.addEventListener( 'voiceschanged', () => {
+    synth.addEventListener && synth.addEventListener('voiceschanged', () => {
       this.populateVoices();
-    } );
+    });
 
     // try to populate voices immediately in case the browser populates them eagerly and we never get an
     // onvoiceschanged event
@@ -405,12 +407,12 @@ class SpeechSynthesisAnnouncer extends Announcer {
       this.timeSinceWakingEngine = ENGINE_WAKE_INTERVAL;
 
       // Display is on the namespace but cannot be imported due to circular dependencies
-      userGestureEmitter.removeListener( startEngineListener );
+      userGestureEmitter.removeListener(startEngineListener);
     };
-    userGestureEmitter.addListener( startEngineListener );
+    userGestureEmitter.addListener(startEngineListener);
 
     // listener for timing variables
-    stepTimer.addListener( this.step.bind( this ) );
+    stepTimer.addListener(this.step.bind(this));
 
     this.isInitializedProperty.value = true;
   }
@@ -418,7 +420,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
   /**
    * @param dt - in seconds from stepTimer
    */
-  private step( dt: number ): void {
+  private step(dt: number): void {
 
     // convert to ms
     dt *= 1000;
@@ -426,12 +428,12 @@ class SpeechSynthesisAnnouncer extends Announcer {
     // if initialized, this means we have a synth.
     const synth = this.getSynth();
 
-    if ( this.initialized && synth ) {
+    if (this.initialized && synth) {
 
       // If we haven't spoken yet, keep checking the synth to determine when there has been a successful usage
       // of SpeechSynthesis. Note this will be true if ANY SpeechSynthesisAnnouncer has successful speech (not just
       // this instance).
-      if ( !this.hasSpoken ) {
+      if (!this.hasSpoken) {
         this.hasSpoken = synth.speaking;
       }
 
@@ -440,14 +442,14 @@ class SpeechSynthesisAnnouncer extends Announcer {
       this.timeSinceUtteranceEnd = synth.speaking ? 0 : this.timeSinceUtteranceEnd + dt;
 
 
-      this.timeSincePendingUtterance = ( this.speakingSpeechSynthesisUtteranceWrapper && !this.speakingSpeechSynthesisUtteranceWrapper.started ) ?
-                                       this.timeSincePendingUtterance + dt : 0;
+      this.timeSincePendingUtterance = (this.speakingSpeechSynthesisUtteranceWrapper && !this.speakingSpeechSynthesisUtteranceWrapper.started) ?
+        this.timeSincePendingUtterance + dt : 0;
 
-      if ( this.timeSincePendingUtterance > PENDING_UTTERANCE_DELAY ) {
-        assert && assert( this.speakingSpeechSynthesisUtteranceWrapper, 'should have this.speakingSpeechSynthesisUtteranceWrapper' );
+      if (this.timeSincePendingUtterance > PENDING_UTTERANCE_DELAY) {
+        assert && assert(this.speakingSpeechSynthesisUtteranceWrapper, 'should have this.speakingSpeechSynthesisUtteranceWrapper');
 
         // It has been too long since we requested speech without speaking, the synth is likely failing on this platform
-        this.handleSpeechSynthesisEnd( this.speakingSpeechSynthesisUtteranceWrapper!.announceText, this.speakingSpeechSynthesisUtteranceWrapper! );
+        this.handleSpeechSynthesisEnd(this.speakingSpeechSynthesisUtteranceWrapper!.announceText, this.speakingSpeechSynthesisUtteranceWrapper!);
         this.speakingSpeechSynthesisUtteranceWrapper = null;
 
         // cancel the synth because we really don't want it to keep trying to speak this utterance after handling
@@ -459,7 +461,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
       // see documentation for the constant for more information. By setting readyToAnnounce in the step function
       // we also don't have to rely at all on the SpeechSynthesisUtterance 'end' event, which is inconsistent on
       // certain platforms. Also, not ready to announce if we are waiting for the synth to start speaking something.
-      if ( this.timeSinceUtteranceEnd > VOICING_UTTERANCE_INTERVAL && !this.speakingSpeechSynthesisUtteranceWrapper ) {
+      if (this.timeSinceUtteranceEnd > VOICING_UTTERANCE_INTERVAL && !this.speakingSpeechSynthesisUtteranceWrapper) {
         this.readyToAnnounce = true;
       }
 
@@ -468,11 +470,11 @@ class SpeechSynthesisAnnouncer extends Announcer {
       // that uses pause/resume like this. The workaround is needed for desktop Chrome when using `localService: false`
       // voices. The bug does not appear on any Microsoft Edge voices. This workaround breaks SpeechSynthesis on
       // android. In this check we only use this workaround where needed.
-      if ( platform.chromium && !platform.android && ( this.voiceProperty.value && !this.voiceProperty.value.localService ) ) {
+      if (platform.chromium && !platform.android && (this.voiceProperty.value && !this.voiceProperty.value.localService)) {
 
         // Not necessary to apply the workaround unless we are currently speaking.
         this.timeSincePauseResume = synth.speaking ? this.timeSincePauseResume + dt : 0;
-        if ( this.timeSincePauseResume > PAUSE_RESUME_WORKAROUND_INTERVAL ) {
+        if (this.timeSincePauseResume > PAUSE_RESUME_WORKAROUND_INTERVAL) {
           this.timeSincePauseResume = 0;
           synth.pause();
           synth.resume();
@@ -484,13 +486,13 @@ class SpeechSynthesisAnnouncer extends Announcer {
       // turns "off" the synthesis engine for performance. If it has been long enough since using speech synthesis and
       // there is nothing to speak in the queue, requesting speech with empty content keeps the engine active.
       // See https://github.com/phetsims/gravity-force-lab-basics/issues/303.
-      if ( platform.chromeOS ) {
+      if (platform.chromeOS) {
         this.timeSinceWakingEngine += dt;
-        if ( !synth.speaking && this.timeSinceWakingEngine > ENGINE_WAKE_INTERVAL ) {
+        if (!synth.speaking && this.timeSinceWakingEngine > ENGINE_WAKE_INTERVAL) {
           this.timeSinceWakingEngine = 0;
 
           // This space is actually quite important. An empty string began breaking chromebooks in https://github.com/phetsims/friction/issues/328
-          synth.speak( new SpeechSynthesisUtterance( ' ' ) );
+          synth.speak(new SpeechSynthesisUtterance(' '));
         }
       }
     }
@@ -499,8 +501,8 @@ class SpeechSynthesisAnnouncer extends Announcer {
   /**
    * When we can no longer speak, cancel all speech to silence everything.
    */
-  private handleCanSpeakChange( canSpeak: boolean ): void {
-    if ( !canSpeak ) { this.cancel(); }
+  private handleCanSpeakChange(canSpeak: boolean): void {
+    if (!canSpeak) { this.cancel(); }
   }
 
   /**
@@ -508,10 +510,10 @@ class SpeechSynthesisAnnouncer extends Announcer {
    */
   private populateVoices(): void {
     const synth = this.getSynth();
-    if ( synth ) {
+    if (synth) {
 
       // the browser sometimes provides duplicate voices, prune those out of the list
-      this.voicesProperty.value = _.uniqBy( synth.getVoices(), voice => voice.name );
+      this.voicesProperty.value = _.uniqBy(synth.getVoices(), voice => voice.name);
     }
   }
 
@@ -523,26 +525,26 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * https://github.com/phetsims/scenery/issues/1282/ for discussion and this decision.
    */
   public getPrioritizedVoices(): SpeechSynthesisVoice[] {
-    assert && assert( this.initialized, 'No voices available until the SpeechSynthesisAnnouncer is initialized' );
-    assert && assert( this.voicesProperty.value.length > 0, 'No voices available to provided a prioritized list.' );
+    assert && assert(this.initialized, 'No voices available until the SpeechSynthesisAnnouncer is initialized');
+    assert && assert(this.voicesProperty.value.length > 0, 'No voices available to provided a prioritized list.');
 
     const allVoices = this.voicesProperty.value.slice();
 
     // exclude "novelty" voices that are included by the operating system but marked as English.
     // const voicesWithoutNovelty = _.filter( allVoices, voice => !NOVELTY_VOICES.includes( voice.name ) );
-    const voicesWithoutNovelty = _.filter( allVoices, voice => {
+    const voicesWithoutNovelty = _.filter(allVoices, voice => {
 
       // Remove the voice if the SpeechSynthesisVoice.name includes a substring of the entry in our list (the browser
       // might include more information in the name than we maintain, like locale info or something else).
-      return !_.some( NOVELTY_VOICES, noveltyVoice => voice.name.includes( noveltyVoice ) );
-    } );
+      return !_.some(NOVELTY_VOICES, noveltyVoice => voice.name.includes(noveltyVoice));
+    });
 
-    const getIndex = ( voice: SpeechSynthesisVoice ) =>
-      voice.name.includes( 'Google' ) ? -1 : // Google should move toward the front
-      voice.name.includes( 'Fred' ) ? voicesWithoutNovelty.length : // Fred should move toward the back
-      voicesWithoutNovelty.indexOf( voice ); // Otherwise preserve ordering
+    const getIndex = (voice: SpeechSynthesisVoice) =>
+      voice.name.includes('Google') ? -1 : // Google should move toward the front
+        voice.name.includes('Fred') ? voicesWithoutNovelty.length : // Fred should move toward the back
+          voicesWithoutNovelty.indexOf(voice); // Otherwise preserve ordering
 
-    return voicesWithoutNovelty.sort( ( a, b ) => getIndex( a ) - getIndex( b ) );
+    return voicesWithoutNovelty.sort((a, b) => getIndex(a) - getIndex(b));
 
   }
 
@@ -552,11 +554,11 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * type doesn't include 'en-US' or 'en_US' as valid values, just 'en'.
    */
   public getEnglishPrioritizedVoices(): SpeechSynthesisVoice[] {
-    return _.filter( this.getPrioritizedVoices(), voice => {
+    return _.filter(this.getPrioritizedVoices(), voice => {
 
       // most browsers use dashes to separate the local, Android uses underscore.
       return voice.lang === 'en-US' || voice.lang === 'en_US';
-    } );
+    });
   }
 
   /**
@@ -588,44 +590,44 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * voice: 'es' - NO
    * voice: 'es-ES' - YES
    */
-  public getPrioritizedVoicesForLocale( locale: Locale ): SpeechSynthesisVoice[] {
+  public getPrioritizedVoicesForLocale(locale: Locale): SpeechSynthesisVoice[] {
 
     // Four letter locales of type Locale include an underscore between the language and the region. Most browser voice
     // names use a dash instead of an underscore, so we need to create a version of the locale with dashes.
     const underscoreLocale = locale;
-    const dashLocale = locale.replace( '_', '-' );
+    const dashLocale = locale.replace('_', '-');
 
-    return _.filter( this.getPrioritizedVoices(), voice => {
+    return _.filter(this.getPrioritizedVoices(), voice => {
 
       // Handle unsupported locale mapping here, see voiceLangToSupportedLocale and https://github.com/phetsims/number-play/issues/230.
-      const voiceLang = voiceLangToSupportedLocale.hasOwnProperty( voice.lang ) ?
-                        voiceLangToSupportedLocale[ voice.lang ] :
-                        voice.lang;
+      const voiceLang = voiceLangToSupportedLocale.hasOwnProperty(voice.lang) ?
+        voiceLangToSupportedLocale[voice.lang] :
+        voice.lang;
 
       let matchesShortLocale = false;
-      if ( voiceLang.includes( '_' ) || voiceLang.includes( '-' ) ) {
+      if (voiceLang.includes('_') || voiceLang.includes('-')) {
 
         // Mapping zh_CN or zh-CN -> zh
-        matchesShortLocale = underscoreLocale === voiceLang.slice( 0, 2 );
+        matchesShortLocale = underscoreLocale === voiceLang.slice(0, 2);
       }
 
       // while most browsers use dashes to separate the local, Android uses underscore, so compare both types. Loosely
       // compare with includes() so all country-specific voices are available for two-letter Locale codes.
       return matchesShortLocale || underscoreLocale === voiceLang || dashLocale === voiceLang;
-    } );
+    });
   }
 
   /**
    * Implements announce so the SpeechSynthesisAnnouncer can be a source of output for utteranceQueue.
    */
-  public override announce( announceText: ResolvedResponse, utterance: Utterance ): void {
-    if ( this.initialized && this.canSpeakProperty && this.canSpeakProperty.value ) {
-      this.requestSpeech( announceText, utterance );
+  public override announce(announceText: ResolvedResponse, utterance: Utterance): void {
+    if (this.initialized && this.canSpeakProperty && this.canSpeakProperty.value) {
+      this.requestSpeech(announceText, utterance);
     }
     else {
 
       // The announcer is not going to announce this utterance, signify that we are done with it.
-      this.handleAnnouncementFailure( utterance, announceText );
+      this.handleAnnouncementFailure(utterance, announceText);
     }
   }
 
@@ -633,9 +635,9 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * The announcement of this utterance has failed in some way, signify to clients of this announcer that the utterance
    * will never complete. For example start/end events on the SpeechSynthesisUtterance will never fire.
    */
-  private handleAnnouncementFailure( utterance: Utterance, announceText: ResolvedResponse ): void {
-    this.debug && console.log( 'announcement failure', announceText );
-    this.announcementCompleteEmitter.emit( utterance, announceText );
+  private handleAnnouncementFailure(utterance: Utterance, announceText: ResolvedResponse): void {
+    this.debug && console.log('announcement failure', announceText);
+    this.announcementCompleteEmitter.emit(utterance, announceText);
   }
 
   /**
@@ -647,24 +649,24 @@ class SpeechSynthesisAnnouncer extends Announcer {
    *
    * NOTE: This will interrupt any currently speaking utterance.
    */
-  public speakIgnoringEnabled( utterance: Utterance ): void {
-    if ( this.initialized ) {
+  public speakIgnoringEnabled(utterance: Utterance): void {
+    if (this.initialized) {
       this.cancel();
-      this.requestSpeech( utterance.getAlertText( this.respectResponseCollectorProperties ), utterance );
+      this.requestSpeech(utterance.getAlertText(this.respectResponseCollectorProperties), utterance);
     }
   }
 
   /**
    * Request speech with SpeechSynthesis.
    */
-  private requestSpeech( announceText: ResolvedResponse, utterance: Utterance ): void {
-    assert && assert( SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'trying to speak with speechSynthesis, but it is not supported on this platform' );
+  private requestSpeech(announceText: ResolvedResponse, utterance: Utterance): void {
+    assert && assert(SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'trying to speak with speechSynthesis, but it is not supported on this platform');
 
-    this.debug && console.log( 'requestSpeech', announceText );
+    this.debug && console.log('requestSpeech', announceText);
 
     // If the utterance text is null, then opt out early
-    if ( !announceText ) {
-      this.handleAnnouncementFailure( utterance, announceText );
+    if (!announceText) {
+      this.handleAnnouncementFailure(utterance, announceText);
       return;
     }
 
@@ -674,28 +676,28 @@ class SpeechSynthesisAnnouncer extends Announcer {
     );
 
     // embedding marks (for i18n) impact the output, strip before speaking, type cast number to string if applicable (for number)
-    const stringToSpeak = removeBrTags( stripEmbeddingMarks( announceText + '' ) );
+    const stringToSpeak = removeBrTags(stripEmbeddingMarks(announceText + ''));
 
     // Disallow any unfilled template variables to be set in the PDOM.
-    validate( stringToSpeak, Validation.STRING_WITHOUT_TEMPLATE_VARS_VALIDATOR );
+    validate(stringToSpeak, Validation.STRING_WITHOUT_TEMPLATE_VARS_VALIDATOR);
 
-    const speechSynthUtterance = new SpeechSynthesisUtterance( stringToSpeak );
+    const speechSynthUtterance = new SpeechSynthesisUtterance(stringToSpeak);
     speechSynthUtterance.voice = utteranceOptions.voice || this.voiceProperty.value;
     speechSynthUtterance.pitch = this.voicePitchProperty.value;
     speechSynthUtterance.rate = this.voiceRateProperty.value;
     speechSynthUtterance.volume = this.voiceVolumeProperty.value;
 
     const startListener = () => {
-      this.startSpeakingEmitter.emit( stringToSpeak, utterance );
+      this.startSpeakingEmitter.emit(stringToSpeak, utterance);
 
-      assert && assert( this.speakingSpeechSynthesisUtteranceWrapper, 'should have been set in requestSpeech' );
+      assert && assert(this.speakingSpeechSynthesisUtteranceWrapper, 'should have been set in requestSpeech');
       this.speakingSpeechSynthesisUtteranceWrapper!.started = true;
 
-      speechSynthUtterance.removeEventListener( 'start', startListener );
+      speechSynthUtterance.removeEventListener('start', startListener);
     };
 
     const endListener = () => {
-      this.handleSpeechSynthesisEnd( stringToSpeak, speechSynthesisUtteranceWrapper );
+      this.handleSpeechSynthesisEnd(stringToSpeak, speechSynthesisUtteranceWrapper);
     };
 
     // Keep a reference to the SpeechSynthesisUtterance and the start/endListeners so that we can remove them later.
@@ -705,17 +707,17 @@ class SpeechSynthesisAnnouncer extends Announcer {
     // will fail to emit that event. See
     // https://stackoverflow.com/questions/23483990/speechsynthesis-api-onend-callback-not-working and
     // https://github.com/phetsims/john-travoltage/issues/435 and https://github.com/phetsims/utterance-queue/issues/52
-    const speechSynthesisUtteranceWrapper = new SpeechSynthesisUtteranceWrapper( utterance, announceText, speechSynthUtterance, false, endListener, startListener );
+    const speechSynthesisUtteranceWrapper = new SpeechSynthesisUtteranceWrapper(utterance, announceText, speechSynthUtterance, false, endListener, startListener);
 
-    assert && assert( this.speakingSpeechSynthesisUtteranceWrapper === null, 'Wrapper should be null, we should have received an end event to clear it before the next one.' );
+    assert && assert(this.speakingSpeechSynthesisUtteranceWrapper === null, 'Wrapper should be null, we should have received an end event to clear it before the next one.');
     this.speakingSpeechSynthesisUtteranceWrapper = speechSynthesisUtteranceWrapper;
 
-    speechSynthUtterance.addEventListener( 'start', startListener );
-    speechSynthUtterance.addEventListener( 'end', endListener );
+    speechSynthUtterance.addEventListener('start', startListener);
+    speechSynthUtterance.addEventListener('end', endListener);
 
     // In Safari the `end` listener does not fire consistently, (especially after cancel)
     // but the error event does. In this case signify that speaking has ended.
-    speechSynthUtterance.addEventListener( 'error', endListener );
+    speechSynthUtterance.addEventListener('error', endListener);
 
     // Signify to the utterance-queue that we cannot speak yet until this utterance has finished
     this.readyToAnnounce = false;
@@ -727,27 +729,27 @@ class SpeechSynthesisAnnouncer extends Announcer {
     this.timeSinceUtteranceEnd = 0;
 
     // Interrupt if the Utterance can no longer be announced.
-    utterance.canAnnounceProperty.link( this.boundHandleCanAnnounceChange );
-    utterance.voicingCanAnnounceProperty.link( this.boundHandleCanAnnounceChange );
+    utterance.canAnnounceProperty.link(this.boundHandleCanAnnounceChange);
+    utterance.voicingCanAnnounceProperty.link(this.boundHandleCanAnnounceChange);
 
-    this.getSynth()!.speak( speechSynthUtterance );
+    this.getSynth()!.speak(speechSynthUtterance);
   }
 
   /**
    * When a canAnnounceProperty changes to false for an Utterance, that utterance should be cancelled.
    */
   private handleCanAnnounceChange(): void {
-    if ( this.speakingSpeechSynthesisUtteranceWrapper ) {
-      this.cancelUtteranceIfCanAnnounceFalse( this.speakingSpeechSynthesisUtteranceWrapper.utterance );
+    if (this.speakingSpeechSynthesisUtteranceWrapper) {
+      this.cancelUtteranceIfCanAnnounceFalse(this.speakingSpeechSynthesisUtteranceWrapper.utterance);
     }
   }
 
   /**
    * When a canAnnounceProperty changes, cancel the Utterance if the value becomes false.
    */
-  private cancelUtteranceIfCanAnnounceFalse( utterance: Utterance ): void {
-    if ( !utterance.canAnnounceProperty.value || !utterance.voicingCanAnnounceProperty.value ) {
-      this.cancelUtterance( utterance );
+  private cancelUtteranceIfCanAnnounceFalse(utterance: Utterance): void {
+    if (!utterance.canAnnounceProperty.value || !utterance.voicingCanAnnounceProperty.value) {
+      this.cancelUtterance(utterance);
     }
   }
 
@@ -755,23 +757,23 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * All the work necessary when we are finished with an utterance, intended for end or cancel.
    * Emits events signifying that we are done with speech and does some disposal.
    */
-  private handleSpeechSynthesisEnd( stringToSpeak: ResolvedResponse, speechSynthesisUtteranceWrapper: SpeechSynthesisUtteranceWrapper ): void {
-    this.endSpeakingEmitter.emit( stringToSpeak, speechSynthesisUtteranceWrapper.utterance );
-    this.announcementCompleteEmitter.emit( speechSynthesisUtteranceWrapper.utterance, speechSynthesisUtteranceWrapper.speechSynthesisUtterance.text );
+  private handleSpeechSynthesisEnd(stringToSpeak: ResolvedResponse, speechSynthesisUtteranceWrapper: SpeechSynthesisUtteranceWrapper): void {
+    this.endSpeakingEmitter.emit(stringToSpeak, speechSynthesisUtteranceWrapper.utterance);
+    this.announcementCompleteEmitter.emit(speechSynthesisUtteranceWrapper.utterance, speechSynthesisUtteranceWrapper.speechSynthesisUtterance.text);
 
-    speechSynthesisUtteranceWrapper.speechSynthesisUtterance.removeEventListener( 'error', speechSynthesisUtteranceWrapper.endListener );
-    speechSynthesisUtteranceWrapper.speechSynthesisUtterance.removeEventListener( 'end', speechSynthesisUtteranceWrapper.endListener );
-    speechSynthesisUtteranceWrapper.speechSynthesisUtterance.removeEventListener( 'start', speechSynthesisUtteranceWrapper.startListener );
+    speechSynthesisUtteranceWrapper.speechSynthesisUtterance.removeEventListener('error', speechSynthesisUtteranceWrapper.endListener);
+    speechSynthesisUtteranceWrapper.speechSynthesisUtterance.removeEventListener('end', speechSynthesisUtteranceWrapper.endListener);
+    speechSynthesisUtteranceWrapper.speechSynthesisUtterance.removeEventListener('start', speechSynthesisUtteranceWrapper.startListener);
 
     // The endSpeakingEmitter may end up calling handleSpeechSynthesisEnd in its listeners, we need to be graceful
     const utteranceCanAnnounceProperty = speechSynthesisUtteranceWrapper.utterance.canAnnounceProperty;
-    if ( utteranceCanAnnounceProperty.hasListener( this.boundHandleCanAnnounceChange ) ) {
-      utteranceCanAnnounceProperty.unlink( this.boundHandleCanAnnounceChange );
+    if (utteranceCanAnnounceProperty.hasListener(this.boundHandleCanAnnounceChange)) {
+      utteranceCanAnnounceProperty.unlink(this.boundHandleCanAnnounceChange);
     }
 
     const utteranceVoicingCanAnnounceProperty = speechSynthesisUtteranceWrapper.utterance.voicingCanAnnounceProperty;
-    if ( utteranceVoicingCanAnnounceProperty.hasListener( this.boundHandleCanAnnounceChange ) ) {
-      utteranceVoicingCanAnnounceProperty.unlink( this.boundHandleCanAnnounceChange );
+    if (utteranceVoicingCanAnnounceProperty.hasListener(this.boundHandleCanAnnounceChange)) {
+      utteranceVoicingCanAnnounceProperty.unlink(this.boundHandleCanAnnounceChange);
     }
 
     this.speakingSpeechSynthesisUtteranceWrapper = null;
@@ -782,7 +784,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * Speech API. Every references has a check to ensure that the synth is available.
    */
   private getSynth(): null | SpeechSynthesis {
-    assert && assert( SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'Trying to use SpeechSynthesis, but it is not supported on this platform.' );
+    assert && assert(SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'Trying to use SpeechSynthesis, but it is not supported on this platform.');
     return this.synth;
   }
 
@@ -791,8 +793,8 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * (utterance-queue internal)
    */
   public cancel(): void {
-    if ( this.initialized ) {
-      this.speakingSpeechSynthesisUtteranceWrapper && this.cancelUtterance( this.speakingSpeechSynthesisUtteranceWrapper.utterance );
+    if (this.initialized) {
+      this.speakingSpeechSynthesisUtteranceWrapper && this.cancelUtterance(this.speakingSpeechSynthesisUtteranceWrapper.utterance);
     }
   }
 
@@ -801,12 +803,12 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * any other utterances that may be in the UtteranceQueue.
    * (utterance-queue internal)
    */
-  public override cancelUtterance( utterance: Utterance ): void {
+  public override cancelUtterance(utterance: Utterance): void {
 
     const wrapper = this.speakingSpeechSynthesisUtteranceWrapper;
 
-    if ( wrapper && utterance === wrapper.utterance ) {
-      this.handleSpeechSynthesisEnd( wrapper.announceText, wrapper );
+    if (wrapper && utterance === wrapper.utterance) {
+      this.handleSpeechSynthesisEnd(wrapper.announceText, wrapper);
 
       // silence all speech - after handleSpeechSynthesisEnd so we don't do that work twice in case `cancelSynth`
       // also triggers end events immediately (but that doesn't happen on all browsers)
@@ -817,7 +819,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
   /**
    * Given one utterance, should it cancel another provided utterance?
    */
-  public override shouldUtteranceCancelOther( utterance: Utterance, utteranceToCancel: Utterance ): boolean {
+  public override shouldUtteranceCancelOther(utterance: Utterance, utteranceToCancel: Utterance): boolean {
 
     // Utterance.announcerOptions must be more general to allow this type to apply to any implementation of Announcer, thus "Object" as the provided options.
     const utteranceOptions = optionize3<SpeechSynthesisAnnounceOptions, SpeechSynthesisAnnounceOptions>()(
@@ -825,12 +827,12 @@ class SpeechSynthesisAnnouncer extends Announcer {
     );
 
     let shouldCancel;
-    if ( utteranceToCancel.priorityProperty.value !== utterance.priorityProperty.value ) {
+    if (utteranceToCancel.priorityProperty.value !== utterance.priorityProperty.value) {
       shouldCancel = utteranceToCancel.priorityProperty.value < utterance.priorityProperty.value;
     }
     else {
       shouldCancel = utteranceOptions.cancelOther;
-      if ( utteranceToCancel && utteranceToCancel === utterance ) {
+      if (utteranceToCancel && utteranceToCancel === utterance) {
         shouldCancel = utteranceOptions.cancelSelf;
       }
     }
@@ -842,12 +844,12 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * When the priority for a new utterance changes or if a new utterance is added to the queue, determine whether
    * we should cancel the synth immediately.
    */
-  public override onUtterancePriorityChange( nextAvailableUtterance: Utterance ): void {
+  public override onUtterancePriorityChange(nextAvailableUtterance: Utterance): void {
 
     // test against what is currently being spoken by the synth
     const wrapper = this.speakingSpeechSynthesisUtteranceWrapper;
-    if ( wrapper && this.shouldUtteranceCancelOther( nextAvailableUtterance, wrapper.utterance ) ) {
-      this.cancelUtterance( wrapper.utterance );
+    if (wrapper && this.shouldUtteranceCancelOther(nextAvailableUtterance, wrapper.utterance)) {
+      this.cancelUtterance(wrapper.utterance);
     }
   }
 
@@ -855,7 +857,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * Cancel the synth. This will silence speech. This will silence any speech and cancel the
    */
   private cancelSynth(): void {
-    assert && assert( this.initialized, 'must be initialized to use synth' );
+    assert && assert(this.initialized, 'must be initialized to use synth');
     const synth = this.getSynth()!;
     synth && synth.cancel();
   }
@@ -878,12 +880,12 @@ class SpeechSynthesisAnnouncer extends Announcer {
  * of the SpeechSynthesisUtterance in memory long enough for the 'end' event to be emitted.
  */
 class SpeechSynthesisUtteranceWrapper {
-  public constructor( public readonly utterance: Utterance,
-                      public readonly announceText: ResolvedResponse,
-                      public readonly speechSynthesisUtterance: SpeechSynthesisUtterance,
-                      public started: boolean,
-                      public readonly endListener: () => void,
-                      public readonly startListener: () => void ) {
+  public constructor(public readonly utterance: Utterance,
+    public readonly announceText: ResolvedResponse,
+    public readonly speechSynthesisUtterance: SpeechSynthesisUtterance,
+    public started: boolean,
+    public readonly endListener: () => void,
+    public readonly startListener: () => void) {
   }
 }
 
@@ -891,14 +893,14 @@ class SpeechSynthesisUtteranceWrapper {
  * Remove <br> or <br/> tags from a string
  * @param string - plain text or html string
  */
-function removeBrTags( string: string ): string {
-  return string.split( '<br/>' ).join( ' ' ).split( '<br>' ).join( ' ' );
+function removeBrTags(string: string): string {
+  return string.split('<br/>').join(' ').split('<br>').join(' ');
 }
 
-const SpeechSynthesisVoiceIO = new IOType( 'SpeechSynthesisVoiceIO', {
+const SpeechSynthesisVoiceIO = new IOType('SpeechSynthesisVoiceIO', {
   isValidValue: v => true, // SpeechSynthesisVoice is not available on window
   toStateObject: speechSynthesisVoice => speechSynthesisVoice.name
-} );
+});
 
-utteranceQueueNamespace.register( 'SpeechSynthesisAnnouncer', SpeechSynthesisAnnouncer );
+utteranceQueueNamespace.register('SpeechSynthesisAnnouncer', SpeechSynthesisAnnouncer);
 export default SpeechSynthesisAnnouncer;

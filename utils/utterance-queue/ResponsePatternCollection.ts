@@ -15,8 +15,10 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { optionize3 } from '../../phet-core/js/optionize.js';
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
+import _ from 'lodash';
+
+import { optionize3 } from '../phet-core/optionize';
+import utteranceQueueNamespace from './utteranceQueueNamespace';
 
 // constants
 const NAME_KEY = 'NAME';
@@ -77,9 +79,9 @@ class ResponsePatternCollection {
   private readonly context: string;
   private readonly hint: string;
 
-  public constructor( providedOptions?: ResponsePatternCollectionOptions ) {
+  public constructor(providedOptions?: ResponsePatternCollectionOptions) {
 
-    const options = optionize3<ResponsePatternCollectionOptions>()( {}, DEFAULT_RESPONSE_PATTERNS, providedOptions );
+    const options = optionize3<ResponsePatternCollectionOptions>()({}, DEFAULT_RESPONSE_PATTERNS, providedOptions);
 
     this.nameObjectContextHint = options.nameObjectContextHint;
     this.nameObjectContext = options.nameObjectContext;
@@ -99,13 +101,13 @@ class ResponsePatternCollection {
   }
 
 
-  public getResponsePattern( key: string ): string {
+  public getResponsePattern(key: string): string {
     // TODO: Not sure how to get rid of this index signature error. I was looking at assertion signatures in links below, see https://github.com/phetsims/tambo/issues/160
     // https://stackoverflow.com/questions/56568423/typescript-no-index-signature-with-a-parameter-of-type-string-was-found-on-ty
     // https://www.carlrippon.com/typescript-assertion-signatures/
     // @ts-expect-error - see above comment
-    const patternString = this[ key ];
-    assert && assert( patternString, `no pattern string found for key ${key}` );
+    const patternString = this[key];
+    assert && assert(patternString, `no pattern string found for key ${key}`);
     return patternString;
   }
 
@@ -113,20 +115,20 @@ class ResponsePatternCollection {
    * Create a key to be used to get a string pattern for a Voicing response. Assumes keys
    * are like those listed in DEFAULT_RESPONSE_PATTERNS.
    */
-  public static createPatternKey( includeName: boolean, includeObject: boolean, includeContext: boolean, includeHint: boolean ): string {
+  public static createPatternKey(includeName: boolean, includeObject: boolean, includeContext: boolean, includeHint: boolean): string {
     let key = '';
-    if ( includeName ) { key = key.concat( NAME_KEY.concat( '_' ) ); }
-    if ( includeObject ) { key = key.concat( OBJECT_KEY.concat( '_' ) ); }
-    if ( includeContext ) { key = key.concat( CONTEXT_KEY.concat( '_' ) ); }
-    if ( includeHint ) { key = key.concat( HINT_KEY.concat( '_' ) ); }
+    if (includeName) { key = key.concat(NAME_KEY.concat('_')); }
+    if (includeObject) { key = key.concat(OBJECT_KEY.concat('_')); }
+    if (includeContext) { key = key.concat(CONTEXT_KEY.concat('_')); }
+    if (includeHint) { key = key.concat(HINT_KEY.concat('_')); }
 
     // convert to camel case and trim any underscores at the end of the string
-    return _.camelCase( key );
+    return _.camelCase(key);
   }
 
   // Default order and punctuation for Voicing responses.
   public static readonly DEFAULT_RESPONSE_PATTERNS = new ResponsePatternCollection();
 }
 
-utteranceQueueNamespace.register( 'ResponsePatternCollection', ResponsePatternCollection );
+utteranceQueueNamespace.register('ResponsePatternCollection', ResponsePatternCollection);
 export default ResponsePatternCollection;

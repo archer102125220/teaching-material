@@ -17,17 +17,17 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import ReadOnlyProperty from '../../axon/js/ReadOnlyProperty.js';
-import TinyProperty from '../../axon/js/TinyProperty.js';
-import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
-import { optionize3, OptionizeDefaults } from '../../phet-core/js/optionize.js';
-import ResponsePatternCollection from './ResponsePatternCollection.js';
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
+import ReadOnlyProperty from '../axon/ReadOnlyProperty';
+import TinyProperty from '../axon/TinyProperty';
+import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
+import { optionize3, type OptionizeDefaults } from '../phet-core/optionize';
+import ResponsePatternCollection from './ResponsePatternCollection';
+import utteranceQueueNamespace from './utteranceQueueNamespace';
 
 // The text sent to an Announcer technology, after resolving it from potentially more complicated structures holding a response
 export type ResolvedResponse = string | number | null;
 
-type ResponseCreator = TReadOnlyProperty<string> | ( () => ResolvedResponse );
+type ResponseCreator = TReadOnlyProperty<string> | (() => ResolvedResponse);
 export type VoicingResponse = ResponseCreator | ResolvedResponse;
 
 // No function creator because we don't want to support the execution of that function.
@@ -60,16 +60,16 @@ export type SpeakableResolvedOptions = {
 
   // In speaking options, we don't allow a ResponseCreator function, but just a string|null. The `undefined` is to
   // match on the properties because they are optional (marked with `?`)
-  [PropertyName in keyof ResponsePacketOptions]: ResponsePacketOptions[PropertyName] extends ( VoicingResponse | undefined ) ?
-                                                 SpeakableResolvedResponse :
-                                                 ResponsePacketOptions[PropertyName];
+  [PropertyName in keyof ResponsePacketOptions]: ResponsePacketOptions[PropertyName] extends (VoicingResponse | undefined) ?
+  SpeakableResolvedResponse :
+  ResponsePacketOptions[PropertyName];
 };
 
 // Add null support for certain cases
 export type SpeakableNullableResolvedOptions = {
   [PropertyName in keyof SpeakableResolvedOptions]: SpeakableResolvedOptions[PropertyName] extends SpeakableResolvedResponse ?
-                                                    SpeakableResolvedResponse | null :
-                                                    SpeakableResolvedOptions[PropertyName];
+  SpeakableResolvedResponse | null :
+  SpeakableResolvedOptions[PropertyName];
 };
 
 // Defaults can't be functions, it makes it easier for certain cases, like in responseCollector.
@@ -96,10 +96,10 @@ class ResponsePacket {
   public responsePatternCollection: ResponsePatternCollection;
   public static readonly DEFAULT_OPTIONS = DEFAULT_OPTIONS;
 
-  public constructor( providedOptions?: ResponsePacketOptions ) {
-    const options = optionize3<ResponsePacketOptions>()( {}, DEFAULT_OPTIONS, providedOptions );
+  public constructor(providedOptions?: ResponsePacketOptions) {
+    const options = optionize3<ResponsePacketOptions>()({}, DEFAULT_OPTIONS, providedOptions);
 
-    assert && assert( options.responsePatternCollection instanceof ResponsePatternCollection );
+    assert && assert(options.responsePatternCollection instanceof ResponsePatternCollection);
 
     // The response to be spoken for this packet when speaking names. This is usually
     // the same as the description accessible name, typically spoken on focus and on interaction, labelling what the
@@ -134,61 +134,61 @@ class ResponsePacket {
   }
 
   public getNameResponse(): ResolvedResponse {
-    return ResponsePacket.getResponseText( this._nameResponse );
+    return ResponsePacket.getResponseText(this._nameResponse);
   }
 
   public get nameResponse(): ResolvedResponse { return this.getNameResponse(); }
 
-  public set nameResponse( nameResponse: VoicingResponse ) { this.setNameResponse( nameResponse ); }
+  public set nameResponse(nameResponse: VoicingResponse) { this.setNameResponse(nameResponse); }
 
-  public setNameResponse( nameResponse: VoicingResponse ): void {
+  public setNameResponse(nameResponse: VoicingResponse): void {
     this._nameResponse = nameResponse;
   }
 
   public getObjectResponse(): ResolvedResponse {
-    return ResponsePacket.getResponseText( this._objectResponse );
+    return ResponsePacket.getResponseText(this._objectResponse);
   }
 
   public get objectResponse(): ResolvedResponse { return this.getObjectResponse(); }
 
-  public set objectResponse( objectResponse: VoicingResponse ) { this.setObjectResponse( objectResponse ); }
+  public set objectResponse(objectResponse: VoicingResponse) { this.setObjectResponse(objectResponse); }
 
-  public setObjectResponse( objectResponse: VoicingResponse ): void {
+  public setObjectResponse(objectResponse: VoicingResponse): void {
     this._objectResponse = objectResponse;
   }
 
   public getContextResponse(): ResolvedResponse {
-    return ResponsePacket.getResponseText( this._contextResponse );
+    return ResponsePacket.getResponseText(this._contextResponse);
   }
 
   public get contextResponse(): ResolvedResponse { return this.getContextResponse(); }
 
-  public set contextResponse( contextResponse: VoicingResponse ) { this.setContextResponse( contextResponse ); }
+  public set contextResponse(contextResponse: VoicingResponse) { this.setContextResponse(contextResponse); }
 
-  public setContextResponse( contextResponse: VoicingResponse ): void {
+  public setContextResponse(contextResponse: VoicingResponse): void {
     this._contextResponse = contextResponse;
   }
 
   public getHintResponse(): ResolvedResponse {
-    return ResponsePacket.getResponseText( this._hintResponse );
+    return ResponsePacket.getResponseText(this._hintResponse);
   }
 
   public get hintResponse(): ResolvedResponse { return this.getHintResponse(); }
 
-  public set hintResponse( hintResponse: VoicingResponse ) { this.setHintResponse( hintResponse ); }
+  public set hintResponse(hintResponse: VoicingResponse) { this.setHintResponse(hintResponse); }
 
-  public setHintResponse( hintResponse: VoicingResponse ): void {
+  public setHintResponse(hintResponse: VoicingResponse): void {
     this._hintResponse = hintResponse;
   }
 
   // Map VoicingResponse -> ResolvedResponse (resolve functions and Properties to their values)
-  public static getResponseText( response: VoicingResponse ): ResolvedResponse {
+  public static getResponseText(response: VoicingResponse): ResolvedResponse {
     return response instanceof ReadOnlyProperty || response instanceof TinyProperty ? response.value :
-           typeof response === 'function' ? response() : response;
+      typeof response === 'function' ? response() : response;
   }
 
   public copy(): ResponsePacket {
-    return new ResponsePacket( this.serialize() );
+    return new ResponsePacket(this.serialize());
   }
 
   public serialize(): Required<SpeakableNullableResolvedOptions> {
@@ -203,5 +203,5 @@ class ResponsePacket {
   }
 }
 
-utteranceQueueNamespace.register( 'ResponsePacket', ResponsePacket );
+utteranceQueueNamespace.register('ResponsePacket', ResponsePacket);
 export default ResponsePacket;

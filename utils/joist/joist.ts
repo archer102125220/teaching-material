@@ -8,4 +8,4 @@
 
 import Namespace from '../phet-core/Namespace';
 
-export default new Namespace( 'joist' );
+export default new Namespace('joist');

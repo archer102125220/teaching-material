@@ -9,6 +9,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import TinyEmitter from '../../axon/TinyEmitter';
 import Bounds2 from '../../dot/Bounds2';
 import Vector2 from '../../dot/Vector2';

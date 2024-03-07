@@ -8,6 +8,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import Tandem from '../tandem/Tandem';
 import IOType from '../tandem/types/IOType';
 import VoidIO from '../tandem/types/VoidIO';
@@ -51,7 +53,7 @@ function getDerivedValue<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T
 
   try {
 
-    
+
     // @ts-expect-error
     return derivation(...dependencies.map(property => property.get()));
   }
@@ -301,7 +303,7 @@ DerivedProperty.DerivedPropertyIO = parameterType => {
           returnType: VoidIO,
           parameterTypes: [parameterType],
 
-          
+
           // @ts-expect-error
           implementation: DerivedProperty.prototype.set,
           documentation: 'Errors out when you try to set a derived property.',

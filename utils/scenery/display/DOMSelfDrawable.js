@@ -12,7 +12,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { scenery, SelfDrawable } from '../imports.js';
+import { scenery, SelfDrawable } from '../imports';
 
 class DOMSelfDrawable extends SelfDrawable {
   /**
@@ -23,11 +23,12 @@ class DOMSelfDrawable extends SelfDrawable {
    * @param {Instance} instance
    * @returns {DOMSelfDrawable}
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer, instance );
+  initialize(renderer, instance) {
+    super.initialize(renderer, instance);
 
     // @private {function} - this is the same across lifecycles
-    this.transformListener = this.transformListener || this.markTransformDirty.bind( this );
+    this.transformListener =
+      this.transformListener || this.markTransformDirty.bind(this);
 
     this.markTransformDirty();
 
@@ -35,7 +36,7 @@ class DOMSelfDrawable extends SelfDrawable {
     this.visibilityDirty = true;
 
     // handle transform changes
-    instance.relativeTransform.addListener( this.transformListener ); // when our relative tranform changes, notify us in the pre-repaint phase
+    instance.relativeTransform.addListener(this.transformListener); // when our relative tranform changes, notify us in the pre-repaint phase
     instance.relativeTransform.addPrecompute(); // trigger precomputation of the relative transform, since we will always need it when it is updated
 
     return this;
@@ -73,13 +74,13 @@ class DOMSelfDrawable extends SelfDrawable {
    */
   update() {
     // See if we need to actually update things (will bail out if we are not dirty, or if we've been disposed)
-    if ( !super.update() ) {
+    if (!super.update()) {
       return false;
     }
 
     this.updateDOM();
 
-    if ( this.visibilityDirty ) {
+    if (this.visibilityDirty) {
       this.visibilityDirty = false;
 
       this.domElement.style.visibility = this.visible ? '' : 'hidden';
@@ -106,7 +107,7 @@ class DOMSelfDrawable extends SelfDrawable {
   updateSelfVisibility() {
     super.updateSelfVisibility();
 
-    if ( !this.visibilityDirty ) {
+    if (!this.visibilityDirty) {
       this.visibilityDirty = true;
       this.markDirty();
     }
@@ -118,7 +119,7 @@ class DOMSelfDrawable extends SelfDrawable {
    * @override
    */
   dispose() {
-    this.instance.relativeTransform.removeListener( this.transformListener );
+    this.instance.relativeTransform.removeListener(this.transformListener);
     this.instance.relativeTransform.removePrecompute();
 
     // super call
@@ -126,5 +127,5 @@ class DOMSelfDrawable extends SelfDrawable {
   }
 }
 
-scenery.register( 'DOMSelfDrawable', DOMSelfDrawable );
+scenery.register('DOMSelfDrawable', DOMSelfDrawable);
 export default DOMSelfDrawable;

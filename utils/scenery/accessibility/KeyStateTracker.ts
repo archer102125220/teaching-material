@@ -10,13 +10,15 @@
  * @author Michael Barlow
  */
 
+import _ from 'lodash';
+
 import PhetioAction from '../../tandem/PhetioAction';
 import Emitter from '../../axon/Emitter';
 import stepTimer from '../../axon/stepTimer';
 import EventType from '../../tandem/EventType';
 import { EventIO, KeyboardUtils, scenery } from '../imports';
 import { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import PickOptional from '../../phet-core/types/PickOptional';
+import type PickOptional from '../../phet-core/types/PickOptional';
 import type TEmitter from '../../axon/TEmitter';
 import platform from '../../phet-core/platform';
 
@@ -101,7 +103,7 @@ class KeyStateTracker {
           assert && assert(key, 'Could not find key from domEvent');
           this.keyState[key] = {
             keyDown: true,
-            key: key,
+            key,
             timeDown: 0 // in ms
           };
         }
@@ -191,21 +193,21 @@ class KeyStateTracker {
     if (domEvent.shiftKey && !KeyboardUtils.isShiftKey(domEvent) && !this.shiftKeyDown) {
       this.keyState[KeyboardUtils.KEY_SHIFT_LEFT] = {
         keyDown: true,
-        key: key,
+        key,
         timeDown: 0 // in ms
       };
     }
     if (domEvent.altKey && !KeyboardUtils.isAltKey(domEvent) && !this.altKeyDown) {
       this.keyState[KeyboardUtils.KEY_ALT_LEFT] = {
         keyDown: true,
-        key: key,
+        key,
         timeDown: 0 // in ms
       };
     }
     if (domEvent.ctrlKey && !KeyboardUtils.isControlKey(domEvent) && !this.ctrlKeyDown) {
       this.keyState[KeyboardUtils.KEY_CONTROL_LEFT] = {
         keyDown: true,
-        key: key,
+        key,
         timeDown: 0 // in ms
       };
     }

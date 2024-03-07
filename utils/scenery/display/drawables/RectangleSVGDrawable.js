@@ -6,13 +6,18 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { RectangleStatefulDrawable, scenery, svgns, SVGSelfDrawable } from '../../imports.js';
+import Poolable from '../../../phet-core/Poolable';
+import {
+  RectangleStatefulDrawable,
+  scenery,
+  svgns,
+  SVGSelfDrawable
+} from '../../imports';
 
 // TODO: change this based on memory and performance characteristics of the platform https://github.com/phetsims/scenery/issues/1581
 const keepSVGRectangleElements = true; // whether we should pool SVG elements for the SVG rendering states, or whether we should free them when possible for memory
 
-class RectangleSVGDrawable extends RectangleStatefulDrawable( SVGSelfDrawable ) {
+class RectangleSVGDrawable extends RectangleStatefulDrawable(SVGSelfDrawable) {
   /**
    * @public
    * @override
@@ -20,14 +25,15 @@ class RectangleSVGDrawable extends RectangleStatefulDrawable( SVGSelfDrawable ) 
    * @param {number} renderer
    * @param {Instance} instance
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer, instance, true, keepSVGRectangleElements ); // usesPaint: true
+  initialize(renderer, instance) {
+    super.initialize(renderer, instance, true, keepSVGRectangleElements); // usesPaint: true
 
     this.lastArcW = -1; // invalid on purpose
     this.lastArcH = -1; // invalid on purpose
 
     // @protected {SVGRectElement} - Sole SVG element for this drawable, implementing API for SVGSelfDrawable
-    this.svgElement = this.svgElement || document.createElementNS( svgns, 'rect' );
+    this.svgElement =
+      this.svgElement || document.createElementNS(svgns, 'rect');
   }
 
   /**
@@ -39,46 +45,51 @@ class RectangleSVGDrawable extends RectangleStatefulDrawable( SVGSelfDrawable ) 
   updateSVGSelf() {
     const rect = this.svgElement;
 
-    if ( this.dirtyX ) {
-      rect.setAttribute( 'x', this.node._rectX );
+    if (this.dirtyX) {
+      rect.setAttribute('x', this.node._rectX);
     }
-    if ( this.dirtyY ) {
-      rect.setAttribute( 'y', this.node._rectY );
+    if (this.dirtyY) {
+      rect.setAttribute('y', this.node._rectY);
     }
-    if ( this.dirtyWidth ) {
-      rect.setAttribute( 'width', this.node._rectWidth );
+    if (this.dirtyWidth) {
+      rect.setAttribute('width', this.node._rectWidth);
     }
-    if ( this.dirtyHeight ) {
-      rect.setAttribute( 'height', this.node._rectHeight );
+    if (this.dirtyHeight) {
+      rect.setAttribute('height', this.node._rectHeight);
     }
-    if ( this.dirtyCornerXRadius || this.dirtyCornerYRadius || this.dirtyWidth || this.dirtyHeight ) {
+    if (
+      this.dirtyCornerXRadius ||
+      this.dirtyCornerYRadius ||
+      this.dirtyWidth ||
+      this.dirtyHeight
+    ) {
       let arcw = 0;
       let arch = 0;
 
       // workaround for various browsers if rx=20, ry=0 (behavior is inconsistent, either identical to rx=20,ry=20, rx=0,ry=0. We'll treat it as rx=0,ry=0)
       // see https://github.com/phetsims/scenery/issues/183
-      if ( this.node.isRounded() ) {
+      if (this.node.isRounded()) {
         const maximumArcSize = this.node.getMaximumArcSize();
-        arcw = Math.min( this.node._cornerXRadius, maximumArcSize );
-        arch = Math.min( this.node._cornerYRadius, maximumArcSize );
+        arcw = Math.min(this.node._cornerXRadius, maximumArcSize);
+        arch = Math.min(this.node._cornerYRadius, maximumArcSize);
       }
-      if ( arcw !== this.lastArcW ) {
+      if (arcw !== this.lastArcW) {
         this.lastArcW = arcw;
-        rect.setAttribute( 'rx', arcw );
+        rect.setAttribute('rx', arcw);
       }
-      if ( arch !== this.lastArcH ) {
+      if (arch !== this.lastArcH) {
         this.lastArcH = arch;
-        rect.setAttribute( 'ry', arch );
+        rect.setAttribute('ry', arch);
       }
     }
 
     // Apply any fill/stroke changes to our element.
-    this.updateFillStrokeStyle( rect );
+    this.updateFillStrokeStyle(rect);
   }
 }
 
-scenery.register( 'RectangleSVGDrawable', RectangleSVGDrawable );
+scenery.register('RectangleSVGDrawable', RectangleSVGDrawable);
 
-Poolable.mixInto( RectangleSVGDrawable );
+Poolable.mixInto(RectangleSVGDrawable);
 
 export default RectangleSVGDrawable;

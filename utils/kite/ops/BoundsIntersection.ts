@@ -9,6 +9,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Vector2 from '../../dot/Vector2';
 import Pool from '../../phet-core/Pool';
 import { kite, Segment, SegmentIntersection } from '../imports';

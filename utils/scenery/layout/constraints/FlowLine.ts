@@ -6,6 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Orientation from '../../../phet-core/Orientation';
 import Pool from '../../../phet-core/Pool';
 import { FlowCell, LayoutLine, scenery } from '../../imports';

@@ -9,6 +9,8 @@
  * @author Jesse Greenberg
  */
 
+import _ from 'lodash';
+
 import Matrix3 from '../../dot/Matrix3';
 import optionize from '../../phet-core/optionize';
 import { scenery, Trail } from '../imports';

@@ -17,6 +17,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import TinyEmitter from '../../../axon/TinyEmitter';
 import type StrictOmit from '../../../phet-core/types/StrictOmit';
 import Bounds2 from '../../../dot/Bounds2';

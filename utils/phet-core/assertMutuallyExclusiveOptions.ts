@@ -12,6 +12,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import phetCore from './phetCore';
 
 /**
@@ -19,20 +21,20 @@ import phetCore from './phetCore';
  *                                        - be null or undefined
  * @param sets - families of mutually exclusive option keys, see examples above.
  */
-const assertMutuallyExclusiveOptions = function( options: object | null | undefined, ...sets: string[][] ): void {
-  if ( assert && options ) {
+const assertMutuallyExclusiveOptions = function (options: object | null | undefined, ...sets: string[][]): void {
+  if (assert && options) {
 
     // Determine which options are used from each set
-    const usedElementsFromEachSet = sets.map( set => Object.keys( _.pick( options, ...set ) ) );
+    const usedElementsFromEachSet = sets.map(set => Object.keys(_.pick(options, ...set)));
 
     // If any element is used from more than one set...
-    if ( usedElementsFromEachSet.filter( usedElements => usedElements.length > 0 ).length > 1 ) {
+    if (usedElementsFromEachSet.filter(usedElements => usedElements.length > 0).length > 1) {
 
       // Output the errant options.
-      assert && assert( false, `Cannot simultaneously specify ${usedElementsFromEachSet.join( ' and ' )}` );
+      assert && assert(false, `Cannot simultaneously specify ${usedElementsFromEachSet.join(' and ')}`);
     }
   }
 };
 
-phetCore.register( 'assertMutuallyExclusiveOptions', assertMutuallyExclusiveOptions );
+phetCore.register('assertMutuallyExclusiveOptions', assertMutuallyExclusiveOptions);
 export default assertMutuallyExclusiveOptions;

@@ -6,9 +6,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import platform from '../../../../phet-core/js/platform.js';
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { scenery, svgns, SVGSelfDrawable, TextStatefulDrawable, Utils } from '../../imports.js';
+import platform from '../../../phet-core/platform';
+import Poolable from '../../../phet-core/Poolable';
+import {
+  scenery,
+  svgns,
+  SVGSelfDrawable,
+  TextStatefulDrawable,
+  Utils
+} from '../../imports';
 
 // TODO: change this based on memory and performance characteristics of the platform https://github.com/phetsims/scenery/issues/1581
 const keepSVGTextElements = true; // whether we should pool SVG elements for the SVG rendering states, or whether we should free them when possible for memory
@@ -18,7 +24,7 @@ const keepSVGTextElements = true; // whether we should pool SVG elements for the
 // See https://github.com/phetsims/scenery/issues/455 for more information.
 const useSVGTextLengthAdjustments = !platform.edge;
 
-class TextSVGDrawable extends TextStatefulDrawable( SVGSelfDrawable ) {
+class TextSVGDrawable extends TextStatefulDrawable(SVGSelfDrawable) {
   /**
    * @public
    * @override
@@ -26,25 +32,29 @@ class TextSVGDrawable extends TextStatefulDrawable( SVGSelfDrawable ) {
    * @param {number} renderer
    * @param {Instance} instance
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer, instance, true, keepSVGTextElements ); // usesPaint: true
+  initialize(renderer, instance) {
+    super.initialize(renderer, instance, true, keepSVGTextElements); // usesPaint: true
 
     // @private {boolean}
     this.hasLength = false;
 
-    if ( !this.svgElement ) {
-      const text = document.createElementNS( svgns, 'text' );
+    if (!this.svgElement) {
+      const text = document.createElementNS(svgns, 'text');
 
       // @protected {SVGTextElement} - Sole SVG element for this drawable, implementing API for SVGSelfDrawable
       this.svgElement = text;
 
-      text.appendChild( document.createTextNode( '' ) );
+      text.appendChild(document.createTextNode(''));
 
       // TODO: flag adjustment for SVG qualities https://github.com/phetsims/scenery/issues/1581
-      text.setAttribute( 'dominant-baseline', 'alphabetic' ); // to match Canvas right now
-      text.setAttribute( 'text-rendering', 'geometricPrecision' );
-      text.setAttributeNS( 'http://www.w3.org/XML/1998/namespace', 'xml:space', 'preserve' );
-      text.setAttribute( 'direction', 'ltr' );
+      text.setAttribute('dominant-baseline', 'alphabetic'); // to match Canvas right now
+      text.setAttribute('text-rendering', 'geometricPrecision');
+      text.setAttributeNS(
+        'http://www.w3.org/XML/1998/namespace',
+        'xml:space',
+        'preserve'
+      );
+      text.setAttribute('direction', 'ltr');
     }
   }
 
@@ -58,44 +68,47 @@ class TextSVGDrawable extends TextStatefulDrawable( SVGSelfDrawable ) {
     const text = this.svgElement;
 
     // set all of the font attributes, since we can't use the combined one
-    if ( this.dirtyFont ) {
-      text.setAttribute( 'font-family', this.node._font.getFamily() );
-      text.setAttribute( 'font-size', this.node._font.getSize() );
-      text.setAttribute( 'font-style', this.node._font.getStyle() );
-      text.setAttribute( 'font-weight', this.node._font.getWeight() );
-      text.setAttribute( 'font-stretch', this.node._font.getStretch() );
+    if (this.dirtyFont) {
+      text.setAttribute('font-family', this.node._font.getFamily());
+      text.setAttribute('font-size', this.node._font.getSize());
+      text.setAttribute('font-style', this.node._font.getStyle());
+      text.setAttribute('font-weight', this.node._font.getWeight());
+      text.setAttribute('font-stretch', this.node._font.getStretch());
     }
 
     // update the text-node's value
-    if ( this.dirtyText ) {
-      text.lastChild.nodeValue = Utils.safariEmbeddingMarkWorkaround( this.node.renderedText );
+    if (this.dirtyText) {
+      text.lastChild.nodeValue = Utils.safariEmbeddingMarkWorkaround(
+        this.node.renderedText
+      );
     }
 
     // text length correction, tested with scenery/tests/text-quality-test.html to determine how to match Canvas/SVG rendering (and overall length)
-    if ( this.dirtyBounds && useSVGTextLengthAdjustments ) {
-      const useLengthAdjustment = this.node._boundsMethod !== 'accurate' && isFinite( this.node.selfBounds.width );
+    if (this.dirtyBounds && useSVGTextLengthAdjustments) {
+      const useLengthAdjustment =
+        this.node._boundsMethod !== 'accurate' &&
+        isFinite(this.node.selfBounds.width);
 
-      if ( useLengthAdjustment ) {
-        if ( !this.hasLength ) {
+      if (useLengthAdjustment) {
+        if (!this.hasLength) {
           this.hasLength = true;
-          text.setAttribute( 'lengthAdjust', 'spacingAndGlyphs' );
+          text.setAttribute('lengthAdjust', 'spacingAndGlyphs');
         }
-        text.setAttribute( 'textLength', this.node.selfBounds.width );
-      }
-      else if ( this.hasLength ) {
+        text.setAttribute('textLength', this.node.selfBounds.width);
+      } else if (this.hasLength) {
         this.hasLength = false;
-        text.removeAttribute( 'lengthAdjust' );
-        text.removeAttribute( 'textLength' );
+        text.removeAttribute('lengthAdjust');
+        text.removeAttribute('textLength');
       }
     }
 
     // Apply any fill/stroke changes to our element.
-    this.updateFillStrokeStyle( text );
+    this.updateFillStrokeStyle(text);
   }
 }
 
-scenery.register( 'TextSVGDrawable', TextSVGDrawable );
+scenery.register('TextSVGDrawable', TextSVGDrawable);
 
-Poolable.mixInto( TextSVGDrawable );
+Poolable.mixInto(TextSVGDrawable);
 
 export default TextSVGDrawable;

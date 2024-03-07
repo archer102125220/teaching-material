@@ -7,10 +7,10 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
-import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
-import { ReadingBlock, ReadingBlockHighlight, ReadingBlockOptions, RichText, RichTextOptions, scenery } from '../../../imports.js';
-import StrictOmit from '../../../../../phet-core/js/types/StrictOmit.js';
+import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/optionize';
+import { ReadingBlock, ReadingBlockHighlight, type ReadingBlockOptions, RichText, type RichTextOptions, scenery } from '../../../imports';
+import type StrictOmit from '../../../../phet-core/types/StrictOmit';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -18,11 +18,11 @@ type SelfOptions = EmptySelfOptions;
 type ParentOptions = ReadingBlockOptions & StrictOmit<RichTextOptions, 'focusHighlight'>;
 export type VoicingRichTextOptions = SelfOptions & ParentOptions;
 
-class VoicingRichText extends ReadingBlock( RichText ) {
+class VoicingRichText extends ReadingBlock(RichText) {
 
-  public constructor( text: string | TReadOnlyProperty<string>, providedOptions?: VoicingRichTextOptions ) {
+  public constructor(text: string | TReadOnlyProperty<string>, providedOptions?: VoicingRichTextOptions) {
 
-    const options = optionize<VoicingRichTextOptions, SelfOptions, ParentOptions>()( {
+    const options = optionize<VoicingRichTextOptions, SelfOptions, ParentOptions>()({
 
       // {string|null} - if provided, alternative text that will be read that is different from the
       // visually displayed text
@@ -35,13 +35,13 @@ class VoicingRichText extends ReadingBlock( RichText ) {
       // default tag name for a ReadingBlock, but there are cases where you may want to override this (such as
       // RichText links)
       readingBlockTagName: 'button'
-    }, providedOptions );
+    }, providedOptions);
 
-    super( text, options );
+    super(text, options);
 
-    this.focusHighlight = new ReadingBlockHighlight( this );
+    this.focusHighlight = new ReadingBlockHighlight(this);
   }
 }
 
-scenery.register( 'VoicingRichText', VoicingRichText );
+scenery.register('VoicingRichText', VoicingRichText);
 export default VoicingRichText;

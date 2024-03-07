@@ -6,17 +6,22 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { LineStatefulDrawable, scenery, svgns, SVGSelfDrawable } from '../../imports.js';
+import Poolable from '../../../phet-core/Poolable';
+import {
+  LineStatefulDrawable,
+  scenery,
+  svgns,
+  SVGSelfDrawable
+} from '../../imports';
 
 // TODO: change this based on memory and performance characteristics of the platform https://github.com/phetsims/scenery/issues/1581
 const keepSVGLineElements = true; // whether we should pool SVG elements for the SVG rendering states, or whether we should free them when possible for memory
 
-/*---------------------------------------------------------------------------*
+/* ---------------------------------------------------------------------------*
  * SVG Rendering
- *----------------------------------------------------------------------------*/
+ * ---------------------------------------------------------------------------- */
 
-class LineSVGDrawable extends LineStatefulDrawable( SVGSelfDrawable ) {
+class LineSVGDrawable extends LineStatefulDrawable(SVGSelfDrawable) {
   /**
    * @public
    * @override
@@ -24,10 +29,11 @@ class LineSVGDrawable extends LineStatefulDrawable( SVGSelfDrawable ) {
    * @param {number} renderer
    * @param {Instance} instance
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer, instance, true, keepSVGLineElements ); // usesPaint: true
+  initialize(renderer, instance) {
+    super.initialize(renderer, instance, true, keepSVGLineElements); // usesPaint: true
 
-    this.svgElement = this.svgElement || document.createElementNS( svgns, 'line' );
+    this.svgElement =
+      this.svgElement || document.createElementNS(svgns, 'line');
   }
 
   /**
@@ -38,26 +44,26 @@ class LineSVGDrawable extends LineStatefulDrawable( SVGSelfDrawable ) {
   updateSVGSelf() {
     const line = this.svgElement;
 
-    if ( this.dirtyX1 ) {
-      line.setAttribute( 'x1', this.node.x1 );
+    if (this.dirtyX1) {
+      line.setAttribute('x1', this.node.x1);
     }
-    if ( this.dirtyY1 ) {
-      line.setAttribute( 'y1', this.node.y1 );
+    if (this.dirtyY1) {
+      line.setAttribute('y1', this.node.y1);
     }
-    if ( this.dirtyX2 ) {
-      line.setAttribute( 'x2', this.node.x2 );
+    if (this.dirtyX2) {
+      line.setAttribute('x2', this.node.x2);
     }
-    if ( this.dirtyY2 ) {
-      line.setAttribute( 'y2', this.node.y2 );
+    if (this.dirtyY2) {
+      line.setAttribute('y2', this.node.y2);
     }
 
     // Apply any fill/stroke changes to our element.
-    this.updateFillStrokeStyle( line );
+    this.updateFillStrokeStyle(line);
   }
 }
 
-scenery.register( 'LineSVGDrawable', LineSVGDrawable );
+scenery.register('LineSVGDrawable', LineSVGDrawable);
 
-Poolable.mixInto( LineSVGDrawable );
+Poolable.mixInto(LineSVGDrawable);
 
 export default LineSVGDrawable;

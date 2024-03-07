@@ -7,13 +7,17 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import dot from './dot';
 import Random from './Random';
 
-const dotRandom = new Random( {
-  seed: _.hasIn( window, 'phet.chipper.queryParameters.randomSeed' ) ? window.phet.chipper.queryParameters.randomSeed : null
-} );
+const dotRandom = new Random({
+  seed: _.hasIn(window, 'phet.chipper.queryParameters.randomSeed')
+    ? window.phet.chipper.queryParameters.randomSeed
+    : null
+});
 
-dot.register( 'dotRandom', dotRandom );
+dot.register('dotRandom', dotRandom);
 
 export default dotRandom;

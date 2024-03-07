@@ -10,6 +10,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 // @ts-expect-error
 import TEmitter from '../../axon/TEmitter';
 import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
@@ -28,7 +30,7 @@ const linear = Utils.linear;
 
 type FormatParser = {
   regexp: RegExp;
-  apply: ( color: Color, matches: RegExpExecArray ) => void;
+  apply: (color: Color, matches: RegExpExecArray) => void;
 };
 
 // regex utilities
@@ -37,16 +39,16 @@ const aNumber = '(\\d+|\\d*\\.\\d+)'; // decimal point number. technically we al
 const rawNumber = '(\\d{1,3})'; // a 1-3 digit number
 
 // handles negative and percentage values
-function parseRGBNumber( str: string ): number {
+function parseRGBNumber(str: string): number {
   let multiplier = 1;
 
   // if it's a percentage, strip it off and handle it that way
-  if ( str.endsWith( '%' ) ) {
+  if (str.endsWith('%')) {
     multiplier = 2.55;
-    str = str.slice( 0, str.length - 1 );
+    str = str.slice(0, str.length - 1);
   }
 
-  return Utils.roundSymmetric( Number( str ) * multiplier );
+  return Utils.roundSymmetric(Number(str) * multiplier);
 }
 
 export default class Color {
@@ -84,24 +86,24 @@ export default class Color {
    * @param [b] - If provided, should be the blue value
    * @param [a] - If provided, should be the alpha value
    */
-  public constructor( color: Color );
-  public constructor( string: string );
-  public constructor( r: number, g: number, b: number, a?: number );
-  public constructor( hex: number, a?: number );
-  public constructor( transparent: null );
-  public constructor( r: number | Color | string | null, g?: number, b?: number, a?: number ) {
+  public constructor(color: Color);
+  public constructor(string: string);
+  public constructor(r: number, g: number, b: number, a?: number);
+  public constructor(hex: number, a?: number);
+  public constructor(transparent: null);
+  public constructor(r: number | Color | string | null, g?: number, b?: number, a?: number) {
 
     // {Emitter}
     this.changeEmitter = new TinyEmitter();
 
-    this.set( r, g, b, a );
+    this.set(r, g, b, a);
   }
 
   /**
    * Returns a copy of this color.
    */
   public copy(): Color {
-    return new Color( this.r, this.g, this.b, this.a );
+    return new Color(this.r, this.g, this.b, this.a);
   }
 
   /**
@@ -120,34 +122,34 @@ export default class Color {
    * @param [b] - If provided, should be the blue value
    * @param [a] - If provided, should be the alpha value
    */
-  public set( r: number | Color | string | null, g?: number, b?: number, a?: number ): this {
-    assert && assert( r !== undefined, 'Can\'t call Color.set( undefined )' );
+  public set(r: number | Color | string | null, g?: number, b?: number, a?: number): this {
+    assert && assert(r !== undefined, 'Can\'t call Color.set( undefined )');
 
-    if ( r === null ) {
-      this.setRGBA( 0, 0, 0, 0 );
+    if (r === null) {
+      this.setRGBA(0, 0, 0, 0);
     }
     // support for set( string )
-    else if ( typeof r === 'string' ) {
-      this.setCSS( r );
+    else if (typeof r === 'string') {
+      this.setCSS(r);
     }
     // support for set( color )
-    else if ( r instanceof Color ) {
-      this.setRGBA( r.r, r.g, r.b, r.a );
+    else if (r instanceof Color) {
+      this.setRGBA(r.r, r.g, r.b, r.a);
     }
     // support for set( hex ) and set( hex, alpha )
-    else if ( b === undefined ) {
-      assert && assert( g === undefined || typeof g === 'number' );
+    else if (b === undefined) {
+      assert && assert(g === undefined || typeof g === 'number');
 
-      const red = ( r >> 16 ) & 0xFF;
-      const green = ( r >> 8 ) & 0xFF;
-      const blue = ( r >> 0 ) & 0xFF;
-      const alpha = ( g === undefined ) ? 1 : g;
-      this.setRGBA( red, green, blue, alpha );
+      const red = (r >> 16) & 0xFF;
+      const green = (r >> 8) & 0xFF;
+      const blue = (r >> 0) & 0xFF;
+      const alpha = (g === undefined) ? 1 : g;
+      this.setRGBA(red, green, blue, alpha);
     }
     // support for set( r, g, b ) and set( r, g, b, a )
     else {
-      assert && assert( a === undefined || typeof a === 'number' );
-      this.setRGBA( r, g!, b, ( a === undefined ) ? 1 : a );
+      assert && assert(a === undefined || typeof a === 'number');
+      this.setRGBA(r, g!, b, (a === undefined) ? 1 : a);
     }
 
     return this; // support chaining
@@ -162,15 +164,15 @@ export default class Color {
 
   public get red(): number { return this.getRed(); }
 
-  public set red( value: number ) { this.setRed( value ); }
+  public set red(value: number) { this.setRed(value); }
 
   /**
    * Sets the red value.
    *
    * @param value - Will be clamped to an integer between 0 and 255
    */
-  public setRed( value: number ): this {
-    return this.setRGBA( value, this.g, this.b, this.a );
+  public setRed(value: number): this {
+    return this.setRGBA(value, this.g, this.b, this.a);
   }
 
   /**
@@ -182,15 +184,15 @@ export default class Color {
 
   public get green(): number { return this.getGreen(); }
 
-  public set green( value: number ) { this.setGreen( value ); }
+  public set green(value: number) { this.setGreen(value); }
 
   /**
    * Sets the green value.
    *
    * @param value - Will be clamped to an integer between 0 and 255
    */
-  public setGreen( value: number ): this {
-    return this.setRGBA( this.r, value, this.b, this.a );
+  public setGreen(value: number): this {
+    return this.setRGBA(this.r, value, this.b, this.a);
   }
 
   /**
@@ -202,15 +204,15 @@ export default class Color {
 
   public get blue(): number { return this.getBlue(); }
 
-  public set blue( value: number ) { this.setBlue( value ); }
+  public set blue(value: number) { this.setBlue(value); }
 
   /**
    * Sets the blue value.
    *
    * @param value - Will be clamped to an integer between 0 and 255
    */
-  public setBlue( value: number ): this {
-    return this.setRGBA( this.r, this.g, value, this.a );
+  public setBlue(value: number): this {
+    return this.setRGBA(this.r, this.g, value, this.a);
   }
 
   /**
@@ -222,25 +224,25 @@ export default class Color {
 
   public get alpha(): number { return this.getAlpha(); }
 
-  public set alpha( value: number ) { this.setAlpha( value ); }
+  public set alpha(value: number) { this.setAlpha(value); }
 
   /**
    * Sets the alpha value.
    *
    * @param value - Will be clamped between 0 and 1
    */
-  public setAlpha( value: number ): this {
-    return this.setRGBA( this.r, this.g, this.b, value );
+  public setAlpha(value: number): this {
+    return this.setRGBA(this.r, this.g, this.b, value);
   }
 
   /**
    * Sets the value of this Color using RGB integral between 0-255, alpha (float) between 0-1.
    */
-  public setRGBA( red: number, green: number, blue: number, alpha: number ): this {
-    this.r = Utils.roundSymmetric( clamp( red, 0, 255 ) );
-    this.g = Utils.roundSymmetric( clamp( green, 0, 255 ) );
-    this.b = Utils.roundSymmetric( clamp( blue, 0, 255 ) );
-    this.a = clamp( alpha, 0, 1 );
+  public setRGBA(red: number, green: number, blue: number, alpha: number): this {
+    this.r = Utils.roundSymmetric(clamp(red, 0, 255));
+    this.g = Utils.roundSymmetric(clamp(green, 0, 255));
+    this.b = Utils.roundSymmetric(clamp(blue, 0, 255));
+    this.a = clamp(alpha, 0, 1);
 
     this.updateColor(); // update the cached value
 
@@ -253,28 +255,28 @@ export default class Color {
    * @param otherColor
    * @param ratio - Not necessarily constrained in [0, 1]
    */
-  public blend( otherColor: Color, ratio: number ): Color {
+  public blend(otherColor: Color, ratio: number): Color {
     const gamma = 2.4;
-    const linearRedA = Math.pow( this.r, gamma );
-    const linearRedB = Math.pow( otherColor.r, gamma );
-    const linearGreenA = Math.pow( this.g, gamma );
-    const linearGreenB = Math.pow( otherColor.g, gamma );
-    const linearBlueA = Math.pow( this.b, gamma );
-    const linearBlueB = Math.pow( otherColor.b, gamma );
+    const linearRedA = Math.pow(this.r, gamma);
+    const linearRedB = Math.pow(otherColor.r, gamma);
+    const linearGreenA = Math.pow(this.g, gamma);
+    const linearGreenB = Math.pow(otherColor.g, gamma);
+    const linearBlueA = Math.pow(this.b, gamma);
+    const linearBlueB = Math.pow(otherColor.b, gamma);
 
-    const r = Math.pow( linearRedA + ( linearRedB - linearRedA ) * ratio, 1 / gamma );
-    const g = Math.pow( linearGreenA + ( linearGreenB - linearGreenA ) * ratio, 1 / gamma );
-    const b = Math.pow( linearBlueA + ( linearBlueB - linearBlueA ) * ratio, 1 / gamma );
-    const a = this.a + ( otherColor.a - this.a ) * ratio;
+    const r = Math.pow(linearRedA + (linearRedB - linearRedA) * ratio, 1 / gamma);
+    const g = Math.pow(linearGreenA + (linearGreenB - linearGreenA) * ratio, 1 / gamma);
+    const b = Math.pow(linearBlueA + (linearBlueB - linearBlueA) * ratio, 1 / gamma);
+    const a = this.a + (otherColor.a - this.a) * ratio;
 
-    return new Color( r, g, b, a );
+    return new Color(r, g, b, a);
   }
 
   /**
    * Used internally to compute the CSS string for this color. Use toCSS()
    */
   private computeCSS(): string {
-    if ( this.a === 1 ) {
+    if (this.a === 1) {
       return `rgb(${this.r},${this.g},${this.b})`;
     }
     else {
@@ -282,9 +284,9 @@ export default class Color {
       // Since this needs to be done quickly, and we don't particularly care about slight rounding differences (it's
       // being used for display purposes only, and is never shown to the user), we use the built-in JS toFixed instead of
       // Dot's version of toFixed. See https://github.com/phetsims/kite/issues/50
-      let alpha = this.a.toFixed( 20 ); // eslint-disable-line bad-sim-text
-      while ( alpha.length >= 2 && alpha.endsWith( '0' ) && alpha[ alpha.length - 2 ] !== '.' ) {
-        alpha = alpha.slice( 0, alpha.length - 1 );
+      let alpha = this.a.toFixed(20); // eslint-disable-line bad-sim-text
+      while (alpha.length >= 2 && alpha.endsWith('0') && alpha[alpha.length - 2] !== '.') {
+        alpha = alpha.slice(0, alpha.length - 1);
       }
 
       const alphaString = this.a === 0 || this.a === 1 ? this.a : alpha;
@@ -297,7 +299,7 @@ export default class Color {
    */
   public toCSS(): string {
     // verify that the cached value is correct (in debugging builds only, defeats the point of caching otherwise)
-    assert && assert( this._css === this.computeCSS(), `CSS cached value is ${this._css}, but the computed value appears to be ${this.computeCSS()}` );
+    assert && assert(this._css === this.computeCSS(), `CSS cached value is ${this._css}, but the computed value appears to be ${this.computeCSS()}`);
 
     return this._css!;
   }
@@ -305,24 +307,24 @@ export default class Color {
   /**
    * Sets this color for a CSS color string.
    */
-  public setCSS( cssString: string ): this {
+  public setCSS(cssString: string): this {
     let success = false;
-    const str = Color.preprocessCSS( cssString );
+    const str = Color.preprocessCSS(cssString);
 
     // run through the available text formats
-    for ( let i = 0; i < Color.formatParsers.length; i++ ) {
-      const parser = Color.formatParsers[ i ];
+    for (let i = 0; i < Color.formatParsers.length; i++) {
+      const parser = Color.formatParsers[i];
 
-      const matches = parser.regexp.exec( str );
-      if ( matches ) {
-        parser.apply( this, matches );
+      const matches = parser.regexp.exec(str);
+      if (matches) {
+        parser.apply(this, matches);
         success = true;
         break;
       }
     }
 
-    if ( !success ) {
-      throw new Error( `Color unable to parse color string: ${cssString}` );
+    if (!success) {
+      throw new Error(`Color unable to parse color string: ${cssString}`);
     }
 
     this.updateColor(); // update the cached value
@@ -334,36 +336,36 @@ export default class Color {
    * Returns this color's RGB information in the hexadecimal number equivalent, e.g. 0xFF00FF
    */
   public toNumber(): number {
-    return ( this.r << 16 ) + ( this.g << 8 ) + this.b;
+    return (this.r << 16) + (this.g << 8) + this.b;
   }
 
   /**
    * Called to update the internally cached CSS value
    */
   private updateColor(): void {
-    assert && assert( !this.immutable,
-      'Cannot modify an immutable color. Likely caused by trying to mutate a color after it was used for a node fill/stroke' );
+    assert && assert(!this.immutable,
+      'Cannot modify an immutable color. Likely caused by trying to mutate a color after it was used for a node fill/stroke');
 
-    assert && assert( typeof this.red === 'number' &&
-    typeof this.green === 'number' &&
-    typeof this.blue === 'number' &&
-    typeof this.alpha === 'number',
-      `Ensure color components are numeric: ${this.toString()}` );
+    assert && assert(typeof this.red === 'number' &&
+      typeof this.green === 'number' &&
+      typeof this.blue === 'number' &&
+      typeof this.alpha === 'number',
+      `Ensure color components are numeric: ${this.toString()}`);
 
-    assert && assert( isFinite( this.red ) && isFinite( this.green ) && isFinite( this.blue ) && isFinite( this.alpha ),
-      'Ensure color components are finite and not NaN' );
+    assert && assert(isFinite(this.red) && isFinite(this.green) && isFinite(this.blue) && isFinite(this.alpha),
+      'Ensure color components are finite and not NaN');
 
-    assert && assert( this.red >= 0 && this.red <= 255 &&
-    this.green >= 0 && this.green <= 255 &&
-    this.red >= 0 && this.red <= 255 &&
-    this.alpha >= 0 && this.alpha <= 1,
-      `Ensure color components are in the proper ranges: ${this.toString()}` );
+    assert && assert(this.red >= 0 && this.red <= 255 &&
+      this.green >= 0 && this.green <= 255 &&
+      this.red >= 0 && this.red <= 255 &&
+      this.alpha >= 0 && this.alpha <= 1,
+      `Ensure color components are in the proper ranges: ${this.toString()}`);
 
     const oldCSS = this._css;
     this._css = this.computeCSS();
 
     // notify listeners if it changed
-    if ( oldCSS !== this._css ) {
+    if (oldCSS !== this._css) {
       this.changeEmitter.emit();
     }
   }
@@ -372,7 +374,7 @@ export default class Color {
    * Allow setting this Color to be immutable when assertions are disabled. any change will throw an error
    */
   public setImmutable(): this {
-    if ( assert ) {
+    if (assert) {
       this.immutable = true;
     }
 
@@ -396,57 +398,57 @@ export default class Color {
    * @param lightness - percentage
    * @param alpha
    */
-  public setHSLA( hue: number, saturation: number, lightness: number, alpha: number ): this {
-    hue = ( hue % 360 ) / 360;
-    saturation = clamp( saturation / 100, 0, 1 );
-    lightness = clamp( lightness / 100, 0, 1 );
+  public setHSLA(hue: number, saturation: number, lightness: number, alpha: number): this {
+    hue = (hue % 360) / 360;
+    saturation = clamp(saturation / 100, 0, 1);
+    lightness = clamp(lightness / 100, 0, 1);
 
     // see http://www.w3.org/TR/css3-color/
     let m2;
-    if ( lightness < 0.5 ) {
-      m2 = lightness * ( saturation + 1 );
+    if (lightness < 0.5) {
+      m2 = lightness * (saturation + 1);
     }
     else {
       m2 = lightness + saturation - lightness * saturation;
     }
     const m1 = lightness * 2 - m2;
 
-    this.r = Utils.roundSymmetric( Color.hueToRGB( m1, m2, hue + 1 / 3 ) * 255 );
-    this.g = Utils.roundSymmetric( Color.hueToRGB( m1, m2, hue ) * 255 );
-    this.b = Utils.roundSymmetric( Color.hueToRGB( m1, m2, hue - 1 / 3 ) * 255 );
-    this.a = clamp( alpha, 0, 1 );
+    this.r = Utils.roundSymmetric(Color.hueToRGB(m1, m2, hue + 1 / 3) * 255);
+    this.g = Utils.roundSymmetric(Color.hueToRGB(m1, m2, hue) * 255);
+    this.b = Utils.roundSymmetric(Color.hueToRGB(m1, m2, hue - 1 / 3) * 255);
+    this.a = clamp(alpha, 0, 1);
 
     this.updateColor(); // update the cached value
 
     return this; // allow chaining
   }
 
-  public equals( color: Color ): boolean {
+  public equals(color: Color): boolean {
     return this.r === color.r && this.g === color.g && this.b === color.b && this.a === color.a;
   }
 
   /**
    * Returns a copy of this color with a different alpha value.
    */
-  public withAlpha( alpha: number ): Color {
-    return new Color( this.r, this.g, this.b, alpha );
+  public withAlpha(alpha: number): Color {
+    return new Color(this.r, this.g, this.b, alpha);
   }
 
-  private checkFactor( factor?: number ): number {
-    assert && assert( factor === undefined || ( factor >= 0 && factor <= 1 ), `factor must be between 0 and 1: ${factor}` );
+  private checkFactor(factor?: number): number {
+    assert && assert(factor === undefined || (factor >= 0 && factor <= 1), `factor must be between 0 and 1: ${factor}`);
 
-    return ( factor === undefined ) ? 0.7 : factor;
+    return (factor === undefined) ? 0.7 : factor;
   }
 
   /**
    * Matches Java's Color.brighter()
    */
-  public brighterColor( factor?: number ): Color {
-    factor = this.checkFactor( factor );
-    const red = Math.min( 255, Math.floor( this.r / factor ) );
-    const green = Math.min( 255, Math.floor( this.g / factor ) );
-    const blue = Math.min( 255, Math.floor( this.b / factor ) );
-    return new Color( red, green, blue, this.a );
+  public brighterColor(factor?: number): Color {
+    factor = this.checkFactor(factor);
+    const red = Math.min(255, Math.floor(this.r / factor));
+    const green = Math.min(255, Math.floor(this.g / factor));
+    const blue = Math.min(255, Math.floor(this.b / factor));
+    return new Color(red, green, blue, this.a);
   }
 
   /**
@@ -455,23 +457,23 @@ export default class Color {
    * @param [factor] - 0 (no change) to 1 (white)
    * @returns - (closer to white) version of the original color.
    */
-  public colorUtilsBrighter( factor?: number ): Color {
-    factor = this.checkFactor( factor );
-    const red = Math.min( 255, this.getRed() + Math.floor( factor * ( 255 - this.getRed() ) ) );
-    const green = Math.min( 255, this.getGreen() + Math.floor( factor * ( 255 - this.getGreen() ) ) );
-    const blue = Math.min( 255, this.getBlue() + Math.floor( factor * ( 255 - this.getBlue() ) ) );
-    return new Color( red, green, blue, this.getAlpha() );
+  public colorUtilsBrighter(factor?: number): Color {
+    factor = this.checkFactor(factor);
+    const red = Math.min(255, this.getRed() + Math.floor(factor * (255 - this.getRed())));
+    const green = Math.min(255, this.getGreen() + Math.floor(factor * (255 - this.getGreen())));
+    const blue = Math.min(255, this.getBlue() + Math.floor(factor * (255 - this.getBlue())));
+    return new Color(red, green, blue, this.getAlpha());
   }
 
   /**
    * Matches Java's Color.darker()
    */
-  public darkerColor( factor?: number ): Color {
-    factor = this.checkFactor( factor );
-    const red = Math.max( 0, Math.floor( factor * this.r ) );
-    const green = Math.max( 0, Math.floor( factor * this.g ) );
-    const blue = Math.max( 0, Math.floor( factor * this.b ) );
-    return new Color( red, green, blue, this.a );
+  public darkerColor(factor?: number): Color {
+    factor = this.checkFactor(factor);
+    const red = Math.max(0, Math.floor(factor * this.r));
+    const green = Math.max(0, Math.floor(factor * this.g));
+    const blue = Math.max(0, Math.floor(factor * this.b));
+    return new Color(red, green, blue, this.a);
   }
 
   /**
@@ -481,12 +483,12 @@ export default class Color {
    * @param [factor] - 0 (no change) to 1 (black)
    * @returns - darker (closer to black) version of the original color.
    */
-  public colorUtilsDarker( factor?: number ): Color {
-    factor = this.checkFactor( factor );
-    const red = Math.max( 0, this.getRed() - Math.floor( factor * this.getRed() ) );
-    const green = Math.max( 0, this.getGreen() - Math.floor( factor * this.getGreen() ) );
-    const blue = Math.max( 0, this.getBlue() - Math.floor( factor * this.getBlue() ) );
-    return new Color( red, green, blue, this.getAlpha() );
+  public colorUtilsDarker(factor?: number): Color {
+    factor = this.checkFactor(factor);
+    const red = Math.max(0, this.getRed() - Math.floor(factor * this.getRed()));
+    const green = Math.max(0, this.getGreen() - Math.floor(factor * this.getGreen()));
+    const blue = Math.max(0, this.getBlue() - Math.floor(factor * this.getBlue()));
+    return new Color(red, green, blue, this.getAlpha());
   }
 
   /**
@@ -497,15 +499,15 @@ export default class Color {
    *
    * @param factor from -1 (black), to 0 (no change), to 1 (white)
    */
-  public colorUtilsBrightness( factor: number ): Color {
-    if ( factor === 0 ) {
+  public colorUtilsBrightness(factor: number): Color {
+    if (factor === 0) {
       return this;
     }
-    else if ( factor > 0 ) {
-      return this.colorUtilsBrighter( factor );
+    else if (factor > 0) {
+      return this.colorUtilsBrighter(factor);
     }
     else {
-      return this.colorUtilsDarker( -factor );
+      return this.colorUtilsDarker(-factor);
     }
   }
 
@@ -520,8 +522,8 @@ export default class Color {
    * Convert to a hex string, that starts with "#".
    */
   public toHexString(): string {
-    let hexString = this.toNumber().toString( 16 );
-    while ( hexString.length < 6 ) {
+    let hexString = this.toNumber().toString(16);
+    while (hexString.length < 6) {
       hexString = `0${hexString}`;
     }
     return `#${hexString}`;
@@ -539,21 +541,21 @@ export default class Color {
   /**
    * Utility function, see http://www.w3.org/TR/css3-color/
    */
-  public static hueToRGB( m1: number, m2: number, h: number ): number {
-    if ( h < 0 ) {
+  public static hueToRGB(m1: number, m2: number, h: number): number {
+    if (h < 0) {
       h = h + 1;
     }
-    if ( h > 1 ) {
+    if (h > 1) {
       h = h - 1;
     }
-    if ( h * 6 < 1 ) {
-      return m1 + ( m2 - m1 ) * h * 6;
+    if (h * 6 < 1) {
+      return m1 + (m2 - m1) * h * 6;
     }
-    if ( h * 2 < 1 ) {
+    if (h * 2 < 1) {
       return m2;
     }
-    if ( h * 3 < 2 ) {
-      return m1 + ( m2 - m1 ) * ( 2 / 3 - h ) * 6;
+    if (h * 3 < 2) {
+      return m1 + (m2 - m1) * (2 / 3 - h) * 6;
     }
     return m1;
   }
@@ -564,18 +566,18 @@ export default class Color {
    *
    * Please note there is no defensive copy when a color is passed in unlike PaintDef.
    */
-  public static toColor( colorSpec: TColor ): Color {
-    if ( colorSpec === null ) {
+  public static toColor(colorSpec: TColor): Color {
+    if (colorSpec === null) {
       return Color.TRANSPARENT;
     }
-    else if ( colorSpec instanceof Color ) {
+    else if (colorSpec instanceof Color) {
       return colorSpec;
     }
-    else if ( typeof colorSpec === 'string' ) {
-      return new Color( colorSpec );
+    else if (typeof colorSpec === 'string') {
+      return new Color(colorSpec);
     }
     else {
-      return Color.toColor( colorSpec.value );
+      return Color.toColor(colorSpec.value);
     }
   }
 
@@ -588,65 +590,65 @@ export default class Color {
    * @param color2
    * @param distance distance between color1 and color2, 0 <= distance <= 1
    */
-  public static interpolateRGBA( color1: Color, color2: Color, distance: number ): Color {
-    if ( distance < 0 || distance > 1 ) {
-      throw new Error( `distance must be between 0 and 1: ${distance}` );
+  public static interpolateRGBA(color1: Color, color2: Color, distance: number): Color {
+    if (distance < 0 || distance > 1) {
+      throw new Error(`distance must be between 0 and 1: ${distance}`);
     }
-    const r = Math.floor( linear( 0, 1, color1.r, color2.r, distance ) );
-    const g = Math.floor( linear( 0, 1, color1.g, color2.g, distance ) );
-    const b = Math.floor( linear( 0, 1, color1.b, color2.b, distance ) );
-    const a = linear( 0, 1, color1.a, color2.a, distance );
-    return new Color( r, g, b, a );
+    const r = Math.floor(linear(0, 1, color1.r, color2.r, distance));
+    const g = Math.floor(linear(0, 1, color1.g, color2.g, distance));
+    const b = Math.floor(linear(0, 1, color1.b, color2.b, distance));
+    const a = linear(0, 1, color1.a, color2.a, distance);
+    return new Color(r, g, b, a);
   }
 
   /**
    * Returns a blended color as a mix between the given colors.
    */
-  public static supersampleBlend( colors: Color[] ): Color {
+  public static supersampleBlend(colors: Color[]): Color {
     // hard-coded gamma (assuming the exponential part of the sRGB curve as a simplification)
     const GAMMA = 2.2;
 
     // maps to [0,1] linear colorspace
-    const reds = colors.map( color => Math.pow( color.r / 255, GAMMA ) );
-    const greens = colors.map( color => Math.pow( color.g / 255, GAMMA ) );
-    const blues = colors.map( color => Math.pow( color.b / 255, GAMMA ) );
-    const alphas = colors.map( color => Math.pow( color.a, GAMMA ) );
+    const reds = colors.map(color => Math.pow(color.r / 255, GAMMA));
+    const greens = colors.map(color => Math.pow(color.g / 255, GAMMA));
+    const blues = colors.map(color => Math.pow(color.b / 255, GAMMA));
+    const alphas = colors.map(color => Math.pow(color.a, GAMMA));
 
-    const alphaSum = _.sum( alphas );
+    const alphaSum = _.sum(alphas);
 
-    if ( alphaSum === 0 ) {
-      return new Color( 0, 0, 0, 0 );
+    if (alphaSum === 0) {
+      return new Color(0, 0, 0, 0);
     }
 
     // blending of pixels, weighted by alphas
-    const red = _.sum( _.range( 0, colors.length ).map( i => reds[ i ] * alphas[ i ] ) ) / alphaSum;
-    const green = _.sum( _.range( 0, colors.length ).map( i => greens[ i ] * alphas[ i ] ) ) / alphaSum;
-    const blue = _.sum( _.range( 0, colors.length ).map( i => blues[ i ] * alphas[ i ] ) ) / alphaSum;
+    const red = _.sum(_.range(0, colors.length).map(i => reds[i] * alphas[i])) / alphaSum;
+    const green = _.sum(_.range(0, colors.length).map(i => greens[i] * alphas[i])) / alphaSum;
+    const blue = _.sum(_.range(0, colors.length).map(i => blues[i] * alphas[i])) / alphaSum;
     const alpha = alphaSum / colors.length; // average of alphas
 
     return new Color(
-      Math.floor( Math.pow( red, 1 / GAMMA ) * 255 ),
-      Math.floor( Math.pow( green, 1 / GAMMA ) * 255 ),
-      Math.floor( Math.pow( blue, 1 / GAMMA ) * 255 ),
-      Math.pow( alpha, 1 / GAMMA )
+      Math.floor(Math.pow(red, 1 / GAMMA) * 255),
+      Math.floor(Math.pow(green, 1 / GAMMA) * 255),
+      Math.floor(Math.pow(blue, 1 / GAMMA) * 255),
+      Math.pow(alpha, 1 / GAMMA)
     );
   }
 
-  public static fromStateObject( stateObject: { r: number; g: number; b: number; a: number } ): Color {
-    return new Color( stateObject.r, stateObject.g, stateObject.b, stateObject.a );
+  public static fromStateObject(stateObject: { r: number; g: number; b: number; a: number }): Color {
+    return new Color(stateObject.r, stateObject.g, stateObject.b, stateObject.a);
   }
 
-  public static hsla( hue: number, saturation: number, lightness: number, alpha: number ): Color {
-    return new Color( 0, 0, 0, 1 ).setHSLA( hue, saturation, lightness, alpha );
+  public static hsla(hue: number, saturation: number, lightness: number, alpha: number): Color {
+    return new Color(0, 0, 0, 1).setHSLA(hue, saturation, lightness, alpha);
   }
 
-  public static checkPaintString( cssString: string ): void {
-    if ( assert ) {
+  public static checkPaintString(cssString: string): void {
+    if (assert) {
       try {
-        scratchColor.setCSS( cssString );
+        scratchColor.setCSS(cssString);
       }
-      catch( e ) {
-        assert( false, `The CSS string is an invalid color: ${cssString}` );
+      catch (e) {
+        assert(false, `The CSS string is an invalid color: ${cssString}`);
       }
     }
   }
@@ -654,12 +656,12 @@ export default class Color {
   /**
    * A Paint of the type that Paintable accepts as fills or strokes
    */
-  public static checkPaint( paint: TPaint ): void {
-    if ( typeof paint === 'string' ) {
-      Color.checkPaintString( paint );
+  public static checkPaint(paint: TPaint): void {
+    if (typeof paint === 'string') {
+      Color.checkPaintString(paint);
     }
-    else if ( ( paint instanceof ReadOnlyProperty ) && ( typeof paint.value === 'string' ) ) {
-      Color.checkPaintString( paint.value );
+    else if ((paint instanceof ReadOnlyProperty) && (typeof paint.value === 'string')) {
+      Color.checkPaintString(paint.value);
     }
   }
 
@@ -670,19 +672,19 @@ export default class Color {
    *
    * @returns - a value in the range [0,255]
    */
-  public static getLuminance( color: Color | string ): number {
-    const sceneryColor = Color.toColor( color );
-    const luminance = ( sceneryColor.red * 0.2126 + sceneryColor.green * 0.7152 + sceneryColor.blue * 0.0722 );
-    assert && assert( luminance >= 0 && luminance <= 255, `unexpected luminance: ${luminance}` );
+  public static getLuminance(color: Color | string): number {
+    const sceneryColor = Color.toColor(color);
+    const luminance = (sceneryColor.red * 0.2126 + sceneryColor.green * 0.7152 + sceneryColor.blue * 0.0722);
+    assert && assert(luminance >= 0 && luminance <= 255, `unexpected luminance: ${luminance}`);
     return luminance;
   }
 
   /**
    * Converts a color to grayscale.
    */
-  public static toGrayscale( color: Color | string ): Color {
-    const luminance = Color.getLuminance( color );
-    return new Color( luminance, luminance, luminance );
+  public static toGrayscale(color: Color | string): Color {
+    const luminance = Color.getLuminance(color);
+    return new Color(luminance, luminance, luminance);
   }
 
   /**
@@ -691,10 +693,10 @@ export default class Color {
    * @param color - colors with luminance < this value are dark, range [0,255], default 186
    * @param luminanceThreshold - colors with luminance < this value are dark, range [0,255], default 186
    */
-  public static isDarkColor( color: Color | string, luminanceThreshold = 186 ): boolean {
-    assert && assert( luminanceThreshold >= 0 && luminanceThreshold <= 255,
-      'invalid luminanceThreshold' );
-    return ( Color.getLuminance( color ) < luminanceThreshold );
+  public static isDarkColor(color: Color | string, luminanceThreshold = 186): boolean {
+    assert && assert(luminanceThreshold >= 0 && luminanceThreshold <= 255,
+      'invalid luminanceThreshold');
+    return (Color.getLuminance(color) < luminanceThreshold);
   }
 
   /**
@@ -703,8 +705,8 @@ export default class Color {
    * @param color
    * @param [luminanceThreshold] - colors with luminance >= this value are light, range [0,255], default 186
    */
-  public static isLightColor( color: Color | string, luminanceThreshold?: number ): boolean {
-    return !Color.isDarkColor( color, luminanceThreshold );
+  public static isLightColor(color: Color | string, luminanceThreshold?: number): boolean {
+    return !Color.isDarkColor(color, luminanceThreshold);
   }
 
   /**
@@ -712,19 +714,19 @@ export default class Color {
    * @param rgb - used for red, blue, and green components
    * @param [a] - defaults to 1
    */
-  public static grayColor( rgb: number, a?: number ): Color {
-    return new Color( rgb, rgb, rgb, a );
+  public static grayColor(rgb: number, a?: number): Color {
+    return new Color(rgb, rgb, rgb, a);
   }
 
   /**
    * Converts a CSS color string into a standard format, lower-casing and keyword-matching it.
    */
-  private static preprocessCSS( cssString: string ): string {
-    let str = cssString.replace( / /g, '' ).toLowerCase();
+  private static preprocessCSS(cssString: string): string {
+    let str = cssString.replace(/ /g, '').toLowerCase();
 
     // replace colors based on keywords
-    const keywordMatch = Color.colorKeywords[ str ];
-    if ( keywordMatch ) {
+    const keywordMatch = Color.colorKeywords[str];
+    if (keywordMatch) {
       str = `#${keywordMatch}`;
     }
 
@@ -734,15 +736,15 @@ export default class Color {
   /**
    * Whether the specified CSS string is a valid CSS color string
    */
-  public static isCSSColorString( cssString: string ): boolean {
-    const str = Color.preprocessCSS( cssString );
+  public static isCSSColorString(cssString: string): boolean {
+    const str = Color.preprocessCSS(cssString);
 
     // run through the available text formats
-    for ( let i = 0; i < Color.formatParsers.length; i++ ) {
-      const parser = Color.formatParsers[ i ];
+    for (let i = 0; i < Color.formatParsers.length; i++) {
+      const parser = Color.formatParsers[i];
 
-      const matches = parser.regexp.exec( str );
-      if ( matches ) {
+      const matches = parser.regexp.exec(str);
+      if (matches) {
         return true;
       }
     }
@@ -754,74 +756,74 @@ export default class Color {
     {
       // 'transparent'
       regexp: /^transparent$/,
-      apply: ( color: Color, matches: RegExpExecArray ): void => {
-        color.setRGBA( 0, 0, 0, 0 );
+      apply: (color: Color, matches: RegExpExecArray): void => {
+        color.setRGBA(0, 0, 0, 0);
       }
     },
     {
       // short hex form, a la '#fff'
       regexp: /^#(\w{1})(\w{1})(\w{1})$/,
-      apply: ( color: Color, matches: RegExpExecArray ): void => {
+      apply: (color: Color, matches: RegExpExecArray): void => {
         color.setRGBA(
-          parseInt( matches[ 1 ] + matches[ 1 ], 16 ),
-          parseInt( matches[ 2 ] + matches[ 2 ], 16 ),
-          parseInt( matches[ 3 ] + matches[ 3 ], 16 ),
-          1 );
+          parseInt(matches[1] + matches[1], 16),
+          parseInt(matches[2] + matches[2], 16),
+          parseInt(matches[3] + matches[3], 16),
+          1);
       }
     },
     {
       // long hex form, a la '#ffffff'
       regexp: /^#(\w{2})(\w{2})(\w{2})$/,
-      apply: ( color: Color, matches: RegExpExecArray ): void => {
+      apply: (color: Color, matches: RegExpExecArray): void => {
         color.setRGBA(
-          parseInt( matches[ 1 ], 16 ),
-          parseInt( matches[ 2 ], 16 ),
-          parseInt( matches[ 3 ], 16 ),
-          1 );
+          parseInt(matches[1], 16),
+          parseInt(matches[2], 16),
+          parseInt(matches[3], 16),
+          1);
       }
     },
     {
       // rgb(...)
-      regexp: new RegExp( `^rgb\\(${rgbNumber},${rgbNumber},${rgbNumber}\\)$` ),
-      apply: ( color: Color, matches: RegExpExecArray ): void => {
+      regexp: new RegExp(`^rgb\\(${rgbNumber},${rgbNumber},${rgbNumber}\\)$`),
+      apply: (color: Color, matches: RegExpExecArray): void => {
         color.setRGBA(
-          parseRGBNumber( matches[ 1 ] ),
-          parseRGBNumber( matches[ 2 ] ),
-          parseRGBNumber( matches[ 3 ] ),
-          1 );
+          parseRGBNumber(matches[1]),
+          parseRGBNumber(matches[2]),
+          parseRGBNumber(matches[3]),
+          1);
       }
     },
     {
       // rgba(...)
-      regexp: new RegExp( `^rgba\\(${rgbNumber},${rgbNumber},${rgbNumber},${aNumber}\\)$` ),
-      apply: ( color: Color, matches: RegExpExecArray ): void => {
+      regexp: new RegExp(`^rgba\\(${rgbNumber},${rgbNumber},${rgbNumber},${aNumber}\\)$`),
+      apply: (color: Color, matches: RegExpExecArray): void => {
         color.setRGBA(
-          parseRGBNumber( matches[ 1 ] ),
-          parseRGBNumber( matches[ 2 ] ),
-          parseRGBNumber( matches[ 3 ] ),
-          Number( matches[ 4 ] ) );
+          parseRGBNumber(matches[1]),
+          parseRGBNumber(matches[2]),
+          parseRGBNumber(matches[3]),
+          Number(matches[4]));
       }
     },
     {
       // hsl(...)
-      regexp: new RegExp( `^hsl\\(${rawNumber},${rawNumber}%,${rawNumber}%\\)$` ),
-      apply: ( color: Color, matches: RegExpExecArray ): void => {
+      regexp: new RegExp(`^hsl\\(${rawNumber},${rawNumber}%,${rawNumber}%\\)$`),
+      apply: (color: Color, matches: RegExpExecArray): void => {
         color.setHSLA(
-          Number( matches[ 1 ] ),
-          Number( matches[ 2 ] ),
-          Number( matches[ 3 ] ),
-          1 );
+          Number(matches[1]),
+          Number(matches[2]),
+          Number(matches[3]),
+          1);
       }
     },
     {
       // hsla(...)
-      regexp: new RegExp( `^hsla\\(${rawNumber},${rawNumber}%,${rawNumber}%,${aNumber}\\)$` ),
-      apply: ( color: Color, matches: RegExpExecArray ): void => {
+      regexp: new RegExp(`^hsla\\(${rawNumber},${rawNumber}%,${rawNumber}%,${aNumber}\\)$`),
+      apply: (color: Color, matches: RegExpExecArray): void => {
         color.setHSLA(
-          Number( matches[ 1 ] ),
-          Number( matches[ 2 ] ),
-          Number( matches[ 3 ] ),
-          Number( matches[ 4 ] ) );
+          Number(matches[1]),
+          Number(matches[2]),
+          Number(matches[3]),
+          Number(matches[4]));
       }
     }
   ];
@@ -1028,27 +1030,27 @@ export default class Color {
   public static ColorIO: IOType;
 }
 
-scenery.register( 'Color', Color );
+scenery.register('Color', Color);
 
 // Java compatibility
-Color.BLACK = Color.black = new Color( 0, 0, 0 ).setImmutable();
-Color.BLUE = Color.blue = new Color( 0, 0, 255 ).setImmutable();
-Color.CYAN = Color.cyan = new Color( 0, 255, 255 ).setImmutable();
-Color.DARK_GRAY = Color.darkGray = new Color( 64, 64, 64 ).setImmutable();
-Color.GRAY = Color.gray = new Color( 128, 128, 128 ).setImmutable();
-Color.GREEN = Color.green = new Color( 0, 255, 0 ).setImmutable();
-Color.LIGHT_GRAY = Color.lightGray = new Color( 192, 192, 192 ).setImmutable();
-Color.MAGENTA = Color.magenta = new Color( 255, 0, 255 ).setImmutable();
-Color.ORANGE = Color.orange = new Color( 255, 200, 0 ).setImmutable();
-Color.PINK = Color.pink = new Color( 255, 175, 175 ).setImmutable();
-Color.RED = Color.red = new Color( 255, 0, 0 ).setImmutable();
-Color.WHITE = Color.white = new Color( 255, 255, 255 ).setImmutable();
-Color.YELLOW = Color.yellow = new Color( 255, 255, 0 ).setImmutable();
+Color.BLACK = Color.black = new Color(0, 0, 0).setImmutable();
+Color.BLUE = Color.blue = new Color(0, 0, 255).setImmutable();
+Color.CYAN = Color.cyan = new Color(0, 255, 255).setImmutable();
+Color.DARK_GRAY = Color.darkGray = new Color(64, 64, 64).setImmutable();
+Color.GRAY = Color.gray = new Color(128, 128, 128).setImmutable();
+Color.GREEN = Color.green = new Color(0, 255, 0).setImmutable();
+Color.LIGHT_GRAY = Color.lightGray = new Color(192, 192, 192).setImmutable();
+Color.MAGENTA = Color.magenta = new Color(255, 0, 255).setImmutable();
+Color.ORANGE = Color.orange = new Color(255, 200, 0).setImmutable();
+Color.PINK = Color.pink = new Color(255, 175, 175).setImmutable();
+Color.RED = Color.red = new Color(255, 0, 0).setImmutable();
+Color.WHITE = Color.white = new Color(255, 255, 255).setImmutable();
+Color.YELLOW = Color.yellow = new Color(255, 255, 0).setImmutable();
 
 // Helper for transparent colors
-Color.TRANSPARENT = Color.transparent = new Color( 0, 0, 0, 0 ).setImmutable();
+Color.TRANSPARENT = Color.transparent = new Color(0, 0, 0, 0).setImmutable();
 
-const scratchColor = new Color( 'blue' );
+const scratchColor = new Color('blue');
 
 export type ColorState = {
   r: number;
@@ -1057,15 +1059,15 @@ export type ColorState = {
   a: number;
 };
 
-Color.ColorIO = new IOType( 'ColorIO', {
+Color.ColorIO = new IOType('ColorIO', {
   valueType: Color,
   documentation: 'A color, with rgba',
-  toStateObject: ( color: Color ) => color.toStateObject(),
-  fromStateObject: ( stateObject: { r: number; g: number; b: number; a: number } ) => new Color( stateObject.r, stateObject.g, stateObject.b, stateObject.a ),
+  toStateObject: (color: Color) => color.toStateObject(),
+  fromStateObject: (stateObject: { r: number; g: number; b: number; a: number }) => new Color(stateObject.r, stateObject.g, stateObject.b, stateObject.a),
   stateSchema: {
     r: NumberIO,
     g: NumberIO,
     b: NumberIO,
     a: NumberIO
   }
-} );
+});

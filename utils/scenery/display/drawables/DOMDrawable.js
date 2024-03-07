@@ -6,19 +6,19 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { DOMSelfDrawable, scenery, Utils } from '../../imports.js';
+import Poolable from '../../../phet-core/Poolable';
+import { DOMSelfDrawable, scenery, Utils } from '../../imports';
 
 class DOMDrawable extends DOMSelfDrawable {
   /**
    * @param {number} renderer - Renderer bitmask, see Renderer's documentation for more details.
    * @param {Instance} instance
    */
-  constructor( renderer, instance ) {
-    super( renderer, instance );
+  constructor(renderer, instance) {
+    super(renderer, instance);
 
     // Apply CSS needed for future CSS transforms to work properly.
-    Utils.prepareForTransform( this.domElement );
+    Utils.prepareForTransform(this.domElement);
   }
 
   /**
@@ -28,8 +28,8 @@ class DOMDrawable extends DOMSelfDrawable {
    * @param {number} renderer
    * @param {Instance} instance
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer, instance );
+  initialize(renderer, instance) {
+    super.initialize(renderer, instance);
 
     // @public {HTMLElement} - Our primary DOM element. This is exposed as part of the DOMSelfDrawable API.
     this.domElement = this.node._container;
@@ -42,8 +42,8 @@ class DOMDrawable extends DOMSelfDrawable {
    * This implements part of the DOMSelfDrawable required API for subtypes.
    */
   updateDOM() {
-    if ( this.transformDirty && !this.node._preventTransform ) {
-      Utils.applyPreparedTransform( this.getTransformMatrix(), this.domElement );
+    if (this.transformDirty && !this.node._preventTransform) {
+      Utils.applyPreparedTransform(this.getTransformMatrix(), this.domElement);
     }
 
     // clear all of the dirty flags
@@ -62,8 +62,8 @@ class DOMDrawable extends DOMSelfDrawable {
   }
 }
 
-scenery.register( 'DOMDrawable', DOMDrawable );
+scenery.register('DOMDrawable', DOMDrawable);
 
-Poolable.mixInto( DOMDrawable );
+Poolable.mixInto(DOMDrawable);
 
 export default DOMDrawable;

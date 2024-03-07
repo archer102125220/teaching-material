@@ -25,6 +25,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import phetCore from './phetCore';
 // @ts-expect-error
 import TEnumeration from './TEnumeration';
@@ -45,66 +47,66 @@ class Enumeration<T extends EnumerationValue> implements TEnumeration<T> {
   public readonly Enumeration: Constructor<T> & Record<string, T>;
   public readonly phetioDocumentation?: string;
 
-  public constructor( Enumeration: Constructor<T>, providedOptions?: EnumerationOptions<T> ) {
+  public constructor(Enumeration: Constructor<T>, providedOptions?: EnumerationOptions<T>) {
 
-    const options = optionize<EnumerationOptions<T>>()( {
+    const options = optionize<EnumerationOptions<T>>()({
       phetioDocumentation: '',
 
       // Values are plucked from the supplied Enumeration, but in order to support subtyping (augmenting) Enumerations,
       // you can specify the rule for what counts as a member of the enumeration. This should only be used in the
       // special case of augmenting existing enumerations.
       instanceType: Enumeration
-    }, providedOptions );
+    }, providedOptions);
     this.phetioDocumentation = options.phetioDocumentation;
 
     const instanceType = options.instanceType;
 
     // Iterate over the type hierarchy to support augmenting enumerations, but reverse so that newly added enumeration
     // values appear after previously existing enumeration values
-    const types = _.reverse( inheritance( Enumeration ) );
+    const types = _.reverse(inheritance(Enumeration));
 
-    assert && assert( types.includes( instanceType ), 'the specified type should be in its own hierarchy' );
+    assert && assert(types.includes(instanceType), 'the specified type should be in its own hierarchy');
 
     this.keys = [];
     this.values = [];
-    types.forEach( type => {
-      Object.keys( type ).forEach( key => {
-        const value = type[ key ];
-        if ( value instanceof instanceType ) {
-          assert && assert( key === key.toUpperCase(), 'keys should be upper case by convention' );
-          this.keys.push( key );
-          this.values.push( value );
+    types.forEach(type => {
+      Object.keys(type).forEach(key => {
+        const value = type[key];
+        if (value instanceof instanceType) {
+          assert && assert(key === key.toUpperCase(), 'keys should be upper case by convention');
+          this.keys.push(key);
+          this.values.push(value);
 
           // Only assign this to the lowest Enumeration in the hierarchy. Otherwise this would overwrite the
           // supertype-assigned Enumeration. See https://github.com/phetsims/phet-core/issues/102
-          if ( value instanceof Enumeration ) {
+          if (value instanceof Enumeration) {
             value.name = key;
             value.enumeration = this;
           }
         }
-      } );
-    } );
+      });
+    });
 
-    assert && assert( this.keys.length > 0, 'no keys found' );
-    assert && assert( this.values.length > 0, 'no values found' );
+    assert && assert(this.keys.length > 0, 'no keys found');
+    assert && assert(this.values.length > 0, 'no values found');
 
     this.Enumeration = Enumeration as Constructor<T> & Record<string, T>;
-    EnumerationValue.sealedCache.add( Enumeration );
+    EnumerationValue.sealedCache.add(Enumeration);
   }
 
-  public getKey( value: T ): string {
+  public getKey(value: T): string {
     return value.name;
   }
 
-  public getValue( key: string ): T {
-    return this.Enumeration[ key ];
+  public getValue(key: string): T {
+    return this.Enumeration[key];
   }
 
-  public includes( value: T ): boolean {
-    return this.values.includes( value );
+  public includes(value: T): boolean {
+    return this.values.includes(value);
   }
 }
 
-phetCore.register( 'Enumeration', Enumeration );
+phetCore.register('Enumeration', Enumeration);
 
 export default Enumeration;

@@ -10,6 +10,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import axon from './axon';
 
 const units = {

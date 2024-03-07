@@ -7,6 +7,8 @@
  * @author Andrew Adare (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import Validation from '../../axon/Validation';
 import tandemNamespace from '../tandemNamespace';
 import IOType from './IOType';

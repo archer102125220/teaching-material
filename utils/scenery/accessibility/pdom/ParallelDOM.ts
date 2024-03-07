@@ -123,6 +123,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import TinyEmitter from '../../../axon/TinyEmitter';
 import validate from '../../../axon/validate';
 import Validation from '../../../axon/Validation';
@@ -3006,7 +3008,6 @@ export default class ParallelDOM extends PhetioObject {
       pruneStack = pruneStack.concat(arrayPDOMOrder as Node[]);
 
       // Visiting trails to ordered nodes.
-      
       // @ts-expect-error
       _.each(arrayPDOMOrder, (descendant: Node) => {
         // Find all descendant references to the node.

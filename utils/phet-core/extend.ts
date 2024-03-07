@@ -10,19 +10,21 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import phetCore from './phetCore';
 
-function extend<T>( obj: T, ...sources: Array<object | undefined> ): T {
-  _.each( sources, source => {
-    if ( source ) {
-      for ( const prop in source ) {
-        Object.defineProperty( obj, prop, Object.getOwnPropertyDescriptor( source, prop )! );
+function extend<T>(obj: T, ...sources: Array<object | undefined>): T {
+  _.each(sources, source => {
+    if (source) {
+      for (const prop in source) {
+        Object.defineProperty(obj, prop, Object.getOwnPropertyDescriptor(source, prop)!);
       }
     }
-  } );
+  });
   return obj;
 }
 
-phetCore.register( 'extend', extend );
+phetCore.register('extend', extend);
 
 export default extend;

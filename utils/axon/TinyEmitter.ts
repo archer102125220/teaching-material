@@ -7,6 +7,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import type IntentionalAny from '../phet-core/types/IntentionalAny';
 import axon from './axon';
 import type TEmitter from './TEmitter';

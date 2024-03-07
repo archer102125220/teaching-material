@@ -8,14 +8,16 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyEmitter from '../../../axon/js/TinyEmitter.js';
-import { scenery } from '../imports.js';
+import _ from 'lodash';
+
+import TinyEmitter from '../../axon/TinyEmitter';
+import { scenery } from '../imports';
 
 class Fittability {
   /**
    * @param {Instance} instance - Our Instance, never changes.
    */
-  constructor( instance ) {
+  constructor(instance) {
     // @private {Instance}
     this.instance = instance;
   }
@@ -29,7 +31,7 @@ class Fittability {
    * @param {Trail|null} trail
    * @returns {Fittability} - Returns this, to allow chaining.
    */
-  initialize( display, trail ) {
+  initialize(display, trail) {
     this.display = display; // @private {Display}
     this.trail = trail; // @private {Trail}
     this.node = trail && trail.lastNode(); // @private {Node}
@@ -55,7 +57,8 @@ class Fittability {
 
     // @public {TinyEmitter} - Called with no arguments when the subtree fittability changes (whether
     // subtreeUnfittableCount is greater than zero or not).
-    this.subtreeFittabilityChangeEmitter = this.subtreeFittabilityChangeEmitter || new TinyEmitter();
+    this.subtreeFittabilityChangeEmitter =
+      this.subtreeFittabilityChangeEmitter || new TinyEmitter();
 
     return this; // allow chaining
   }
@@ -77,7 +80,7 @@ class Fittability {
    */
   checkSelfFittability() {
     const newSelfFittable = this.isSelfFitSupported();
-    if ( this.selfFittable !== newSelfFittable ) {
+    if (this.selfFittable !== newSelfFittable) {
       this.updateSelfFittable();
     }
   }
@@ -101,19 +104,19 @@ class Fittability {
    */
   markSubtreeFittable() {
     // Bail if we can't be fittable ourselves
-    if ( !this.selfFittable ) {
+    if (!this.selfFittable) {
       return;
     }
 
     this.ancestorsFittable = true;
 
     const children = this.instance.children;
-    for ( let i = 0; i < children.length; i++ ) {
-      children[ i ].fittability.markSubtreeFittable();
+    for (let i = 0; i < children.length; i++) {
+      children[i].fittability.markSubtreeFittable();
     }
 
     // Update the Instance's drawables, so that their blocks can potentially now be fitted.
-    this.instance.updateDrawableFittability( true );
+    this.instance.updateDrawableFittability(true);
   }
 
   /**
@@ -123,19 +126,19 @@ class Fittability {
    */
   markSubtreeUnfittable() {
     // Bail if we are already unfittable
-    if ( !this.ancestorsFittable ) {
+    if (!this.ancestorsFittable) {
       return;
     }
 
     this.ancestorsFittable = false;
 
     const children = this.instance.children;
-    for ( let i = 0; i < children.length; i++ ) {
-      children[ i ].fittability.markSubtreeUnfittable();
+    for (let i = 0; i < children.length; i++) {
+      children[i].fittability.markSubtreeUnfittable();
     }
 
     // Update the Instance's drawables, so that their blocks can potentially now be prevented from being fitted.
-    this.instance.updateDrawableFittability( false );
+    this.instance.updateDrawableFittability(false);
   }
 
   /**
@@ -144,21 +147,19 @@ class Fittability {
    */
   updateSelfFittable() {
     const newSelfFittable = this.isSelfFitSupported();
-    assert && assert( this.selfFittable !== newSelfFittable );
+    assert && assert(this.selfFittable !== newSelfFittable);
 
     this.selfFittable = newSelfFittable;
 
-    if ( this.selfFittable && ( !this.parent || this.parent.ancestorsFittable ) ) {
+    if (this.selfFittable && (!this.parent || this.parent.ancestorsFittable)) {
       this.markSubtreeFittable();
-    }
-    else if ( !this.selfFittable ) {
+    } else if (!this.selfFittable) {
       this.markSubtreeUnfittable();
     }
 
-    if ( this.selfFittable ) {
+    if (this.selfFittable) {
       this.decrementSubtreeUnfittableCount();
-    }
-    else {
+    } else {
       this.incrementSubtreeUnfittableCount();
     }
   }
@@ -172,7 +173,7 @@ class Fittability {
     this.subtreeUnfittableCount++;
 
     // If now something in our subtree can't be fitted, we need to notify our parent
-    if ( this.subtreeUnfittableCount === 1 ) {
+    if (this.subtreeUnfittableCount === 1) {
       this.parent && this.parent.incrementSubtreeUnfittableCount();
 
       // Notify anything listening that the condition ( this.subtreeUnfittableCount > 0 ) changed.
@@ -189,7 +190,7 @@ class Fittability {
     this.subtreeUnfittableCount--;
 
     // If now our subtree can all be fitted, we need to notify our parent
-    if ( this.subtreeUnfittableCount === 0 ) {
+    if (this.subtreeUnfittableCount === 0) {
       this.parent && this.parent.decrementSubtreeUnfittableCount();
 
       // Notify anything listening that the condition ( this.subtreeUnfittableCount > 0 ) changed.
@@ -203,12 +204,12 @@ class Fittability {
    *
    * @param {Fittability} childFittability - The Fittability of the new child instance.
    */
-  onInsert( childFittability ) {
-    if ( !this.ancestorsFittable ) {
+  onInsert(childFittability) {
+    if (!this.ancestorsFittable) {
       childFittability.markSubtreeUnfittable();
     }
 
-    if ( childFittability.subtreeUnfittableCount > 0 ) {
+    if (childFittability.subtreeUnfittableCount > 0) {
       this.incrementSubtreeUnfittableCount();
     }
   }
@@ -219,12 +220,12 @@ class Fittability {
    *
    * @param {Fittability} childFittability - The Fittability of the old child instance.
    */
-  onRemove( childFittability ) {
-    if ( !this.ancestorsFittable ) {
+  onRemove(childFittability) {
+    if (!this.ancestorsFittable) {
       childFittability.markSubtreeFittable();
     }
 
-    if ( childFittability.subtreeUnfittableCount > 0 ) {
+    if (childFittability.subtreeUnfittableCount > 0) {
       this.decrementSubtreeUnfittableCount();
     }
   }
@@ -234,28 +235,37 @@ class Fittability {
    * @public
    */
   audit() {
-    if ( assertSlow ) {
-      assertSlow( this.selfFittable === this.isSelfFitSupported(),
-        'selfFittable diverged from isSelfFitSupported()' );
+    if (assertSlow) {
+      assertSlow(
+        this.selfFittable === this.isSelfFitSupported(),
+        'selfFittable diverged from isSelfFitSupported()'
+      );
 
-      assertSlow( this.ancestorsFittable === ( ( this.parent ? this.parent.ancestorsFittable : true ) && this.selfFittable ),
-        'Our ancestorsFittable should be false if our parent or our self is not fittable.' );
+      assertSlow(
+        this.ancestorsFittable ===
+          ((this.parent ? this.parent.ancestorsFittable : true) &&
+            this.selfFittable),
+        'Our ancestorsFittable should be false if our parent or our self is not fittable.'
+      );
 
       // Our subtree unfittable count should be the sum of children that have a non-zero count, plus 1 if our self
       // is not fittable
       let subtreeUnfittableCount = 0;
-      if ( !this.selfFittable ) {
+      if (!this.selfFittable) {
         subtreeUnfittableCount++;
       }
-      _.each( this.instance.children, instance => {
-        if ( instance.fittability.subtreeUnfittableCount > 0 ) {
+      _.each(this.instance.children, (instance) => {
+        if (instance.fittability.subtreeUnfittableCount > 0) {
           subtreeUnfittableCount++;
         }
-      } );
-      assertSlow( this.subtreeUnfittableCount === subtreeUnfittableCount, 'Incorrect subtreeUnfittableCount' );
+      });
+      assertSlow(
+        this.subtreeUnfittableCount === subtreeUnfittableCount,
+        'Incorrect subtreeUnfittableCount'
+      );
     }
   }
 }
 
-scenery.register( 'Fittability', Fittability );
+scenery.register('Fittability', Fittability);
 export default Fittability;

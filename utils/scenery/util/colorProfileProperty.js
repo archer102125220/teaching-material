@@ -11,6 +11,7 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 import _ from 'lodash';
+
 import StringProperty from '../../axon/StringProperty';
 import Tandem from '../../tandem/Tandem';
 import { scenery, SceneryConstants } from '../imports';

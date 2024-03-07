@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Drawable, scenery } from '../imports.js';
+import { Drawable, scenery } from '../imports';
 
 class SharedCanvasCacheDrawable extends Drawable {
   /**
@@ -15,10 +15,10 @@ class SharedCanvasCacheDrawable extends Drawable {
    * @param {Instance} instance
    * @param {Instance} sharedInstance
    */
-  constructor( trail, renderer, instance, sharedInstance ) {
+  constructor(trail, renderer, instance, sharedInstance) {
     super();
 
-    this.initialize( trail, renderer, instance, sharedInstance );
+    this.initialize(trail, renderer, instance, sharedInstance);
   }
 
   /**
@@ -30,8 +30,8 @@ class SharedCanvasCacheDrawable extends Drawable {
    * @param {Instance} instance
    * @param {Instance} sharedInstance
    */
-  initialize( trail, renderer, instance, sharedInstance ) {
-    super.initialize( renderer );
+  initialize(trail, renderer, instance, sharedInstance) {
+    super.initialize(renderer);
 
     // TODO: NOTE: may have to separate into separate drawables for separate group renderers https://github.com/phetsims/scenery/issues/1581
 
@@ -40,5 +40,5 @@ class SharedCanvasCacheDrawable extends Drawable {
   }
 }
 
-scenery.register( 'SharedCanvasCacheDrawable', SharedCanvasCacheDrawable );
+scenery.register('SharedCanvasCacheDrawable', SharedCanvasCacheDrawable);
 export default SharedCanvasCacheDrawable;

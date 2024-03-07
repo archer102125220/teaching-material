@@ -12,6 +12,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import animationFrameTimer from '../axon/animationFrameTimer';
 // @ts-expect-error
 import StrictOmit from '../phet-core/types/StrictOmit';
@@ -334,7 +336,7 @@ class PhetioObject extends Disposable {
     // for phetioDynamicElements, the corresponding phetioID for the element in the archetype subtree
     this.phetioArchetypePhetioID = null;
 
-    //keep track of LinkedElements for disposal. Null out to support asserting on
+    // keep track of LinkedElements for disposal. Null out to support asserting on
     // edge error cases, see this.addLinkedElement()
     this.linkedElements = [];
 

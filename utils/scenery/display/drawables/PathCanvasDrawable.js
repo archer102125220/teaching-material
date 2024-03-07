@@ -6,10 +6,16 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { CanvasSelfDrawable, PaintableStatelessDrawable, scenery } from '../../imports.js';
+import Poolable from '../../../phet-core/Poolable';
+import {
+  CanvasSelfDrawable,
+  PaintableStatelessDrawable,
+  scenery
+} from '../../imports';
 
-class PathCanvasDrawable extends PaintableStatelessDrawable( CanvasSelfDrawable ) {
+class PathCanvasDrawable extends PaintableStatelessDrawable(
+  CanvasSelfDrawable
+) {
   /**
    * Paints this drawable to a Canvas (the wrapper contains both a Canvas reference and its drawing context).
    * @public
@@ -23,24 +29,24 @@ class PathCanvasDrawable extends PaintableStatelessDrawable( CanvasSelfDrawable 
    * @param {scenery.Node} node - Our node that is being drawn
    * @param {Matrix3} matrix - The transformation matrix applied for this node's coordinate system.
    */
-  paintCanvas( wrapper, node, matrix ) {
+  paintCanvas(wrapper, node, matrix) {
     const context = wrapper.context;
 
-    if ( node.hasShape() ) {
+    if (node.hasShape()) {
       // TODO: fill/stroke delay optimizations? https://github.com/phetsims/scenery/issues/1581
       context.beginPath();
-      node._shape.writeToContext( context );
+      node._shape.writeToContext(context);
 
-      if ( node.hasFill() ) {
-        node.beforeCanvasFill( wrapper ); // defined in Paintable
+      if (node.hasFill()) {
+        node.beforeCanvasFill(wrapper); // defined in Paintable
         context.fill();
-        node.afterCanvasFill( wrapper ); // defined in Paintable
+        node.afterCanvasFill(wrapper); // defined in Paintable
       }
 
-      if ( node.hasPaintableStroke() ) {
-        node.beforeCanvasStroke( wrapper ); // defined in Paintable
+      if (node.hasPaintableStroke()) {
+        node.beforeCanvasStroke(wrapper); // defined in Paintable
         context.stroke();
-        node.afterCanvasStroke( wrapper ); // defined in Paintable
+        node.afterCanvasStroke(wrapper); // defined in Paintable
       }
     }
   }
@@ -53,8 +59,8 @@ class PathCanvasDrawable extends PaintableStatelessDrawable( CanvasSelfDrawable 
   }
 }
 
-scenery.register( 'PathCanvasDrawable', PathCanvasDrawable );
+scenery.register('PathCanvasDrawable', PathCanvasDrawable);
 
-Poolable.mixInto( PathCanvasDrawable );
+Poolable.mixInto(PathCanvasDrawable);
 
 export default PathCanvasDrawable;

@@ -8,6 +8,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Vector2 from '../../dot/Vector2';
 import platform from '../../phet-core/platform';
 import { ColorDef, Gradient, type GradientStop, scenery, SVGBlock, SVGRadialGradient, type TColor } from '../imports';

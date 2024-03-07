@@ -13,6 +13,8 @@
  * @author Mohamed Safi
  */
 
+import _ from 'lodash';
+
 import merge from '../phet-core/merge';
 import Bounds2 from './Bounds2';
 import dot from './dot';

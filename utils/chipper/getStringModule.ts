@@ -13,6 +13,8 @@
  * @author Jonathan Olson <jonathan.olson>
  */
 
+import _ from 'lodash';
+
 import PhetioObject from '../tandem/PhetioObject';
 import Tandem from '../tandem/Tandem';
 import CouldNotYetDeserializeError from '../tandem/CouldNotYetDeserializeError';

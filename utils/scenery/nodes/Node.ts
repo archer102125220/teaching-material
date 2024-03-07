@@ -151,6 +151,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import BooleanProperty, { type BooleanPropertyOptions } from '../../axon/BooleanProperty';
 import EnabledProperty, { type EnabledPropertyOptions } from '../../axon/EnabledProperty';
 import Property, { type PropertyOptions } from '../../axon/Property';

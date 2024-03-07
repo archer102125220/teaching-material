@@ -97,6 +97,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import type KeysMatching from '../phet-core/types/KeysMatching';
 import axon from './axon';
 import type TProperty from './TProperty';

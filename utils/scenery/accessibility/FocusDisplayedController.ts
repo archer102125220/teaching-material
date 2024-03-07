@@ -10,6 +10,8 @@
  * @author Jesse Greenberg
  */
 
+import _ from 'lodash';
+
 import type TProperty from '../../axon/TProperty';
 import optionize from '../../phet-core/optionize';
 import { Focus, Instance, Node, scenery, TrailVisibilityTracker } from '../imports';

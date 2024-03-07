@@ -48,26 +48,28 @@
  *         case we are from a removed instance)
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
- */
+*/
 
-import Emitter from '../../../axon/js/Emitter.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import stepTimer from '../../../axon/js/stepTimer.js';
-import TinyProperty from '../../../axon/js/TinyProperty.js';
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import Dimension2 from '../../../dot/js/Dimension2.js';
-import { Matrix3Type } from '../../../dot/js/Matrix3.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import escapeHTML from '../../../phet-core/js/escapeHTML.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import platform from '../../../phet-core/js/platform.js';
-import PhetioObject, { PhetioObjectOptions } from '../../../tandem/js/PhetioObject.js';
-import AriaLiveAnnouncer from '../../../utterance-queue/js/AriaLiveAnnouncer.js';
-import UtteranceQueue from '../../../utterance-queue/js/UtteranceQueue.js';
-import { BackboneDrawable, Block, CanvasBlock, CanvasNodeBoundsOverlay, ChangeInterval, Color, DOMBlock, DOMDrawable, Drawable, Features, FittedBlockBoundsOverlay, FocusManager, FullScreen, globalKeyStateTracker, HighlightOverlay, HitAreaOverlay, Input, InputOptions, Instance, KeyboardUtils, Node, PDOMInstance, PDOMSiblingStyle, PDOMTree, PDOMUtils, Pointer, PointerAreaOverlay, PointerOverlay, Renderer, scenery, SceneryEvent, scenerySerialize, SelfDrawable, TInputListener, TOverlay, Trail, Utils, WebGLBlock } from '../imports.js';
-import TEmitter from '../../../axon/js/TEmitter.js';
-import SafariWorkaroundOverlay from '../overlays/SafariWorkaroundOverlay.js';
+import _ from 'lodash';
+
+import Emitter from '../../axon/Emitter';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import type TProperty from '../../axon/TProperty';
+import stepTimer from '../../axon/stepTimer';
+import TinyProperty from '../../axon/TinyProperty';
+import Bounds2 from '../../dot/Bounds2';
+import Dimension2 from '../../dot/Dimension2';
+import { Matrix3Type } from '../../dot/Matrix3';
+import Vector2 from '../../dot/Vector2';
+import escapeHTML from '../../phet-core/escapeHTML';
+import optionize from '../../phet-core/optionize';
+import platform from '../../phet-core/platform';
+import PhetioObject, { type PhetioObjectOptions } from '../../tandem/PhetioObject';
+import AriaLiveAnnouncer from '../../utterance-queue/AriaLiveAnnouncer';
+import UtteranceQueue from '../../utterance-queue/UtteranceQueue';
+import { BackboneDrawable, Block, CanvasBlock, CanvasNodeBoundsOverlay, ChangeInterval, Color, DOMBlock, DOMDrawable, Drawable, Features, FittedBlockBoundsOverlay, FocusManager, FullScreen, globalKeyStateTracker, HighlightOverlay, HitAreaOverlay, Input, type InputOptions, Instance, KeyboardUtils, Node, PDOMInstance, PDOMSiblingStyle, PDOMTree, PDOMUtils, Pointer, PointerAreaOverlay, PointerOverlay, Renderer, scenery, SceneryEvent, scenerySerialize, SelfDrawable, type TInputListener, type TOverlay, Trail, Utils, WebGLBlock } from '../imports';
+import type TEmitter from '../../axon/TEmitter';
+import SafariWorkaroundOverlay from '../overlays/SafariWorkaroundOverlay';
 
 type SelfOptions = {
   // Initial (or override) display width
@@ -163,8 +165,8 @@ type ParentOptions = Pick<PhetioObjectOptions, 'tandem'>;
 export type DisplayOptions = SelfOptions & ParentOptions;
 
 const CUSTOM_CURSORS = {
-  'scenery-grab-pointer': [ 'grab', '-moz-grab', '-webkit-grab', 'pointer' ],
-  'scenery-grabbing-pointer': [ 'grabbing', '-moz-grabbing', '-webkit-grabbing', 'pointer' ]
+  'scenery-grab-pointer': ['grab', '-moz-grab', '-webkit-grab', 'pointer'],
+  'scenery-grabbing-pointer': ['grabbing', '-moz-grabbing', '-webkit-grabbing', 'pointer']
 } as Record<string, string[]>;
 
 let globalIdCounter = 1;
@@ -294,7 +296,7 @@ export default class Display {
   public _rootPDOMInstance?: PDOMInstance;
 
   // (if accessible)
-  private _boundHandleFullScreenNavigation?: ( domEvent: KeyboardEvent ) => void;
+  private _boundHandleFullScreenNavigation?: (domEvent: KeyboardEvent) => void;
 
   // If logging performance
   private perfSyncTreeCount?: number;
@@ -310,17 +312,17 @@ export default class Display {
    * @param rootNode - Displays this node and all of its descendants
    * @param [providedOptions]
    */
-  public constructor( rootNode: Node, providedOptions?: DisplayOptions ) {
-    assert && assert( rootNode, 'rootNode is a required parameter' );
+  public constructor(rootNode: Node, providedOptions?: DisplayOptions) {
+    assert && assert(rootNode, 'rootNode is a required parameter');
 
-    //OHTWO TODO: hybrid batching (option to batch until an event like 'up' that might be needed for security issues) https://github.com/phetsims/scenery/issues/1581
+    // OHTWO TODO: hybrid batching (option to batch until an event like 'up' that might be needed for security issues) https://github.com/phetsims/scenery/issues/1581
 
-    const options = optionize<DisplayOptions, StrictOmit<SelfOptions, 'container'>, ParentOptions>()( {
+    const options = optionize<DisplayOptions, StrictOmit<SelfOptions, 'container'>, ParentOptions>()({
       // {number} - Initial display width
-      width: ( providedOptions && providedOptions.container && providedOptions.container.clientWidth ) || 640,
+      width: (providedOptions && providedOptions.container && providedOptions.container.clientWidth) || 640,
 
       // {number} - Initial display height
-      height: ( providedOptions && providedOptions.container && providedOptions.container.clientHeight ) || 480,
+      height: (providedOptions && providedOptions.container && providedOptions.container.clientHeight) || 480,
 
       // {boolean} - Applies CSS styles to the root DOM element that make it amenable to interactive content
       allowCSSHacks: true,
@@ -392,7 +394,7 @@ export default class Display {
       // {boolean} - Whether, if no WebGL antialiasing is detected, the backing scale can be increased so as to
       //             provide some antialiasing benefit. See https://github.com/phetsims/scenery/issues/859.
       allowBackingScaleAntialiasing: true
-    }, providedOptions );
+    }, providedOptions);
 
     this.id = globalIdCounter++;
 
@@ -404,16 +406,16 @@ export default class Display {
 
     this._defaultCursor = options.defaultCursor;
 
-    this.sizeProperty = new TinyProperty( new Dimension2( options.width, options.height ) );
+    this.sizeProperty = new TinyProperty(new Dimension2(options.width, options.height));
 
-    this._currentSize = new Dimension2( -1, -1 );
-    console.log( { rootNode: rootNode } );
+    this._currentSize = new Dimension2(-1, -1);
+    console.log({ rootNode });
     this._rootNode = rootNode;
-    this._rootNode.addRootedDisplay( this );
+    this._rootNode.addRootedDisplay(this);
     this._rootBackbone = null; // to be filled in later
     this._domElement = options.container ?
-                       BackboneDrawable.repurposeBackboneContainer( options.container ) :
-                       BackboneDrawable.createDivBackbone();
+      BackboneDrawable.repurposeBackboneContainer(options.container) :
+      BackboneDrawable.createDivBackbone();
 
     this._sharedCanvasInstances = {};
     this._baseInstance = null; // will be filled with the root Instance
@@ -447,7 +449,7 @@ export default class Display {
     this._canvasAreaBoundsOverlay = null;
     this._fittedBlockBoundsOverlay = null;
 
-    if ( assert ) {
+    if (assert) {
       this._isPainting = false;
       this._isDisposing = false;
       this._isDisposed = false;
@@ -455,56 +457,56 @@ export default class Display {
 
     this.applyCSSHacks();
 
-    this.setBackgroundColor( options.backgroundColor );
+    this.setBackgroundColor(options.backgroundColor);
 
     const ariaLiveAnnouncer = new AriaLiveAnnouncer();
-    this.descriptionUtteranceQueue = new UtteranceQueue( ariaLiveAnnouncer, {
+    this.descriptionUtteranceQueue = new UtteranceQueue(ariaLiveAnnouncer, {
       initialize: this._accessible,
       featureSpecificAnnouncingControlPropertyName: 'descriptionCanAnnounceProperty'
-    } );
+    });
 
-    if ( platform.safari && options.allowSafariRedrawWorkaround ) {
-      this.addOverlay( new SafariWorkaroundOverlay( this ) );
+    if (platform.safari && options.allowSafariRedrawWorkaround) {
+      this.addOverlay(new SafariWorkaroundOverlay(this));
     }
 
     this.focusManager = new FocusManager();
 
     // Features that require the HighlightOverlay
-    if ( this._accessible || options.supportsInteractiveHighlights ) {
+    if (this._accessible || options.supportsInteractiveHighlights) {
       this._focusRootNode = new Node();
-      this._focusOverlay = new HighlightOverlay( this, this._focusRootNode, {
+      this._focusOverlay = new HighlightOverlay(this, this._focusRootNode, {
         pdomFocusHighlightsVisibleProperty: this.focusManager.pdomFocusHighlightsVisibleProperty,
         interactiveHighlightsVisibleProperty: this.focusManager.interactiveHighlightsVisibleProperty,
         readingBlockHighlightsVisibleProperty: this.focusManager.readingBlockHighlightsVisibleProperty
-      } );
-      this.addOverlay( this._focusOverlay );
+      });
+      this.addOverlay(this._focusOverlay);
     }
 
-    if ( this._accessible ) {
-      this._rootPDOMInstance = PDOMInstance.pool.create( null, this, new Trail() );
+    if (this._accessible) {
+      this._rootPDOMInstance = PDOMInstance.pool.create(null, this, new Trail());
       sceneryLog && sceneryLog.PDOMInstance && sceneryLog.PDOMInstance(
-        `Display root instance: ${this._rootPDOMInstance.toString()}` );
-      PDOMTree.rebuildInstanceTree( this._rootPDOMInstance );
+        `Display root instance: ${this._rootPDOMInstance.toString()}`);
+      PDOMTree.rebuildInstanceTree(this._rootPDOMInstance);
 
       // add the accessible DOM as a child of this DOM element
-      assert && assert( this._rootPDOMInstance.peer, 'Peer should be created from createFromPool' );
-      this._domElement.appendChild( this._rootPDOMInstance.peer!.primarySibling! );
+      assert && assert(this._rootPDOMInstance.peer, 'Peer should be created from createFromPool');
+      this._domElement.appendChild(this._rootPDOMInstance.peer!.primarySibling!);
 
       const ariaLiveContainer = ariaLiveAnnouncer.ariaLiveContainer;
 
       // add aria-live elements to the display
-      this._domElement.appendChild( ariaLiveContainer );
+      this._domElement.appendChild(ariaLiveContainer);
 
       // set `user-select: none` on the aria-live container to prevent iOS text selection issue, see
       // https://github.com/phetsims/scenery/issues/1006
       // @ts-expect-error
-      ariaLiveContainer.style[ Features.userSelect ] = 'none';
+      ariaLiveContainer.style[Features.userSelect] = 'none';
 
       // Prevent focus from being lost in FullScreen mode, listener on the globalKeyStateTracker
       // because tab navigation may happen before focus is within the PDOM. See handleFullScreenNavigation
       // for more.
-      this._boundHandleFullScreenNavigation = this.handleFullScreenNavigation.bind( this );
-      globalKeyStateTracker.keydownEmitter.addListener( this._boundHandleFullScreenNavigation );
+      this._boundHandleFullScreenNavigation = this.handleFullScreenNavigation.bind(this);
+      globalKeyStateTracker.keydownEmitter.addListener(this._boundHandleFullScreenNavigation);
     }
   }
 
@@ -519,7 +521,7 @@ export default class Display {
    */
   public updateDisplay(): void {
     // @ts-expect-error scenery namespace
-    if ( sceneryLog && scenery.isLoggingPerformance() ) {
+    if (sceneryLog && scenery.isLoggingPerformance()) {
       this.perfSyncTreeCount = 0;
       this.perfStitchCount = 0;
       this.perfIntervalCount = 0;
@@ -528,23 +530,23 @@ export default class Display {
       this.perfDrawableNewIntervalCount = 0;
     }
 
-    if ( assert ) {
-      Display.assertSubtreeDisposed( this._rootNode );
+    if (assert) {
+      Display.assertSubtreeDisposed(this._rootNode);
     }
 
-    sceneryLog && sceneryLog.Display && sceneryLog.Display( `updateDisplay frame ${this._frameId}` );
+    sceneryLog && sceneryLog.Display && sceneryLog.Display(`updateDisplay frame ${this._frameId}`);
     sceneryLog && sceneryLog.Display && sceneryLog.push();
 
     const firstRun = !!this._baseInstance;
 
     // check to see whether contents under pointers changed (and if so, send the enter/exit events) to
     // maintain consistent state
-    if ( this._input ) {
+    if (this._input) {
       // TODO: Should this be handled elsewhere? https://github.com/phetsims/scenery/issues/1581
       this._input.validatePointers();
     }
 
-    if ( this._accessible ) {
+    if (this._accessible) {
 
       // update positioning of focusable peer siblings so they are discoverable on mobile assistive devices
       this._rootPDOMInstance!.peer!.updateSubtreePositioning();
@@ -554,168 +556,168 @@ export default class Display {
     // from code below without triggering side effects (we assume that we are not reentrant).
     this._rootNode.validateWatchedBounds();
 
-    if ( assertSlow ) { this._accessible && this._rootPDOMInstance!.auditRoot(); }
+    if (assertSlow) { this._accessible && this._rootPDOMInstance!.auditRoot(); }
 
-    if ( assertSlow ) { this._rootNode._picker.audit(); }
+    if (assertSlow) { this._rootNode._picker.audit(); }
 
     // @ts-expect-error TODO Instance https://github.com/phetsims/scenery/issues/1581
-    this._baseInstance = this._baseInstance || Instance.createFromPool( this, new Trail( this._rootNode ), true, false );
+    this._baseInstance = this._baseInstance || Instance.createFromPool(this, new Trail(this._rootNode), true, false);
     this._baseInstance!.baseSyncTree();
-    if ( firstRun ) {
+    if (firstRun) {
       // @ts-expect-error TODO instance https://github.com/phetsims/scenery/issues/1581
-      this.markTransformRootDirty( this._baseInstance!, this._baseInstance!.isTransformed ); // marks the transform root as dirty (since it is)
+      this.markTransformRootDirty(this._baseInstance!, this._baseInstance!.isTransformed); // marks the transform root as dirty (since it is)
     }
 
     // update our drawable's linked lists where necessary
-    while ( this._drawablesToUpdateLinks.length ) {
+    while (this._drawablesToUpdateLinks.length) {
       this._drawablesToUpdateLinks.pop()!.updateLinks();
     }
 
     // clean change-interval information from instances, so we don't leak memory/references
-    while ( this._changeIntervalsToDispose.length ) {
+    while (this._changeIntervalsToDispose.length) {
       this._changeIntervalsToDispose.pop()!.dispose();
     }
 
     this._rootBackbone = this._rootBackbone || this._baseInstance!.groupDrawable;
-    assert && assert( this._rootBackbone, 'We are guaranteed a root backbone as the groupDrawable on the base instance' );
-    assert && assert( this._rootBackbone === this._baseInstance!.groupDrawable, 'We don\'t want the base instance\'s groupDrawable to change' );
+    assert && assert(this._rootBackbone, 'We are guaranteed a root backbone as the groupDrawable on the base instance');
+    assert && assert(this._rootBackbone === this._baseInstance!.groupDrawable, 'We don\'t want the base instance\'s groupDrawable to change');
 
 
-    if ( assertSlow ) { this._rootBackbone!.audit( true, false, true ); } // allow pending blocks / dirty
+    if (assertSlow) { this._rootBackbone!.audit(true, false, true); } // allow pending blocks / dirty
 
-    sceneryLog && sceneryLog.Display && sceneryLog.Display( 'drawable block change phase' );
+    sceneryLog && sceneryLog.Display && sceneryLog.Display('drawable block change phase');
     sceneryLog && sceneryLog.Display && sceneryLog.push();
-    while ( this._drawablesToChangeBlock.length ) {
+    while (this._drawablesToChangeBlock.length) {
       const changed = this._drawablesToChangeBlock.pop()!.updateBlock();
       // @ts-expect-error scenery namespace
-      if ( sceneryLog && scenery.isLoggingPerformance() && changed ) {
+      if (sceneryLog && scenery.isLoggingPerformance() && changed) {
         this.perfDrawableBlockChangeCount!++;
       }
     }
     sceneryLog && sceneryLog.Display && sceneryLog.pop();
 
-    if ( assertSlow ) { this._rootBackbone!.audit( false, false, true ); } // allow only dirty
-    if ( assertSlow ) { this._baseInstance!.audit( this._frameId, false ); }
+    if (assertSlow) { this._rootBackbone!.audit(false, false, true); } // allow only dirty
+    if (assertSlow) { this._baseInstance!.audit(this._frameId, false); }
 
     // pre-repaint phase: update relative transform information for listeners (notification) and precomputation where desired
     this.updateDirtyTransformRoots();
     // pre-repaint phase update visibility information on instances
-    this._baseInstance!.updateVisibility( true, true, true, false );
-    if ( assertSlow ) { this._baseInstance!.auditVisibility( true ); }
+    this._baseInstance!.updateVisibility(true, true, true, false);
+    if (assertSlow) { this._baseInstance!.auditVisibility(true); }
 
-    if ( assertSlow ) { this._baseInstance!.audit( this._frameId, true ); }
+    if (assertSlow) { this._baseInstance!.audit(this._frameId, true); }
 
-    sceneryLog && sceneryLog.Display && sceneryLog.Display( 'instance root disposal phase' );
+    sceneryLog && sceneryLog.Display && sceneryLog.Display('instance root disposal phase');
     sceneryLog && sceneryLog.Display && sceneryLog.push();
     // dispose all of our instances. disposing the root will cause all descendants to also be disposed.
     // will also dispose attached drawables (self/group/etc.)
-    while ( this._instanceRootsToDispose.length ) {
+    while (this._instanceRootsToDispose.length) {
       this._instanceRootsToDispose.pop()!.dispose();
     }
     sceneryLog && sceneryLog.Display && sceneryLog.pop();
 
-    if ( assertSlow ) { this._rootNode.auditInstanceSubtreeForDisplay( this ); } // make sure trails are valid
+    if (assertSlow) { this._rootNode.auditInstanceSubtreeForDisplay(this); } // make sure trails are valid
 
-    sceneryLog && sceneryLog.Display && sceneryLog.Display( 'drawable disposal phase' );
+    sceneryLog && sceneryLog.Display && sceneryLog.Display('drawable disposal phase');
     sceneryLog && sceneryLog.Display && sceneryLog.push();
     // dispose all of our other drawables.
-    while ( this._drawablesToDispose.length ) {
+    while (this._drawablesToDispose.length) {
       this._drawablesToDispose.pop()!.dispose();
     }
     sceneryLog && sceneryLog.Display && sceneryLog.pop();
 
-    if ( assertSlow ) { this._baseInstance!.audit( this._frameId, false ); }
+    if (assertSlow) { this._baseInstance!.audit(this._frameId, false); }
 
-    if ( assert ) {
-      assert( !this._isPainting, 'Display was already updating paint, may have thrown an error on the last update' );
+    if (assert) {
+      assert(!this._isPainting, 'Display was already updating paint, may have thrown an error on the last update');
       this._isPainting = true;
     }
 
     // repaint phase
-    //OHTWO TODO: can anything be updated more efficiently by tracking at the Display level? Remember, we have recursive updates so things get updated in the right order! https://github.com/phetsims/scenery/issues/1581
-    sceneryLog && sceneryLog.Display && sceneryLog.Display( 'repaint phase' );
+    // OHTWO TODO: can anything be updated more efficiently by tracking at the Display level? Remember, we have recursive updates so things get updated in the right order! https://github.com/phetsims/scenery/issues/1581
+    sceneryLog && sceneryLog.Display && sceneryLog.Display('repaint phase');
     sceneryLog && sceneryLog.Display && sceneryLog.push();
     this._rootBackbone!.update();
     sceneryLog && sceneryLog.Display && sceneryLog.pop();
 
-    if ( assert ) {
+    if (assert) {
       this._isPainting = false;
     }
 
-    if ( assertSlow ) { this._rootBackbone!.audit( false, false, false ); } // allow nothing
-    if ( assertSlow ) { this._baseInstance!.audit( this._frameId, false ); }
+    if (assertSlow) { this._rootBackbone!.audit(false, false, false); } // allow nothing
+    if (assertSlow) { this._baseInstance!.audit(this._frameId, false); }
 
     this.updateCursor();
     this.updateBackgroundColor();
 
     this.updateSize();
 
-    if ( this._overlays.length ) {
+    if (this._overlays.length) {
       let zIndex = this._rootBackbone!.lastZIndex!;
-      for ( let i = 0; i < this._overlays.length; i++ ) {
+      for (let i = 0; i < this._overlays.length; i++) {
         // layer the overlays properly
-        const overlay = this._overlays[ i ];
-        overlay.domElement.style.zIndex = '' + ( zIndex++ );
+        const overlay = this._overlays[i];
+        overlay.domElement.style.zIndex = '' + (zIndex++);
 
         overlay.update();
       }
     }
 
     // After our update and disposals, we want to eliminate any memory leaks from anything that wasn't updated.
-    while ( this._reduceReferencesNeeded.length ) {
+    while (this._reduceReferencesNeeded.length) {
       this._reduceReferencesNeeded.pop()!.reduceReferences();
     }
 
     this._frameId++;
 
     // @ts-expect-error TODO scenery namespace https://github.com/phetsims/scenery/issues/1581
-    if ( sceneryLog && scenery.isLoggingPerformance() ) {
+    if (sceneryLog && scenery.isLoggingPerformance()) {
       const syncTreeMessage = `syncTree count: ${this.perfSyncTreeCount}`;
-      if ( this.perfSyncTreeCount! > 500 ) {
-        sceneryLog.PerfCritical && sceneryLog.PerfCritical( syncTreeMessage );
+      if (this.perfSyncTreeCount! > 500) {
+        sceneryLog.PerfCritical && sceneryLog.PerfCritical(syncTreeMessage);
       }
-      else if ( this.perfSyncTreeCount! > 100 ) {
-        sceneryLog.PerfMajor && sceneryLog.PerfMajor( syncTreeMessage );
+      else if (this.perfSyncTreeCount! > 100) {
+        sceneryLog.PerfMajor && sceneryLog.PerfMajor(syncTreeMessage);
       }
-      else if ( this.perfSyncTreeCount! > 20 ) {
-        sceneryLog.PerfMinor && sceneryLog.PerfMinor( syncTreeMessage );
+      else if (this.perfSyncTreeCount! > 20) {
+        sceneryLog.PerfMinor && sceneryLog.PerfMinor(syncTreeMessage);
       }
-      else if ( this.perfSyncTreeCount! > 0 ) {
-        sceneryLog.PerfVerbose && sceneryLog.PerfVerbose( syncTreeMessage );
+      else if (this.perfSyncTreeCount! > 0) {
+        sceneryLog.PerfVerbose && sceneryLog.PerfVerbose(syncTreeMessage);
       }
 
       const drawableBlockCountMessage = `drawable block changes: ${this.perfDrawableBlockChangeCount} for` +
-                                        ` -${this.perfDrawableOldIntervalCount
-                                        } +${this.perfDrawableNewIntervalCount}`;
-      if ( this.perfDrawableBlockChangeCount! > 200 ) {
-        sceneryLog.PerfCritical && sceneryLog.PerfCritical( drawableBlockCountMessage );
+        ` -${this.perfDrawableOldIntervalCount
+        } +${this.perfDrawableNewIntervalCount}`;
+      if (this.perfDrawableBlockChangeCount! > 200) {
+        sceneryLog.PerfCritical && sceneryLog.PerfCritical(drawableBlockCountMessage);
       }
-      else if ( this.perfDrawableBlockChangeCount! > 60 ) {
-        sceneryLog.PerfMajor && sceneryLog.PerfMajor( drawableBlockCountMessage );
+      else if (this.perfDrawableBlockChangeCount! > 60) {
+        sceneryLog.PerfMajor && sceneryLog.PerfMajor(drawableBlockCountMessage);
       }
-      else if ( this.perfDrawableBlockChangeCount! > 10 ) {
-        sceneryLog.PerfMinor && sceneryLog.PerfMinor( drawableBlockCountMessage );
+      else if (this.perfDrawableBlockChangeCount! > 10) {
+        sceneryLog.PerfMinor && sceneryLog.PerfMinor(drawableBlockCountMessage);
       }
-      else if ( this.perfDrawableBlockChangeCount! > 0 ) {
-        sceneryLog.PerfVerbose && sceneryLog.PerfVerbose( drawableBlockCountMessage );
+      else if (this.perfDrawableBlockChangeCount! > 0) {
+        sceneryLog.PerfVerbose && sceneryLog.PerfVerbose(drawableBlockCountMessage);
       }
     }
 
-    PDOMTree.auditPDOMDisplays( this.rootNode );
+    PDOMTree.auditPDOMDisplays(this.rootNode);
 
     sceneryLog && sceneryLog.Display && sceneryLog.pop();
   }
 
   // Used for Studio Autoselect to determine the leafiest PhET-iO Element under the mouse
-  public getPhetioElementAt( point: Vector2 ): PhetioObject | null {
-    const node = this._rootNode.getPhetioMouseHit( point );
+  public getPhetioElementAt(point: Vector2): PhetioObject | null {
+    const node = this._rootNode.getPhetioMouseHit(point);
 
-    if ( node === 'phetioNotSelectable' ) {
+    if (node === 'phetioNotSelectable') {
       return null;
     }
 
-    if ( node ) {
-      assert && assert( node.isPhetioInstrumented(), 'a PhetioMouseHit should be instrumented' );
+    if (node) {
+      assert && assert(node.isPhetioInstrumented(), 'a PhetioMouseHit should be instrumented');
     }
     return node;
   }
@@ -723,20 +725,20 @@ export default class Display {
   private updateSize(): void {
     // console.log( { 'this.size.width': this.size.width } );
     let sizeDirty = false;
-    //OHTWO TODO: if we aren't clipping or setting background colors, can we get away with having a 0x0 container div and using absolutely-positioned children? https://github.com/phetsims/scenery/issues/1581
-    if ( this.size.width !== this._currentSize.width ) {
+    // OHTWO TODO: if we aren't clipping or setting background colors, can we get away with having a 0x0 container div and using absolutely-positioned children? https://github.com/phetsims/scenery/issues/1581
+    if (this.size.width !== this._currentSize.width) {
       sizeDirty = true;
       this._currentSize.width = this.size.width;
       this._domElement.style.width = `${this.size.width}px`;
     }
-    if ( this.size.height !== this._currentSize.height ) {
+    if (this.size.height !== this._currentSize.height) {
       sizeDirty = true;
       this._currentSize.height = this.size.height;
       this._domElement.style.height = `${this.size.height}px`;
     }
-    if ( sizeDirty && !this._allowSceneOverflow ) {
+    if (sizeDirty && !this._allowSceneOverflow) {
       // to prevent overflow, we add a CSS clip
-      //TODO: 0px => 0? https://github.com/phetsims/scenery/issues/1581
+      // TODO: 0px => 0? https://github.com/phetsims/scenery/issues/1581
       this._domElement.style.clip = `rect(0px,${this.size.width}px,${this.size.height}px,0px)`;
     }
   }
@@ -757,7 +759,7 @@ export default class Display {
   public get rootNode(): Node { return this.getRootNode(); }
 
   public getRootBackbone(): BackboneDrawable {
-    assert && assert( this._rootBackbone );
+    assert && assert(this._rootBackbone);
     return this._rootBackbone!;
   }
 
@@ -781,13 +783,13 @@ export default class Display {
   /**
    * Changes the size that the Display's DOM element will be after the next updateDisplay()
    */
-  public setSize( size: Dimension2 ): void {
-    assert && assert( size.width % 1 === 0, 'Display.width should be an integer' );
-    assert && assert( size.width > 0, 'Display.width should be greater than zero' );
-    assert && assert( size.height % 1 === 0, 'Display.height should be an integer' );
-    assert && assert( size.height > 0, 'Display.height should be greater than zero' );
+  public setSize(size: Dimension2): void {
+    assert && assert(size.width % 1 === 0, 'Display.width should be an integer');
+    assert && assert(size.width > 0, 'Display.width should be greater than zero');
+    assert && assert(size.height % 1 === 0, 'Display.height should be an integer');
+    assert && assert(size.height > 0, 'Display.height should be greater than zero');
 
-    console.log( { size: size } );
+    console.log({ size });
     // console.dir( this._domElement );
 
     this.sizeProperty.value = size;
@@ -796,9 +798,9 @@ export default class Display {
   /**
    * Changes the size that the Display's DOM element will be after the next updateDisplay()
    */
-  public setWidthHeight( width: number, height: number ): void {
-    console.log( 'setWidthHeight' );
-    this.setSize( new Dimension2( width, height ) );
+  public setWidthHeight(width: number, height: number): void {
+    console.log('setWidthHeight');
+    this.setSize(new Dimension2(width, height));
   }
 
   /**
@@ -810,16 +812,16 @@ export default class Display {
 
   public get width(): number { return this.getWidth(); }
 
-  public set width( value: number ) { this.setWidth( value ); }
+  public set width(value: number) { this.setWidth(value); }
 
   /**
    * Sets the width that the Display's DOM element will be after the next updateDisplay(). Should be an integral value.
    */
-  public setWidth( width: number ): this {
+  public setWidth(width: number): this {
 
-    if ( this.getWidth() !== width ) {
-      console.log( 'setWidth' );
-      this.setSize( new Dimension2( width, this.getHeight() ) );
+    if (this.getWidth() !== width) {
+      console.log('setWidth');
+      this.setSize(new Dimension2(width, this.getHeight()));
     }
 
     return this;
@@ -834,16 +836,16 @@ export default class Display {
 
   public get height(): number { return this.getHeight(); }
 
-  public set height( value: number ) { this.setHeight( value ); }
+  public set height(value: number) { this.setHeight(value); }
 
   /**
    * Sets the height that the Display's DOM element will be after the next updateDisplay(). Should be an integral value.
    */
-  public setHeight( height: number ): this {
+  public setHeight(height: number): this {
 
-    if ( this.getHeight() !== height ) {
-      console.log( 'setHeight' );
-      this.setSize( new Dimension2( this.getWidth(), height ) );
+    if (this.getHeight() !== height) {
+      console.log('setHeight');
+      this.setSize(new Dimension2(this.getWidth(), height));
     }
 
     return this;
@@ -852,15 +854,15 @@ export default class Display {
   /**
    * Will be applied to the root DOM element on updateDisplay(), and no sooner.
    */
-  public setBackgroundColor( color: Color | string | null ): this {
-    assert && assert( color === null || typeof color === 'string' || color instanceof Color );
+  public setBackgroundColor(color: Color | string | null): this {
+    assert && assert(color === null || typeof color === 'string' || color instanceof Color);
 
     this._backgroundColor = color;
 
     return this;
   }
 
-  public set backgroundColor( value: Color | string | null ) { this.setBackgroundColor( value ); }
+  public set backgroundColor(value: Color | string | null) { this.setBackgroundColor(value); }
 
   public get backgroundColor(): Color | string | null { return this.getBackgroundColor(); }
 
@@ -870,13 +872,13 @@ export default class Display {
 
   public get interactive(): boolean { return this._interactive; }
 
-  public set interactive( value: boolean ) {
-    if ( this._accessible && value !== this._interactive ) {
-      this._rootPDOMInstance!.peer!.recursiveDisable( !value );
+  public set interactive(value: boolean) {
+    if (this._accessible && value !== this._interactive) {
+      this._rootPDOMInstance!.peer!.recursiveDisable(!value);
     }
 
     this._interactive = value;
-    if ( !this._interactive && this._input ) {
+    if (!this._interactive && this._input) {
       this._input.interruptPointers();
       this._input.clearBatchedEvents();
       this._input.removeTemporaryPointers();
@@ -889,21 +891,21 @@ export default class Display {
    * Adds an overlay to the Display. Each overlay should have a .domElement (the DOM element that will be used for
    * display) and an .update() method.
    */
-  public addOverlay( overlay: TOverlay ): void {
-    this._overlays.push( overlay );
-    this._domElement.appendChild( overlay.domElement );
+  public addOverlay(overlay: TOverlay): void {
+    this._overlays.push(overlay);
+    this._domElement.appendChild(overlay.domElement);
 
     // ensure that the overlay is hidden from screen readers, all accessible content should be in the dom element
     // of the this._rootPDOMInstance
-    overlay.domElement.setAttribute( 'aria-hidden', 'true' );
+    overlay.domElement.setAttribute('aria-hidden', 'true');
   }
 
   /**
    * Removes an overlay from the display.
    */
-  public removeOverlay( overlay: TOverlay ): void {
-    this._domElement.removeChild( overlay.domElement );
-    this._overlays.splice( _.indexOf( this._overlays, overlay ), 1 );
+  public removeOverlay(overlay: TOverlay): void {
+    this._domElement.removeChild(overlay.domElement);
+    this._overlays.splice(_.indexOf(this._overlays, overlay), 1);
   }
 
   /**
@@ -926,8 +928,8 @@ export default class Display {
   /**
    * Returns true if the element is in the PDOM. That is only possible if the display is accessible.
    */
-  public isElementUnderPDOM( element: HTMLElement ): boolean {
-    return this._accessible && this.pdomRootElement!.contains( element );
+  public isElementUnderPDOM(element: HTMLElement): boolean {
+    return this._accessible && this.pdomRootElement!.contains(element);
   }
 
   /**
@@ -935,14 +937,14 @@ export default class Display {
    * a bug in some browsers where DOM focus can be permanently lost if tabbing out of the FullScreen element,
    * see https://github.com/phetsims/scenery/issues/883.
    */
-  private handleFullScreenNavigation( domEvent: KeyboardEvent ): void {
-    assert && assert( this.pdomRootElement, 'There must be a PDOM to support keyboard navigation' );
+  private handleFullScreenNavigation(domEvent: KeyboardEvent): void {
+    assert && assert(this.pdomRootElement, 'There must be a PDOM to support keyboard navigation');
 
-    if ( FullScreen.isFullScreen() && KeyboardUtils.isKeyEvent( domEvent, KeyboardUtils.KEY_TAB ) ) {
+    if (FullScreen.isFullScreen() && KeyboardUtils.isKeyEvent(domEvent, KeyboardUtils.KEY_TAB)) {
       const rootElement = this.pdomRootElement;
-      const nextElement = domEvent.shiftKey ? PDOMUtils.getPreviousFocusable( rootElement || undefined ) :
-                          PDOMUtils.getNextFocusable( rootElement || undefined );
-      if ( nextElement === domEvent.target ) {
+      const nextElement = domEvent.shiftKey ? PDOMUtils.getPreviousFocusable(rootElement || undefined) :
+        PDOMUtils.getNextFocusable(rootElement || undefined);
+      if (nextElement === domEvent.target) {
         domEvent.preventDefault();
       }
     }
@@ -953,21 +955,21 @@ export default class Display {
    * BackboneDrawables (which would be DOM).
    */
   public getUsedRenderersBitmask(): number {
-    function renderersUnderBackbone( backbone: BackboneDrawable ): number {
+    function renderersUnderBackbone(backbone: BackboneDrawable): number {
       let bitmask = 0;
-      _.each( backbone.blocks, block => {
-        if ( block instanceof DOMBlock && block.domDrawable instanceof BackboneDrawable ) {
-          bitmask = bitmask | renderersUnderBackbone( block.domDrawable );
+      _.each(backbone.blocks, block => {
+        if (block instanceof DOMBlock && block.domDrawable instanceof BackboneDrawable) {
+          bitmask = bitmask | renderersUnderBackbone(block.domDrawable);
         }
         else {
           bitmask = bitmask | block.renderer;
         }
-      } );
+      });
       return bitmask;
     }
 
     // only return the renderer-specific portion (no other hints, etc)
-    return renderersUnderBackbone( this._rootBackbone! ) & Renderer.bitmaskRendererArea;
+    return renderersUnderBackbone(this._rootBackbone!) & Renderer.bitmaskRendererArea;
   }
 
   /**
@@ -977,18 +979,18 @@ export default class Display {
    * @param passTransform - Whether we should pass the first transform root when validating transforms (should
    * be true if the instance is transformed)
    */
-  public markTransformRootDirty( instance: Instance, passTransform: boolean ): void {
-    passTransform ? this._dirtyTransformRoots.push( instance ) : this._dirtyTransformRootsWithoutPass.push( instance );
+  public markTransformRootDirty(instance: Instance, passTransform: boolean): void {
+    passTransform ? this._dirtyTransformRoots.push(instance) : this._dirtyTransformRootsWithoutPass.push(instance);
   }
 
   private updateDirtyTransformRoots(): void {
-    sceneryLog && sceneryLog.transformSystem && sceneryLog.transformSystem( 'updateDirtyTransformRoots' );
+    sceneryLog && sceneryLog.transformSystem && sceneryLog.transformSystem('updateDirtyTransformRoots');
     sceneryLog && sceneryLog.transformSystem && sceneryLog.push();
-    while ( this._dirtyTransformRoots.length ) {
-      this._dirtyTransformRoots.pop()!.relativeTransform.updateTransformListenersAndCompute( false, false, this._frameId, true );
+    while (this._dirtyTransformRoots.length) {
+      this._dirtyTransformRoots.pop()!.relativeTransform.updateTransformListenersAndCompute(false, false, this._frameId, true);
     }
-    while ( this._dirtyTransformRootsWithoutPass.length ) {
-      this._dirtyTransformRootsWithoutPass.pop()!.relativeTransform.updateTransformListenersAndCompute( false, false, this._frameId, false );
+    while (this._dirtyTransformRootsWithoutPass.length) {
+      this._dirtyTransformRootsWithoutPass.pop()!.relativeTransform.updateTransformListenersAndCompute(false, false, this._frameId, false);
     }
     sceneryLog && sceneryLog.transformSystem && sceneryLog.pop();
   }
@@ -996,137 +998,137 @@ export default class Display {
   /**
    * (scenery-internal)
    */
-  public markDrawableChangedBlock( drawable: Drawable ): void {
-    sceneryLog && sceneryLog.Display && sceneryLog.Display( `markDrawableChangedBlock: ${drawable.toString()}` );
-    this._drawablesToChangeBlock.push( drawable );
+  public markDrawableChangedBlock(drawable: Drawable): void {
+    sceneryLog && sceneryLog.Display && sceneryLog.Display(`markDrawableChangedBlock: ${drawable.toString()}`);
+    this._drawablesToChangeBlock.push(drawable);
   }
 
   /**
    * Marks an item for later reduceReferences() calls at the end of Display.update().
    * (scenery-internal)
    */
-  public markForReducedReferences( item: { reduceReferences: () => void } ): void {
-    assert && assert( !!item.reduceReferences );
+  public markForReducedReferences(item: { reduceReferences: () => void }): void {
+    assert && assert(!!item.reduceReferences);
 
-    this._reduceReferencesNeeded.push( item );
+    this._reduceReferencesNeeded.push(item);
   }
 
   /**
    * (scenery-internal)
    */
-  public markInstanceRootForDisposal( instance: Instance ): void {
-    sceneryLog && sceneryLog.Display && sceneryLog.Display( `markInstanceRootForDisposal: ${instance.toString()}` );
-    this._instanceRootsToDispose.push( instance );
+  public markInstanceRootForDisposal(instance: Instance): void {
+    sceneryLog && sceneryLog.Display && sceneryLog.Display(`markInstanceRootForDisposal: ${instance.toString()}`);
+    this._instanceRootsToDispose.push(instance);
   }
 
   /**
    * (scenery-internal)
    */
-  public markDrawableForDisposal( drawable: Drawable ): void {
-    sceneryLog && sceneryLog.Display && sceneryLog.Display( `markDrawableForDisposal: ${drawable.toString()}` );
-    this._drawablesToDispose.push( drawable );
+  public markDrawableForDisposal(drawable: Drawable): void {
+    sceneryLog && sceneryLog.Display && sceneryLog.Display(`markDrawableForDisposal: ${drawable.toString()}`);
+    this._drawablesToDispose.push(drawable);
   }
 
   /**
    * (scenery-internal)
    */
-  public markDrawableForLinksUpdate( drawable: Drawable ): void {
-    this._drawablesToUpdateLinks.push( drawable );
+  public markDrawableForLinksUpdate(drawable: Drawable): void {
+    this._drawablesToUpdateLinks.push(drawable);
   }
 
   /**
    * Add a {ChangeInterval} for the "remove change interval info" phase (we don't want to leak memory/references)
    * (scenery-internal)
    */
-  public markChangeIntervalToDispose( changeInterval: ChangeInterval ): void {
-    this._changeIntervalsToDispose.push( changeInterval );
+  public markChangeIntervalToDispose(changeInterval: ChangeInterval): void {
+    this._changeIntervalsToDispose.push(changeInterval);
   }
 
   private updateBackgroundColor(): void {
-    assert && assert( this._backgroundColor === null ||
-                      typeof this._backgroundColor === 'string' ||
-                      this._backgroundColor instanceof Color );
+    assert && assert(this._backgroundColor === null ||
+      typeof this._backgroundColor === 'string' ||
+      this._backgroundColor instanceof Color);
 
     const newBackgroundCSS = this._backgroundColor === null ?
-                             '' :
-                             ( ( this._backgroundColor as Color ).toCSS ?
-                               ( this._backgroundColor as Color ).toCSS() :
-                               this._backgroundColor as string );
-    if ( newBackgroundCSS !== this._currentBackgroundCSS ) {
+      '' :
+      ((this._backgroundColor as Color).toCSS ?
+        (this._backgroundColor as Color).toCSS() :
+        this._backgroundColor as string);
+    if (newBackgroundCSS !== this._currentBackgroundCSS) {
       this._currentBackgroundCSS = newBackgroundCSS;
 
       this._domElement.style.backgroundColor = newBackgroundCSS;
     }
   }
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * Cursors
-   *----------------------------------------------------------------------------*/
+   * ---------------------------------------------------------------------------- */
 
   private updateCursor(): void {
-    if ( this._input && this._input.mouse && this._input.mouse.point ) {
-      if ( this._input.mouse.cursor ) {
-        sceneryLog && sceneryLog.Cursor && sceneryLog.Cursor( `set on pointer: ${this._input.mouse.cursor}` );
-        this.setSceneCursor( this._input.mouse.cursor );
+    if (this._input && this._input.mouse && this._input.mouse.point) {
+      if (this._input.mouse.cursor) {
+        sceneryLog && sceneryLog.Cursor && sceneryLog.Cursor(`set on pointer: ${this._input.mouse.cursor}`);
+        this.setSceneCursor(this._input.mouse.cursor);
         return;
       }
 
-      //OHTWO TODO: For a display, just return an instance and we can avoid the garbage collection/mutation at the cost of the linked-list traversal instead of an array https://github.com/phetsims/scenery/issues/1581
-      const mouseTrail = this._rootNode.trailUnderPointer( this._input.mouse );
+      // OHTWO TODO: For a display, just return an instance and we can avoid the garbage collection/mutation at the cost of the linked-list traversal instead of an array https://github.com/phetsims/scenery/issues/1581
+      const mouseTrail = this._rootNode.trailUnderPointer(this._input.mouse);
 
-      if ( mouseTrail ) {
-        for ( let i = mouseTrail.getCursorCheckIndex(); i >= 0; i-- ) {
-          const node = mouseTrail.nodes[ i ];
+      if (mouseTrail) {
+        for (let i = mouseTrail.getCursorCheckIndex(); i >= 0; i--) {
+          const node = mouseTrail.nodes[i];
           const cursor = node.getEffectiveCursor();
 
-          if ( cursor ) {
-            sceneryLog && sceneryLog.Cursor && sceneryLog.Cursor( `${cursor} on ${node.constructor.name}#${node.id}` );
-            this.setSceneCursor( cursor );
+          if (cursor) {
+            sceneryLog && sceneryLog.Cursor && sceneryLog.Cursor(`${cursor} on ${node.constructor.name}#${node.id}`);
+            this.setSceneCursor(cursor);
             return;
           }
         }
       }
 
-      sceneryLog && sceneryLog.Cursor && sceneryLog.Cursor( `--- for ${mouseTrail ? mouseTrail.toString() : '(no hit)'}` );
+      sceneryLog && sceneryLog.Cursor && sceneryLog.Cursor(`--- for ${mouseTrail ? mouseTrail.toString() : '(no hit)'}`);
     }
 
     // fallback case
-    this.setSceneCursor( this._defaultCursor );
+    this.setSceneCursor(this._defaultCursor);
   }
 
   /**
    * Sets the cursor to be displayed when over the Display.
    */
-  private setElementCursor( cursor: string ): void {
+  private setElementCursor(cursor: string): void {
     this._domElement.style.cursor = cursor;
 
     // In some cases, Chrome doesn't seem to respect the cursor set on the Display's domElement. If we are using the
     // full window, we can apply the workaround of controlling the body's style.
     // See https://github.com/phetsims/scenery/issues/983
-    if ( this._assumeFullWindow ) {
+    if (this._assumeFullWindow) {
       document.body.style.cursor = cursor;
     }
   }
 
-  private setSceneCursor( cursor: string ): void {
-    if ( cursor !== this._lastCursor ) {
+  private setSceneCursor(cursor: string): void {
+    if (cursor !== this._lastCursor) {
       this._lastCursor = cursor;
-      const customCursors = CUSTOM_CURSORS[ cursor ];
-      if ( customCursors ) {
+      const customCursors = CUSTOM_CURSORS[cursor];
+      if (customCursors) {
         // go backwards, so the most desired cursor sticks
-        for ( let i = customCursors.length - 1; i >= 0; i-- ) {
-          this.setElementCursor( customCursors[ i ] );
+        for (let i = customCursors.length - 1; i >= 0; i--) {
+          this.setElementCursor(customCursors[i]);
         }
       }
       else {
-        this.setElementCursor( cursor );
+        this.setElementCursor(cursor);
       }
     }
   }
 
   private applyCSSHacks(): void {
     // to use CSS3 transforms for performance, hide anything outside our bounds by default
-    if ( !this._allowSceneOverflow ) {
+    if (!this._allowSceneOverflow) {
       this._domElement.style.overflow = 'hidden';
     }
 
@@ -1135,9 +1137,9 @@ export default class Display {
     this._domElement.style.msTouchAction = 'none';
 
     // don't allow browser to switch between font smoothing methods for text (see https://github.com/phetsims/scenery/issues/431)
-    Features.setStyle( this._domElement, Features.fontSmoothing, 'antialiased' );
+    Features.setStyle(this._domElement, Features.fontSmoothing, 'antialiased');
 
-    if ( this._allowCSSHacks ) {
+    if (this._allowCSSHacks) {
       // Prevents selection cursor issues in Safari, see https://github.com/phetsims/scenery/issues/476
       document.onselectstart = () => false;
 
@@ -1148,51 +1150,51 @@ export default class Display {
 
       // some css hacks (inspired from https://github.com/EightMedia/hammer.js/blob/master/hammer.js).
       // modified to only apply the proper prefixed version instead of spamming all of them, and doesn't use jQuery.
-      Features.setStyle( this._domElement, Features.userDrag, 'none' );
-      Features.setStyle( this._domElement, Features.userSelect, 'none' );
-      Features.setStyle( this._domElement, Features.touchAction, 'none' );
-      Features.setStyle( this._domElement, Features.touchCallout, 'none' );
-      Features.setStyle( this._domElement, Features.tapHighlightColor, 'rgba(0,0,0,0)' );
+      Features.setStyle(this._domElement, Features.userDrag, 'none');
+      Features.setStyle(this._domElement, Features.userSelect, 'none');
+      Features.setStyle(this._domElement, Features.touchAction, 'none');
+      Features.setStyle(this._domElement, Features.touchCallout, 'none');
+      Features.setStyle(this._domElement, Features.tapHighlightColor, 'rgba(0,0,0,0)');
     }
   }
 
-  public canvasDataURL( callback: ( str: string ) => void ): void {
-    this.canvasSnapshot( ( canvas: HTMLCanvasElement ) => {
-      callback( canvas.toDataURL() );
-    } );
+  public canvasDataURL(callback: (str: string) => void): void {
+    this.canvasSnapshot((canvas: HTMLCanvasElement) => {
+      callback(canvas.toDataURL());
+    });
   }
 
   /**
    * Renders what it can into a Canvas (so far, Canvas and SVG layers work fine)
    */
-  public canvasSnapshot( callback: ( canvas: HTMLCanvasElement, imageData: ImageData ) => void ): void {
-    const canvas = document.createElement( 'canvas' );
+  public canvasSnapshot(callback: (canvas: HTMLCanvasElement, imageData: ImageData) => void): void {
+    const canvas = document.createElement('canvas');
     canvas.width = this.size.width;
     canvas.height = this.size.height;
 
-    const context = canvas.getContext( '2d' )!;
+    const context = canvas.getContext('2d')!;
 
-    //OHTWO TODO: allow actual background color directly, not having to check the style here!!! https://github.com/phetsims/scenery/issues/1581
-    this._rootNode.renderToCanvas( canvas, context, () => {
-      callback( canvas, context.getImageData( 0, 0, canvas.width, canvas.height ) );
-    }, this.domElement.style.backgroundColor );
+    // OHTWO TODO: allow actual background color directly, not having to check the style here!!! https://github.com/phetsims/scenery/issues/1581
+    this._rootNode.renderToCanvas(canvas, context, () => {
+      callback(canvas, context.getImageData(0, 0, canvas.width, canvas.height));
+    }, this.domElement.style.backgroundColor);
   }
 
   /**
    * TODO: reduce code duplication for handling overlays https://github.com/phetsims/scenery/issues/1581
    */
-  public setPointerDisplayVisible( visibility: boolean ): void {
+  public setPointerDisplayVisible(visibility: boolean): void {
     const hasOverlay = !!this._pointerOverlay;
 
-    if ( visibility !== hasOverlay ) {
-      if ( !visibility ) {
-        this.removeOverlay( this._pointerOverlay! );
+    if (visibility !== hasOverlay) {
+      if (!visibility) {
+        this.removeOverlay(this._pointerOverlay!);
         this._pointerOverlay!.dispose();
         this._pointerOverlay = null;
       }
       else {
-        this._pointerOverlay = new PointerOverlay( this, this._rootNode );
-        this.addOverlay( this._pointerOverlay );
+        this._pointerOverlay = new PointerOverlay(this, this._rootNode);
+        this.addOverlay(this._pointerOverlay);
       }
     }
   }
@@ -1200,18 +1202,18 @@ export default class Display {
   /**
    * TODO: reduce code duplication for handling overlays https://github.com/phetsims/scenery/issues/1581
    */
-  public setPointerAreaDisplayVisible( visibility: boolean ): void {
+  public setPointerAreaDisplayVisible(visibility: boolean): void {
     const hasOverlay = !!this._pointerAreaOverlay;
 
-    if ( visibility !== hasOverlay ) {
-      if ( !visibility ) {
-        this.removeOverlay( this._pointerAreaOverlay! );
+    if (visibility !== hasOverlay) {
+      if (!visibility) {
+        this.removeOverlay(this._pointerAreaOverlay!);
         this._pointerAreaOverlay!.dispose();
         this._pointerAreaOverlay = null;
       }
       else {
-        this._pointerAreaOverlay = new PointerAreaOverlay( this, this._rootNode );
-        this.addOverlay( this._pointerAreaOverlay );
+        this._pointerAreaOverlay = new PointerAreaOverlay(this, this._rootNode);
+        this.addOverlay(this._pointerAreaOverlay);
       }
     }
   }
@@ -1219,18 +1221,18 @@ export default class Display {
   /**
    * TODO: reduce code duplication for handling overlays https://github.com/phetsims/scenery/issues/1581
    */
-  public setHitAreaDisplayVisible( visibility: boolean ): void {
+  public setHitAreaDisplayVisible(visibility: boolean): void {
     const hasOverlay = !!this._hitAreaOverlay;
 
-    if ( visibility !== hasOverlay ) {
-      if ( !visibility ) {
-        this.removeOverlay( this._hitAreaOverlay! );
+    if (visibility !== hasOverlay) {
+      if (!visibility) {
+        this.removeOverlay(this._hitAreaOverlay!);
         this._hitAreaOverlay!.dispose();
         this._hitAreaOverlay = null;
       }
       else {
-        this._hitAreaOverlay = new HitAreaOverlay( this, this._rootNode );
-        this.addOverlay( this._hitAreaOverlay );
+        this._hitAreaOverlay = new HitAreaOverlay(this, this._rootNode);
+        this.addOverlay(this._hitAreaOverlay);
       }
     }
   }
@@ -1238,18 +1240,18 @@ export default class Display {
   /**
    * TODO: reduce code duplication for handling overlays https://github.com/phetsims/scenery/issues/1581
    */
-  public setCanvasNodeBoundsVisible( visibility: boolean ): void {
+  public setCanvasNodeBoundsVisible(visibility: boolean): void {
     const hasOverlay = !!this._canvasAreaBoundsOverlay;
 
-    if ( visibility !== hasOverlay ) {
-      if ( !visibility ) {
-        this.removeOverlay( this._canvasAreaBoundsOverlay! );
+    if (visibility !== hasOverlay) {
+      if (!visibility) {
+        this.removeOverlay(this._canvasAreaBoundsOverlay!);
         this._canvasAreaBoundsOverlay!.dispose();
         this._canvasAreaBoundsOverlay = null;
       }
       else {
-        this._canvasAreaBoundsOverlay = new CanvasNodeBoundsOverlay( this, this._rootNode );
-        this.addOverlay( this._canvasAreaBoundsOverlay );
+        this._canvasAreaBoundsOverlay = new CanvasNodeBoundsOverlay(this, this._rootNode);
+        this.addOverlay(this._canvasAreaBoundsOverlay);
       }
     }
   }
@@ -1257,18 +1259,18 @@ export default class Display {
   /**
    * TODO: reduce code duplication for handling overlays https://github.com/phetsims/scenery/issues/1581
    */
-  public setFittedBlockBoundsVisible( visibility: boolean ): void {
+  public setFittedBlockBoundsVisible(visibility: boolean): void {
     const hasOverlay = !!this._fittedBlockBoundsOverlay;
 
-    if ( visibility !== hasOverlay ) {
-      if ( !visibility ) {
-        this.removeOverlay( this._fittedBlockBoundsOverlay! );
+    if (visibility !== hasOverlay) {
+      if (!visibility) {
+        this.removeOverlay(this._fittedBlockBoundsOverlay!);
         this._fittedBlockBoundsOverlay!.dispose();
         this._fittedBlockBoundsOverlay = null;
       }
       else {
-        this._fittedBlockBoundsOverlay = new FittedBlockBoundsOverlay( this, this._rootNode );
-        this.addOverlay( this._fittedBlockBoundsOverlay );
+        this._fittedBlockBoundsOverlay = new FittedBlockBoundsOverlay(this, this._rootNode);
+        this.addOverlay(this._fittedBlockBoundsOverlay);
       }
     }
   }
@@ -1277,17 +1279,17 @@ export default class Display {
    * Sets up the Display to resize to whatever the window inner dimensions will be.
    */
   public resizeOnWindowResize(): void {
-    console.dir( this._domElement );
+    console.dir(this._domElement);
     const resizer = () => {
       // eslint-disable-next-line bad-sim-text
-      // this.setWidthHeight( window.innerWidth, window.innerHeight ); 
-      console.dir( this._domElement?.parentElement );
+      // this.setWidthHeight( window.innerWidth, window.innerHeight );
+      console.dir(this._domElement?.parentElement);
 
       // eslint-disable-next-line bad-sim-text
-      console.log( this._domElement?.parentElement?.clientWidth || window.innerWidth, this._domElement?.parentElement?.clientHeight || window.innerHeight );
-      this.setWidthHeight( this._domElement?.parentElement?.clientWidth || window.innerWidth, this._domElement?.parentElement?.clientHeight || window.innerHeight ); // eslint-disable-line bad-sim-text
+      console.log(this._domElement?.parentElement?.clientWidth || window.innerWidth, this._domElement?.parentElement?.clientHeight || window.innerHeight);
+      this.setWidthHeight(this._domElement?.parentElement?.clientWidth || window.innerWidth, this._domElement?.parentElement?.clientHeight || window.innerHeight); // eslint-disable-line bad-sim-text
     };
-    window.addEventListener( 'resize', resizer );
+    window.addEventListener('resize', resizer);
     resizer();
   }
 
@@ -1295,33 +1297,33 @@ export default class Display {
    * Updates on every request animation frame. If stepCallback is passed in, it is called before updateDisplay() with
    * stepCallback( timeElapsedInSeconds )
    */
-  public updateOnRequestAnimationFrame( stepCallback?: ( dt: number ) => void ): void {
+  public updateOnRequestAnimationFrame(stepCallback?: (dt: number) => void): void {
     // keep track of how much time elapsed over the last frame
     let lastTime = 0;
     let timeElapsedInSeconds = 0;
 
     const self = this; // eslint-disable-line @typescript-eslint/no-this-alias
-    ( function step() {
+    (function step() {
       // @ts-expect-error LEGACY --- it would know to update just the DOM element's location if it's the second argument
-      self._requestAnimationFrameID = window.requestAnimationFrame( step, self._domElement );
+      self._requestAnimationFrameID = window.requestAnimationFrame(step, self._domElement);
 
       // calculate how much time has elapsed since we rendered the last frame
       const timeNow = Date.now();
-      if ( lastTime !== 0 ) {
-        timeElapsedInSeconds = ( timeNow - lastTime ) / 1000.0;
+      if (lastTime !== 0) {
+        timeElapsedInSeconds = (timeNow - lastTime) / 1000.0;
       }
       lastTime = timeNow;
 
       // step the timer that drives any time dependent updates of the Display
-      stepTimer.emit( timeElapsedInSeconds );
+      stepTimer.emit(timeElapsedInSeconds);
 
-      stepCallback && stepCallback( timeElapsedInSeconds );
+      stepCallback && stepCallback(timeElapsedInSeconds);
       self.updateDisplay();
-    } )();
+    })();
   }
 
   public cancelUpdateOnRequestAnimationFrame(): void {
-    window.cancelAnimationFrame( this._requestAnimationFrameID );
+    window.cancelAnimationFrame(this._requestAnimationFrameID);
   }
 
   /**
@@ -1329,11 +1331,11 @@ export default class Display {
    *
    * NOTE: This can be reversed with detachEvents().
    */
-  public initializeEvents( options?: InputOptions ): void {
-    assert && assert( !this._input, 'Events cannot be attached twice to a display (for now)' );
+  public initializeEvents(options?: InputOptions): void {
+    assert && assert(!this._input, 'Events cannot be attached twice to a display (for now)');
 
     // TODO: refactor here https://github.com/phetsims/scenery/issues/1581
-    const input = new Input( this, !this._listenToOnlyElement, this._batchDOMEvents, this._assumeFullWindow, this._passiveEvents, options );
+    const input = new Input(this, !this._listenToOnlyElement, this._batchDOMEvents, this._assumeFullWindow, this._passiveEvents, options);
     this._input = input;
 
     input.connectListeners();
@@ -1343,7 +1345,7 @@ export default class Display {
    * Detach already-attached input event handling (from initializeEvents()).
    */
   public detachEvents(): void {
-    assert && assert( this._input, 'detachEvents() should be called only when events are attached' );
+    assert && assert(this._input, 'detachEvents() should be called only when events are attached');
 
     this._input!.disconnectListeners();
     this._input = null;
@@ -1353,12 +1355,12 @@ export default class Display {
   /**
    * Adds an input listener.
    */
-  public addInputListener( listener: TInputListener ): this {
-    assert && assert( !_.includes( this._inputListeners, listener ), 'Input listener already registered on this Display' );
+  public addInputListener(listener: TInputListener): this {
+    assert && assert(!_.includes(this._inputListeners, listener), 'Input listener already registered on this Display');
 
     // don't allow listeners to be added multiple times
-    if ( !_.includes( this._inputListeners, listener ) ) {
-      this._inputListeners.push( listener );
+    if (!_.includes(this._inputListeners, listener)) {
+      this._inputListeners.push(listener);
     }
     return this;
   }
@@ -1366,11 +1368,11 @@ export default class Display {
   /**
    * Removes an input listener that was previously added with addInputListener.
    */
-  public removeInputListener( listener: TInputListener ): this {
+  public removeInputListener(listener: TInputListener): this {
     // ensure the listener is in our list
-    assert && assert( _.includes( this._inputListeners, listener ) );
+    assert && assert(_.includes(this._inputListeners, listener));
 
-    this._inputListeners.splice( _.indexOf( this._inputListeners, listener ), 1 );
+    this._inputListeners.splice(_.indexOf(this._inputListeners, listener), 1);
 
     return this;
   }
@@ -1380,9 +1382,9 @@ export default class Display {
    *
    * More efficient than checking display.inputListeners, as that includes a defensive copy.
    */
-  public hasInputListener( listener: TInputListener ): boolean {
-    for ( let i = 0; i < this._inputListeners.length; i++ ) {
-      if ( this._inputListeners[ i ] === listener ) {
+  public hasInputListener(listener: TInputListener): boolean {
+    for (let i = 0; i < this._inputListeners.length; i++) {
+      if (this._inputListeners[i] === listener) {
         return true;
       }
     }
@@ -1393,7 +1395,7 @@ export default class Display {
    * Returns a copy of all of our input listeners.
    */
   public getInputListeners(): TInputListener[] {
-    return this._inputListeners.slice( 0 ); // defensive copy
+    return this._inputListeners.slice(0); // defensive copy
   }
 
   public get inputListeners(): TInputListener[] { return this.getInputListeners(); }
@@ -1404,8 +1406,8 @@ export default class Display {
   public interruptInput(): this {
     const listenersCopy = this.inputListeners;
 
-    for ( let i = 0; i < listenersCopy.length; i++ ) {
-      const listener = listenersCopy[ i ];
+    for (let i = 0; i < listenersCopy.length; i++) {
+      const listener = listenersCopy[i];
 
       listener.interrupt && listener.interrupt();
     }
@@ -1429,27 +1431,27 @@ export default class Display {
    * If excludePointer is provided and is non-null, it's used as the "current" pointer that should be excluded from
    * interruption.
    */
-  public interruptOtherPointers( excludePointer: Pointer | null = null ): this {
+  public interruptOtherPointers(excludePointer: Pointer | null = null): this {
     this._input && this._input.interruptPointers(
-      ( excludePointer || this._input.currentSceneryEvent?.pointer ) || null
+      (excludePointer || this._input.currentSceneryEvent?.pointer) || null
     );
 
     return this;
   }
 
-  public static readonly INTERRUPT_OTHER_POINTERS = ( event: SceneryEvent ): void => {
-    phet?.joist?.display?.interruptOtherPointers( event?.pointer );
+  public static readonly INTERRUPT_OTHER_POINTERS = (event: SceneryEvent): void => {
+    phet?.joist?.display?.interruptOtherPointers(event?.pointer);
   };
 
   /**
    * (scenery-internal)
    */
   public ensureNotPainting(): void {
-    assert && assert( !this._isPainting,
+    assert && assert(!this._isPainting,
       'This should not be run in the call tree of updateDisplay(). If you see this, it is likely that either the ' +
       'last updateDisplay() had a thrown error and it is trying to be run again (in which case, investigate that ' +
       'error), OR code was run/triggered from inside an updateDisplay() that has the potential to cause an infinite ' +
-      'loop, e.g. CanvasNode paintCanvas() call manipulating another Node, or a bounds listener that Scenery missed.' );
+      'loop, e.g. CanvasNode paintCanvas() call manipulating another Node, or a bounds listener that Scenery missed.');
   }
 
   /**
@@ -1458,29 +1460,29 @@ export default class Display {
    * NOTE: Should generally only be used for debugging.
    */
   public loseWebGLContexts(): void {
-    ( function loseBackbone( backbone: BackboneDrawable ) {
-      if ( backbone.blocks ) {
-        backbone.blocks.forEach( ( block: Block ) => {
-          const gl = ( block as unknown as WebGLBlock ).gl;
-          if ( gl ) {
-            Utils.loseContext( gl );
+    (function loseBackbone(backbone: BackboneDrawable) {
+      if (backbone.blocks) {
+        backbone.blocks.forEach((block: Block) => {
+          const gl = (block as unknown as WebGLBlock).gl;
+          if (gl) {
+            Utils.loseContext(gl);
           }
 
-          //TODO: pattern for this iteration https://github.com/phetsims/scenery/issues/1581
-          for ( let drawable = block.firstDrawable; drawable !== null; drawable = drawable.nextDrawable ) {
-            loseBackbone( drawable );
-            if ( drawable === block.lastDrawable ) { break; }
+          // TODO: pattern for this iteration https://github.com/phetsims/scenery/issues/1581
+          for (let drawable = block.firstDrawable; drawable !== null; drawable = drawable.nextDrawable) {
+            loseBackbone(drawable);
+            if (drawable === block.lastDrawable) { break; }
           }
-        } );
+        });
       }
-    } )( this._rootBackbone! );
+    })(this._rootBackbone!);
   }
 
   /**
    * Makes this Display available for inspection.
    */
   public inspect(): void {
-    localStorage.scenerySnapshot = JSON.stringify( scenerySerialize( this ) );
+    localStorage.scenerySnapshot = JSON.stringify(scenerySerialize(this));
   }
 
   /**
@@ -1497,88 +1499,88 @@ export default class Display {
     result += `<div style="${headerStyle}">Display (${this.id}) Summary</div>`;
     result += `${this.size.toString()} frame:${this._frameId} input:${!!this._input} cursor:${this._lastCursor}<br/>`;
 
-    function nodeCount( node: Node ): number {
+    function nodeCount(node: Node): number {
       let count = 1; // for us
-      for ( let i = 0; i < node.children.length; i++ ) {
-        count += nodeCount( node.children[ i ] );
+      for (let i = 0; i < node.children.length; i++) {
+        count += nodeCount(node.children[i]);
       }
       return count;
     }
 
-    result += `Nodes: ${nodeCount( this._rootNode )}<br/>`;
+    result += `Nodes: ${nodeCount(this._rootNode)}<br/>`;
 
-    function instanceCount( instance: Instance ): number {
+    function instanceCount(instance: Instance): number {
       let count = 1; // for us
-      for ( let i = 0; i < instance.children.length; i++ ) {
-        count += instanceCount( instance.children[ i ] );
+      for (let i = 0; i < instance.children.length; i++) {
+        count += instanceCount(instance.children[i]);
       }
       return count;
     }
 
-    result += this._baseInstance ? ( `Instances: ${instanceCount( this._baseInstance )}<br/>` ) : '';
+    result += this._baseInstance ? (`Instances: ${instanceCount(this._baseInstance)}<br/>`) : '';
 
-    function drawableCount( drawable: Drawable ): number {
+    function drawableCount(drawable: Drawable): number {
       let count = 1; // for us
-      if ( ( drawable as unknown as BackboneDrawable ).blocks ) {
+      if ((drawable as unknown as BackboneDrawable).blocks) {
         // we're a backbone
-        _.each( ( drawable as unknown as BackboneDrawable ).blocks, childDrawable => {
-          count += drawableCount( childDrawable );
-        } );
+        _.each((drawable as unknown as BackboneDrawable).blocks, childDrawable => {
+          count += drawableCount(childDrawable);
+        });
       }
-      else if ( ( drawable as unknown as Block ).firstDrawable && ( drawable as unknown as Block ).lastDrawable ) {
+      else if ((drawable as unknown as Block).firstDrawable && (drawable as unknown as Block).lastDrawable) {
         // we're a block
-        for ( let childDrawable = ( drawable as unknown as Block ).firstDrawable; childDrawable !== ( drawable as unknown as Block ).lastDrawable; childDrawable = childDrawable.nextDrawable ) {
-          count += drawableCount( childDrawable );
+        for (let childDrawable = (drawable as unknown as Block).firstDrawable; childDrawable !== (drawable as unknown as Block).lastDrawable; childDrawable = childDrawable.nextDrawable) {
+          count += drawableCount(childDrawable);
         }
-        count += drawableCount( ( drawable as unknown as Block ).lastDrawable! );
+        count += drawableCount((drawable as unknown as Block).lastDrawable!);
       }
       return count;
     }
 
     // @ts-expect-error TODO BackboneDrawable https://github.com/phetsims/scenery/issues/1581
-    result += this._rootBackbone ? ( `Drawables: ${drawableCount( this._rootBackbone )}<br/>` ) : '';
+    result += this._rootBackbone ? (`Drawables: ${drawableCount(this._rootBackbone)}<br/>`) : '';
 
     const drawableCountMap: Record<string, number> = {}; // {string} drawable constructor name => {number} count of seen
     // increment the count in our map
-    function countRetainedDrawable( drawable: Drawable ): void {
+    function countRetainedDrawable(drawable: Drawable): void {
       const name = drawable.constructor.name;
-      if ( drawableCountMap[ name ] ) {
-        drawableCountMap[ name ]++;
+      if (drawableCountMap[name]) {
+        drawableCountMap[name]++;
       }
       else {
-        drawableCountMap[ name ] = 1;
+        drawableCountMap[name] = 1;
       }
     }
 
-    function retainedDrawableCount( instance: Instance ): number {
+    function retainedDrawableCount(instance: Instance): number {
       let count = 0;
-      if ( instance.selfDrawable ) {
-        countRetainedDrawable( instance.selfDrawable );
+      if (instance.selfDrawable) {
+        countRetainedDrawable(instance.selfDrawable);
         count++;
       }
-      if ( instance.groupDrawable ) {
-        countRetainedDrawable( instance.groupDrawable );
+      if (instance.groupDrawable) {
+        countRetainedDrawable(instance.groupDrawable);
         count++;
       }
-      if ( instance.sharedCacheDrawable ) {
+      if (instance.sharedCacheDrawable) {
         // @ts-expect-error TODO Instance https://github.com/phetsims/scenery/issues/1581
-        countRetainedDrawable( instance.sharedCacheDrawable );
+        countRetainedDrawable(instance.sharedCacheDrawable);
         count++;
       }
-      for ( let i = 0; i < instance.children.length; i++ ) {
-        count += retainedDrawableCount( instance.children[ i ] );
+      for (let i = 0; i < instance.children.length; i++) {
+        count += retainedDrawableCount(instance.children[i]);
       }
       return count;
     }
 
-    result += this._baseInstance ? ( `Retained Drawables: ${retainedDrawableCount( this._baseInstance )}<br/>` ) : '';
-    for ( const drawableName in drawableCountMap ) {
-      result += `&nbsp;&nbsp;&nbsp;&nbsp;${drawableName}: ${drawableCountMap[ drawableName ]}<br/>`;
+    result += this._baseInstance ? (`Retained Drawables: ${retainedDrawableCount(this._baseInstance)}<br/>`) : '';
+    for (const drawableName in drawableCountMap) {
+      result += `&nbsp;&nbsp;&nbsp;&nbsp;${drawableName}: ${drawableCountMap[drawableName]}<br/>`;
     }
 
-    function blockSummary( block: Block ): string {
+    function blockSummary(block: Block): string {
       // ensure we are a block
-      if ( !block.firstDrawable || !block.lastDrawable ) {
+      if (!block.firstDrawable || !block.lastDrawable) {
         return '';
       }
 
@@ -1588,18 +1590,18 @@ export default class Display {
       let div = `<div style="margin-left: ${depth * 20}px">`;
 
       div += block.toString();
-      if ( !hasBackbone ) {
+      if (!hasBackbone) {
         div += ` (${block.drawableCount} drawables)`;
       }
 
       div += '</div>';
 
       depth += 1;
-      if ( hasBackbone ) {
+      if (hasBackbone) {
         // @ts-expect-error TODO display stuff https://github.com/phetsims/scenery/issues/1581
-        for ( let k = 0; k < block.domDrawable.blocks.length; k++ ) {
+        for (let k = 0; k < block.domDrawable.blocks.length; k++) {
           // @ts-expect-error TODO display stuff https://github.com/phetsims/scenery/issues/1581
-          div += blockSummary( block.domDrawable.blocks[ k ] );
+          div += blockSummary(block.domDrawable.blocks[k]);
         }
       }
       depth -= 1;
@@ -1607,17 +1609,17 @@ export default class Display {
       return div;
     }
 
-    if ( this._rootBackbone ) {
+    if (this._rootBackbone) {
       result += `<div style="${headerStyle}">Block Summary</div>`;
-      for ( let i = 0; i < this._rootBackbone.blocks.length; i++ ) {
-        result += blockSummary( this._rootBackbone.blocks[ i ] );
+      for (let i = 0; i < this._rootBackbone.blocks.length; i++) {
+        result += blockSummary(this._rootBackbone.blocks[i]);
       }
     }
 
-    function instanceSummary( instance: Instance ): string {
+    function instanceSummary(instance: Instance): string {
       let iSummary = '';
 
-      function addQualifier( text: string ): void {
+      function addQualifier(text: string): void {
         iSummary += ` <span style="color: #008">${text}</span>`;
       }
 
@@ -1628,67 +1630,67 @@ export default class Display {
       iSummary += ` <span style="font-weight: ${node.isPainted() ? 'bold' : 'normal'}">${node.id}</span>`;
       iSummary += node.getDebugHTMLExtras();
 
-      if ( !node.visible ) {
-        addQualifier( 'invis' );
+      if (!node.visible) {
+        addQualifier('invis');
       }
-      if ( !instance.visible ) {
-        addQualifier( 'I-invis' );
+      if (!instance.visible) {
+        addQualifier('I-invis');
       }
-      if ( !instance.relativeVisible ) {
-        addQualifier( 'I-rel-invis' );
+      if (!instance.relativeVisible) {
+        addQualifier('I-rel-invis');
       }
-      if ( !instance.selfVisible ) {
-        addQualifier( 'I-self-invis' );
+      if (!instance.selfVisible) {
+        addQualifier('I-self-invis');
       }
-      if ( !instance.fittability.ancestorsFittable ) {
-        addQualifier( 'nofit-ancestor' );
+      if (!instance.fittability.ancestorsFittable) {
+        addQualifier('nofit-ancestor');
       }
-      if ( !instance.fittability.selfFittable ) {
-        addQualifier( 'nofit-self' );
+      if (!instance.fittability.selfFittable) {
+        addQualifier('nofit-self');
       }
-      if ( node.pickable === true ) {
-        addQualifier( 'pickable' );
+      if (node.pickable === true) {
+        addQualifier('pickable');
       }
-      if ( node.pickable === false ) {
-        addQualifier( 'unpickable' );
+      if (node.pickable === false) {
+        addQualifier('unpickable');
       }
-      if ( instance.trail!.isPickable() ) {
-        addQualifier( '<span style="color: #808">hits</span>' );
+      if (instance.trail!.isPickable()) {
+        addQualifier('<span style="color: #808">hits</span>');
       }
-      if ( node.getEffectiveCursor() ) {
-        addQualifier( `effectiveCursor:${node.getEffectiveCursor()}` );
+      if (node.getEffectiveCursor()) {
+        addQualifier(`effectiveCursor:${node.getEffectiveCursor()}`);
       }
-      if ( node.clipArea ) {
-        addQualifier( 'clipArea' );
+      if (node.clipArea) {
+        addQualifier('clipArea');
       }
-      if ( node.mouseArea ) {
-        addQualifier( 'mouseArea' );
+      if (node.mouseArea) {
+        addQualifier('mouseArea');
       }
-      if ( node.touchArea ) {
-        addQualifier( 'touchArea' );
+      if (node.touchArea) {
+        addQualifier('touchArea');
       }
-      if ( node.getInputListeners().length ) {
-        addQualifier( 'inputListeners' );
+      if (node.getInputListeners().length) {
+        addQualifier('inputListeners');
       }
-      if ( node.getRenderer() ) {
-        addQualifier( `renderer:${node.getRenderer()}` );
+      if (node.getRenderer()) {
+        addQualifier(`renderer:${node.getRenderer()}`);
       }
-      if ( node.isLayerSplit() ) {
-        addQualifier( 'layerSplit' );
+      if (node.isLayerSplit()) {
+        addQualifier('layerSplit');
       }
-      if ( node.opacity < 1 ) {
-        addQualifier( `opacity:${node.opacity}` );
+      if (node.opacity < 1) {
+        addQualifier(`opacity:${node.opacity}`);
       }
-      if ( node.disabledOpacity < 1 ) {
-        addQualifier( `disabledOpacity:${node.disabledOpacity}` );
+      if (node.disabledOpacity < 1) {
+        addQualifier(`disabledOpacity:${node.disabledOpacity}`);
       }
 
-      if ( node._boundsEventCount > 0 ) {
-        addQualifier( `<span style="color: #800">boundsListen:${node._boundsEventCount}:${node._boundsEventSelfCount}</span>` );
+      if (node._boundsEventCount > 0) {
+        addQualifier(`<span style="color: #800">boundsListen:${node._boundsEventCount}:${node._boundsEventSelfCount}</span>`);
       }
 
       let transformType = '';
-      switch( node.transform.getMatrix().type ) {
+      switch (node.transform.getMatrix().type) {
         case Matrix3Type.IDENTITY:
           transformType = '';
           break;
@@ -1705,109 +1707,109 @@ export default class Display {
           transformType = 'other';
           break;
         default:
-          throw new Error( `invalid matrix type: ${node.transform.getMatrix().type}` );
+          throw new Error(`invalid matrix type: ${node.transform.getMatrix().type}`);
       }
-      if ( transformType ) {
-        iSummary += ` <span style="color: #88f" title="${node.transform.getMatrix().toString().replace( '\n', '&#10;' )}">${transformType}</span>`;
+      if (transformType) {
+        iSummary += ` <span style="color: #88f" title="${node.transform.getMatrix().toString().replace('\n', '&#10;')}">${transformType}</span>`;
       }
 
-      iSummary += ` <span style="color: #888">[Trail ${instance.trail!.indices.join( '.' )}]</span>`;
+      iSummary += ` <span style="color: #888">[Trail ${instance.trail!.indices.join('.')}]</span>`;
       // iSummary += ` <span style="color: #c88">${str( instance.state )}</span>`;
-      iSummary += ` <span style="color: #8c8">${node._rendererSummary.bitmask.toString( 16 )}${node._rendererBitmask !== Renderer.bitmaskNodeDefault ? ` (${node._rendererBitmask.toString( 16 )})` : ''}</span>`;
+      iSummary += ` <span style="color: #8c8">${node._rendererSummary.bitmask.toString(16)}${node._rendererBitmask !== Renderer.bitmaskNodeDefault ? ` (${node._rendererBitmask.toString(16)})` : ''}</span>`;
 
       return iSummary;
     }
 
-    function drawableSummary( drawable: Drawable ): string {
+    function drawableSummary(drawable: Drawable): string {
       let drawableString = drawable.toString();
-      if ( drawable.visible ) {
+      if (drawable.visible) {
         drawableString = `<strong>${drawableString}</strong>`;
       }
-      if ( drawable.dirty ) {
-        drawableString += ( drawable.dirty ? ' <span style="color: #c00;">[x]</span>' : '' );
+      if (drawable.dirty) {
+        drawableString += (drawable.dirty ? ' <span style="color: #c00;">[x]</span>' : '');
       }
-      if ( !drawable.fittable ) {
-        drawableString += ( drawable.dirty ? ' <span style="color: #0c0;">[no-fit]</span>' : '' );
+      if (!drawable.fittable) {
+        drawableString += (drawable.dirty ? ' <span style="color: #0c0;">[no-fit]</span>' : '');
       }
       return drawableString;
     }
 
-    function printInstanceSubtree( instance: Instance ): void {
+    function printInstanceSubtree(instance: Instance): void {
       let div = `<div style="margin-left: ${depth * 20}px">`;
 
-      function addDrawable( name: string, drawable: Drawable ): void {
-        div += ` <span style="color: #888">${name}:${drawableSummary( drawable )}</span>`;
+      function addDrawable(name: string, drawable: Drawable): void {
+        div += ` <span style="color: #888">${name}:${drawableSummary(drawable)}</span>`;
       }
 
-      div += instanceSummary( instance );
+      div += instanceSummary(instance);
 
-      instance.selfDrawable && addDrawable( 'self', instance.selfDrawable );
-      instance.groupDrawable && addDrawable( 'group', instance.groupDrawable );
+      instance.selfDrawable && addDrawable('self', instance.selfDrawable);
+      instance.groupDrawable && addDrawable('group', instance.groupDrawable);
       // @ts-expect-error TODO Instance https://github.com/phetsims/scenery/issues/1581
-      instance.sharedCacheDrawable && addDrawable( 'sharedCache', instance.sharedCacheDrawable );
+      instance.sharedCacheDrawable && addDrawable('sharedCache', instance.sharedCacheDrawable);
 
       div += '</div>';
       result += div;
 
       depth += 1;
-      _.each( instance.children, childInstance => {
-        printInstanceSubtree( childInstance );
-      } );
+      _.each(instance.children, childInstance => {
+        printInstanceSubtree(childInstance);
+      });
       depth -= 1;
     }
 
-    if ( this._baseInstance ) {
+    if (this._baseInstance) {
       result += `<div style="${headerStyle}">Root Instance Tree</div>`;
-      printInstanceSubtree( this._baseInstance );
+      printInstanceSubtree(this._baseInstance);
     }
 
-    _.each( this._sharedCanvasInstances, instance => {
+    _.each(this._sharedCanvasInstances, instance => {
       result += `<div style="${headerStyle}">Shared Canvas Instance Tree</div>`;
-      printInstanceSubtree( instance );
-    } );
+      printInstanceSubtree(instance);
+    });
 
-    function printDrawableSubtree( drawable: Drawable ): void {
+    function printDrawableSubtree(drawable: Drawable): void {
       let div = `<div style="margin-left: ${depth * 20}px">`;
 
-      div += drawableSummary( drawable );
-      if ( ( drawable as unknown as SelfDrawable ).instance ) {
-        div += ` <span style="color: #0a0;">(${( drawable as unknown as SelfDrawable ).instance.trail.toPathString()})</span>`;
-        div += `&nbsp;&nbsp;&nbsp;${instanceSummary( ( drawable as unknown as SelfDrawable ).instance )}`;
+      div += drawableSummary(drawable);
+      if ((drawable as unknown as SelfDrawable).instance) {
+        div += ` <span style="color: #0a0;">(${(drawable as unknown as SelfDrawable).instance.trail.toPathString()})</span>`;
+        div += `&nbsp;&nbsp;&nbsp;${instanceSummary((drawable as unknown as SelfDrawable).instance)}`;
       }
-      else if ( ( drawable as unknown as BackboneDrawable ).backboneInstance ) {
-        div += ` <span style="color: #a00;">(${( drawable as unknown as BackboneDrawable ).backboneInstance.trail.toPathString()})</span>`;
-        div += `&nbsp;&nbsp;&nbsp;${instanceSummary( ( drawable as unknown as BackboneDrawable ).backboneInstance )}`;
+      else if ((drawable as unknown as BackboneDrawable).backboneInstance) {
+        div += ` <span style="color: #a00;">(${(drawable as unknown as BackboneDrawable).backboneInstance.trail.toPathString()})</span>`;
+        div += `&nbsp;&nbsp;&nbsp;${instanceSummary((drawable as unknown as BackboneDrawable).backboneInstance)}`;
       }
 
       div += '</div>';
       result += div;
 
-      if ( ( drawable as unknown as BackboneDrawable ).blocks ) {
+      if ((drawable as unknown as BackboneDrawable).blocks) {
         // we're a backbone
         depth += 1;
-        _.each( ( drawable as unknown as BackboneDrawable ).blocks, childDrawable => {
-          printDrawableSubtree( childDrawable );
-        } );
+        _.each((drawable as unknown as BackboneDrawable).blocks, childDrawable => {
+          printDrawableSubtree(childDrawable);
+        });
         depth -= 1;
       }
-      else if ( ( drawable as unknown as Block ).firstDrawable && ( drawable as unknown as Block ).lastDrawable ) {
+      else if ((drawable as unknown as Block).firstDrawable && (drawable as unknown as Block).lastDrawable) {
         // we're a block
         depth += 1;
-        for ( let childDrawable = ( drawable as unknown as Block ).firstDrawable; childDrawable !== ( drawable as unknown as Block ).lastDrawable; childDrawable = childDrawable.nextDrawable ) {
-          printDrawableSubtree( childDrawable );
+        for (let childDrawable = (drawable as unknown as Block).firstDrawable; childDrawable !== (drawable as unknown as Block).lastDrawable; childDrawable = childDrawable.nextDrawable) {
+          printDrawableSubtree(childDrawable);
         }
-        printDrawableSubtree( ( drawable as unknown as Block ).lastDrawable! ); // wasn't hit in our simplified (and safer) loop
+        printDrawableSubtree((drawable as unknown as Block).lastDrawable!); // wasn't hit in our simplified (and safer) loop
         depth -= 1;
       }
     }
 
-    if ( this._rootBackbone ) {
+    if (this._rootBackbone) {
       result += '<div style="font-weight: bold;">Root Drawable Tree</div>';
       // @ts-expect-error TODO BackboneDrawable https://github.com/phetsims/scenery/issues/1581
-      printDrawableSubtree( this._rootBackbone );
+      printDrawableSubtree(this._rootBackbone);
     }
 
-    //OHTWO TODO: add shared cache drawable trees https://github.com/phetsims/scenery/issues/1581
+    // OHTWO TODO: add shared cache drawable trees https://github.com/phetsims/scenery/issues/1581
 
     return result;
   }
@@ -1829,7 +1831,7 @@ export default class Display {
    * Attempts to open a popup with the getDebugHTML() information.
    */
   public popupDebug(): void {
-    window.open( this.getDebugURI() );
+    window.open(this.getDebugURI());
   }
 
   /**
@@ -1837,37 +1839,37 @@ export default class Display {
    * popupDebug(), but should work in browsers that block popups, or prevent that type of data URI being opened.
    */
   public iframeDebug(): void {
-    const iframe = document.createElement( 'iframe' );
+    const iframe = document.createElement('iframe');
     iframe.width = '' + window.innerWidth; // eslint-disable-line bad-sim-text
     iframe.height = '' + window.innerHeight; // eslint-disable-line bad-sim-text
     iframe.style.position = 'absolute';
     iframe.style.left = '0';
     iframe.style.top = '0';
     iframe.style.zIndex = '10000';
-    document.body.appendChild( iframe );
+    document.body.appendChild(iframe);
 
     iframe.contentWindow!.document.open();
-    iframe.contentWindow!.document.write( this.getDebugHTML() );
+    iframe.contentWindow!.document.write(this.getDebugHTML());
     iframe.contentWindow!.document.close();
 
     iframe.contentWindow!.document.body.style.background = 'white';
 
-    const closeButton = document.createElement( 'button' );
+    const closeButton = document.createElement('button');
     closeButton.style.position = 'absolute';
     closeButton.style.top = '0';
     closeButton.style.right = '0';
     closeButton.style.zIndex = '10001';
-    document.body.appendChild( closeButton );
+    document.body.appendChild(closeButton);
 
     closeButton.textContent = 'close';
 
     // A normal 'click' event listener doesn't seem to be working. This is less-than-ideal.
-    [ 'pointerdown', 'click', 'touchdown' ].forEach( eventType => {
-      closeButton.addEventListener( eventType, () => {
-        document.body.removeChild( iframe );
-        document.body.removeChild( closeButton );
-      }, true );
-    } );
+    ['pointerdown', 'click', 'touchdown'].forEach(eventType => {
+      closeButton.addEventListener(eventType, () => {
+        document.body.removeChild(iframe);
+        document.body.removeChild(closeButton);
+      }, true);
+    });
   }
 
   public getPDOMDebugHTML(): string {
@@ -1878,31 +1880,31 @@ export default class Display {
 
     result += `<div style="${headerStyle}">Accessible Instances</div><br>`;
 
-    recurse( this._rootPDOMInstance!, '' );
+    recurse(this._rootPDOMInstance!, '');
 
-    function recurse( instance: PDOMInstance, indentation: string ): void {
-      result += `${indentation + escapeHTML( `${instance.isRootInstance ? '' : instance.node!.tagName} ${instance.toString()}` )}<br>`;
-      instance.children.forEach( ( child: PDOMInstance ) => {
-        recurse( child, indentation + indent );
-      } );
+    function recurse(instance: PDOMInstance, indentation: string): void {
+      result += `${indentation + escapeHTML(`${instance.isRootInstance ? '' : instance.node!.tagName} ${instance.toString()}`)}<br>`;
+      instance.children.forEach((child: PDOMInstance) => {
+        recurse(child, indentation + indent);
+      });
     }
 
     result += `<br><div style="${headerStyle}">Parallel DOM</div><br>`;
 
     let parallelDOM = this._rootPDOMInstance!.peer!.primarySibling!.outerHTML;
-    parallelDOM = parallelDOM.replace( /></g, '>\n<' );
-    const lines = parallelDOM.split( '\n' );
+    parallelDOM = parallelDOM.replace(/></g, '>\n<');
+    const lines = parallelDOM.split('\n');
 
     let indentation = '';
-    for ( let i = 0; i < lines.length; i++ ) {
-      const line = lines[ i ];
-      const isEndTag = line.startsWith( '</' );
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const isEndTag = line.startsWith('</');
 
-      if ( isEndTag ) {
-        indentation = indentation.slice( indent.length );
+      if (isEndTag) {
+        indentation = indentation.slice(indent.length);
       }
-      result += `${indentation + escapeHTML( line )}<br>`;
-      if ( !isEndTag ) {
+      result += `${indentation + escapeHTML(line)}<br>`;
+      if (!isEndTag) {
         indentation += indent;
       }
     }
@@ -1917,7 +1919,7 @@ export default class Display {
    *
    * See https://github.com/phetsims/scenery/issues/394 for some details.
    */
-  public foreignObjectRasterization( callback: ( url: string | null ) => void ): void {
+  public foreignObjectRasterization(callback: (url: string | null) => void): void {
     // Scan our drawable tree for Canvases. We'll rasterize them here (to data URLs) so we can replace them later in
     // the HTML tree (with images) before putting that in the foreignObject. That way, we can actually display
     // things rendered in Canvas in our rasterization.
@@ -1925,76 +1927,76 @@ export default class Display {
 
     let unknownIds = 0;
 
-    function addCanvas( canvas: HTMLCanvasElement ): void {
-      if ( !canvas.id ) {
+    function addCanvas(canvas: HTMLCanvasElement): void {
+      if (!canvas.id) {
         canvas.id = `unknown-canvas-${unknownIds++}`;
       }
-      canvasUrlMap[ canvas.id ] = canvas.toDataURL();
+      canvasUrlMap[canvas.id] = canvas.toDataURL();
     }
 
-    function scanForCanvases( drawable: Drawable ): void {
-      if ( drawable instanceof BackboneDrawable ) {
+    function scanForCanvases(drawable: Drawable): void {
+      if (drawable instanceof BackboneDrawable) {
         // we're a backbone
-        _.each( drawable.blocks, childDrawable => {
-          scanForCanvases( childDrawable );
-        } );
+        _.each(drawable.blocks, childDrawable => {
+          scanForCanvases(childDrawable);
+        });
       }
-      else if ( drawable instanceof Block && drawable.firstDrawable && drawable.lastDrawable ) {
+      else if (drawable instanceof Block && drawable.firstDrawable && drawable.lastDrawable) {
         // we're a block
-        for ( let childDrawable = drawable.firstDrawable; childDrawable !== drawable.lastDrawable; childDrawable = childDrawable.nextDrawable ) {
-          scanForCanvases( childDrawable );
+        for (let childDrawable = drawable.firstDrawable; childDrawable !== drawable.lastDrawable; childDrawable = childDrawable.nextDrawable) {
+          scanForCanvases(childDrawable);
         }
-        scanForCanvases( drawable.lastDrawable ); // wasn't hit in our simplified (and safer) loop
+        scanForCanvases(drawable.lastDrawable); // wasn't hit in our simplified (and safer) loop
 
-        if ( ( drawable instanceof CanvasBlock || drawable instanceof WebGLBlock ) && drawable.canvas && drawable.canvas instanceof window.HTMLCanvasElement ) {
-          addCanvas( drawable.canvas );
+        if ((drawable instanceof CanvasBlock || drawable instanceof WebGLBlock) && drawable.canvas && drawable.canvas instanceof window.HTMLCanvasElement) {
+          addCanvas(drawable.canvas);
         }
       }
 
-      if ( DOMDrawable && drawable instanceof DOMDrawable ) {
-        if ( drawable.domElement instanceof window.HTMLCanvasElement ) {
-          addCanvas( drawable.domElement );
+      if (DOMDrawable && drawable instanceof DOMDrawable) {
+        if (drawable.domElement instanceof window.HTMLCanvasElement) {
+          addCanvas(drawable.domElement);
         }
-        Array.prototype.forEach.call( drawable.domElement.getElementsByTagName( 'canvas' ), canvas => {
-          addCanvas( canvas );
-        } );
+        Array.prototype.forEach.call(drawable.domElement.getElementsByTagName('canvas'), canvas => {
+          addCanvas(canvas);
+        });
       }
     }
 
     // @ts-expect-error TODO BackboneDrawable https://github.com/phetsims/scenery/issues/1581
-    scanForCanvases( this._rootBackbone! );
+    scanForCanvases(this._rootBackbone!);
 
     // Create a new document, so that we can (1) serialize it to XHTML, and (2) manipulate it independently.
     // Inspired by http://cburgmer.github.io/rasterizeHTML.js/
-    const doc = document.implementation.createHTMLDocument( '' );
+    const doc = document.implementation.createHTMLDocument('');
     doc.documentElement.innerHTML = this.domElement.outerHTML;
-    doc.documentElement.setAttribute( 'xmlns', doc.documentElement.namespaceURI! );
+    doc.documentElement.setAttribute('xmlns', doc.documentElement.namespaceURI!);
 
     // Hide the PDOM
-    doc.documentElement.appendChild( document.createElement( 'style' ) ).innerHTML = `.${PDOMSiblingStyle.ROOT_CLASS_NAME} { display:none; } `;
+    doc.documentElement.appendChild(document.createElement('style')).innerHTML = `.${PDOMSiblingStyle.ROOT_CLASS_NAME} { display:none; } `;
 
     // Replace each <canvas> with an <img> that has src=canvas.toDataURL() and the same style
-    let displayCanvases: HTMLElement[] | HTMLCollection = doc.documentElement.getElementsByTagName( 'canvas' );
-    displayCanvases = Array.prototype.slice.call( displayCanvases ); // don't use a live HTMLCollection copy!
-    for ( let i = 0; i < displayCanvases.length; i++ ) {
-      const displayCanvas = displayCanvases[ i ];
+    let displayCanvases: HTMLElement[] | HTMLCollection = doc.documentElement.getElementsByTagName('canvas');
+    displayCanvases = Array.prototype.slice.call(displayCanvases); // don't use a live HTMLCollection copy!
+    for (let i = 0; i < displayCanvases.length; i++) {
+      const displayCanvas = displayCanvases[i];
 
       const cssText = displayCanvas.style.cssText;
 
-      const displayImg = doc.createElement( 'img' );
-      const src = canvasUrlMap[ displayCanvas.id ];
-      assert && assert( src, 'Must have missed a toDataURL() on a Canvas' );
+      const displayImg = doc.createElement('img');
+      const src = canvasUrlMap[displayCanvas.id];
+      assert && assert(src, 'Must have missed a toDataURL() on a Canvas');
 
       displayImg.src = src;
-      displayImg.setAttribute( 'style', cssText );
+      displayImg.setAttribute('style', cssText);
 
-      displayCanvas.parentNode!.replaceChild( displayImg, displayCanvas );
+      displayCanvas.parentNode!.replaceChild(displayImg, displayCanvas);
     }
 
     const displayWidth = this.width;
     const displayHeight = this.height;
     const completeFunction = () => {
-      Display.elementToSVGDataURL( doc.documentElement, displayWidth, displayHeight, callback );
+      Display.elementToSVGDataURL(doc.documentElement, displayWidth, displayHeight, callback);
     };
 
     // Convert each <image>'s xlink:href so that it's a data URL with the relevant data, e.g.
@@ -2003,91 +2005,91 @@ export default class Display {
     // See https://github.com/phetsims/scenery/issues/573
     let replacedImages = 0; // Count how many images get replaced. We'll decrement with each finished image.
     let hasReplacedImages = false; // Whether any images are replaced
-    const displaySVGImages = Array.prototype.slice.call( doc.documentElement.getElementsByTagName( 'image' ) );
-    for ( let j = 0; j < displaySVGImages.length; j++ ) {
-      const displaySVGImage = displaySVGImages[ j ];
-      const currentHref = displaySVGImage.getAttribute( 'xlink:href' );
-      if ( currentHref.slice( 0, 5 ) !== 'data:' ) {
+    const displaySVGImages = Array.prototype.slice.call(doc.documentElement.getElementsByTagName('image'));
+    for (let j = 0; j < displaySVGImages.length; j++) {
+      const displaySVGImage = displaySVGImages[j];
+      const currentHref = displaySVGImage.getAttribute('xlink:href');
+      if (currentHref.slice(0, 5) !== 'data:') {
         replacedImages++;
         hasReplacedImages = true;
 
-        ( () => { // eslint-disable-line @typescript-eslint/no-loop-func
+        (() => {
           // Closure variables need to be stored for each individual SVG image.
           const refImage = new window.Image();
           const svgImage = displaySVGImage;
 
           refImage.onload = () => {
             // Get a Canvas
-            const refCanvas = document.createElement( 'canvas' );
+            const refCanvas = document.createElement('canvas');
             refCanvas.width = refImage.width;
             refCanvas.height = refImage.height;
-            const refContext = refCanvas.getContext( '2d' )!;
+            const refContext = refCanvas.getContext('2d')!;
 
             // Draw the (now loaded) image into the Canvas
-            refContext.drawImage( refImage, 0, 0 );
+            refContext.drawImage(refImage, 0, 0);
 
             // Replace the <image>'s href with the Canvas' data.
-            svgImage.setAttribute( 'xlink:href', refCanvas.toDataURL() );
+            svgImage.setAttribute('xlink:href', refCanvas.toDataURL());
 
             // If it's the last replaced image, go to the next step
-            if ( --replacedImages === 0 ) {
+            if (--replacedImages === 0) {
               completeFunction();
             }
 
-            assert && assert( replacedImages >= 0 );
+            assert && assert(replacedImages >= 0);
           };
           refImage.onerror = () => {
             // NOTE: not much we can do, leave this element alone.
 
             // If it's the last replaced image, go to the next step
-            if ( --replacedImages === 0 ) {
+            if (--replacedImages === 0) {
               completeFunction();
             }
 
-            assert && assert( replacedImages >= 0 );
+            assert && assert(replacedImages >= 0);
           };
 
           // Kick off loading of the image.
           refImage.src = currentHref;
-        } )();
+        })();
       }
     }
 
     // If no images are replaced, we need to call our callback through this route.
-    if ( !hasReplacedImages ) {
+    if (!hasReplacedImages) {
       completeFunction();
     }
   }
 
   public popupRasterization(): void {
-    this.foreignObjectRasterization( url => {
-      if ( url ) {
-        window.open( url );
+    this.foreignObjectRasterization(url => {
+      if (url) {
+        window.open(url);
       }
-    } );
+    });
   }
 
   /**
    * Will return null if the string of indices isn't part of the PDOMInstance tree
    */
-  public getTrailFromPDOMIndicesString( indicesString: string ): Trail | null {
+  public getTrailFromPDOMIndicesString(indicesString: string): Trail | null {
 
     // No PDOMInstance tree if the display isn't accessible
-    if ( !this._rootPDOMInstance ) {
+    if (!this._rootPDOMInstance) {
       return null;
     }
 
     let instance = this._rootPDOMInstance;
-    const indexStrings = indicesString.split( PDOMUtils.PDOM_UNIQUE_ID_SEPARATOR );
-    for ( let i = 0; i < indexStrings.length; i++ ) {
-      const digit = Number( indexStrings[ i ] );
-      instance = instance.children[ digit ];
-      if ( !instance ) {
+    const indexStrings = indicesString.split(PDOMUtils.PDOM_UNIQUE_ID_SEPARATOR);
+    for (let i = 0; i < indexStrings.length; i++) {
+      const digit = Number(indexStrings[i]);
+      instance = instance.children[digit];
+      if (!instance) {
         return null;
       }
     }
 
-    return ( instance && instance.trail ) ? instance.trail : null;
+    return (instance && instance.trail) ? instance.trail : null;
   }
 
   /**
@@ -2096,21 +2098,21 @@ export default class Display {
    * TODO: this dispose function is not complete. https://github.com/phetsims/scenery/issues/1581
    */
   public dispose(): void {
-    if ( assert ) {
-      assert( !this._isDisposing );
-      assert( !this._isDisposed );
+    if (assert) {
+      assert(!this._isDisposing);
+      assert(!this._isDisposed);
 
       this._isDisposing = true;
     }
 
-    if ( this._input ) {
+    if (this._input) {
       this.detachEvents();
     }
-    this._rootNode.removeRootedDisplay( this );
+    this._rootNode.removeRootedDisplay(this);
 
-    if ( this._accessible ) {
-      assert && assert( this._boundHandleFullScreenNavigation, '_boundHandleFullScreenNavigation was not added to the keyStateTracker' );
-      globalKeyStateTracker.keydownEmitter.removeListener( this._boundHandleFullScreenNavigation! );
+    if (this._accessible) {
+      assert && assert(this._boundHandleFullScreenNavigation, '_boundHandleFullScreenNavigation was not added to the keyStateTracker');
+      globalKeyStateTracker.keydownEmitter.removeListener(this._boundHandleFullScreenNavigation!);
       this._rootPDOMInstance!.dispose();
     }
 
@@ -2126,7 +2128,7 @@ export default class Display {
 
     this.focusManager && this.focusManager.dispose();
 
-    if ( assert ) {
+    if (assert) {
       this._isDisposing = false;
       this._isDisposed = true;
     }
@@ -2141,40 +2143,39 @@ export default class Display {
    * @param height - The height of the output SVG
    * @param callback - Called as callback( url: {string} ), where the URL will be the encoded SVG file.
    */
-  public static elementToSVGDataURL( domElement: HTMLElement, width: number, height: number, callback: ( url: string | null ) => void ): void {
-    const canvas = document.createElement( 'canvas' );
-    const context = canvas.getContext( '2d' )!;
+  public static elementToSVGDataURL(domElement: HTMLElement, width: number, height: number, callback: (url: string | null) => void): void {
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d')!;
     canvas.width = width;
     canvas.height = height;
 
     // Serialize it to XHTML that can be used in foreignObject (HTML can't be)
-    const xhtml = new window.XMLSerializer().serializeToString( domElement );
+    const xhtml = new window.XMLSerializer().serializeToString(domElement);
 
     // Create an SVG container with a foreignObject.
     const data = `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
-                 '<foreignObject width="100%" height="100%">' +
-                 `<div xmlns="http://www.w3.org/1999/xhtml">${
-                   xhtml
-                 }</div>` +
-                 '</foreignObject>' +
-                 '</svg>';
+      '<foreignObject width="100%" height="100%">' +
+      `<div xmlns="http://www.w3.org/1999/xhtml">${xhtml
+      }</div>` +
+      '</foreignObject>' +
+      '</svg>';
 
     // Load an <img> with the SVG data URL, and when loaded draw it into our Canvas
     const img = new window.Image();
     img.onload = () => {
-      context.drawImage( img, 0, 0 );
-      callback( canvas.toDataURL() ); // Endpoint here
+      context.drawImage(img, 0, 0);
+      callback(canvas.toDataURL()); // Endpoint here
     };
     img.onerror = () => {
-      callback( null );
+      callback(null);
     };
 
     // We can't btoa() arbitrary unicode, so we need another solution,
     // see https://developer.mozilla.org/en-US/docs/Web/API/WindowBase64/Base64_encoding_and_decoding#The_.22Unicode_Problem.22
     // @ts-expect-error - Exterior lib
-    const uint8array = new window.TextEncoderLite( 'utf-8' ).encode( data );
+    const uint8array = new window.TextEncoderLite('utf-8').encode(data);
     // @ts-expect-error - Exterior lib
-    const base64 = window.fromByteArray( uint8array );
+    const base64 = window.fromByteArray(uint8array);
 
     // turn it to base64 and wrap it in the data URL format
     img.src = `data:image/svg+xml;base64,${base64}`;
@@ -2183,12 +2184,12 @@ export default class Display {
   /**
    * Returns true when NO nodes in the subtree are disposed.
    */
-  private static assertSubtreeDisposed( node: Node ): void {
-    assert && assert( !node.isDisposed, 'Disposed nodes should not be included in a scene graph to display.' );
+  private static assertSubtreeDisposed(node: Node): void {
+    assert && assert(!node.isDisposed, 'Disposed nodes should not be included in a scene graph to display.');
 
-    if ( assert ) {
-      for ( let i = 0; i < node.children.length; i++ ) {
-        Display.assertSubtreeDisposed( node.children[ i ] );
+    if (assert) {
+      for (let i = 0; i < node.children.length; i++) {
+        Display.assertSubtreeDisposed(node.children[i]);
       }
     }
   }
@@ -2196,33 +2197,33 @@ export default class Display {
   /**
    * Adds an input listener to be fired for ANY Display
    */
-  public static addInputListener( listener: TInputListener ): void {
-    assert && assert( !_.includes( Display.inputListeners, listener ), 'Input listener already registered' );
+  public static addInputListener(listener: TInputListener): void {
+    assert && assert(!_.includes(Display.inputListeners, listener), 'Input listener already registered');
 
     // don't allow listeners to be added multiple times
-    if ( !_.includes( Display.inputListeners, listener ) ) {
-      Display.inputListeners.push( listener );
+    if (!_.includes(Display.inputListeners, listener)) {
+      Display.inputListeners.push(listener);
     }
   }
 
   /**
    * Removes an input listener that was previously added with Display.addInputListener.
    */
-  public static removeInputListener( listener: TInputListener ): void {
+  public static removeInputListener(listener: TInputListener): void {
     // ensure the listener is in our list
-    assert && assert( _.includes( Display.inputListeners, listener ) );
+    assert && assert(_.includes(Display.inputListeners, listener));
 
-    Display.inputListeners.splice( _.indexOf( Display.inputListeners, listener ), 1 );
+    Display.inputListeners.splice(_.indexOf(Display.inputListeners, listener), 1);
   }
 
   /**
    * Interrupts all input listeners that are attached to all Displays.
    */
   public static interruptInput(): void {
-    const listenersCopy = Display.inputListeners.slice( 0 );
+    const listenersCopy = Display.inputListeners.slice(0);
 
-    for ( let i = 0; i < listenersCopy.length; i++ ) {
-      const listener = listenersCopy[ i ];
+    for (let i = 0; i < listenersCopy.length; i++) {
+      const listener = listenersCopy[i];
 
       listener.interrupt && listener.interrupt();
     }
@@ -2239,7 +2240,7 @@ export default class Display {
   public static inputListeners: TInputListener[];
 }
 
-scenery.register( 'Display', Display );
+scenery.register('Display', Display);
 
 Display.userGestureEmitter = new Emitter();
 Display.inputListeners = [];

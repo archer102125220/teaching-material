@@ -18,12 +18,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import inheritance from '../../../../phet-core/js/inheritance.js';
-import memoize from '../../../../phet-core/js/memoize.js';
-import { Color, PaintObserver, scenery, SelfDrawable } from '../../imports.js';
+import _ from 'lodash';
 
-const PaintableStatefulDrawable = memoize( type => {
-  assert && assert( _.includes( inheritance( type ), SelfDrawable ) );
+import inheritance from '../../../phet-core/inheritance';
+import memoize from '../../../phet-core/memoize';
+import { Color, PaintObserver, scenery, SelfDrawable } from '../../imports';
+
+const PaintableStatefulDrawable = memoize((type) => {
+  assert && assert(_.includes(inheritance(type), SelfDrawable));
 
   return class extends type {
     /**
@@ -33,8 +35,8 @@ const PaintableStatefulDrawable = memoize( type => {
      * @param {number} renderer - Renderer bitmask, see Renderer's documentation for more details.
      * @param {Instance} instance
      */
-    initialize( renderer, instance, ...args ) {
-      super.initialize( renderer, instance, ...args );
+    initialize(renderer, instance, ...args) {
+      super.initialize(renderer, instance, ...args);
 
       // @protected {boolean} - Whether the fill has changed since our last update.
       this.dirtyFill = true;
@@ -60,20 +62,23 @@ const PaintableStatefulDrawable = memoize( type => {
       this.lastCachedPaints = [];
 
       // @private {function} - Callback for when the fill is marked as dirty
-      this.fillCallback = this.fillCallback || this.markDirtyFill.bind( this );
+      this.fillCallback = this.fillCallback || this.markDirtyFill.bind(this);
 
       // @private {function} - Callback for when the stroke is marked as dirty
-      this.strokeCallback = this.strokeCallback || this.markDirtyStroke.bind( this );
+      this.strokeCallback =
+        this.strokeCallback || this.markDirtyStroke.bind(this);
 
       // @private {PaintObserver} - Observers the fill property for nodes
-      this.fillObserver = this.fillObserver || new PaintObserver( this.fillCallback );
+      this.fillObserver =
+        this.fillObserver || new PaintObserver(this.fillCallback);
 
       // @private {PaintObserver} - Observers the stroke property for nodes
-      this.strokeObserver = this.strokeObserver || new PaintObserver( this.strokeCallback );
+      this.strokeObserver =
+        this.strokeObserver || new PaintObserver(this.strokeCallback);
 
       // Hook up our fill/stroke observers to this node
-      this.fillObserver.setPrimary( instance.node._fill );
-      this.strokeObserver.setPrimary( instance.node._stroke );
+      this.fillObserver.setPrimary(instance.node._fill);
+      this.strokeObserver.setPrimary(instance.node._stroke);
     }
 
     /**
@@ -108,11 +113,11 @@ const PaintableStatefulDrawable = memoize( type => {
      * @public
      */
     markDirtyFill() {
-      assert && Color.checkPaint( this.instance.node._fill );
+      assert && Color.checkPaint(this.instance.node._fill);
 
       this.dirtyFill = true;
       this.markPaintDirty();
-      this.fillObserver.setPrimary( this.instance.node._fill );
+      this.fillObserver.setPrimary(this.instance.node._fill);
       // TODO: look into having the fillObserver be notified of Node changes as our source https://github.com/phetsims/scenery/issues/1581
     }
 
@@ -121,11 +126,11 @@ const PaintableStatefulDrawable = memoize( type => {
      * @public
      */
     markDirtyStroke() {
-      assert && Color.checkPaint( this.instance.node._stroke );
+      assert && Color.checkPaint(this.instance.node._stroke);
 
       this.dirtyStroke = true;
       this.markPaintDirty();
-      this.strokeObserver.setPrimary( this.instance.node._stroke );
+      this.strokeObserver.setPrimary(this.instance.node._stroke);
       // TODO: look into having the strokeObserver be notified of Node changes as our source https://github.com/phetsims/scenery/issues/1581
     }
 
@@ -156,7 +161,7 @@ const PaintableStatefulDrawable = memoize( type => {
       this.markPaintDirty();
     }
   };
-} );
+});
 
-scenery.register( 'PaintableStatefulDrawable', PaintableStatefulDrawable );
+scenery.register('PaintableStatefulDrawable', PaintableStatefulDrawable);
 export default PaintableStatefulDrawable;

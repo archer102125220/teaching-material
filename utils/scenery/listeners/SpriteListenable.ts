@@ -7,6 +7,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import inheritance from '../../phet-core/inheritance';
 import memoize from '../../phet-core/memoize';
 import type Constructor from '../../phet-core/types/Constructor';

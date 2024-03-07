@@ -9,6 +9,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 // @ts-expect-error
 import TEmitter from '../../axon/TEmitter';
 import TinyEmitter from '../../axon/TinyEmitter';
@@ -202,7 +204,7 @@ export default abstract class Segment {
     assert && assert(t0 < t1);
 
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let segment: Segment = this; // eslint-disable-line consistent-this
+    let segment: Segment = this;
     if (t1 < 1) {
       segment = segment.subdivided(t1)[0];
     }
@@ -219,7 +221,7 @@ export default abstract class Segment {
     // this could be solved by recursion, but we don't plan on the JS engine doing tail-call optimization
 
     // eslint-disable-next-line @typescript-eslint/no-this-alias
-    let right: Segment = this; // eslint-disable-line consistent-this
+    let right: Segment = this;
     const result = [];
     for (let i = 0; i < tList.length; i++) {
       // assume binary subdivision
@@ -370,9 +372,9 @@ export default abstract class Segment {
     })(0, 1, this.start, this.end, 0);
 
     return {
-      values: values,
-      arcLength: arcLength,
-      initiallyInside: initiallyInside
+      values,
+      arcLength,
+      initiallyInside
     };
   }
 
@@ -548,12 +550,12 @@ export default abstract class Segment {
               bestList = []; // clear it
             }
             items.push({
-              ta: ta,
-              tb: tb,
-              pa: pa,
-              pb: pb,
-              segment: segment,
-              bounds: bounds,
+              ta,
+              tb,
+              pa,
+              pb,
+              segment,
+              bounds,
               min: minDistanceSquared,
               max: maxDistanceSquared
             });
@@ -625,8 +627,8 @@ export default abstract class Segment {
       const closestPoint = item.segment.positionAt(t);
       bestList.push({
         segment: item.segment,
-        t: t,
-        closestPoint: closestPoint,
+        t,
+        closestPoint,
         distanceSquared: point.distanceSquared(closestPoint)
       });
     });
@@ -658,8 +660,8 @@ export default abstract class Segment {
     }
     const b = (p2s - a * a * q2s) / (3 * a * a * q3s);
     return {
-      a: a,
-      b: b
+      a,
+      b
     };
   }
 
@@ -692,8 +694,8 @@ export default abstract class Segment {
 
     const b = (p1s - a * q1s) / (2 * a * q2s);
     return {
-      a: a,
-      b: b
+      a,
+      b
     };
   }
 
@@ -725,8 +727,8 @@ export default abstract class Segment {
 
     const b = (p0s - q0s) / q1s;
     return {
-      a: a,
-      b: b
+      a,
+      b
     };
   }
 

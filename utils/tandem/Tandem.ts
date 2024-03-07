@@ -10,6 +10,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import arrayRemove from '../phet-core/arrayRemove';
 import merge from '../phet-core/merge';
 import optionize from '../phet-core/optionize';

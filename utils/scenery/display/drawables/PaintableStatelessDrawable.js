@@ -9,12 +9,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import inheritance from '../../../../phet-core/js/inheritance.js';
-import memoize from '../../../../phet-core/js/memoize.js';
-import { Color, PaintObserver, scenery, SelfDrawable } from '../../imports.js';
+import _ from 'lodash';
 
-const PaintableStatelessDrawable = memoize( type => {
-  assert && assert( _.includes( inheritance( type ), SelfDrawable ) );
+import inheritance from '../../../phet-core/inheritance';
+import memoize from '../../../phet-core/memoize';
+import { Color, PaintObserver, scenery, SelfDrawable } from '../../imports';
+
+const PaintableStatelessDrawable = memoize((type) => {
+  assert && assert(_.includes(inheritance(type), SelfDrawable));
 
   return class extends type {
     /**
@@ -24,19 +26,22 @@ const PaintableStatelessDrawable = memoize( type => {
      * @param {number} renderer
      * @param {Instance} instance
      */
-    initialize( renderer, instance, ...args ) {
-      super.initialize( renderer, instance, ...args );
+    initialize(renderer, instance, ...args) {
+      super.initialize(renderer, instance, ...args);
 
       // @private {function}
-      this.fillCallback = this.fillCallback || this.markDirtyFill.bind( this );
-      this.strokeCallback = this.strokeCallback || this.markDirtyStroke.bind( this );
+      this.fillCallback = this.fillCallback || this.markDirtyFill.bind(this);
+      this.strokeCallback =
+        this.strokeCallback || this.markDirtyStroke.bind(this);
 
       // @private {PaintObserver}
-      this.fillObserver = this.fillObserver || new PaintObserver( this.fillCallback );
-      this.strokeObserver = this.strokeObserver || new PaintObserver( this.strokeCallback );
+      this.fillObserver =
+        this.fillObserver || new PaintObserver(this.fillCallback);
+      this.strokeObserver =
+        this.strokeObserver || new PaintObserver(this.strokeCallback);
 
-      this.fillObserver.setPrimary( instance.node._fill );
-      this.strokeObserver.setPrimary( instance.node._stroke );
+      this.fillObserver.setPrimary(instance.node._fill);
+      this.strokeObserver.setPrimary(instance.node._stroke);
     }
 
     /**
@@ -55,10 +60,10 @@ const PaintableStatelessDrawable = memoize( type => {
      * @public
      */
     markDirtyFill() {
-      assert && Color.checkPaint( this.instance.node._fill );
+      assert && Color.checkPaint(this.instance.node._fill);
 
       this.markPaintDirty();
-      this.fillObserver.setPrimary( this.instance.node._fill );
+      this.fillObserver.setPrimary(this.instance.node._fill);
       // TODO: look into having the fillObserver be notified of Node changes as our source https://github.com/phetsims/scenery/issues/1581
     }
 
@@ -66,10 +71,10 @@ const PaintableStatelessDrawable = memoize( type => {
      * @public
      */
     markDirtyStroke() {
-      assert && Color.checkPaint( this.instance.node._stroke );
+      assert && Color.checkPaint(this.instance.node._stroke);
 
       this.markPaintDirty();
-      this.strokeObserver.setPrimary( this.instance.node._stroke );
+      this.strokeObserver.setPrimary(this.instance.node._stroke);
       // TODO: look into having the strokeObserver be notified of Node changes as our source https://github.com/phetsims/scenery/issues/1581
     }
 
@@ -94,7 +99,7 @@ const PaintableStatelessDrawable = memoize( type => {
       this.markPaintDirty();
     }
   };
-} );
+});
 
-scenery.register( 'PaintableStatelessDrawable', PaintableStatelessDrawable );
+scenery.register('PaintableStatelessDrawable', PaintableStatelessDrawable);
 export default PaintableStatelessDrawable;

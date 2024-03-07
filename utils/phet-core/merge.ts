@@ -12,6 +12,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import phetCore from './phetCore';
 import type IntentionalAny from './types/IntentionalAny';
 

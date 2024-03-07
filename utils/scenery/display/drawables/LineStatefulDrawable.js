@@ -11,14 +11,20 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import inheritance from '../../../../phet-core/js/inheritance.js';
-import memoize from '../../../../phet-core/js/memoize.js';
-import { PaintableStatefulDrawable, scenery, SelfDrawable } from '../../imports.js';
+import _ from 'lodash';
 
-const LineStatefulDrawable = memoize( type => {
-  assert && assert( _.includes( inheritance( type ), SelfDrawable ) );
+import inheritance from '../../../phet-core/inheritance';
+import memoize from '../../../phet-core/memoize';
+import {
+  PaintableStatefulDrawable,
+  scenery,
+  SelfDrawable
+} from '../../imports';
 
-  return class extends PaintableStatefulDrawable( type ) {
+const LineStatefulDrawable = memoize((type) => {
+  assert && assert(_.includes(inheritance(type), SelfDrawable));
+
+  return class extends PaintableStatefulDrawable(type) {
     /**
      * @public
      * @override
@@ -26,8 +32,8 @@ const LineStatefulDrawable = memoize( type => {
      * @param {number} renderer - Renderer bitmask, see Renderer's documentation for more details.
      * @param {Instance} instance
      */
-    initialize( renderer, instance, ...args ) {
-      super.initialize( renderer, instance, ...args );
+    initialize(renderer, instance, ...args) {
+      super.initialize(renderer, instance, ...args);
 
       // @protected {boolean} - Flag marked as true if ANY of the drawable dirty flags are set (basically everything except for transforms, as we
       //                        need to accelerate the transform case.
@@ -124,7 +130,7 @@ const LineStatefulDrawable = memoize( type => {
       this.dirtyY2 = false;
     }
   };
-} );
+});
 
-scenery.register( 'LineStatefulDrawable', LineStatefulDrawable );
+scenery.register('LineStatefulDrawable', LineStatefulDrawable);
 export default LineStatefulDrawable;

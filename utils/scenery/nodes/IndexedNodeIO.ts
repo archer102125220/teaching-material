@@ -16,16 +16,16 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import FunctionIO from '../../../tandem/js/types/FunctionIO.js';
-import IOType from '../../../tandem/js/types/IOType.js';
-import NullableIO from '../../../tandem/js/types/NullableIO.js';
-import NumberIO from '../../../tandem/js/types/NumberIO.js';
-import VoidIO from '../../../tandem/js/types/VoidIO.js';
-import { Node, scenery } from '../imports.js';
-import deprecationWarning from '../../../phet-core/js/deprecationWarning.js';
+import FunctionIO from '../../tandem/types/FunctionIO';
+import IOType from '../../tandem/types/IOType';
+import NullableIO from '../../tandem/types/NullableIO';
+import NumberIO from '../../tandem/types/NumberIO';
+import VoidIO from '../../tandem/types/VoidIO';
+import { Node, scenery } from '../imports';
+import deprecationWarning from '../../phet-core/deprecationWarning';
 
 export type IndexedNodeIOParent = {
-  onIndexedNodeIOChildMoved: ( node: Node ) => void;
+  onIndexedNodeIOChildMoved: (node: Node) => void;
 };
 type IndexedNodeIOObserver = Partial<IndexedNodeIOParent> & Node;
 
@@ -36,122 +36,122 @@ const map: Record<number, () => void> = {};
 let index = 0;
 
 // Move this node one index forward in each of its parents, jumping over invisible nodes. If the Node is already at the front, this is a no-op.
-function moveForward( node: Node ): void {
-  node._parents.forEach( parent => moveChild( parent as IndexedNodeIOObserver, node, +1 ) );
+function moveForward(node: Node): void {
+  node._parents.forEach(parent => moveChild(parent as IndexedNodeIOObserver, node, +1));
 }
 
 // Move this node one index backward in each of its parents, jumping over invisible nodes.  If the Node is already at the back, this is a no-op.
-function moveBackward( node: Node ): void {
-  node._parents.forEach( parent => moveChild( parent as IndexedNodeIOObserver, node, -1 ) );
+function moveBackward(node: Node): void {
+  node._parents.forEach(parent => moveChild(parent as IndexedNodeIOObserver, node, -1));
 }
 
 // factored out for use with the deprecated method name too
-function unlinkIndex( this: Node, index: number ): void {
-  const method = map[ index ];
-  assert && assert( this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent' );
-  this.parents[ 0 ].childrenChangedEmitter.removeListener( method );
-  delete map[ index ];
+function unlinkIndex(this: Node, index: number): void {
+  const method = map[index];
+  assert && assert(this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
+  this.parents[0].childrenChangedEmitter.removeListener(method);
+  delete map[index];
 }
 
 
 /**
  * Moves the specified child by +1/-1 indices, without going past the beginning or end.
  */
-function moveChild( parent: IndexedNodeIOObserver, child: Node, delta: number ): void {
-  const index = parent.indexOfChild( child );
+function moveChild(parent: IndexedNodeIOObserver, child: Node, delta: number): void {
+  const index = parent.indexOfChild(child);
 
   let targetIndex = index + delta;
 
   // skip invisible children
-  while ( targetIndex > 0 && targetIndex < parent.children.length && !parent.children[ targetIndex ].visible ) {
+  while (targetIndex > 0 && targetIndex < parent.children.length && !parent.children[targetIndex].visible) {
     targetIndex += delta;
   }
 
-  if ( targetIndex >= 0 && targetIndex < parent.children.length ) {
-    parent.moveChildToIndex( child, targetIndex );
+  if (targetIndex >= 0 && targetIndex < parent.children.length) {
+    parent.moveChildToIndex(child, targetIndex);
   }
 
-  parent.onIndexedNodeIOChildMoved && parent.onIndexedNodeIOChildMoved( child );
+  parent.onIndexedNodeIOChildMoved && parent.onIndexedNodeIOChildMoved(child);
 }
 
-const IndexedNodeIO = new IOType( 'IndexedNodeIO', {
+const IndexedNodeIO = new IOType('IndexedNodeIO', {
   valueType: Node,
   documentation: 'Node that can be moved forward/back by index, which specifies z-order and/or layout order',
   supertype: Node.NodeIO,
   toStateObject: node => {
     const stateObject: { index: number | null } = { index: null };
-    if ( node.parents[ 0 ] ) {
-      assert && assert( node.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent' );
-      stateObject.index = node.parents[ 0 ].indexOfChild( node );
+    if (node.parents[0]) {
+      assert && assert(node.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
+      stateObject.index = node.parents[0].indexOfChild(node);
     }
     return stateObject;
   },
-  applyState: ( node, stateObject ) => {
-    const nodeParent = node.parents[ 0 ];
+  applyState: (node, stateObject) => {
+    const nodeParent = node.parents[0];
 
-    if ( nodeParent && stateObject.index ) {
-      assert && assert( node.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent' );
+    if (nodeParent && stateObject.index) {
+      assert && assert(node.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
 
       // Swap the child at the destination index with current position of this Node, that way the operation is atomic.
       // This implementation assumes that all children are instrumented IndexedNodeIO instances and can have state set
       // on them to "fix them" after this operation. Without this implementation, using Node.moveChildToIndex could blow
       // away another IndexedNode state set. See https://github.com/phetsims/ph-scale/issues/227
       const children = nodeParent.children;
-      const currentIndex = nodeParent.indexOfChild( node );
-      children[ currentIndex ] = children[ stateObject.index ];
-      children[ stateObject.index ] = node;
-      nodeParent.setChildren( children );
+      const currentIndex = nodeParent.indexOfChild(node);
+      children[currentIndex] = children[stateObject.index];
+      children[stateObject.index] = node;
+      nodeParent.setChildren(children);
     }
   },
   stateSchema: {
-    index: NullableIO( NumberIO )
+    index: NullableIO(NumberIO)
   },
   methods: {
     linkIndex: {
       returnType: NumberIO,
-      parameterTypes: [ FunctionIO( VoidIO, [ NumberIO ] ) ],
+      parameterTypes: [FunctionIO(VoidIO, [NumberIO])],
       documentation: 'Following the PropertyIO.link pattern, subscribe for notifications when the index in the parent ' +
-                     'changes, and receive a callback with the current value.  The return value is a numeric ID for use ' +
-                     'with clearLinkIndex.',
-      implementation: function( this: Node, listener ) {
+        'changes, and receive a callback with the current value.  The return value is a numeric ID for use ' +
+        'with clearLinkIndex.',
+      implementation: function (this: Node, listener) {
 
         // The callback which signifies the current index
         const callback = () => {
-          assert && assert( this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent' );
-          const index = this.parents[ 0 ].indexOfChild( this );
-          listener( index );
+          assert && assert(this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
+          const index = this.parents[0].indexOfChild(this);
+          listener(index);
         };
 
-        assert && assert( this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent' );
-        this.parents[ 0 ].childrenChangedEmitter.addListener( callback );
+        assert && assert(this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
+        this.parents[0].childrenChangedEmitter.addListener(callback);
         callback();
 
         const myIndex = index;
-        map[ myIndex ] = callback;
+        map[myIndex] = callback;
         index++;
         return myIndex;
       }
     },
     unlinkIndex: {
       returnType: VoidIO,
-      parameterTypes: [ NumberIO ],
+      parameterTypes: [NumberIO],
       documentation: 'Unlink a listener that has been added using linkIndex, by its numerical ID (like setTimeout/clearTimeout)',
       implementation: unlinkIndex
     },
     clearLinkIndex: {
       returnType: VoidIO,
-      parameterTypes: [ NumberIO ],
+      parameterTypes: [NumberIO],
       documentation: 'Deprecated, see "unlinkIndex".',
-      implementation: function( this: Node, index: number ): void {
-        assert && deprecationWarning( 'clearLinkIndex is deprecated, use unlinkIndex instead.', true );
-        unlinkIndex.call( this, index );
+      implementation: function (this: Node, index: number): void {
+        assert && deprecationWarning('clearLinkIndex is deprecated, use unlinkIndex instead.', true);
+        unlinkIndex.call(this, index);
       }
     },
     moveForward: {
       returnType: VoidIO,
       parameterTypes: [],
-      implementation: function( this: Node ) {
-        return moveForward( this );
+      implementation: function (this: Node) {
+        return moveForward(this);
       },
       documentation: 'Move this Node one index forward in each of its parents, skipping invisible Nodes. If the Node is already at the front, this is a no-op.'
     },
@@ -159,13 +159,13 @@ const IndexedNodeIO = new IOType( 'IndexedNodeIO', {
     moveBackward: {
       returnType: VoidIO,
       parameterTypes: [],
-      implementation: function( this: Node ) {
-        return moveBackward( this );
+      implementation: function (this: Node) {
+        return moveBackward(this);
       },
       documentation: 'Move this Node one index backward in each of its parents, skipping invisible Nodes. If the Node is already at the back, this is a no-op.'
     }
   }
-} );
+});
 
-scenery.register( 'IndexedNodeIO', IndexedNodeIO );
+scenery.register('IndexedNodeIO', IndexedNodeIO);
 export default IndexedNodeIO;

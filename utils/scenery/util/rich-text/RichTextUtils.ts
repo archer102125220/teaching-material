@@ -5,6 +5,9 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
+
+import _ from 'lodash';
+
 import { scenery, Text } from '../../imports';
 
 // Types for Himalaya

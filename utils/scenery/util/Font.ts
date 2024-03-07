@@ -23,6 +23,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import optionize, { combineOptions } from '../../phet-core/optionize';
 // @ts-expect-error
 import PhetioObject, { PhetioObjectOptions } from '../../tandem/PhetioObject';

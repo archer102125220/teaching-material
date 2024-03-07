@@ -11,6 +11,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Bounds2 from '../../dot/Bounds2';
 import Matrix3 from '../../dot/Matrix3';
 import Ray2 from '../../dot/Ray2';

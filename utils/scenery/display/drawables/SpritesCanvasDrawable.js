@@ -6,8 +6,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { CanvasSelfDrawable, Imageable, Node, scenery, SpriteInstanceTransformType } from '../../imports.js';
+import Poolable from '../../../phet-core/Poolable';
+import {
+  CanvasSelfDrawable,
+  Imageable,
+  Node,
+  scenery,
+  SpriteInstanceTransformType
+} from '../../imports';
 
 class SpritesCanvasDrawable extends CanvasSelfDrawable {
   /**
@@ -23,30 +29,41 @@ class SpritesCanvasDrawable extends CanvasSelfDrawable {
    * @param {Node} node - Our node that is being drawn
    * @param {Matrix3} matrix - The transformation matrix applied for this node's coordinate system.
    */
-  paintCanvas( wrapper, node, matrix ) {
-    assert && assert( node instanceof Node );
+  paintCanvas(wrapper, node, matrix) {
+    assert && assert(node instanceof Node);
 
-    const baseMipmapScale = Imageable.getApproximateMatrixScale( matrix ) * ( window.devicePixelRatio || 1 );
+    const baseMipmapScale =
+      Imageable.getApproximateMatrixScale(matrix) *
+      (window.devicePixelRatio || 1);
 
     const numInstances = node._spriteInstances.length;
-    for ( let i = 0; i < numInstances; i++ ) {
-      const spriteInstance = node._spriteInstances[ i ];
+    for (let i = 0; i < numInstances; i++) {
+      const spriteInstance = node._spriteInstances[i];
       const spriteImage = spriteInstance.sprite.imageProperty.value;
-      const hasOpacity = spriteInstance.alpha !== 1 || spriteImage.imageOpacity !== 1;
+      const hasOpacity =
+        spriteInstance.alpha !== 1 || spriteImage.imageOpacity !== 1;
       const hasMipmaps = spriteImage._mipmap && spriteImage.hasMipmaps();
 
       // If it includes opacity, we'll do a context save/restore
-      if ( hasOpacity ) {
+      if (hasOpacity) {
         wrapper.context.save();
-        wrapper.context.globalAlpha *= spriteInstance.alpha * spriteImage.imageOpacity;
+        wrapper.context.globalAlpha *=
+          spriteInstance.alpha * spriteImage.imageOpacity;
       }
 
       // If it's a translation only, we can add the offsets to the drawImage call directly (higher performance)
-      if ( spriteInstance.transformType === SpriteInstanceTransformType.TRANSLATION && matrix.isTranslation() ) {
-        if ( hasMipmaps ) {
-          const level = spriteImage.getMipmapLevelFromScale( baseMipmapScale, Imageable.CANVAS_MIPMAP_BIAS_ADJUSTMENT );
-          const canvas = spriteImage.getMipmapCanvas( level );
-          const multiplier = Math.pow( 2, level );
+      if (
+        spriteInstance.transformType ===
+          SpriteInstanceTransformType.TRANSLATION &&
+        matrix.isTranslation()
+      ) {
+        if (hasMipmaps) {
+          const level = spriteImage.getMipmapLevelFromScale(
+            baseMipmapScale,
+            Imageable.CANVAS_MIPMAP_BIAS_ADJUSTMENT
+          );
+          const canvas = spriteImage.getMipmapCanvas(level);
+          const multiplier = Math.pow(2, level);
           wrapper.context.drawImage(
             canvas,
             spriteInstance.matrix.m02() - spriteImage.offset.x,
@@ -54,23 +71,25 @@ class SpritesCanvasDrawable extends CanvasSelfDrawable {
             canvas.width * multiplier,
             canvas.height * multiplier
           );
-        }
-        else {
+        } else {
           wrapper.context.drawImage(
             spriteImage.image,
             spriteInstance.matrix.m02() - spriteImage.offset.x,
             spriteInstance.matrix.m12() - spriteImage.offset.y
           );
         }
-      }
-      else {
+      } else {
         wrapper.context.save();
-        spriteInstance.matrix.canvasAppendTransform( wrapper.context );
+        spriteInstance.matrix.canvasAppendTransform(wrapper.context);
 
-        if ( hasMipmaps ) {
-          const level = spriteImage.getMipmapLevelFromScale( baseMipmapScale * Imageable.getApproximateMatrixScale( spriteInstance.matrix ), Imageable.CANVAS_MIPMAP_BIAS_ADJUSTMENT );
-          const canvas = spriteImage.getMipmapCanvas( level );
-          const multiplier = Math.pow( 2, level );
+        if (hasMipmaps) {
+          const level = spriteImage.getMipmapLevelFromScale(
+            baseMipmapScale *
+              Imageable.getApproximateMatrixScale(spriteInstance.matrix),
+            Imageable.CANVAS_MIPMAP_BIAS_ADJUSTMENT
+          );
+          const canvas = spriteImage.getMipmapCanvas(level);
+          const multiplier = Math.pow(2, level);
           wrapper.context.drawImage(
             canvas,
             -spriteImage.offset.x,
@@ -78,8 +97,7 @@ class SpritesCanvasDrawable extends CanvasSelfDrawable {
             canvas.width * multiplier,
             canvas.height * multiplier
           );
-        }
-        else {
+        } else {
           wrapper.context.drawImage(
             spriteImage.image,
             -spriteImage.offset.x,
@@ -90,15 +108,15 @@ class SpritesCanvasDrawable extends CanvasSelfDrawable {
         wrapper.context.restore();
       }
 
-      if ( hasOpacity ) {
+      if (hasOpacity) {
         wrapper.context.restore();
       }
     }
   }
 }
 
-scenery.register( 'SpritesCanvasDrawable', SpritesCanvasDrawable );
+scenery.register('SpritesCanvasDrawable', SpritesCanvasDrawable);
 
-Poolable.mixInto( SpritesCanvasDrawable );
+Poolable.mixInto(SpritesCanvasDrawable);
 
 export default SpritesCanvasDrawable;

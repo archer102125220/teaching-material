@@ -6,6 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Bounds2 from '../../dot/Bounds2';
 import Matrix3 from '../../dot/Matrix3';
 import Ray2 from '../../dot/Ray2';
@@ -484,7 +486,7 @@ export default class Arc extends Segment {
    * Returns the angle for the parametrized t value. The t value should range from 0 to 1 (inclusive).
    */
   public angleAt(t: number): number {
-    //TODO: add asserts https://github.com/phetsims/kite/issues/76
+    // TODO: add asserts https://github.com/phetsims/kite/issues/76
     return this._startAngle + (this.getActualEndAngle() - this._startAngle) * t;
   }
 
@@ -834,6 +836,7 @@ export default class Arc extends Segment {
     else {
       // angle is 'increasing'
       // -2pi < end - start <= 2pi
+      // eslint-disable-next-line no-lonely-if
       if (startAngle < endAngle) {
         return endAngle;
       }

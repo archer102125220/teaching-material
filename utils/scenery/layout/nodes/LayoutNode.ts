@@ -6,6 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import type TProperty from '../../../axon/TProperty';
 import Vector2 from '../../../dot/Vector2';
 import Vector2Property from '../../../dot/Vector2Property';

@@ -5,6 +5,9 @@
  *
  * @author Sam Reid (PhET Interactive Simulations)
  */
+
+import _ from 'lodash';
+
 import arrayRemove from '../../phet-core/arrayRemove';
 import Namespace from '../../phet-core/Namespace';
 import { type PropertyOptions } from '../../axon/Property';

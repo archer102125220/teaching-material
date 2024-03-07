@@ -24,6 +24,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import inheritance from '../../../phet-core/inheritance';
 import ResponsePacket, { type ResolvedResponse, type SpeakableResolvedOptions, type VoicingResponse } from '../../../utterance-queue/ResponsePacket';
 import ResponsePatternCollection from '../../../utterance-queue/ResponsePatternCollection';

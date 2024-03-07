@@ -7,8 +7,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { Renderer, scenery, WebGLNode, WebGLSelfDrawable } from '../../imports.js';
+import Poolable from '../../../phet-core/Poolable';
+import { Renderer, scenery, WebGLNode, WebGLSelfDrawable } from '../../imports';
 
 class WebGLNodeDrawable extends WebGLSelfDrawable {
   /**
@@ -18,11 +18,12 @@ class WebGLNodeDrawable extends WebGLSelfDrawable {
    * @param {number} renderer
    * @param {Instance} instance
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer, instance );
+  initialize(renderer, instance) {
+    super.initialize(renderer, instance);
 
     // @private {function}
-    this.contextChangeListener = this.contextChangeListener || this.onWebGLContextChange.bind( this );
+    this.contextChangeListener =
+      this.contextChangeListener || this.onWebGLContextChange.bind(this);
 
     // @private {*} - Will be set to whatever type node.painterType is.
     this.painter = null;
@@ -36,7 +37,7 @@ class WebGLNodeDrawable extends WebGLSelfDrawable {
    */
   createPainter() {
     const PainterType = this.node.painterType;
-    return new PainterType( this.webGLBlock.gl, this.node );
+    return new PainterType(this.webGLBlock.gl, this.node);
   }
 
   /**
@@ -44,7 +45,7 @@ class WebGLNodeDrawable extends WebGLSelfDrawable {
    * @public
    */
   onWebGLContextChange() {
-    //TODO: Should a function be added for "disposeNonWebGL"? https://github.com/phetsims/scenery/issues/1581
+    // TODO: Should a function be added for "disposeNonWebGL"? https://github.com/phetsims/scenery/issues/1581
 
     // Create the new painter
     this.painter = this.createPainter();
@@ -55,13 +56,13 @@ class WebGLNodeDrawable extends WebGLSelfDrawable {
    *
    * @param {WebGLBlock} webGLBlock
    */
-  onAddToBlock( webGLBlock ) {
+  onAddToBlock(webGLBlock) {
     // @private {WebGLBlock}
     this.webGLBlock = webGLBlock;
 
     this.painter = this.createPainter();
 
-    webGLBlock.glChangedEmitter.addListener( this.contextChangeListener );
+    webGLBlock.glChangedEmitter.addListener(this.contextChangeListener);
   }
 
   /**
@@ -69,8 +70,8 @@ class WebGLNodeDrawable extends WebGLSelfDrawable {
    *
    * @param {WebGLBlock} webGLBlock
    */
-  onRemoveFromBlock( webGLBlock ) {
-    webGLBlock.glChangedEmitter.removeListener( this.contextChangeListener );
+  onRemoveFromBlock(webGLBlock) {
+    webGLBlock.glChangedEmitter.removeListener(this.contextChangeListener);
   }
 
   /**
@@ -82,11 +83,21 @@ class WebGLNodeDrawable extends WebGLSelfDrawable {
     // we have a precompute need
     const matrix = this.instance.relativeTransform.matrix;
 
-    const painted = this.painter.paint( matrix, this.webGLBlock.projectionMatrix );
+    const painted = this.painter.paint(
+      matrix,
+      this.webGLBlock.projectionMatrix
+    );
 
-    assert && assert( painted === WebGLNode.PAINTED_SOMETHING || painted === WebGLNode.PAINTED_NOTHING );
-    assert && assert( WebGLNode.PAINTED_NOTHING === 0 && WebGLNode.PAINTED_SOMETHING === 1,
-      'Ensure we can pass the value through directly to indicate whether draw calls were made' );
+    assert &&
+      assert(
+        painted === WebGLNode.PAINTED_SOMETHING ||
+          painted === WebGLNode.PAINTED_NOTHING
+      );
+    assert &&
+      assert(
+        WebGLNode.PAINTED_NOTHING === 0 && WebGLNode.PAINTED_SOMETHING === 1,
+        'Ensure we can pass the value through directly to indicate whether draw calls were made'
+      );
 
     return painted;
   }
@@ -100,7 +111,7 @@ class WebGLNodeDrawable extends WebGLSelfDrawable {
     this.painter.dispose();
     this.painter = null;
 
-    if ( this.webGLBlock ) {
+    if (this.webGLBlock) {
       this.webGLBlock = null;
     }
 
@@ -129,8 +140,8 @@ class WebGLNodeDrawable extends WebGLSelfDrawable {
 // We use a custom renderer for the needed flexibility
 WebGLNodeDrawable.prototype.webglRenderer = Renderer.webglCustom;
 
-scenery.register( 'WebGLNodeDrawable', WebGLNodeDrawable );
+scenery.register('WebGLNodeDrawable', WebGLNodeDrawable);
 
-Poolable.mixInto( WebGLNodeDrawable );
+Poolable.mixInto(WebGLNodeDrawable);
 
 export default WebGLNodeDrawable;

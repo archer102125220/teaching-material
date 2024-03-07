@@ -7,6 +7,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import axon from './axon';
 // @ts-expect-error
 import IntentionalAny from '../phet-core/types/IntentionalAny';

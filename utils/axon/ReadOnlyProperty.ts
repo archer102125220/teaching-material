@@ -6,6 +6,8 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
+import _ from 'lodash';
+
 import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
 import Tandem, { DYNAMIC_ARCHETYPE_NAME } from '../tandem/Tandem';
 import ArrayIO from '../tandem/types/ArrayIO';
@@ -193,7 +195,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
     this.tinyProperty = new TinyProperty(value, null, options.hasListenerOrderDependencies);
 
     // Since we are already in the heavyweight Property, we always assign TinyProperty.useDeepEquality for clarity.
-    
+
     // @ts-expect-error
     this.tinyProperty.useDeepEquality = options.valueComparisonStrategy && options.valueComparisonStrategy === 'equalsFunction';
     this.notifying = false;

@@ -9,6 +9,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import CallbackTimer from '../../axon/CallbackTimer';
 import Emitter from '../../axon/Emitter';
 import type TEmitter from '../../axon/TEmitter';

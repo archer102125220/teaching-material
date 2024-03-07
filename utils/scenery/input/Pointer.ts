@@ -22,6 +22,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import BooleanProperty from '../../axon/BooleanProperty';
 import type TProperty from '../../axon/TProperty';
 import Vector2 from '../../dot/Vector2';

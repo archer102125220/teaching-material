@@ -8,6 +8,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Vector2 from '../../dot/Vector2';
 import { ColorDef, Gradient, scenery, SVGBlock, SVGLinearGradient } from '../imports';
 

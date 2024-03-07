@@ -6,6 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
 import { LayoutCell, LayoutConstraint, LayoutProxy, Node, scenery } from '../../imports';
 

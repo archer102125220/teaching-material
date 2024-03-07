@@ -9,6 +9,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import validate from '../../axon/validate';
 import Validation, { type Validator } from '../../axon/Validation';
 import optionize from '../../phet-core/optionize';

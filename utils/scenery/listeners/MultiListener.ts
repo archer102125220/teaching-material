@@ -21,6 +21,8 @@
  * @author Jesse Greenberg
  */
 
+import _ from 'lodash';
+
 import Property from '../../axon/Property';
 import Matrix from '../../dot/Matrix';
 import Matrix3 from '../../dot/Matrix3';

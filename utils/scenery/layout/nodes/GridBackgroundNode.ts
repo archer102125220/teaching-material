@@ -9,6 +9,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
 import optionize from '../../../phet-core/optionize';
 import { GridCell, GridConstraint, Node, type NodeOptions, Rectangle, scenery, type TPaint } from '../../imports';

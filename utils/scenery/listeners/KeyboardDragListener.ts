@@ -20,6 +20,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import PhetioAction from '../../tandem/PhetioAction';
 import EnabledComponent, { type EnabledComponentOptions } from '../../axon/EnabledComponent';
 import Emitter from '../../axon/Emitter';

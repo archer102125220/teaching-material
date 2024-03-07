@@ -5,6 +5,9 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
+
+import _ from 'lodash';
+
 import Matrix3 from '../../../dot/Matrix3';
 import inheritance from '../../../phet-core/inheritance';
 import memoize from '../../../phet-core/memoize';

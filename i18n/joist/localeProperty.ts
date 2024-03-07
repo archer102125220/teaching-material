@@ -6,6 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Property from '@/utils/axon/Property';
 import localeInfoModule from '@/assets/chipper/localeInfoModule';
 import StringUtils from '@/utils/phetcommon/util/StringUtils';

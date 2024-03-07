@@ -7,6 +7,7 @@
  */
 import _ from 'lodash';
 import QUnit from 'qunit';
+
 import QueryStringMachine from '@/utils/query-string-machine/QueryStringMachine';
 import Tandem from '../../tandem/Tandem';
 

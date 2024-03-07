@@ -6,9 +6,16 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import cleanArray from '../../../phet-core/js/cleanArray.js';
-import Poolable from '../../../phet-core/js/Poolable.js';
-import { CountMap, FittedBlock, scenery, SVGGroup, svgns, Utils } from '../imports.js';
+import cleanArray from '../../phet-core/cleanArray';
+import Poolable from '../../phet-core/Poolable';
+import {
+  CountMap,
+  FittedBlock,
+  scenery,
+  SVGGroup,
+  svgns,
+  Utils
+} from '../imports';
 
 class SVGBlock extends FittedBlock {
   /**
@@ -19,10 +26,15 @@ class SVGBlock extends FittedBlock {
    * @param {Instance} transformRootInstance - TODO: Documentation https://github.com/phetsims/scenery/issues/1581
    * @param {Instance} filterRootInstance - TODO: Documentation
    */
-  constructor( display, renderer, transformRootInstance, filterRootInstance ) {
+  constructor(display, renderer, transformRootInstance, filterRootInstance) {
     super();
 
-    this.initialize( display, renderer, transformRootInstance, filterRootInstance );
+    this.initialize(
+      display,
+      renderer,
+      transformRootInstance,
+      filterRootInstance
+    );
   }
 
   /**
@@ -34,70 +46,78 @@ class SVGBlock extends FittedBlock {
    * @param {Instance} filterRootInstance - TODO: Documentation
    * @returns {FittedBlock}
    */
-  initialize( display, renderer, transformRootInstance, filterRootInstance ) {
-    super.initialize( display, renderer, transformRootInstance, FittedBlock.COMMON_ANCESTOR );
+  initialize(display, renderer, transformRootInstance, filterRootInstance) {
+    super.initialize(
+      display,
+      renderer,
+      transformRootInstance,
+      FittedBlock.COMMON_ANCESTOR
+    );
 
     // @public {Instance}
     this.filterRootInstance = filterRootInstance;
 
     // @private {Array.<SVGGradient>}
-    this.dirtyGradients = cleanArray( this.dirtyGradients );
+    this.dirtyGradients = cleanArray(this.dirtyGradients);
 
     // @private {Array.<SVGGroup>}
-    this.dirtyGroups = cleanArray( this.dirtyGroups );
+    this.dirtyGroups = cleanArray(this.dirtyGroups);
 
     // @private {Array.<Drawable>}
-    this.dirtyDrawables = cleanArray( this.dirtyDrawables );
+    this.dirtyDrawables = cleanArray(this.dirtyDrawables);
 
     // @private {CountMap.<Paint,SVGGradient|SVGPattern>}
-    this.paintCountMap = this.paintCountMap || new CountMap(
-      this.onAddPaint.bind( this ),
-      this.onRemovePaint.bind( this )
-    );
+    this.paintCountMap =
+      this.paintCountMap ||
+      new CountMap(this.onAddPaint.bind(this), this.onRemovePaint.bind(this));
 
     // @private {boolean} - Tracks whether we have no dirty objects that would require cleanup or releases
     this.areReferencesReduced = true;
 
-    if ( !this.domElement ) {
-
+    if (!this.domElement) {
       // main SVG element
-      this.svg = document.createElementNS( svgns, 'svg' );
+      this.svg = document.createElementNS(svgns, 'svg');
       this.svg.style.position = 'absolute';
       this.svg.style.left = '0';
       this.svg.style.top = '0';
 
       // pdom - make sure the element is not focusable (it is focusable by default in IE11 full screen mode)
-      this.svg.setAttribute( 'focusable', false );
+      this.svg.setAttribute('focusable', false);
 
-      //OHTWO TODO: why would we clip the individual layers also? Seems like a potentially useless performance loss https://github.com/phetsims/scenery/issues/1581
+      // OHTWO TODO: why would we clip the individual layers also? Seems like a potentially useless performance loss https://github.com/phetsims/scenery/issues/1581
       // this.svg.style.clip = 'rect(0px,' + width + 'px,' + height + 'px,0px)';
-      this.svg.style[ 'pointer-events' ] = 'none';
+      this.svg.style['pointer-events'] = 'none';
 
       // @public {SVGDefsElement} - the <defs> block that we will be stuffing gradients and patterns into
-      this.defs = document.createElementNS( svgns, 'defs' );
-      this.svg.appendChild( this.defs );
+      this.defs = document.createElementNS(svgns, 'defs');
+      this.svg.appendChild(this.defs);
 
-      this.baseTransformGroup = document.createElementNS( svgns, 'g' );
-      this.svg.appendChild( this.baseTransformGroup );
+      this.baseTransformGroup = document.createElementNS(svgns, 'g');
+      this.svg.appendChild(this.baseTransformGroup);
 
       this.domElement = this.svg;
     }
 
     // reset what layer fitting can do
-    Utils.prepareForTransform( this.svg ); // Apply CSS needed for future CSS transforms to work properly.
+    Utils.prepareForTransform(this.svg); // Apply CSS needed for future CSS transforms to work properly.
 
-    Utils.unsetTransform( this.svg ); // clear out any transforms that could have been previously applied
-    this.baseTransformGroup.setAttribute( 'transform', '' ); // no base transform
+    Utils.unsetTransform(this.svg); // clear out any transforms that could have been previously applied
+    this.baseTransformGroup.setAttribute('transform', ''); // no base transform
 
-    const instanceClosestToRoot = transformRootInstance.trail.nodes.length > filterRootInstance.trail.nodes.length ?
-                                  filterRootInstance : transformRootInstance;
+    const instanceClosestToRoot =
+      transformRootInstance.trail.nodes.length >
+      filterRootInstance.trail.nodes.length
+        ? filterRootInstance
+        : transformRootInstance;
 
-    this.rootGroup = SVGGroup.createFromPool( this, instanceClosestToRoot, null );
-    this.baseTransformGroup.appendChild( this.rootGroup.svgGroup );
+    this.rootGroup = SVGGroup.createFromPool(this, instanceClosestToRoot, null);
+    this.baseTransformGroup.appendChild(this.rootGroup.svgGroup);
 
     // TODO: dirty list of nodes (each should go dirty only once, easier than scanning all?) https://github.com/phetsims/scenery/issues/1581
 
-    sceneryLog && sceneryLog.SVGBlock && sceneryLog.SVGBlock( `initialized #${this.id}` );
+    sceneryLog &&
+      sceneryLog.SVGBlock &&
+      sceneryLog.SVGBlock(`initialized #${this.id}`);
 
     return this;
   }
@@ -109,10 +129,10 @@ class SVGBlock extends FittedBlock {
    * @param {Paint} paint
    * @returns {SVGGradient|SVGPattern}
    */
-  onAddPaint( paint ) {
-    const svgPaint = paint.createSVGPaint( this );
-    svgPaint.definition.setAttribute( 'id', `${paint.id}-${this.id}` );
-    this.defs.appendChild( svgPaint.definition );
+  onAddPaint(paint) {
+    const svgPaint = paint.createSVGPaint(this);
+    svgPaint.definition.setAttribute('id', `${paint.id}-${this.id}`);
+    this.defs.appendChild(svgPaint.definition);
 
     return svgPaint;
   }
@@ -124,8 +144,8 @@ class SVGBlock extends FittedBlock {
    * @param {Paint} paint
    * @param {SVGGradient|SVGPattern} svgPaint
    */
-  onRemovePaint( paint, svgPaint ) {
-    this.defs.removeChild( svgPaint.definition );
+  onRemovePaint(paint, svgPaint) {
+    this.defs.removeChild(svgPaint.definition);
     svgPaint.dispose();
   }
 
@@ -136,12 +156,14 @@ class SVGBlock extends FittedBlock {
    *
    * @param {Paint} paint
    */
-  incrementPaint( paint ) {
-    assert && assert( paint.isPaint );
+  incrementPaint(paint) {
+    assert && assert(paint.isPaint);
 
-    sceneryLog && sceneryLog.Paints && sceneryLog.Paints( `incrementPaint ${this} ${paint}` );
+    sceneryLog &&
+      sceneryLog.Paints &&
+      sceneryLog.Paints(`incrementPaint ${this} ${paint}`);
 
-    this.paintCountMap.increment( paint );
+    this.paintCountMap.increment(paint);
   }
 
   /*
@@ -151,12 +173,14 @@ class SVGBlock extends FittedBlock {
    *
    * @param {Paint} paint
    */
-  decrementPaint( paint ) {
-    assert && assert( paint.isPaint );
+  decrementPaint(paint) {
+    assert && assert(paint.isPaint);
 
-    sceneryLog && sceneryLog.Paints && sceneryLog.Paints( `decrementPaint ${this} ${paint}` );
+    sceneryLog &&
+      sceneryLog.Paints &&
+      sceneryLog.Paints(`decrementPaint ${this} ${paint}`);
 
-    this.paintCountMap.decrement( paint );
+    this.paintCountMap.decrement(paint);
   }
 
   /**
@@ -164,8 +188,8 @@ class SVGBlock extends FittedBlock {
    *
    * @param {SVGGradient} gradient
    */
-  markDirtyGradient( gradient ) {
-    this.dirtyGradients.push( gradient );
+  markDirtyGradient(gradient) {
+    this.dirtyGradients.push(gradient);
     this.markDirty();
   }
 
@@ -174,12 +198,12 @@ class SVGBlock extends FittedBlock {
    *
    * @param {Block} block
    */
-  markDirtyGroup( block ) {
-    this.dirtyGroups.push( block );
+  markDirtyGroup(block) {
+    this.dirtyGroups.push(block);
     this.markDirty();
 
-    if ( this.areReferencesReduced ) {
-      this.display.markForReducedReferences( this );
+    if (this.areReferencesReduced) {
+      this.display.markForReducedReferences(this);
     }
     this.areReferencesReduced = false;
   }
@@ -189,13 +213,17 @@ class SVGBlock extends FittedBlock {
    *
    * @param {Drawable} drawable
    */
-  markDirtyDrawable( drawable ) {
-    sceneryLog && sceneryLog.dirty && sceneryLog.dirty( `markDirtyDrawable on SVGBlock#${this.id} with ${drawable.toString()}` );
-    this.dirtyDrawables.push( drawable );
+  markDirtyDrawable(drawable) {
+    sceneryLog &&
+      sceneryLog.dirty &&
+      sceneryLog.dirty(
+        `markDirtyDrawable on SVGBlock#${this.id} with ${drawable.toString()}`
+      );
+    this.dirtyDrawables.push(drawable);
     this.markDirty();
 
-    if ( this.areReferencesReduced ) {
-      this.display.markForReducedReferences( this );
+    if (this.areReferencesReduced) {
+      this.display.markForReducedReferences(this);
     }
     this.areReferencesReduced = false;
   }
@@ -205,14 +233,16 @@ class SVGBlock extends FittedBlock {
    * @override
    */
   setSizeFullDisplay() {
-    sceneryLog && sceneryLog.SVGBlock && sceneryLog.SVGBlock( `setSizeFullDisplay #${this.id}` );
+    sceneryLog &&
+      sceneryLog.SVGBlock &&
+      sceneryLog.SVGBlock(`setSizeFullDisplay #${this.id}`);
 
-    this.baseTransformGroup.removeAttribute( 'transform' );
-    Utils.unsetTransform( this.svg );
+    this.baseTransformGroup.removeAttribute('transform');
+    Utils.unsetTransform(this.svg);
 
     const size = this.display.getSize();
-    this.svg.setAttribute( 'width', size.width );
-    this.svg.setAttribute( 'height', size.height );
+    this.svg.setAttribute('width', size.width);
+    this.svg.setAttribute('height', size.height);
   }
 
   /**
@@ -220,18 +250,23 @@ class SVGBlock extends FittedBlock {
    * @override
    */
   setSizeFitBounds() {
-    sceneryLog && sceneryLog.SVGBlock && sceneryLog.SVGBlock( `setSizeFitBounds #${this.id} with ${this.fitBounds.toString()}` );
+    sceneryLog &&
+      sceneryLog.SVGBlock &&
+      sceneryLog.SVGBlock(
+        `setSizeFitBounds #${this.id} with ${this.fitBounds.toString()}`
+      );
 
     const x = this.fitBounds.minX;
     const y = this.fitBounds.minY;
 
-    assert && assert( isFinite( x ) && isFinite( y ), 'Invalid SVG transform for SVGBlock' );
-    assert && assert( this.fitBounds.isValid(), 'Invalid fitBounds' );
+    assert &&
+      assert(isFinite(x) && isFinite(y), 'Invalid SVG transform for SVGBlock');
+    assert && assert(this.fitBounds.isValid(), 'Invalid fitBounds');
 
-    this.baseTransformGroup.setAttribute( 'transform', `translate(${-x},${-y})` ); // subtract off so we have a tight fit
-    Utils.setTransform( `matrix(1,0,0,1,${x},${y})`, this.svg ); // reapply the translation as a CSS transform
-    this.svg.setAttribute( 'width', this.fitBounds.width );
-    this.svg.setAttribute( 'height', this.fitBounds.height );
+    this.baseTransformGroup.setAttribute('transform', `translate(${-x},${-y})`); // subtract off so we have a tight fit
+    Utils.setTransform(`matrix(1,0,0,1,${x},${y})`, this.svg); // reapply the translation as a CSS transform
+    this.svg.setAttribute('width', this.fitBounds.width);
+    this.svg.setAttribute('height', this.fitBounds.height);
   }
 
   /**
@@ -244,31 +279,33 @@ class SVGBlock extends FittedBlock {
    */
   update() {
     // See if we need to actually update things (will bail out if we are not dirty, or if we've been disposed)
-    if ( !super.update() ) {
+    if (!super.update()) {
       return false;
     }
 
-    sceneryLog && sceneryLog.SVGBlock && sceneryLog.SVGBlock( `update #${this.id}` );
+    sceneryLog &&
+      sceneryLog.SVGBlock &&
+      sceneryLog.SVGBlock(`update #${this.id}`);
 
-    //OHTWO TODO: call here! https://github.com/phetsims/scenery/issues/1581
+    // OHTWO TODO: call here! https://github.com/phetsims/scenery/issues/1581
     // TODO: What does the above TODO mean? https://github.com/phetsims/scenery/issues/1581
-    while ( this.dirtyGroups.length ) {
+    while (this.dirtyGroups.length) {
       const group = this.dirtyGroups.pop();
 
       // if this group has been disposed or moved to another block, don't mess with it
-      if ( group.block === this ) {
+      if (group.block === this) {
         group.update();
       }
     }
-    while ( this.dirtyGradients.length ) {
+    while (this.dirtyGradients.length) {
       this.dirtyGradients.pop().update();
     }
-    while ( this.dirtyDrawables.length ) {
+    while (this.dirtyDrawables.length) {
       const drawable = this.dirtyDrawables.pop();
 
       // if this drawable has been disposed or moved to another block, don't mess with it
       // TODO: If it was moved to another block, why might it still appear in our list?  Shouldn't that be an assertion check? https://github.com/phetsims/scenery/issues/1581
-      if ( drawable.parentDrawable === this ) {
+      if (drawable.parentDrawable === this) {
         drawable.update();
       }
     }
@@ -290,7 +327,7 @@ class SVGBlock extends FittedBlock {
    */
   reduceReferences() {
     // no-op if we had an update first
-    if ( this.areReferencesReduced ) {
+    if (this.areReferencesReduced) {
       return;
     }
 
@@ -300,14 +337,14 @@ class SVGBlock extends FittedBlock {
     let inspectionIndex = 0;
     let replacementIndex = 0;
 
-    while ( inspectionIndex < this.dirtyGroups.length ) {
-      const group = this.dirtyGroups[ inspectionIndex ];
+    while (inspectionIndex < this.dirtyGroups.length) {
+      const group = this.dirtyGroups[inspectionIndex];
 
       // Only keep things that reference our block.
-      if ( group.block === this ) {
+      if (group.block === this) {
         // If the indices are the same, don't do the operation
-        if ( replacementIndex !== inspectionIndex ) {
-          this.dirtyGroups[ replacementIndex ] = group;
+        if (replacementIndex !== inspectionIndex) {
+          this.dirtyGroups[replacementIndex] = group;
         }
         replacementIndex++;
       }
@@ -316,7 +353,7 @@ class SVGBlock extends FittedBlock {
     }
 
     // Our array should be only that length now
-    while ( this.dirtyGroups.length > replacementIndex ) {
+    while (this.dirtyGroups.length > replacementIndex) {
       this.dirtyGroups.pop();
     }
 
@@ -324,14 +361,14 @@ class SVGBlock extends FittedBlock {
     inspectionIndex = 0;
     replacementIndex = 0;
 
-    while ( inspectionIndex < this.dirtyDrawables.length ) {
-      const drawable = this.dirtyDrawables[ inspectionIndex ];
+    while (inspectionIndex < this.dirtyDrawables.length) {
+      const drawable = this.dirtyDrawables[inspectionIndex];
 
       // Only keep things that reference our block as the parentDrawable.
-      if ( drawable.parentDrawable === this ) {
+      if (drawable.parentDrawable === this) {
         // If the indices are the same, don't do the operation
-        if ( replacementIndex !== inspectionIndex ) {
-          this.dirtyDrawables[ replacementIndex ] = drawable;
+        if (replacementIndex !== inspectionIndex) {
+          this.dirtyDrawables[replacementIndex] = drawable;
         }
         replacementIndex++;
       }
@@ -340,7 +377,7 @@ class SVGBlock extends FittedBlock {
     }
 
     // Our array should be only that length now
-    while ( this.dirtyDrawables.length > replacementIndex ) {
+    while (this.dirtyDrawables.length > replacementIndex) {
       this.dirtyDrawables.pop();
     }
 
@@ -352,28 +389,30 @@ class SVGBlock extends FittedBlock {
    * @public
    */
   dispose() {
-    sceneryLog && sceneryLog.SVGBlock && sceneryLog.SVGBlock( `dispose #${this.id}` );
+    sceneryLog &&
+      sceneryLog.SVGBlock &&
+      sceneryLog.SVGBlock(`dispose #${this.id}`);
 
     // make it take up zero area, so that we don't use up excess memory
-    this.svg.setAttribute( 'width', '0' );
-    this.svg.setAttribute( 'height', '0' );
+    this.svg.setAttribute('width', '0');
+    this.svg.setAttribute('height', '0');
 
     // clear references
     this.filterRootInstance = null;
 
-    cleanArray( this.dirtyGradients );
-    cleanArray( this.dirtyGroups );
-    cleanArray( this.dirtyDrawables );
+    cleanArray(this.dirtyGradients);
+    cleanArray(this.dirtyGroups);
+    cleanArray(this.dirtyDrawables);
 
     this.paintCountMap.clear();
 
-    this.baseTransformGroup.removeChild( this.rootGroup.svgGroup );
+    this.baseTransformGroup.removeChild(this.rootGroup.svgGroup);
     this.rootGroup.dispose();
     this.rootGroup = null;
 
     // since we may not properly remove all defs yet
-    while ( this.defs.childNodes.length ) {
-      this.defs.removeChild( this.defs.childNodes[ 0 ] );
+    while (this.defs.childNodes.length) {
+      this.defs.removeChild(this.defs.childNodes[0]);
     }
 
     super.dispose();
@@ -385,13 +424,15 @@ class SVGBlock extends FittedBlock {
    *
    * @param {Drawable} drawable
    */
-  addDrawable( drawable ) {
-    sceneryLog && sceneryLog.SVGBlock && sceneryLog.SVGBlock( `#${this.id}.addDrawable ${drawable.toString()}` );
+  addDrawable(drawable) {
+    sceneryLog &&
+      sceneryLog.SVGBlock &&
+      sceneryLog.SVGBlock(`#${this.id}.addDrawable ${drawable.toString()}`);
 
-    super.addDrawable( drawable );
+    super.addDrawable(drawable);
 
-    SVGGroup.addDrawable( this, drawable );
-    drawable.updateSVGBlock( this );
+    SVGGroup.addDrawable(this, drawable);
+    drawable.updateSVGBlock(this);
   }
 
   /**
@@ -400,12 +441,14 @@ class SVGBlock extends FittedBlock {
    *
    * @param {Drawable} drawable
    */
-  removeDrawable( drawable ) {
-    sceneryLog && sceneryLog.SVGBlock && sceneryLog.SVGBlock( `#${this.id}.removeDrawable ${drawable.toString()}` );
+  removeDrawable(drawable) {
+    sceneryLog &&
+      sceneryLog.SVGBlock &&
+      sceneryLog.SVGBlock(`#${this.id}.removeDrawable ${drawable.toString()}`);
 
-    SVGGroup.removeDrawable( this, drawable );
+    SVGGroup.removeDrawable(this, drawable);
 
-    super.removeDrawable( drawable );
+    super.removeDrawable(drawable);
 
     // NOTE: we don't unset the drawable's defs here, since it will either be disposed (will clear it)
     // or will be added to another SVGBlock (which will overwrite it)
@@ -418,10 +461,14 @@ class SVGBlock extends FittedBlock {
    * @param {Drawable} firstDrawable
    * @param {Drawable} lastDrawable
    */
-  onIntervalChange( firstDrawable, lastDrawable ) {
-    sceneryLog && sceneryLog.SVGBlock && sceneryLog.SVGBlock( `#${this.id}.onIntervalChange ${firstDrawable.toString()} to ${lastDrawable.toString()}` );
+  onIntervalChange(firstDrawable, lastDrawable) {
+    sceneryLog &&
+      sceneryLog.SVGBlock &&
+      sceneryLog.SVGBlock(
+        `#${this.id}.onIntervalChange ${firstDrawable.toString()} to ${lastDrawable.toString()}`
+      );
 
-    super.onIntervalChange( firstDrawable, lastDrawable );
+    super.onIntervalChange(firstDrawable, lastDrawable);
   }
 
   /**
@@ -431,12 +478,12 @@ class SVGBlock extends FittedBlock {
    * @returns {string}
    */
   toString() {
-    return `SVGBlock#${this.id}-${FittedBlock.fitString[ this.fit ]}`;
+    return `SVGBlock#${this.id}-${FittedBlock.fitString[this.fit]}`;
   }
 }
 
-scenery.register( 'SVGBlock', SVGBlock );
+scenery.register('SVGBlock', SVGBlock);
 
-Poolable.mixInto( SVGBlock );
+Poolable.mixInto(SVGBlock);
 
 export default SVGBlock;

@@ -7,19 +7,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
-import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
-import { ReadingBlock, ReadingBlockHighlight, ReadingBlockOptions, scenery, Text, TextOptions } from '../../../imports.js';
+import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
+import optionize, { type EmptySelfOptions } from '../../../../phet-core/optionize';
+import { ReadingBlock, ReadingBlockHighlight, type ReadingBlockOptions, scenery, Text, type TextOptions } from '../../../imports';
 
 type SelfOptions = EmptySelfOptions;
 type ParentOptions = ReadingBlockOptions & TextOptions;
 export type VoicingTextOptions = SelfOptions & ParentOptions;
 
-class VoicingText extends ReadingBlock( Text ) {
+class VoicingText extends ReadingBlock(Text) {
 
-  public constructor( text: string | TReadOnlyProperty<string>, providedOptions?: VoicingTextOptions ) {
+  public constructor(text: string | TReadOnlyProperty<string>, providedOptions?: VoicingTextOptions) {
 
-    const options = optionize<VoicingTextOptions, SelfOptions, ParentOptions>()( {
+    const options = optionize<VoicingTextOptions, SelfOptions, ParentOptions>()({
 
       // {string|null} - if provided, alternative text that will be spoken that is different from the
       // visually displayed text
@@ -28,16 +28,16 @@ class VoicingText extends ReadingBlock( Text ) {
       // pdom
       tagName: 'p',
       innerContent: text
-    }, providedOptions );
+    }, providedOptions);
 
-    super( text );
+    super(text);
 
     // unique highlight for non-interactive components
-    this.focusHighlight = new ReadingBlockHighlight( this );
+    this.focusHighlight = new ReadingBlockHighlight(this);
 
-    this.mutate( options );
+    this.mutate(options);
   }
 }
 
-scenery.register( 'VoicingText', VoicingText );
+scenery.register('VoicingText', VoicingText);
 export default VoicingText;

@@ -6,6 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import arrayRemove from '../../phet-core/arrayRemove';
 import platform from '../../phet-core/platform';
 import {

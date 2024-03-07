@@ -7,7 +7,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { scenery, SelfDrawable } from '../imports.js';
+import { scenery, SelfDrawable } from '../imports';
 
 class CanvasSelfDrawable extends SelfDrawable {
   /**
@@ -16,13 +16,14 @@ class CanvasSelfDrawable extends SelfDrawable {
    * @param {number} renderer
    * @param {Instance} instance
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer, instance );
+  initialize(renderer, instance) {
+    super.initialize(renderer, instance);
 
     // @private {function} - this is the same across lifecycles
-    this.transformListener = this.transformListener || this.markTransformDirty.bind( this );
+    this.transformListener =
+      this.transformListener || this.markTransformDirty.bind(this);
 
-    instance.relativeTransform.addListener( this.transformListener ); // when our relative tranform changes, notify us in the pre-repaint phase
+    instance.relativeTransform.addListener(this.transformListener); // when our relative tranform changes, notify us in the pre-repaint phase
     instance.relativeTransform.addPrecompute(); // trigger precomputation of the relative transform, since we will always need it when it is updated
   }
 
@@ -58,13 +59,13 @@ class CanvasSelfDrawable extends SelfDrawable {
    * @override
    */
   dispose() {
-    this.instance.relativeTransform.removeListener( this.transformListener );
+    this.instance.relativeTransform.removeListener(this.transformListener);
     this.instance.relativeTransform.removePrecompute();
 
     super.dispose();
   }
 }
 
-scenery.register( 'CanvasSelfDrawable', CanvasSelfDrawable );
+scenery.register('CanvasSelfDrawable', CanvasSelfDrawable);
 
 export default CanvasSelfDrawable;

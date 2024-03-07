@@ -1,5 +1,7 @@
 // Copyright 2021-2024, University of Colorado Boulder
 
+import _ from 'lodash';
+
 import tandemNamespace from '../tandemNamespace';
 import IOType from './IOType';
 import StateSchema from './StateSchema';

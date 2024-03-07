@@ -6,6 +6,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import Tandem from './Tandem';
 import tandemNamespace from './tandemNamespace';
 import IOType from './types/IOType';

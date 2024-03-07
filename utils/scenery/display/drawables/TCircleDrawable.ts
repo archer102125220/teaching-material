@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { TPathDrawable } from '../../imports.js';
+import { type TPathDrawable } from '../../imports';
 
 type TCircleDrawable = {
   markDirtyRadius(): void;

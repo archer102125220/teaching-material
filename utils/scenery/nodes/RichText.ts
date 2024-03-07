@@ -58,6 +58,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import 'himalaya';
 import type TProperty from '../../axon/TProperty';
 import { type PropertyOptions } from '../../axon/Property';

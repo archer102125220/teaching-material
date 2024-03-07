@@ -6,13 +6,18 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { CircleStatefulDrawable, scenery, svgns, SVGSelfDrawable } from '../../imports.js';
+import Poolable from '../../../phet-core/Poolable';
+import {
+  CircleStatefulDrawable,
+  scenery,
+  svgns,
+  SVGSelfDrawable
+} from '../../imports';
 
 // TODO: change this based on memory and performance characteristics of the platform https://github.com/phetsims/scenery/issues/1581
 const keepSVGCircleElements = true; // whether we should pool SVG elements for the SVG rendering states, or whether we should free them when possible for memory
 
-class CircleSVGDrawable extends CircleStatefulDrawable( SVGSelfDrawable ) {
+class CircleSVGDrawable extends CircleStatefulDrawable(SVGSelfDrawable) {
   /**
    * @public
    * @override
@@ -20,13 +25,13 @@ class CircleSVGDrawable extends CircleStatefulDrawable( SVGSelfDrawable ) {
    * @param {number} renderer
    * @param {Instance} instance
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer, instance, true, keepSVGCircleElements ); // usesPaint: true
+  initialize(renderer, instance) {
+    super.initialize(renderer, instance, true, keepSVGCircleElements); // usesPaint: true
 
     // @protected {SVGCircleElement} - Sole SVG element for this drawable, implementing API for SVGSelfDrawable
-    this.svgElement = this.svgElement || document.createElementNS( svgns, 'circle' );
+    this.svgElement =
+      this.svgElement || document.createElementNS(svgns, 'circle');
   }
-
 
   /**
    * Updates the SVG elements so that they will appear like the current node's representation.
@@ -37,17 +42,17 @@ class CircleSVGDrawable extends CircleStatefulDrawable( SVGSelfDrawable ) {
   updateSVGSelf() {
     const circle = this.svgElement;
 
-    if ( this.dirtyRadius ) {
-      circle.setAttribute( 'r', this.node._radius );
+    if (this.dirtyRadius) {
+      circle.setAttribute('r', this.node._radius);
     }
 
     // Apply any fill/stroke changes to our element.
-    this.updateFillStrokeStyle( circle );
+    this.updateFillStrokeStyle(circle);
   }
 }
 
-scenery.register( 'CircleSVGDrawable', CircleSVGDrawable );
+scenery.register('CircleSVGDrawable', CircleSVGDrawable);
 
-Poolable.mixInto( CircleSVGDrawable );
+Poolable.mixInto(CircleSVGDrawable);
 
 export default CircleSVGDrawable;

@@ -17,8 +17,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../phet-core/js/Poolable.js';
-import { Drawable, scenery } from '../imports.js';
+import Poolable from '../../phet-core/Poolable';
+import { Drawable, scenery } from '../imports';
 
 class ChangeInterval {
   /**
@@ -27,8 +27,8 @@ class ChangeInterval {
    * @param {Drawable} drawableBefore
    * @param {Drawable} drawableAfter
    */
-  constructor( drawableBefore, drawableAfter ) {
-    this.initialize( drawableBefore, drawableAfter );
+  constructor(drawableBefore, drawableAfter) {
+    this.initialize(drawableBefore, drawableAfter);
   }
 
   /**
@@ -37,17 +37,23 @@ class ChangeInterval {
    * @param {Drawable} drawableBefore
    * @param {Drawable} drawableAfter
    */
-  initialize( drawableBefore, drawableAfter ) {
-    assert && assert( drawableBefore === null || ( drawableBefore instanceof Drawable ),
-      'drawableBefore can either be null to indicate that there is no un-changed drawable before our changes, ' +
-      'or it can reference an un-changed drawable' );
-    assert && assert( drawableAfter === null || ( drawableAfter instanceof Drawable ),
-      'drawableAfter can either be null to indicate that there is no un-changed drawable after our changes, ' +
-      'or it can reference an un-changed drawable' );
+  initialize(drawableBefore, drawableAfter) {
+    assert &&
+      assert(
+        drawableBefore === null || drawableBefore instanceof Drawable,
+        'drawableBefore can either be null to indicate that there is no un-changed drawable before our changes, ' +
+          'or it can reference an un-changed drawable'
+      );
+    assert &&
+      assert(
+        drawableAfter === null || drawableAfter instanceof Drawable,
+        'drawableAfter can either be null to indicate that there is no un-changed drawable after our changes, ' +
+          'or it can reference an un-changed drawable'
+      );
 
-    /*---------------------------------------------------------------------------*
+    /* ---------------------------------------------------------------------------*
      * All @public properties
-     *----------------------------------------------------------------------------*/
+     * ---------------------------------------------------------------------------- */
 
     // @public {ChangeInterval|null}, singly-linked list
     this.nextChangeInterval = null;
@@ -88,38 +94,51 @@ class ChangeInterval {
   constrict() {
     let changed = false;
 
-    if ( this.isEmpty() ) { return true; }
+    if (this.isEmpty()) {
+      return true;
+    }
 
     // Notes: We don't constrict null boundaries, and we should never constrict a non-null boundary to a null
     // boundary (this the this.drawableX.Xdrawable truthy check), since going from a null-to-X interval to
     // null-to-null has a completely different meaning. This should be checked by a client of this API.
 
-    while ( this.drawableBefore && this.drawableBefore.nextDrawable === this.drawableBefore.oldNextDrawable ) {
+    while (
+      this.drawableBefore &&
+      this.drawableBefore.nextDrawable === this.drawableBefore.oldNextDrawable
+    ) {
       this.drawableBefore = this.drawableBefore.nextDrawable;
       changed = true;
 
       // check for a totally-collapsed state
-      if ( !this.drawableBefore ) {
-        assert && assert( !this.drawableAfter );
+      if (!this.drawableBefore) {
+        assert && assert(!this.drawableAfter);
         this.collapsedEmpty = true;
       }
 
       // if we are empty, bail out before continuing
-      if ( this.isEmpty() ) { return true; }
+      if (this.isEmpty()) {
+        return true;
+      }
     }
 
-    while ( this.drawableAfter && this.drawableAfter.previousDrawable === this.drawableAfter.oldPreviousDrawable ) {
+    while (
+      this.drawableAfter &&
+      this.drawableAfter.previousDrawable ===
+        this.drawableAfter.oldPreviousDrawable
+    ) {
       this.drawableAfter = this.drawableAfter.previousDrawable;
       changed = true;
 
       // check for a totally-collapsed state
-      if ( !this.drawableAfter ) {
-        assert && assert( !this.drawableBefore );
+      if (!this.drawableAfter) {
+        assert && assert(!this.drawableBefore);
         this.collapsedEmpty = true;
       }
 
       // if we are empty, bail out before continuing
-      if ( this.isEmpty() ) { return true; }
+      if (this.isEmpty()) {
+        return true;
+      }
     }
 
     return changed;
@@ -131,7 +150,11 @@ class ChangeInterval {
    * @returns {boolean}
    */
   isEmpty() {
-    return this.collapsedEmpty || ( this.drawableBefore !== null && this.drawableBefore === this.drawableAfter );
+    return (
+      this.collapsedEmpty ||
+      (this.drawableBefore !== null &&
+        this.drawableBefore === this.drawableAfter)
+    );
   }
 
   /**
@@ -143,12 +166,18 @@ class ChangeInterval {
    * @param {Drawable} oldStitchLastDrawable
    * @returns {number}
    */
-  getOldInternalDrawableCount( oldStitchFirstDrawable, oldStitchLastDrawable ) {
-    const firstInclude = this.drawableBefore ? this.drawableBefore.oldNextDrawable : oldStitchFirstDrawable;
+  getOldInternalDrawableCount(oldStitchFirstDrawable, oldStitchLastDrawable) {
+    const firstInclude = this.drawableBefore
+      ? this.drawableBefore.oldNextDrawable
+      : oldStitchFirstDrawable;
     const lastExclude = this.drawableAfter; // null is OK here
 
     let count = 0;
-    for ( let drawable = firstInclude; drawable !== lastExclude; drawable = drawable.oldNextDrawable ) {
+    for (
+      let drawable = firstInclude;
+      drawable !== lastExclude;
+      drawable = drawable.oldNextDrawable
+    ) {
       count++;
     }
 
@@ -165,12 +194,18 @@ class ChangeInterval {
    *
    * @returns {number}
    */
-  getNewInternalDrawableCount( newStitchFirstDrawable, newStitchLastDrawable ) {
-    const firstInclude = this.drawableBefore ? this.drawableBefore.nextDrawable : newStitchFirstDrawable;
+  getNewInternalDrawableCount(newStitchFirstDrawable, newStitchLastDrawable) {
+    const firstInclude = this.drawableBefore
+      ? this.drawableBefore.nextDrawable
+      : newStitchFirstDrawable;
     const lastExclude = this.drawableAfter; // null is OK here
 
     let count = 0;
-    for ( let drawable = firstInclude; drawable !== lastExclude; drawable = drawable.nextDrawable ) {
+    for (
+      let drawable = firstInclude;
+      drawable !== lastExclude;
+      drawable = drawable.nextDrawable
+    ) {
       count++;
     }
 
@@ -187,15 +222,18 @@ class ChangeInterval {
    *
    * @returns {ChangeInterval}
    */
-  static newForDisplay( drawableBefore, drawableAfter, display ) {
-    const changeInterval = ChangeInterval.createFromPool( drawableBefore, drawableAfter );
-    display.markChangeIntervalToDispose( changeInterval );
+  static newForDisplay(drawableBefore, drawableAfter, display) {
+    const changeInterval = ChangeInterval.createFromPool(
+      drawableBefore,
+      drawableAfter
+    );
+    display.markChangeIntervalToDispose(changeInterval);
     return changeInterval;
   }
 }
 
-scenery.register( 'ChangeInterval', ChangeInterval );
+scenery.register('ChangeInterval', ChangeInterval);
 
-Poolable.mixInto( ChangeInterval );
+Poolable.mixInto(ChangeInterval);
 
 export default ChangeInterval;

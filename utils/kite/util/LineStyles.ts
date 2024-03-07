@@ -8,6 +8,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Utils from '../../dot/Utils';
 import Vector2 from '../../dot/Vector2';
 import merge from '../../phet-core/merge';

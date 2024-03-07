@@ -7,6 +7,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  * @author Jesse Greenberg
  */
+import _ from 'lodash';
 
 import Bounds2 from '../../../dot/Bounds2';
 import Matrix3 from '../../../dot/Matrix3';
@@ -869,7 +870,7 @@ class PDOMPeer {
         this.visible
           ? visibleElements === this.topLevelElements.length
           : visibleElements === 0,
-        'some of the peer\'s elements are visible and some are not'
+        "some of the peer's elements are visible and some are not"
       );
     }
     return this.visible === null ? true : this.visible; // default to true if visibility hasn't been set yet.
@@ -888,9 +889,9 @@ class PDOMPeer {
       for (let i = 0; i < this.topLevelElements.length; i++) {
         const element = this.topLevelElements[i];
         if (visible) {
-          this.removeAttributeFromElement('hidden', { element: element });
+          this.removeAttributeFromElement('hidden', { element });
         } else {
-          this.setAttributeToElement('hidden', '', { element: element });
+          this.setAttributeToElement('hidden', '', { element });
         }
       }
 

@@ -7,6 +7,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Bounds2 from '../../../dot/Bounds2';
 import Orientation from '../../../phet-core/Orientation';
 import arrayRemove from '../../../phet-core/arrayRemove';

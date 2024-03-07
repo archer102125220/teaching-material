@@ -6,10 +6,17 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { CanvasSelfDrawable, Node, PaintableStatelessDrawable, scenery } from '../../imports.js';
+import Poolable from '../../../phet-core/Poolable';
+import {
+  CanvasSelfDrawable,
+  Node,
+  PaintableStatelessDrawable,
+  scenery
+} from '../../imports';
 
-class CircleCanvasDrawable extends PaintableStatelessDrawable( CanvasSelfDrawable ) {
+class CircleCanvasDrawable extends PaintableStatelessDrawable(
+  CanvasSelfDrawable
+) {
   /**
    * Paints this drawable to a Canvas (the wrapper contains both a Canvas reference and its drawing context).
    * @public
@@ -23,23 +30,23 @@ class CircleCanvasDrawable extends PaintableStatelessDrawable( CanvasSelfDrawabl
    * @param {Node} node - Our node that is being drawn
    * @param {Matrix3} matrix - The transformation matrix applied for this node's coordinate system.
    */
-  paintCanvas( wrapper, node, matrix ) {
-    assert && assert( node instanceof Node );
+  paintCanvas(wrapper, node, matrix) {
+    assert && assert(node instanceof Node);
     const context = wrapper.context;
 
     context.beginPath();
-    context.arc( 0, 0, node._radius, 0, Math.PI * 2, false );
+    context.arc(0, 0, node._radius, 0, Math.PI * 2, false);
     context.closePath();
 
-    if ( node.hasFill() ) {
-      node.beforeCanvasFill( wrapper ); // defined in Paintable
+    if (node.hasFill()) {
+      node.beforeCanvasFill(wrapper); // defined in Paintable
       context.fill();
-      node.afterCanvasFill( wrapper ); // defined in Paintable
+      node.afterCanvasFill(wrapper); // defined in Paintable
     }
-    if ( node.hasPaintableStroke() ) {
-      node.beforeCanvasStroke( wrapper ); // defined in Paintable
+    if (node.hasPaintableStroke()) {
+      node.beforeCanvasStroke(wrapper); // defined in Paintable
       context.stroke();
-      node.afterCanvasStroke( wrapper ); // defined in Paintable
+      node.afterCanvasStroke(wrapper); // defined in Paintable
     }
   }
 
@@ -61,8 +68,8 @@ class CircleCanvasDrawable extends PaintableStatelessDrawable( CanvasSelfDrawabl
   }
 }
 
-scenery.register( 'CircleCanvasDrawable', CircleCanvasDrawable );
+scenery.register('CircleCanvasDrawable', CircleCanvasDrawable);
 
-Poolable.mixInto( CircleCanvasDrawable );
+Poolable.mixInto(CircleCanvasDrawable);
 
 export default CircleCanvasDrawable;

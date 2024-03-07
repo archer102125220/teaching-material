@@ -16,6 +16,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import axon from './axon';
 import type TReadOnlyProperty from './TReadOnlyProperty';
 
@@ -187,7 +189,7 @@ export default class Multilink<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
    */
   public static multilinkAny(dependencies: Readonly<TReadOnlyProperty<unknown>[]>, callback: () => void): UnknownMultilink {
 
-    
+
     // @ts-expect-error
     return new Multilink(dependencies, callback);
   }
@@ -221,7 +223,7 @@ export default class Multilink<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
    */
   public static lazyMultilinkAny(dependencies: Readonly<TReadOnlyProperty<unknown>[]>, callback: () => void): UnknownMultilink {
 
-    
+
     // @ts-expect-error
     return new Multilink(dependencies, callback, true /* lazy */);
   }

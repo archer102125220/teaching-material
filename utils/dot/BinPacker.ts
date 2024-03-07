@@ -28,6 +28,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Bounds2 from './Bounds2';
 import dot from './dot';
 
@@ -40,20 +42,20 @@ export default class BinPacker {
    *
    * @param bounds - The available bounds to pack bins inside.
    */
-  public constructor( bounds: Bounds2 ) {
-    this.rootBin = new Bin( bounds, null );
+  public constructor(bounds: Bounds2) {
+    this.rootBin = new Bin(bounds, null);
   }
 
   /**
    * Allocates a bin with the specified width and height if possible (returning a {Bin}), otherwise returns null.
    */
-  public allocate( width: number, height: number ): Bin | null {
+  public allocate(width: number, height: number): Bin | null {
     // find a leaf bin that has available room (or null)
-    const bin = this.rootBin.findAvailableBin( width, height );
+    const bin = this.rootBin.findAvailableBin(width, height);
 
-    if ( bin ) {
+    if (bin) {
       // split it into a sized sub-bin for our purpose that we will use, and other bins for future allocations
-      const sizedBin = bin.split( width, height );
+      const sizedBin = bin.split(width, height);
 
       // mark our bin as used
       sizedBin.use();
@@ -70,7 +72,7 @@ export default class BinPacker {
    *
    * @param bin - The bin that was returned from allocate().
    */
-  public deallocate( bin: Bin ): void {
+  public deallocate(bin: Bin): void {
     bin.unuse();
   }
 
@@ -79,14 +81,14 @@ export default class BinPacker {
 
     let padding = '';
 
-    function binTree( bin: Bin ): void {
+    function binTree(bin: Bin): void {
       result += `${padding + bin.toString()}\n`;
       padding = `${padding}  `;
-      _.each( bin.children, binTree );
-      padding = padding.substring( 2 );
+      _.each(bin.children, binTree);
+      padding = padding.substring(2);
     }
 
-    binTree( this.rootBin );
+    binTree(this.rootBin);
 
     return result;
   }
@@ -94,7 +96,7 @@ export default class BinPacker {
   public static Bin: typeof Bin;
 }
 
-dot.register( 'BinPacker', BinPacker );
+dot.register('BinPacker', BinPacker);
 
 export class Bin {
 
@@ -115,7 +117,7 @@ export class Bin {
   /**
    * A rectangular bin that can be used itself or split into sub-bins.
    */
-  public constructor( bounds: Bounds2, parent: Bin | null ) {
+  public constructor(bounds: Bounds2, parent: Bin | null) {
     this.bounds = bounds;
     this.parent = parent;
     this.isSplit = false;
@@ -126,22 +128,22 @@ export class Bin {
   /**
    * Finds an unused bin with open area that is at least width-x-height in size. (dot-internal)
    */
-  public findAvailableBin( width: number, height: number ): Bin | null {
-    assert && assert( width > 0 && height > 0, 'Empty bin requested?' );
+  public findAvailableBin(width: number, height: number): Bin | null {
+    assert && assert(width > 0 && height > 0, 'Empty bin requested?');
 
     // If we are marked as used ourself, we can't be used
-    if ( this.isUsed ) {
+    if (this.isUsed) {
       return null;
     }
     // If our bounds can't fit it, skip this entire sub-tree
-    else if ( this.bounds.width < width || this.bounds.height < height ) {
+    else if (this.bounds.width < width || this.bounds.height < height) {
       return null;
     }
     // If we have been split, check our children
-    else if ( this.isSplit ) {
-      for ( let i = 0; i < this.children.length; i++ ) {
-        const result = this.children[ i ].findAvailableBin( width, height );
-        if ( result ) {
+    else if (this.isSplit) {
+      for (let i = 0; i < this.children.length; i++) {
+        const result = this.children[i].findAvailableBin(width, height);
+        if (result) {
           return result;
         }
       }
@@ -157,15 +159,15 @@ export class Bin {
   /**
    * Splits this bin into multiple child bins, and returns the child with the dimensions (width,height). (dot-internal)
    */
-  public split( width: number, height: number ): Bin {
-    assert && assert( this.bounds.width >= width && this.bounds.height >= height,
-      'Bin does not have space' );
-    assert && assert( !this.isSplit, 'Bin should not be re-split' );
-    assert && assert( !this.isUsed, 'Bin should not be split when used' );
-    assert && assert( width > 0 && height > 0, 'Empty bin requested?' );
+  public split(width: number, height: number): Bin {
+    assert && assert(this.bounds.width >= width && this.bounds.height >= height,
+      'Bin does not have space');
+    assert && assert(!this.isSplit, 'Bin should not be re-split');
+    assert && assert(!this.isUsed, 'Bin should not be split when used');
+    assert && assert(width > 0 && height > 0, 'Empty bin requested?');
 
     // if our dimensions match exactly, don't split (return ourself)
-    if ( width === this.bounds.width && height === this.bounds.height ) {
+    if (width === this.bounds.width && height === this.bounds.height) {
       return this;
     }
 
@@ -192,19 +194,19 @@ export class Bin {
      *   *                                  *
      *   ************************************
      */
-    const mainBounds = new Bounds2( this.bounds.minX, this.bounds.minY, splitX, splitY );
-    const rightBounds = new Bounds2( splitX, this.bounds.minY, this.bounds.maxX, splitY );
-    const bottomBounds = new Bounds2( this.bounds.minX, splitY, this.bounds.maxX, this.bounds.maxY );
+    const mainBounds = new Bounds2(this.bounds.minX, this.bounds.minY, splitX, splitY);
+    const rightBounds = new Bounds2(splitX, this.bounds.minY, this.bounds.maxX, splitY);
+    const bottomBounds = new Bounds2(this.bounds.minX, splitY, this.bounds.maxX, this.bounds.maxY);
 
-    const mainBin = new Bin( mainBounds, this );
-    this.children.push( mainBin );
+    const mainBin = new Bin(mainBounds, this);
+    this.children.push(mainBin);
 
     // only add right/bottom if they take up area
-    if ( rightBounds.hasNonzeroArea() ) {
-      this.children.push( new Bin( rightBounds, this ) );
+    if (rightBounds.hasNonzeroArea()) {
+      this.children.push(new Bin(rightBounds, this));
     }
-    if ( bottomBounds.hasNonzeroArea() ) {
-      this.children.push( new Bin( bottomBounds, this ) );
+    if (bottomBounds.hasNonzeroArea()) {
+      this.children.push(new Bin(bottomBounds, this));
     }
 
     return mainBin;
@@ -214,8 +216,8 @@ export class Bin {
    * Mark this bin as used. (dot-internal)
    */
   public use(): void {
-    assert && assert( !this.isSplit, 'Should not mark a split bin as used' );
-    assert && assert( !this.isUsed, 'Should not mark a used bin as used' );
+    assert && assert(!this.isSplit, 'Should not mark a split bin as used');
+    assert && assert(!this.isUsed, 'Should not mark a used bin as used');
 
     this.isUsed = true;
   }
@@ -224,7 +226,7 @@ export class Bin {
    * Mark this bin as not used, and attempt to collapse split parents if all children are unused. (dot-internal)
    */
   public unuse(): void {
-    assert && assert( this.isUsed, 'Can only unuse a used instance' );
+    assert && assert(this.isUsed, 'Can only unuse a used instance');
 
     this.isUsed = false;
 
@@ -237,14 +239,14 @@ export class Bin {
    * to clean up unused data structures.
    */
   private attemptToCollapse(): void {
-    assert && assert( this.isSplit, 'Should only attempt to collapse split bins' );
+    assert && assert(this.isSplit, 'Should only attempt to collapse split bins');
 
     // Bail out if a single child isn't able to be collapsed. If it is not split or used, it won't have any children
     // or needs.
-    for ( let i = 0; i < this.children.length; i++ ) {
-      const child = this.children[ i ];
+    for (let i = 0; i < this.children.length; i++) {
+      const child = this.children[i];
 
-      if ( child.isSplit || child.isUsed ) {
+      if (child.isSplit || child.isUsed) {
         return;
       }
     }
@@ -258,7 +260,7 @@ export class Bin {
   }
 
   public toString(): string {
-    return this.bounds.toString() + ( this.isUsed ? ' used' : '' );
+    return this.bounds.toString() + (this.isUsed ? ' used' : '');
   }
 }
 

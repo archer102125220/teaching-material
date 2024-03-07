@@ -59,6 +59,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import deprecationWarning from './deprecationWarning';
 import merge from './merge';
 import phetCore from './phetCore';
@@ -67,49 +69,77 @@ import phetCore from './phetCore';
  * @deprecated
  */
 class EnumerationDeprecated {
-
   /**
    * @param {Object} config - must provide keys such as {keys:['RED','BLUE]}
    *                          - or map such as {map:{RED: myRedValue, BLUE: myBlueValue}}
    *
    * @private - clients should use EnumerationDeprecated.byKeys or EnumerationDeprecated.byMap
    */
-  constructor( config ) {
-    deprecationWarning( 'EnumerationDeprecated should be exchanged for classes that extend EnumerationValue, see WilderEnumerationPatterns for examples.' );
+  constructor(config) {
+    deprecationWarning(
+      'EnumerationDeprecated should be exchanged for classes that extend EnumerationValue, see WilderEnumerationPatterns for examples.'
+    );
 
-    assert && assert( config, 'config must be provided' );
+    assert && assert(config, 'config must be provided');
 
     const keysProvided = !!config.keys;
     const mapProvided = !!config.map;
-    assert && assert( keysProvided !== mapProvided, 'must provide one or the other but not both of keys/map' );
+    assert &&
+      assert(
+        keysProvided !== mapProvided,
+        'must provide one or the other but not both of keys/map'
+      );
 
-    const keys = config.keys || Object.keys( config.map );
+    const keys = config.keys || Object.keys(config.map);
     const map = config.map || {};
 
-    config = merge( {
+    config = merge(
+      {
+        // {string|null} Will be appended to the EnumerationIO documentation, if provided
+        phetioDocumentation: null,
 
-      // {string|null} Will be appended to the EnumerationIO documentation, if provided
-      phetioDocumentation: null,
+        // {function(EnumerationDeprecated):|null} If provided, it will be called as beforeFreeze( enumeration ) just before the
+        // enumeration is frozen. Since it's not possible to modify the enumeration after
+        // it is frozen (e.g. adding convenience functions), and there is no reference to
+        // the enumeration object beforehand, this allows defining custom values/methods
+        // on the enumeration object itself.
+        beforeFreeze: null
+      },
+      config
+    );
 
-      // {function(EnumerationDeprecated):|null} If provided, it will be called as beforeFreeze( enumeration ) just before the
-      // enumeration is frozen. Since it's not possible to modify the enumeration after
-      // it is frozen (e.g. adding convenience functions), and there is no reference to
-      // the enumeration object beforehand, this allows defining custom values/methods
-      // on the enumeration object itself.
-      beforeFreeze: null
-    }, config );
-
-    assert && assert( Array.isArray( keys ), 'Values should be an array' );
-    assert && assert( _.uniq( keys ).length === keys.length, 'There should be no duplicated values provided' );
-    assert && keys.forEach( value => assert( typeof value === 'string', 'Each value should be a string' ) );
-    assert && keys.forEach( value => assert( /^[A-Z][A-Z0-9_]*$/g.test( value ),
-      'EnumerationDeprecated values should be uppercase alphanumeric with underscores and begin with a letter' ) );
-    assert && assert( !_.includes( keys, 'VALUES' ),
-      'This is the name of a built-in provided value, so it cannot be included as an enumeration value' );
-    assert && assert( !_.includes( keys, 'KEYS' ),
-      'This is the name of a built-in provided value, so it cannot be included as an enumeration value' );
-    assert && assert( !_.includes( keys, 'includes' ),
-      'This is the name of a built-in provided value, so it cannot be included as an enumeration value' );
+    assert && assert(Array.isArray(keys), 'Values should be an array');
+    assert &&
+      assert(
+        _.uniq(keys).length === keys.length,
+        'There should be no duplicated values provided'
+      );
+    assert &&
+      keys.forEach((value) =>
+        assert(typeof value === 'string', 'Each value should be a string')
+      );
+    assert &&
+      keys.forEach((value) =>
+        assert(
+          /^[A-Z][A-Z0-9_]*$/g.test(value),
+          'EnumerationDeprecated values should be uppercase alphanumeric with underscores and begin with a letter'
+        )
+      );
+    assert &&
+      assert(
+        !_.includes(keys, 'VALUES'),
+        'This is the name of a built-in provided value, so it cannot be included as an enumeration value'
+      );
+    assert &&
+      assert(
+        !_.includes(keys, 'KEYS'),
+        'This is the name of a built-in provided value, so it cannot be included as an enumeration value'
+      );
+    assert &&
+      assert(
+        !_.includes(keys, 'includes'),
+        'This is the name of a built-in provided value, so it cannot be included as an enumeration value'
+      );
 
     // @public (phet-io) - provides additional documentation for PhET-iO which can be viewed in studio
     // Note this uses the same term as used by PhetioObject, but via a different channel.
@@ -121,12 +151,20 @@ class EnumerationDeprecated {
     // @public {Object[]} (read-only) - the object values of the enumeration
     this.VALUES = [];
 
-    keys.forEach( key => {
-      const value = map[ key ] || {};
+    keys.forEach((key) => {
+      const value = map[key] || {};
 
       // Set attributes of the enumeration value
-      assert && assert( value.name === undefined, '"rich" enumeration values cannot provide their own name attribute' );
-      assert && assert( value.toString === Object.prototype.toString, '"rich" enumeration values cannot provide their own toString' );
+      assert &&
+        assert(
+          value.name === undefined,
+          '"rich" enumeration values cannot provide their own name attribute'
+        );
+      assert &&
+        assert(
+          value.toString === Object.prototype.toString,
+          '"rich" enumeration values cannot provide their own toString'
+        );
 
       // @public {string} (read-only) - PhET-iO public API relies on this mapping, do not change it lightly
       value.name = key;
@@ -135,15 +173,15 @@ class EnumerationDeprecated {
       value.toString = () => key;
 
       // Assign to the enumeration
-      this[ key ] = value;
-      this.VALUES.push( value );
-    } );
+      this[key] = value;
+      this.VALUES.push(value);
+    });
 
-    config.beforeFreeze && config.beforeFreeze( this );
-    assert && Object.freeze( this );
-    assert && Object.freeze( this.VALUES );
-    assert && Object.freeze( this.KEYS );
-    assert && keys.forEach( key => assert && Object.freeze( map[ key ] ) );
+    config.beforeFreeze && config.beforeFreeze(this);
+    assert && Object.freeze(this);
+    assert && Object.freeze(this.VALUES);
+    assert && Object.freeze(this.KEYS);
+    assert && keys.forEach((key) => assert && Object.freeze(map[key]));
   }
 
   /**
@@ -154,7 +192,7 @@ class EnumerationDeprecated {
    */
 
   toString() {
-    return this.KEYS.join( ', ' );
+    return this.KEYS.join(', ');
   }
 
   /**
@@ -164,8 +202,8 @@ class EnumerationDeprecated {
    * @param {Object} value
    * @returns {boolean}
    */
-  includes( value ) {
-    return _.includes( this.VALUES, value );
+  includes(value) {
+    return _.includes(this.VALUES, value);
   }
 
   /**
@@ -174,8 +212,8 @@ class EnumerationDeprecated {
    * @param {string} key
    * @returns {*}
    */
-  getValue( key ) {
-    return this[ key ];
+  getValue(key) {
+    return this[key];
   }
 
   /**
@@ -184,7 +222,7 @@ class EnumerationDeprecated {
    * @param {Object} enumerationValue
    * @returns {string}
    */
-  getKey( enumerationValue ) {
+  getKey(enumerationValue) {
     return enumerationValue.name;
   }
 
@@ -222,10 +260,10 @@ class EnumerationDeprecated {
    * @returns {EnumerationDeprecated}
    * @public
    */
-  static byKeys( keys, options ) {
-    assert && assert( Array.isArray( keys ), 'keys must be an array' );
-    assert && assert( !options || options.keys === undefined );
-    return new EnumerationDeprecated( merge( { keys: keys }, options ) );
+  static byKeys(keys, options) {
+    assert && assert(Array.isArray(keys), 'keys must be an array');
+    assert && assert(!options || options.keys === undefined);
+    return new EnumerationDeprecated(merge({ keys: keys }, options));
   }
 
   /**
@@ -235,16 +273,27 @@ class EnumerationDeprecated {
    * @returns {EnumerationDeprecated}
    * @public
    */
-  static byMap( map, options ) {
-    assert && assert( !options || options.map === undefined );
-    if ( assert ) {
-      const values = _.values( map );
-      assert && assert( values.length >= 1, 'must have at least 2 entries in an enumeration' );
-      assert && assert( _.every( values, value => value.constructor === values[ 0 ].constructor ), 'Values must have same constructor' );
+  static byMap(map, options) {
+    assert && assert(!options || options.map === undefined);
+    if (assert) {
+      const values = _.values(map);
+      assert &&
+        assert(
+          values.length >= 1,
+          'must have at least 2 entries in an enumeration'
+        );
+      assert &&
+        assert(
+          _.every(
+            values,
+            (value) => value.constructor === values[0].constructor
+          ),
+          'Values must have same constructor'
+        );
     }
-    return new EnumerationDeprecated( merge( { map: map }, options ) );
+    return new EnumerationDeprecated(merge({ map: map }, options));
   }
 }
 
-phetCore.register( 'EnumerationDeprecated', EnumerationDeprecated );
+phetCore.register('EnumerationDeprecated', EnumerationDeprecated);
 export default EnumerationDeprecated;

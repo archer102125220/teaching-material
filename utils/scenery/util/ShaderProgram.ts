@@ -6,6 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import optionize from '../../phet-core/optionize';
 import { scenery, Utils } from '../imports';
 

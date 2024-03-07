@@ -6,10 +6,16 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../../phet-core/js/Poolable.js';
-import { CanvasSelfDrawable, PaintableStatelessDrawable, scenery } from '../../imports.js';
+import Poolable from '../../../phet-core/Poolable';
+import {
+  CanvasSelfDrawable,
+  PaintableStatelessDrawable,
+  scenery
+} from '../../imports';
 
-class TextCanvasDrawable extends PaintableStatelessDrawable( CanvasSelfDrawable ) {
+class TextCanvasDrawable extends PaintableStatelessDrawable(
+  CanvasSelfDrawable
+) {
   /**
    * Paints this drawable to a Canvas (the wrapper contains both a Canvas reference and its drawing context).
    * @public
@@ -23,24 +29,24 @@ class TextCanvasDrawable extends PaintableStatelessDrawable( CanvasSelfDrawable 
    * @param {scenery.Node} node - Our node that is being drawn
    * @param {Matrix3} matrix - The transformation matrix applied for this node's coordinate system.
    */
-  paintCanvas( wrapper, node, matrix ) {
+  paintCanvas(wrapper, node, matrix) {
     const context = wrapper.context;
 
     // extra parameters we need to set, but should avoid setting if we aren't drawing anything
-    if ( node.hasFill() || node.hasPaintableStroke() ) {
-      wrapper.setFont( node._font.getFont() );
-      wrapper.setDirection( 'ltr' );
+    if (node.hasFill() || node.hasPaintableStroke()) {
+      wrapper.setFont(node._font.getFont());
+      wrapper.setDirection('ltr');
     }
 
-    if ( node.hasFill() ) {
-      node.beforeCanvasFill( wrapper ); // defined in Paintable
-      context.fillText( node.renderedText, 0, 0 );
-      node.afterCanvasFill( wrapper ); // defined in Paintable
+    if (node.hasFill()) {
+      node.beforeCanvasFill(wrapper); // defined in Paintable
+      context.fillText(node.renderedText, 0, 0);
+      node.afterCanvasFill(wrapper); // defined in Paintable
     }
-    if ( node.hasPaintableStroke() ) {
-      node.beforeCanvasStroke( wrapper ); // defined in Paintable
-      context.strokeText( node.renderedText, 0, 0 );
-      node.afterCanvasStroke( wrapper ); // defined in Paintable
+    if (node.hasPaintableStroke()) {
+      node.beforeCanvasStroke(wrapper); // defined in Paintable
+      context.strokeText(node.renderedText, 0, 0);
+      node.afterCanvasStroke(wrapper); // defined in Paintable
     }
   }
 
@@ -66,8 +72,8 @@ class TextCanvasDrawable extends PaintableStatelessDrawable( CanvasSelfDrawable 
   }
 }
 
-scenery.register( 'TextCanvasDrawable', TextCanvasDrawable );
+scenery.register('TextCanvasDrawable', TextCanvasDrawable);
 
-Poolable.mixInto( TextCanvasDrawable );
+Poolable.mixInto(TextCanvasDrawable);
 
 export default TextCanvasDrawable;

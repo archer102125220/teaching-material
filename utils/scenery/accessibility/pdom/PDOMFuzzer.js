@@ -7,6 +7,7 @@
  */
 
 import _ from 'lodash';
+
 import Permutation from '../../../dot/Permutation';
 import Random from '../../../dot/Random';
 import arrayDifference from '../../../phet-core/arrayDifference';

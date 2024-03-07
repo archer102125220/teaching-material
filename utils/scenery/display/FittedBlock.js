@@ -8,8 +8,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import { Block, scenery } from '../imports.js';
+import Bounds2 from '../../dot/Bounds2';
+import { Block, scenery } from '../imports';
 
 const scratchBounds2 = Bounds2.NOTHING.copy();
 
@@ -23,18 +23,22 @@ class FittedBlock extends Block {
    * @param {FittedBlock.Fit} preferredFit
    * @returns {FittedBlock} - For chaining
    */
-  initialize( display, renderer, transformRootInstance, preferredFit ) {
-    super.initialize( display, renderer );
+  initialize(display, renderer, transformRootInstance, preferredFit) {
+    super.initialize(display, renderer);
 
     // @private {Instance}
     this.transformRootInstance = transformRootInstance;
 
-    assert && assert( typeof transformRootInstance.isDisplayRoot === 'boolean' );
+    assert && assert(typeof transformRootInstance.isDisplayRoot === 'boolean');
 
     // @private {boolean}
     this.canBeFullDisplay = transformRootInstance.isDisplayRoot;
 
-    assert && assert( preferredFit === FittedBlock.FULL_DISPLAY || preferredFit === FittedBlock.COMMON_ANCESTOR );
+    assert &&
+      assert(
+        preferredFit === FittedBlock.FULL_DISPLAY ||
+          preferredFit === FittedBlock.COMMON_ANCESTOR
+      );
 
     // @private {FittedBlock.Fit} - Our preferred fit IF we can be fitted. Our fit can fall back if something's unfittable.
     this.preferredFit = preferredFit;
@@ -58,11 +62,13 @@ class FittedBlock extends Block {
     this.unfittableDrawableCount = 0;
 
     // @private {function}
-    this.dirtyFitListener = this.dirtyFitListener || this.markDirtyFit.bind( this );
-    this.fittableListener = this.fittableListener || this.onFittabilityChange.bind( this );
+    this.dirtyFitListener =
+      this.dirtyFitListener || this.markDirtyFit.bind(this);
+    this.fittableListener =
+      this.fittableListener || this.onFittabilityChange.bind(this);
 
     // now we always add a listener to the display size to invalidate our fit
-    this.display.sizeProperty.lazyLink( this.dirtyFitListener );
+    this.display.sizeProperty.lazyLink(this.dirtyFitListener);
 
     // TODO: add count of boundsless objects? https://github.com/phetsims/scenery/issues/1581
     return this;
@@ -74,13 +80,13 @@ class FittedBlock extends Block {
    *
    * @param {FittedBlock.Fit} fit
    */
-  setFit( fit ) {
+  setFit(fit) {
     // We can't allow full-display fits sometimes
-    if ( !this.canBeFullDisplay && fit === FittedBlock.FULL_DISPLAY ) {
+    if (!this.canBeFullDisplay && fit === FittedBlock.FULL_DISPLAY) {
       fit = FittedBlock.COMMON_ANCESTOR;
     }
 
-    if ( this.fit !== fit ) {
+    if (this.fit !== fit) {
       this.fit = fit;
 
       // updateFit() needs to be called in the repaint phase
@@ -88,10 +94,10 @@ class FittedBlock extends Block {
 
       // Reset the oldFitBounds so that any updates that check bounds changes will update it.
       // TODO: remove duplication here with updateFit() https://github.com/phetsims/scenery/issues/1581
-      this.oldFitBounds.set( Bounds2.NOTHING );
+      this.oldFitBounds.set(Bounds2.NOTHING);
 
       // If we switched to the common-ancestor fit, we need to compute the common-ancestor instance.
-      if ( fit === FittedBlock.COMMON_ANCESTOR ) {
+      if (fit === FittedBlock.COMMON_ANCESTOR) {
         this.removeCommonFitInstance();
       }
     }
@@ -101,7 +107,9 @@ class FittedBlock extends Block {
    * @public
    */
   markDirtyFit() {
-    sceneryLog && sceneryLog.dirty && sceneryLog.dirty( `markDirtyFit on FittedBlock#${this.id}` );
+    sceneryLog &&
+      sceneryLog.dirty &&
+      sceneryLog.dirty(`markDirtyFit on FittedBlock#${this.id}`);
     this.dirtyFit = true;
 
     // Make sure we are visited in the repaint phase
@@ -113,76 +121,89 @@ class FittedBlock extends Block {
    * @protected
    */
   updateFit() {
-    assert && assert( this.fit === FittedBlock.FULL_DISPLAY || this.fit === FittedBlock.COMMON_ANCESTOR,
-      'Unsupported fit' );
+    assert &&
+      assert(
+        this.fit === FittedBlock.FULL_DISPLAY ||
+          this.fit === FittedBlock.COMMON_ANCESTOR,
+        'Unsupported fit'
+      );
 
     // check to see if we don't need to re-fit
-    if ( !this.dirtyFit && this.fit === FittedBlock.FULL_DISPLAY ) {
+    if (!this.dirtyFit && this.fit === FittedBlock.FULL_DISPLAY) {
       return;
     }
 
-    sceneryLog && sceneryLog.FittedBlock && sceneryLog.FittedBlock( `updateFit #${this.id}` );
+    sceneryLog &&
+      sceneryLog.FittedBlock &&
+      sceneryLog.FittedBlock(`updateFit #${this.id}`);
 
     this.dirtyFit = false;
 
-    if ( this.fit === FittedBlock.COMMON_ANCESTOR && this.commonFitInstance === null ) {
-      this.addCommonFitInstance( this.computeCommonAncestorInstance() );
+    if (
+      this.fit === FittedBlock.COMMON_ANCESTOR &&
+      this.commonFitInstance === null
+    ) {
+      this.addCommonFitInstance(this.computeCommonAncestorInstance());
     }
 
     // If our fit WAS common-ancestor and our common fit instance's subtree as something unfittable, switch to
     // full-display fit.
-    if ( this.fit === FittedBlock.COMMON_ANCESTOR &&
-         this.commonFitInstance.fittability.subtreeUnfittableCount > 0 &&
-         this.canBeFullDisplay ) {
+    if (
+      this.fit === FittedBlock.COMMON_ANCESTOR &&
+      this.commonFitInstance.fittability.subtreeUnfittableCount > 0 &&
+      this.canBeFullDisplay
+    ) {
       // Reset the oldFitBounds so that any updates that check bounds changes will update it.
-      this.oldFitBounds.set( Bounds2.NOTHING );
+      this.oldFitBounds.set(Bounds2.NOTHING);
 
       this.fit = FittedBlock.FULL_DISPLAY;
     }
 
-    if ( this.fit === FittedBlock.FULL_DISPLAY ) {
-      this.fitBounds.set( Bounds2.NOTHING );
+    if (this.fit === FittedBlock.FULL_DISPLAY) {
+      this.fitBounds.set(Bounds2.NOTHING);
 
       this.setSizeFullDisplay();
-    }
-    else if ( this.fit === FittedBlock.COMMON_ANCESTOR ) {
-      assert && assert( this.commonFitInstance.trail.length >= this.transformRootInstance.trail.length );
+    } else if (this.fit === FittedBlock.COMMON_ANCESTOR) {
+      assert &&
+        assert(
+          this.commonFitInstance.trail.length >=
+            this.transformRootInstance.trail.length
+        );
 
       // will trigger bounds validation (for now) until we have a better way of handling this
-      this.fitBounds.set( this.commonFitInstance.node.getLocalBounds() );
+      this.fitBounds.set(this.commonFitInstance.node.getLocalBounds());
 
       // walk it up, transforming so it is relative to our transform root
       let instance = this.commonFitInstance;
-      while ( instance !== this.transformRootInstance ) {
+      while (instance !== this.transformRootInstance) {
         // shouldn't infinite loop, we'll null-pointer beforehand unless something is seriously wrong
-        this.fitBounds.transform( instance.node.getMatrix() );
+        this.fitBounds.transform(instance.node.getMatrix());
         instance = instance.parent;
       }
 
       this.fitBounds.roundOut();
-      this.fitBounds.dilate( 4 ); // for safety, modify in the future
+      this.fitBounds.dilate(4); // for safety, modify in the future
 
       // ensure that our fitted bounds don't go outside of our display's bounds (see https://github.com/phetsims/scenery/issues/390)
-      if ( this.transformRootInstance.isDisplayRoot ) {
+      if (this.transformRootInstance.isDisplayRoot) {
         // Only apply this effect if our transform root is the display root. Otherwise we might be transformed, and
         // this could cause buggy situations. See https://github.com/phetsims/scenery/issues/454
-        scratchBounds2.setMinMax( 0, 0, this.display.width, this.display.height );
-        this.fitBounds.constrainBounds( scratchBounds2 );
+        scratchBounds2.setMinMax(0, 0, this.display.width, this.display.height);
+        this.fitBounds.constrainBounds(scratchBounds2);
       }
 
-      if ( !this.fitBounds.isValid() ) {
-        this.fitBounds.setMinMax( 0, 0, 0, 0 );
+      if (!this.fitBounds.isValid()) {
+        this.fitBounds.setMinMax(0, 0, 0, 0);
       }
 
-      if ( !this.fitBounds.equals( this.oldFitBounds ) ) {
+      if (!this.fitBounds.equals(this.oldFitBounds)) {
         // store our copy for future checks (and do it before we modify this.fitBounds)
-        this.oldFitBounds.set( this.fitBounds );
+        this.oldFitBounds.set(this.fitBounds);
 
         this.setSizeFitBounds();
       }
-    }
-    else {
-      throw new Error( 'unknown fit' );
+    } else {
+      throw new Error('unknown fit');
     }
   }
 
@@ -205,12 +226,14 @@ class FittedBlock extends Block {
    *
    * @param {Instance|null} instance
    */
-  addCommonFitInstance( instance ) {
-    assert && assert( this.commonFitInstance === null );
+  addCommonFitInstance(instance) {
+    assert && assert(this.commonFitInstance === null);
 
-    if ( instance ) {
+    if (instance) {
       this.commonFitInstance = instance;
-      this.commonFitInstance.fittability.subtreeFittabilityChangeEmitter.addListener( this.dirtyFitListener );
+      this.commonFitInstance.fittability.subtreeFittabilityChangeEmitter.addListener(
+        this.dirtyFitListener
+      );
     }
   }
 
@@ -218,8 +241,10 @@ class FittedBlock extends Block {
    * @public
    */
   removeCommonFitInstance() {
-    if ( this.commonFitInstance ) {
-      this.commonFitInstance.fittability.subtreeFittabilityChangeEmitter.removeListener( this.dirtyFitListener );
+    if (this.commonFitInstance) {
+      this.commonFitInstance.fittability.subtreeFittabilityChangeEmitter.removeListener(
+        this.dirtyFitListener
+      );
       this.commonFitInstance = null;
     }
   }
@@ -230,9 +255,11 @@ class FittedBlock extends Block {
    * @override
    */
   dispose() {
-    sceneryLog && sceneryLog.FittedBlock && sceneryLog.FittedBlock( `dispose #${this.id}` );
+    sceneryLog &&
+      sceneryLog.FittedBlock &&
+      sceneryLog.FittedBlock(`dispose #${this.id}`);
 
-    this.display.sizeProperty.unlink( this.dirtyFitListener );
+    this.display.sizeProperty.unlink(this.dirtyFitListener);
 
     this.removeCommonFitInstance();
 
@@ -249,12 +276,12 @@ class FittedBlock extends Block {
    *
    * @param {Drawable} drawable
    */
-  addDrawable( drawable ) {
-    super.addDrawable( drawable );
+  addDrawable(drawable) {
+    super.addDrawable(drawable);
 
-    drawable.fittableProperty.lazyLink( this.fittableListener );
+    drawable.fittableProperty.lazyLink(this.fittableListener);
 
-    if ( !drawable.fittable ) {
+    if (!drawable.fittable) {
       this.incrementUnfittable();
     }
   }
@@ -266,12 +293,12 @@ class FittedBlock extends Block {
    *
    * @param {Drawable} drawable
    */
-  removeDrawable( drawable ) {
-    super.removeDrawable( drawable );
+  removeDrawable(drawable) {
+    super.removeDrawable(drawable);
 
-    drawable.fittableProperty.unlink( this.fittableListener );
+    drawable.fittableProperty.unlink(this.fittableListener);
 
-    if ( !drawable.fittable ) {
+    if (!drawable.fittable) {
       this.decrementUnfittable();
     }
   }
@@ -282,11 +309,10 @@ class FittedBlock extends Block {
    *
    * @param {boolean} fittable - Whether the particular child drawable is fittable
    */
-  onFittabilityChange( fittable ) {
-    if ( fittable ) {
+  onFittabilityChange(fittable) {
+    if (fittable) {
       this.decrementUnfittable();
-    }
-    else {
+    } else {
       this.incrementUnfittable();
     }
   }
@@ -298,7 +324,7 @@ class FittedBlock extends Block {
   incrementUnfittable() {
     this.unfittableDrawableCount++;
 
-    if ( this.unfittableDrawableCount === 1 ) {
+    if (this.unfittableDrawableCount === 1) {
       this.checkFitConstraints();
     }
   }
@@ -310,7 +336,7 @@ class FittedBlock extends Block {
   decrementUnfittable() {
     this.unfittableDrawableCount--;
 
-    if ( this.unfittableDrawableCount === 0 ) {
+    if (this.unfittableDrawableCount === 0) {
       this.checkFitConstraints();
     }
   }
@@ -321,12 +347,12 @@ class FittedBlock extends Block {
    */
   checkFitConstraints() {
     // If we have ANY unfittable drawables, take up the full display.
-    if ( this.unfittableDrawableCount > 0 && this.canBeFullDisplay ) {
-      this.setFit( FittedBlock.FULL_DISPLAY );
+    if (this.unfittableDrawableCount > 0 && this.canBeFullDisplay) {
+      this.setFit(FittedBlock.FULL_DISPLAY);
     }
     // Otherwise fall back to our "default"
     else {
-      this.setFit( this.preferredFit );
+      this.setFit(this.preferredFit);
     }
   }
 
@@ -336,30 +362,40 @@ class FittedBlock extends Block {
    * @returns {Instance}
    */
   computeCommonAncestorInstance() {
-    assert && assert( this.firstDrawable.instance && this.lastDrawable.instance,
-      'For common-ancestor fits, we need the first and last drawables to have direct instance references' );
+    assert &&
+      assert(
+        this.firstDrawable.instance && this.lastDrawable.instance,
+        'For common-ancestor fits, we need the first and last drawables to have direct instance references'
+      );
 
     let firstInstance = this.firstDrawable.instance;
     let lastInstance = this.lastDrawable.instance;
 
     // walk down the longest one until they are a common length
-    const minLength = Math.min( firstInstance.trail.length, lastInstance.trail.length );
-    while ( firstInstance.trail.length > minLength ) {
+    const minLength = Math.min(
+      firstInstance.trail.length,
+      lastInstance.trail.length
+    );
+    while (firstInstance.trail.length > minLength) {
       firstInstance = firstInstance.parent;
     }
-    while ( lastInstance.trail.length > minLength ) {
+    while (lastInstance.trail.length > minLength) {
       lastInstance = lastInstance.parent;
     }
 
     // step down until they match
-    while ( firstInstance !== lastInstance ) {
+    while (firstInstance !== lastInstance) {
       firstInstance = firstInstance.parent;
       lastInstance = lastInstance.parent;
     }
 
     const commonFitInstance = firstInstance;
 
-    assert && assert( commonFitInstance.trail.length >= this.transformRootInstance.trail.length );
+    assert &&
+      assert(
+        commonFitInstance.trail.length >=
+          this.transformRootInstance.trail.length
+      );
 
     return commonFitInstance;
   }
@@ -371,20 +407,24 @@ class FittedBlock extends Block {
    * @param {Drawable} firstDrawable
    * @param {Drawable} lastDrawable
    */
-  onIntervalChange( firstDrawable, lastDrawable ) {
-    sceneryLog && sceneryLog.FittedBlock && sceneryLog.FittedBlock( `#${this.id}.onIntervalChange ${firstDrawable.toString()} to ${lastDrawable.toString()}` );
+  onIntervalChange(firstDrawable, lastDrawable) {
+    sceneryLog &&
+      sceneryLog.FittedBlock &&
+      sceneryLog.FittedBlock(
+        `#${this.id}.onIntervalChange ${firstDrawable.toString()} to ${lastDrawable.toString()}`
+      );
 
-    super.onIntervalChange( firstDrawable, lastDrawable );
+    super.onIntervalChange(firstDrawable, lastDrawable);
 
     // if we use a common ancestor fit, find the common ancestor instance
-    if ( this.fit === FittedBlock.COMMON_ANCESTOR ) {
+    if (this.fit === FittedBlock.COMMON_ANCESTOR) {
       this.removeCommonFitInstance();
       this.markDirtyFit();
     }
   }
 }
 
-scenery.register( 'FittedBlock', FittedBlock );
+scenery.register('FittedBlock', FittedBlock);
 
 // Defines the FittedBlock.Fit enumeration type.
 FittedBlock.FULL_DISPLAY = 1;

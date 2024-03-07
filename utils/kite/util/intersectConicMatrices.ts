@@ -29,6 +29,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import SingularValueDecomposition from '../../dot/SingularValueDecomposition';
 import Matrix from '../../dot/Matrix';
 import Matrix3 from '../../dot/Matrix3';
@@ -222,6 +224,7 @@ const getRealIntersectionsForDegenerateConic = (matrix: Complex[]): (Vector2 | R
     }
     else {
       // Select only one root if we have it, we might have a double line
+      // eslint-disable-next-line no-lonely-if
       if (xAlphaRoots && xAlphaRoots.length === 1) {
         solutions = [
           [alpha, xAlphaRoots[0]]
@@ -519,6 +522,7 @@ const intersectConicMatrices = (a: Matrix3, b: Matrix3): ConicMatrixIntersection
     return { degenerateConicMatrices: [], intersectionCollections: [], points: [], lines: [] };
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const uniqueLambdas = _.uniqWith(potentialLambdas, (a: any, b) => a.equals(b));
 
   const degenerateConicMatrices = uniqueLambdas.map(lambda => {
@@ -574,9 +578,9 @@ const intersectConicMatrices = (a: Matrix3, b: Matrix3): ConicMatrixIntersection
 
   return {
     points: result,
-    degenerateConicMatrices: degenerateConicMatrices,
+    degenerateConicMatrices,
     lines: _.flatten(lineCollections),
-    intersectionCollections: intersectionCollections
+    intersectionCollections
   };
 };
 export default intersectConicMatrices;

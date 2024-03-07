@@ -7,10 +7,17 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../../dot/js/toSVGNumber.js';
-import cleanArray from '../../../phet-core/js/cleanArray.js';
-import Poolable from '../../../phet-core/js/Poolable.js';
-import { Drawable, GreedyStitcher, RebuildStitcher, scenery, Stitcher, Utils } from '../imports.js';
+import toSVGNumber from '../../dot/toSVGNumber';
+import cleanArray from '../../phet-core/cleanArray';
+import Poolable from '../../phet-core/Poolable';
+import {
+  Drawable,
+  GreedyStitcher,
+  RebuildStitcher,
+  scenery,
+  Stitcher,
+  Utils
+} from '../imports';
 
 // constants
 const useGreedyStitcher = true;
@@ -25,10 +32,22 @@ class BackboneDrawable extends Drawable {
    * @param {number} renderer
    * @param {boolean} isDisplayRoot
    */
-  constructor( display, backboneInstance, transformRootInstance, renderer, isDisplayRoot ) {
+  constructor(
+    display,
+    backboneInstance,
+    transformRootInstance,
+    renderer,
+    isDisplayRoot
+  ) {
     super();
 
-    this.initialize( display, backboneInstance, transformRootInstance, renderer, isDisplayRoot );
+    this.initialize(
+      display,
+      backboneInstance,
+      transformRootInstance,
+      renderer,
+      isDisplayRoot
+    );
   }
 
   /**
@@ -40,8 +59,14 @@ class BackboneDrawable extends Drawable {
    * @param {number} renderer
    * @param {boolean} isDisplayRoot
    */
-  initialize( display, backboneInstance, transformRootInstance, renderer, isDisplayRoot ) {
-    super.initialize( renderer );
+  initialize(
+    display,
+    backboneInstance,
+    transformRootInstance,
+    renderer,
+    isDisplayRoot
+  ) {
+    super.initialize(renderer);
 
     this.display = display;
 
@@ -53,36 +78,51 @@ class BackboneDrawable extends Drawable {
 
     // @private {Instance} - where have filters been applied to up? our responsibility is to apply filters between this
     // and our backboneInstance
-    this.filterRootAncestorInstance = backboneInstance.parent ? backboneInstance.parent.getFilterRootInstance() : backboneInstance;
+    this.filterRootAncestorInstance = backboneInstance.parent
+      ? backboneInstance.parent.getFilterRootInstance()
+      : backboneInstance;
 
     // where have transforms been applied up to? our responsibility is to apply transforms between this and our backboneInstance
-    this.transformRootAncestorInstance = backboneInstance.parent ? backboneInstance.parent.getTransformRootInstance() : backboneInstance;
+    this.transformRootAncestorInstance = backboneInstance.parent
+      ? backboneInstance.parent.getTransformRootInstance()
+      : backboneInstance;
 
-    this.willApplyTransform = this.transformRootAncestorInstance !== this.transformRootInstance;
-    this.willApplyFilters = this.filterRootAncestorInstance !== this.backboneInstance;
+    this.willApplyTransform =
+      this.transformRootAncestorInstance !== this.transformRootInstance;
+    this.willApplyFilters =
+      this.filterRootAncestorInstance !== this.backboneInstance;
 
-    this.transformListener = this.transformListener || this.markTransformDirty.bind( this );
-    if ( this.willApplyTransform ) {
-      this.backboneInstance.relativeTransform.addListener( this.transformListener ); // when our relative transform changes, notify us in the pre-repaint phase
+    this.transformListener =
+      this.transformListener || this.markTransformDirty.bind(this);
+    if (this.willApplyTransform) {
+      this.backboneInstance.relativeTransform.addListener(
+        this.transformListener
+      ); // when our relative transform changes, notify us in the pre-repaint phase
       this.backboneInstance.relativeTransform.addPrecompute(); // trigger precomputation of the relative transform, since we will always need it when it is updated
     }
 
-    this.backboneVisibilityListener = this.backboneVisibilityListener || this.updateBackboneVisibility.bind( this );
-    this.backboneInstance.relativeVisibleEmitter.addListener( this.backboneVisibilityListener );
+    this.backboneVisibilityListener =
+      this.backboneVisibilityListener ||
+      this.updateBackboneVisibility.bind(this);
+    this.backboneInstance.relativeVisibleEmitter.addListener(
+      this.backboneVisibilityListener
+    );
     this.updateBackboneVisibility();
     this.visibilityDirty = true;
 
     this.renderer = renderer;
-    this.domElement = isDisplayRoot ? display.domElement : BackboneDrawable.createDivBackbone();
+    this.domElement = isDisplayRoot
+      ? display.domElement
+      : BackboneDrawable.createDivBackbone();
     this.isDisplayRoot = isDisplayRoot;
-    this.dirtyDrawables = cleanArray( this.dirtyDrawables );
+    this.dirtyDrawables = cleanArray(this.dirtyDrawables);
 
     // Apply CSS needed for future CSS transforms to work properly.
-    Utils.prepareForTransform( this.domElement );
+    Utils.prepareForTransform(this.domElement);
 
     // Ff we need to, watch nodes below us (and including us) and apply their filters (opacity/visibility/clip) to the
     // backbone. Order will be important, since we'll visit them in the order of filter application
-    this.watchedFilterNodes = cleanArray( this.watchedFilterNodes );
+    this.watchedFilterNodes = cleanArray(this.watchedFilterNodes);
 
     // @private {boolean}
     this.filterDirty = true;
@@ -90,20 +130,30 @@ class BackboneDrawable extends Drawable {
     // @private {boolean}
     this.clipDirty = true;
 
-    this.filterDirtyListener = this.filterDirtyListener || this.onFilterDirty.bind( this );
-    this.clipDirtyListener = this.clipDirtyListener || this.onClipDirty.bind( this );
-    if ( this.willApplyFilters ) {
-      assert && assert( this.filterRootAncestorInstance.trail.nodes.length < this.backboneInstance.trail.nodes.length,
-        'Our backboneInstance should be deeper if we are applying filters' );
+    this.filterDirtyListener =
+      this.filterDirtyListener || this.onFilterDirty.bind(this);
+    this.clipDirtyListener =
+      this.clipDirtyListener || this.onClipDirty.bind(this);
+    if (this.willApplyFilters) {
+      assert &&
+        assert(
+          this.filterRootAncestorInstance.trail.nodes.length <
+            this.backboneInstance.trail.nodes.length,
+          'Our backboneInstance should be deeper if we are applying filters'
+        );
 
       // walk through to see which instances we'll need to watch for filter changes
       // NOTE: order is important, so that the filters are applied in the correct order!
-      for ( let instance = this.backboneInstance; instance !== this.filterRootAncestorInstance; instance = instance.parent ) {
+      for (
+        let instance = this.backboneInstance;
+        instance !== this.filterRootAncestorInstance;
+        instance = instance.parent
+      ) {
         const node = instance.node;
 
-        this.watchedFilterNodes.push( node );
-        node.filterChangeEmitter.addListener( this.filterDirtyListener );
-        node.clipAreaProperty.lazyLink( this.clipDirtyListener );
+        this.watchedFilterNodes.push(node);
+        node.filterChangeEmitter.addListener(this.filterDirtyListener);
+        node.clipAreaProperty.lazyLink(this.clipDirtyListener);
       }
     }
 
@@ -119,9 +169,13 @@ class BackboneDrawable extends Drawable {
     // If removedDrawables = false during disposal, it means we need to remove the drawables manually (this should only happen if an instance tree is removed)
     this.removedDrawables = false;
 
-    this.stitcher = this.stitcher || ( useGreedyStitcher ? new GreedyStitcher() : new RebuildStitcher() );
+    this.stitcher =
+      this.stitcher ||
+      (useGreedyStitcher ? new GreedyStitcher() : new RebuildStitcher());
 
-    sceneryLog && sceneryLog.BackboneDrawable && sceneryLog.BackboneDrawable( `initialized ${this.toString()}` );
+    sceneryLog &&
+      sceneryLog.BackboneDrawable &&
+      sceneryLog.BackboneDrawable(`initialized ${this.toString()}`);
   }
 
   /**
@@ -129,31 +183,38 @@ class BackboneDrawable extends Drawable {
    * @public
    */
   dispose() {
-    sceneryLog && sceneryLog.BackboneDrawable && sceneryLog.BackboneDrawable( `dispose ${this.toString()}` );
+    sceneryLog &&
+      sceneryLog.BackboneDrawable &&
+      sceneryLog.BackboneDrawable(`dispose ${this.toString()}`);
     sceneryLog && sceneryLog.BackboneDrawable && sceneryLog.push();
 
-
-    while ( this.watchedFilterNodes.length ) {
+    while (this.watchedFilterNodes.length) {
       const node = this.watchedFilterNodes.pop();
 
-      node.filterChangeEmitter.removeListener( this.filterDirtyListener );
-      node.clipAreaProperty.unlink( this.clipDirtyListener );
+      node.filterChangeEmitter.removeListener(this.filterDirtyListener);
+      node.clipAreaProperty.unlink(this.clipDirtyListener);
     }
 
-    this.backboneInstance.relativeVisibleEmitter.removeListener( this.backboneVisibilityListener );
+    this.backboneInstance.relativeVisibleEmitter.removeListener(
+      this.backboneVisibilityListener
+    );
 
     // if we need to remove drawables from the blocks, do so
-    if ( !this.removedDrawables ) {
-      for ( let d = this.previousFirstDrawable; d !== null; d = d.nextDrawable ) {
-        d.parentDrawable.removeDrawable( d );
-        if ( d === this.previousLastDrawable ) { break; }
+    if (!this.removedDrawables) {
+      for (let d = this.previousFirstDrawable; d !== null; d = d.nextDrawable) {
+        d.parentDrawable.removeDrawable(d);
+        if (d === this.previousLastDrawable) {
+          break;
+        }
       }
     }
 
     this.markBlocksForDisposal();
 
-    if ( this.willApplyTransform ) {
-      this.backboneInstance.relativeTransform.removeListener( this.transformListener );
+    if (this.willApplyTransform) {
+      this.backboneInstance.relativeTransform.removeListener(
+        this.transformListener
+      );
       this.backboneInstance.relativeTransform.removePrecompute();
     }
 
@@ -161,8 +222,8 @@ class BackboneDrawable extends Drawable {
     this.transformRootInstance = null;
     this.filterRootAncestorInstance = null;
     this.transformRootAncestorInstance = null;
-    cleanArray( this.dirtyDrawables );
-    cleanArray( this.watchedFilterNodes );
+    cleanArray(this.dirtyDrawables);
+    cleanArray(this.watchedFilterNodes);
 
     this.previousFirstDrawable = null;
     this.previousLastDrawable = null;
@@ -177,15 +238,19 @@ class BackboneDrawable extends Drawable {
    * @public
    */
   markBlocksForDisposal() {
-    while ( this.blocks.length ) {
+    while (this.blocks.length) {
       const block = this.blocks.pop();
-      sceneryLog && sceneryLog.BackboneDrawable && sceneryLog.BackboneDrawable( `${this.toString()} removing block: ${block.toString()}` );
-      //TODO: PERFORMANCE: does this cause reflows / style calculation https://github.com/phetsims/scenery/issues/1581
-      if ( block.domElement.parentNode === this.domElement ) {
+      sceneryLog &&
+        sceneryLog.BackboneDrawable &&
+        sceneryLog.BackboneDrawable(
+          `${this.toString()} removing block: ${block.toString()}`
+        );
+      // TODO: PERFORMANCE: does this cause reflows / style calculation https://github.com/phetsims/scenery/issues/1581
+      if (block.domElement.parentNode === this.domElement) {
         // guarded, since we may have a (new) child drawable add it before we can remove it
-        this.domElement.removeChild( block.domElement );
+        this.domElement.removeChild(block.domElement);
       }
-      block.markForDisposal( this.display );
+      block.markForDisposal(this.display);
     }
   }
 
@@ -195,7 +260,7 @@ class BackboneDrawable extends Drawable {
   updateBackboneVisibility() {
     this.visible = this.backboneInstance.relativeVisible;
 
-    if ( !this.visibilityDirty ) {
+    if (!this.visibilityDirty) {
       this.visibilityDirty = true;
       this.markDirty();
     }
@@ -210,15 +275,21 @@ class BackboneDrawable extends Drawable {
    *
    * @param {Display} display
    */
-  markForDisposal( display ) {
-    for ( let d = this.previousFirstDrawable; d !== null; d = d.oldNextDrawable ) {
-      d.notePendingRemoval( this.display );
-      if ( d === this.previousLastDrawable ) { break; }
+  markForDisposal(display) {
+    for (
+      let d = this.previousFirstDrawable;
+      d !== null;
+      d = d.oldNextDrawable
+    ) {
+      d.notePendingRemoval(this.display);
+      if (d === this.previousLastDrawable) {
+        break;
+      }
     }
     this.removedDrawables = true;
 
     // super call
-    super.markForDisposal( display );
+    super.markForDisposal(display);
   }
 
   /**
@@ -227,13 +298,13 @@ class BackboneDrawable extends Drawable {
    *
    * @param {Drawable} drawable
    */
-  markDirtyDrawable( drawable ) {
-    if ( assert ) {
+  markDirtyDrawable(drawable) {
+    if (assert) {
       // Catch infinite loops
       this.display.ensureNotPainting();
     }
 
-    this.dirtyDrawables.push( drawable );
+    this.dirtyDrawables.push(drawable);
     this.markDirty();
   }
 
@@ -242,10 +313,14 @@ class BackboneDrawable extends Drawable {
    * @public
    */
   markTransformDirty() {
-    assert && assert( this.willApplyTransform, 'Sanity check for willApplyTransform' );
+    assert &&
+      assert(this.willApplyTransform, 'Sanity check for willApplyTransform');
 
     // relative matrix on backbone instance should be up to date, since we added the compute flags
-    Utils.applyPreparedTransform( this.backboneInstance.relativeTransform.matrix, this.domElement );
+    Utils.applyPreparedTransform(
+      this.backboneInstance.relativeTransform.matrix,
+      this.domElement
+    );
   }
 
   /**
@@ -253,7 +328,7 @@ class BackboneDrawable extends Drawable {
    * @private
    */
   onFilterDirty() {
-    if ( !this.filterDirty ) {
+    if (!this.filterDirty) {
       this.filterDirty = true;
       this.markDirty();
     }
@@ -264,7 +339,7 @@ class BackboneDrawable extends Drawable {
    * @private
    */
   onClipDirty() {
-    if ( !this.clipDirty ) {
+    if (!this.clipDirty) {
       this.clipDirty = true;
       this.markDirty();
     }
@@ -280,49 +355,49 @@ class BackboneDrawable extends Drawable {
    */
   update() {
     // See if we need to actually update things (will bail out if we are not dirty, or if we've been disposed)
-    if ( !super.update() ) {
+    if (!super.update()) {
       return false;
     }
 
-    while ( this.dirtyDrawables.length ) {
+    while (this.dirtyDrawables.length) {
       this.dirtyDrawables.pop().update();
     }
 
-    if ( this.filterDirty ) {
+    if (this.filterDirty) {
       this.filterDirty = false;
 
       let filterString = '';
 
       const len = this.watchedFilterNodes.length;
-      for ( let i = 0; i < len; i++ ) {
-        const node = this.watchedFilterNodes[ i ];
+      for (let i = 0; i < len; i++) {
+        const node = this.watchedFilterNodes[i];
         const opacity = node.getEffectiveOpacity();
 
-        for ( let j = 0; j < node._filters.length; j++ ) {
-          filterString += `${filterString ? ' ' : ''}${node._filters[ j ].getCSSFilterString()}`;
+        for (let j = 0; j < node._filters.length; j++) {
+          filterString += `${filterString ? ' ' : ''}${node._filters[j].getCSSFilterString()}`;
         }
 
         // Apply opacity after other effects
-        if ( opacity !== 1 ) {
-          filterString += `${filterString ? ' ' : ''}opacity(${toSVGNumber( opacity )})`;
+        if (opacity !== 1) {
+          filterString += `${filterString ? ' ' : ''}opacity(${toSVGNumber(opacity)})`;
         }
       }
 
       this.domElement.style.filter = filterString;
     }
 
-    if ( this.visibilityDirty ) {
+    if (this.visibilityDirty) {
       this.visibilityDirty = false;
 
       this.domElement.style.display = this.visible ? '' : 'none';
     }
 
-    if ( this.clipDirty ) {
+    if (this.clipDirty) {
       this.clipDirty = false;
 
       // var clip = this.willApplyFilters ? this.getFilterClip() : '';
 
-      //OHTWO TODO: CSS clip-path/mask support here. see http://www.html5rocks.com/en/tutorials/masking/adobe/ https://github.com/phetsims/scenery/issues/1581
+      // OHTWO TODO: CSS clip-path/mask support here. see http://www.html5rocks.com/en/tutorials/masking/adobe/ https://github.com/phetsims/scenery/issues/1581
       // this.domElement.style.clipPath = clip; // yikes! temporary, since we already threw something?
     }
 
@@ -338,8 +413,8 @@ class BackboneDrawable extends Drawable {
    */
   getFilterVisibility() {
     const len = this.watchedFilterNodes.length;
-    for ( let i = 0; i < len; i++ ) {
-      if ( !this.watchedFilterNodes[ i ].isVisible() ) {
+    for (let i = 0; i < len; i++) {
+      if (!this.watchedFilterNodes[i].isVisible()) {
         return false;
       }
     }
@@ -356,7 +431,7 @@ class BackboneDrawable extends Drawable {
   getFilterClip() {
     const clip = '';
 
-    //OHTWO TODO: proper clipping support https://github.com/phetsims/scenery/issues/1581
+    // OHTWO TODO: proper clipping support https://github.com/phetsims/scenery/issues/1581
     // var len = this.watchedFilterNodes.length;
     // for ( var i = 0; i < len; i++ ) {
     //   if ( this.watchedFilterNodes[i].clipArea ) {
@@ -374,23 +449,30 @@ class BackboneDrawable extends Drawable {
   reindexBlocks() {
     // full-pass change for zindex.
     let zIndex = 0; // don't start below 1 (we ensure > in loop)
-    for ( let k = 0; k < this.blocks.length; k++ ) {
-      const block = this.blocks[ k ];
-      if ( block.zIndex <= zIndex ) {
-        const newIndex = ( k + 1 < this.blocks.length && this.blocks[ k + 1 ].zIndex - 1 > zIndex ) ?
-                         Math.ceil( ( zIndex + this.blocks[ k + 1 ].zIndex ) / 2 ) :
-                         zIndex + 20;
+    for (let k = 0; k < this.blocks.length; k++) {
+      const block = this.blocks[k];
+      if (block.zIndex <= zIndex) {
+        const newIndex =
+          k + 1 < this.blocks.length && this.blocks[k + 1].zIndex - 1 > zIndex
+            ? Math.ceil((zIndex + this.blocks[k + 1].zIndex) / 2)
+            : zIndex + 20;
 
         // NOTE: this should give it its own stacking index (which is what we want)
         block.domElement.style.zIndex = block.zIndex = newIndex;
       }
       zIndex = block.zIndex;
 
-      if ( assert ) {
-        assert( this.blocks[ k ].zIndex % 1 === 0, 'z-indices should be integers' );
-        assert( this.blocks[ k ].zIndex > 0, 'z-indices should be greater than zero for our needs (see spec)' );
-        if ( k > 0 ) {
-          assert( this.blocks[ k - 1 ].zIndex < this.blocks[ k ].zIndex, 'z-indices should be strictly increasing' );
+      if (assert) {
+        assert(this.blocks[k].zIndex % 1 === 0, 'z-indices should be integers');
+        assert(
+          this.blocks[k].zIndex > 0,
+          'z-indices should be greater than zero for our needs (see spec)'
+        );
+        if (k > 0) {
+          assert(
+            this.blocks[k - 1].zIndex < this.blocks[k].zIndex,
+            'z-indices should be strictly increasing'
+          );
         }
       }
     }
@@ -408,20 +490,26 @@ class BackboneDrawable extends Drawable {
    * @param {ChangeInterval} firstChangeInterval
    * @param {ChangeInterval} lastChangeInterval
    */
-  stitch( firstDrawable, lastDrawable, firstChangeInterval, lastChangeInterval ) {
+  stitch(firstDrawable, lastDrawable, firstChangeInterval, lastChangeInterval) {
     // no stitch necessary if there are no change intervals
-    if ( firstChangeInterval === null || lastChangeInterval === null ) {
-      assert && assert( firstChangeInterval === null );
-      assert && assert( lastChangeInterval === null );
+    if (firstChangeInterval === null || lastChangeInterval === null) {
+      assert && assert(firstChangeInterval === null);
+      assert && assert(lastChangeInterval === null);
       return;
     }
 
-    assert && assert( lastChangeInterval.nextChangeInterval === null, 'This allows us to have less checks in the loop' );
+    assert &&
+      assert(
+        lastChangeInterval.nextChangeInterval === null,
+        'This allows us to have less checks in the loop'
+      );
 
-    if ( sceneryLog && sceneryLog.Stitch ) {
-      sceneryLog.Stitch( `Stitch intervals before constricting: ${this.toString()}` );
+    if (sceneryLog && sceneryLog.Stitch) {
+      sceneryLog.Stitch(
+        `Stitch intervals before constricting: ${this.toString()}`
+      );
       sceneryLog.push();
-      Stitcher.debugIntervals( firstChangeInterval );
+      Stitcher.debugIntervals(firstChangeInterval);
       sceneryLog.pop();
     }
 
@@ -430,20 +518,19 @@ class BackboneDrawable extends Drawable {
     let lastNonemptyInterval = null;
     let interval = firstChangeInterval;
     let intervalsChanged = false;
-    while ( interval ) {
+    while (interval) {
       intervalsChanged = interval.constrict() || intervalsChanged;
 
-      if ( interval.isEmpty() ) {
-        assert && assert( intervalsChanged );
+      if (interval.isEmpty()) {
+        assert && assert(intervalsChanged);
 
-        if ( lastNonemptyInterval ) {
+        if (lastNonemptyInterval) {
           // skip it, hook the correct reference
           lastNonemptyInterval.nextChangeInterval = interval.nextChangeInterval;
         }
-      }
-      else {
+      } else {
         // our first non-empty interval will be our new firstChangeInterval
-        if ( !lastNonemptyInterval ) {
+        if (!lastNonemptyInterval) {
           firstChangeInterval = interval;
         }
         lastNonemptyInterval = interval;
@@ -451,7 +538,7 @@ class BackboneDrawable extends Drawable {
       interval = interval.nextChangeInterval;
     }
 
-    if ( !lastNonemptyInterval ) {
+    if (!lastNonemptyInterval) {
       // eek, no nonempty change intervals. do nothing (good to catch here, but ideally there shouldn't be change
       // intervals that all collapse).
       return;
@@ -460,29 +547,44 @@ class BackboneDrawable extends Drawable {
     lastChangeInterval = lastNonemptyInterval;
     lastChangeInterval.nextChangeInterval = null;
 
-    if ( sceneryLog && sceneryLog.Stitch && intervalsChanged ) {
-      sceneryLog.Stitch( `Stitch intervals after constricting: ${this.toString()}` );
+    if (sceneryLog && sceneryLog.Stitch && intervalsChanged) {
+      sceneryLog.Stitch(
+        `Stitch intervals after constricting: ${this.toString()}`
+      );
       sceneryLog.push();
-      Stitcher.debugIntervals( firstChangeInterval );
+      Stitcher.debugIntervals(firstChangeInterval);
       sceneryLog.pop();
     }
 
-    if ( sceneryLog && scenery.isLoggingPerformance() ) {
+    if (sceneryLog && scenery.isLoggingPerformance()) {
       this.display.perfStitchCount++;
 
       let dInterval = firstChangeInterval;
 
-      while ( dInterval ) {
+      while (dInterval) {
         this.display.perfIntervalCount++;
 
-        this.display.perfDrawableOldIntervalCount += dInterval.getOldInternalDrawableCount( this.previousFirstDrawable, this.previousLastDrawable );
-        this.display.perfDrawableNewIntervalCount += dInterval.getNewInternalDrawableCount( firstDrawable, lastDrawable );
+        this.display.perfDrawableOldIntervalCount +=
+          dInterval.getOldInternalDrawableCount(
+            this.previousFirstDrawable,
+            this.previousLastDrawable
+          );
+        this.display.perfDrawableNewIntervalCount +=
+          dInterval.getNewInternalDrawableCount(firstDrawable, lastDrawable);
 
         dInterval = dInterval.nextChangeInterval;
       }
     }
 
-    this.stitcher.stitch( this, firstDrawable, lastDrawable, this.previousFirstDrawable, this.previousLastDrawable, firstChangeInterval, lastChangeInterval );
+    this.stitcher.stitch(
+      this,
+      firstDrawable,
+      lastDrawable,
+      this.previousFirstDrawable,
+      this.previousLastDrawable,
+      firstChangeInterval,
+      lastChangeInterval
+    );
   }
 
   /**
@@ -494,15 +596,23 @@ class BackboneDrawable extends Drawable {
    * @param {boolean} allowPendingList
    * @param {boolean} allowDirty
    */
-  audit( allowPendingBlock, allowPendingList, allowDirty ) {
-    if ( assertSlow ) {
-      super.audit( allowPendingBlock, allowPendingList, allowDirty );
+  audit(allowPendingBlock, allowPendingList, allowDirty) {
+    if (assertSlow) {
+      super.audit(allowPendingBlock, allowPendingList, allowDirty);
 
-      assertSlow && assertSlow( this.backboneInstance.isBackbone, 'We should reference an instance that requires a backbone' );
-      assertSlow && assertSlow( this.transformRootInstance.isTransformed, 'Transform root should be transformed' );
+      assertSlow &&
+        assertSlow(
+          this.backboneInstance.isBackbone,
+          'We should reference an instance that requires a backbone'
+        );
+      assertSlow &&
+        assertSlow(
+          this.transformRootInstance.isTransformed,
+          'Transform root should be transformed'
+        );
 
-      for ( let i = 0; i < this.blocks.length; i++ ) {
-        this.blocks[ i ].audit( allowPendingBlock, allowPendingList, allowDirty );
+      for (let i = 0; i < this.blocks.length; i++) {
+        this.blocks[i].audit(allowPendingBlock, allowPendingList, allowDirty);
       }
     }
   }
@@ -514,7 +624,7 @@ class BackboneDrawable extends Drawable {
    * @returns {HTMLDivElement}
    */
   static createDivBackbone() {
-    const div = document.createElement( 'div' );
+    const div = document.createElement('div');
     div.style.position = 'absolute';
     div.style.left = '0';
     div.style.top = '0';
@@ -530,11 +640,14 @@ class BackboneDrawable extends Drawable {
    * @param {HTMLElement} element
    * @returns {HTMLElement} - For chaining
    */
-  static repurposeBackboneContainer( element ) {
+  static repurposeBackboneContainer(element) {
     // if ( element.style.position !== 'relative' || element.style.position !== 'absolute' ) {
     //   element.style.position = 'relative';
     // }
-    if ( element.style.position !== 'relative' && element.style.position !== 'absolute' ) {
+    if (
+      element.style.position !== 'relative' &&
+      element.style.position !== 'absolute'
+    ) {
       element.style.position = 'relative';
     }
     element.style.left = '0';
@@ -543,8 +656,8 @@ class BackboneDrawable extends Drawable {
   }
 }
 
-scenery.register( 'BackboneDrawable', BackboneDrawable );
+scenery.register('BackboneDrawable', BackboneDrawable);
 
-Poolable.mixInto( BackboneDrawable );
+Poolable.mixInto(BackboneDrawable);
 
 export default BackboneDrawable;

@@ -47,6 +47,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import CallbackTimer from '../../axon/CallbackTimer';
 import optionize from '../../phet-core/optionize';
 import { type EnglishKey, EnglishStringToCodeMap, FocusManager, globalKeyStateTracker, scenery, SceneryEvent, type TInputListener } from '../imports';
@@ -542,10 +544,10 @@ class KeyboardListener<Keys extends readonly OneKeyStroke[]> implements TInputLi
       }) : null;
 
       const keyGroup: KeyGroup<Keys> = {
-        keys: keys,
-        modifierKeys: modifierKeys,
-        naturalKeys: naturalKeys,
-        timer: timer
+        keys,
+        modifierKeys,
+        naturalKeys,
+        timer
       };
       return keyGroup;
     });

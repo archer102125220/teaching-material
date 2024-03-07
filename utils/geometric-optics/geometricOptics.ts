@@ -6,6 +6,6 @@
  * @author veillette
  */
 
-import Namespace from '../../phet-core/js/Namespace.js';
+import Namespace from '../phet-core/Namespace';
 
-export default new Namespace( 'geometricOptics' );
+export default new Namespace('geometricOptics');

@@ -10,6 +10,8 @@
  * @author Jesse Greenberg
  */
 
+import _ from 'lodash';
+
 import { isTReadOnlyProperty } from '../../../axon/TReadOnlyProperty';
 import validate from '../../../axon/validate';
 import Validation from '../../../axon/Validation';
@@ -51,31 +53,57 @@ const BR_TAG = 'BR';
 
 // These browser tags are a definition of default focusable elements, converted from Javascript types,
 // see https://stackoverflow.com/questions/1599660/which-html-elements-can-receive-focus
-const DEFAULT_FOCUSABLE_TAGS = [ A_TAG, AREA_TAG, INPUT_TAG, SELECT_TAG, TEXTAREA_TAG, BUTTON_TAG, IFRAME_TAG ];
+const DEFAULT_FOCUSABLE_TAGS = [
+  A_TAG,
+  AREA_TAG,
+  INPUT_TAG,
+  SELECT_TAG,
+  TEXTAREA_TAG,
+  BUTTON_TAG,
+  IFRAME_TAG
+];
 
 // collection of tags that are used for formatting text
-const FORMATTING_TAGS = [ BOLD_TAG, STRONG_TAG, I_TAG, EM_TAG, MARK_TAG, SMALL_TAG, DEL_TAG, INS_TAG, SUB_TAG,
-  SUP_TAG, BR_TAG ];
+const FORMATTING_TAGS = [
+  BOLD_TAG,
+  STRONG_TAG,
+  I_TAG,
+  EM_TAG,
+  MARK_TAG,
+  SMALL_TAG,
+  DEL_TAG,
+  INS_TAG,
+  SUB_TAG,
+  SUP_TAG,
+  BR_TAG
+];
 
 // these elements do not have a closing tag, so they won't support features like innerHTML. This is how PhET treats
 // these elements, not necessary what is legal html.
-const ELEMENTS_WITHOUT_CLOSING_TAG = [ INPUT_TAG ];
+const ELEMENTS_WITHOUT_CLOSING_TAG = [INPUT_TAG];
 
 // valid DOM events that the display adds listeners to. For a list of scenery events that support pdom features
 // see Input.PDOM_EVENT_TYPES
 // NOTE: Update BrowserEvents if this is added to
-const DOM_EVENTS = [ 'focusin', 'focusout', 'input', 'change', 'click', 'keydown', 'keyup' ];
+const DOM_EVENTS = [
+  'focusin',
+  'focusout',
+  'input',
+  'change',
+  'click',
+  'keydown',
+  'keyup'
+];
 
 // DOM events that must have been triggered from user input of some kind, and will trigger the
 // Display.userGestureEmitter. focus and blur events will trigger from scripting so they must be excluded.
-const USER_GESTURE_EVENTS = [ 'input', 'change', 'click', 'keydown', 'keyup' ];
+const USER_GESTURE_EVENTS = ['input', 'change', 'click', 'keydown', 'keyup'];
 
 // A collection of DOM events which should be blocked from reaching the scenery Display div
 // if they are targeted at an ancestor of the PDOM. Some screen readers try to send fake
 // mouse/touch/pointer events to elements but for the purposes of Accessibility we only
 // want to respond to DOM_EVENTS.
 const BLOCKED_DOM_EVENTS = [
-
   // touch
   'touchstart',
   'touchend',
@@ -113,7 +141,11 @@ const DATA_FOCUSABLE = 'data-focusable';
 const DATA_PDOM_UNIQUE_ID = 'data-unique-id';
 
 // {Array.<String>} attributes that put an ID of another attribute as the value, see https://github.com/phetsims/scenery/issues/819
-const ASSOCIATION_ATTRIBUTES = [ ARIA_LABELLEDBY, ARIA_DESCRIBEDBY, ARIA_ACTIVE_DESCENDANT ];
+const ASSOCIATION_ATTRIBUTES = [
+  ARIA_LABELLEDBY,
+  ARIA_DESCRIBEDBY,
+  ARIA_ACTIVE_DESCENDANT
+];
 
 /**
  * Get all 'element' nodes off the parent element, placing them in an array for easy traversal.  Note that this
@@ -122,17 +154,15 @@ const ASSOCIATION_ATTRIBUTES = [ ARIA_LABELLEDBY, ARIA_DESCRIBEDBY, ARIA_ACTIVE_
  * @param  {HTMLElement} domElement - parent whose children will be linearized
  * @returns {HTMLElement[]}
  */
-function getLinearDOMElements( domElement ) {
-
+function getLinearDOMElements(domElement) {
   // gets ALL descendant children for the element
-  const children = domElement.getElementsByTagName( '*' );
+  const children = domElement.getElementsByTagName('*');
 
   const linearDOM = [];
-  for ( let i = 0; i < children.length; i++ ) {
-
+  for (let i = 0; i < children.length; i++) {
     // searching for the HTML element nodes (NOT Scenery nodes)
-    if ( children[ i ].nodeType === Node.ELEMENT_NODE ) {
-      linearDOM[ i ] = ( children[ i ] );
+    if (children[i].nodeType === Node.ELEMENT_NODE) {
+      linearDOM[i] = children[i];
     }
   }
   return linearDOM;
@@ -145,15 +175,13 @@ function getLinearDOMElements( domElement ) {
  * @param {HTMLElement} domElement
  * @returns {Boolean}
  */
-function isElementHidden( domElement ) {
-  if ( domElement.hidden ) {
+function isElementHidden(domElement) {
+  if (domElement.hidden) {
     return true;
-  }
-  else if ( domElement === document.body ) {
+  } else if (domElement === document.body) {
     return false;
-  }
-  else {
-    return isElementHidden( domElement.parentElement );
+  } else {
+    return isElementHidden(domElement.parentElement);
   }
 }
 
@@ -167,23 +195,22 @@ function isElementHidden( domElement ) {
  * @param {HTMLElement} [parentElement] - optional, search will be limited to children of this element
  * @returns {HTMLElement}
  */
-function getNextPreviousFocusable( direction, parentElement ) {
-
+function getNextPreviousFocusable(direction, parentElement) {
   // linearize the document [or the desired parent] for traversal
   const parent = parentElement || document.body;
-  const linearDOM = getLinearDOMElements( parent );
+  const linearDOM = getLinearDOMElements(parent);
 
   const activeElement = document.activeElement;
-  const activeIndex = linearDOM.indexOf( activeElement );
+  const activeIndex = linearDOM.indexOf(activeElement);
   const delta = direction === NEXT ? +1 : -1;
 
   // find the next focusable element in the DOM
   let nextIndex = activeIndex + delta;
-  while ( nextIndex < linearDOM.length && nextIndex >= 0 ) {
-    const nextElement = linearDOM[ nextIndex ];
+  while (nextIndex < linearDOM.length && nextIndex >= 0) {
+    const nextElement = linearDOM[nextIndex];
     nextIndex += delta;
 
-    if ( PDOMUtils.isElementFocusable( nextElement ) ) {
+    if (PDOMUtils.isElementFocusable(nextElement)) {
       return nextElement;
     }
   }
@@ -198,14 +225,12 @@ function getNextPreviousFocusable( direction, parentElement ) {
  * @param  {string} string
  * @returns {string}
  */
-function trimLeft( string ) {
-
+function trimLeft(string) {
   // ^ - from the beginning of the string
   // \s - whitespace character
   // + - greedy
-  return string.replace( /^\s+/, '' );
+  return string.replace(/^\s+/, '');
 }
-
 
 /**
  * Returns whether or not the tagName supports innerHTML or textContent in PhET.
@@ -213,12 +238,11 @@ function trimLeft( string ) {
  * @param {string} tagName
  * @returns {boolean}
  */
-function tagNameSupportsContent( tagName ) {
-  return !_.includes( ELEMENTS_WITHOUT_CLOSING_TAG, tagName.toUpperCase() );
+function tagNameSupportsContent(tagName) {
+  return !_.includes(ELEMENTS_WITHOUT_CLOSING_TAG, tagName.toUpperCase());
 }
 
 const PDOMUtils = {
-
   /**
    * Given a Property or string, return the Propergy value if it is a property. Otherwise just return the string.
    * Useful for forwarding the string to DOM content, but allowing the API to take a StringProperty. Eventually
@@ -226,10 +250,15 @@ const PDOMUtils = {
    * @param valueOrProperty
    * @returns {string|Property}
    */
-  unwrapStringProperty( valueOrProperty ) {
-    const result = valueOrProperty === null ? null : ( typeof valueOrProperty === 'string' ? valueOrProperty : valueOrProperty.value );
+  unwrapStringProperty(valueOrProperty) {
+    const result =
+      valueOrProperty === null
+        ? null
+        : typeof valueOrProperty === 'string'
+          ? valueOrProperty
+          : valueOrProperty.value;
 
-    assert && assert( result === null || typeof result === 'string' );
+    assert && assert(result === null || typeof result === 'string');
 
     return result;
   },
@@ -243,8 +272,8 @@ const PDOMUtils = {
    * @param {HTMLElement} [parentElement] - optional, search will be limited to elements under this element
    * @returns {HTMLElement}
    */
-  getNextFocusable( parentElement ) {
-    return getNextPreviousFocusable( NEXT, parentElement );
+  getNextFocusable(parentElement) {
+    return getNextPreviousFocusable(NEXT, parentElement);
   },
 
   /**
@@ -256,8 +285,8 @@ const PDOMUtils = {
    * @param {HTMLElement} [parentElement] - optional, search will be limited to elements under this parent
    * @returns {HTMLElement}
    */
-  getPreviousFocusable( parentElement ) {
-    return getNextPreviousFocusable( PREVIOUS, parentElement );
+  getPreviousFocusable(parentElement) {
+    return getNextPreviousFocusable(PREVIOUS, parentElement);
   },
 
   /**
@@ -267,19 +296,19 @@ const PDOMUtils = {
    * @param {HTMLElement} [parentElement] - optionally restrict the search to elements under this parent
    * @returns {HTMLElement}
    */
-  getFirstFocusable( parentElement ) {
+  getFirstFocusable(parentElement) {
     const parent = parentElement || document.body;
-    const linearDOM = getLinearDOMElements( parent );
+    const linearDOM = getLinearDOMElements(parent);
 
     // return the document.body if no element is found
     let firstFocusable = document.body;
 
     let nextIndex = 0;
-    while ( nextIndex < linearDOM.length ) {
-      const nextElement = linearDOM[ nextIndex ];
+    while (nextIndex < linearDOM.length) {
+      const nextElement = linearDOM[nextIndex];
       nextIndex++;
 
-      if ( PDOMUtils.isElementFocusable( nextElement ) ) {
+      if (PDOMUtils.isElementFocusable(nextElement)) {
         firstFocusable = nextElement;
         break;
       }
@@ -295,16 +324,17 @@ const PDOMUtils = {
    * @parma {Random} random
    * @returns {HTMLElement}
    */
-  getRandomFocusable( random ) {
-    assert && assert( random, 'Random expected' );
+  getRandomFocusable(random) {
+    assert && assert(random, 'Random expected');
 
-    const linearDOM = getLinearDOMElements( document.body );
+    const linearDOM = getLinearDOMElements(document.body);
     const focusableElements = [];
-    for ( let i = 0; i < linearDOM.length; i++ ) {
-      PDOMUtils.isElementFocusable( linearDOM[ i ] ) && focusableElements.push( linearDOM[ i ] );
+    for (let i = 0; i < linearDOM.length; i++) {
+      PDOMUtils.isElementFocusable(linearDOM[i]) &&
+        focusableElements.push(linearDOM[i]);
     }
 
-    return focusableElements[ random.nextInt( focusableElements.length ) ];
+    return focusableElements[random.nextInt(focusableElements.length)];
   },
 
   /**
@@ -315,8 +345,10 @@ const PDOMUtils = {
    * @param {string | boolean | number | TReadOnlyProperty<string|boolean|number>} valueOrProperty
    * @returns {string|boolean|number}
    */
-  unwrapProperty( valueOrProperty ) {
-    return isTReadOnlyProperty( valueOrProperty ) ? valueOrProperty.value : valueOrProperty;
+  unwrapProperty(valueOrProperty) {
+    return isTReadOnlyProperty(valueOrProperty)
+      ? valueOrProperty.value
+      : valueOrProperty;
   },
 
   /**
@@ -327,57 +359,64 @@ const PDOMUtils = {
    * @param {string} textContent
    * @returns {boolean}
    */
-  containsFormattingTags( textContent ) {
-
+  containsFormattingTags(textContent) {
     // no-op for null case
-    if ( textContent === null ) {
+    if (textContent === null) {
       return false;
     }
-    assert && assert( typeof textContent === 'string', 'unsupported type for textContent.' );
+    assert &&
+      assert(
+        typeof textContent === 'string',
+        'unsupported type for textContent.'
+      );
 
     let i = 0;
     const openIndices = [];
     const closeIndices = [];
 
     // find open/close tag pairs in the text content
-    while ( i < textContent.length ) {
-      const openIndex = textContent.indexOf( '<', i );
-      const closeIndex = textContent.indexOf( '>', i );
+    while (i < textContent.length) {
+      const openIndex = textContent.indexOf('<', i);
+      const closeIndex = textContent.indexOf('>', i);
 
-      if ( openIndex > -1 ) {
-        openIndices.push( openIndex );
+      if (openIndex > -1) {
+        openIndices.push(openIndex);
         i = openIndex + 1;
       }
-      if ( closeIndex > -1 ) {
-        closeIndices.push( closeIndex );
+      if (closeIndex > -1) {
+        closeIndices.push(closeIndex);
         i = closeIndex + 1;
-      }
-      else {
+      } else {
         i++;
       }
     }
 
     // malformed tags or no tags at all, return false immediately
-    if ( openIndices.length !== closeIndices.length || openIndices.length === 0 ) {
+    if (
+      openIndices.length !== closeIndices.length ||
+      openIndices.length === 0
+    ) {
       return false;
     }
 
     // check the name in between the open and close brackets - if anything other than formatting tags, return false
     let onlyFormatting = true;
     const upperCaseContent = textContent.toUpperCase();
-    for ( let j = 0; j < openIndices.length; j++ ) {
-
+    for (let j = 0; j < openIndices.length; j++) {
       // get the name and remove the closing slash
-      let subString = upperCaseContent.substring( openIndices[ j ] + 1, closeIndices[ j ] );
-      subString = subString.replace( '/', '' );
+      let subString = upperCaseContent.substring(
+        openIndices[j] + 1,
+        closeIndices[j]
+      );
+      subString = subString.replace('/', '');
 
       // if the left of the substring contains space, it is not a valid tag so allow
-      const trimmed = trimLeft( subString );
-      if ( subString.length - trimmed.length > 0 ) {
+      const trimmed = trimLeft(subString);
+      if (subString.length - trimmed.length > 0) {
         continue;
       }
 
-      if ( !_.includes( FORMATTING_TAGS, subString ) ) {
+      if (!_.includes(FORMATTING_TAGS, subString)) {
         onlyFormatting = false;
       }
     }
@@ -395,32 +434,31 @@ const PDOMUtils = {
    * @param {string|number|null} textContent - domElement is cleared of content if null, could have acceptable HTML
    *                                    "formatting" tags in it
    */
-  setTextContent( domElement, textContent ) {
-    assert && assert( domElement instanceof Element ); // parent to HTMLElement, to support other namespaces
-    assert && assert( textContent === null || typeof textContent === 'string' );
+  setTextContent(domElement, textContent) {
+    assert && assert(domElement instanceof Element); // parent to HTMLElement, to support other namespaces
+    assert && assert(textContent === null || typeof textContent === 'string');
 
-    if ( textContent === null ) {
+    if (textContent === null) {
       domElement.innerHTML = '';
-    }
-    else {
-
+    } else {
       // XHTML requires <br/> instead of <br>, but <br/> is still valid in HTML. See
       // https://github.com/phetsims/scenery/issues/1309
-      const textWithoutBreaks = textContent.replaceAll( '<br>', '<br/>' );
+      const textWithoutBreaks = textContent.replaceAll('<br>', '<br/>');
 
       // TODO: this line must be removed to support i18n Interactive Description, see https://github.com/phetsims/chipper/issues/798
-      const textWithoutEmbeddingMarks = stripEmbeddingMarks( textWithoutBreaks );
+      const textWithoutEmbeddingMarks = stripEmbeddingMarks(textWithoutBreaks);
 
       // Disallow any unfilled template variables to be set in the PDOM.
-      validate( textWithoutEmbeddingMarks, Validation.STRING_WITHOUT_TEMPLATE_VARS_VALIDATOR );
+      validate(
+        textWithoutEmbeddingMarks,
+        Validation.STRING_WITHOUT_TEMPLATE_VARS_VALIDATOR
+      );
 
-      if ( tagNameSupportsContent( domElement.tagName ) ) {
-
+      if (tagNameSupportsContent(domElement.tagName)) {
         // only returns true if content contains listed formatting tags
-        if ( PDOMUtils.containsFormattingTags( textWithoutEmbeddingMarks ) ) {
+        if (PDOMUtils.containsFormattingTags(textWithoutEmbeddingMarks)) {
           domElement.innerHTML = textWithoutEmbeddingMarks;
-        }
-        else {
+        } else {
           domElement.textContent = textWithoutEmbeddingMarks;
         }
       }
@@ -439,8 +477,8 @@ const PDOMUtils = {
    * @param tagName
    * @returns {boolean}
    */
-  tagIsDefaultFocusable( tagName ) {
-    return _.includes( DEFAULT_FOCUSABLE_TAGS, tagName.toUpperCase() );
+  tagIsDefaultFocusable(tagName) {
+    return _.includes(DEFAULT_FOCUSABLE_TAGS, tagName.toUpperCase());
   },
 
   /**
@@ -450,23 +488,22 @@ const PDOMUtils = {
    * @param {HTMLElement} domElement
    * @returns {boolean}
    */
-  isElementFocusable( domElement ) {
-
-    if ( !document.body.contains( domElement ) ) {
+  isElementFocusable(domElement) {
+    if (!document.body.contains(domElement)) {
       return false;
     }
 
     // continue to next element if this one is meant to be hidden
-    if ( isElementHidden( domElement ) ) {
+    if (isElementHidden(domElement)) {
       return false;
     }
 
     // if element is for formatting, skipe over it - required since IE gives these tabindex="0"
-    if ( _.includes( FORMATTING_TAGS, domElement.tagName ) ) {
+    if (_.includes(FORMATTING_TAGS, domElement.tagName)) {
       return false;
     }
 
-    return domElement.getAttribute( DATA_FOCUSABLE ) === 'true';
+    return domElement.getAttribute(DATA_FOCUSABLE) === 'true';
   },
 
   /**
@@ -475,8 +512,8 @@ const PDOMUtils = {
    * @param {string} tagName
    * @returns {boolean} - true if the tag does support inner content
    */
-  tagNameSupportsContent( tagName ) {
-    return tagNameSupportsContent( tagName );
+  tagNameSupportsContent(tagName) {
+    return tagNameSupportsContent(tagName);
   },
 
   /**
@@ -486,16 +523,19 @@ const PDOMUtils = {
    * @param {HTMLElement} element
    * @param {Array.<HTMLElement>} childrenToRemove
    */
-  removeElements( element, childrenToRemove ) {
+  removeElements(element, childrenToRemove) {
+    for (let i = 0; i < childrenToRemove.length; i++) {
+      const childToRemove = childrenToRemove[i];
 
-    for ( let i = 0; i < childrenToRemove.length; i++ ) {
-      const childToRemove = childrenToRemove[ i ];
+      assert &&
+        assert(
+          element.contains(childToRemove),
+          'element does not contain child to be removed: ',
+          childToRemove
+        );
 
-      assert && assert( element.contains( childToRemove ), 'element does not contain child to be removed: ', childToRemove );
-
-      element.removeChild( childToRemove );
+      element.removeChild(childToRemove);
     }
-
   },
 
   /**
@@ -506,12 +546,12 @@ const PDOMUtils = {
    * @param {Array.<HTMLElement>} childrenToAdd
    * @param {HTMLElement} [beforeThisElement] - if not supplied, the insertBefore call will just use 'null'
    */
-  insertElements( element, childrenToAdd, beforeThisElement ) {
-    assert && assert( element instanceof window.Element );
-    assert && assert( Array.isArray( childrenToAdd ) );
-    for ( let i = 0; i < childrenToAdd.length; i++ ) {
-      const childToAdd = childrenToAdd[ i ];
-      element.insertBefore( childToAdd, beforeThisElement || null );
+  insertElements(element, childrenToAdd, beforeThisElement) {
+    assert && assert(element instanceof window.Element);
+    assert && assert(Array.isArray(childrenToAdd));
+    for (let i = 0; i < childrenToAdd.length; i++) {
+      const childToAdd = childrenToAdd[i];
+      element.insertBefore(childToAdd, beforeThisElement || null);
     }
   },
 
@@ -526,29 +566,32 @@ const PDOMUtils = {
    * @param {Object} [options]
    * @returns {HTMLElement}
    */
-  createElement( tagName, focusable, options ) {
-    options = merge( {
-      // {string|null} - If non-null, the element will be created with the specific namespace
-      namespace: null,
+  createElement(tagName, focusable, options) {
+    options = merge(
+      {
+        // {string|null} - If non-null, the element will be created with the specific namespace
+        namespace: null,
 
-      // {string|null} - A string id that uniquely represents this element in the DOM, must be completely
-      // unique in the DOM.
-      id: null
-    }, options );
+        // {string|null} - A string id that uniquely represents this element in the DOM, must be completely
+        // unique in the DOM.
+        id: null
+      },
+      options
+    );
 
     const domElement = options.namespace
-                       ? document.createElementNS( options.namespace, tagName )
-                       : document.createElement( tagName );
+      ? document.createElementNS(options.namespace, tagName)
+      : document.createElement(tagName);
 
-    if ( options.id ) {
+    if (options.id) {
       domElement.id = options.id;
     }
 
     // set tab index if we are overriding default browser behavior
-    PDOMUtils.overrideFocusWithTabIndex( domElement, focusable );
+    PDOMUtils.overrideFocusWithTabIndex(domElement, focusable);
 
     // gives this element styling from SceneryStyle
-    domElement.classList.add( PDOMSiblingStyle.SIBLING_CLASS_NAME );
+    domElement.classList.add(PDOMSiblingStyle.SIBLING_CLASS_NAME);
 
     return domElement;
   },
@@ -565,18 +608,17 @@ const PDOMUtils = {
    * @param {HTMLElement} element
    * @param {boolean} focusable
    */
-  overrideFocusWithTabIndex( element, focusable ) {
-    const defaultFocusable = PDOMUtils.tagIsDefaultFocusable( element.tagName );
+  overrideFocusWithTabIndex(element, focusable) {
+    const defaultFocusable = PDOMUtils.tagIsDefaultFocusable(element.tagName);
 
     // only add a tabindex when we are overriding the default focusable bahvior of the browser for the tag name
-    if ( defaultFocusable !== focusable ) {
+    if (defaultFocusable !== focusable) {
       element.tabIndex = focusable ? 0 : -1;
-    }
-    else {
-      element.removeAttribute( 'tabindex' );
+    } else {
+      element.removeAttribute('tabindex');
     }
 
-    element.setAttribute( DATA_FOCUSABLE, focusable );
+    element.setAttribute(DATA_FOCUSABLE, focusable);
   },
 
   TAGS: {
@@ -604,23 +646,32 @@ const PDOMUtils = {
   },
 
   // these elements are typically associated with forms, and support certain attributes
-  FORM_ELEMENTS: [ INPUT_TAG, BUTTON_TAG, TEXTAREA_TAG, SELECT_TAG, OPTGROUP_TAG, DATALIST_TAG, OUTPUT_TAG, A_TAG ],
+  FORM_ELEMENTS: [
+    INPUT_TAG,
+    BUTTON_TAG,
+    TEXTAREA_TAG,
+    SELECT_TAG,
+    OPTGROUP_TAG,
+    DATALIST_TAG,
+    OUTPUT_TAG,
+    A_TAG
+  ],
 
   // default tags for html elements of the Node.
   DEFAULT_CONTAINER_TAG_NAME: DIV_TAG,
   DEFAULT_DESCRIPTION_TAG_NAME: P_TAG,
   DEFAULT_LABEL_TAG_NAME: P_TAG,
 
-  ASSOCIATION_ATTRIBUTES: ASSOCIATION_ATTRIBUTES,
+  ASSOCIATION_ATTRIBUTES,
 
   // valid input types that support the "checked" property/attribute for input elements
-  INPUT_TYPES_THAT_SUPPORT_CHECKED: [ 'RADIO', 'CHECKBOX' ],
+  INPUT_TYPES_THAT_SUPPORT_CHECKED: ['RADIO', 'CHECKBOX'],
 
-  DOM_EVENTS: DOM_EVENTS,
-  USER_GESTURE_EVENTS: USER_GESTURE_EVENTS,
-  BLOCKED_DOM_EVENTS: BLOCKED_DOM_EVENTS,
+  DOM_EVENTS,
+  USER_GESTURE_EVENTS,
+  BLOCKED_DOM_EVENTS,
 
-  DATA_PDOM_UNIQUE_ID: DATA_PDOM_UNIQUE_ID,
+  DATA_PDOM_UNIQUE_ID,
   PDOM_UNIQUE_ID_SEPARATOR: '-',
 
   // attribute used for elements which Scenery should not dispatch SceneryEvents when DOM event input is received on
@@ -628,6 +679,6 @@ const PDOMUtils = {
   DATA_EXCLUDE_FROM_INPUT: 'data-exclude-from-input'
 };
 
-scenery.register( 'PDOMUtils', PDOMUtils );
+scenery.register('PDOMUtils', PDOMUtils);
 
 export default PDOMUtils;

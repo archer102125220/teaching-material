@@ -7,7 +7,7 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import { scenery, SelfDrawable } from '../imports.js';
+import { scenery, SelfDrawable } from '../imports';
 
 class WebGLSelfDrawable extends SelfDrawable {
   /**
@@ -18,14 +18,15 @@ class WebGLSelfDrawable extends SelfDrawable {
    * @param {Instance} instance
    * @returns {WebGLSelfDrawable}
    */
-  initialize( renderer, instance ) {
-    super.initialize( renderer, instance );
+  initialize(renderer, instance) {
+    super.initialize(renderer, instance);
 
     // @private {function} - this is the same across lifecycles
-    this.transformListener = this.transformListener || this.markTransformDirty.bind( this );
+    this.transformListener =
+      this.transformListener || this.markTransformDirty.bind(this);
 
     // when our relative transform changes, notify us in the pre-repaint phase
-    instance.relativeTransform.addListener( this.transformListener );
+    instance.relativeTransform.addListener(this.transformListener);
 
     // trigger precomputation of the relative transform, since we will always need it when it is updated
     instance.relativeTransform.addPrecompute();
@@ -57,13 +58,13 @@ class WebGLSelfDrawable extends SelfDrawable {
    * @override
    */
   dispose() {
-    this.instance.relativeTransform.removeListener( this.transformListener );
+    this.instance.relativeTransform.removeListener(this.transformListener);
     this.instance.relativeTransform.removePrecompute();
 
     super.dispose();
   }
 }
 
-scenery.register( 'WebGLSelfDrawable', WebGLSelfDrawable );
+scenery.register('WebGLSelfDrawable', WebGLSelfDrawable);
 
 export default WebGLSelfDrawable;

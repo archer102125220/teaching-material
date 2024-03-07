@@ -53,8 +53,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyProperty from '../../../axon/js/TinyProperty.js';
-import { Block, Renderer, scenery } from '../imports.js';
+import TinyProperty from '../../axon/TinyProperty';
+import { Block, Renderer, scenery } from '../imports';
 
 let globalId = 1;
 
@@ -65,14 +65,21 @@ class Drawable {
    * @param {number} renderer
    * @returns {Drawable} - for chaining
    */
-  initialize( renderer ) {
-
-    assert && assert( !this.id || this.isDisposed, 'If we previously existed, we need to have been disposed' );
+  initialize(renderer) {
+    assert &&
+      assert(
+        !this.id || this.isDisposed,
+        'If we previously existed, we need to have been disposed'
+      );
 
     // @public {number} - unique ID for drawables
     this.id = this.id || globalId++;
 
-    sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable( `[${this.constructor.name}*] initialize ${this.toString()}` );
+    sceneryLog &&
+      sceneryLog.Drawable &&
+      sceneryLog.Drawable(
+        `[${this.constructor.name}*] initialize ${this.toString()}`
+      );
 
     this.clean();
 
@@ -87,8 +94,8 @@ class Drawable {
     this.linksDirty = false;
 
     // @public {TinyProperty.<boolean>}
-    this.visibleProperty = new TinyProperty( true );
-    this.fittableProperty = new TinyProperty( true ); // If false, will cause our parent block to not be fitted
+    this.visibleProperty = new TinyProperty(true);
+    this.fittableProperty = new TinyProperty(true); // If false, will cause our parent block to not be fitted
 
     return this;
   }
@@ -116,8 +123,11 @@ class Drawable {
     // @public {boolean} - whether we are to be removed from a block/backbone in our updateBlock() call
     this.pendingRemoval = false;
 
-    assert && assert( !this.previousDrawable && !this.nextDrawable,
-      'By cleaning (disposal or fresh creation), we should have disconnected from the linked list' );
+    assert &&
+      assert(
+        !this.previousDrawable && !this.nextDrawable,
+        'By cleaning (disposal or fresh creation), we should have disconnected from the linked list'
+      );
 
     // @public {Drawable|null} - Linked list handling (will be filled in later)
     this.previousDrawable = null;
@@ -144,7 +154,7 @@ class Drawable {
   update() {
     let needsFurtherUpdates = false;
 
-    if ( this.dirty && !this.isDisposed ) {
+    if (this.dirty && !this.isDisposed) {
       this.dirty = false;
       needsFurtherUpdates = true;
     }
@@ -158,11 +168,13 @@ class Drawable {
    *
    * @param {boolean} visible
    */
-  setVisible( visible ) {
+  setVisible(visible) {
     this.visibleProperty.value = visible;
   }
 
-  set visible( value ) { this.setVisible( value ); }
+  set visible(value) {
+    this.setVisible(value);
+  }
 
   /**
    * Returns whether the drawable is visible.
@@ -174,7 +186,9 @@ class Drawable {
     return this.visibleProperty.value;
   }
 
-  get visible() { return this.isVisible(); }
+  get visible() {
+    return this.isVisible();
+  }
 
   /**
    * Sets whether this drawable is fittable.
@@ -184,11 +198,13 @@ class Drawable {
    *
    * @param {boolean} fittable
    */
-  setFittable( fittable ) {
+  setFittable(fittable) {
     this.fittableProperty.value = fittable;
   }
 
-  set fittable( value ) { this.setFittable( value ); }
+  set fittable(value) {
+    this.setFittable(value);
+  }
 
   /**
    * Returns whether the drawable is fittable.
@@ -200,7 +216,9 @@ class Drawable {
     return this.fittableProperty.value;
   }
 
-  get fittable() { return this.isFittable(); }
+  get fittable() {
+    return this.isFittable();
+  }
 
   /**
    * Called to add a block (us) as a child of a backbone
@@ -208,12 +226,15 @@ class Drawable {
    *
    * @param {BackboneDrawable} backboneInstance
    */
-  setBlockBackbone( backboneInstance ) {
-    sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable( `[${this.constructor.name}*] setBlockBackbone ${
-      this.toString()} with ${backboneInstance.toString()}` );
+  setBlockBackbone(backboneInstance) {
+    sceneryLog &&
+      sceneryLog.Drawable &&
+      sceneryLog.Drawable(
+        `[${this.constructor.name}*] setBlockBackbone ${this.toString()} with ${backboneInstance.toString()}`
+      );
 
     // if this is being called, Block will be guaranteed to be loaded
-    assert && assert( this instanceof Block );
+    assert && assert(this instanceof Block);
 
     this.parentDrawable = backboneInstance;
     this.backbone = backboneInstance;
@@ -231,21 +252,29 @@ class Drawable {
    * @param {Block} block
    * @param {BackboneDrawable} backbone
    */
-  notePendingAddition( display, block, backbone ) {
-    sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable( `[${this.constructor.name}*] notePendingAddition ${
-      this.toString()} with ${block.toString()}, ${
-      backbone ? backbone.toString() : '-'}` );
+  notePendingAddition(display, block, backbone) {
+    sceneryLog &&
+      sceneryLog.Drawable &&
+      sceneryLog.Drawable(
+        `[${this.constructor.name}*] notePendingAddition ${this.toString()} with ${block.toString()}, ${
+          backbone ? backbone.toString() : '-'
+        }`
+      );
 
-    assert && assert( backbone !== undefined, 'backbone can be either null or a backbone' );
-    assert && assert( block instanceof Block );
+    assert &&
+      assert(
+        backbone !== undefined,
+        'backbone can be either null or a backbone'
+      );
+    assert && assert(block instanceof Block);
 
     this.pendingParentDrawable = block;
     this.pendingBackbone = backbone;
     this.pendingAddition = true;
 
     // if we weren't already marked for an update, mark us
-    if ( !this.pendingRemoval ) {
-      display.markDrawableChangedBlock( this );
+    if (!this.pendingRemoval) {
+      display.markDrawableChangedBlock(this);
     }
   }
 
@@ -255,15 +284,18 @@ class Drawable {
    *
    * @param {Display} display
    */
-  notePendingRemoval( display ) {
-    sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable( `[${this.constructor.name}*] notePendingRemoval ${
-      this.toString()}` );
+  notePendingRemoval(display) {
+    sceneryLog &&
+      sceneryLog.Drawable &&
+      sceneryLog.Drawable(
+        `[${this.constructor.name}*] notePendingRemoval ${this.toString()}`
+      );
 
     this.pendingRemoval = true;
 
     // if we weren't already marked for an update, mark us
-    if ( !this.pendingAddition ) {
-      display.markDrawableChangedBlock( this );
+    if (!this.pendingAddition) {
+      display.markDrawableChangedBlock(this);
     }
   }
 
@@ -277,16 +309,19 @@ class Drawable {
    * @param {Display} display
    * @param {Block} block
    */
-  notePendingMove( display, block ) {
-    sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable( `[${this.constructor.name}*] notePendingMove ${
-      this.toString()} with ${block.toString()}` );
+  notePendingMove(display, block) {
+    sceneryLog &&
+      sceneryLog.Drawable &&
+      sceneryLog.Drawable(
+        `[${this.constructor.name}*] notePendingMove ${this.toString()} with ${block.toString()}`
+      );
 
-    assert && assert( block instanceof Block );
+    assert && assert(block instanceof Block);
 
     this.pendingParentDrawable = block;
 
-    if ( !this.pendingRemoval || !this.pendingAddition ) {
-      display.markDrawableChangedBlock( this );
+    if (!this.pendingRemoval || !this.pendingAddition) {
+      display.markDrawableChangedBlock(this);
     }
 
     // set both flags, since we need it to be removed and added
@@ -301,28 +336,38 @@ class Drawable {
    * @returns {boolean} - Whether we changed our block
    */
   updateBlock() {
-    sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable( `[${this.constructor.name}*] updateBlock ${this.toString()
-    } with add:${this.pendingAddition
-    } remove:${this.pendingRemoval
-    } old:${this.parentDrawable ? this.parentDrawable.toString() : '-'
-    } new:${this.pendingParentDrawable ? this.pendingParentDrawable.toString() : '-'}` );
+    sceneryLog &&
+      sceneryLog.Drawable &&
+      sceneryLog.Drawable(
+        `[${this.constructor.name}*] updateBlock ${this.toString()} with add:${
+          this.pendingAddition
+        } remove:${this.pendingRemoval} old:${
+          this.parentDrawable ? this.parentDrawable.toString() : '-'
+        } new:${this.pendingParentDrawable ? this.pendingParentDrawable.toString() : '-'}`
+      );
     sceneryLog && sceneryLog.Drawable && sceneryLog.push();
 
     let changed = false;
 
-    if ( this.pendingRemoval || this.pendingAddition ) {
+    if (this.pendingRemoval || this.pendingAddition) {
       // we are only unchanged if we have an addition AND removal, and the endpoints are identical
-      changed = !this.pendingRemoval || !this.pendingAddition ||
-                this.parentDrawable !== this.pendingParentDrawable ||
-                this.backbone !== this.pendingBackbone;
+      changed =
+        !this.pendingRemoval ||
+        !this.pendingAddition ||
+        this.parentDrawable !== this.pendingParentDrawable ||
+        this.backbone !== this.pendingBackbone;
 
-      if ( changed ) {
-        if ( this.pendingRemoval ) {
-          sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable( `removing from ${this.parentDrawable.toString()}` );
-          this.parentDrawable.removeDrawable( this );
+      if (changed) {
+        if (this.pendingRemoval) {
+          sceneryLog &&
+            sceneryLog.Drawable &&
+            sceneryLog.Drawable(
+              `removing from ${this.parentDrawable.toString()}`
+            );
+          this.parentDrawable.removeDrawable(this);
 
           // remove references if we are not being added back in
-          if ( !this.pendingAddition ) {
+          if (!this.pendingAddition) {
             this.pendingParentDrawable = null;
             this.pendingBackbone = null;
           }
@@ -331,16 +376,17 @@ class Drawable {
         this.parentDrawable = this.pendingParentDrawable;
         this.backbone = this.pendingBackbone;
 
-        if ( this.pendingAddition ) {
-          sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable( `adding to ${this.parentDrawable.toString()}` );
-          this.parentDrawable.addDrawable( this );
+        if (this.pendingAddition) {
+          sceneryLog &&
+            sceneryLog.Drawable &&
+            sceneryLog.Drawable(`adding to ${this.parentDrawable.toString()}`);
+          this.parentDrawable.addDrawable(this);
         }
-      }
-      else {
-        sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable( 'unchanged' );
+      } else {
+        sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable('unchanged');
 
-        if ( this.pendingAddition && Renderer.isCanvas( this.renderer ) ) {
-          this.parentDrawable.onPotentiallyMovedDrawable( this );
+        if (this.pendingAddition && Renderer.isCanvas(this.renderer)) {
+          this.parentDrawable.onPotentiallyMovedDrawable(this);
         }
       }
 
@@ -368,12 +414,12 @@ class Drawable {
    * @public
    */
   markDirty() {
-    if ( !this.dirty ) {
+    if (!this.dirty) {
       this.dirty = true;
 
       // TODO: notify what we want to call repaint() later https://github.com/phetsims/scenery/issues/1581
-      if ( this.parentDrawable ) {
-        this.parentDrawable.markDirtyDrawable( this );
+      if (this.parentDrawable) {
+        this.parentDrawable.markDirtyDrawable(this);
       }
     }
   }
@@ -386,10 +432,10 @@ class Drawable {
    *
    * @param {Display} display
    */
-  markLinksDirty( display ) {
-    if ( !this.linksDirty ) {
+  markLinksDirty(display) {
+    if (!this.linksDirty) {
       this.linksDirty = true;
-      display.markDrawableForLinksUpdate( this );
+      display.markDrawableForLinksUpdate(this);
     }
   }
 
@@ -399,12 +445,12 @@ class Drawable {
    *
    * @param {Display} display
    */
-  markForDisposal( display ) {
+  markForDisposal(display) {
     // as we are marked for disposal, we disconnect from the linked list (so our disposal setting nulls won't cause issues)
-    Drawable.disconnectBefore( this, display );
-    Drawable.disconnectAfter( this, display );
+    Drawable.disconnectBefore(this, display);
+    Drawable.disconnectAfter(this, display);
 
-    display.markDrawableForDisposal( this );
+    display.markDrawableForDisposal(this);
   }
 
   /**
@@ -413,10 +459,10 @@ class Drawable {
    *
    * @param {Display} display
    */
-  disposeImmediately( display ) {
+  disposeImmediately(display) {
     // as we are marked for disposal, we disconnect from the linked list (so our disposal setting nulls won't cause issues)
-    Drawable.disconnectBefore( this, display );
-    Drawable.disconnectAfter( this, display );
+    Drawable.disconnectBefore(this, display);
+    Drawable.disconnectAfter(this, display);
 
     this.dispose();
   }
@@ -431,9 +477,13 @@ class Drawable {
    * @param {*} 'We should not re-dispose drawables'
    */
   dispose() {
-    assert && assert( !this.isDisposed, 'We should not re-dispose drawables' );
+    assert && assert(!this.isDisposed, 'We should not re-dispose drawables');
 
-    sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable( `[${this.constructor.name}*] dispose ${this.toString()}` );
+    sceneryLog &&
+      sceneryLog.Drawable &&
+      sceneryLog.Drawable(
+        `[${this.constructor.name}*] dispose ${this.toString()}`
+      );
     sceneryLog && sceneryLog.Drawable && sceneryLog.push();
 
     this.clean();
@@ -453,35 +503,58 @@ class Drawable {
    * @param {boolean} allowPendingList
    * @param {boolean} allowDirty
    */
-  audit( allowPendingBlock, allowPendingList, allowDirty ) {
-    if ( assertSlow ) {
-      assertSlow && assertSlow( !this.isDisposed,
-        'If we are being audited, we assume we are in the drawable display tree, and we should not be marked as disposed' );
-      assertSlow && assertSlow( this.renderer, 'Should not have a 0 (no) renderer' );
+  audit(allowPendingBlock, allowPendingList, allowDirty) {
+    if (assertSlow) {
+      assertSlow &&
+        assertSlow(
+          !this.isDisposed,
+          'If we are being audited, we assume we are in the drawable display tree, and we should not be marked as disposed'
+        );
+      assertSlow &&
+        assertSlow(this.renderer, 'Should not have a 0 (no) renderer');
 
-      assertSlow && assertSlow( !this.backbone || this.parentDrawable,
-        'If we have a backbone reference, we must have a parentDrawable (our block)' );
+      assertSlow &&
+        assertSlow(
+          !this.backbone || this.parentDrawable,
+          'If we have a backbone reference, we must have a parentDrawable (our block)'
+        );
 
-      if ( !allowPendingBlock ) {
-        assertSlow && assertSlow( !this.pendingAddition );
-        assertSlow && assertSlow( !this.pendingRemoval );
-        assertSlow && assertSlow( this.parentDrawable === this.pendingParentDrawable,
-          'Assure our parent and pending parent match, if we have updated blocks' );
-        assertSlow && assertSlow( this.backbone === this.pendingBackbone,
-          'Assure our backbone and pending backbone match, if we have updated blocks' );
+      if (!allowPendingBlock) {
+        assertSlow && assertSlow(!this.pendingAddition);
+        assertSlow && assertSlow(!this.pendingRemoval);
+        assertSlow &&
+          assertSlow(
+            this.parentDrawable === this.pendingParentDrawable,
+            'Assure our parent and pending parent match, if we have updated blocks'
+          );
+        assertSlow &&
+          assertSlow(
+            this.backbone === this.pendingBackbone,
+            'Assure our backbone and pending backbone match, if we have updated blocks'
+          );
       }
 
-      if ( !allowPendingList ) {
-        assertSlow && assertSlow( this.oldPreviousDrawable === this.previousDrawable,
-          'Pending linked-list references should be cleared by now' );
-        assertSlow && assertSlow( this.oldNextDrawable === this.nextDrawable,
-          'Pending linked-list references should be cleared by now' );
-        assertSlow && assertSlow( !this.linksDirty, 'Links dirty flag should be clean' );
+      if (!allowPendingList) {
+        assertSlow &&
+          assertSlow(
+            this.oldPreviousDrawable === this.previousDrawable,
+            'Pending linked-list references should be cleared by now'
+          );
+        assertSlow &&
+          assertSlow(
+            this.oldNextDrawable === this.nextDrawable,
+            'Pending linked-list references should be cleared by now'
+          );
+        assertSlow &&
+          assertSlow(!this.linksDirty, 'Links dirty flag should be clean');
       }
 
-      if ( !allowDirty ) {
-        assertSlow && assertSlow( !this.dirty,
-          'Should not be dirty at this phase, if we are in the drawable display tree' );
+      if (!allowDirty) {
+        assertSlow &&
+          assertSlow(
+            !this.dirty,
+            'Should not be dirty at this phase, if we are in the drawable display tree'
+          );
       }
     }
   }
@@ -514,16 +587,16 @@ class Drawable {
    * @param {Drawable} b
    * @param {Display} display
    */
-  static connectDrawables( a, b, display ) {
+  static connectDrawables(a, b, display) {
     // we don't need to do anything if there is no change
-    if ( a.nextDrawable !== b ) {
+    if (a.nextDrawable !== b) {
       // touch previous neighbors
-      if ( a.nextDrawable ) {
-        a.nextDrawable.markLinksDirty( display );
+      if (a.nextDrawable) {
+        a.nextDrawable.markLinksDirty(display);
         a.nextDrawable.previousDrawable = null;
       }
-      if ( b.previousDrawable ) {
-        b.previousDrawable.markLinksDirty( display );
+      if (b.previousDrawable) {
+        b.previousDrawable.markLinksDirty(display);
         b.previousDrawable.nextDrawable = null;
       }
 
@@ -531,8 +604,8 @@ class Drawable {
       b.previousDrawable = a;
 
       // mark these as needing updates
-      a.markLinksDirty( display );
-      b.markLinksDirty( display );
+      a.markLinksDirty(display);
+      b.markLinksDirty(display);
     }
   }
 
@@ -543,11 +616,11 @@ class Drawable {
    * @param {Drawable} drawable
    * @param {Display} display
    */
-  static disconnectBefore( drawable, display ) {
+  static disconnectBefore(drawable, display) {
     // we don't need to do anything if there is no change
-    if ( drawable.previousDrawable ) {
-      drawable.markLinksDirty( display );
-      drawable.previousDrawable.markLinksDirty( display );
+    if (drawable.previousDrawable) {
+      drawable.markLinksDirty(display);
+      drawable.previousDrawable.markLinksDirty(display);
       drawable.previousDrawable.nextDrawable = null;
       drawable.previousDrawable = null;
     }
@@ -560,11 +633,11 @@ class Drawable {
    * @param {Drawable} drawable
    * @param {Display} display
    */
-  static disconnectAfter( drawable, display ) {
+  static disconnectAfter(drawable, display) {
     // we don't need to do anything if there is no change
-    if ( drawable.nextDrawable ) {
-      drawable.markLinksDirty( display );
-      drawable.nextDrawable.markLinksDirty( display );
+    if (drawable.nextDrawable) {
+      drawable.markLinksDirty(display);
+      drawable.nextDrawable.markLinksDirty(display);
       drawable.nextDrawable.previousDrawable = null;
       drawable.nextDrawable = null;
     }
@@ -579,14 +652,14 @@ class Drawable {
    * @param {Drawable} lastDrawable
    * @returns {Array.<Drawable>}
    */
-  static listToArray( firstDrawable, lastDrawable ) {
+  static listToArray(firstDrawable, lastDrawable) {
     const arr = [];
 
     // assumes we'll hit lastDrawable, otherwise we'll NPE
-    for ( let drawable = firstDrawable; ; drawable = drawable.nextDrawable ) {
-      arr.push( drawable );
+    for (let drawable = firstDrawable; ; drawable = drawable.nextDrawable) {
+      arr.push(drawable);
 
-      if ( drawable === lastDrawable ) {
+      if (drawable === lastDrawable) {
         break;
       }
     }
@@ -603,14 +676,14 @@ class Drawable {
    * @param {Drawable} lastDrawable
    * @returns {Array.<Drawable>}
    */
-  static oldListToArray( firstDrawable, lastDrawable ) {
+  static oldListToArray(firstDrawable, lastDrawable) {
     const arr = [];
 
     // assumes we'll hit lastDrawable, otherwise we'll NPE
-    for ( let drawable = firstDrawable; ; drawable = drawable.oldNextDrawable ) {
-      arr.push( drawable );
+    for (let drawable = firstDrawable; ; drawable = drawable.oldNextDrawable) {
+      arr.push(drawable);
 
-      if ( drawable === lastDrawable ) {
+      if (drawable === lastDrawable) {
         break;
       }
     }
@@ -619,5 +692,5 @@ class Drawable {
   }
 }
 
-scenery.register( 'Drawable', Drawable );
+scenery.register('Drawable', Drawable);
 export default Drawable;

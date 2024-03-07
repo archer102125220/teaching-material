@@ -5,13 +5,15 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import localeInfoModule from '@/assets/chipper/localeInfoModule';
 import phetcommon from '../phetcommon';
 
 // Unicode embedding marks that we use.
-const LTR = '\u202a';
-const RTL = '\u202b';
-const POP = '\u202c';
+const LTR = '\u202A';
+const RTL = '\u202B';
+const POP = '\u202C';
 
 const StringUtils = {
   /**
@@ -31,7 +33,6 @@ const StringUtils = {
    * @deprecated - please use StringUtils.fillIn
    */
   format: function (pattern) {
-    // eslint-disable-next-line prefer-rest-params
     const args = arguments;
     return pattern.replace(/{(\d)}/g, (r, n) => args[+n + 1]);
   },
@@ -252,8 +253,8 @@ const StringUtils = {
         length = separator.length;
       }
       return {
-        index: index,
-        length: length
+        index,
+        length
       };
     }
 
@@ -299,9 +300,9 @@ const StringUtils = {
    */
   embeddedDebugString: function (string) {
     return string
-      .replace(/\u202a/g, '[LTR]')
-      .replace(/\u202b/g, '[RTL]')
-      .replace(/\u202c/g, '[POP]');
+      .replace(/\u202A/g, '[LTR]')
+      .replace(/\u202B/g, '[RTL]')
+      .replace(/\u202C/g, '[POP]');
   },
 
   /**

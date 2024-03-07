@@ -7,8 +7,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../phet-core/js/Poolable.js';
-import { Block, scenery } from '../imports.js';
+import Poolable from '../../phet-core/Poolable';
+import { Block, scenery } from '../imports';
 
 class DOMBlock extends Block {
   /**
@@ -17,10 +17,10 @@ class DOMBlock extends Block {
    * @param {Display} display
    * @param {Drawable} domDrawable
    */
-  constructor( display, domDrawable ) {
+  constructor(display, domDrawable) {
     super();
 
-    this.initialize( display, domDrawable );
+    this.initialize(display, domDrawable);
   }
 
   /**
@@ -30,9 +30,9 @@ class DOMBlock extends Block {
    * @param {Drawable} domDrawable
    * @returns {DOMBlock} - For chaining
    */
-  initialize( display, domDrawable ) {
+  initialize(display, domDrawable) {
     // TODO: is it bad to pass the acceleration flags along? https://github.com/phetsims/scenery/issues/1581
-    super.initialize( display, domDrawable.renderer );
+    super.initialize(display, domDrawable.renderer);
 
     this.domDrawable = domDrawable;
     this.domElement = domDrawable.domElement;
@@ -50,7 +50,7 @@ class DOMBlock extends Block {
    */
   update() {
     // See if we need to actually update things (will bail out if we are not dirty, or if we've been disposed)
-    if ( !super.update() ) {
+    if (!super.update()) {
       return false;
     }
 
@@ -77,7 +77,7 @@ class DOMBlock extends Block {
    *
    * @param {Drawable} drawable
    */
-  markDirtyDrawable( drawable ) {
+  markDirtyDrawable(drawable) {
     this.markDirty();
   }
 
@@ -88,11 +88,17 @@ class DOMBlock extends Block {
    *
    * @param {Drawable} drawable
    */
-  addDrawable( drawable ) {
-    sceneryLog && sceneryLog.DOMBlock && sceneryLog.DOMBlock( `#${this.id}.addDrawable ${drawable.toString()}` );
-    assert && assert( this.domDrawable === drawable, 'DOMBlock should only be used with one drawable for now (the one it was initialized with)' );
+  addDrawable(drawable) {
+    sceneryLog &&
+      sceneryLog.DOMBlock &&
+      sceneryLog.DOMBlock(`#${this.id}.addDrawable ${drawable.toString()}`);
+    assert &&
+      assert(
+        this.domDrawable === drawable,
+        'DOMBlock should only be used with one drawable for now (the one it was initialized with)'
+      );
 
-    super.addDrawable( drawable );
+    super.addDrawable(drawable);
   }
 
   /**
@@ -102,16 +108,22 @@ class DOMBlock extends Block {
    *
    * @param {Drawable} drawable
    */
-  removeDrawable( drawable ) {
-    sceneryLog && sceneryLog.DOMBlock && sceneryLog.DOMBlock( `#${this.id}.removeDrawable ${drawable.toString()}` );
-    assert && assert( this.domDrawable === drawable, 'DOMBlock should only be used with one drawable for now (the one it was initialized with)' );
+  removeDrawable(drawable) {
+    sceneryLog &&
+      sceneryLog.DOMBlock &&
+      sceneryLog.DOMBlock(`#${this.id}.removeDrawable ${drawable.toString()}`);
+    assert &&
+      assert(
+        this.domDrawable === drawable,
+        'DOMBlock should only be used with one drawable for now (the one it was initialized with)'
+      );
 
-    super.removeDrawable( drawable );
+    super.removeDrawable(drawable);
   }
 }
 
-scenery.register( 'DOMBlock', DOMBlock );
+scenery.register('DOMBlock', DOMBlock);
 
-Poolable.mixInto( DOMBlock );
+Poolable.mixInto(DOMBlock);
 
 export default DOMBlock;

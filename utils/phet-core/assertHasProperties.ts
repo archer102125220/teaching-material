@@ -14,24 +14,26 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 import inheritance from './inheritance';
-import IntentionalAny from './types/IntentionalAny';
+import type IntentionalAny from './types/IntentionalAny';
 import phetCore from './phetCore';
 
-const assertHasProperties = ( object: IntentionalAny, properties: string[] ): void => {
-  if ( assert && object ) {
+const assertHasProperties = (object: IntentionalAny, properties: string[]): void => {
+  if (assert && object) {
 
 
-    properties.forEach( property => {
+    properties.forEach(property => {
 
-      assert && assert( Object.getOwnPropertyDescriptor( object, property ) || // support fields directly on the object
+      assert && assert(Object.getOwnPropertyDescriptor(object, property) || // support fields directly on the object
 
-                        // test up the class hierarchy for if the property is defined on a prototype.
-                        _.some( inheritance( object.constructor ).map( type => Object.getOwnPropertyDescriptor( type.prototype, property ) ) ),
-        `property not defined: ${property}` );
-    } );
+        // test up the class hierarchy for if the property is defined on a prototype.
+        _.some(inheritance(object.constructor).map(type => Object.getOwnPropertyDescriptor(type.prototype, property))),
+        `property not defined: ${property}`);
+    });
   }
 };
 
-phetCore.register( 'assertHasProperties', assertHasProperties );
+phetCore.register('assertHasProperties', assertHasProperties);
 export default assertHasProperties;

@@ -19,6 +19,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import _ from 'lodash';
+
 // @ts-expect-error
 import Validation, { Validator } from '../../axon/Validation';
 import assertMutuallyExclusiveOptions from '../../phet-core/assertMutuallyExclusiveOptions.js';
@@ -76,16 +78,16 @@ export default class StateSchema<T, SelfStateType> {
   // "composite" state schemas are treated differently that value state schemas
   public readonly compositeSchema: null | CompositeSchema<SelfStateType>;
 
-  public constructor( providedOptions?: StateSchemaOptions<SelfStateType> ) {
+  public constructor(providedOptions?: StateSchemaOptions<SelfStateType>) {
 
     // Either create with compositeSchema, or specify a that this state is just a value
-    assert && assertMutuallyExclusiveOptions( providedOptions, [ 'compositeSchema' ], [ 'displayString', 'validator' ] );
+    assert && assertMutuallyExclusiveOptions(providedOptions, ['compositeSchema'], ['displayString', 'validator']);
 
-    const options = optionize<StateSchemaOptions<SelfStateType>>()( {
+    const options = optionize<StateSchemaOptions<SelfStateType>>()({
       displayString: '',
       validator: null,
       compositeSchema: null
-    }, providedOptions );
+    }, providedOptions);
 
     this.displayString = options.displayString;
     this.validator = options.validator;
@@ -98,30 +100,30 @@ export default class StateSchema<T, SelfStateType> {
    * It supports the coreObject keys as private, underscore-prefixed field, as
    * well as if the coreObject has an es5 setter instead of an actual field.
    */
-  public defaultApplyState( coreObject: T, stateObject: CompositeStateObjectType ): void {
+  public defaultApplyState(coreObject: T, stateObject: CompositeStateObjectType): void {
 
-    assert && assert( this.isComposite(), 'defaultApplyState from stateSchema only applies to composite stateSchemas' );
-    for ( const stateKey in this.compositeSchema ) {
-      if ( this.compositeSchema.hasOwnProperty( stateKey ) ) {
-        assert && assert( stateObject.hasOwnProperty( stateKey ), `stateObject does not have expected schema key: ${stateKey}` );
+    assert && assert(this.isComposite(), 'defaultApplyState from stateSchema only applies to composite stateSchemas');
+    for (const stateKey in this.compositeSchema) {
+      if (this.compositeSchema.hasOwnProperty(stateKey)) {
+        assert && assert(stateObject.hasOwnProperty(stateKey), `stateObject does not have expected schema key: ${stateKey}`);
 
         // The IOType for the key in the composite.
-        const schemaIOType = this.compositeSchema[ stateKey ];
+        const schemaIOType = this.compositeSchema[stateKey];
 
-        const coreObjectAccessorName = this.getCoreObjectAccessorName( stateKey, coreObject );
+        const coreObjectAccessorName = this.getCoreObjectAccessorName(stateKey, coreObject);
 
         // Using fromStateObject to deserialize sub-component
-        if ( schemaIOType.defaultDeserializationMethod === 'fromStateObject' ) {
+        if (schemaIOType.defaultDeserializationMethod === 'fromStateObject') {
 
           // @ts-expect-error, I don't know how to tell typescript that we are accessing an expected key on the PhetioObject subtype. Likely there is no way with making things generic.
-          coreObject[ coreObjectAccessorName ] = this.compositeSchema[ stateKey ].fromStateObject( stateObject[ stateKey ] );
+          coreObject[coreObjectAccessorName] = this.compositeSchema[stateKey].fromStateObject(stateObject[stateKey]);
         }
         else {
-          assert && assert( schemaIOType.defaultDeserializationMethod === 'applyState', 'unexpected deserialization method' );
+          assert && assert(schemaIOType.defaultDeserializationMethod === 'applyState', 'unexpected deserialization method');
 
           // Using applyState to deserialize sub-component
           // @ts-expect-error, I don't know how to tell typescript that we are accessing an expected key on the PhetioObject subtype. Likely there is no way with making things generic.
-          this.compositeSchema[ stateKey ].applyState( coreObject[ coreObjectAccessorName ], stateObject[ stateKey ] );
+          this.compositeSchema[stateKey].applyState(coreObject[coreObjectAccessorName], stateObject[stateKey]);
         }
       }
     }
@@ -132,37 +134,37 @@ export default class StateSchema<T, SelfStateType> {
    * same key names on the coreObject instance. It supports those keys as private, underscore-prefixed field, as
    * well as if the coreObject has an es5 getter instead of an actual field.
    */
-  public defaultToStateObject( coreObject: T ): SelfStateType {
-    assert && assert( this.isComposite(), 'defaultToStateObject from stateSchema only applies to composite stateSchemas' );
+  public defaultToStateObject(coreObject: T): SelfStateType {
+    assert && assert(this.isComposite(), 'defaultToStateObject from stateSchema only applies to composite stateSchemas');
 
     const stateObject = {};
-    for ( const stateKey in this.compositeSchema ) {
-      if ( this.compositeSchema.hasOwnProperty( stateKey ) ) {
+    for (const stateKey in this.compositeSchema) {
+      if (this.compositeSchema.hasOwnProperty(stateKey)) {
 
-        const coreObjectAccessorName = this.getCoreObjectAccessorName( stateKey, coreObject );
+        const coreObjectAccessorName = this.getCoreObjectAccessorName(stateKey, coreObject);
 
-        if ( assert ) {
-          const descriptor = Object.getOwnPropertyDescriptor( coreObject, coreObjectAccessorName )!;
+        if (assert) {
+          const descriptor = Object.getOwnPropertyDescriptor(coreObject, coreObjectAccessorName)!;
 
           let isGetter = false;
 
           // @ts-expect-error Subtype T for this method better
-          if ( coreObject.constructor.prototype ) {
+          if (coreObject.constructor.prototype) {
 
             // The prototype is what has the getter on it
             // @ts-expect-error Subtype T for this method better
-            const prototypeDescriptor = Object.getOwnPropertyDescriptor( coreObject.constructor!.prototype, coreObjectAccessorName );
+            const prototypeDescriptor = Object.getOwnPropertyDescriptor(coreObject.constructor!.prototype, coreObjectAccessorName);
             isGetter = !!prototypeDescriptor && !!prototypeDescriptor.get;
           }
 
-          const isValue = !!descriptor && descriptor.hasOwnProperty( 'value' ) && descriptor.writable;
-          assert && assert( isValue || isGetter,
-            `cannot get state because coreObject does not have expected schema key: ${coreObjectAccessorName}` );
+          const isValue = !!descriptor && descriptor.hasOwnProperty('value') && descriptor.writable;
+          assert && assert(isValue || isGetter,
+            `cannot get state because coreObject does not have expected schema key: ${coreObjectAccessorName}`);
 
         }
 
         // @ts-expect-error https://github.com/phetsims/tandem/issues/261
-        stateObject[ stateKey ] = this.compositeSchema[ stateKey ].toStateObject( coreObject[ coreObjectAccessorName ] );
+        stateObject[stateKey] = this.compositeSchema[stateKey].toStateObject(coreObject[coreObjectAccessorName]);
       }
     }
     return stateObject as SelfStateType;
@@ -172,20 +174,20 @@ export default class StateSchema<T, SelfStateType> {
    * Provide the member string key that should be used to get/set an instance's field. Used only internally for the
    * default implementations of toStateObject and applyState.
    */
-  private getCoreObjectAccessorName( stateKey: string, coreObject: T ): string {
+  private getCoreObjectAccessorName(stateKey: string, coreObject: T): string {
 
-    assert && assert( !stateKey.startsWith( '__' ), 'State keys should not start with too many underscores: ' + stateKey + '. When serializing ', coreObject );
+    assert && assert(!stateKey.startsWith('__'), 'State keys should not start with too many underscores: ' + stateKey + '. When serializing ', coreObject);
 
     // Does the class field start with an underscore? We need to cover two cases here. The first is where the underscore
     // was added to make a private state key. The second, is where the core class only has the underscore-prefixed
     // field key name available for setting. The easiest algorithm to cover all cases is to see if the coreObject has
     // the underscore-prefixed key name, and use that if available, otherwise use the stateKey without an underscore.
-    const noUnderscore = stateKey.startsWith( '_' ) ? stateKey.substring( 1 ) : stateKey;
+    const noUnderscore = stateKey.startsWith('_') ? stateKey.substring(1) : stateKey;
     const underscored = `_${noUnderscore}`;
     let coreObjectAccessorName: string;
 
     // @ts-expect-error - T is not specific to composite schemas, so NumberIO doesn't actually need a hasOwnProperty method
-    if ( coreObject.hasOwnProperty( underscored ) ) {
+    if (coreObject.hasOwnProperty(underscored)) {
       coreObjectAccessorName = underscored;
     }
     else {
@@ -211,51 +213,52 @@ export default class StateSchema<T, SelfStateType> {
    * @param schemaKeysPresentInStateObject - to be populated with any keys this StateSchema is responsible for.
    * @returns boolean if validity can be checked, null if valid, but next in the hierarchy is needed
    */
-  public checkStateObjectValid( stateObject: SelfStateType, toAssert: boolean, schemaKeysPresentInStateObject: string[] ): boolean | null {
-    if ( this.isComposite() ) {
+  public checkStateObjectValid(stateObject: SelfStateType, toAssert: boolean, schemaKeysPresentInStateObject: string[]): boolean | null {
+    if (this.isComposite()) {
       const compositeStateObject = stateObject as CompositeStateObjectType;
       const schema = this.compositeSchema!;
 
       let valid = null;
-      if ( !compositeStateObject ) {
-        assert && toAssert && assert( false, 'There was no stateObject, but there was a state schema saying there should be', schema );
+      if (!compositeStateObject) {
+        assert && toAssert && assert(false, 'There was no stateObject, but there was a state schema saying there should be', schema);
         valid = false;
         return valid;
       }
-      const keys = Object.keys( schema ) as ( keyof CompositeSchema<SelfStateType> )[];
-      keys.forEach( key => {
+      const keys = Object.keys(schema) as (keyof CompositeSchema<SelfStateType>)[];
+      keys.forEach(key => {
 
-        if ( typeof key === 'string' ) {
+        if (typeof key === 'string') {
 
-          if ( !compositeStateObject.hasOwnProperty( key ) ) {
-            assert && toAssert && assert( false, `${key} in state schema but not in the state object` );
+          if (!compositeStateObject.hasOwnProperty(key)) {
+            assert && toAssert && assert(false, `${key} in state schema but not in the state object`);
             valid = false;
           }
           else {
-            if ( !schema[ key ].isStateObjectValid( compositeStateObject[ key ], false ) ) {
-              assert && toAssert && assert( false, `stateObject is not valid for ${key}. stateObject=`, compositeStateObject[ key ], 'schema=', schema[ key ] );
+            // eslint-disable-next-line no-lonely-if
+            if (!schema[key].isStateObjectValid(compositeStateObject[key], false)) {
+              assert && toAssert && assert(false, `stateObject is not valid for ${key}. stateObject=`, compositeStateObject[key], 'schema=', schema[key]);
               valid = false;
             }
           }
-          schemaKeysPresentInStateObject.push( key );
+          schemaKeysPresentInStateObject.push(key);
         }
         else {
-          console.error( 'key should be a string', key );
-          assert && assert( false, 'key should be a string' );
+          console.error('key should be a string', key);
+          assert && assert(false, 'key should be a string');
         }
-      } );
+      });
       return valid;
     }
     else {
-      assert && assert( this.validator, 'validator must be present if not composite' );
+      assert && assert(this.validator, 'validator must be present if not composite');
       const valueStateObject = stateObject;
 
-      if ( assert && toAssert ) {
-        const validationError = Validation.getValidationError( valueStateObject, this.validator! );
-        assert( validationError === null, 'valueStateObject failed validation', valueStateObject, validationError );
+      if (assert && toAssert) {
+        const validationError = Validation.getValidationError(valueStateObject, this.validator!);
+        assert(validationError === null, 'valueStateObject failed validation', valueStateObject, validationError);
       }
 
-      return Validation.isValueValid( valueStateObject, this.validator! );
+      return Validation.isValueValid(valueStateObject, this.validator!);
     }
   }
 
@@ -265,12 +268,12 @@ export default class StateSchema<T, SelfStateType> {
   public getRelatedTypes(): IOType[] {
     const relatedTypes: IOType[] = [];
 
-    if ( this.compositeSchema ) {
+    if (this.compositeSchema) {
 
-      const keys = Object.keys( this.compositeSchema ) as ( keyof CompositeSchema<SelfStateType> )[];
-      keys.forEach( stateSchemaKey => {
-        this.compositeSchema![ stateSchemaKey ] instanceof IOType && relatedTypes.push( this.compositeSchema![ stateSchemaKey ] );
-      } );
+      const keys = Object.keys(this.compositeSchema) as (keyof CompositeSchema<SelfStateType>)[];
+      keys.forEach(stateSchemaKey => {
+        this.compositeSchema![stateSchemaKey] instanceof IOType && relatedTypes.push(this.compositeSchema![stateSchemaKey]);
+      });
     }
     return relatedTypes;
   }
@@ -281,8 +284,8 @@ export default class StateSchema<T, SelfStateType> {
    * (phet-io internal)
    */
   public getStateSchemaAPI(): string | CompositeSchemaAPI {
-    if ( this.isComposite() ) {
-      return _.mapValues( this.compositeSchema, value => value.typeName )!;
+    if (this.isComposite()) {
+      return _.mapValues(this.compositeSchema, value => value.typeName)!;
     }
     else {
       return this.displayString;
@@ -294,13 +297,13 @@ export default class StateSchema<T, SelfStateType> {
    * Factory function for StateSchema instances that represent a single value of state. This is opposed to a composite
    * schema of sub-components.
    */
-  public static asValue<T, StateType>( displayString: string, validator: Validator<IntentionalAny> ): StateSchema<T, StateType> {
-    assert && assert( validator, 'validator required' );
-    return new StateSchema<T, StateType>( {
-      validator: validator,
-      displayString: displayString
-    } );
+  public static asValue<T, StateType>(displayString: string, validator: Validator<IntentionalAny>): StateSchema<T, StateType> {
+    assert && assert(validator, 'validator required');
+    return new StateSchema<T, StateType>({
+      validator,
+      displayString
+    });
   }
 }
 
-tandemNamespace.register( 'StateSchema', StateSchema );
+tandemNamespace.register('StateSchema', StateSchema);

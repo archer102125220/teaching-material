@@ -7,6 +7,8 @@
  * @author Jesse Greenberg
  */
 
+import _ from 'lodash';
+
 import TinyProperty from '../../axon/TinyProperty';
 import merge from '../../phet-core/merge';
 import { scenery } from '../imports';

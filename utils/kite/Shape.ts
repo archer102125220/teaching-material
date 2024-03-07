@@ -18,6 +18,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import TinyEmitter from '../axon/TinyEmitter';
 import Bounds2 from '../dot/Bounds2';
 import dotRandom from '../dot/dotRandom';
@@ -1576,9 +1578,9 @@ class Shape implements CanApplyParsedSVG {
     return `new phet.kite.Shape( '${this.getSVGPath()}' )`;
   }
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * Internal subpath computations
-   *----------------------------------------------------------------------------*/
+   * ---------------------------------------------------------------------------- */
 
   private invalidate(): void {
     assert && assert(!this._immutable, 'Attempt to modify an immutable Shape');

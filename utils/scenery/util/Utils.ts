@@ -6,6 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Bounds2 from '../../dot/Bounds2';
 import Matrix3 from '../../dot/Matrix3';
 import Transform3 from '../../dot/Transform3';
@@ -33,9 +35,9 @@ let webglEnabled = true;
 let _extensionlessWebGLSupport: boolean | undefined; // lazily computed
 
 const Utils = {
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * Transformation Utilities (TODO: separate file) https://github.com/phetsims/scenery/issues/1581
-   *---------------------------------------------------------------------------*/
+   * --------------------------------------------------------------------------- */
 
   /**
    * Prepares a DOM element for use with applyPreparedTransform(). Applies some CSS styles that are required, but
@@ -150,9 +152,9 @@ const Utils = {
     return Utils.backingStorePixelRatio( scenery.scratchContext ) === 1;
   },
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * Text bounds utilities (TODO: separate file) https://github.com/phetsims/scenery/issues/1581
-   *---------------------------------------------------------------------------*/
+   * --------------------------------------------------------------------------- */
 
   /**
    * Given a data snapshot and transform, calculate range on how large / small the bounds can be. It's
@@ -248,7 +250,7 @@ const Utils = {
         context.putImageData( snapshot, 0, 0 );
         $( canvas ).css( 'border', '1px solid black' );
         $( window ).ready( () => {
-          //$( '#display' ).append( $( document.createElement( 'div' ) ).text( 'Bounds: ' +  ) );
+          // $( '#display' ).append( $( document.createElement( 'div' ) ).text( 'Bounds: ' +  ) );
           $( '#display' ).append( canvas );
         } );
       }
@@ -405,9 +407,9 @@ const Utils = {
     return result;
   },
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * WebGL utilities (TODO: separate file) https://github.com/phetsims/scenery/issues/1581
-   *---------------------------------------------------------------------------*/
+   * --------------------------------------------------------------------------- */
 
   /**
    * Finds the smallest power of 2 that is at least as large as n.

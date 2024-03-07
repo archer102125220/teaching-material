@@ -6,6 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import TinyEmitter from '../../axon/TinyEmitter';
 import TinyProperty from '../../axon/TinyProperty';
 import { Node, scenery } from '../imports';

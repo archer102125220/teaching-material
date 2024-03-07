@@ -26,6 +26,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import Multilink from '../../../axon/Multilink';
 import type StrictOmit from '../../../phet-core/types/StrictOmit';
 import Bounds2 from '../../../dot/Bounds2';

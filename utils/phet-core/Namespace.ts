@@ -5,28 +5,30 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
+import _ from 'lodash';
+
 import isHMR from './isHMR';
 
 class Namespace {
   public readonly name: string;
 
-  public constructor( name: string ) {
+  public constructor(name: string) {
 
     this.name = name;
 
-    if ( window.phet ) {
+    if (window.phet) {
       // We already create the chipper namespace, so we just attach to it with the register function.
-      if ( name === 'chipper' ) {
+      if (name === 'chipper') {
         window.phet.chipper.name = 'chipper';
-        window.phet.chipper.register = this.register.bind( window.phet.chipper );
+        window.phet.chipper.register = this.register.bind(window.phet.chipper);
         return window.phet.chipper; // eslint-disable-line -- we want to provide the namespace API on something already existing
       }
       else {
         /* TODO: Ideally we should always assert this, but in PhET-iO wrapper code, multiple built modules define the
            TODO: same namespace, this should be fixed in https://github.com/phetsims/phet-io-wrappers/issues/631 */
-        const ignoreAssertion = !_.hasIn( window, 'phet.chipper.brand' );
-        assert && !ignoreAssertion && assert( !window.phet[ name ], `namespace ${name} already exists` );
-        window.phet[ name ] = this;
+        const ignoreAssertion = !_.hasIn(window, 'phet.chipper.brand');
+        assert && !ignoreAssertion && assert(!window.phet[name], `namespace ${name} already exists`);
+        window.phet[name] = this;
       }
     }
   }
@@ -43,56 +45,50 @@ class Namespace {
    * - x.register( 'A.B.C', C );
    * then the register function will navigate to the object x.A.B and add x.A.B.C = C.
    */
-  public register<T>( key: string, value: T ): T {
+  public register<T>(key: string, value: T): T {
 
     // When using hot module replacement, a module will be loaded and initialized twice, and hence its namespace.register
     // function will be called twice.  This should not be an assertion error.
 
     // If the key isn't compound (doesn't contain '.'), we can just look it up on this namespace
-    if ( key.includes( '.' ) ) {
-      if ( !isHMR ) {
+    if (key.includes('.')) {
+      if (!isHMR) {
 
-        
         // @ts-expect-error
-        assert && assert( !this[ key ], `${key} is already registered for namespace ${this.name}` );
+        assert && assert(!this[key], `${key} is already registered for namespace ${this.name}`);
       }
 
-      
       // @ts-expect-error
-      this[ key ] = value;
+      this[key] = value;
     }
     // Compound (contains '.' at least once). x.register( 'A.B.C', C ) should set x.A.B.C.
     else {
-      const keys = key.split( '.' ); // e.g. [ 'A', 'B', 'C' ]
+      const keys = key.split('.'); // e.g. [ 'A', 'B', 'C' ]
 
       // Walk into the namespace, verifying that each level exists. e.g. parent => x.A.B
       let parent = this; // eslint-disable-line consistent-this, @typescript-eslint/no-this-alias
-      for ( let i = 0; i < keys.length - 1; i++ ) { // for all but the last key
+      for (let i = 0; i < keys.length - 1; i++) { // for all but the last key
 
-        if ( !isHMR ) {
-          
+        if (!isHMR) {
           // @ts-expect-error
-          assert && assert( !!parent[ keys[ i ] ],
-            `${[ this.name ].concat( keys.slice( 0, i + 1 ) ).join( '.' )} needs to be defined to register ${key}` );
+          assert && assert(!!parent[keys[i]],
+            `${[this.name].concat(keys.slice(0, i + 1)).join('.')} needs to be defined to register ${key}`);
         }
 
-        
         // @ts-expect-error
-        parent = parent[ keys[ i ] ];
+        parent = parent[keys[i]];
       }
 
       // Write into the inner namespace, e.g. x.A.B[ 'C' ] = C
-      const lastKey = keys[ keys.length - 1 ];
+      const lastKey = keys[keys.length - 1];
 
-      if ( !isHMR ) {
-        
+      if (!isHMR) {
         // @ts-expect-error
-        assert && assert( !parent[ lastKey ], `${key} is already registered for namespace ${this.name}` );
+        assert && assert(!parent[lastKey], `${key} is already registered for namespace ${this.name}`);
       }
 
-      
       // @ts-expect-error
-      parent[ lastKey ] = value;
+      parent[lastKey] = value;
     }
 
     return value;
