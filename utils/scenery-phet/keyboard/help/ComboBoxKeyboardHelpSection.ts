@@ -6,17 +6,17 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
-import StringProperty from '../../../../axon/js/StringProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import sceneryPhet from '../../sceneryPhet.js';
-import SceneryPhetStrings from '../../SceneryPhetStrings.js';
-import TextKeyNode from '../TextKeyNode.js';
-import KeyboardHelpIconFactory from './KeyboardHelpIconFactory.js';
-import KeyboardHelpSection, { KeyboardHelpSectionOptions } from './KeyboardHelpSection.js';
-import KeyboardHelpSectionRow from './KeyboardHelpSectionRow.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
+import PatternStringProperty from '../../../axon/PatternStringProperty';
+import StringProperty from '../../../axon/StringProperty';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import optionize from '../../../phet-core/optionize';
+import sceneryPhet from '../../sceneryPhet';
+import SceneryPhetStrings from '../../SceneryPhetStrings';
+import TextKeyNode from '../TextKeyNode';
+import KeyboardHelpIconFactory from './KeyboardHelpIconFactory';
+import KeyboardHelpSection, { type KeyboardHelpSectionOptions } from './KeyboardHelpSection';
+import KeyboardHelpSectionRow from './KeyboardHelpSectionRow';
+import Tandem from '../../../tandem/Tandem';
 
 type SelfOptions = {
 
@@ -34,9 +34,9 @@ export type ComboBoxKeyboardHelpSectionOptions = SelfOptions & KeyboardHelpSecti
 
 export default class ComboBoxKeyboardHelpSection extends KeyboardHelpSection {
 
-  public constructor( providedOptions?: ComboBoxKeyboardHelpSectionOptions ) {
+  public constructor(providedOptions?: ComboBoxKeyboardHelpSectionOptions) {
 
-    const options = optionize<ComboBoxKeyboardHelpSectionOptions, SelfOptions, KeyboardHelpSectionOptions>()( {
+    const options = optionize<ComboBoxKeyboardHelpSectionOptions, SelfOptions, KeyboardHelpSectionOptions>()({
 
       // SelfOptions
       headingString: SceneryPhetStrings.keyboardHelpDialog.comboBox.headingStringStringProperty,
@@ -48,58 +48,58 @@ export default class ComboBoxKeyboardHelpSection extends KeyboardHelpSection {
       vBoxOptions: {
         spacing: 8 // A bit tighter so that it looks like one set of instructions
       }
-    }, providedOptions );
+    }, providedOptions);
 
     // options may be string or TReadOnlyProperty<string>, so ensure that we have a TReadOnlyProperty<string>.
-    const thingAsLowerCasePluralStringProperty = ( typeof options.thingAsLowerCasePlural === 'string' ) ?
-                                                 new StringProperty( options.thingAsLowerCasePlural ) :
-                                                 options.thingAsLowerCasePlural;
-    const thingAsLowerCaseSingularStringProperty = ( typeof options.thingAsLowerCaseSingular === 'string' ) ?
-                                                   new StringProperty( options.thingAsLowerCaseSingular ) :
-                                                   options.thingAsLowerCaseSingular;
+    const thingAsLowerCasePluralStringProperty = (typeof options.thingAsLowerCasePlural === 'string') ?
+      new StringProperty(options.thingAsLowerCasePlural) :
+      options.thingAsLowerCasePlural;
+    const thingAsLowerCaseSingularStringProperty = (typeof options.thingAsLowerCaseSingular === 'string') ?
+      new StringProperty(options.thingAsLowerCaseSingular) :
+      options.thingAsLowerCaseSingular;
 
     // Create a PatternStringProperty that fills in a plural/singular pattern, and support dynamic locale.
-    const createPatternStringProperty = ( providedStringProperty: TReadOnlyProperty<string> ) => {
+    const createPatternStringProperty = (providedStringProperty: TReadOnlyProperty<string>) => {
       return new PatternStringProperty(
         providedStringProperty, {
-          thingPlural: thingAsLowerCasePluralStringProperty,
-          thingSingular: thingAsLowerCaseSingularStringProperty
-        }, { tandem: Tandem.OPT_OUT } );
+        thingPlural: thingAsLowerCasePluralStringProperty,
+        thingSingular: thingAsLowerCaseSingularStringProperty
+      }, { tandem: Tandem.OPT_OUT });
     };
 
     const spaceKeyNode = TextKeyNode.space();
     const enterKeyNode = TextKeyNode.enter();
-    const spaceOrEnterIcon = KeyboardHelpIconFactory.iconOrIcon( spaceKeyNode, enterKeyNode );
+    const spaceOrEnterIcon = KeyboardHelpIconFactory.iconOrIcon(spaceKeyNode, enterKeyNode);
 
     const popUpList = KeyboardHelpSectionRow.labelWithIcon(
-      createPatternStringProperty( SceneryPhetStrings.keyboardHelpDialog.comboBox.popUpListPatternStringProperty ),
+      createPatternStringProperty(SceneryPhetStrings.keyboardHelpDialog.comboBox.popUpListPatternStringProperty),
       spaceOrEnterIcon, {
-        labelInnerContent: createPatternStringProperty( SceneryPhetStrings.a11y.keyboardHelpDialog.comboBox.popUpListPatternDescriptionStringProperty )
-      } );
+      labelInnerContent: createPatternStringProperty(SceneryPhetStrings.a11y.keyboardHelpDialog.comboBox.popUpListPatternDescriptionStringProperty)
+    });
 
     const moveThrough = KeyboardHelpSectionRow.labelWithIcon(
-      createPatternStringProperty( SceneryPhetStrings.keyboardHelpDialog.comboBox.moveThroughPatternStringProperty ),
+      createPatternStringProperty(SceneryPhetStrings.keyboardHelpDialog.comboBox.moveThroughPatternStringProperty),
       KeyboardHelpIconFactory.upDownArrowKeysRowIcon(), {
-        labelInnerContent: createPatternStringProperty( SceneryPhetStrings.a11y.keyboardHelpDialog.comboBox.moveThroughPatternDescriptionStringProperty )
-      } );
+      labelInnerContent: createPatternStringProperty(SceneryPhetStrings.a11y.keyboardHelpDialog.comboBox.moveThroughPatternDescriptionStringProperty)
+    });
 
     const chooseNew = KeyboardHelpSectionRow.labelWithIcon(
-      createPatternStringProperty( SceneryPhetStrings.keyboardHelpDialog.comboBox.chooseNewPatternStringProperty ),
+      createPatternStringProperty(SceneryPhetStrings.keyboardHelpDialog.comboBox.chooseNewPatternStringProperty),
       enterKeyNode, {
-        labelInnerContent: createPatternStringProperty( SceneryPhetStrings.a11y.keyboardHelpDialog.comboBox.chooseNewPatternDescriptionStringProperty )
-      } );
+      labelInnerContent: createPatternStringProperty(SceneryPhetStrings.a11y.keyboardHelpDialog.comboBox.chooseNewPatternDescriptionStringProperty)
+    });
 
     const escapeKeyNode = TextKeyNode.esc();
     const closeWithoutChanging = KeyboardHelpSectionRow.labelWithIcon(
       SceneryPhetStrings.keyboardHelpDialog.comboBox.closeWithoutChangingStringProperty,
       escapeKeyNode, {
-        labelInnerContent: SceneryPhetStrings.a11y.keyboardHelpDialog.comboBox.closeWithoutChangingDescriptionStringProperty
-      } );
+      labelInnerContent: SceneryPhetStrings.a11y.keyboardHelpDialog.comboBox.closeWithoutChangingDescriptionStringProperty
+    });
 
     // order the rows of content
-    const rows = [ popUpList, moveThrough, chooseNew, closeWithoutChanging ];
-    super( options.headingString, rows, options );
+    const rows = [popUpList, moveThrough, chooseNew, closeWithoutChanging];
+    super(options.headingString, rows, options);
   }
 }
 
-sceneryPhet.register( 'ComboBoxKeyboardHelpSection', ComboBoxKeyboardHelpSection );
+sceneryPhet.register('ComboBoxKeyboardHelpSection', ComboBoxKeyboardHelpSection);

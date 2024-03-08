@@ -7,18 +7,20 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import Emitter from '../../../axon/js/Emitter.js';
-import Property from '../../../axon/js/Property.js';
-import optionize, { combineOptions } from '../../../phet-core/js/optionize.js';
-import { PressListener, PressListenerOptions } from '../../../scenery/js/imports.js';
-import PhetioObject from '../../../tandem/js/PhetioObject.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import EnabledComponent, { EnabledComponentOptions } from '../../../axon/js/EnabledComponent.js';
-import sun from '../sun.js';
-import Multilink, { UnknownMultilink } from '../../../axon/js/Multilink.js';
-import { EnabledPropertyOptions } from '../../../axon/js/EnabledProperty.js';
-import TEmitter from '../../../axon/js/TEmitter.js';
+import _ from 'lodash';
+
+import BooleanProperty from '../../axon/BooleanProperty';
+import Emitter from '../../axon/Emitter';
+import Property from '../../axon/Property';
+import optionize, { combineOptions } from '../../phet-core/optionize';
+import { PressListener, type PressListenerOptions } from '../../scenery/imports';
+import PhetioObject from '../../tandem/PhetioObject';
+import Tandem from '../../tandem/Tandem';
+import EnabledComponent, { type EnabledComponentOptions } from '../../axon/EnabledComponent';
+import sun from '../sun';
+import Multilink, { type UnknownMultilink } from '../../axon/Multilink';
+import { type EnabledPropertyOptions } from '../../axon/EnabledProperty';
+import type TEmitter from '../../axon/TEmitter';
 
 type SelfOptions = {
 
@@ -26,7 +28,7 @@ type SelfOptions = {
   startCallback?: () => void;
 
   // called on pointer up, indicates whether the pointer was released over the button
-  endCallback?: ( over: boolean ) => void;
+  endCallback?: (over: boolean) => void;
 
   // to support properly passing this to children, see https://github.com/phetsims/tandem/issues/60
   phetioState?: boolean;
@@ -82,9 +84,9 @@ export default class ButtonModel extends EnabledComponent {
 
   private readonly disposeButtonModel: () => void;
 
-  public constructor( providedOptions?: ButtonModelOptions ) {
+  public constructor(providedOptions?: ButtonModelOptions) {
 
-    const options = optionize<ButtonModelOptions, SelfOptions, EnabledComponentOptions>()( {
+    const options = optionize<ButtonModelOptions, SelfOptions, EnabledComponentOptions>()({
       startCallback: _.noop,
       endCallback: _.noop,
 
@@ -93,26 +95,26 @@ export default class ButtonModel extends EnabledComponent {
       phetioState: PhetioObject.DEFAULT_OPTIONS.phetioState,
       phetioReadOnly: PhetioObject.DEFAULT_OPTIONS.phetioReadOnly,
       phetioFeatured: PhetioObject.DEFAULT_OPTIONS.phetioFeatured
-    }, providedOptions );
+    }, providedOptions);
 
     // Set up enabledPropertyOptions for the enabledProperty that the mixin might create
-    options.enabledPropertyOptions = combineOptions<EnabledPropertyOptions>( {
+    options.enabledPropertyOptions = combineOptions<EnabledPropertyOptions>({
 
       // phet-io
       phetioState: options.phetioState,
       phetioReadOnly: options.phetioReadOnly,
       phetioDocumentation: 'When disabled, the button is grayed out and cannot be pressed',
       phetioFeatured: true
-    }, options.enabledPropertyOptions! );
+    }, options.enabledPropertyOptions!);
 
-    super( options );
+    super(options);
 
     // model Properties
-    this.overProperty = new BooleanProperty( false );
-    this.downProperty = new BooleanProperty( false, { reentrant: true } );
-    this.focusedProperty = new BooleanProperty( false );
-    this.looksPressedProperty = new BooleanProperty( false );
-    this.looksOverProperty = new BooleanProperty( false );
+    this.overProperty = new BooleanProperty(false);
+    this.downProperty = new BooleanProperty(false, { reentrant: true });
+    this.focusedProperty = new BooleanProperty(false);
+    this.looksPressedProperty = new BooleanProperty(false);
+    this.looksOverProperty = new BooleanProperty(false);
 
     this.produceSoundEmitter = new Emitter();
     this.interrupted = false;
@@ -130,25 +132,25 @@ export default class ButtonModel extends EnabledComponent {
 
     // Call startCallback on pointer down, endCallback on pointer up. Use lazyLink so they aren't called immediately.
     // No unlink needed since this button model owns the Property.
-    this.downProperty.lazyLink( down => {
-      if ( down ) {
+    this.downProperty.lazyLink(down => {
+      if (down) {
         options.startCallback();
       }
       else {
-        options.endCallback( this.looksOverProperty.get() );
+        options.endCallback(this.looksOverProperty.get());
       }
-    } );
+    });
 
     // Interrupt input listeners when enabled is set to false. This is the equivalent of Node.interruptSubtreeInput,
     // but ButtonModel is not a Node, so we have to interrupt each listener. See https://github.com/phetsims/sun/issues/642.
-    this.enabledProperty.link( enabled => {
-      if ( !enabled ) {
-        for ( let i = 0; i < this.listeners.length; i++ ) {
-          const listener = this.listeners[ i ];
+    this.enabledProperty.link(enabled => {
+      if (!enabled) {
+        for (let i = 0; i < this.listeners.length; i++) {
+          const listener = this.listeners[i];
           listener.interrupt && listener.interrupt();
         }
       }
-    } );
+    });
 
     this.disposeButtonModel = () => {
 
@@ -173,51 +175,51 @@ export default class ButtonModel extends EnabledComponent {
    * Creates a PressListener that will handle changes to ButtonModel when the associated button Node is pressed.
    * The client is responsible for adding this PressListener to the associated button Node.
    */
-  public createPressListener( options?: PressListenerOptions ): PressListener {
+  public createPressListener(options?: PressListenerOptions): PressListener {
 
-    options = combineOptions<PressListenerOptions>( {
+    options = combineOptions<PressListenerOptions>({
       canStartPress: () => this.enabledProperty.value
-    }, options );
+    }, options);
 
-    const pressListener = new PressListener( options );
-    this.listeners.push( pressListener );
+    const pressListener = new PressListener(options);
+    this.listeners.push(pressListener);
 
     // Link lazily in case client externally sets downProperty - don't update until the next press.  No unlink needed
     // because the pressListener is local.
-    pressListener.isPressedProperty.lazyLink( isPressed => {
+    pressListener.isPressedProperty.lazyLink(isPressed => {
 
       // determine interrupted first so listeners on downProperty have access
       this.interrupted = pressListener.interrupted;
-      this.downProperty.set( isPressed );
-    } );
-    pressListener.isOverProperty.lazyLink( this.overProperty.set.bind( this.overProperty ) );
-    pressListener.isFocusedProperty.lazyLink( this.focusedProperty.set.bind( this.focusedProperty ) );
+      this.downProperty.set(isPressed);
+    });
+    pressListener.isOverProperty.lazyLink(this.overProperty.set.bind(this.overProperty));
+    pressListener.isFocusedProperty.lazyLink(this.focusedProperty.set.bind(this.focusedProperty));
 
     // dispose the previous multilink in case we already created a PressListener with this model
     this.looksPressedMultilink && this.looksPressedMultilink.dispose();
     this.looksOverMultilink && this.looksOverMultilink.dispose();
 
     // the downProperty is included because it can be set externally, looksPressedProperty should update in this case
-    const looksPressedProperties = this.listeners.map( listener => listener.looksPressedProperty );
-    looksPressedProperties.push( this.downProperty );
+    const looksPressedProperties = this.listeners.map(listener => listener.looksPressedProperty);
+    looksPressedProperties.push(this.downProperty);
 
     // assign a new Multilink (for disposal), and make sure that the button looks pressed when any of the
     // PressListeners created by this ButtonModel look pressed.
-    this.looksPressedMultilink = Multilink.multilinkAny( looksPressedProperties, ( ...args: boolean[] ) => {
-      this.looksPressedProperty.value = _.reduce( args, ( sum: boolean, newValue: boolean ) => sum || newValue, false );
-    } );
+    this.looksPressedMultilink = Multilink.multilinkAny(looksPressedProperties, (...args: boolean[]) => {
+      this.looksPressedProperty.value = _.reduce(args, (sum: boolean, newValue: boolean) => sum || newValue, false);
+    });
 
-    const looksOverProperties = this.listeners.map( listener => listener.looksOverProperty );
+    const looksOverProperties = this.listeners.map(listener => listener.looksOverProperty);
 
     // assign a new Multilink (for disposal), and make sure that the button looks over when any of the
     // PressListeners created by this ButtonModel look over. Note that this cannot be an arrow function
     // because its implementation relies on arguments.
-    this.looksOverMultilink = Multilink.multilinkAny( looksOverProperties, ( ...args: boolean[] ) => {
-      this.looksOverProperty.value = _.reduce( args, ( sum: boolean, newValue: boolean ) => sum || newValue, false );
-    } );
+    this.looksOverMultilink = Multilink.multilinkAny(looksOverProperties, (...args: boolean[]) => {
+      this.looksOverProperty.value = _.reduce(args, (sum: boolean, newValue: boolean) => sum || newValue, false);
+    });
 
     return pressListener;
   }
 }
 
-sun.register( 'ButtonModel', ButtonModel );
+sun.register('ButtonModel', ButtonModel);

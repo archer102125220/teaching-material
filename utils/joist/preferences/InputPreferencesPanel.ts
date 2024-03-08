@@ -6,22 +6,22 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import merge from '../../../phet-core/js/merge.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
-import StringUtils from '../../../phetcommon/js/util/StringUtils.js';
-import { Node, Text, VBox, VoicingRichText } from '../../../scenery/js/imports.js';
-import ToggleSwitch, { ToggleSwitchOptions } from '../../../sun/js/ToggleSwitch.js';
-import joist from '../joist.js';
-import JoistStrings from '../JoistStrings.js';
-import PreferencesDialog from './PreferencesDialog.js';
-import { InputModel } from './PreferencesModel.js';
-import PreferencesPanel, { PreferencesPanelOptions } from './PreferencesPanel.js';
-import PreferencesPanelSection from './PreferencesPanelSection.js';
-import PreferencesControl from './PreferencesControl.js';
-import PreferencesType from './PreferencesType.js';
-import PreferencesDialogConstants from './PreferencesDialogConstants.js';
-import { combineOptions } from '../../../phet-core/js/optionize.js';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import merge from '../../phet-core/merge';
+import type PickRequired from '../../phet-core/types/PickRequired';
+import StringUtils from '../../phetcommon/util/StringUtils';
+import { Node, Text, VBox, VoicingRichText } from '../../scenery/imports';
+import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
+import joist from '../joist';
+import JoistStrings from '../JoistStrings';
+import PreferencesDialog from './PreferencesDialog';
+import { type InputModel } from './PreferencesModel';
+import PreferencesPanel, { type PreferencesPanelOptions } from './PreferencesPanel';
+import PreferencesPanelSection from './PreferencesPanelSection';
+import PreferencesControl from './PreferencesControl';
+import PreferencesType from './PreferencesType';
+import PreferencesDialogConstants from './PreferencesDialogConstants';
+import { combineOptions } from '../../phet-core/optionize';
 
 // constants
 const gestureControlEnabledAlertStringProperty = JoistStrings.a11y.preferences.tabs.input.gestureControl.enabledAlertStringProperty;
@@ -37,69 +37,69 @@ type InputPreferencesPanelOptions = PickRequired<PreferencesPanelOptions, 'tande
 
 class InputPreferencesPanel extends PreferencesPanel {
 
-  public constructor( inputModel: InputModel, selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean>, providedOptions: InputPreferencesPanelOptions ) {
+  public constructor(inputModel: InputModel, selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean>, providedOptions: InputPreferencesPanelOptions) {
 
-    super( PreferencesType.INPUT, selectedTabProperty, tabVisibleProperty, {
+    super(PreferencesType.INPUT, selectedTabProperty, tabVisibleProperty, {
       labelContent: inputTitleString
-    } );
+    });
 
     // children are filled in later depending on what is supported in the InputModel
-    const contentVBox = new VBox( {
+    const contentVBox = new VBox({
       spacing: PreferencesDialog.CONTENT_SPACING,
       align: 'left'
-    } );
-    this.addChild( contentVBox );
+    });
+    this.addChild(contentVBox);
 
-    if ( inputModel.supportsGestureControl ) {
+    if (inputModel.supportsGestureControl) {
 
-      const gestureControlText = new Text( gestureControlsString, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-      const gestureControlDescriptionNode = new VoicingRichText( gestureControlsDescriptionString, merge( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
+      const gestureControlText = new Text(gestureControlsString, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS);
+      const gestureControlDescriptionNode = new VoicingRichText(gestureControlsDescriptionString, merge({}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
         lineWrap: 350,
         maxHeight: 100,
 
-        readingBlockNameResponse: StringUtils.fillIn( labelledDescriptionPatternStringProperty, {
+        readingBlockNameResponse: StringUtils.fillIn(labelledDescriptionPatternStringProperty, {
           label: gestureControlsString,
           description: gestureControlsDescriptionString
-        } )
-      } ) );
-      const gestureControlsEnabledSwitch = new ToggleSwitch( inputModel.gestureControlsEnabledProperty, false, true, combineOptions<ToggleSwitchOptions>( {
+        })
+      }));
+      const gestureControlsEnabledSwitch = new ToggleSwitch(inputModel.gestureControlsEnabledProperty, false, true, combineOptions<ToggleSwitchOptions>({
         a11yName: gestureControlsString,
         leftValueContextResponse: gestureControlDisabledAlertStringProperty,
         rightValueContextResponse: gestureControlEnabledAlertStringProperty
-      }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ) );
-      const gestureControlsControl = new PreferencesControl( {
+      }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS));
+      const gestureControlsControl = new PreferencesControl({
         labelNode: gestureControlText,
         descriptionNode: gestureControlDescriptionNode,
         controlNode: gestureControlsEnabledSwitch
-      } );
+      });
 
-      const gesturePanelSection = new PreferencesPanelSection( {
+      const gesturePanelSection = new PreferencesPanelSection({
         titleNode: gestureControlsControl,
         contentLeftMargin: 0
-      } );
+      });
 
-      contentVBox.addChild( gesturePanelSection );
+      contentVBox.addChild(gesturePanelSection);
     }
 
-    const contentNode = new VBox( {
+    const contentNode = new VBox({
       spacing: PreferencesDialog.CONTENT_SPACING,
       align: 'left'
-    } );
+    });
 
-    inputModel.customPreferences.forEach( customPreference => {
-      const customContent = customPreference.createContent( providedOptions.tandem );
+    inputModel.customPreferences.forEach(customPreference => {
+      const customContent = customPreference.createContent(providedOptions.tandem);
       contentNode.addChild(
-        new Node( { children: [ customContent ] } )
+        new Node({ children: [customContent] })
       );
-    } );
+    });
 
-    const customPanelSection = new PreferencesPanelSection( {
-      contentNode: contentNode,
+    const customPanelSection = new PreferencesPanelSection({
+      contentNode,
       contentLeftMargin: 0
-    } );
-    contentVBox.addChild( customPanelSection );
+    });
+    contentVBox.addChild(customPanelSection);
   }
 }
 
-joist.register( 'InputPreferencesPanel', InputPreferencesPanel );
+joist.register('InputPreferencesPanel', InputPreferencesPanel);
 export default InputPreferencesPanel;

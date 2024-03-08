@@ -7,50 +7,50 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import merge from '../../../phet-core/js/merge.js';
-import { VBox, VoicingRichText } from '../../../scenery/js/imports.js';
-import isLeftToRightProperty from '../i18n/isLeftToRightProperty.js';
-import joist from '../joist.js';
-import JoistStrings from '../JoistStrings.js';
-import PreferencesDialog from './PreferencesDialog.js';
-import PreferencesPanel from './PreferencesPanel.js';
-import PreferencesType from './PreferencesType.js';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import merge from '../../phet-core/merge';
+import { VBox, VoicingRichText } from '../../scenery/imports';
+import isLeftToRightProperty from '@/i18n/joist/isLeftToRightProperty';
+import joist from '../joist';
+import JoistStrings from '../JoistStrings';
+import PreferencesDialog from './PreferencesDialog';
+import PreferencesPanel from './PreferencesPanel';
+import PreferencesType from './PreferencesType';
 
 class OverviewPreferencesPanel extends PreferencesPanel {
-  public constructor( selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean> ) {
-    super( PreferencesType.OVERVIEW, selectedTabProperty, tabVisibleProperty );
+  public constructor(selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean>) {
+    super(PreferencesType.OVERVIEW, selectedTabProperty, tabVisibleProperty);
 
-    const introTextOptions = merge( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
+    const introTextOptions = merge({}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
 
       // using lineWrap instead of default maxWidth for content
       maxWidth: null,
       lineWrap: 600,
       maxHeight: 600,
       tagName: 'p'
-    } );
+    });
 
     const introParagraphsTexts = [
 
       // These string keys go through preferences.tabs.general because they used to
       // live in that tab. But now we cannot rename the string keys.
-      new VoicingRichText( JoistStrings.preferences.tabs.general.accessibilityIntroStringProperty, introTextOptions ),
-      new VoicingRichText( JoistStrings.preferences.tabs.general.moreAccessibilityStringProperty, introTextOptions )
+      new VoicingRichText(JoistStrings.preferences.tabs.general.accessibilityIntroStringProperty, introTextOptions),
+      new VoicingRichText(JoistStrings.preferences.tabs.general.moreAccessibilityStringProperty, introTextOptions)
     ];
 
-    const panelContent = new VBox( { spacing: 10, children: introParagraphsTexts } );
-    this.addChild( panelContent );
+    const panelContent = new VBox({ spacing: 10, children: introParagraphsTexts });
+    this.addChild(panelContent);
 
-    const leftToRightListener = ( isLTR: boolean ) => {
-      introParagraphsTexts.forEach( text => {
+    const leftToRightListener = (isLTR: boolean) => {
+      introParagraphsTexts.forEach(text => {
         const align = isLTR ? 'left' : 'right';
         text.align = align;
         panelContent.align = align;
-      } );
+      });
     };
-    isLeftToRightProperty.link( leftToRightListener );
+    isLeftToRightProperty.link(leftToRightListener);
   }
 }
 
-joist.register( 'OverviewPreferencesPanel', OverviewPreferencesPanel );
+joist.register('OverviewPreferencesPanel', OverviewPreferencesPanel);
 export default OverviewPreferencesPanel;

@@ -4,6 +4,9 @@
     <NuxtLink to="/desmos">
       <v-btn color="primary">desmos</v-btn>
     </NuxtLink>
+    <NuxtLink to="/geometric-optics">
+      <v-btn color="primary">geometric-optics</v-btn>
+    </NuxtLink>
   </div>
 </template>
 <script setup>

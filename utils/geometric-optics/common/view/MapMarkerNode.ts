@@ -6,32 +6,32 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import PickOptional from '../../../../phet-core/js/types/PickOptional.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import { Node, NodeOptions, Path, PathOptions } from '../../../../scenery/js/imports.js';
-import mapMarkerAltSolidShape from '../../../../sherpa/js/fontawesome-5/mapMarkerAltSolidShape.js';
-import geometricOptics from '../../geometricOptics.js';
+import type PickOptional from '../../../phet-core/types/PickOptional';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import { Node, type NodeOptions, Path, type PathOptions } from '../../../scenery/imports';
+import mapMarkerAltSolidShape from '../../../sherpa/fontawesome-5/mapMarkerAltSolidShape';
+import geometricOptics from '../../geometricOptics';
 
 type MapMarkerNodeOptions = PickOptional<NodeOptions, 'scale' | 'tagName'> & PickRequired<PathOptions, 'fill' | 'stroke'>;
 
 export default class MapMarkerNode extends Node {
 
-  public constructor( providedOptions: MapMarkerNodeOptions ) {
+  public constructor(providedOptions: MapMarkerNodeOptions) {
 
-    super( providedOptions );
+    super(providedOptions);
 
-    const mapMarkerNode = new Path( mapMarkerAltSolidShape, {
+    const mapMarkerNode = new Path(mapMarkerAltSolidShape, {
       fill: providedOptions.fill,
       stroke: providedOptions.stroke,
       lineWidth: 12,
       rotation: Math.PI,
       opacity: 0.85
-    } );
-    this.addChild( mapMarkerNode );
+    });
+    this.addChild(mapMarkerNode);
 
     // slight vertical elongation
-    mapMarkerNode.setScaleMagnitude( 0.06, 0.07 );
+    mapMarkerNode.setScaleMagnitude(0.06, 0.07);
   }
 }
 
-geometricOptics.register( 'MapMarkerNode', MapMarkerNode );
+geometricOptics.register('MapMarkerNode', MapMarkerNode);

@@ -7,26 +7,28 @@
  * @author Aaron Davis (PhET Interactive Simulations)
  */
 
-import Emitter from '../../../axon/js/Emitter.js';
-import TEmitter from '../../../axon/js/TEmitter.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import { Color, Node, PaintableNode, PaintColorProperty } from '../../../scenery/js/imports.js';
-import TSoundPlayer from '../../../tambo/js/TSoundPlayer.js';
-import pushButtonSoundPlayer from '../../../tambo/js/shared-sound-players/pushButtonSoundPlayer.js';
-import EventType from '../../../tandem/js/EventType.js';
-import PhetioObject from '../../../tandem/js/PhetioObject.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import ColorConstants from '../ColorConstants.js';
-import sun from '../sun.js';
-import ButtonModel from './ButtonModel.js';
-import RadioButtonInteractionState from './RadioButtonInteractionState.js';
-import RadioButtonInteractionStateProperty from './RadioButtonInteractionStateProperty.js';
-import RectangularButton, { RectangularButtonOptions } from './RectangularButton.js';
-import TButtonAppearanceStrategy, { TButtonAppearanceStrategyOptions } from './TButtonAppearanceStrategy.js';
-import TContentAppearanceStrategy, { TContentAppearanceStrategyOptions } from './TContentAppearanceStrategy.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
+import Emitter from '../../axon/Emitter';
+import type TEmitter from '../../axon/TEmitter';
+import type TProperty from '../../axon/TProperty';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import optionize from '../../phet-core/optionize';
+import { Color, Node, type PaintableNode, PaintColorProperty } from '../../scenery/imports';
+import type TSoundPlayer from '../../tambo/TSoundPlayer';
+import pushButtonSoundPlayer from '../../tambo/shared-sound-players/pushButtonSoundPlayer';
+import EventType from '../../tandem/EventType';
+import PhetioObject from '../../tandem/PhetioObject';
+import Tandem from '../../tandem/Tandem';
+import ColorConstants from '../ColorConstants';
+import sun from '../sun';
+import ButtonModel from './ButtonModel';
+import RadioButtonInteractionState from './RadioButtonInteractionState';
+import RadioButtonInteractionStateProperty from './RadioButtonInteractionStateProperty';
+import RectangularButton, { type RectangularButtonOptions } from './RectangularButton';
+import type TButtonAppearanceStrategy from './TButtonAppearanceStrategy';
+import type { TButtonAppearanceStrategyOptions } from './TButtonAppearanceStrategy';
+import type TContentAppearanceStrategy from './TContentAppearanceStrategy';
+import type { TContentAppearanceStrategyOptions } from './TContentAppearanceStrategy';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
 
 type SelfOptions = {
 
@@ -60,9 +62,9 @@ export default class RectangularRadioButton<T> extends RectangularButton {
    * @param value - value when this radio button is selected
    * @param providedOptions
    */
-  public constructor( property: TProperty<T>, value: T, providedOptions?: RectangularRadioButtonOptions ) {
+  public constructor(property: TProperty<T>, value: T, providedOptions?: RectangularRadioButtonOptions) {
 
-    const options = optionize<RectangularRadioButtonOptions, SelfOptions, RectangularButtonOptions>()( {
+    const options = optionize<RectangularRadioButtonOptions, SelfOptions, RectangularButtonOptions>()({
 
       // SelfOptions
       soundPlayer: null,
@@ -76,7 +78,7 @@ export default class RectangularRadioButton<T> extends RectangularButton {
         selectedStroke: Color.BLACK,
         selectedLineWidth: 1.5,
         selectedButtonOpacity: 1,
-        deselectedStroke: new Color( 50, 50, 50 ),
+        deselectedStroke: new Color(50, 50, 50),
         deselectedLineWidth: 1,
         deselectedButtonOpacity: 0.6
       },
@@ -99,25 +101,25 @@ export default class RectangularRadioButton<T> extends RectangularButton {
       tandem: Tandem.REQUIRED,
       tandemNameSuffix: 'Button',
       phetioReadOnly: PhetioObject.DEFAULT_OPTIONS.phetioReadOnly // to support properly passing this to children, see https://github.com/phetsims/tandem/issues/60
-    }, providedOptions );
+    }, providedOptions);
 
-    assert && assert( !options.tandem.supplied || options.tandem.name.endsWith( RectangularRadioButton.TANDEM_NAME_SUFFIX ),
-      `RectangularRadioButton tandem.name must end with ${RectangularRadioButton.TANDEM_NAME_SUFFIX}: ${options.tandem.phetioID}` );
+    assert && assert(!options.tandem.supplied || options.tandem.name.endsWith(RectangularRadioButton.TANDEM_NAME_SUFFIX),
+      `RectangularRadioButton tandem.name must end with ${RectangularRadioButton.TANDEM_NAME_SUFFIX}: ${options.tandem.phetioID}`);
 
     // ButtonModel is responsible for enabledProperty, so propagate enabledPropertyOptions.
     // tandem is also propagated because we want enabledProperty to appear as a child of this button.
     // Since enabledProperty is unrelated to the look of the button when selected/deselected, we've also included
     // phetioEnabledPropertyInstrumented so that one can opt out of this potentially confusing instrumentation.
     // See https://github.com/phetsims/sun/issues/847.
-    const buttonModel = new ButtonModel( {
+    const buttonModel = new ButtonModel({
       enabledPropertyOptions: options.enabledPropertyOptions,
       tandem: options.tandem,
       phetioEnabledPropertyInstrumented: options.phetioEnabledPropertyInstrumented
-    } );
+    });
 
-    const interactionStateProperty = new RadioButtonInteractionStateProperty( buttonModel, property, value );
+    const interactionStateProperty = new RadioButtonInteractionStateProperty(buttonModel, property, value);
 
-    super( buttonModel, interactionStateProperty, options );
+    super(buttonModel, interactionStateProperty, options);
 
     // for use in RectangularRadioButtonGroup for managing the labels
     this.interactionStateProperty = interactionStateProperty;
@@ -125,47 +127,47 @@ export default class RectangularRadioButton<T> extends RectangularButton {
     // pdom - Specify the default value for assistive technology, this attribute is needed in addition to
     // the 'checked' Property to mark this element as the default selection since 'checked' may be set before
     // we are finished adding RectangularRadioButtons to the RectangularRadioButtonGroup.
-    if ( property.value === value ) {
-      this.setPDOMAttribute( 'checked', 'checked' );
+    if (property.value === value) {
+      this.setPDOMAttribute('checked', 'checked');
     }
 
     // pdom - when the Property changes, make sure the correct radio button is marked as 'checked' so that this button
     // receives focus on 'tab'
-    const pdomCheckedListener = ( newValue: T ) => {
-      this.pdomChecked = ( newValue === value );
+    const pdomCheckedListener = (newValue: T) => {
+      this.pdomChecked = (newValue === value);
     };
-    property.link( pdomCheckedListener );
+    property.link(pdomCheckedListener);
 
     this.property = property;
     this.value = value;
-    this.firedEmitter = new Emitter( {
-      tandem: options.tandem.createTandem( 'firedEmitter' ),
+    this.firedEmitter = new Emitter({
+      tandem: options.tandem.createTandem('firedEmitter'),
       phetioDocumentation: 'Emits when the radio button is pressed',
       phetioReadOnly: options.phetioReadOnly,
       phetioEventType: EventType.USER
-    } );
+    });
 
-    this.firedEmitter.addListener( () => property.set( value ) );
+    this.firedEmitter.addListener(() => property.set(value));
 
     // When the button model triggers an event, fire from the radio button
-    buttonModel.downProperty.link( down => {
-      if ( !down && ( buttonModel.overProperty.get() || buttonModel.focusedProperty.get() ) && !buttonModel.interrupted ) {
+    buttonModel.downProperty.link(down => {
+      if (!down && (buttonModel.overProperty.get() || buttonModel.focusedProperty.get()) && !buttonModel.interrupted) {
         this.fire();
-        this.voicingSpeakFullResponse( {
+        this.voicingSpeakFullResponse({
           hintResponse: null
-        } );
+        });
       }
-    } );
+    });
 
     // sound generation
     const soundPlayer = options.soundPlayer || pushButtonSoundPlayer;
     const playSound = () => { soundPlayer.play(); };
-    buttonModel.produceSoundEmitter.addListener( playSound );
+    buttonModel.produceSoundEmitter.addListener(playSound);
 
     this.disposeRectangularRadioButton = () => {
-      property.unlink( pdomCheckedListener );
+      property.unlink(pdomCheckedListener);
       this.firedEmitter.dispose();
-      buttonModel.produceSoundEmitter.removeListener( playSound );
+      buttonModel.produceSoundEmitter.removeListener(playSound);
       buttonModel.dispose();
       this.interactionStateProperty.dispose();
     };
@@ -180,7 +182,7 @@ export default class RectangularRadioButton<T> extends RectangularButton {
    * fire on up if the button is enabled, public for use in the accessibility tree
    */
   public fire(): void {
-    if ( this.buttonModel.enabledProperty.get() ) {
+    if (this.buttonModel.enabledProperty.get()) {
       this.firedEmitter.emit();
       this.buttonModel.produceSoundEmitter.emit();
     }
@@ -199,12 +201,12 @@ export default class RectangularRadioButton<T> extends RectangularButton {
     /**
      * buttonBackground is the Node for the button's background, sans content
      */
-    public constructor( buttonBackground: PaintableNode,
-                        interactionStateProperty: TReadOnlyProperty<RadioButtonInteractionState>,
-                        baseColorProperty: TReadOnlyProperty<Color>,
-                        providedOptions?: TButtonAppearanceStrategyOptions ) {
+    public constructor(buttonBackground: PaintableNode,
+      interactionStateProperty: TReadOnlyProperty<RadioButtonInteractionState>,
+      baseColorProperty: TReadOnlyProperty<Color>,
+      providedOptions?: TButtonAppearanceStrategyOptions) {
 
-      const options = optionize<TButtonAppearanceStrategyOptions>()( {
+      const options = optionize<TButtonAppearanceStrategyOptions>()({
         stroke: baseColorProperty,
         lineWidth: 1,
         deselectedButtonOpacity: 1,
@@ -217,25 +219,25 @@ export default class RectangularRadioButton<T> extends RectangularButton {
         selectedButtonOpacity: 1,
         selectedLineWidth: 1,
         selectedStroke: 'black'
-      }, providedOptions );
+      }, providedOptions);
 
       // Dynamic fills and strokes
-      const pressedFillProperty = new PaintColorProperty( baseColorProperty, {
+      const pressedFillProperty = new PaintColorProperty(baseColorProperty, {
         luminanceFactor: -0.4
-      } );
-      const overFillProperty = new PaintColorProperty( options.overFill || baseColorProperty, {
+      });
+      const overFillProperty = new PaintColorProperty(options.overFill || baseColorProperty, {
         luminanceFactor: providedOptions && providedOptions.overFill ? 0 : 0.4
-      } );
+      });
 
       // Editorial Note: The code below, where the deselected stroke is used as the value for the over stroke if no over
       // stroke is provided, seems a bit odd.  However, I (jbphet) tried removing it when refactoring this to support
       // TypeScript, and a number of sims broke.  The code was reviewed and discussed with some other devs, and we
       // decided to leave it as is, despite it being a bit unintuitive.  See https://github.com/phetsims/sun/issues/772.
-      const overStrokeProperty = new PaintColorProperty( options.overStroke || options.deselectedStroke, {
+      const overStrokeProperty = new PaintColorProperty(options.overStroke || options.deselectedStroke, {
         luminanceFactor: providedOptions && providedOptions.overStroke ? 0 : -0.4
-      } );
+      });
 
-      this.maxLineWidth = Math.max( options.selectedLineWidth, options.deselectedLineWidth, options.overLineWidth );
+      this.maxLineWidth = Math.max(options.selectedLineWidth, options.deselectedLineWidth, options.overLineWidth);
 
       // Cache colors
       buttonBackground.cachedPaints = [
@@ -243,8 +245,8 @@ export default class RectangularRadioButton<T> extends RectangularButton {
       ];
 
       // Change colors and opacity to match interactionState
-      function interactionStateListener( interactionState: RadioButtonInteractionState ): void {
-        switch( interactionState ) {
+      function interactionStateListener(interactionState: RadioButtonInteractionState): void {
+        switch (interactionState) {
 
           case RadioButtonInteractionState.SELECTED:
             buttonBackground.fill = baseColorProperty;
@@ -263,7 +265,7 @@ export default class RectangularRadioButton<T> extends RectangularButton {
           case RadioButtonInteractionState.OVER:
             buttonBackground.fill = overFillProperty;
             buttonBackground.stroke = overStrokeProperty;
-            buttonBackground.lineWidth = Math.max( options.overLineWidth, options.deselectedLineWidth );
+            buttonBackground.lineWidth = Math.max(options.overLineWidth, options.deselectedLineWidth);
             buttonBackground.opacity = options.overButtonOpacity;
             break;
 
@@ -275,15 +277,15 @@ export default class RectangularRadioButton<T> extends RectangularButton {
             break;
 
           default:
-            throw new Error( `unsupported interactionState: ${interactionState}` );
+            throw new Error(`unsupported interactionState: ${interactionState}`);
         }
       }
 
-      interactionStateProperty.link( interactionStateListener );
+      interactionStateProperty.link(interactionStateListener);
 
       this.disposeFlatAppearanceStrategy = () => {
-        if ( interactionStateProperty.hasListener( interactionStateListener ) ) {
-          interactionStateProperty.unlink( interactionStateListener );
+        if (interactionStateProperty.hasListener(interactionStateListener)) {
+          interactionStateProperty.unlink(interactionStateListener);
         }
         overStrokeProperty.dispose();
         overFillProperty.dispose();
@@ -304,20 +306,20 @@ export default class RectangularRadioButton<T> extends RectangularButton {
 
     private readonly disposeContentAppearanceStrategy: () => void;
 
-    public constructor( content: Node,
-                        interactionStateProperty: TReadOnlyProperty<RadioButtonInteractionState>,
-                        providedOptions?: TContentAppearanceStrategyOptions ) {
+    public constructor(content: Node,
+      interactionStateProperty: TReadOnlyProperty<RadioButtonInteractionState>,
+      providedOptions?: TContentAppearanceStrategyOptions) {
 
-      const options = optionize<TContentAppearanceStrategyOptions>()( {
+      const options = optionize<TContentAppearanceStrategyOptions>()({
         deselectedContentOpacity: 1,
         overContentOpacity: 1,
         selectedContentOpacity: 1
-      }, providedOptions );
+      }, providedOptions);
 
       // The button is not the parent of the content, therefore it is necessary to set the opacity on the content separately
-      function handleInteractionStateChanged( state: RadioButtonInteractionState ): void {
-        if ( content !== null ) {
-          switch( state ) {
+      function handleInteractionStateChanged(state: RadioButtonInteractionState): void {
+        if (content !== null) {
+          switch (state) {
 
             case RadioButtonInteractionState.DESELECTED:
               content.opacity = options.deselectedContentOpacity;
@@ -337,16 +339,16 @@ export default class RectangularRadioButton<T> extends RectangularButton {
               break;
 
             default:
-              throw new Error( `unsupported state: ${state}` );
+              throw new Error(`unsupported state: ${state}`);
           }
         }
       }
 
-      interactionStateProperty.link( handleInteractionStateChanged );
+      interactionStateProperty.link(handleInteractionStateChanged);
 
       this.disposeContentAppearanceStrategy = () => {
-        if ( interactionStateProperty.hasListener( handleInteractionStateChanged ) ) {
-          interactionStateProperty.unlink( handleInteractionStateChanged );
+        if (interactionStateProperty.hasListener(handleInteractionStateChanged)) {
+          interactionStateProperty.unlink(handleInteractionStateChanged);
         }
       };
     }
@@ -357,4 +359,4 @@ export default class RectangularRadioButton<T> extends RectangularButton {
   };
 }
 
-sun.register( 'RectangularRadioButton', RectangularRadioButton );
+sun.register('RectangularRadioButton', RectangularRadioButton);

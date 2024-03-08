@@ -14,7 +14,7 @@ module.exports = {
     browser: true,
     node: true
   },
-  plugins: ['vue','typescript'],
+  plugins: ['vue'],
   ignorePatterns: ['.eslintrc.js'],
   overrides: [
     {

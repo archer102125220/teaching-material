@@ -7,23 +7,23 @@
  * @author Martin Veillette
  */
 
-import Property from '../../../../axon/js/Property.js';
-import { HBox, VSeparator } from '../../../../scenery/js/imports.js';
-import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
-import geometricOptics from '../../geometricOptics.js';
-import GOColors from '../GOColors.js';
-import Optic from '../model/Optic.js';
-import { RaysType } from '../model/RaysType.js';
-import VisibilityCheckboxGroup from './VisibilityCheckboxGroup.js';
-import VisibleProperties from './VisibleProperties.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import RaysSubpanel from './RaysSubpanel.js';
-import OpticSubpanel from './OpticSubpanel.js';
-import PickOptional from '../../../../phet-core/js/types/PickOptional.js';
-import { GOSimOptions } from '../../GOSim.js';
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
-import OpticalObjectChoice from '../model/OpticalObjectChoice.js';
+import Property from '../../../axon/Property';
+import { HBox, VSeparator } from '../../../scenery/imports';
+import Panel, { type PanelOptions } from '../../../sun/Panel';
+import geometricOptics from '../../geometricOptics';
+import GOColors from '../GOColors';
+import Optic from '../model/Optic';
+import { type RaysType } from '../model/RaysType';
+import VisibilityCheckboxGroup from './VisibilityCheckboxGroup';
+import VisibleProperties from './VisibleProperties';
+import optionize from '../../../phet-core/optionize';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import RaysSubpanel from './RaysSubpanel';
+import OpticSubpanel from './OpticSubpanel';
+import type PickOptional from '../../../phet-core/types/PickOptional';
+import { type GOSimOptions } from '../../GOSim';
+import EnumerationProperty from '../../../axon/EnumerationProperty';
+import OpticalObjectChoice from '../model/OpticalObjectChoice';
 
 type SelfOptions = PickRequired<GOSimOptions, 'isBasicsVersion'>;
 
@@ -38,13 +38,13 @@ export default class GOControlPanel extends Panel {
    * @param visibleProperties
    * @param providedOptions
    */
-  public constructor( optic: Optic,
-                      raysTypeProperty: Property<RaysType>,
-                      opticalObjectChoiceProperty: EnumerationProperty<OpticalObjectChoice>,
-                      visibleProperties: VisibleProperties,
-                      providedOptions: GOControlPanelOptions ) {
+  public constructor(optic: Optic,
+    raysTypeProperty: Property<RaysType>,
+    opticalObjectChoiceProperty: EnumerationProperty<OpticalObjectChoice>,
+    visibleProperties: VisibleProperties,
+    providedOptions: GOControlPanelOptions) {
 
-    const options = optionize<GOControlPanelOptions, SelfOptions, PanelOptions>()( {
+    const options = optionize<GOControlPanelOptions, SelfOptions, PanelOptions>()({
 
       // PanelOptions
       isDisposable: false,
@@ -55,33 +55,33 @@ export default class GOControlPanel extends Panel {
       visiblePropertyOptions: {
         phetioFeatured: true
       }
-    }, providedOptions );
+    }, providedOptions);
 
-    const raysSubpanel = new RaysSubpanel( raysTypeProperty, options.tandem.createTandem( 'raysSubpanel' ) );
+    const raysSubpanel = new RaysSubpanel(raysTypeProperty, options.tandem.createTandem('raysSubpanel'));
 
-    const opticSubpanel = new OpticSubpanel( optic, options.tandem.createTandem( 'opticSubpanel' ) );
+    const opticSubpanel = new OpticSubpanel(optic, options.tandem.createTandem('opticSubpanel'));
 
-    const checkboxGroup = new VisibilityCheckboxGroup( visibleProperties, optic, opticalObjectChoiceProperty, {
+    const checkboxGroup = new VisibilityCheckboxGroup(visibleProperties, optic, opticalObjectChoiceProperty, {
       isBasicsVersion: options.isBasicsVersion,
-      tandem: options.tandem.createTandem( 'checkboxGroup' )
-    } );
+      tandem: options.tandem.createTandem('checkboxGroup')
+    });
 
     // Vertical separators between sections of the control panel
-    const leftSeparator = new VSeparator( {
+    const leftSeparator = new VSeparator({
       stroke: GOColors.panelSeparatorStrokeProperty
-    } );
-    const rightSeparator = new VSeparator( {
+    });
+    const rightSeparator = new VSeparator({
       stroke: GOColors.panelSeparatorStrokeProperty
-    } );
+    });
 
-    const content = new HBox( {
-      children: [ raysSubpanel, leftSeparator, opticSubpanel, rightSeparator, checkboxGroup ],
+    const content = new HBox({
+      children: [raysSubpanel, leftSeparator, opticSubpanel, rightSeparator, checkboxGroup],
       spacing: 15,
       align: 'center'
-    } );
+    });
 
-    super( content, options );
+    super(content, options);
   }
 }
 
-geometricOptics.register( 'GOControlPanel', GOControlPanel );
+geometricOptics.register('GOControlPanel', GOControlPanel);

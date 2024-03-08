@@ -7,11 +7,11 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import optionize, { combineOptions } from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import { AlignGroup, Node, NodeOptions, VBox, VBoxOptions } from '../../../scenery/js/imports.js';
-import joist from '../joist.js';
-import PreferencesDialog from './PreferencesDialog.js';
+import optionize, { combineOptions } from '../../phet-core/optionize';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import { AlignGroup, Node, type NodeOptions, VBox, type VBoxOptions } from '../../scenery/imports';
+import joist from '../joist';
+import PreferencesDialog from './PreferencesDialog';
 
 type SelfOptions = {
 
@@ -30,36 +30,36 @@ type SelfOptions = {
 export type PreferencesPanelSectionOptions = SelfOptions & StrictOmit<VBoxOptions, 'children'>;
 
 class PreferencesPanelSection extends VBox {
-  public constructor( providedOptions?: PreferencesPanelSectionOptions ) {
-    const options = optionize<PreferencesPanelSectionOptions, SelfOptions, VBoxOptions>()( {
+  public constructor(providedOptions?: PreferencesPanelSectionOptions) {
+    const options = optionize<PreferencesPanelSectionOptions, SelfOptions, VBoxOptions>()({
       spacing: PreferencesDialog.CONTENT_SPACING,
       titleNode: null,
       contentNode: null,
       contentNodeOptions: {},
       contentLeftMargin: 30
-    }, providedOptions );
+    }, providedOptions);
 
     // layout - supports the layout of contentNode nested under the titleNode with indentation
-    const sectionAlignGroup = new AlignGroup( { matchVertical: false } );
+    const sectionAlignGroup = new AlignGroup({ matchVertical: false });
 
     const sectionChildren = [];
-    if ( options.titleNode ) {
-      sectionChildren.push( sectionAlignGroup.createBox( options.titleNode, {
+    if (options.titleNode) {
+      sectionChildren.push(sectionAlignGroup.createBox(options.titleNode, {
         xAlign: 'left'
-      } ) );
+      }));
     }
-    if ( options.contentNode ) {
-      const contentNodeOptions = combineOptions<NodeOptions>( { children: [ options.contentNode ] }, options.contentNodeOptions );
-      sectionChildren.push( sectionAlignGroup.createBox( new Node( contentNodeOptions ), {
+    if (options.contentNode) {
+      const contentNodeOptions = combineOptions<NodeOptions>({ children: [options.contentNode] }, options.contentNodeOptions);
+      sectionChildren.push(sectionAlignGroup.createBox(new Node(contentNodeOptions), {
         leftMargin: options.contentLeftMargin,
         xAlign: 'left'
-      } ) );
+      }));
     }
 
     options.children = sectionChildren;
-    super( options );
+    super(options);
   }
 }
 
-joist.register( 'PreferencesPanelSection', PreferencesPanelSection );
+joist.register('PreferencesPanelSection', PreferencesPanelSection);
 export default PreferencesPanelSection;

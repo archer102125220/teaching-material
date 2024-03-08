@@ -7,25 +7,25 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Shape } from '../../../../kite/js/imports.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import ArrowNode from '../../../../scenery-phet/js/ArrowNode.js';
-import { Circle, DragListener, HighlightFromNode, InteractiveHighlighting, KeyboardDragListener, KeyboardDragListenerOptions, Node, NodeOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
-import geometricOptics from '../../geometricOptics.js';
-import GOColors from '../GOColors.js';
-import SecondPoint from '../model/SecondPoint.js';
-import GOConstants from '../GOConstants.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import TProperty from '../../../../axon/js/TProperty.js';
-import CueingArrowsNode from './CueingArrowsNode.js';
+import { Shape } from '../../../kite/imports';
+import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
+import ArrowNode from '../../../scenery-phet/ArrowNode';
+import { Circle, DragListener, HighlightFromNode, InteractiveHighlighting, KeyboardDragListener, type KeyboardDragListenerOptions, Node, type NodeOptions, VBox, type VBoxOptions } from '../../../scenery/imports';
+import geometricOptics from '../../geometricOptics';
+import GOColors from '../GOColors';
+import SecondPoint from '../model/SecondPoint';
+import GOConstants from '../GOConstants';
+import optionize, { combineOptions, type EmptySelfOptions } from '../../../phet-core/optionize';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import type TProperty from '../../../axon/TProperty';
+import CueingArrowsNode from './CueingArrowsNode';
 
 type SelfOptions = EmptySelfOptions;
 
 type SecondPointNodeOptions = SelfOptions &
   PickRequired<NodeOptions, 'visibleProperty' | 'tandem' | 'phetioDocumentation'>;
 
-export default class SecondPointNode extends InteractiveHighlighting( Node ) {
+export default class SecondPointNode extends InteractiveHighlighting(Node) {
 
   /**
    * @param secondPoint - model element
@@ -33,10 +33,10 @@ export default class SecondPointNode extends InteractiveHighlighting( Node ) {
    * @param wasDraggedProperty - was the second point dragged?
    * @param providedOptions
    */
-  public constructor( secondPoint: SecondPoint, modelViewTransform: ModelViewTransform2, wasDraggedProperty: TProperty<boolean>,
-                      providedOptions: SecondPointNodeOptions ) {
+  public constructor(secondPoint: SecondPoint, modelViewTransform: ModelViewTransform2, wasDraggedProperty: TProperty<boolean>,
+    providedOptions: SecondPointNodeOptions) {
 
-    const options = optionize<SecondPointNodeOptions, SelfOptions, NodeOptions>()( {
+    const options = optionize<SecondPointNodeOptions, SelfOptions, NodeOptions>()({
 
       // NodeOptions
       cursor: 'ns-resize', // second point can only be dragged vertically
@@ -44,50 +44,50 @@ export default class SecondPointNode extends InteractiveHighlighting( Node ) {
       focusable: true,
       isDisposable: false,
       phetioInputEnabledPropertyInstrumented: true
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     const pointNode = new PointNode();
-    this.addChild( pointNode );
-    this.setFocusHighlight( new HighlightFromNode( pointNode ) );
+    this.addChild(pointNode);
+    this.setFocusHighlight(new HighlightFromNode(pointNode));
 
     // Cueing arrows
-    const cueingArrowsNode = new SecondPointCueingArrowsNode( pointNode.width + 10, {
+    const cueingArrowsNode = new SecondPointCueingArrowsNode(pointNode.width + 10, {
       center: pointNode.center,
-      visibleProperty: CueingArrowsNode.createVisibleProperty( this.inputEnabledProperty, wasDraggedProperty )
-    } );
-    this.addChild( cueingArrowsNode );
+      visibleProperty: CueingArrowsNode.createVisibleProperty(this.inputEnabledProperty, wasDraggedProperty)
+    });
+    this.addChild(cueingArrowsNode);
 
-    this.touchArea = Shape.circle( 0, 0, 2 * pointNode.width + 10 );
+    this.touchArea = Shape.circle(0, 0, 2 * pointNode.width + 10);
 
-    secondPoint.positionProperty.link( position => {
-      this.center = modelViewTransform.modelToViewPosition( position );
-    } );
+    secondPoint.positionProperty.link(position => {
+      this.center = modelViewTransform.modelToViewPosition(position);
+    });
 
     // Drag action that is common to DragListener and KeyboardDragListener
-    const drag = ( modelDeltaY: number ) => {
+    const drag = (modelDeltaY: number) => {
       wasDraggedProperty.value = true;
       const verticalOffset = secondPoint.positionProperty.value.y + modelDeltaY - secondPoint.framedObjectPositionProperty.value.y;
-      secondPoint.verticalOffsetProperty.value = SecondPoint.VERTICAL_OFFSET_RANGE.constrainValue( verticalOffset );
+      secondPoint.verticalOffsetProperty.value = SecondPoint.VERTICAL_OFFSET_RANGE.constrainValue(verticalOffset);
     };
 
-    const dragListener = new DragListener( {
+    const dragListener = new DragListener({
       transform: modelViewTransform,
-      drag: ( event, listener ) => drag( listener.modelDelta.y ),
-      tandem: options.tandem.createTandem( 'dragListener' )
-    } );
-    this.addInputListener( dragListener );
+      drag: (event, listener) => drag(listener.modelDelta.y),
+      tandem: options.tandem.createTandem('dragListener')
+    });
+    this.addInputListener(dragListener);
 
     const keyboardDragListener = new KeyboardDragListener(
-      combineOptions<KeyboardDragListenerOptions>( {}, GOConstants.KEYBOARD_DRAG_LISTENER_OPTIONS, {
+      combineOptions<KeyboardDragListenerOptions>({}, GOConstants.KEYBOARD_DRAG_LISTENER_OPTIONS, {
         transform: modelViewTransform,
-        drag: modelDelta => drag( modelDelta.y ),
-        tandem: options.tandem.createTandem( 'keyboardDragListener' )
-      } ) );
-    this.addInputListener( keyboardDragListener );
+        drag: modelDelta => drag(modelDelta.y),
+        tandem: options.tandem.createTandem('keyboardDragListener')
+      }));
+    this.addInputListener(keyboardDragListener);
 
-    this.addLinkedElement( secondPoint );
+    this.addLinkedElement(secondPoint);
   }
 
   /**
@@ -101,10 +101,10 @@ export default class SecondPointNode extends InteractiveHighlighting( Node ) {
 // Circle that denotes the second point
 class PointNode extends Circle {
   public constructor() {
-    super( 7, {
+    super(7, {
       fill: GOColors.secondPointFillProperty,
       stroke: GOColors.secondPointStrokeProperty
-    } );
+    });
   }
 }
 
@@ -123,16 +123,16 @@ const ARROW_NODE_OPTIONS = {
  */
 class SecondPointCueingArrowsNode extends VBox {
 
-  public constructor( spacing: number, providedOptions?: NodeOptions ) {
-    super( optionize<NodeOptions, EmptySelfOptions, VBoxOptions>()( {
-      spacing: spacing,
+  public constructor(spacing: number, providedOptions?: NodeOptions) {
+    super(optionize<NodeOptions, EmptySelfOptions, VBoxOptions>()({
+      spacing,
       align: 'center',
       children: [
-        new ArrowNode( 0, 0, 0, -ARROW_LENGTH, ARROW_NODE_OPTIONS ), // up arrow
-        new ArrowNode( 0, 0, 0, +ARROW_LENGTH, ARROW_NODE_OPTIONS ) // down arrow
+        new ArrowNode(0, 0, 0, -ARROW_LENGTH, ARROW_NODE_OPTIONS), // up arrow
+        new ArrowNode(0, 0, 0, +ARROW_LENGTH, ARROW_NODE_OPTIONS) // down arrow
       ]
-    }, providedOptions ) );
+    }, providedOptions));
   }
 }
 
-geometricOptics.register( 'SecondPointNode', SecondPointNode );
+geometricOptics.register('SecondPointNode', SecondPointNode);

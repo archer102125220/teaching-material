@@ -6,36 +6,36 @@
  * @author Jesse Greenberg
  */
 
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import NumberProperty from '../../../axon/js/NumberProperty.js';
-import Property from '../../../axon/js/Property.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import Dimension2 from '../../../dot/js/Dimension2.js';
-import Range from '../../../dot/js/Range.js';
-import Utils from '../../../dot/js/Utils.js';
-import merge from '../../../phet-core/js/merge.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import NumberControl from '../../../scenery-phet/js/NumberControl.js';
-import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import { HighlightFromNode, Node, PressListener, Text, VBox, voicingManager, VoicingText } from '../../../scenery/js/imports.js';
-import Checkbox from '../../../sun/js/Checkbox.js';
-import ComboBox, { ComboBoxItem, ComboBoxOptions } from '../../../sun/js/ComboBox.js';
-import ExpandCollapseButton from '../../../sun/js/ExpandCollapseButton.js';
-import HSlider from '../../../sun/js/HSlider.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import Utterance from '../../../utterance-queue/js/Utterance.js';
-import joist from '../joist.js';
-import JoistStrings from '../JoistStrings.js';
-import PreferencesDialog from './PreferencesDialog.js';
-import { AudioModel } from './PreferencesModel.js';
-import PreferencesPanelSection, { PreferencesPanelSectionOptions } from './PreferencesPanelSection.js';
-import PreferencesControl from './PreferencesControl.js';
-import localeProperty, { Locale } from '../i18n/localeProperty.js';
-import ToggleSwitch, { ToggleSwitchOptions } from '../../../sun/js/ToggleSwitch.js';
-import PreferencesDialogConstants from './PreferencesDialogConstants.js';
-import PatternStringProperty from '../../../axon/js/PatternStringProperty.js';
-import DerivedProperty from '../../../axon/js/DerivedProperty.js';
-import type Disposable from '../../../axon/js/Disposable.js';
+import BooleanProperty from '../../axon/BooleanProperty';
+import NumberProperty from '../../axon/NumberProperty';
+import Property from '../../axon/Property';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import Dimension2 from '../../dot/Dimension2';
+import Range from '../../dot/Range';
+import Utils from '../../dot/Utils';
+import merge from '../../phet-core/merge';
+import optionize, { combineOptions, type EmptySelfOptions } from '../../phet-core/optionize';
+import NumberControl from '../../scenery-phet/NumberControl';
+import PhetFont from '../../scenery-phet/PhetFont';
+import { HighlightFromNode, Node, PressListener, Text, VBox, voicingManager, VoicingText } from '../../scenery/imports';
+import Checkbox from '../../sun/Checkbox';
+import ComboBox, { type ComboBoxItem, type ComboBoxOptions } from '../../sun/ComboBox';
+import ExpandCollapseButton from '../../sun/ExpandCollapseButton';
+import HSlider from '../../sun/HSlider';
+import Tandem from '../../tandem/Tandem';
+import Utterance from '../../utterance-queue/Utterance';
+import joist from '../joist';
+import JoistStrings from '../JoistStrings';
+import PreferencesDialog from './PreferencesDialog';
+import { type AudioModel } from './PreferencesModel';
+import PreferencesPanelSection, { type PreferencesPanelSectionOptions } from './PreferencesPanelSection';
+import PreferencesControl from './PreferencesControl';
+import localeProperty, { type Locale } from '@/i18n/joist/localeProperty';
+import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
+import PreferencesDialogConstants from './PreferencesDialogConstants';
+import PatternStringProperty from '../../axon/PatternStringProperty';
+import DerivedProperty from '../../axon/DerivedProperty';
+import type Disposable from '../../axon/Disposable';
 
 // constants
 // none of the Voicing strings or feature is translatable yet, all strings in this file
@@ -90,13 +90,13 @@ const voicingEnglishOnlyLabelStringProperty = JoistStrings.preferences.tabs.audi
 const voicingDescriptionStringProperty = JoistStrings.preferences.tabs.audio.voicing.descriptionStringProperty;
 
 const VOICE_PITCH_DESCRIPTION_MAP = new Map();
-VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 0.5, 0.75 ), inLowRangeStringProperty );
-VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 0.75, 1.25 ), inNormalRangeStringProperty );
-VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 1.25, 1.5 ), aboveNormalRangeStringProperty );
-VOICE_PITCH_DESCRIPTION_MAP.set( new Range( 1.5, 2 ), inHighRangeStringProperty );
+VOICE_PITCH_DESCRIPTION_MAP.set(new Range(0.5, 0.75), inLowRangeStringProperty);
+VOICE_PITCH_DESCRIPTION_MAP.set(new Range(0.75, 1.25), inNormalRangeStringProperty);
+VOICE_PITCH_DESCRIPTION_MAP.set(new Range(1.25, 1.5), aboveNormalRangeStringProperty);
+VOICE_PITCH_DESCRIPTION_MAP.set(new Range(1.5, 2), inHighRangeStringProperty);
 
-const THUMB_SIZE = new Dimension2( 13, 26 );
-const TRACK_SIZE = new Dimension2( 100, 5 );
+const THUMB_SIZE = new Dimension2(13, 26);
+const TRACK_SIZE = new Dimension2(100, 5);
 
 type SelfOptions = EmptySelfOptions;
 type VoicingPanelSectionOptions = SelfOptions & PreferencesPanelSectionOptions;
@@ -107,66 +107,66 @@ class VoicingPanelSection extends PreferencesPanelSection {
    * @param audioModel - configuration for audio settings, see PreferencesModel
    * @param [providedOptions]
    */
-  public constructor( audioModel: AudioModel, providedOptions?: VoicingPanelSectionOptions ) {
+  public constructor(audioModel: AudioModel, providedOptions?: VoicingPanelSectionOptions) {
 
     // Voicing feature only works when running in English. If running in a version where you can change locale,
     // indicate through the title that the feature will only work in English.
-    const titleStringProperty = ( localeProperty.validValues && localeProperty.validValues.length > 1 ) ?
-                                voicingEnglishOnlyLabelStringProperty : voicingLabelStringProperty;
+    const titleStringProperty = (localeProperty.validValues && localeProperty.validValues.length > 1) ?
+      voicingEnglishOnlyLabelStringProperty : voicingLabelStringProperty;
 
     // the checkbox is the title for the section and totally enables/disables the feature
-    const voicingLabel = new Text( titleStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-    const voicingEnabledReadingBlockNameResponsePatternStringProperty = new PatternStringProperty( labelledDescriptionPatternStringProperty, {
+    const voicingLabel = new Text(titleStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS);
+    const voicingEnabledReadingBlockNameResponsePatternStringProperty = new PatternStringProperty(labelledDescriptionPatternStringProperty, {
       label: titleStringProperty,
       description: voicingDescriptionStringProperty
-    }, { tandem: Tandem.OPT_OUT } );
-    const voicingEnabledSwitchVoicingText = new VoicingText( voicingDescriptionStringProperty, merge( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
+    }, { tandem: Tandem.OPT_OUT });
+    const voicingEnabledSwitchVoicingText = new VoicingText(voicingDescriptionStringProperty, merge({}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
       readingBlockNameResponse: voicingEnabledReadingBlockNameResponsePatternStringProperty
-    } ) );
-    const voicingToggleSwitch = new ToggleSwitch( audioModel.voicingEnabledProperty, false, true, combineOptions<ToggleSwitchOptions>( {
+    }));
+    const voicingToggleSwitch = new ToggleSwitch(audioModel.voicingEnabledProperty, false, true, combineOptions<ToggleSwitchOptions>({
       a11yName: titleStringProperty
-    }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ) );
-    const voicingEnabledSwitch = new PreferencesControl( {
+    }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS));
+    const voicingEnabledSwitch = new PreferencesControl({
       labelNode: voicingLabel,
       descriptionNode: voicingEnabledSwitchVoicingText,
       controlNode: voicingToggleSwitch
-    } );
+    });
 
     // checkbox for the toolbar
-    const quickAccessLabel = new Text( toolbarLabelStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-    const toolbarToggleSwitch = new ToggleSwitch( audioModel.toolbarEnabledProperty, false, true, combineOptions<ToggleSwitchOptions>( {
+    const quickAccessLabel = new Text(toolbarLabelStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS);
+    const toolbarToggleSwitch = new ToggleSwitch(audioModel.toolbarEnabledProperty, false, true, combineOptions<ToggleSwitchOptions>({
       a11yName: toolbarLabelStringProperty,
       leftValueContextResponse: toolbarRemovedStringProperty,
       rightValueContextResponse: toolbarAddedStringProperty
-    }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ) );
-    const toolbarEnabledSwitch = new PreferencesControl( {
+    }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS));
+    const toolbarEnabledSwitch = new PreferencesControl({
       labelNode: quickAccessLabel,
       controlNode: toolbarToggleSwitch
-    } );
+    });
 
     // Speech output levels
-    const speechOutputLabel = new Text( simVoicingOptionsStringProperty, merge( {}, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS, {
+    const speechOutputLabel = new Text(simVoicingOptionsStringProperty, merge({}, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS, {
 
       // pdom
       tagName: 'h3',
       innerContent: simVoicingOptionsStringProperty
-    } ) );
-    const speechOutputReadingBlockNameResponsePatternStringProperty = new PatternStringProperty( labelledDescriptionPatternStringProperty, {
+    }));
+    const speechOutputReadingBlockNameResponsePatternStringProperty = new PatternStringProperty(labelledDescriptionPatternStringProperty, {
       label: simVoicingOptionsStringProperty,
       description: simVoicingDescriptionStringProperty
-    }, { tandem: Tandem.OPT_OUT } );
-    const speechOutputDescription = new VoicingText( simVoicingDescriptionStringProperty, merge( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
+    }, { tandem: Tandem.OPT_OUT });
+    const speechOutputDescription = new VoicingText(simVoicingDescriptionStringProperty, merge({}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
       readingBlockNameResponse: speechOutputReadingBlockNameResponsePatternStringProperty
-    } ) );
+    }));
 
     /**
      * Create a checkbox for the features of voicing content with a label.
      */
-    const createCheckbox = ( labelString: TReadOnlyProperty<string>, property: Property<boolean>,
-                             checkedContextResponse: TReadOnlyProperty<string>,
-                             uncheckedContextResponse: TReadOnlyProperty<string>, disposable: Disposable ): Checkbox => {
-      const labelNode = new Text( labelString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
-      const checkbox = new Checkbox( property, labelNode, {
+    const createCheckbox = (labelString: TReadOnlyProperty<string>, property: Property<boolean>,
+      checkedContextResponse: TReadOnlyProperty<string>,
+      uncheckedContextResponse: TReadOnlyProperty<string>, disposable: Disposable): Checkbox => {
+      const labelNode = new Text(labelString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS);
+      const checkbox = new Checkbox(property, labelNode, {
 
         // pdom
         labelTagName: 'label',
@@ -178,55 +178,55 @@ class VoicingPanelSection extends PreferencesPanelSection {
         voiceNameResponseOnSelection: false,
 
         // both pdom and voicing
-        checkedContextResponse: checkedContextResponse,
-        uncheckedContextResponse: uncheckedContextResponse,
+        checkedContextResponse,
+        uncheckedContextResponse,
 
         // phet-io
         tandem: Tandem.OPT_OUT // We don't want to instrument components for preferences, https://github.com/phetsims/joist/issues/744#issuecomment-1196028362
-      } );
+      });
 
       return checkbox;
     };
 
     const speechOutputContent = new Node();
 
-    const speechOutputCheckboxes = new VBox( {
+    const speechOutputCheckboxes = new VBox({
       align: 'left',
       spacing: PreferencesDialog.VERTICAL_CONTENT_SPACING,
       children: [
-        createCheckbox( objectDetailsLabelStringProperty, audioModel.voicingObjectResponsesEnabledProperty,
+        createCheckbox(objectDetailsLabelStringProperty, audioModel.voicingObjectResponsesEnabledProperty,
           voicingObjectChangesStringProperty, objectChangesMutedStringProperty, speechOutputLabel
         ),
-        createCheckbox( contextChangesLabelStringProperty, audioModel.voicingContextResponsesEnabledProperty,
+        createCheckbox(contextChangesLabelStringProperty, audioModel.voicingContextResponsesEnabledProperty,
           voicingContextChangesStringProperty, contextChangesMutedStringProperty, speechOutputLabel
         ),
-        createCheckbox( helpfulHintsLabelStringProperty, audioModel.voicingHintResponsesEnabledProperty,
+        createCheckbox(helpfulHintsLabelStringProperty, audioModel.voicingHintResponsesEnabledProperty,
           voicingHintsStringProperty, hintsMutedStringProperty, speechOutputLabel
         )
       ]
-    } );
+    });
 
-    speechOutputContent.children = [ speechOutputLabel, speechOutputDescription, speechOutputCheckboxes ];
-    speechOutputDescription.leftTop = speechOutputLabel.leftBottom.plusXY( 0, PreferencesDialog.VERTICAL_CONTENT_SPACING );
-    speechOutputCheckboxes.leftTop = speechOutputDescription.leftBottom.plusXY( PreferencesDialog.CONTENT_INDENTATION_SPACING, PreferencesDialog.VERTICAL_CONTENT_SPACING );
+    speechOutputContent.children = [speechOutputLabel, speechOutputDescription, speechOutputCheckboxes];
+    speechOutputDescription.leftTop = speechOutputLabel.leftBottom.plusXY(0, PreferencesDialog.VERTICAL_CONTENT_SPACING);
+    speechOutputCheckboxes.leftTop = speechOutputDescription.leftBottom.plusXY(PreferencesDialog.CONTENT_INDENTATION_SPACING, PreferencesDialog.VERTICAL_CONTENT_SPACING);
 
-    const rateSlider = new VoiceRateNumberControl( rateStringProperty, rateLabelStringProperty, audioModel.voiceRateProperty );
-    const pitchSlider = new VoicingPitchSlider( pitchStringProperty, audioModel.voicePitchProperty );
-    const voiceOptionsContent = new VBox( {
+    const rateSlider = new VoiceRateNumberControl(rateStringProperty, rateLabelStringProperty, audioModel.voiceRateProperty);
+    const pitchSlider = new VoicingPitchSlider(pitchStringProperty, audioModel.voicePitchProperty);
+    const voiceOptionsContent = new VBox({
       spacing: PreferencesDialog.VERTICAL_CONTENT_SPACING,
       align: 'left',
       children: [
         rateSlider,
         pitchSlider
       ]
-    } );
+    });
 
     // voice options
-    const voiceOptionsLabel = new Text( customizeVoiceStringProperty, merge( {}, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS, {
+    const voiceOptionsLabel = new Text(customizeVoiceStringProperty, merge({}, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS, {
       cursor: 'pointer'
-    } ) );
-    const voiceOptionsOpenProperty = new BooleanProperty( false );
-    const expandCollapseButton = new ExpandCollapseButton( voiceOptionsOpenProperty, {
+    }));
+    const voiceOptionsOpenProperty = new BooleanProperty(false);
+    const expandCollapseButton = new ExpandCollapseButton(voiceOptionsOpenProperty, {
       sideLength: 16,
 
       // pdom
@@ -238,82 +238,82 @@ class VoicingPanelSection extends PreferencesPanelSection {
 
       // phet-io
       tandem: Tandem.OPT_OUT // We don't want to instrument components for preferences, https://github.com/phetsims/joist/issues/744#issuecomment-1196028362
-    } );
+    });
 
-    const voiceOptionsContainer = new Node( {
-      children: [ voiceOptionsLabel, expandCollapseButton ]
-    } );
+    const voiceOptionsContainer = new Node({
+      children: [voiceOptionsLabel, expandCollapseButton]
+    });
 
     // the visual title of the ExpandCollapseButton needs to be clickable
-    const voiceOptionsPressListener = new PressListener( {
+    const voiceOptionsPressListener = new PressListener({
       press: () => {
         voiceOptionsOpenProperty.toggle();
       },
 
       // phet-io
       tandem: Tandem.OPT_OUT // We don't want to instrument components for preferences, https://github.com/phetsims/joist/issues/744#issuecomment-1196028362
-    } );
-    voiceOptionsLabel.addInputListener( voiceOptionsPressListener );
+    });
+    voiceOptionsLabel.addInputListener(voiceOptionsPressListener);
 
-    const content = new Node( {
-      children: [ speechOutputContent, toolbarEnabledSwitch, voiceOptionsContainer, voiceOptionsContent ]
-    } );
+    const content = new Node({
+      children: [speechOutputContent, toolbarEnabledSwitch, voiceOptionsContainer, voiceOptionsContent]
+    });
 
     // layout for section content, custom rather than using a FlowBox because the voice options label needs
     // to be left aligned with other labels, while the ExpandCollapseButton extends to the left
-    toolbarEnabledSwitch.leftTop = speechOutputContent.leftBottom.plusXY( 0, 20 );
-    voiceOptionsLabel.leftTop = toolbarEnabledSwitch.leftBottom.plusXY( 0, 20 );
-    expandCollapseButton.leftCenter = voiceOptionsLabel.rightCenter.plusXY( 10, 0 );
-    voiceOptionsContent.leftTop = voiceOptionsLabel.leftBottom.plusXY( 0, 10 );
-    voiceOptionsOpenProperty.link( open => { voiceOptionsContent.visible = open; } );
+    toolbarEnabledSwitch.leftTop = speechOutputContent.leftBottom.plusXY(0, 20);
+    voiceOptionsLabel.leftTop = toolbarEnabledSwitch.leftBottom.plusXY(0, 20);
+    expandCollapseButton.leftCenter = voiceOptionsLabel.rightCenter.plusXY(10, 0);
+    voiceOptionsContent.leftTop = voiceOptionsLabel.leftBottom.plusXY(0, 10);
+    voiceOptionsOpenProperty.link(open => { voiceOptionsContent.visible = open; });
 
     // the focus highlight for the voice options expand collapse button should surround the label
-    expandCollapseButton.focusHighlight = new HighlightFromNode( voiceOptionsContainer );
+    expandCollapseButton.focusHighlight = new HighlightFromNode(voiceOptionsContainer);
 
-    super( {
+    super({
       titleNode: voicingEnabledSwitch,
       contentNode: content
-    } );
+    });
 
-    const contentVisibilityListener = ( enabled: boolean ) => {
+    const contentVisibilityListener = (enabled: boolean) => {
       content.visible = enabled;
     };
-    audioModel.voicingEnabledProperty.link( contentVisibilityListener );
+    audioModel.voicingEnabledProperty.link(contentVisibilityListener);
 
-    const localeListener = ( locale: Locale ) => {
-      voicingEnabledSwitch.enabledProperty.value = locale.startsWith( 'en' );
+    const localeListener = (locale: Locale) => {
+      voicingEnabledSwitch.enabledProperty.value = locale.startsWith('en');
     };
-    localeProperty.link( localeListener );
+    localeProperty.link(localeListener);
 
     // Speak when voicing becomes initially enabled. First speech is done synchronously (not using utterance-queue)
     // in response to user input, otherwise all speech will be blocked on many platforms
     const voicingEnabledUtterance = new Utterance();
-    const voicingEnabledPropertyListener = ( enabled: boolean ) => {
+    const voicingEnabledPropertyListener = (enabled: boolean) => {
 
       // only speak if "Sim Voicing" is on, all voicing should be disabled except for the Toolbar
       // buttons in this case
-      if ( audioModel.voicingMainWindowVoicingEnabledProperty.value ) {
+      if (audioModel.voicingMainWindowVoicingEnabledProperty.value) {
 
         // If locale changes, make sure to describe that Voicing has become disabled because Voicing is only available
         // in the English locale.
         voicingEnabledUtterance.alert = enabled ? voicingEnabledStringProperty :
-                                        ( localeProperty.value.startsWith( 'en' ) ? voicingDisabledStringProperty : voicingOffOnlyAvailableInEnglishStringProperty );
+          (localeProperty.value.startsWith('en') ? voicingDisabledStringProperty : voicingOffOnlyAvailableInEnglishStringProperty);
 
         // PhET-iO Archetypes should never voice responses.
-        if ( !this.isInsidePhetioArchetype() ) {
-          voicingManager.speakIgnoringEnabled( voicingEnabledUtterance );
+        if (!this.isInsidePhetioArchetype()) {
+          voicingManager.speakIgnoringEnabled(voicingEnabledUtterance);
         }
-        this.alertDescriptionUtterance( voicingEnabledUtterance );
+        this.alertDescriptionUtterance(voicingEnabledUtterance);
       }
     };
-    audioModel.voicingEnabledProperty.lazyLink( voicingEnabledPropertyListener );
+    audioModel.voicingEnabledProperty.lazyLink(voicingEnabledPropertyListener);
 
     // when the list of voices for the ComboBox changes, create a new ComboBox that includes the supported
     // voices. Eagerly create the first ComboBox, even if no voices are available.
     let voiceComboBox: VoiceComboBox | null = null;
-    const voicesChangedListener = ( voices: SpeechSynthesisVoice[] ) => {
-      if ( voiceComboBox ) {
-        voiceOptionsContent.removeChild( voiceComboBox );
+    const voicesChangedListener = (voices: SpeechSynthesisVoice[]) => {
+      if (voiceComboBox) {
+        voiceOptionsContent.removeChild(voiceComboBox);
 
         // Disposal is required before creating a new one when available voices change
         voiceComboBox.dispose();
@@ -326,31 +326,31 @@ class VoicingPanelSection extends PreferencesPanelSection {
       // that gracefully.
       // Voice changing is not (as of this writing) available on MacOS or iOS, but we hope they fix that bug soon. Perhaps
       // next time someone is working in this area, they can check and see if it is working, https://github.com/phetsims/utterance-queue/issues/74
-      if ( voices.length > 0 ) {
+      if (voices.length > 0) {
 
         // For now, only English voices are available because the Voicing feature is not translatable.
         const prioritizedVoices = voicingManager.getEnglishPrioritizedVoices();
 
         // limit the voices for now to keep the size of the ComboBox manageable
-        voiceList = prioritizedVoices.slice( 0, 12 );
+        voiceList = prioritizedVoices.slice(0, 12);
       }
 
       // phet-io - for when creating the Archetype for the Capsule housing the preferencesDialog, we don't have a sim global.
       // TODO: topLayer should be private, see https://github.com/phetsims/joist/issues/841
       const parent = phet.joist.sim.topLayer || new Node();
 
-      voiceComboBox = new VoiceComboBox( audioModel.voiceProperty, voiceList, parent );
-      voiceOptionsContent.addChild( voiceComboBox );
+      voiceComboBox = new VoiceComboBox(audioModel.voiceProperty, voiceList, parent);
+      voiceOptionsContent.addChild(voiceComboBox);
     };
-    voicingManager.voicesProperty.link( voicesChangedListener );
+    voicingManager.voicesProperty.link(voicesChangedListener);
 
-    voiceOptionsOpenProperty.lazyLink( open => {
+    voiceOptionsOpenProperty.lazyLink(open => {
       const alertStringProperty = open ? customizeVoiceExpandedStringProperty : customizeVoiceCollapsedStringProperty;
-      expandCollapseButton.voicingSpeakContextResponse( {
+      expandCollapseButton.voicingSpeakContextResponse({
         contextResponse: alertStringProperty
-      } );
-      this.alertDescriptionUtterance( alertStringProperty );
-    } );
+      });
+      this.alertDescriptionUtterance(alertStringProperty);
+    });
   }
 }
 
@@ -363,21 +363,21 @@ class VoicingPanelSection extends PreferencesPanelSection {
  */
 class VoiceRateNumberControl extends NumberControl {
 
-  public constructor( labelString: TReadOnlyProperty<string>, a11yNameString: TReadOnlyProperty<string>, voiceRateProperty: NumberProperty ) {
+  public constructor(labelString: TReadOnlyProperty<string>, a11yNameString: TReadOnlyProperty<string>, voiceRateProperty: NumberProperty) {
 
-    super( labelString, voiceRateProperty, voiceRateProperty.range, {
+    super(labelString, voiceRateProperty, voiceRateProperty.range, {
       includeArrowButtons: false,
       layoutFunction: NumberControl.createLayoutFunction4(),
       delta: 0.25,
-      titleNodeOptions: merge( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
+      titleNodeOptions: merge({}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
         maxWidth: 45
-      } ),
+      }),
       numberDisplayOptions: {
         decimalPlaces: 2,
         valuePattern: voiceVariablesPatternStringProperty,
-        textOptions: merge( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
+        textOptions: merge({}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
           maxWidth: 45
-        } )
+        })
       },
       sliderOptions: {
         thumbSize: THUMB_SIZE,
@@ -397,7 +397,7 @@ class VoiceRateNumberControl extends NumberControl {
 
       // phet-io
       tandem: Tandem.OPT_OUT // We don't want to instrument components for preferences, https://github.com/phetsims/joist/issues/744#issuecomment-1196028362
-    } );
+    });
 
     // Voicing goes through the NumberControl slider through AccessibleValueHandler
     this.slider.voicingNameResponse = a11yNameString;
@@ -406,15 +406,15 @@ class VoiceRateNumberControl extends NumberControl {
     // that happen when changing the voice attributes
     this.slider.voicingIgnoreVoicingManagerProperties = true;
 
-    const voiceRateNonNormalPatternStringProperty = new PatternStringProperty( voiceRateDescriptionPatternStringProperty, {
+    const voiceRateNonNormalPatternStringProperty = new PatternStringProperty(voiceRateDescriptionPatternStringProperty, {
       value: voiceRateProperty
-    }, { tandem: Tandem.OPT_OUT } );
+    }, { tandem: Tandem.OPT_OUT });
 
-    const voiceRateResponseProperty = new DerivedProperty( [
+    const voiceRateResponseProperty = new DerivedProperty([
       voiceRateProperty, voiceRateNormalStringProperty, voiceRateNonNormalPatternStringProperty
-    ], ( rate, normal, nonNormal ) => {
+    ], (rate, normal, nonNormal) => {
       return rate === 1 ? normal : nonNormal;
-    } );
+    });
 
     this.slider.voicingObjectResponse = voiceRateResponseProperty;
   }
@@ -437,8 +437,8 @@ class VoiceComboBox extends ComboBox<SpeechSynthesisVoice | null> {
    * @param parentNode - node that acts as a parent for the ComboBox list
    * @param [providedOptions]
    */
-  public constructor( voiceProperty: Property<SpeechSynthesisVoice | null>, voices: SpeechSynthesisVoice[], parentNode: Node, providedOptions?: ComboBoxOptions ) {
-    const options = optionize<VoiceComboBoxOptions, VoiceComboBoxSelfOptions, ComboBoxOptions>()( {
+  public constructor(voiceProperty: Property<SpeechSynthesisVoice | null>, voices: SpeechSynthesisVoice[], parentNode: Node, providedOptions?: ComboBoxOptions) {
+    const options = optionize<VoiceComboBoxOptions, VoiceComboBoxSelfOptions, ComboBoxOptions>()({
       listPosition: 'above',
       accessibleName: voiceLabelStringProperty,
       comboBoxVoicingNameResponsePattern: voiceTitlePatternLabelStringProperty.value,
@@ -447,40 +447,40 @@ class VoiceComboBox extends ComboBox<SpeechSynthesisVoice | null> {
       // We don't want to instrument components for preferences, https://github.com/phetsims/joist/issues/744#issuecomment-1196028362
       // Furthermore, opt out because we would need to instrument voices, but those could change between runtimes.
       tandem: Tandem.OPT_OUT
-    }, providedOptions );
+    }, providedOptions);
 
     const items: ComboBoxItem<SpeechSynthesisVoice | null>[] = [];
 
-    if ( voices.length === 0 ) {
-      items.push( {
+    if (voices.length === 0) {
+      items.push({
         value: null,
-        createNode: ( tandem: Tandem ) => new Text( noVoicesAvailableStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: (tandem: Tandem) => new Text(noVoicesAvailableStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS),
         a11yName: noVoicesAvailableStringProperty
-      } );
+      });
     }
 
-    voices.forEach( voice => {
-      items.push( {
+    voices.forEach(voice => {
+      items.push({
         value: voice,
-        createNode: ( tandem: Tandem ) => new Text( voice.name, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS ),
+        createNode: (tandem: Tandem) => new Text(voice.name, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS),
         a11yName: voice.name
-      } );
-    } );
+      });
+    });
 
     // since we are updating the list, set the VoiceProperty to the first available value, or null if there are
     // voices
-    voiceProperty.set( items[ 0 ].value );
+    voiceProperty.set(items[0].value);
 
-    super( voiceProperty, items, parentNode, options );
+    super(voiceProperty, items, parentNode, options);
 
     // voicing -  responses for the button should always come through, regardless of user selection of
     // responses. As of 10/29/21, ComboBox will only read the name response (which are always read regardless)
     // so this isn't really necessary but it is prudent to include it anyway.
     this.button.voicingIgnoreVoicingManagerProperties = true;
     this.disposeVoiceComboBox = () => {
-      items.forEach( item => {
+      items.forEach(item => {
         item.value = null;
-      } );
+      });
     };
   }
 
@@ -494,12 +494,12 @@ class VoiceComboBox extends ComboBox<SpeechSynthesisVoice | null> {
  * A slider with labels and tick marks used to control voice rate of web speech synthesis.
  */
 class VoicingPitchSlider extends VBox {
-  public constructor( labelString: TReadOnlyProperty<string>, voicePitchProperty: NumberProperty ) {
-    const label = new Text( labelString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
+  public constructor(labelString: TReadOnlyProperty<string>, voicePitchProperty: NumberProperty) {
+    const label = new Text(labelString, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS);
 
     const voicePitchRange = voicePitchProperty.range;
 
-    const slider = new HSlider( voicePitchProperty, voicePitchRange, {
+    const slider = new HSlider(voicePitchProperty, voicePitchRange, {
       majorTickLength: 10,
       thumbSize: THUMB_SIZE,
       trackSize: TRACK_SIZE,
@@ -508,7 +508,7 @@ class VoicingPitchSlider extends VBox {
 
       // constrain the value to the nearest hundredths place so there is no overlap in described ranges in
       // VOICE_PITCH_DESCRIPTION_MAP
-      constrainValue: value => Utils.roundToInterval( value, 0.01 ),
+      constrainValue: value => Utils.roundToInterval(value, 0.01),
 
       // pdom
       labelTagName: 'label',
@@ -522,44 +522,44 @@ class VoicingPitchSlider extends VBox {
 
       // phet-io
       tandem: Tandem.OPT_OUT // We don't want to instrument components for preferences, https://github.com/phetsims/joist/issues/744#issuecomment-1196028362
-    } );
+    });
 
-    const lowLabel = new Text( 'Low', { font: new PhetFont( 14 ) } );
-    slider.addMajorTick( voicePitchRange.min, lowLabel );
+    const lowLabel = new Text('Low', { font: new PhetFont(14) });
+    slider.addMajorTick(voicePitchRange.min, lowLabel);
 
-    const highLabel = new Text( 'High', { font: new PhetFont( 14 ) } );
-    slider.addMajorTick( voicePitchRange.max, highLabel );
+    const highLabel = new Text('High', { font: new PhetFont(14) });
+    slider.addMajorTick(voicePitchRange.max, highLabel);
 
     super();
 
     // voicing
-    const voicePitchListener = ( pitch: number, previousValue: number | null ) => {
-      slider.voicingObjectResponse = this.getPitchDescriptionString( pitch );
+    const voicePitchListener = (pitch: number, previousValue: number | null) => {
+      slider.voicingObjectResponse = this.getPitchDescriptionString(pitch);
     };
-    voicePitchProperty.link( voicePitchListener );
+    voicePitchProperty.link(voicePitchListener);
 
-    this.mutate( {
-      children: [ label, slider ],
+    this.mutate({
+      children: [label, slider],
 
       // see https://github.com/phetsims/scenery/issues/1433
       spacing: 5
-    } );
+    });
   }
 
   /**
    * Gets a description of the pitch at the provided value from VOICE_PITCH_DESCRIPTION_MAP.
    */
-  private getPitchDescriptionString( pitchValue: number ): string {
+  private getPitchDescriptionString(pitchValue: number): string {
     let pitchDescription = '';
-    VOICE_PITCH_DESCRIPTION_MAP.forEach( ( description, range ) => {
-      if ( range.contains( pitchValue ) ) {
+    VOICE_PITCH_DESCRIPTION_MAP.forEach((description, range) => {
+      if (range.contains(pitchValue)) {
         pitchDescription = description;
       }
-    } );
-    assert && assert( pitchDescription, `no description found for pitch at value: ${pitchValue}` );
+    });
+    assert && assert(pitchDescription, `no description found for pitch at value: ${pitchValue}`);
     return pitchDescription;
   }
 }
 
-joist.register( 'VoicingPanelSection', VoicingPanelSection );
+joist.register('VoicingPanelSection', VoicingPanelSection);
 export default VoicingPanelSection;

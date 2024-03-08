@@ -6,20 +6,20 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import PatternStringProperty from '../../../axon/js/PatternStringProperty.js';
-import merge from '../../../phet-core/js/merge.js';
-import optionize, { combineOptions } from '../../../phet-core/js/optionize.js';
-import { Node, Text, VBox, VoicingRichText, VoicingText } from '../../../scenery/js/imports.js';
-import Checkbox from '../../../sun/js/Checkbox.js';
-import ToggleSwitch, { ToggleSwitchOptions } from '../../../sun/js/ToggleSwitch.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import joist from '../joist.js';
-import JoistStrings from '../JoistStrings.js';
-import PreferencesDialog from './PreferencesDialog.js';
-import { AudioModel } from './PreferencesModel.js';
-import PreferencesPanelSection, { PreferencesPanelSectionOptions } from './PreferencesPanelSection.js';
-import PreferencesControl from './PreferencesControl.js';
-import PreferencesDialogConstants from './PreferencesDialogConstants.js';
+import PatternStringProperty from '../../axon/PatternStringProperty';
+import merge from '../../phet-core/merge';
+import optionize, { combineOptions } from '../../phet-core/optionize';
+import { Node, Text, VBox, VoicingRichText, VoicingText } from '../../scenery/imports';
+import Checkbox from '../../sun/Checkbox';
+import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
+import Tandem from '../../tandem/Tandem';
+import joist from '../joist';
+import JoistStrings from '../JoistStrings';
+import PreferencesDialog from './PreferencesDialog';
+import { type AudioModel } from './PreferencesModel';
+import PreferencesPanelSection, { type PreferencesPanelSectionOptions } from './PreferencesPanelSection';
+import PreferencesControl from './PreferencesControl';
+import PreferencesDialogConstants from './PreferencesDialogConstants';
 
 // constants
 const soundsLabelStringProperty = JoistStrings.preferences.tabs.audio.sounds.titleStringProperty;
@@ -48,36 +48,36 @@ class SoundPanelSection extends PreferencesPanelSection {
    * @param audioModel - configuration for audio preferences, see PreferencesModel
    * @param [providedOptions]
    */
-  public constructor( audioModel: AudioModel, providedOptions?: SoundPanelSectionOptions ) {
-    const options = optionize<SoundPanelSectionOptions, SelfOptions, PreferencesPanelSectionOptions>()( {
+  public constructor(audioModel: AudioModel, providedOptions?: SoundPanelSectionOptions) {
+    const options = optionize<SoundPanelSectionOptions, SelfOptions, PreferencesPanelSectionOptions>()({
       includeTitleToggleSwitch: true
-    }, providedOptions );
+    }, providedOptions);
 
-    const soundLabel = new Text( soundsLabelStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
+    const soundLabel = new Text(soundsLabelStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS);
 
-    const soundEnabledStringProperty = new PatternStringProperty( labelledDescriptionPatternStringProperty, {
+    const soundEnabledStringProperty = new PatternStringProperty(labelledDescriptionPatternStringProperty, {
       label: soundsLabelStringProperty,
       description: soundDescriptionStringProperty
-    }, { tandem: Tandem.OPT_OUT } );
-    const soundEnabledVoicingText = new VoicingText( soundDescriptionStringProperty, merge( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
+    }, { tandem: Tandem.OPT_OUT });
+    const soundEnabledVoicingText = new VoicingText(soundDescriptionStringProperty, merge({}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
       readingBlockNameResponse: soundEnabledStringProperty
-    } ) );
-    const soundEnabledSwitch = new ToggleSwitch( audioModel.soundEnabledProperty, false, true, combineOptions<ToggleSwitchOptions>( {
+    }));
+    const soundEnabledSwitch = new ToggleSwitch(audioModel.soundEnabledProperty, false, true, combineOptions<ToggleSwitchOptions>({
       visible: options.includeTitleToggleSwitch,
       a11yName: soundsLabelStringProperty,
       leftValueContextResponse: soundsOffStringProperty,
       rightValueContextResponse: soundsOnStringProperty
-    }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ) );
-    const soundEnabledControl = new PreferencesControl( {
+    }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS));
+    const soundEnabledControl = new PreferencesControl({
       labelNode: soundLabel,
       descriptionNode: soundEnabledVoicingText,
       controlNode: soundEnabledSwitch
-    } );
+    });
 
     let extraSoundContent: Node | null = null;
-    if ( audioModel.supportsExtraSound ) {
-      const enhancedSoundLabel = new Text( extraSoundsLabelStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
-      const extraSoundCheckbox = new Checkbox( audioModel.extraSoundEnabledProperty, enhancedSoundLabel, {
+    if (audioModel.supportsExtraSound) {
+      const enhancedSoundLabel = new Text(extraSoundsLabelStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS);
+      const extraSoundCheckbox = new Checkbox(audioModel.extraSoundEnabledProperty, enhancedSoundLabel, {
 
         // pdom
         labelTagName: 'label',
@@ -94,41 +94,41 @@ class SoundPanelSection extends PreferencesPanelSection {
 
         // phet-io
         tandem: Tandem.OPT_OUT // We don't want to instrument components for preferences, https://github.com/phetsims/joist/issues/744#issuecomment-1196028362
-      } );
+      });
 
-      const extraSoundReadingBlockNameResponsePatternStringProperty = new PatternStringProperty( labelledDescriptionPatternStringProperty, {
+      const extraSoundReadingBlockNameResponsePatternStringProperty = new PatternStringProperty(labelledDescriptionPatternStringProperty, {
         label: extraSoundsLabelStringProperty,
         description: extraSoundsDescriptionStringProperty
-      }, { tandem: Tandem.OPT_OUT } );
-      const extraSoundDescription = new VoicingRichText( extraSoundsDescriptionStringProperty, merge( {}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
+      }, { tandem: Tandem.OPT_OUT });
+      const extraSoundDescription = new VoicingRichText(extraSoundsDescriptionStringProperty, merge({}, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS, {
         lineWrap: 300,
         maxHeight: 100,
         readingBlockNameResponse: extraSoundReadingBlockNameResponsePatternStringProperty
-      } ) );
+      }));
 
-      extraSoundContent = new VBox( {
-        children: [ extraSoundCheckbox, extraSoundDescription ],
+      extraSoundContent = new VBox({
+        children: [extraSoundCheckbox, extraSoundDescription],
         align: 'left',
         spacing: 5,
         tagName: 'div' // Must have PDOM content to support toggling enabled in the PDOM. Could be removed after https://github.com/phetsims/scenery/issues/1514
-      } );
+      });
 
-      const extraSoundEnabledListener = ( enabled: boolean ) => {
+      const extraSoundEnabledListener = (enabled: boolean) => {
         extraSoundContent!.enabled = enabled;
 
         // TODO: Workaround for now, see https://github.com/phetsims/scenery/issues/1514. PDOM does not
         //       correctly propagate enabled state to descendants when ancestor becomes disabled.
         extraSoundCheckbox.inputEnabled = enabled;
       };
-      audioModel.soundEnabledProperty.link( extraSoundEnabledListener );
+      audioModel.soundEnabledProperty.link(extraSoundEnabledListener);
     }
 
-    super( {
+    super({
       titleNode: soundEnabledControl,
       contentNode: extraSoundContent
-    } );
+    });
   }
 }
 
-joist.register( 'SoundPanelSection', SoundPanelSection );
+joist.register('SoundPanelSection', SoundPanelSection);
 export default SoundPanelSection;

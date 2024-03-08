@@ -11,31 +11,35 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Range from '../../../../dot/js/Range.js';
-import Utils from '../../../../dot/js/Utils.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import merge from '../../../../phet-core/js/merge.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import ResponsePacket from '../../../../utterance-queue/js/ResponsePacket.js';
-import Utterance from '../../../../utterance-queue/js/Utterance.js';
-import sceneryPhet from '../../sceneryPhet.js';
-import SceneryPhetStrings from '../../SceneryPhetStrings.js';
-import Alerter from './Alerter.js';
-import BorderAlertsDescriber from './BorderAlertsDescriber.js';
-import DirectionEnum from './DirectionEnum.js';
+import Range from '../../../dot/Range';
+import Utils from '../../../dot/Utils';
+import Vector2 from '../../../dot/Vector2';
+import merge from '../../../phet-core/merge';
+import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
+import ResponsePacket from '../../../utterance-queue/ResponsePacket';
+import Utterance from '../../../utterance-queue/Utterance';
+import sceneryPhet from '../../sceneryPhet';
+import SceneryPhetStrings from '../../SceneryPhetStrings';
+import Alerter from './Alerter';
+import BorderAlertsDescriber from './BorderAlertsDescriber';
+import DirectionEnum from './DirectionEnum';
 
 // constants
 const downString = SceneryPhetStrings.a11y.movementAlerter.down;
 const leftString = SceneryPhetStrings.a11y.movementAlerter.left;
 const rightString = SceneryPhetStrings.a11y.movementAlerter.right;
 const upString = SceneryPhetStrings.a11y.movementAlerter.up;
-const upAndToTheLeftString = SceneryPhetStrings.a11y.movementAlerter.upAndToTheLeft;
-const upAndToTheRightString = SceneryPhetStrings.a11y.movementAlerter.upAndToTheRight;
-const downAndToTheLeftString = SceneryPhetStrings.a11y.movementAlerter.downAndToTheLeft;
-const downAndToTheRightString = SceneryPhetStrings.a11y.movementAlerter.downAndToTheRight;
+const upAndToTheLeftString =
+  SceneryPhetStrings.a11y.movementAlerter.upAndToTheLeft;
+const upAndToTheRightString =
+  SceneryPhetStrings.a11y.movementAlerter.upAndToTheRight;
+const downAndToTheLeftString =
+  SceneryPhetStrings.a11y.movementAlerter.downAndToTheLeft;
+const downAndToTheRightString =
+  SceneryPhetStrings.a11y.movementAlerter.downAndToTheRight;
 
 // in radians - threshold for diagonal movement is +/- 15 degrees from diagonals
-const DIAGONAL_MOVEMENT_THRESHOLD = 15 * Math.PI / 180;
+const DIAGONAL_MOVEMENT_THRESHOLD = (15 * Math.PI) / 180;
 
 // mapping from alerting direction to the radian range that fills that space in the unit circle.
 //
@@ -45,24 +49,48 @@ const DIAGONAL_MOVEMENT_THRESHOLD = 15 * Math.PI / 180;
 // for a relative (primary) direction. Therefore each diagonal direction is 1/9 of the Unit circle, and each
 // primary direction is 2/9 of the unit circle.
 const DIRECTION_MAP = {
-  UP: new Range( -3 * Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD, -Math.PI / 4 - DIAGONAL_MOVEMENT_THRESHOLD ),
-  DOWN: new Range( Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD, 3 * Math.PI / 4 - DIAGONAL_MOVEMENT_THRESHOLD ),
-  RIGHT: new Range( -Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD, Math.PI / 4 - DIAGONAL_MOVEMENT_THRESHOLD ),
+  UP: new Range(
+    (-3 * Math.PI) / 4 + DIAGONAL_MOVEMENT_THRESHOLD,
+    -Math.PI / 4 - DIAGONAL_MOVEMENT_THRESHOLD
+  ),
+  DOWN: new Range(
+    Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD,
+    (3 * Math.PI) / 4 - DIAGONAL_MOVEMENT_THRESHOLD
+  ),
+  RIGHT: new Range(
+    -Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD,
+    Math.PI / 4 - DIAGONAL_MOVEMENT_THRESHOLD
+  ),
 
   // atan2 wraps around PI, so we will use absolute value in checks
-  LEFT: new Range( 3 * Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD, Math.PI ),
+  LEFT: new Range((3 * Math.PI) / 4 + DIAGONAL_MOVEMENT_THRESHOLD, Math.PI),
 
-  UP_LEFT: new Range( -3 * Math.PI - DIAGONAL_MOVEMENT_THRESHOLD, -3 * Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD ),
-  DOWN_LEFT: new Range( 3 * Math.PI / 4 - DIAGONAL_MOVEMENT_THRESHOLD, 3 * Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD ),
-  UP_RIGHT: new Range( -Math.PI / 4 - DIAGONAL_MOVEMENT_THRESHOLD, -Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD ),
-  DOWN_RIGHT: new Range( Math.PI / 4 - DIAGONAL_MOVEMENT_THRESHOLD, Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD )
+  UP_LEFT: new Range(
+    -3 * Math.PI - DIAGONAL_MOVEMENT_THRESHOLD,
+    (-3 * Math.PI) / 4 + DIAGONAL_MOVEMENT_THRESHOLD
+  ),
+  DOWN_LEFT: new Range(
+    (3 * Math.PI) / 4 - DIAGONAL_MOVEMENT_THRESHOLD,
+    (3 * Math.PI) / 4 + DIAGONAL_MOVEMENT_THRESHOLD
+  ),
+  UP_RIGHT: new Range(
+    -Math.PI / 4 - DIAGONAL_MOVEMENT_THRESHOLD,
+    -Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD
+  ),
+  DOWN_RIGHT: new Range(
+    Math.PI / 4 - DIAGONAL_MOVEMENT_THRESHOLD,
+    Math.PI / 4 + DIAGONAL_MOVEMENT_THRESHOLD
+  )
 };
-const DIRECTION_MAP_KEYS = Object.keys( DIRECTION_MAP );
+const DIRECTION_MAP_KEYS = Object.keys(DIRECTION_MAP);
 
-if ( assert ) {
-  DIRECTION_MAP_KEYS.forEach( direction => {
-    assert( DirectionEnum.keys.indexOf( direction ) >= 0, `unexpected direction: ${direction}. Keys should be the same as those in DirectionEnum` );
-  } );
+if (assert) {
+  DIRECTION_MAP_KEYS.forEach((direction) => {
+    assert(
+      DirectionEnum.keys.indexOf(direction) >= 0,
+      `unexpected direction: ${direction}. Keys should be the same as those in DirectionEnum`
+    );
+  });
 }
 
 // the set of directional alerts including cardinal and intercardinal directions
@@ -78,43 +106,45 @@ const DEFAULT_MOVEMENT_DESCRIPTIONS = {
 };
 
 class MovementAlerter extends Alerter {
-
   /**
    * @param {Property.<Vector2>} positionProperty - Property that drives movement, in model coordinate frame
    * @param {Object} [options]
    */
-  constructor( positionProperty, options ) {
+  constructor(positionProperty, options) {
+    options = merge(
+      {
+        // see BorderAlertsDescriber
+        borderAlertsOptions: null,
 
-    options = merge( {
+        // {Object.<DIRECTION, TAlertable> see DirectionEnum for allowed keys. Any missing keys will not be alerted.
+        // Use `{}` to omit movementAlerts.
+        movementAlerts: DEFAULT_MOVEMENT_DESCRIPTIONS,
 
-      // see BorderAlertsDescriber
-      borderAlertsOptions: null,
+        // {ModelViewTransform2} - if provided, this will transform between the model and view coordinate frames, so
+        // that movement in the view is described
+        modelViewTransform: ModelViewTransform2.createIdentity(),
 
-      // {Object.<DIRECTION, TAlertable> see DirectionEnum for allowed keys. Any missing keys will not be alerted.
-      // Use `{}` to omit movementAlerts.
-      movementAlerts: DEFAULT_MOVEMENT_DESCRIPTIONS,
+        // if false then diagonal alerts will be converted to two primary direction alerts that are alerted back to back
+        // i.e. UP_LEFT becomes "UP" and "LEFT"
+        alertDiagonal: false
+      },
+      options
+    );
 
-      // {ModelViewTransform2} - if provided, this will transform between the model and view coordinate frames, so
-      // that movement in the view is described
-      modelViewTransform: ModelViewTransform2.createIdentity(),
+    assert && assert(options.movementAlerts instanceof Object);
+    assert && assert(!Array.isArray(options.movementAlerts)); // should not be an Array
 
-      // if false then diagonal alerts will be converted to two primary direction alerts that are alerted back to back
-      // i.e. UP_LEFT becomes "UP" and "LEFT"
-      alertDiagonal: false
-    }, options );
-
-    assert && assert( options.movementAlerts instanceof Object );
-    assert && assert( !Array.isArray( options.movementAlerts ) ); // should not be an Array
-
-    super( options );
+    super(options);
 
     // @private
-    this.movementAlertKeys = Object.keys( options.movementAlerts );
-    if ( assert ) {
-
-      for ( let i = 0; i < this.movementAlertKeys.length; i++ ) {
-        const key = this.movementAlertKeys[ i ];
-        assert( DirectionEnum.keys.indexOf( key ) >= 0, `unexpected key: ${key}. Keys should be the same as those in DirectionEnum` );
+    this.movementAlertKeys = Object.keys(options.movementAlerts);
+    if (assert) {
+      for (let i = 0; i < this.movementAlertKeys.length; i++) {
+        const key = this.movementAlertKeys[i];
+        assert(
+          DirectionEnum.keys.indexOf(key) >= 0,
+          `unexpected key: ${key}. Keys should be the same as those in DirectionEnum`
+        );
       }
     }
 
@@ -125,13 +155,15 @@ class MovementAlerter extends Alerter {
 
     // @private
     // This sub-describer handles the logic for alerting when an item is on the edge of the movement space
-    this.borderAlertsDescriber = new BorderAlertsDescriber( options.borderAlertsOptions );
+    this.borderAlertsDescriber = new BorderAlertsDescriber(
+      options.borderAlertsOptions
+    );
 
     // @private {Utterance} - single utterance to describe direction changes so that when this
     // happens frequently only the last change is announced
-    this.directionChangeUtterance = new Utterance( {
+    this.directionChangeUtterance = new Utterance({
       alert: new ResponsePacket()
-    } );
+    });
 
     // @private
     this.initialFirstPosition = positionProperty.get();
@@ -148,8 +180,8 @@ class MovementAlerter extends Alerter {
    *
    * @param {TAlertable} alertable - anything that can be passed to UtteranceQueue
    */
-  alert( alertable ) {
-    super.alert( alertable );
+  alert(alertable) {
+    super.alert(alertable);
     this.lastAlertedPosition = this.positionProperty.get();
   }
 
@@ -158,16 +190,17 @@ class MovementAlerter extends Alerter {
    * @protected
    * @param {Array.<DirectionEnum>|DirectionEnum} directions
    */
-  alertDirections( directions ) {
-    if ( DirectionEnum.includes( directions ) ) {
-      directions = [ directions ];
+  alertDirections(directions) {
+    if (DirectionEnum.includes(directions)) {
+      directions = [directions];
     }
 
     // support if an instance doesn't want to alert in all directions
-    directions.forEach( direction => {
-      this.directionChangeUtterance.alert.objectResponse = this.movementAlerts[ direction ];
-      this.alert( this.directionChangeUtterance );
-    } );
+    directions.forEach((direction) => {
+      this.directionChangeUtterance.alert.objectResponse =
+        this.movementAlerts[direction];
+      this.alert(this.directionChangeUtterance);
+    });
   }
 
   /**
@@ -185,17 +218,23 @@ class MovementAlerter extends Alerter {
    * @public
    */
   alertDirectionalMovement() {
-
     const newPosition = this.positionProperty.get();
-    if ( !newPosition.equals( this.lastAlertedPosition ) ) {
-
-      const directions = this.getDirections( newPosition, this.lastAlertedPosition );
+    if (!newPosition.equals(this.lastAlertedPosition)) {
+      const directions = this.getDirections(
+        newPosition,
+        this.lastAlertedPosition
+      );
 
       // make sure that these alerts exist
-      if ( assert ) {
-        directions.forEach( direction => { assert( this.movementAlerts[ direction ] && typeof this.movementAlerts[ direction ] === 'string' ); } );
+      if (assert) {
+        directions.forEach((direction) => {
+          assert(
+            this.movementAlerts[direction] &&
+              typeof this.movementAlerts[direction] === 'string'
+          );
+        });
       }
-      this.alertDirections( directions );
+      this.alertDirections(directions);
     }
   }
 
@@ -211,16 +250,18 @@ class MovementAlerter extends Alerter {
    *                            diagonal directions or their composite. See options.alertDiagonal for more info
    * @protected
    */
-  getDirections( newPoint, oldPoint ) {
-
-    const direction = MovementAlerter.getDirectionEnumerable( newPoint, oldPoint, this.modelViewTransform );
+  getDirections(newPoint, oldPoint) {
+    const direction = MovementAlerter.getDirectionEnumerable(
+      newPoint,
+      oldPoint,
+      this.modelViewTransform
+    );
 
     // This includes complex directions like "UP_LEFT"
-    if ( this.alertDiagonal ) {
-      return [ direction ];
-    }
-    else {
-      return DirectionEnum.directionToRelativeDirections( direction );
+    if (this.alertDiagonal) {
+      return [direction];
+    } else {
+      return DirectionEnum.directionToRelativeDirections(direction);
     }
   }
 
@@ -235,27 +276,27 @@ class MovementAlerter extends Alerter {
    * @param {ModelViewTransform2} modelViewTransform
    * @returns {DirectionEnum}
    */
-  static getDirectionEnumerable( newPoint, oldPoint, modelViewTransform ) {
+  static getDirectionEnumerable(newPoint, oldPoint, modelViewTransform) {
     let direction;
 
     // to view coordinates to motion in the screen
-    const newViewPoint = modelViewTransform.modelToViewPosition( newPoint );
-    const oldViewPoint = modelViewTransform.modelToViewPosition( oldPoint );
+    const newViewPoint = modelViewTransform.modelToViewPosition(newPoint);
+    const oldViewPoint = modelViewTransform.modelToViewPosition(oldPoint);
 
     const dx = newViewPoint.x - oldViewPoint.x;
     const dy = newViewPoint.y - oldViewPoint.y;
-    const angle = Math.atan2( dy, dx );
+    const angle = Math.atan2(dy, dx);
 
     // atan2 wraps around Math.PI, so special check for moving left from absolute value
-    if ( DIRECTION_MAP.LEFT.contains( Math.abs( angle ) ) ) {
+    if (DIRECTION_MAP.LEFT.contains(Math.abs(angle))) {
       direction = DirectionEnum.LEFT;
     }
 
     // otherwise, angle will be in one of the ranges in DIRECTION_MAP
-    for ( let i = 0; i < DIRECTION_MAP_KEYS.length; i++ ) {
-      const entry = DIRECTION_MAP[ DIRECTION_MAP_KEYS[ i ] ];
-      if ( entry.contains( angle ) ) {
-        direction = DirectionEnum[ DIRECTION_MAP_KEYS[ i ] ];
+    for (let i = 0; i < DIRECTION_MAP_KEYS.length; i++) {
+      const entry = DIRECTION_MAP[DIRECTION_MAP_KEYS[i]];
+      if (entry.contains(angle)) {
+        direction = DirectionEnum[DIRECTION_MAP_KEYS[i]];
         break;
       }
     }
@@ -277,37 +318,44 @@ class MovementAlerter extends Alerter {
    * @param {Object} [options]
    * @returns {string}
    */
-  static getDirectionDescriptionFromAngle( angle, options ) {
-
-    options = merge( {
-
-      // see constructor options for description
-      modelViewTransform: ModelViewTransform2.createIdentity()
-    }, options );
+  static getDirectionDescriptionFromAngle(angle, options) {
+    options = merge(
+      {
+        // see constructor options for description
+        modelViewTransform: ModelViewTransform2.createIdentity()
+      },
+      options
+    );
 
     // start and end positions to determine angle in view coordinate frame
-    const modelStartPoint = new Vector2( 0, 0 );
+    const modelStartPoint = new Vector2(0, 0);
 
     // trim off precision error when very close to 0 or 1 so that cardinal direction is still described
     // when off by a minuscule amount
-    const dx = Utils.toFixedNumber( Math.cos( angle ), 8 );
-    const dy = Utils.toFixedNumber( Math.sin( angle ), 8 );
-    const modelEndPoint = new Vector2( dx, dy );
+    const dx = Utils.toFixedNumber(Math.cos(angle), 8);
+    const dy = Utils.toFixedNumber(Math.sin(angle), 8);
+    const modelEndPoint = new Vector2(dx, dy);
 
-    const direction = MovementAlerter.getDirectionEnumerable( modelEndPoint, modelStartPoint, options.modelViewTransform );
-    return DEFAULT_MOVEMENT_DESCRIPTIONS[ direction ];
+    const direction = MovementAlerter.getDirectionEnumerable(
+      modelEndPoint,
+      modelStartPoint,
+      options.modelViewTransform
+    );
+    return DEFAULT_MOVEMENT_DESCRIPTIONS[direction];
   }
 
   /**
    * @public
    * @param {window.Event} [domEvent]
    */
-  endDrag( domEvent ) {
-
+  endDrag(domEvent) {
     // better to have the movement alerts, then the alert about the border
     this.alertDirectionalMovement();
-    const alert = this.borderAlertsDescriber.getAlertOnEndDrag( this.positionProperty.get(), domEvent );
-    alert && this.alert( alert );
+    const alert = this.borderAlertsDescriber.getAlertOnEndDrag(
+      this.positionProperty.get(),
+      domEvent
+    );
+    alert && this.alert(alert);
   }
 
   /**
@@ -317,10 +365,10 @@ class MovementAlerter extends Alerter {
     this.lastAlertedPosition = this.initialFirstPosition;
 
     // if any alerts are of type Utterance, reset them.
-    this.movementAlertKeys.forEach( direction => {
-      const alert = this.movementAlerts[ direction ];
+    this.movementAlertKeys.forEach((direction) => {
+      const alert = this.movementAlerts[direction];
       alert && alert.reset && alert.reset();
-    } );
+    });
 
     this.borderAlertsDescriber.reset();
   }
@@ -331,9 +379,9 @@ class MovementAlerter extends Alerter {
    * @public
    */
   static getDefaultMovementDescriptions() {
-    return merge( {}, DEFAULT_MOVEMENT_DESCRIPTIONS ); // clone
+    return merge({}, DEFAULT_MOVEMENT_DESCRIPTIONS); // clone
   }
 }
 
-sceneryPhet.register( 'MovementAlerter', MovementAlerter );
+sceneryPhet.register('MovementAlerter', MovementAlerter);
 export default MovementAlerter;

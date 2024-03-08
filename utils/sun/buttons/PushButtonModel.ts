@@ -8,18 +8,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import CallbackTimer from '../../../axon/js/CallbackTimer.js';
-import Emitter from '../../../axon/js/Emitter.js';
-import TEmitter from '../../../axon/js/TEmitter.js';
-import Property from '../../../axon/js/Property.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import EventType from '../../../tandem/js/EventType.js';
-import PhetioObject from '../../../tandem/js/PhetioObject.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import sun from '../sun.js';
-import ButtonModel, { ButtonModelOptions } from './ButtonModel.js';
-import { SceneryEvent } from '../../../scenery/js/imports.js';
+import BooleanProperty from '../../axon/BooleanProperty';
+import CallbackTimer from '../../axon/CallbackTimer';
+import Emitter from '../../axon/Emitter';
+import type TEmitter from '../../axon/TEmitter';
+import Property from '../../axon/Property';
+import optionize from '../../phet-core/optionize';
+import EventType from '../../tandem/EventType';
+import PhetioObject from '../../tandem/PhetioObject';
+import Tandem from '../../tandem/Tandem';
+import sun from '../sun';
+import ButtonModel, { type ButtonModelOptions } from './ButtonModel';
+import { SceneryEvent } from '../../scenery/imports';
 
 export type PushButtonListener = () => void;
 
@@ -33,7 +33,7 @@ type SelfOptions = {
 
   // a listener that gets fired before other listeners on this button, with the express purpose of just interrupting
   // other input/pointers for better multi-touch support. See https://github.com/phetsims/sun/issues/858
-  interruptListener?: ( ( event: SceneryEvent | null ) => void ) | null;
+  interruptListener?: ((event: SceneryEvent | null) => void) | null;
 
   // fire-on-hold feature
   // TODO: these options are not supported with PDOM interaction, see https://github.com/phetsims/scenery/issues/1117
@@ -62,9 +62,9 @@ export default class PushButtonModel extends ButtonModel {
   // the event that kicked off the latest fire (including delayed fire-on-hold cases)
   private startEvent: SceneryEvent | null = null;
 
-  public constructor( providedOptions?: PushButtonModelOptions ) {
+  public constructor(providedOptions?: PushButtonModelOptions) {
 
-    const options = optionize<PushButtonModelOptions, SelfOptions, ButtonModelOptions>()( {
+    const options = optionize<PushButtonModelOptions, SelfOptions, ButtonModelOptions>()({
 
       fireOnDown: false,
       listener: null,
@@ -75,14 +75,14 @@ export default class PushButtonModel extends ButtonModel {
 
       tandem: Tandem.REQUIRED,
       phetioReadOnly: PhetioObject.DEFAULT_OPTIONS.phetioReadOnly
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
-    this.isFiringProperty = new BooleanProperty( false );
+    this.isFiringProperty = new BooleanProperty(false);
 
-    this.firedEmitter = new Emitter( {
-      tandem: options.tandem.createTandem( 'firedEmitter' ),
+    this.firedEmitter = new Emitter({
+      tandem: options.tandem.createTandem('firedEmitter'),
       phetioDocumentation: 'Emits when the button is fired',
       phetioReadOnly: options.phetioReadOnly,
       phetioEventType: EventType.USER,
@@ -90,41 +90,41 @@ export default class PushButtonModel extends ButtonModel {
       // Order dependencies, so that we can fire our interruptListener before any other listeners without having to
       // create and maintain other emitters.
       hasListenerOrderDependencies: true
-    } );
+    });
 
-    if ( options.interruptListener ) {
-      this.firedEmitter.addListener( () => {
-        options.interruptListener!( this.startEvent );
-      } );
+    if (options.interruptListener) {
+      this.firedEmitter.addListener(() => {
+        options.interruptListener!(this.startEvent);
+      });
     }
 
-    if ( options.listener !== null ) {
-      this.firedEmitter.addListener( options.listener );
+    if (options.listener !== null) {
+      this.firedEmitter.addListener(options.listener);
     }
 
     // Create a timer to handle the optional fire-on-hold feature.
     // When that feature is enabled, calling this.fire is delegated to the timer.
-    if ( options.fireOnHold ) {
-      this.timer = new CallbackTimer( {
-        callback: this.fire.bind( this ),
+    if (options.fireOnHold) {
+      this.timer = new CallbackTimer({
+        callback: this.fire.bind(this),
         delay: options.fireOnHoldDelay,
         interval: options.fireOnHoldInterval
-      } );
+      });
     }
 
     // Point down
-    const downPropertyObserver = ( down: boolean ) => {
-      if ( down ) {
-        if ( this.enabledProperty.get() ) {
+    const downPropertyObserver = (down: boolean) => {
+      if (down) {
+        if (this.enabledProperty.get()) {
           this.startEvent = phet?.joist?.display?._input?.currentSceneryEvent || null;
 
-          if ( options.fireOnDown ) {
+          if (options.fireOnDown) {
             this.fire();
           }
-          if ( this.timer ) {
+          if (this.timer) {
             this.timer.start();
           }
-          if ( options.fireOnDown || this.timer ) {
+          if (options.fireOnDown || this.timer) {
             this.produceSoundEmitter.emit();
           }
         }
@@ -132,11 +132,11 @@ export default class PushButtonModel extends ButtonModel {
       else {
 
         // should the button fire?
-        const fire = ( !options.fireOnDown && ( this.overProperty.get() || this.focusedProperty.get() ) && this.enabledProperty.get() && !this.interrupted );
-        if ( this.timer ) {
-          this.timer.stop( fire );
+        const fire = (!options.fireOnDown && (this.overProperty.get() || this.focusedProperty.get()) && this.enabledProperty.get() && !this.interrupted);
+        if (this.timer) {
+          this.timer.stop(fire);
         }
-        else if ( fire ) {
+        else if (fire) {
 
           // Produce sound before firing, in case firing causes the disposal of this PushButtonModel
           this.produceSoundEmitter.emit();
@@ -144,15 +144,15 @@ export default class PushButtonModel extends ButtonModel {
         }
       }
     };
-    this.downProperty.link( downPropertyObserver );
+    this.downProperty.link(downPropertyObserver);
 
     // Stop the timer when the button is disabled.
-    const enabledPropertyObserver = ( enabled: boolean ) => {
-      if ( !enabled && this.timer ) {
-        this.timer.stop( false ); // Stop the timer, don't fire if we haven't already
+    const enabledPropertyObserver = (enabled: boolean) => {
+      if (!enabled && this.timer) {
+        this.timer.stop(false); // Stop the timer, don't fire if we haven't already
       }
     };
-    this.enabledProperty.link( enabledPropertyObserver );
+    this.enabledProperty.link(enabledPropertyObserver);
 
     this.disposePushButtonModel = () => {
 
@@ -161,9 +161,9 @@ export default class PushButtonModel extends ButtonModel {
       this.isFiringProperty.value = false;
       this.isFiringProperty.dispose();
       this.firedEmitter.dispose();
-      this.downProperty.unlink( downPropertyObserver );
-      this.enabledProperty.unlink( enabledPropertyObserver );
-      if ( this.timer ) {
+      this.downProperty.unlink(downPropertyObserver);
+      this.enabledProperty.unlink(enabledPropertyObserver);
+      if (this.timer) {
         this.timer.dispose();
         this.timer = null;
       }
@@ -179,15 +179,15 @@ export default class PushButtonModel extends ButtonModel {
    * Adds a listener. If already a listener, this is a no-op.
    * @param listener - function called when the button is pressed, no args
    */
-  public addListener( listener: PushButtonListener ): void {
-    this.firedEmitter.addListener( listener );
+  public addListener(listener: PushButtonListener): void {
+    this.firedEmitter.addListener(listener);
   }
 
   /**
    * Removes a listener. If not a listener, this is a no-op.
    */
-  public removeListener( listener: PushButtonListener ): void {
-    this.firedEmitter.removeListener( listener );
+  public removeListener(listener: PushButtonListener): void {
+    this.firedEmitter.removeListener(listener);
   }
 
   /**
@@ -196,11 +196,11 @@ export default class PushButtonModel extends ButtonModel {
   public fire(): void {
 
     // Make sure the button is not already firing, see https://github.com/phetsims/energy-skate-park-basics/issues/380
-    assert && assert( !this.isFiringProperty.value, 'Cannot fire when already firing' );
+    assert && assert(!this.isFiringProperty.value, 'Cannot fire when already firing');
     this.isFiringProperty.value = true;
     this.firedEmitter.emit();
     this.isFiringProperty.value = false;
   }
 }
 
-sun.register( 'PushButtonModel', PushButtonModel );
+sun.register('PushButtonModel', PushButtonModel);

@@ -6,15 +6,15 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
+import generalSoftClick_mp3 from '@/assets/sounds/tambo/generalSoftClick_mp3';
 import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const generalSoftClickSoundPlayer = new SoundClipPlayer( generalSoftClick_mp3, {
+const generalSoftClickSoundPlayer = new SoundClipPlayer(generalSoftClick_mp3, {
   soundClipOptions: { initialOutputLevel: 0.2 },
   soundManagerOptions: { categoryName: 'user-interface' }
-} );
+});
 
-tambo.register( 'generalSoftClickSoundPlayer', generalSoftClickSoundPlayer );
+tambo.register('generalSoftClickSoundPlayer', generalSoftClickSoundPlayer);
 export default generalSoftClickSoundPlayer;

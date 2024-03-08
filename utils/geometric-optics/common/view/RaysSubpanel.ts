@@ -7,14 +7,14 @@
  * @author Martin Veillette
  */
 
-import Property from '../../../../axon/js/Property.js';
-import { Text, VBox } from '../../../../scenery/js/imports.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import geometricOptics from '../../geometricOptics.js';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings.js';
-import GOConstants from '../GOConstants.js';
-import { RaysType } from '../model/RaysType.js';
-import RaysRadioButtonGroup from './RaysRadioButtonGroup.js';
+import Property from '../../../axon/Property';
+import { Text, VBox } from '../../../scenery/imports';
+import Tandem from '../../../tandem/Tandem';
+import geometricOptics from '../../geometricOptics';
+import GeometricOpticsStrings from '../../GeometricOpticsStrings';
+import GOConstants from '../GOConstants';
+import { type RaysType } from '../model/RaysType';
+import RaysRadioButtonGroup from './RaysRadioButtonGroup';
 
 export default class RaysSubpanel extends VBox {
 
@@ -22,33 +22,33 @@ export default class RaysSubpanel extends VBox {
    * @param raysTypeProperty - representation used for rays
    * @param tandem
    */
-  public constructor( raysTypeProperty: Property<RaysType>, tandem: Tandem ) {
+  public constructor(raysTypeProperty: Property<RaysType>, tandem: Tandem) {
 
     // title
-    const titleText = new Text( GeometricOpticsStrings.raysStringProperty, {
+    const titleText = new Text(GeometricOpticsStrings.raysStringProperty, {
       font: GOConstants.TITLE_FONT,
       maxWidth: 90,
-      tandem: tandem.createTandem( 'titleText' )
-    } );
+      tandem: tandem.createTandem('titleText')
+    });
 
     // radio buttons
-    const raysRadioButtonGroup = new RaysRadioButtonGroup( raysTypeProperty, {
-      tandem: tandem.createTandem( 'raysRadioButtonGroup' )
-    } );
+    const raysRadioButtonGroup = new RaysRadioButtonGroup(raysTypeProperty, {
+      tandem: tandem.createTandem('raysRadioButtonGroup')
+    });
 
     // title + radio buttons
-    super( {
+    super({
 
       // VBox options
-      children: [ titleText, raysRadioButtonGroup ],
+      children: [titleText, raysRadioButtonGroup],
       align: 'left',
       spacing: 4,
       visiblePropertyOptions: {
         phetioFeatured: true
       },
-      tandem: tandem
-    } );
+      tandem
+    });
   }
 }
 
-geometricOptics.register( 'RaysSubpanel', RaysSubpanel );
+geometricOptics.register('RaysSubpanel', RaysSubpanel);

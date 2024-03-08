@@ -7,19 +7,19 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import geometricOptics from '../../geometricOptics.js';
-import lockSolidShape from '../../../../sherpa/js/fontawesome-5/lockSolidShape.js';
-import unlockSolidShape from '../../../../sherpa/js/fontawesome-5/unlockSolidShape.js';
-import { AlignBox, AlignGroup, HBox, HBoxOptions, NodeTranslationOptions, Path } from '../../../../scenery/js/imports.js';
-import CueingArrowsNode from './CueingArrowsNode.js';
-import ButtonNode from '../../../../sun/js/buttons/ButtonNode.js';
-import PhetColorScheme from '../../../../scenery-phet/js/PhetColorScheme.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { ObjectDragMode } from './ObjectDragMode.js';
-import ToggleNode from '../../../../sun/js/ToggleNode.js';
-import RectangularToggleButton, { RectangularToggleButtonOptions } from '../../../../sun/js/buttons/RectangularToggleButton.js';
-import Property from '../../../../axon/js/Property.js';
+import geometricOptics from '../../geometricOptics';
+import lockSolidShape from '../../../sherpa/fontawesome-5/lockSolidShape';
+import unlockSolidShape from '../../../sherpa/fontawesome-5/unlockSolidShape';
+import { AlignBox, AlignGroup, HBox, type HBoxOptions, type NodeTranslationOptions, Path } from '../../../scenery/imports';
+import CueingArrowsNode from './CueingArrowsNode';
+import ButtonNode from '../../../sun/buttons/ButtonNode';
+import PhetColorScheme from '../../../scenery-phet/PhetColorScheme';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import optionize, { combineOptions, type EmptySelfOptions } from '../../../phet-core/optionize';
+import { type ObjectDragMode } from './ObjectDragMode';
+import ToggleNode from '../../../sun/ToggleNode';
+import RectangularToggleButton, { type RectangularToggleButtonOptions } from '../../../sun/buttons/RectangularToggleButton';
+import Property from '../../../axon/Property';
 
 const ARROWS_SCALE = 0.65;
 const LOCK_SCALE = 0.045;
@@ -38,7 +38,7 @@ export default class ObjectDragModeToggleButton extends RectangularToggleButton<
    * @param objectDragModeProperty - constrains how an optical object can be dragged
    * @param providedOptions
    */
-  public constructor( objectDragModeProperty: Property<ObjectDragMode>, providedOptions?: DragLockedButtonOptions ) {
+  public constructor(objectDragModeProperty: Property<ObjectDragMode>, providedOptions?: DragLockedButtonOptions) {
 
     // To make both icons have the same effective size
     const alignBoxOptions = {
@@ -50,44 +50,44 @@ export default class ObjectDragModeToggleButton extends RectangularToggleButton<
     };
 
     // 4-way arrow to indicate free dragging
-    const freeDraggingNode = new AlignBox( new HBox( combineOptions<HBoxOptions>( {}, hBoxOptions, {
+    const freeDraggingNode = new AlignBox(new HBox(combineOptions<HBoxOptions>({}, hBoxOptions, {
       children: [
-        new CueingArrowsNode( {
+        new CueingArrowsNode({
           direction: 'both',
           fill: UNLOCKED_FILL,
           stroke: null,
           scale: ARROWS_SCALE
-        } ),
-        new Path( unlockSolidShape, {
+        }),
+        new Path(unlockSolidShape, {
           fill: UNLOCKED_FILL,
           scale: LOCK_SCALE
-        } )
+        })
       ]
-    } ) ), alignBoxOptions );
+    })), alignBoxOptions);
 
     // horizontal 2-way arrow to indicate horizontal dragging
-    const horizontalDragNode = new AlignBox( new HBox( combineOptions<HBoxOptions>( {}, hBoxOptions, {
+    const horizontalDragNode = new AlignBox(new HBox(combineOptions<HBoxOptions>({}, hBoxOptions, {
       children: [
-        new CueingArrowsNode( {
+        new CueingArrowsNode({
           direction: 'horizontal',
           fill: LOCKED_FILL,
           stroke: null,
           scale: ARROWS_SCALE
-        } ),
-        new Path( lockSolidShape, {
+        }),
+        new Path(lockSolidShape, {
           fill: LOCKED_FILL,
           scale: LOCK_SCALE
-        } )
+        })
       ]
-    } ) ), alignBoxOptions );
+    })), alignBoxOptions);
 
-    const options = optionize<DragLockedButtonOptions, SelfOptions, RectangularToggleButtonOptions>()( {
+    const options = optionize<DragLockedButtonOptions, SelfOptions, RectangularToggleButtonOptions>()({
 
       // RectangularToggleButtonOptions
-      content: new ToggleNode<ObjectDragMode>( objectDragModeProperty, [
+      content: new ToggleNode<ObjectDragMode>(objectDragModeProperty, [
         { value: 'freeDragging', createNode: () => freeDraggingNode },
         { value: 'horizontalDragging', createNode: () => horizontalDragNode }
-      ] ),
+      ]),
       baseColor: 'transparent',
       disabledColor: 'transparent',
       buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
@@ -98,15 +98,15 @@ export default class ObjectDragModeToggleButton extends RectangularToggleButton<
       mouseAreaYDilation: 5,
       isDisposable: false,
       phetioEnabledPropertyInstrumented: false
-    }, providedOptions );
+    }, providedOptions);
 
-    super( objectDragModeProperty, 'freeDragging', 'horizontalDragging', options );
+    super(objectDragModeProperty, 'freeDragging', 'horizontalDragging', options);
 
-    objectDragModeProperty.link( objectDragMode => {
-      freeDraggingNode.visible = ( objectDragMode === 'freeDragging' );
-      horizontalDragNode.visible = ( objectDragMode === 'horizontalDragging' );
-    } );
+    objectDragModeProperty.link(objectDragMode => {
+      freeDraggingNode.visible = (objectDragMode === 'freeDragging');
+      horizontalDragNode.visible = (objectDragMode === 'horizontalDragging');
+    });
   }
 }
 
-geometricOptics.register( 'ObjectDragModeToggleButton', ObjectDragModeToggleButton );
+geometricOptics.register('ObjectDragModeToggleButton', ObjectDragModeToggleButton);

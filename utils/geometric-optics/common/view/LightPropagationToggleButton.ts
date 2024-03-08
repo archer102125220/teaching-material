@@ -7,16 +7,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import SceneryPhetConstants from '../../../../scenery-phet/js/SceneryPhetConstants.js';
-import { Image } from '../../../../scenery/js/imports.js';
-import BooleanRoundToggleButton, { BooleanRoundToggleButtonOptions } from '../../../../sun/js/buttons/BooleanRoundToggleButton.js';
-import lightPropagationOffIcon_png from '../../../images/lightPropagationOffIcon_png.js';
-import lightPropagationOnIcon_png from '../../../images/lightPropagationOnIcon_png.js';
-import geometricOptics from '../../geometricOptics.js';
-import GOColors from '../GOColors.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import Property from '../../../../axon/js/Property.js';
+import SceneryPhetConstants from '../../../scenery-phet/SceneryPhetConstants';
+import { Image } from '../../../scenery/imports';
+import BooleanRoundToggleButton, { type BooleanRoundToggleButtonOptions } from '../../../sun/buttons/BooleanRoundToggleButton';
+import lightPropagationOffIcon_png from '@/assets/images/geometric-optics/lightPropagationOffIcon_png';
+import lightPropagationOnIcon_png from '@/assets/images/geometric-optics/lightPropagationOnIcon_png';
+import geometricOptics from '../../geometricOptics';
+import GOColors from '../GOColors';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import Property from '../../../axon/Property';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -24,9 +24,9 @@ type LightPropagationToggleButtonOptions = SelfOptions & PickRequired<BooleanRou
 
 export default class LightPropagationToggleButton extends BooleanRoundToggleButton {
 
-  public constructor( booleanProperty: Property<boolean>, providedOptions: LightPropagationToggleButtonOptions ) {
+  public constructor(booleanProperty: Property<boolean>, providedOptions: LightPropagationToggleButtonOptions) {
 
-    const options = optionize<LightPropagationToggleButtonOptions, SelfOptions, BooleanRoundToggleButtonOptions>()( {
+    const options = optionize<LightPropagationToggleButtonOptions, SelfOptions, BooleanRoundToggleButtonOptions>()({
 
       // BooleanRoundToggleButtonOptions
       radius: SceneryPhetConstants.DEFAULT_BUTTON_RADIUS, // so that this button will be the same size as ResetAllButton
@@ -35,14 +35,14 @@ export default class LightPropagationToggleButton extends BooleanRoundToggleButt
       touchAreaDilation: 5.2, // same as ResetAllButton
       baseColor: GOColors.lightPropagationToggleButtonFillProperty,
       isDisposable: false
-    }, providedOptions );
+    }, providedOptions);
 
     // create nodes for open and closed eye icons
-    const onNode = new Image( lightPropagationOnIcon_png );
-    const offNode = new Image( lightPropagationOffIcon_png );
+    const onNode = new Image(lightPropagationOnIcon_png);
+    const offNode = new Image(lightPropagationOffIcon_png);
 
-    super( booleanProperty, onNode, offNode, options );
+    super(booleanProperty, onNode, offNode, options);
   }
 }
 
-geometricOptics.register( 'LightPropagationToggleButton', LightPropagationToggleButton );
+geometricOptics.register('LightPropagationToggleButton', LightPropagationToggleButton);

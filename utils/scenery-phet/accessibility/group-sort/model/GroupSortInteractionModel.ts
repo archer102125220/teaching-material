@@ -48,24 +48,24 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import sceneryPhet from '../../../sceneryPhet.js';
-import optionize from '../../../../../phet-core/js/optionize.js';
-import Property from '../../../../../axon/js/Property.js';
-import Tandem from '../../../../../tandem/js/Tandem.js';
-import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
-import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
-import DerivedProperty from '../../../../../axon/js/DerivedProperty.js';
-import PhetioObject, { PhetioObjectOptions } from '../../../../../tandem/js/PhetioObject.js';
-import TProperty from '../../../../../axon/js/TProperty.js';
-import EnabledComponent, { EnabledComponentOptions } from '../../../../../axon/js/EnabledComponent.js';
-import IOType from '../../../../../tandem/js/types/IOType.js';
-import ReferenceIO from '../../../../../tandem/js/types/ReferenceIO.js';
-import NullableIO from '../../../../../tandem/js/types/NullableIO.js';
+import sceneryPhet from '../../../sceneryPhet';
+import optionize from '../../../../phet-core/optionize';
+import Property from '../../../../axon/Property';
+import Tandem from '../../../../tandem/Tandem';
+import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
+import BooleanProperty from '../../../../axon/BooleanProperty';
+import DerivedProperty from '../../../../axon/DerivedProperty';
+import PhetioObject, { type PhetioObjectOptions } from '../../../../tandem/PhetioObject';
+import type TProperty from '../../../../axon/TProperty';
+import EnabledComponent, { type EnabledComponentOptions } from '../../../../axon/EnabledComponent';
+import IOType from '../../../../tandem/types/IOType';
+import ReferenceIO from '../../../../tandem/types/ReferenceIO';
+import NullableIO from '../../../../tandem/types/NullableIO';
 
 type SelfOptions<ItemModel> = {
 
   // A function that returns the "value" for a group item set to it. The value is where the item should be sorted. Null means that it isn't part of this interaction (different scene/not active/etc).
-  getGroupItemValue: ( itemModel: ItemModel ) => number | null;
+  getGroupItemValue: (itemModel: ItemModel) => number | null;
 } & Pick<PhetioObjectOptions, 'tandem'>;
 
 type ParentOptions = EnabledComponentOptions;
@@ -81,7 +81,7 @@ export default class GroupSortInteractionModel<ItemModel> extends EnabledCompone
 
   // Whether a group item is being grabbed via keyboard interaction. When true, the focus highlight will display as
   // dashed instead of solid.
-  public readonly isGroupItemKeyboardGrabbedProperty = new BooleanProperty( false );
+  public readonly isGroupItemKeyboardGrabbedProperty = new BooleanProperty(false);
 
   // Whether the 'Press SPACE to Grab or Release' dialog is showing
   public readonly grabReleaseCueVisibleProperty: TReadOnlyProperty<boolean>;
@@ -90,17 +90,17 @@ export default class GroupSortInteractionModel<ItemModel> extends EnabledCompone
   public readonly keyboardSortCueVisibleProperty: TReadOnlyProperty<boolean>;
 
   // Whether the keyboard is currently focused on a sim component
-  public readonly isKeyboardFocusedProperty = new BooleanProperty( false );
+  public readonly isKeyboardFocusedProperty = new BooleanProperty(false);
 
   // Properties that switch to true when the specified action has occurred once.
-  public readonly hasKeyboardGrabbedGroupItemProperty = new BooleanProperty( false );
+  public readonly hasKeyboardGrabbedGroupItemProperty = new BooleanProperty(false);
 
   // Whether a group item has been sorted with keyboard input.
-  public readonly hasKeyboardSortedGroupItemProperty = new BooleanProperty( false );
+  public readonly hasKeyboardSortedGroupItemProperty = new BooleanProperty(false);
 
   // Whether the user has changed the selected group item with the keyboard controls. Note, this will not be true until
   // the selection changes from the default upon focus.
-  public readonly hasKeyboardSelectedGroupItemProperty = new BooleanProperty( false );
+  public readonly hasKeyboardSelectedGroupItemProperty = new BooleanProperty(false);
 
   // Whether the mouse/touch sort icon cue is currently showing on the group item area
   // TODO: MS and JB! Does this make sense to live inside of GroupSortInteractionModel? https://github.com/phetsims/mean-share-and-balance/issues/141
@@ -109,7 +109,7 @@ export default class GroupSortInteractionModel<ItemModel> extends EnabledCompone
   //                  2. We need to update this value based on sim logic AND hard coded group sort logic (like mouseSortCueShouldBeVisible())
   //                  3. We need to manually call registerUpdateSortCueNode() in addition to any other spots that update the mouse sort cue.
   //                  4. Noting here that we don't have any code in group sort about creating the mouse cue Node itself (just the visibleProperty and if it should be shown from our perspective)
-  public readonly mouseSortCueVisibleProperty = new BooleanProperty( false );
+  public readonly mouseSortCueVisibleProperty = new BooleanProperty(false);
 
   // A PhET-iO specific Property for opting out of showing the visual mouse cue. This is not reset, and is used to
   // calculate the visibility of the mouse cue. If true, it doesn't mean that the cue is visible, but that it is possible
@@ -118,81 +118,81 @@ export default class GroupSortInteractionModel<ItemModel> extends EnabledCompone
 
   // Whether a group item has been sorted with mouse/touch (non keyboard) input. This is set to true from outside
   // input (not from keyboard/group sort input), but is important for cue showing.
-  public readonly hasMouseSortedGroupItemProperty = new BooleanProperty( false );
+  public readonly hasMouseSortedGroupItemProperty = new BooleanProperty(false);
 
   // Whether any group item has yet been sorted to a new value, even if not by the "group sort" interaction. This
   // Property should be used to control the mouseSortCueVisibleProperty. The mouse sort cue does not need to be shown
   // if a keyboard sort has occurred (because now the user knows that the group items are sortable).
   public readonly hasGroupItemBeenSortedProperty: TReadOnlyProperty<boolean>;
 
-  public readonly getGroupItemValue: ( itemModel: ItemModel ) => number | null;
+  public readonly getGroupItemValue: (itemModel: ItemModel) => number | null;
 
-  public constructor( providedOptions?: GroupSortInteractionModelOptions<ItemModel> ) {
+  public constructor(providedOptions?: GroupSortInteractionModelOptions<ItemModel>) {
 
-    const options = optionize<GroupSortInteractionModelOptions<ItemModel>, SelfOptions<ItemModel>, ParentOptions>()( {
+    const options = optionize<GroupSortInteractionModelOptions<ItemModel>, SelfOptions<ItemModel>, ParentOptions>()({
       tandem: Tandem.REQUIRED,
       phetioEnabledPropertyInstrumented: false // enabledProperty doesn't need to be in PhET-iO
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.getGroupItemValue = options.getGroupItemValue;
 
-    this.selectedGroupItemProperty = new Property<ItemModel | null>( null, {
+    this.selectedGroupItemProperty = new Property<ItemModel | null>(null, {
       isValidValue: x => !!x || x === null,
-      tandem: options.tandem.createTandem( 'selectedGroupItemProperty' ),
-      phetioValueType: NullableIO( ReferenceIO( IOType.ObjectIO ) ),
+      tandem: options.tandem.createTandem('selectedGroupItemProperty'),
+      phetioValueType: NullableIO(ReferenceIO(IOType.ObjectIO)),
       phetioReadOnly: true,
       phetioDocumentation: 'For PhET-iO internal use only. Tracks the current selection for the interaction. Null means there is no selection.'
-    } );
+    });
 
-    assert && this.selectedGroupItemProperty.lazyLink( selectedGroupItem => {
+    assert && this.selectedGroupItemProperty.lazyLink(selectedGroupItem => {
       // TODO: Turn this on! But we can't until reorganizeStack respects the selection first. Note! This can cause a very weird bug where while sorting, all soccer balls end up in the same stack when using the arrow keys. I believe it is because reorganize stack triggers a call to change the selection to a different ball (keeping it in the large stack) https://github.com/phetsims/soccer-common/issues/7
       // assert && assert( !this.isGroupItemKeyboardGrabbedProperty.value, 'should not change selection when sorting' );
 
       // If we are PhET-iO instrumented, so should the selection.
-      if ( Tandem.VALIDATION && selectedGroupItem && options.tandem.supplied ) {
-        assert && assert( selectedGroupItem instanceof PhetioObject && selectedGroupItem.isPhetioInstrumented(),
-          'instrumented GroupSortInteractionModels require its group items to be instrumented.' );
+      if (Tandem.VALIDATION && selectedGroupItem && options.tandem.supplied) {
+        assert && assert(selectedGroupItem instanceof PhetioObject && selectedGroupItem.isPhetioInstrumented(),
+          'instrumented GroupSortInteractionModels require its group items to be instrumented.');
       }
-    } );
+    });
 
-    this.showMouseCueProperty = new BooleanProperty( true, {
-      tandem: options.tandem.createTandem( 'showMouseCueProperty' ),
+    this.showMouseCueProperty = new BooleanProperty(true, {
+      tandem: options.tandem.createTandem('showMouseCueProperty'),
       phetioDocumentation: 'This controls if the visual cue Node for mouse/touch sorting is displayed. Set to false ' +
-                           'to hide the cue. A value of true does not mean the cue is visible, but instead that it can ' +
-                           'be shown when appropriate'
-    } );
+        'to hide the cue. A value of true does not mean the cue is visible, but instead that it can ' +
+        'be shown when appropriate'
+    });
 
-    this.hasGroupItemBeenSortedProperty = new DerivedProperty( [
+    this.hasGroupItemBeenSortedProperty = new DerivedProperty([
       this.hasMouseSortedGroupItemProperty,
       this.hasKeyboardSortedGroupItemProperty,
       this.showMouseCueProperty
-    ], ( hasMouseSortedGroupItem, hasKeyboardSortedGroupItem, showMouseCue ) => {
+    ], (hasMouseSortedGroupItem, hasKeyboardSortedGroupItem, showMouseCue) => {
       return hasMouseSortedGroupItem || hasKeyboardSortedGroupItem || !showMouseCue;
-    } );
+    });
 
-    this.grabReleaseCueVisibleProperty = new DerivedProperty( [
+    this.grabReleaseCueVisibleProperty = new DerivedProperty([
       this.selectedGroupItemProperty,
       this.hasKeyboardGrabbedGroupItemProperty,
       this.isKeyboardFocusedProperty,
       this.enabledProperty
-    ], ( selectedGroupItem, hasGrabbedGroupItem, hasKeyboardFocus, enabled ) => {
+    ], (selectedGroupItem, hasGrabbedGroupItem, hasKeyboardFocus, enabled) => {
       return selectedGroupItem !== null && !hasGrabbedGroupItem && hasKeyboardFocus && enabled;
-    } );
+    });
 
-    this.keyboardSortCueVisibleProperty = new DerivedProperty( [
+    this.keyboardSortCueVisibleProperty = new DerivedProperty([
       this.selectedGroupItemProperty,
       this.isGroupItemKeyboardGrabbedProperty,
       this.isKeyboardFocusedProperty,
       this.hasKeyboardSortedGroupItemProperty
-    ], ( selectedGroupItem, isGroupItemKeyboardGrabbed, isKeyboardFocused, hasKeyboardSortedGroupItem ) =>
-      selectedGroupItem !== null && isGroupItemKeyboardGrabbed && isKeyboardFocused && !hasKeyboardSortedGroupItem );
+    ], (selectedGroupItem, isGroupItemKeyboardGrabbed, isKeyboardFocused, hasKeyboardSortedGroupItem) =>
+      selectedGroupItem !== null && isGroupItemKeyboardGrabbed && isKeyboardFocused && !hasKeyboardSortedGroupItem);
   }
 
   // Wrap this in a function to make sure that hasMouseSortedGroupItemProperty is never read or listened to. Instead,
   // listen to hasGroupItemBeenSortedProperty (like to set the mouseSortCueVisibleProperty).
-  public setMouseSortedGroupItem( sortedByMouse: boolean ): void {
+  public setMouseSortedGroupItem(sortedByMouse: boolean): void {
     this.hasMouseSortedGroupItemProperty.value = sortedByMouse;
   }
 
@@ -201,8 +201,8 @@ export default class GroupSortInteractionModel<ItemModel> extends EnabledCompone
   // of the Node. TODO: add this.enabledProperty into this like is done for soccer-common? https://github.com/phetsims/mean-share-and-balance/issues/141
   public mouseSortCueShouldBeVisible(): boolean {
     return !this.hasGroupItemBeenSortedProperty.value &&
-           !this.isKeyboardFocusedProperty.value &&
-           this.enabled;
+      !this.isKeyboardFocusedProperty.value &&
+      this.enabled;
   }
 
   /**
@@ -233,22 +233,22 @@ export default class GroupSortInteractionModel<ItemModel> extends EnabledCompone
 
   // Register your closure responsible for updating the sort-indicator node. This should be called with a callback that
   // updates mouseSortCueVisibleProperty() and maybe does other things.
-  public registerUpdateSortCueNode( updateSortIndicatorNode: () => void ): void {
-    this.mouseSortCueVisibleProperty.link( updateSortIndicatorNode );
-    this.showMouseCueProperty.link( updateSortIndicatorNode );
-    this.enabledProperty.link( updateSortIndicatorNode );
-    this.selectedGroupItemProperty.link( updateSortIndicatorNode );
-    this.hasGroupItemBeenSortedProperty.link( updateSortIndicatorNode );
-    this.isKeyboardFocusedProperty.link( updateSortIndicatorNode );
+  public registerUpdateSortCueNode(updateSortIndicatorNode: () => void): void {
+    this.mouseSortCueVisibleProperty.link(updateSortIndicatorNode);
+    this.showMouseCueProperty.link(updateSortIndicatorNode);
+    this.enabledProperty.link(updateSortIndicatorNode);
+    this.selectedGroupItemProperty.link(updateSortIndicatorNode);
+    this.hasGroupItemBeenSortedProperty.link(updateSortIndicatorNode);
+    this.isKeyboardFocusedProperty.link(updateSortIndicatorNode);
 
-    this.disposeEmitter.addListener( () => {
-      this.isKeyboardFocusedProperty.unlink( updateSortIndicatorNode );
-      this.hasGroupItemBeenSortedProperty.unlink( updateSortIndicatorNode );
-      this.mouseSortCueVisibleProperty.unlink( updateSortIndicatorNode );
-      this.enabledProperty.unlink( updateSortIndicatorNode );
-      this.showMouseCueProperty.unlink( updateSortIndicatorNode );
-      this.selectedGroupItemProperty.unlink( updateSortIndicatorNode );
-    } );
+    this.disposeEmitter.addListener(() => {
+      this.isKeyboardFocusedProperty.unlink(updateSortIndicatorNode);
+      this.hasGroupItemBeenSortedProperty.unlink(updateSortIndicatorNode);
+      this.mouseSortCueVisibleProperty.unlink(updateSortIndicatorNode);
+      this.enabledProperty.unlink(updateSortIndicatorNode);
+      this.showMouseCueProperty.unlink(updateSortIndicatorNode);
+      this.selectedGroupItemProperty.unlink(updateSortIndicatorNode);
+    });
   }
 
   public override dispose(): void {
@@ -266,4 +266,4 @@ export default class GroupSortInteractionModel<ItemModel> extends EnabledCompone
   }
 }
 
-sceneryPhet.register( 'GroupSortInteractionModel', GroupSortInteractionModel );
+sceneryPhet.register('GroupSortInteractionModel', GroupSortInteractionModel);

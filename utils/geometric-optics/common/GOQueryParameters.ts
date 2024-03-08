@@ -8,6 +8,8 @@
  * @author Martin Veillette
  */
 
+import _ from 'lodash';
+
 import RangeWithValue from '../../dot/RangeWithValue';
 import logGlobal from '../../phet-core/logGlobal';
 import geometricOptics from '../geometricOptics';

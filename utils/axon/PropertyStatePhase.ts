@@ -11,7 +11,7 @@
 
 import Enumeration from '../phet-core/Enumeration';
 import EnumerationValue from '../phet-core/EnumerationValue';
-import axon from './axon.js';
+import axon from './axon';
 
 class PropertyStatePhase extends EnumerationValue {
   public static readonly UNDEFER = new PropertyStatePhase();

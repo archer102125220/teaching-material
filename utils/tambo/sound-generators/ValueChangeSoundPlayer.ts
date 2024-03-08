@@ -16,48 +16,48 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import Range from '../../../dot/js/Range.js';
-import Utils from '../../../dot/js/Utils.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
-import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
-import TSoundPlayer from '../TSoundPlayer.js';
-import phetAudioContext from '../phetAudioContext.js';
-import generalBoundaryBoopSoundPlayer from '../shared-sound-players/generalBoundaryBoopSoundPlayer.js';
-import generalSoftClickSoundPlayer from '../shared-sound-players/generalSoftClickSoundPlayer.js';
-import nullSoundPlayer from '../shared-sound-players/nullSoundPlayer.js';
-import tambo from '../tambo.js';
-import SoundClip from './SoundClip.js';
-import SoundClipPlayer from './SoundClipPlayer.js';
-import { Disposable, DisposableOptions, TinyProperty, TReadOnlyProperty } from '../../../axon/js/imports.js';
+import Range from '../../dot/Range';
+import Utils from '../../dot/Utils';
+import optionize from '../../phet-core/optionize';
+import generalBoundaryBoop_mp3 from '@/assets/sounds/tambo/generalBoundaryBoop_mp3';
+import generalSoftClick_mp3 from '@/assets/sounds/tambo/generalSoftClick_mp3';
+import type TSoundPlayer from '../TSoundPlayer';
+import phetAudioContext from '../phetAudioContext';
+import generalBoundaryBoopSoundPlayer from '../shared-sound-players/generalBoundaryBoopSoundPlayer';
+import generalSoftClickSoundPlayer from '../shared-sound-players/generalSoftClickSoundPlayer';
+import nullSoundPlayer from '../shared-sound-players/nullSoundPlayer';
+import tambo from '../tambo';
+import SoundClip from './SoundClip';
+import SoundClipPlayer from './SoundClipPlayer';
+import { Disposable, type DisposableOptions, TinyProperty, type TReadOnlyProperty } from '../../axon/imports';
 
 // constants
 const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary
-const DEFAULT_MIN_SOUND_PLAYER = new SoundClipPlayer( generalBoundaryBoop_mp3, {
+const DEFAULT_MIN_SOUND_PLAYER = new SoundClipPlayer(generalBoundaryBoop_mp3, {
   soundClipOptions: {
     initialOutputLevel: 0.2,
-    initialPlaybackRate: 1 / Math.pow( 2, 1 / 6 ) // a major second lower
+    initialPlaybackRate: 1 / Math.pow(2, 1 / 6) // a major second lower
   },
   soundManagerOptions: { categoryName: 'user-interface' }
-} );
-const DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER = new SoundClipPlayer( generalSoftClick_mp3, {
+});
+const DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER = new SoundClipPlayer(generalSoftClick_mp3, {
   soundClipOptions: {
     initialOutputLevel: 0.2,
-    initialPlaybackRate: 1 / Math.pow( 2, 1 / 6 ) // a major second lower
+    initialPlaybackRate: 1 / Math.pow(2, 1 / 6) // a major second lower
   },
   soundManagerOptions: { categoryName: 'user-interface' }
-} );
+});
 
 // Define a default constraint function.  See the docs for the associated option for more info.  The interval value used
 // here was empirically determined.
-const DEFAULT_VALUE_CONSTRAINT = ( value: number ) => Utils.roundToInterval( value, 0.000000001 );
+const DEFAULT_VALUE_CONSTRAINT = (value: number) => Utils.roundToInterval(value, 0.000000001);
 
 // A "no-op" function for mapping pitch values.  Always returns one, which signifies no change to the playback rate.
 const NO_PLAYBACK_RATE_CHANGE = () => 1;
 
 // A function for a stubbed sound player, see usage.
 const STUB_SOUND_PLAYER_FUNCTION = (): void => {
-  assert && assert( false, 'Code error: This is a stubbed function and should never be invoked.' );
+  assert && assert(false, 'Code error: This is a stubbed function and should never be invoked.');
 };
 
 type SelfOptions = {
@@ -69,8 +69,8 @@ type SelfOptions = {
   middleMovingDownSoundPlayer?: TSoundPlayer | SoundClip;
 
   // Functions that, if provided, will alter the playback rates of the middle sounds based on the provided value.
-  middleMovingUpPlaybackRateMapper?: ( value: number ) => number;
-  middleMovingDownPlaybackRateMapper?: ( value: number ) => number;
+  middleMovingUpPlaybackRateMapper?: (value: number) => number;
+  middleMovingDownPlaybackRateMapper?: (value: number) => number;
 
   // The number of thresholds that, when reached or crossed, will cause a sound to be played when checking value changes
   // against thresholds.  In other words, this is the number of thresholds that exist between the min and max values.
@@ -92,7 +92,7 @@ type SelfOptions = {
   // sounds not to be generated when they should.  Use _.identity for a "no-op" if no constraint is needed.  This is
   // used for multiple values, but is called "constrainValue" rather than "constrainValues" to match the pre-existing
   // option name in the Slider class.  See https://github.com/phetsims/sun/issues/697#issuecomment-1066850181.
-  constrainValue?: ( n: number ) => number;
+  constrainValue?: (n: number) => number;
 
   // The sound player that is used to indicate the minimum value.
   minSoundPlayer?: TSoundPlayer;
@@ -122,10 +122,10 @@ class ValueChangeSoundPlayer extends Disposable {
   private readonly middleMovingDownSoundPlayer: TSoundPlayer | SoundClip;
 
   // playback rate mapper for middle sounds and upward value changes
-  private readonly middleMovingUpPlaybackRateMapper: ( value: number ) => number;
+  private readonly middleMovingUpPlaybackRateMapper: (value: number) => number;
 
   // playback rate mapper for middle sounds and downward value changes
-  private readonly middleMovingDownPlaybackRateMapper: ( value: number ) => number;
+  private readonly middleMovingDownPlaybackRateMapper: (value: number) => number;
 
   // Sound players for the min and max values.  If nothing is provided a default will be used.  If the flag
   // USE_MIDDLE_SOUND is provided, the sound player for the middle range will be used.
@@ -136,7 +136,7 @@ class ValueChangeSoundPlayer extends Disposable {
   private readonly minimumInterMiddleSoundTime: number;
 
   // function to constrain the values used for thresholds and comparisons
-  private readonly constrainValue: ( n: number ) => number;
+  private readonly constrainValue: (n: number) => number;
 
   // time of most recently played middle sound, used to moderate the rate at which these sounds are played
   private timeOfMostRecentMiddleSound: number;
@@ -145,9 +145,9 @@ class ValueChangeSoundPlayer extends Disposable {
    * @param valueRange - the range of values expected and over which sounds will be played
    * @param [providedOptions]
    */
-  public constructor( valueRange: Range | TReadOnlyProperty<Range>, providedOptions?: ValueChangeSoundPlayerOptions ) {
+  public constructor(valueRange: Range | TReadOnlyProperty<Range>, providedOptions?: ValueChangeSoundPlayerOptions) {
 
-    const options = optionize<ValueChangeSoundPlayerOptions, SelfOptions, DisposableOptions>()( {
+    const options = optionize<ValueChangeSoundPlayerOptions, SelfOptions, DisposableOptions>()({
       middleMovingUpSoundPlayer: generalSoftClickSoundPlayer,
       middleMovingDownSoundPlayer: DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER,
       middleMovingUpPlaybackRateMapper: NO_PLAYBACK_RATE_CHANGE,
@@ -158,11 +158,11 @@ class ValueChangeSoundPlayer extends Disposable {
       minSoundPlayer: DEFAULT_MIN_SOUND_PLAYER,
       maxSoundPlayer: generalBoundaryBoopSoundPlayer,
       minimumInterMiddleSoundTime: 0.035 // empirically determined
-    }, providedOptions );
+    }, providedOptions);
 
     // option validity checks
     assert && assert(
-    options.minimumInterMiddleSoundTime >= 0 && options.minimumInterMiddleSoundTime < 1,
+      options.minimumInterMiddleSoundTime >= 0 && options.minimumInterMiddleSoundTime < 1,
       `unreasonable value for minimumInterMiddleSoundTime: ${options.minimumInterMiddleSoundTime}`
     );
     assert && assert(
@@ -170,7 +170,7 @@ class ValueChangeSoundPlayer extends Disposable {
       'cannot specify both the number of middle thresholds and the inter-threshold delta'
     );
     assert && assert(
-      options.numberOfMiddleThresholds === null || Number.isInteger( options.numberOfMiddleThresholds ),
+      options.numberOfMiddleThresholds === null || Number.isInteger(options.numberOfMiddleThresholds),
       'numberOfMiddleThresholds must be an integer if specified'
     );
 
@@ -190,13 +190,13 @@ class ValueChangeSoundPlayer extends Disposable {
     );
 
     // Set default number of middle thresholds if necessary.
-    if ( options.numberOfMiddleThresholds === null && options.interThresholdDelta === null ) {
+    if (options.numberOfMiddleThresholds === null && options.interThresholdDelta === null) {
       options.numberOfMiddleThresholds = DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS;
     }
 
-    super( options );
+    super(options);
 
-    this.valueRangeProperty = valueRange instanceof Range ? new TinyProperty( valueRange ) : valueRange;
+    this.valueRangeProperty = valueRange instanceof Range ? new TinyProperty(valueRange) : valueRange;
     this.middleMovingUpSoundPlayer = options.middleMovingUpSoundPlayer;
     this.middleMovingDownSoundPlayer = options.middleMovingDownSoundPlayer;
     this.middleMovingUpPlaybackRateMapper = options.middleMovingUpPlaybackRateMapper;
@@ -208,69 +208,69 @@ class ValueChangeSoundPlayer extends Disposable {
     this.constrainValue = options.constrainValue;
 
     // No need to dispose. Sound generators do not get disposed.
-    const rangeChangeListener = ( valueRange: Range ) => {
-      if ( options.numberOfMiddleThresholds !== null ) {
-        this.interThresholdDistance = valueRange.getLength() / ( options.numberOfMiddleThresholds + 1 );
+    const rangeChangeListener = (valueRange: Range) => {
+      if (options.numberOfMiddleThresholds !== null) {
+        this.interThresholdDistance = valueRange.getLength() / (options.numberOfMiddleThresholds + 1);
       }
-      else if ( options.interThresholdDelta !== null ) {
+      else if (options.interThresholdDelta !== null) {
         this.interThresholdDistance = options.interThresholdDelta;
       }
       else {
-        assert && assert( false, 'should never get here, it is a logic error if we do' );
+        assert && assert(false, 'should never get here, it is a logic error if we do');
         this.interThresholdDistance = valueRange.getLength() / 2; // avoid uninitialized compile-time error
       }
     };
-    this.valueRangeProperty.link( rangeChangeListener );
+    this.valueRangeProperty.link(rangeChangeListener);
 
-    this.disposeEmitter.addListener( () => {
-      this.valueRangeProperty.unlink( rangeChangeListener );
-    } );
+    this.disposeEmitter.addListener(() => {
+      this.valueRangeProperty.unlink(rangeChangeListener);
+    });
   }
 
   /**
    * Check if the new value has reached or crossed a threshold and, if so, play the appropriate sound.  If no threshold
    * has been reached or crossed and the new value is not at the min or max, no sound will be played.
    */
-  public playSoundIfThresholdReached( newValue: number, oldValue: number ): void {
+  public playSoundIfThresholdReached(newValue: number, oldValue: number): void {
 
-    if ( newValue !== oldValue ) {
+    if (newValue !== oldValue) {
 
-      const constrainedNewValue = this.constrainValue( newValue );
-      const constrainedOldValue = this.constrainValue( oldValue );
+      const constrainedNewValue = this.constrainValue(newValue);
+      const constrainedOldValue = this.constrainValue(oldValue);
 
-      const oldValueSurroundingThresholds = this.getSurroundingThresholds( constrainedOldValue );
-      const newValueSurroundingThresholds = this.getSurroundingThresholds( constrainedNewValue );
+      const oldValueSurroundingThresholds = this.getSurroundingThresholds(constrainedOldValue);
+      const newValueSurroundingThresholds = this.getSurroundingThresholds(constrainedNewValue);
 
-      const thresholdCrossed = ( oldValueSurroundingThresholds.length === 1 &&
-                                 newValueSurroundingThresholds.length === 1 &&
-                                 Math.abs( oldValueSurroundingThresholds[ 0 ] - newValueSurroundingThresholds[ 0 ] ) > this.interThresholdDistance
-                               ) ||
-                               ( oldValueSurroundingThresholds.length === 1 &&
-                                 newValueSurroundingThresholds.length === 2 &&
-                                 oldValueSurroundingThresholds[ 0 ] !== newValueSurroundingThresholds[ 0 ] &&
-                                 oldValueSurroundingThresholds[ 0 ] !== newValueSurroundingThresholds[ 1 ]
-                               ) ||
-                               (
-                                 oldValueSurroundingThresholds.length === 2 &&
-                                 newValueSurroundingThresholds.length === 1 &&
-                                 newValueSurroundingThresholds[ 0 ] !== oldValueSurroundingThresholds[ 0 ] &&
-                                 newValueSurroundingThresholds[ 0 ] !== oldValueSurroundingThresholds[ 1 ]
-                               ) ||
-                               (
-                                 oldValueSurroundingThresholds.length === 2 &&
-                                 newValueSurroundingThresholds.length === 2 &&
-                                 newValueSurroundingThresholds[ 0 ] !== oldValueSurroundingThresholds[ 0 ]
-                               );
+      const thresholdCrossed = (oldValueSurroundingThresholds.length === 1 &&
+        newValueSurroundingThresholds.length === 1 &&
+        Math.abs(oldValueSurroundingThresholds[0] - newValueSurroundingThresholds[0]) > this.interThresholdDistance
+      ) ||
+        (oldValueSurroundingThresholds.length === 1 &&
+          newValueSurroundingThresholds.length === 2 &&
+          oldValueSurroundingThresholds[0] !== newValueSurroundingThresholds[0] &&
+          oldValueSurroundingThresholds[0] !== newValueSurroundingThresholds[1]
+        ) ||
+        (
+          oldValueSurroundingThresholds.length === 2 &&
+          newValueSurroundingThresholds.length === 1 &&
+          newValueSurroundingThresholds[0] !== oldValueSurroundingThresholds[0] &&
+          newValueSurroundingThresholds[0] !== oldValueSurroundingThresholds[1]
+        ) ||
+        (
+          oldValueSurroundingThresholds.length === 2 &&
+          newValueSurroundingThresholds.length === 2 &&
+          newValueSurroundingThresholds[0] !== oldValueSurroundingThresholds[0]
+        );
       const thresholdReached = newValueSurroundingThresholds.length === 1 &&
-                               ( oldValueSurroundingThresholds.length === 2 ||
-                                 oldValueSurroundingThresholds[ 0 ] !== newValueSurroundingThresholds[ 0 ] );
+        (oldValueSurroundingThresholds.length === 2 ||
+          oldValueSurroundingThresholds[0] !== newValueSurroundingThresholds[0]);
 
-      if ( thresholdCrossed ||
-           thresholdReached ||
-           constrainedNewValue === this.valueRangeProperty.value.min ||
-           constrainedNewValue === this.valueRangeProperty.value.max
+      if (thresholdCrossed ||
+        thresholdReached ||
+        constrainedNewValue === this.valueRangeProperty.value.min ||
+        constrainedNewValue === this.valueRangeProperty.value.max
       ) {
-        this.playSoundForValueChange( newValue, oldValue );
+        this.playSoundForValueChange(newValue, oldValue);
       }
     }
   }
@@ -279,29 +279,29 @@ class ValueChangeSoundPlayer extends Disposable {
    * Play the appropriate sound for the change in value indicated by the provided new and old values.  This will almost
    * always play a sound, but there are some exceptions.  See the code and comments for details.
    */
-  public playSoundForValueChange( newValue: number, oldValue: number ): void {
-    const constrainedNewValue = this.constrainValue( newValue );
-    const constrainedOldValue = this.constrainValue( oldValue );
-    if ( constrainedNewValue !== constrainedOldValue ||
-         ( oldValue !== newValue && ( newValue === this.valueRangeProperty.value.min ||
-                                      newValue === this.valueRangeProperty.value.max ) ) ) {
+  public playSoundForValueChange(newValue: number, oldValue: number): void {
+    const constrainedNewValue = this.constrainValue(newValue);
+    const constrainedOldValue = this.constrainValue(oldValue);
+    if (constrainedNewValue !== constrainedOldValue ||
+      (oldValue !== newValue && (newValue === this.valueRangeProperty.value.min ||
+        newValue === this.valueRangeProperty.value.max))) {
 
-      if ( newValue === this.valueRangeProperty.value.min &&
-           this.minSoundPlayer !== ValueChangeSoundPlayer.USE_MIDDLE_SOUND ) {
+      if (newValue === this.valueRangeProperty.value.min &&
+        this.minSoundPlayer !== ValueChangeSoundPlayer.USE_MIDDLE_SOUND) {
         this.minSoundPlayer.play();
       }
-      else if ( newValue === this.valueRangeProperty.value.max &&
-                this.maxSoundPlayer !== ValueChangeSoundPlayer.USE_MIDDLE_SOUND ) {
+      else if (newValue === this.valueRangeProperty.value.max &&
+        this.maxSoundPlayer !== ValueChangeSoundPlayer.USE_MIDDLE_SOUND) {
         this.maxSoundPlayer.play();
       }
       else {
 
         // Play a middle-range sound, but only if enough time has passed since the last one was played.
         const now = phetAudioContext.currentTime;
-        if ( now - this.timeOfMostRecentMiddleSound > this.minimumInterMiddleSoundTime ) {
+        if (now - this.timeOfMostRecentMiddleSound > this.minimumInterMiddleSoundTime) {
           let playbackRateMapper;
           let soundPlayer;
-          if ( constrainedNewValue > constrainedOldValue ) {
+          if (constrainedNewValue > constrainedOldValue) {
             playbackRateMapper = this.middleMovingUpPlaybackRateMapper;
             soundPlayer = this.middleMovingUpSoundPlayer;
           }
@@ -310,11 +310,11 @@ class ValueChangeSoundPlayer extends Disposable {
             soundPlayer = this.middleMovingDownSoundPlayer;
           }
 
-          if ( playbackRateMapper !== NO_PLAYBACK_RATE_CHANGE ) {
+          if (playbackRateMapper !== NO_PLAYBACK_RATE_CHANGE) {
 
             // Adjust the playback rate based on the provided new value.  It should be safe to cast this here because of
             // the assertion checks that occur during construction.
-            ( soundPlayer as SoundClip ).setPlaybackRate( playbackRateMapper( newValue ) );
+            (soundPlayer as SoundClip).setPlaybackRate(playbackRateMapper(newValue));
           }
           soundPlayer.play();
           this.timeOfMostRecentMiddleSound = now;
@@ -327,7 +327,7 @@ class ValueChangeSoundPlayer extends Disposable {
    * Get an array that contains the next lowest and next highest thresholds for the provided value.  If the provided
    * value is exactly equal to a threshold, only the single threshold value is returned in the array.
    */
-  private getSurroundingThresholds( value: number ): number[] {
+  private getSurroundingThresholds(value: number): number[] {
 
     // A note to future maintainers: JavaScript's floating point implementation was causing all manner of problems with
     // this method.  For instance, when the inter-threshold distance was 0.1 and the provided value was 0.3, JS says
@@ -339,21 +339,21 @@ class ValueChangeSoundPlayer extends Disposable {
     const roundingInterval = 1E-7;
 
     const segment = Math.floor(
-      Utils.roundToInterval( ( value - this.valueRangeProperty.value.min ) / this.interThresholdDistance,
-        roundingInterval )
+      Utils.roundToInterval((value - this.valueRangeProperty.value.min) / this.interThresholdDistance,
+        roundingInterval)
     );
 
     const lowerThreshold = Utils.roundToInterval(
       segment * this.interThresholdDistance + this.valueRangeProperty.value.min,
       roundingInterval
     );
-    const thresholdArray = [ lowerThreshold ];
-    if ( lowerThreshold !== value ) {
+    const thresholdArray = [lowerThreshold];
+    if (lowerThreshold !== value) {
 
       // The provided value wasn't exactly at a threshold.  Since the preceding calculation provided the lower
       // threshold, add the upper one now.
       const upperThreshold = Math.min(
-        Utils.roundToInterval( lowerThreshold + this.interThresholdDistance, roundingInterval ),
+        Utils.roundToInterval(lowerThreshold + this.interThresholdDistance, roundingInterval),
         this.valueRangeProperty.value.max
       );
 
@@ -363,8 +363,8 @@ class ValueChangeSoundPlayer extends Disposable {
       // threshold if it's actually higher than the lower one.  If the upper threshold isn't added, this essentially
       // says that the lower threshold was an exact match for one of the crossing thresholds, which is approximately
       // true and has worked fine in all test cases thus far.
-      if ( upperThreshold > lowerThreshold ) {
-        thresholdArray.push( upperThreshold );
+      if (upperThreshold > lowerThreshold) {
+        thresholdArray.push(upperThreshold);
       }
     }
     return thresholdArray;
@@ -373,11 +373,11 @@ class ValueChangeSoundPlayer extends Disposable {
   /**
    * A static instance that makes no sound.  This is generally used as an option value to turn off sound generation.
    */
-  public static readonly NO_SOUND = new ValueChangeSoundPlayer( new Range( 0, 1 ), {
+  public static readonly NO_SOUND = new ValueChangeSoundPlayer(new Range(0, 1), {
     middleMovingUpSoundPlayer: nullSoundPlayer,
     minSoundPlayer: nullSoundPlayer,
     maxSoundPlayer: nullSoundPlayer
-  } );
+  });
 
   /**
    * A static TSoundPlayer instance that is intended to be used as a flag for the min and max sound players to
@@ -389,6 +389,6 @@ class ValueChangeSoundPlayer extends Disposable {
   };
 }
 
-tambo.register( 'ValueChangeSoundPlayer', ValueChangeSoundPlayer );
+tambo.register('ValueChangeSoundPlayer', ValueChangeSoundPlayer);
 
 export default ValueChangeSoundPlayer;

@@ -9,7 +9,7 @@ import _ from 'lodash';
 import QUnit from 'qunit';
 
 import QueryStringMachine from '@/utils/query-string-machine/QueryStringMachine';
-import Tandem from '../../tandem/Tandem';
+// import Tandem from '../../tandem/Tandem';
 
 const qunitStart = () => {
   const start = () => {
@@ -25,18 +25,19 @@ const qunitStart = () => {
       }); // eslint-disable-line no-debugger
     }
 
-    if (Tandem.PHET_IO_ENABLED) {
-      import(
-        /* webpackMode: "eager" */ '../../../phet-io/js/phetioEngine.js'
-      ).then(() => {
-        // no API validation in unit tests
-        window.phet.tandem.phetioAPIValidation.enabled = false;
-        window.phet.phetio.phetioEngine.flushPhetioObjectBuffer();
-        QUnit.start();
-      });
-    } else {
-      QUnit.start();
-    }
+    // if (Tandem.PHET_IO_ENABLED) {
+    //   import(
+    //     /* webpackMode: "eager" */ '../../../phet-io/js/phetioEngine.js'
+    //   ).then(() => {
+    //     // no API validation in unit tests
+    //     window.phet.tandem.phetioAPIValidation.enabled = false;
+    //     window.phet.phetio.phetioEngine.flushPhetioObjectBuffer();
+    //     QUnit.start();
+    //   });
+    // } else {
+    //   QUnit.start();
+    // }
+    QUnit.start();
   };
 
   // When running in the puppeteer harness, we need the opportunity to wire up listeners before QUnit begins.

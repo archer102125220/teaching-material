@@ -10,12 +10,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Shape } from '../../../../kite/js/imports.js';
-import geometricOptics from '../../geometricOptics.js';
-import Matrix3 from '../../../../dot/js/Matrix3.js';
-import { Node, Path } from '../../../../scenery/js/imports.js';
-import GOColors from '../GOColors.js';
-import GOQueryParameters from '../GOQueryParameters.js';
+import { Shape } from '../../../kite/imports';
+import geometricOptics from '../../geometricOptics';
+import Matrix3 from '../../../dot/Matrix3';
+import { Node, Path } from '../../../scenery/imports';
+import GOColors from '../GOColors';
+import GOQueryParameters from '../GOQueryParameters';
 
 export default class FramedImageMaskNode extends Node {
 
@@ -25,34 +25,34 @@ export default class FramedImageMaskNode extends Node {
   private readonly rightFacingMaskShape: Shape;
   private readonly leftFacingMaskShape: Shape;
 
-  public constructor( imageWidth: number, imageHeight: number ) {
+  public constructor(imageWidth: number, imageHeight: number) {
 
-    const rightFacingMaskShape = new MaskShape( imageWidth, imageHeight );
+    const rightFacingMaskShape = new MaskShape(imageWidth, imageHeight);
 
     // Same shape as the right-facing mask, but reflected about the y-axis, and shifted to the right.
-    const leftFacingMaskShape = new MaskShape( imageWidth, imageHeight ).transformed( new Matrix3().rowMajor(
+    const leftFacingMaskShape = new MaskShape(imageWidth, imageHeight).transformed(new Matrix3().rowMajor(
       -1, 0, imageWidth,
       0, 1, 0,
       0, 0, 1
-    ) );
+    ));
 
-    const path = new Path( rightFacingMaskShape, {
+    const path = new Path(rightFacingMaskShape, {
       fill: GOColors.screenBackgroundColorProperty,
       opacity: GOQueryParameters.frameImageMaskOpacity,
       stroke: GOQueryParameters.debugMask ? 'red' : null
-    } );
+    });
 
-    super( {
-      children: [ path ] // wrapped in Node so we don't expose Path API
-    } );
+    super({
+      children: [path] // wrapped in Node so we don't expose Path API
+    });
 
     this.path = path;
     this.rightFacingMaskShape = rightFacingMaskShape;
     this.leftFacingMaskShape = leftFacingMaskShape;
   }
 
-  public setIsRightFacing( isRightFacing: boolean ): void {
-    this.path.shape = ( isRightFacing ? this.rightFacingMaskShape : this.leftFacingMaskShape );
+  public setIsRightFacing(isRightFacing: boolean): void {
+    this.path.shape = (isRightFacing ? this.rightFacingMaskShape : this.leftFacingMaskShape);
   }
 }
 
@@ -69,7 +69,7 @@ export default class FramedImageMaskNode extends Node {
  */
 class MaskShape extends Shape {
 
-  public constructor( imageWidth: number, imageHeight: number ) {
+  public constructor(imageWidth: number, imageHeight: number) {
 
     // insets are numbered as they are used, as we move clockwise
     const xInset1 = 1;
@@ -82,14 +82,14 @@ class MaskShape extends Shape {
     super();
 
     // Outline a right-facing framed image, starting at topLeft and moving clockwise.
-    this.moveTo( xInset1, yInset1 )
-      .lineTo( xInset3, yInset2 )
-      .lineTo( imageWidth - xInset2, yInset3 )
-      .lineTo( imageWidth - xInset2, imageHeight - yInset3 )
-      .lineTo( xInset3, imageHeight - yInset2 )
-      .lineTo( xInset1, imageHeight - yInset1 )
+    this.moveTo(xInset1, yInset1)
+      .lineTo(xInset3, yInset2)
+      .lineTo(imageWidth - xInset2, yInset3)
+      .lineTo(imageWidth - xInset2, imageHeight - yInset3)
+      .lineTo(xInset3, imageHeight - yInset2)
+      .lineTo(xInset1, imageHeight - yInset1)
       .close();
   }
 }
 
-geometricOptics.register( 'FramedImageMaskNode', FramedImageMaskNode );
+geometricOptics.register('FramedImageMaskNode', FramedImageMaskNode);

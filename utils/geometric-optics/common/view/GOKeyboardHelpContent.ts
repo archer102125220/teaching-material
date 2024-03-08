@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import BasicActionsKeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
-import ComboBoxKeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/ComboBoxKeyboardHelpSection.js';
-import SliderControlsKeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/SliderControlsKeyboardHelpSection.js';
-import TwoColumnKeyboardHelpContent from '../../../../scenery-phet/js/keyboard/help/TwoColumnKeyboardHelpContent.js';
-import geometricOptics from '../../geometricOptics.js';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings.js';
-import MoveDraggableItemsKeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/MoveDraggableItemsKeyboardHelpSection.js';
-import { RulerAndMarkerControlsSection } from './RulerAndMarkerControlsSection.js';
+import BasicActionsKeyboardHelpSection from '../../../scenery-phet/keyboard/help/BasicActionsKeyboardHelpSection';
+import ComboBoxKeyboardHelpSection from '../../../scenery-phet/keyboard/help/ComboBoxKeyboardHelpSection';
+import SliderControlsKeyboardHelpSection from '../../../scenery-phet/keyboard/help/SliderControlsKeyboardHelpSection';
+import TwoColumnKeyboardHelpContent from '../../../scenery-phet/keyboard/help/TwoColumnKeyboardHelpContent';
+import geometricOptics from '../../geometricOptics';
+import GeometricOpticsStrings from '../../GeometricOpticsStrings';
+import MoveDraggableItemsKeyboardHelpSection from '../../../scenery-phet/keyboard/help/MoveDraggableItemsKeyboardHelpSection';
+import { RulerAndMarkerControlsSection } from './RulerAndMarkerControlsSection';
 
 export default class GOKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
 
@@ -29,11 +29,11 @@ export default class GOKeyboardHelpContent extends TwoColumnKeyboardHelpContent 
       new RulerAndMarkerControlsSection(),
 
       // Choose an Object
-      new ComboBoxKeyboardHelpSection( {
+      new ComboBoxKeyboardHelpSection({
         headingString: GeometricOpticsStrings.keyboardHelpDialog.chooseAnObjectStringProperty,
         thingAsLowerCaseSingular: GeometricOpticsStrings.keyboardHelpDialog.objectStringProperty,
         thingAsLowerCasePlural: GeometricOpticsStrings.keyboardHelpDialog.objectsStringProperty
-      } )
+      })
     ];
 
     // Sections in the right column.
@@ -43,15 +43,15 @@ export default class GOKeyboardHelpContent extends TwoColumnKeyboardHelpContent 
       new SliderControlsKeyboardHelpSection(),
 
       // Basic Actions
-      new BasicActionsKeyboardHelpSection( {
+      new BasicActionsKeyboardHelpSection({
         withCheckboxContent: true
-      } )
+      })
     ];
 
-    super( leftSections, rightSections, {
+    super(leftSections, rightSections, {
       isDisposable: false // See https://github.com/phetsims/geometric-optics/issues/483
-    } );
+    });
   }
 }
 
-geometricOptics.register( 'GOKeyboardHelpContent', GOKeyboardHelpContent );
+geometricOptics.register('GOKeyboardHelpContent', GOKeyboardHelpContent);

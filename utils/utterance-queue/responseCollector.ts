@@ -8,15 +8,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../axon/js/BooleanProperty.js';
-import StringUtils from '../../phetcommon/js/util/StringUtils.js';
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
-import ResponsePacket, { SpeakableNullableResolvedOptions } from './ResponsePacket.js';
-import ResponsePatternCollection from './ResponsePatternCollection.js';
-import Property from '../../axon/js/Property.js';
-import { optionize3 } from '../../phet-core/js/optionize.js';
-import PhetioObject, { PhetioObjectOptions } from '../../tandem/js/PhetioObject.js';
-import PickRequired from '../../phet-core/js/types/PickRequired.js';
+import BooleanProperty from '../axon/BooleanProperty';
+import StringUtils from '../phetcommon/util/StringUtils';
+import utteranceQueueNamespace from './utteranceQueueNamespace';
+import ResponsePacket, { type SpeakableNullableResolvedOptions } from './ResponsePacket';
+import ResponsePatternCollection from './ResponsePatternCollection';
+import Property from '../axon/Property';
+import { optionize3 } from '../phet-core/optionize';
+import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
+import type PickRequired from '../phet-core/types/PickRequired';
 
 type ResponseCollectorOptions = PhetioObjectOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 
@@ -26,20 +26,20 @@ class ResponseCollector extends PhetioObject {
   public contextResponsesEnabledProperty: Property<boolean>;
   public hintResponsesEnabledProperty: Property<boolean>;
 
-  public constructor( options?: ResponseCollectorOptions ) {
+  public constructor(options?: ResponseCollectorOptions) {
     super();
 
     // whether component names are read as input lands on various components
-    this.nameResponsesEnabledProperty = new BooleanProperty( true );
+    this.nameResponsesEnabledProperty = new BooleanProperty(true);
 
     // whether "Object Responses" are read as interactive components change
-    this.objectResponsesEnabledProperty = new BooleanProperty( false );
+    this.objectResponsesEnabledProperty = new BooleanProperty(false);
 
     // whether "Context Responses" are read as inputs receive interaction
-    this.contextResponsesEnabledProperty = new BooleanProperty( false );
+    this.contextResponsesEnabledProperty = new BooleanProperty(false);
 
     // whether "Hints" are read to the user in response to certain input
-    this.hintResponsesEnabledProperty = new BooleanProperty( false );
+    this.hintResponsesEnabledProperty = new BooleanProperty(false);
   }
 
   public reset(): void {
@@ -55,32 +55,32 @@ class ResponseCollector extends PhetioObject {
    * unique utterances, we use string interpolation so that the highlight around the abject being spoken
    * about stays lit for the entire combination of responses.
    */
-  public collectResponses( providedOptions?: SpeakableNullableResolvedOptions ): string {
+  public collectResponses(providedOptions?: SpeakableNullableResolvedOptions): string {
 
     // see ResponsePacket for supported options
-    const options = optionize3<SpeakableNullableResolvedOptions>()( {}, ResponsePacket.DEFAULT_OPTIONS, providedOptions );
+    const options = optionize3<SpeakableNullableResolvedOptions>()({}, ResponsePacket.DEFAULT_OPTIONS, providedOptions);
 
-    assert && assert( options.responsePatternCollection instanceof ResponsePatternCollection );
+    assert && assert(options.responsePatternCollection instanceof ResponsePatternCollection);
 
-    const usesNames = !!( options.nameResponse && ( this.nameResponsesEnabledProperty.get() || options.ignoreProperties ) );
-    const usesObjectChanges = !!( options.objectResponse && ( this.objectResponsesEnabledProperty.get() || options.ignoreProperties ) );
-    const usesContextChanges = !!( options.contextResponse && ( this.contextResponsesEnabledProperty.get() || options.ignoreProperties ) );
-    const usesInteractionHints = !!( options.hintResponse && ( this.hintResponsesEnabledProperty.get() || options.ignoreProperties ) );
-    const responseKey = ResponsePatternCollection.createPatternKey( usesNames, usesObjectChanges, usesContextChanges, usesInteractionHints );
+    const usesNames = !!(options.nameResponse && (this.nameResponsesEnabledProperty.get() || options.ignoreProperties));
+    const usesObjectChanges = !!(options.objectResponse && (this.objectResponsesEnabledProperty.get() || options.ignoreProperties));
+    const usesContextChanges = !!(options.contextResponse && (this.contextResponsesEnabledProperty.get() || options.ignoreProperties));
+    const usesInteractionHints = !!(options.hintResponse && (this.hintResponsesEnabledProperty.get() || options.ignoreProperties));
+    const responseKey = ResponsePatternCollection.createPatternKey(usesNames, usesObjectChanges, usesContextChanges, usesInteractionHints);
 
     let finalResponse = '';
-    if ( responseKey ) {
+    if (responseKey) {
 
       // graceful if the responseKey is empty, but if we formed some key, it should
       // be defined in responsePatternCollection
-      const patternString = options.responsePatternCollection.getResponsePattern( responseKey );
+      const patternString = options.responsePatternCollection.getResponsePattern(responseKey);
 
-      finalResponse = StringUtils.fillIn( patternString, {
+      finalResponse = StringUtils.fillIn(patternString, {
         NAME: options.nameResponse,
         OBJECT: options.objectResponse,
         CONTEXT: options.contextResponse,
         HINT: options.hintResponse
-      } );
+      });
     }
 
     return finalResponse;
@@ -89,5 +89,5 @@ class ResponseCollector extends PhetioObject {
 
 const responseCollector = new ResponseCollector();
 
-utteranceQueueNamespace.register( 'responseCollector', responseCollector );
+utteranceQueueNamespace.register('responseCollector', responseCollector);
 export default responseCollector;

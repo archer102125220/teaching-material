@@ -14,7 +14,7 @@ import joist from './joist';
 
 // See below for dynamic imports, which must be locked.
 // let phetioEngine: PhetioEngine | null = null;
-let phetioEngine: null = null;
+// let phetioEngine: null = null;
 
 const unlockBrand = asyncLoader.createLock({ name: 'brand' });
 import( /* webpackMode: "eager" */ `../../brand/${window.phet.chipper.brand}/js/Brand.js`) // 
@@ -22,15 +22,15 @@ import( /* webpackMode: "eager" */ `../../brand/${window.phet.chipper.brand}/js/
   .then(module => unlockBrand())
   .catch(err => console.log(err));
 
-if (Tandem.PHET_IO_ENABLED) {
-  const unlockPhetioEngine = asyncLoader.createLock({ name: 'phetioEngine' });
-  import( /* webpackMode: "eager" */ '../../phet-io/js/phetioEngine.js')
-    .then(module => {
-      phetioEngine = module.default;
-      unlockPhetioEngine();
-    })
-    .catch(err => console.log(err));
-}
+// if (Tandem.PHET_IO_ENABLED) {
+//   const unlockPhetioEngine = asyncLoader.createLock({ name: 'phetioEngine' });
+//   import( /* webpackMode: "eager" */ '../../phet-io/js/phetioEngine.js')
+//     .then(module => {
+//       phetioEngine = module.default;
+//       unlockPhetioEngine();
+//     })
+//     .catch(err => console.log(err));
+// }
 
 const unlockLaunch = asyncLoader.createLock({ name: 'launch' });
 
@@ -61,18 +61,18 @@ class SimLauncher {
 
         // once launchSimulation has been called, the wrapper is ready to receive messages because any listeners it
         // wants have been set up by now.
-        if (Tandem.PHET_IO_ENABLED) {
-          phetioEngine?.onCrossFrameListenersReady();
-        }
+        // if (Tandem.PHET_IO_ENABLED) {
+        //   phetioEngine?.onCrossFrameListenersReady();
+        // }
 
         // Instantiate the sim and show it.
         callback();
       };
 
       // PhET-iO simulations support an initialization phase (before the sim launches)
-      if (Tandem.PHET_IO_ENABLED) {
-        phetioEngine?.initialize(); // calls back to window.phet.joist.launchSimulation
-      }
+      // if (Tandem.PHET_IO_ENABLED) {
+      //   phetioEngine?.initialize(); // calls back to window.phet.joist.launchSimulation
+      // }
 
       if (phet.chipper.queryParameters.postMessageOnReady) {
         window.parent && window.parent.postMessage(JSON.stringify({

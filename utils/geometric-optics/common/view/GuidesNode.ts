@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Node, NodeOptions, TColor } from '../../../../scenery/js/imports.js';
-import geometricOptics from '../../geometricOptics.js';
-import GuideNode from './GuideNode.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import Guides from '../model/Guides.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import PickOptional from '../../../../phet-core/js/types/PickOptional.js';
+import { Node, type NodeOptions, type TColor } from '../../../scenery/imports';
+import geometricOptics from '../../geometricOptics';
+import GuideNode from './GuideNode';
+import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
+import Guides from '../model/Guides';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import type PickOptional from '../../../phet-core/types/PickOptional';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -23,17 +23,17 @@ type GuidesNodeOptions = SelfOptions &
 
 export default class GuidesNode extends Node {
 
-  public constructor( guides: Guides, armColor: TColor,
-                      modelViewTransform: ModelViewTransform2, providedOptions: GuidesNodeOptions ) {
-    super( optionize<GuidesNodeOptions, SelfOptions, NodeOptions>()( {
+  public constructor(guides: Guides, armColor: TColor,
+    modelViewTransform: ModelViewTransform2, providedOptions: GuidesNodeOptions) {
+    super(optionize<GuidesNodeOptions, SelfOptions, NodeOptions>()({
 
       // NodeOptions
       children: [
-        new GuideNode( guides.topGuide, armColor, modelViewTransform ),
-        new GuideNode( guides.bottomGuide, armColor, modelViewTransform )
+        new GuideNode(guides.topGuide, armColor, modelViewTransform),
+        new GuideNode(guides.bottomGuide, armColor, modelViewTransform)
       ]
-    }, providedOptions ) );
+    }, providedOptions));
   }
 }
 
-geometricOptics.register( 'GuidesNode', GuidesNode );
+geometricOptics.register('GuidesNode', GuidesNode);

@@ -6,15 +6,15 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
-import soundConstants from '../soundConstants.js';
-import SoundUtils from '../SoundUtils.js';
-import tambo from '../tambo.js';
-import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
-import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import Property from '../../../axon/js/Property.js';
+import BooleanProperty from '../../axon/BooleanProperty';
+import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor';
+import soundConstants from '../soundConstants';
+import SoundUtils from '../SoundUtils';
+import tambo from '../tambo';
+import SoundGenerator, { type SoundGeneratorOptions } from './SoundGenerator';
+import WrappedAudioBuffer from '../WrappedAudioBuffer';
+import optionize from '../../phet-core/optionize';
+import Property from '../../axon/Property';
 
 type SelfOptions = {
 
@@ -87,19 +87,19 @@ class SoundClip extends SoundGenerator {
   private timeOfDeferredPlayRequest: number;
 
   // callback for when audio context isn't in 'running' state, see usage
-  private readonly audioContextStateChangeListener: ( state: string ) => void;
+  private readonly audioContextStateChangeListener: (state: string) => void;
 
-  public constructor( wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipOptions ) {
+  public constructor(wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipOptions) {
 
-    const options = optionize<SoundClipOptions, SelfOptions, SoundGeneratorOptions>()( {
+    const options = optionize<SoundClipOptions, SelfOptions, SoundGeneratorOptions>()({
       loop: false,
       trimSilence: true,
       initialPlaybackRate: 1,
       initiateWhenDisabled: false,
       rateChangesAffectPlayingSounds: true
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     // initialize local state
     this.wrappedAudioBuffer = wrappedAudioBuffer;
@@ -108,41 +108,41 @@ class SoundClip extends SoundGenerator {
     this.initiateWhenDisabled = options.initiateWhenDisabled;
     this.soundStart = 0;
     this.soundEnd = null;
-    if ( options.trimSilence ) {
+    if (options.trimSilence) {
 
       // For sounds that are created statically during the module load phase, this listener will interpret the audio
       // data once the load of that data has completed.  For all sounds constructed after the module load phase has
       // completed, this will process right away.
-      const setStartAndEndPoints = ( audioBuffer: AudioBuffer | null ) => {
-        if ( audioBuffer ) {
-          const loopBoundsInfo = SoundUtils.detectSoundBounds( audioBuffer );
+      const setStartAndEndPoints = (audioBuffer: AudioBuffer | null) => {
+        if (audioBuffer) {
+          const loopBoundsInfo = SoundUtils.detectSoundBounds(audioBuffer);
           this.soundStart = loopBoundsInfo.soundStart;
           this.soundEnd = loopBoundsInfo.soundEnd;
-          this.wrappedAudioBuffer.audioBufferProperty.unlink( setStartAndEndPoints );
+          this.wrappedAudioBuffer.audioBufferProperty.unlink(setStartAndEndPoints);
         }
       };
-      this.wrappedAudioBuffer.audioBufferProperty.link( setStartAndEndPoints );
+      this.wrappedAudioBuffer.audioBufferProperty.link(setStartAndEndPoints);
     }
     this.activeBufferSources = [];
     this.localGainNode = this.audioContext.createGain();
-    this.localGainNode.connect( this.soundSourceDestination );
+    this.localGainNode.connect(this.soundSourceDestination);
     this._playbackRate = options.initialPlaybackRate;
-    this.isPlayingProperty = new BooleanProperty( false );
+    this.isPlayingProperty = new BooleanProperty(false);
     this.timeOfDeferredPlayRequest = Number.NEGATIVE_INFINITY;
 
     // callback for when audio context isn't in 'running' state, see usage
     this.audioContextStateChangeListener = state => {
 
-      if ( state === 'running' ) {
+      if (state === 'running') {
 
         // initiate deferred play if this is a loop or if it hasn't been too long since the request was made
-        if ( this.loop || ( Date.now() - this.timeOfDeferredPlayRequest ) / 1000 < MAX_PLAY_DEFER_TIME ) {
+        if (this.loop || (Date.now() - this.timeOfDeferredPlayRequest) / 1000 < MAX_PLAY_DEFER_TIME) {
 
           // Play the sound, but with a little bit of delay.  The delay was found to be needed because otherwise on
           // some browsers the sound would be somewhat muted, probably due to some sort of fade in of the audio levels
           // that the browser does automatically to avoid having the web page's sound start too abruptly.  The amount of
           // delay was empirically determined by testing on multiple browsers.
-          this.play( 0.1 );
+          this.play(0.1);
         }
 
         // automatically remove after firing
@@ -154,71 +154,71 @@ class SoundClip extends SoundGenerator {
     };
 
     // listen to the Property that indicates whether we are fully enabled and stop one-shot sounds when it goes false
-    this.fullyEnabledProperty.lazyLink( fullyEnabled => {
-      if ( !this.loop && !fullyEnabled ) {
+    this.fullyEnabledProperty.lazyLink(fullyEnabled => {
+      if (!this.loop && !fullyEnabled) {
         this.stop();
       }
-    } );
+    });
   }
 
   /**
    * Start playing the sound.
    */
-  public play( delay = 0 ): void {
+  public play(delay = 0): void {
 
-    if ( this.audioContext.state === 'running' && this.wrappedAudioBuffer.audioBufferProperty.value ) {
+    if (this.audioContext.state === 'running' && this.wrappedAudioBuffer.audioBufferProperty.value) {
 
       const now = this.audioContext.currentTime;
 
-      if ( ( this.loop && !this.isPlayingProperty.get() ) ||
-           ( !this.loop && ( this.fullyEnabled || this.initiateWhenDisabled ) ) ) {
+      if ((this.loop && !this.isPlayingProperty.get()) ||
+        (!this.loop && (this.fullyEnabled || this.initiateWhenDisabled))) {
 
         // create an audio buffer source node that uses the previously decoded audio data
         const bufferSource = this.audioContext.createBufferSource();
         bufferSource.buffer = this.wrappedAudioBuffer.audioBufferProperty.value;
         bufferSource.loop = this.loop;
         bufferSource.loopStart = this.soundStart;
-        if ( this.soundEnd ) {
+        if (this.soundEnd) {
           bufferSource.loopEnd = this.soundEnd;
         }
 
         // make sure the local gain is set to unity value
-        this.localGainNode.gain.cancelScheduledValues( now );
-        this.localGainNode.gain.setValueAtTime( 1, now );
+        this.localGainNode.gain.cancelScheduledValues(now);
+        this.localGainNode.gain.setValueAtTime(1, now);
 
-        bufferSource.connect( this.soundSourceDestination );
+        bufferSource.connect(this.soundSourceDestination);
 
         // add this to the list of active sources so that it can be stopped if necessary
-        this.activeBufferSources.push( bufferSource );
+        this.activeBufferSources.push(bufferSource);
 
-        if ( !this.loop ) {
+        if (!this.loop) {
 
           // add a handler for when the sound finishes playing
           bufferSource.onended = () => {
 
             // remove the source from the list of active sources
-            const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
-            if ( indexOfSource > -1 ) {
-              this.activeBufferSources.splice( indexOfSource, 1 );
+            const indexOfSource = this.activeBufferSources.indexOf(bufferSource);
+            if (indexOfSource > -1) {
+              this.activeBufferSources.splice(indexOfSource, 1);
             }
             this.isPlayingProperty.value = this.activeBufferSources.length > 0;
           };
         }
 
         // set the playback rate and start playback
-        bufferSource.playbackRate.setValueAtTime( this._playbackRate, now );
-        bufferSource.start( now + delay, this.soundStart );
+        bufferSource.playbackRate.setValueAtTime(this._playbackRate, now);
+        bufferSource.start(now + delay, this.soundStart);
         this.isPlayingProperty.value = true;
       }
     }
-    else if ( this.audioContext.state === 'suspended' ) {
+    else if (this.audioContext.state === 'suspended') {
 
       // The play method was called when the audio context was not yet running, so add a listener to play if and when
       // the audio context state changes.  This will start any loops, and will also play a one-shot sound if the time
       // between the request and the state change isn't too great.  Note that this does NOT queue up more than one
       // individual sound to be played.
       this.timeOfDeferredPlayRequest = Date.now();
-      if ( !audioContextStateChangeMonitor.hasListener( this.audioContext, this.audioContextStateChangeListener ) ) {
+      if (!audioContextStateChangeMonitor.hasListener(this.audioContext, this.audioContextStateChangeListener)) {
         audioContextStateChangeMonitor.addStateChangeListener(
           this.audioContext,
           this.audioContextStateChangeListener
@@ -237,7 +237,7 @@ class SoundClip extends SoundGenerator {
    * cause audible clicks.  If greater than zero, which it is by default, this method will try to fade out the sound
    * fully prior to stopping the audio playback.
    */
-  public stop( delay: number = DEFAULT_STOP_DELAY ): void {
+  public stop(delay: number = DEFAULT_STOP_DELAY): void {
 
     // Calculate a time constant to fade output level by 99% by the stop time, see Web Audio time constant information
     // to understand this calculation.
@@ -247,9 +247,9 @@ class SoundClip extends SoundGenerator {
     // down the gain, effectively doing a fade out, and then stopping playback.
     const now = this.audioContext.currentTime;
     const stopTime = now + delay;
-    this.localGainNode.gain.cancelScheduledValues( now );
-    this.localGainNode.gain.setTargetAtTime( 0, now, fadeTimeConstant );
-    this.activeBufferSources.forEach( source => { source.stop( stopTime ); } );
+    this.localGainNode.gain.cancelScheduledValues(now);
+    this.localGainNode.gain.setTargetAtTime(0, now, fadeTimeConstant);
+    this.activeBufferSources.forEach(source => { source.stop(stopTime); });
 
     // The WebAudio spec is a bit unclear about whether stopping a sound will trigger an onended event.  In testing
     // on Chrome in September 2018, I (jbphet) found that onended was NOT being fired when stop() was called, so the
@@ -259,7 +259,7 @@ class SoundClip extends SoundGenerator {
     // clear the flag
     this.isPlayingProperty.value = false;
 
-    if ( audioContextStateChangeMonitor.hasListener( this.audioContext, this.audioContextStateChangeListener ) ) {
+    if (audioContextStateChangeMonitor.hasListener(this.audioContext, this.audioContextStateChangeListener)) {
 
       // remove the state change listener that was going to do a deferred play, since the sound has now been stopped
       audioContextStateChangeMonitor.removeStateChangeListener(
@@ -272,14 +272,14 @@ class SoundClip extends SoundGenerator {
   /**
    * Set the playback rate.  Based on the way this SoundClip was created, this may or may not affect in-progress sounds.
    */
-  public setPlaybackRate( playbackRate: number, timeConstant: number = DEFAULT_TC ): void {
-    assert && assert( playbackRate > 0, 'invalid playback rate: ' + playbackRate );
-    if ( this.rateChangesAffectPlayingSounds ) {
+  public setPlaybackRate(playbackRate: number, timeConstant: number = DEFAULT_TC): void {
+    assert && assert(playbackRate > 0, 'invalid playback rate: ' + playbackRate);
+    if (this.rateChangesAffectPlayingSounds) {
       const now = this.audioContext.currentTime;
-      this.activeBufferSources.forEach( bufferSource => {
-        bufferSource.playbackRate.cancelScheduledValues( now );
-        bufferSource.playbackRate.setTargetAtTime( playbackRate, now, timeConstant );
-      } );
+      this.activeBufferSources.forEach(bufferSource => {
+        bufferSource.playbackRate.cancelScheduledValues(now);
+        bufferSource.playbackRate.setTargetAtTime(playbackRate, now, timeConstant);
+      });
     }
     this._playbackRate = playbackRate;
   }
@@ -316,6 +316,6 @@ class SoundClip extends SoundGenerator {
   }
 }
 
-tambo.register( 'SoundClip', SoundClip );
+tambo.register('SoundClip', SoundClip);
 
 export default SoundClip;

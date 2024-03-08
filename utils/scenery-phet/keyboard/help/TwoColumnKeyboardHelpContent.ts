@@ -6,11 +6,11 @@
  * @author Jesse Greenberg
  */
 
-import optionize, { combineOptions } from '../../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import { HBox, Node, NodeOptions, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
-import sceneryPhet from '../../sceneryPhet.js';
-import KeyboardHelpSection from './KeyboardHelpSection.js';
+import optionize, { combineOptions } from '../../../phet-core/optionize';
+import type StrictOmit from '../../../phet-core/types/StrictOmit';
+import { HBox, Node, type NodeOptions, VBox, type VBoxOptions } from '../../../scenery/imports';
+import sceneryPhet from '../../sceneryPhet';
+import KeyboardHelpSection from './KeyboardHelpSection';
 
 type SelfOptions = {
 
@@ -30,35 +30,35 @@ export default class TwoColumnKeyboardHelpContent extends Node {
    * @param rightSections -  KeyboardHelpSections for the right column
    * @param [providedOptions]
    */
-  public constructor( leftSections: KeyboardHelpSection[], rightSections: KeyboardHelpSection[],
-                      providedOptions?: TwoColumnKeyboardHelpContentOptions ) {
+  public constructor(leftSections: KeyboardHelpSection[], rightSections: KeyboardHelpSection[],
+    providedOptions?: TwoColumnKeyboardHelpContentOptions) {
 
-    const options = optionize<TwoColumnKeyboardHelpContentOptions, SelfOptions, NodeOptions>()( {
+    const options = optionize<TwoColumnKeyboardHelpContentOptions, SelfOptions, NodeOptions>()({
       columnSpacing: 40,
       sectionSpacing: 40
-    }, providedOptions );
+    }, providedOptions);
 
     const columnOptions: StrictOmit<VBoxOptions, 'children'> = {
       align: 'left',
       spacing: options.sectionSpacing
     };
-    const leftColumn = new VBox( combineOptions<VBoxOptions>( {
+    const leftColumn = new VBox(combineOptions<VBoxOptions>({
       children: leftSections
-    }, columnOptions ) );
-    const rightColumn = new VBox( combineOptions<VBoxOptions>( {
+    }, columnOptions));
+    const rightColumn = new VBox(combineOptions<VBoxOptions>({
       children: rightSections
-    }, columnOptions ) );
+    }, columnOptions));
 
-    const hBox = new HBox( {
-      children: [ leftColumn, rightColumn ],
+    const hBox = new HBox({
+      children: [leftColumn, rightColumn],
       spacing: options.columnSpacing,
       align: 'top'
-    } );
+    });
 
-    options.children = [ hBox ];
+    options.children = [hBox];
 
-    super( options );
+    super(options);
   }
 }
 
-sceneryPhet.register( 'TwoColumnKeyboardHelpContent', TwoColumnKeyboardHelpContent );
+sceneryPhet.register('TwoColumnKeyboardHelpContent', TwoColumnKeyboardHelpContent);

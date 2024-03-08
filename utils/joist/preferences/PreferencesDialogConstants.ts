@@ -7,20 +7,20 @@
  *
  */
 
-import Dimension2 from '../../../dot/js/Dimension2.js';
-import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import Tandem from '../../../tandem/js/Tandem.js';
+import Dimension2 from '../../dot/Dimension2';
+import PhetFont from '../../scenery-phet/PhetFont';
+import Tandem from '../../tandem/Tandem';
 
-const TITLE_FONT = new PhetFont( { weight: 'bold', size: 16 } );
-const DESCRIPTION_FONT = new PhetFont( 16 );
+const TITLE_FONT = new PhetFont({ weight: 'bold', size: 16 });
+const DESCRIPTION_FONT = new PhetFont(16);
 
 
 const PreferencesDialogConstants = {
   TOGGLE_SWITCH_OPTIONS: {
-    size: new Dimension2( 36, 18 ),
+    size: new Dimension2(36, 18),
     trackFillRight: '#64bd5a',
     // enabled:true by default, but disable if fuzzing when supporting voicing
-    enabled: !( phet.chipper.isFuzzEnabled() && phet.chipper.queryParameters.supportsVoicing ),
+    enabled: !(phet.chipper.isFuzzEnabled() && phet.chipper.queryParameters.supportsVoicing),
 
 
     // voicing

@@ -6,12 +6,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import TProperty from '../../../axon/js/TProperty.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import PhetioObject from '../../../tandem/js/PhetioObject.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import sun from '../sun.js';
-import ButtonModel, { ButtonModelOptions } from './ButtonModel.js';
+import type TProperty from '../../axon/TProperty';
+import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
+import PhetioObject from '../../tandem/PhetioObject';
+import Tandem from '../../tandem/Tandem';
+import sun from '../sun';
+import ButtonModel, { type ButtonModelOptions } from './ButtonModel';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -27,49 +27,49 @@ export default class MomentaryButtonModel<T> extends ButtonModel {
    * @param valueProperty
    * @param [providedOptions]
    */
-  public constructor( valueOff: T, valueOn: T, valueProperty: TProperty<T>, providedOptions?: MomentaryButtonModelOptions ) {
+  public constructor(valueOff: T, valueOn: T, valueProperty: TProperty<T>, providedOptions?: MomentaryButtonModelOptions) {
 
-    const options = optionize<MomentaryButtonModelOptions, SelfOptions, ButtonModelOptions>()( {
+    const options = optionize<MomentaryButtonModelOptions, SelfOptions, ButtonModelOptions>()({
 
       // phet-io
       tandem: Tandem.REQUIRED,
 
       // to support properly passing this to children, see https://github.com/phetsims/tandem/issues/60
       phetioReadOnly: PhetioObject.DEFAULT_OPTIONS.phetioReadOnly
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
-    const downListener = ( down: boolean ) => {
+    const downListener = (down: boolean) => {
 
       // turn on when pressed (if enabled)
-      if ( down ) {
-        if ( this.enabledProperty.get() ) {
-          valueProperty.set( valueOn );
+      if (down) {
+        if (this.enabledProperty.get()) {
+          valueProperty.set(valueOn);
         }
       }
       else {
-        valueProperty.set( valueOff );
+        valueProperty.set(valueOff);
       }
     };
-    this.downProperty.lazyLink( downListener );
+    this.downProperty.lazyLink(downListener);
 
     // if valueProperty set externally, signify to ButtonModel
-    const valuePropertyListener = ( value: T ) => {
-      this.downProperty.set( value === valueOn );
+    const valuePropertyListener = (value: T) => {
+      this.downProperty.set(value === valueOn);
     };
-    valueProperty.link( valuePropertyListener );
+    valueProperty.link(valuePropertyListener);
 
     this.disposeMomentaryButtonModel = () => {
-      this.downProperty.unlink( downListener );
-      valueProperty.unlink( valuePropertyListener );
+      this.downProperty.unlink(downListener);
+      valueProperty.unlink(valuePropertyListener);
     };
   }
 
   public override dispose(): void {
     this.disposeMomentaryButtonModel();
-    super.dispose(); //TODO fails with assertions enabled, see https://github.com/phetsims/sun/issues/212
+    super.dispose(); // TODO fails with assertions enabled, see https://github.com/phetsims/sun/issues/212
   }
 }
 
-sun.register( 'MomentaryButtonModel', MomentaryButtonModel );
+sun.register('MomentaryButtonModel', MomentaryButtonModel);

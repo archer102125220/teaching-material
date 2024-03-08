@@ -8,22 +8,22 @@
  * @author Martin Veillette
  */
 
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import Bounds2 from '../../../../dot/js/Bounds2.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { DragListener, HighlightFromNode, Image, KeyboardDragListener, KeyboardDragListenerOptions, Node } from '../../../../scenery/js/imports.js';
-import geometricOptics from '../../geometricOptics.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import GOConstants from '../GOConstants.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
-import HTMLImageElementObject from '../model/HTMLImageElementObject.js';
-import TProperty from '../../../../axon/js/TProperty.js';
-import stepTimer from '../../../../axon/js/stepTimer.js';
-import { ObjectDragMode } from './ObjectDragMode.js';
-import OpticalObjectNode, { OpticalObjectNodeOptions } from './OpticalObjectNode.js';
-import Multilink from '../../../../axon/js/Multilink.js';
-import isSettingPhetioStateProperty from '../../../../tandem/js/isSettingPhetioStateProperty.js';
+import DerivedProperty from '../../../axon/DerivedProperty';
+import Bounds2 from '../../../dot/Bounds2';
+import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
+import { DragListener, HighlightFromNode, Image, KeyboardDragListener, type KeyboardDragListenerOptions, Node } from '../../../scenery/imports';
+import geometricOptics from '../../geometricOptics';
+import Vector2 from '../../../dot/Vector2';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import GOConstants from '../GOConstants';
+import { combineOptions } from '../../../phet-core/optionize';
+import HTMLImageElementObject from '../model/HTMLImageElementObject';
+import type TProperty from '../../../axon/TProperty';
+import stepTimer from '../../../axon/stepTimer';
+import { type ObjectDragMode } from './ObjectDragMode';
+import OpticalObjectNode, { type OpticalObjectNodeOptions } from './OpticalObjectNode';
+import Multilink from '../../../axon/Multilink';
+import isSettingPhetioStateProperty from '../../../tandem/isSettingPhetioStateProperty';
 
 export type HTMLImageElementObjectNodeOptions = OpticalObjectNodeOptions;
 
@@ -38,65 +38,65 @@ export default class HTMLImageElementObjectNode extends OpticalObjectNode {
    * @param wasDraggedProperty - was this optical object dragged?
    * @param providedOptions
    */
-  public constructor( htmlImageElementObject: HTMLImageElementObject,
-                      sceneBoundsProperty: TReadOnlyProperty<Bounds2>,
-                      opticPositionProperty: TReadOnlyProperty<Vector2>,
-                      modelViewTransform: ModelViewTransform2,
-                      objectDragModeProperty: TReadOnlyProperty<ObjectDragMode>,
-                      wasDraggedProperty: TProperty<boolean>,
-                      providedOptions: HTMLImageElementObjectNodeOptions ) {
+  public constructor(htmlImageElementObject: HTMLImageElementObject,
+    sceneBoundsProperty: TReadOnlyProperty<Bounds2>,
+    opticPositionProperty: TReadOnlyProperty<Vector2>,
+    modelViewTransform: ModelViewTransform2,
+    objectDragModeProperty: TReadOnlyProperty<ObjectDragMode>,
+    wasDraggedProperty: TProperty<boolean>,
+    providedOptions: HTMLImageElementObjectNodeOptions) {
 
-    super( htmlImageElementObject, objectDragModeProperty, wasDraggedProperty, providedOptions );
+    super(htmlImageElementObject, objectDragModeProperty, wasDraggedProperty, providedOptions);
 
-    const imageNode = new Image( htmlImageElementObject.htmlImageElementProperty.value );
+    const imageNode = new Image(htmlImageElementObject.htmlImageElementProperty.value);
 
     // Wrap imageNode in a Node. We need to scale imageNode, but do not want its focus highlight to scale.
-    const wrappedImageNode = new Node( {
-      children: [ imageNode ]
-    } );
-    this.addChild( wrappedImageNode );
-    this.setFocusHighlight( new HighlightFromNode( wrappedImageNode ) );
+    const wrappedImageNode = new Node({
+      children: [imageNode]
+    });
+    this.addChild(wrappedImageNode);
+    this.setFocusHighlight(new HighlightFromNode(wrappedImageNode));
 
     const updateScale = () => {
       const sceneBounds = htmlImageElementObject.boundsProperty.value;
-      const viewBounds = modelViewTransform.modelToViewBounds( sceneBounds );
-      const scaleX = ( viewBounds.width / imageNode.width ) || GOConstants.MIN_SCALE; // prevent zero scale
-      const scaleY = ( viewBounds.height / imageNode.height ) || GOConstants.MIN_SCALE; // prevent zero scale
-      imageNode.scale( scaleX, scaleY );
+      const viewBounds = modelViewTransform.modelToViewBounds(sceneBounds);
+      const scaleX = (viewBounds.width / imageNode.width) || GOConstants.MIN_SCALE; // prevent zero scale
+      const scaleY = (viewBounds.height / imageNode.height) || GOConstants.MIN_SCALE; // prevent zero scale
+      imageNode.scale(scaleX, scaleY);
     };
 
     // Change the PNG image.
-    htmlImageElementObject.htmlImageElementProperty.link( htmlImageElement => {
+    htmlImageElementObject.htmlImageElementProperty.link(htmlImageElement => {
       imageNode.image = htmlImageElement;
       updateScale();
-    } );
+    });
 
     // Translate and scale
-    htmlImageElementObject.boundsProperty.link( bounds => {
-      this.translation = modelViewTransform.modelToViewBounds( bounds ).leftTop;
+    htmlImageElementObject.boundsProperty.link(bounds => {
+      this.translation = modelViewTransform.modelToViewBounds(bounds).leftTop;
       updateScale();
-    } );
+    });
 
     // Drag bounds, in model coordinates. Keep the full object within the model bounds and to the left of the optic.
     // Use Math.floor herein to avoid floating-point rounding errors that result in unwanted changes and additional
     // reentrant Properties, see https://github.com/phetsims/geometric-optics/issues/317.
     const dragBoundsProperty = new DerivedProperty(
-      [ htmlImageElementObject.boundsProperty, sceneBoundsProperty, objectDragModeProperty, htmlImageElementObject.positionProperty, opticPositionProperty ],
-      ( htmlImageElementObjectBounds, sceneBounds, objectDragMode, htmlImageElementObjectPosition, opticPosition ) => {
+      [htmlImageElementObject.boundsProperty, sceneBoundsProperty, objectDragModeProperty, htmlImageElementObject.positionProperty, opticPositionProperty],
+      (htmlImageElementObjectBounds, sceneBounds, objectDragMode, htmlImageElementObjectPosition, opticPosition) => {
 
-        const maxX = Math.floor( opticPosition.x - GOConstants.MIN_DISTANCE_FROM_OBJECT_TO_OPTIC );
+        const maxX = Math.floor(opticPosition.x - GOConstants.MIN_DISTANCE_FROM_OBJECT_TO_OPTIC);
 
         // Added Math.min to resolve https://github.com/phetsims/geometric-optics/issues/491. When running with
         // ?listenerOrderRange, we pass through an intermediate state where minX is invalid, and actually > maxX.
-        const minX = Math.min( maxX - 1, Math.floor( sceneBounds.minX + ( htmlImageElementObjectPosition.x - htmlImageElementObjectBounds.minX ) ) );
+        const minX = Math.min(maxX - 1, Math.floor(sceneBounds.minX + (htmlImageElementObjectPosition.x - htmlImageElementObjectBounds.minX)));
 
         let minY: number;
         let maxY: number;
-        if ( objectDragMode === 'freeDragging' ) {
+        if (objectDragMode === 'freeDragging') {
 
           // free dragging
-          minY = Math.floor( sceneBounds.minY + ( htmlImageElementObjectPosition.y - htmlImageElementObjectBounds.minY ) );
-          maxY = Math.floor( sceneBounds.maxY - ( htmlImageElementObjectBounds.maxY - htmlImageElementObjectPosition.y ) );
+          minY = Math.floor(sceneBounds.minY + (htmlImageElementObjectPosition.y - htmlImageElementObjectBounds.minY));
+          maxY = Math.floor(sceneBounds.maxY - (htmlImageElementObjectBounds.maxY - htmlImageElementObjectPosition.y));
         }
         else {
 
@@ -104,59 +104,59 @@ export default class HTMLImageElementObjectNode extends OpticalObjectNode {
           minY = htmlImageElementObjectPosition.y;
           maxY = minY;
         }
-        return new Bounds2( minX, minY, maxX, maxY );
+        return new Bounds2(minX, minY, maxX, maxY);
       }, {
 
-        // Reentrant because dragBounds depends on positionProperty, and its listener modifies positionProperty to
-        // keep objects inside dragBounds. See https://github.com/phetsims/geometric-optics/issues/487
-        reentrant: true
-      } );
+      // Reentrant because dragBounds depends on positionProperty, and its listener modifies positionProperty to
+      // keep objects inside dragBounds. See https://github.com/phetsims/geometric-optics/issues/487
+      reentrant: true
+    });
 
     // Keep the object inside the drag bounds. This is done in the next animation frame to prevent problems with
     // reentrant Properties, as in https://github.com/phetsims/geometric-optics/issues/325.  dragBoundsProperty is
     // derived from htmlImageElementObject.boundsProperty, and will change htmlImageElementObject.boundsProperty by
     // setting htmlImageElementObject.positionProperty.
-    dragBoundsProperty.link( dragBounds => {
+    dragBoundsProperty.link(dragBounds => {
 
       // Do not disturb positionProperty when restoring PhET-iO state.
       // See https://github.com/phetsims/geometric-optics/issues/469
-      if ( !isSettingPhetioStateProperty.value ) {
-        const closestPoint = dragBounds.closestPointTo( htmlImageElementObject.positionProperty.value );
-        if ( !closestPoint.equals( htmlImageElementObject.positionProperty.value ) ) {
-          stepTimer.setTimeout( () => {
+      if (!isSettingPhetioStateProperty.value) {
+        const closestPoint = dragBounds.closestPointTo(htmlImageElementObject.positionProperty.value);
+        if (!closestPoint.equals(htmlImageElementObject.positionProperty.value)) {
+          stepTimer.setTimeout(() => {
             htmlImageElementObject.positionProperty.value = closestPoint;
-          }, 0 );
+          }, 0);
         }
       }
-    } );
+    });
 
-    const dragListener = new DragListener( {
+    const dragListener = new DragListener({
       positionProperty: htmlImageElementObject.positionProperty,
-      dragBoundsProperty: dragBoundsProperty,
+      dragBoundsProperty,
       transform: modelViewTransform,
       useParentOffset: true,
       drag: () => this.drag(),
-      tandem: providedOptions.tandem.createTandem( 'dragListener' )
-    } );
-    this.addInputListener( dragListener );
+      tandem: providedOptions.tandem.createTandem('dragListener')
+    });
+    this.addInputListener(dragListener);
 
     const keyboardDragListener = new KeyboardDragListener(
-      combineOptions<KeyboardDragListenerOptions>( {}, GOConstants.KEYBOARD_DRAG_LISTENER_OPTIONS, {
+      combineOptions<KeyboardDragListenerOptions>({}, GOConstants.KEYBOARD_DRAG_LISTENER_OPTIONS, {
         positionProperty: htmlImageElementObject.positionProperty,
-        dragBoundsProperty: dragBoundsProperty,
+        dragBoundsProperty,
         transform: modelViewTransform,
         drag: () => this.drag(),
-        tandem: providedOptions.tandem.createTandem( 'keyboardDragListener' )
-      } ) );
-    this.addInputListener( keyboardDragListener );
+        tandem: providedOptions.tandem.createTandem('keyboardDragListener')
+      }));
+    this.addInputListener(keyboardDragListener);
 
     // Keep cueing arrows next to the framed object.
-    Multilink.multilink( [ wrappedImageNode.boundsProperty, this.cueingArrowsNode.boundsProperty ],
-      ( wrappedImageNodeBounds: Bounds2, cueingArrowsNodeBounds: Bounds2 ) => {
+    Multilink.multilink([wrappedImageNode.boundsProperty, this.cueingArrowsNode.boundsProperty],
+      (wrappedImageNodeBounds: Bounds2, cueingArrowsNodeBounds: Bounds2) => {
         this.cueingArrowsNode.right = wrappedImageNode.left - 5;
         this.cueingArrowsNode.centerY = wrappedImageNode.centerY;
-      } );
+      });
   }
 }
 
-geometricOptics.register( 'HTMLImageElementObjectNode', HTMLImageElementObjectNode );
+geometricOptics.register('HTMLImageElementObjectNode', HTMLImageElementObjectNode);

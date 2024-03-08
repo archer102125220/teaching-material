@@ -7,20 +7,21 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../../axon/js/DerivedProperty.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import Multilink from '../../../axon/js/Multilink.js';
-import Dimension2 from '../../../dot/js/Dimension2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
-import { Color, TPaint, LinearGradient, Node, PaintColorProperty, Path } from '../../../scenery/js/imports.js';
-import sun from '../sun.js';
-import ButtonInteractionState from './ButtonInteractionState.js';
-import ButtonModel from './ButtonModel.js';
-import ButtonNode, { ButtonNodeOptions, ExternalButtonNodeOptions } from './ButtonNode.js';
-import RadioButtonInteractionState from './RadioButtonInteractionState.js';
-import TButtonAppearanceStrategy, { TButtonAppearanceStrategyOptions } from './TButtonAppearanceStrategy.js';
+import DerivedProperty from '../../axon/DerivedProperty';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import Multilink from '../../axon/Multilink';
+import Dimension2 from '../../dot/Dimension2';
+import { Shape } from '../../kite/imports';
+import optionize from '../../phet-core/optionize';
+import type PickRequired from '../../phet-core/types/PickRequired';
+import { Color, type TPaint, LinearGradient, Node, PaintColorProperty, Path } from '../../scenery/imports';
+import sun from '../sun';
+import ButtonInteractionState from './ButtonInteractionState';
+import ButtonModel from './ButtonModel';
+import ButtonNode, { type ButtonNodeOptions, type ExternalButtonNodeOptions } from './ButtonNode';
+import RadioButtonInteractionState from './RadioButtonInteractionState';
+import type TButtonAppearanceStrategy from './TButtonAppearanceStrategy';
+import type { TButtonAppearanceStrategyOptions } from './TButtonAppearanceStrategy';
 
 // constants
 const VERTICAL_HIGHLIGHT_GRADIENT_LENGTH = 7; // In screen coords, which are roughly pixels.
@@ -81,10 +82,10 @@ export default class RectangularButton extends ButtonNode {
    * @param interactionStateProperty - a Property that is used to drive the visual appearance of the button
    * @param providedOptions
    */
-  protected constructor( buttonModel: ButtonModel, interactionStateProperty: TReadOnlyProperty<ButtonInteractionState>,
-                         providedOptions?: RectangularButtonOptions ) {
+  protected constructor(buttonModel: ButtonModel, interactionStateProperty: TReadOnlyProperty<ButtonInteractionState>,
+    providedOptions?: RectangularButtonOptions) {
 
-    const options = optionize<RectangularButtonOptions, SelfOptions, ButtonNodeOptions>()( {
+    const options = optionize<RectangularButtonOptions, SelfOptions, ButtonNodeOptions>()({
       size: null,
 
       minWidth: HORIZONTAL_HIGHLIGHT_GRADIENT_LENGTH + SHADE_GRADIENT_LENGTH,
@@ -115,31 +116,31 @@ export default class RectangularButton extends ButtonNode {
       // Class that determines the button's appearance for the values of interactionStateProperty.
       // See RectangularButton.ThreeDAppearanceStrategy for an example of the interface required.
       buttonAppearanceStrategy: RectangularButton.ThreeDAppearanceStrategy
-    }, providedOptions );
+    }, providedOptions);
 
-    if ( !options.content ) {
-      assert && assert( options.size !== undefined, 'button dimensions needed if no content is supplied.' );
+    if (!options.content) {
+      assert && assert(options.size !== undefined, 'button dimensions needed if no content is supplied.');
     }
 
-    if ( options.size ) {
-      assert && assert( options.xMargin < options.size.width, 'xMargin cannot be larger than width' );
-      assert && assert( options.yMargin < options.size.height, 'yMargin cannot be larger than height' );
+    if (options.size) {
+      assert && assert(options.xMargin < options.size.width, 'xMargin cannot be larger than width');
+      assert && assert(options.yMargin < options.size.height, 'yMargin cannot be larger than height');
 
       options.minUnstrokedWidth = options.size.width;
       options.minUnstrokedHeight = options.size.height;
     }
     else {
-      if ( options.minWidth !== undefined ) {
+      if (options.minWidth !== undefined) {
         options.minUnstrokedWidth = options.minWidth;
       }
-      if ( options.minHeight !== undefined ) {
+      if (options.minHeight !== undefined) {
         options.minUnstrokedHeight = options.minHeight;
       }
     }
 
     // If no options were explicitly passed in for the button appearance strategy, pass through the general appearance
     // options.
-    if ( !options.buttonAppearanceStrategyOptions ) {
+    if (!options.buttonAppearanceStrategyOptions) {
       options.buttonAppearanceStrategyOptions = {
         stroke: options.stroke,
         lineWidth: options.lineWidth
@@ -150,59 +151,59 @@ export default class RectangularButton extends ButtonNode {
     let buttonWidth: number;
     let buttonHeight: number;
 
-    if ( options.size ) {
+    if (options.size) {
       buttonWidth = options.size.width;
       buttonHeight = options.size.height;
     }
     else {
-      buttonWidth = Math.max( options.content ? options.content.width + options.xMargin * 2 : 0, options.minWidth );
-      buttonHeight = Math.max( options.content ? options.content.height + options.yMargin * 2 : 0, options.minHeight );
+      buttonWidth = Math.max(options.content ? options.content.width + options.xMargin * 2 : 0, options.minWidth);
+      buttonHeight = Math.max(options.content ? options.content.height + options.yMargin * 2 : 0, options.minHeight);
     }
 
     // Create the rectangular part of the button.
-    const buttonBackground = new Path( createButtonShape( buttonWidth, buttonHeight, options ) );
+    const buttonBackground = new Path(createButtonShape(buttonWidth, buttonHeight, options));
 
-    if ( options.size && options.content ) {
+    if (options.size && options.content) {
       const previousContent = options.content;
       const minScale = Math.min(
-        ( options.size.width - options.xMargin * 2 ) / previousContent.width,
-        ( options.size.height - options.yMargin * 2 ) / previousContent.height );
+        (options.size.width - options.xMargin * 2) / previousContent.width,
+        (options.size.height - options.yMargin * 2) / previousContent.height);
 
-      options.content = new Node( {
-        children: [ previousContent ],
+      options.content = new Node({
+        children: [previousContent],
         scale: minScale
-      } );
+      });
     }
 
-    super( buttonModel, buttonBackground, interactionStateProperty, options );
+    super(buttonModel, buttonBackground, interactionStateProperty, options);
 
     let isFirstlayout = true;
-    Multilink.multilink( [
+    Multilink.multilink([
       this.isWidthResizableProperty,
       this.isHeightResizableProperty,
       this.layoutSizeProperty
-    ], ( isWidthSizable, isHeightSizable, layoutSize ) => {
-      if ( isWidthSizable || isHeightSizable ) {
+    ], (isWidthSizable, isHeightSizable, layoutSize) => {
+      if (isWidthSizable || isHeightSizable) {
         buttonBackground.shape = createButtonShape(
           isWidthSizable ? layoutSize.width - this.maxLineWidth : buttonWidth,
           isHeightSizable ? layoutSize.height - this.maxLineWidth : buttonHeight,
-          options );
-        assert && assert( !isWidthSizable || buttonBackground.width <= layoutSize.width + 1e-7, 'button width cannot exceed layout width' );
-        assert && assert( !isHeightSizable || buttonBackground.height <= layoutSize.height + 1e-7, 'button width cannot exceed layout height' );
+          options);
+        assert && assert(!isWidthSizable || buttonBackground.width <= layoutSize.width + 1e-7, 'button width cannot exceed layout width');
+        assert && assert(!isHeightSizable || buttonBackground.height <= layoutSize.height + 1e-7, 'button width cannot exceed layout height');
       }
 
-      if ( isFirstlayout || isWidthSizable || isHeightSizable ) {
+      if (isFirstlayout || isWidthSizable || isHeightSizable) {
         // Set pointer areas.
         this.touchArea = buttonBackground.localBounds
-          .dilatedXY( options.touchAreaXDilation, options.touchAreaYDilation )
-          .shiftedXY( options.touchAreaXShift, options.touchAreaYShift );
+          .dilatedXY(options.touchAreaXDilation, options.touchAreaYDilation)
+          .shiftedXY(options.touchAreaXShift, options.touchAreaYShift);
         this.mouseArea = buttonBackground.localBounds
-          .dilatedXY( options.mouseAreaXDilation, options.mouseAreaYDilation )
-          .shiftedXY( options.mouseAreaXShift, options.mouseAreaYShift );
+          .dilatedXY(options.mouseAreaXDilation, options.mouseAreaYDilation)
+          .shiftedXY(options.mouseAreaXShift, options.mouseAreaYShift);
       }
 
       isFirstlayout = false;
-    } );
+    });
   }
 }
 
@@ -212,19 +213,19 @@ export default class RectangularButton extends ButtonNode {
  * @param height
  * @param config - RectangularButton config, containing values related to radii of button corners
  */
-function createButtonShape( width: number, height: number,
-                            config: PickRequired<RectangularButtonOptions, 'cornerRadius' | 'leftTopCornerRadius' | 'rightTopCornerRadius' | 'leftBottomCornerRadius' | 'rightBottomCornerRadius'> ): Shape {
+function createButtonShape(width: number, height: number,
+  config: PickRequired<RectangularButtonOptions, 'cornerRadius' | 'leftTopCornerRadius' | 'rightTopCornerRadius' | 'leftBottomCornerRadius' | 'rightBottomCornerRadius'>): Shape {
 
   // Don't allow a corner radius that is larger than half the width or height, see
   // https://github.com/phetsims/under-pressure/issues/151
-  const maxCorner = Math.min( width / 2, height / 2 );
+  const maxCorner = Math.min(width / 2, height / 2);
 
-  return Shape.roundedRectangleWithRadii( 0, 0, width, height, {
-    topLeft: Math.min( maxCorner, config.leftTopCornerRadius !== null ? config.leftTopCornerRadius : config.cornerRadius ),
-    topRight: Math.min( maxCorner, config.rightTopCornerRadius !== null ? config.rightTopCornerRadius : config.cornerRadius ),
-    bottomLeft: Math.min( maxCorner, config.leftBottomCornerRadius !== null ? config.leftBottomCornerRadius : config.cornerRadius ),
-    bottomRight: Math.min( maxCorner, config.rightBottomCornerRadius !== null ? config.rightBottomCornerRadius : config.cornerRadius )
-  } );
+  return Shape.roundedRectangleWithRadii(0, 0, width, height, {
+    topLeft: Math.min(maxCorner, config.leftTopCornerRadius !== null ? config.leftTopCornerRadius : config.cornerRadius),
+    topRight: Math.min(maxCorner, config.rightTopCornerRadius !== null ? config.rightTopCornerRadius : config.cornerRadius),
+    bottomLeft: Math.min(maxCorner, config.leftBottomCornerRadius !== null ? config.leftBottomCornerRadius : config.cornerRadius),
+    bottomRight: Math.min(maxCorner, config.rightBottomCornerRadius !== null ? config.rightBottomCornerRadius : config.cornerRadius)
+  });
 }
 
 /**
@@ -244,21 +245,21 @@ class ThreeDAppearanceStrategy {
    * @param baseColorProperty
    * @param [providedOptions]
    */
-  public constructor( buttonBackground: Path,
-                      interactionStateProperty: TReadOnlyProperty<ButtonInteractionState | RadioButtonInteractionState>,
-                      baseColorProperty: TReadOnlyProperty<Color>,
-                      providedOptions?: TButtonAppearanceStrategyOptions ) {
+  public constructor(buttonBackground: Path,
+    interactionStateProperty: TReadOnlyProperty<ButtonInteractionState | RadioButtonInteractionState>,
+    baseColorProperty: TReadOnlyProperty<Color>,
+    providedOptions?: TButtonAppearanceStrategyOptions) {
 
     // If stroke and lineWidth exist in the provided options, they become the default for all strokes and line widths.
     // If not, defaults are created.
-    const defaultStroke = ( providedOptions && providedOptions.stroke ) ?
-                          providedOptions.stroke :
-                          new PaintColorProperty( baseColorProperty, { luminanceFactor: -0.4 } );
-    const defaultLineWidth = ( providedOptions && providedOptions.lineWidth !== undefined ) ?
-                             providedOptions.lineWidth :
-                             0.5;
+    const defaultStroke = (providedOptions && providedOptions.stroke) ?
+      providedOptions.stroke :
+      new PaintColorProperty(baseColorProperty, { luminanceFactor: -0.4 });
+    const defaultLineWidth = (providedOptions && providedOptions.lineWidth !== undefined) ?
+      providedOptions.lineWidth :
+      0.5;
 
-    const options = optionize<TButtonAppearanceStrategyOptions>()( {
+    const options = optionize<TButtonAppearanceStrategyOptions>()({
       stroke: defaultStroke,
       lineWidth: defaultLineWidth,
       overStroke: defaultStroke,
@@ -271,29 +272,29 @@ class ThreeDAppearanceStrategy {
       deselectedStroke: defaultStroke,
       deselectedLineWidth: defaultLineWidth,
       deselectedButtonOpacity: 1
-    }, providedOptions );
+    }, providedOptions);
 
     // Create the colors that will be used to produce the gradients and shading needed for the 3D appearance.
-    const baseBrighter7Property = new PaintColorProperty( baseColorProperty, { luminanceFactor: 0.7 } );
-    const baseBrighter5Property = new PaintColorProperty( baseColorProperty, { luminanceFactor: 0.5 } );
-    const baseBrighter2Property = new PaintColorProperty( baseColorProperty, { luminanceFactor: 0.2 } );
-    const baseDarker3Property = new PaintColorProperty( baseColorProperty, { luminanceFactor: -0.3 } );
-    const baseDarker4Property = new PaintColorProperty( baseColorProperty, { luminanceFactor: -0.4 } );
-    const baseDarker5Property = new PaintColorProperty( baseColorProperty, { luminanceFactor: -0.5 } );
-    const baseTransparentProperty = new DerivedProperty( [ baseColorProperty ], color => color.withAlpha( 0 ) );
-    const transparentWhite = new Color( 255, 255, 255, 0.7 );
+    const baseBrighter7Property = new PaintColorProperty(baseColorProperty, { luminanceFactor: 0.7 });
+    const baseBrighter5Property = new PaintColorProperty(baseColorProperty, { luminanceFactor: 0.5 });
+    const baseBrighter2Property = new PaintColorProperty(baseColorProperty, { luminanceFactor: 0.2 });
+    const baseDarker3Property = new PaintColorProperty(baseColorProperty, { luminanceFactor: -0.3 });
+    const baseDarker4Property = new PaintColorProperty(baseColorProperty, { luminanceFactor: -0.4 });
+    const baseDarker5Property = new PaintColorProperty(baseColorProperty, { luminanceFactor: -0.5 });
+    const baseTransparentProperty = new DerivedProperty([baseColorProperty], color => color.withAlpha(0));
+    const transparentWhite = new Color(255, 255, 255, 0.7);
 
     // Adds shading to left and right edges of the button.
-    const horizontalShadingPath = new Path( null, {
+    const horizontalShadingPath = new Path(null, {
       stroke: options.stroke,
       lineWidth: options.lineWidth,
       pickable: false
-    } );
-    buttonBackground.addChild( horizontalShadingPath );
+    });
+    buttonBackground.addChild(horizontalShadingPath);
 
     this.maxLineWidth = typeof options.lineWidth === 'number' ? options.lineWidth : 0;
 
-    let interactionStateListener: ( interactionState: ButtonInteractionState ) => void;
+    let interactionStateListener: (interactionState: ButtonInteractionState) => void;
 
     // We'll need to listen to the shape changes in order to update our appearance.
     const listener = () => {
@@ -305,54 +306,54 @@ class ThreeDAppearanceStrategy {
       horizontalShadingPath.shape = buttonBackground.shape;
 
       // compute color stops for gradient, see issue #148
-      assert && assert( buttonWidth >= HORIZONTAL_HIGHLIGHT_GRADIENT_LENGTH + SHADE_GRADIENT_LENGTH );
-      assert && assert( buttonHeight >= VERTICAL_HIGHLIGHT_GRADIENT_LENGTH + SHADE_GRADIENT_LENGTH );
-      const verticalHighlightStop = Math.min( VERTICAL_HIGHLIGHT_GRADIENT_LENGTH / buttonHeight, 1 );
-      const verticalShadowStop = Math.max( 1 - SHADE_GRADIENT_LENGTH / buttonHeight, 0 );
-      const horizontalHighlightStop = Math.min( HORIZONTAL_HIGHLIGHT_GRADIENT_LENGTH / buttonWidth, 1 );
-      const horizontalShadowStop = Math.max( 1 - SHADE_GRADIENT_LENGTH / buttonWidth, 0 );
+      assert && assert(buttonWidth >= HORIZONTAL_HIGHLIGHT_GRADIENT_LENGTH + SHADE_GRADIENT_LENGTH);
+      assert && assert(buttonHeight >= VERTICAL_HIGHLIGHT_GRADIENT_LENGTH + SHADE_GRADIENT_LENGTH);
+      const verticalHighlightStop = Math.min(VERTICAL_HIGHLIGHT_GRADIENT_LENGTH / buttonHeight, 1);
+      const verticalShadowStop = Math.max(1 - SHADE_GRADIENT_LENGTH / buttonHeight, 0);
+      const horizontalHighlightStop = Math.min(HORIZONTAL_HIGHLIGHT_GRADIENT_LENGTH / buttonWidth, 1);
+      const horizontalShadowStop = Math.max(1 - SHADE_GRADIENT_LENGTH / buttonWidth, 0);
 
       // Gradient fills for button states
-      const upFillVertical = new LinearGradient( 0, 0, 0, buttonHeight )
-        .addColorStop( 0, baseBrighter7Property )
-        .addColorStop( verticalHighlightStop, baseColorProperty )
-        .addColorStop( verticalShadowStop, baseColorProperty )
-        .addColorStop( 1, baseDarker5Property );
+      const upFillVertical = new LinearGradient(0, 0, 0, buttonHeight)
+        .addColorStop(0, baseBrighter7Property)
+        .addColorStop(verticalHighlightStop, baseColorProperty)
+        .addColorStop(verticalShadowStop, baseColorProperty)
+        .addColorStop(1, baseDarker5Property);
 
-      const upFillHorizontal = new LinearGradient( 0, 0, buttonWidth, 0 )
-        .addColorStop( 0, transparentWhite )
-        .addColorStop( horizontalHighlightStop, baseTransparentProperty )
-        .addColorStop( horizontalShadowStop, baseTransparentProperty )
-        .addColorStop( 1, baseDarker5Property );
+      const upFillHorizontal = new LinearGradient(0, 0, buttonWidth, 0)
+        .addColorStop(0, transparentWhite)
+        .addColorStop(horizontalHighlightStop, baseTransparentProperty)
+        .addColorStop(horizontalShadowStop, baseTransparentProperty)
+        .addColorStop(1, baseDarker5Property);
 
-      const overFillVertical = new LinearGradient( 0, 0, 0, buttonHeight )
-        .addColorStop( 0, baseBrighter7Property )
-        .addColorStop( verticalHighlightStop, baseBrighter5Property )
-        .addColorStop( verticalShadowStop, baseBrighter5Property )
-        .addColorStop( 1, baseDarker5Property );
+      const overFillVertical = new LinearGradient(0, 0, 0, buttonHeight)
+        .addColorStop(0, baseBrighter7Property)
+        .addColorStop(verticalHighlightStop, baseBrighter5Property)
+        .addColorStop(verticalShadowStop, baseBrighter5Property)
+        .addColorStop(1, baseDarker5Property);
 
-      const overFillHorizontal = new LinearGradient( 0, 0, buttonWidth, 0 )
-        .addColorStop( 0, transparentWhite )
-        .addColorStop( horizontalHighlightStop / 2, new Color( 255, 255, 255, 0 ) )
-        .addColorStop( horizontalShadowStop, baseTransparentProperty )
-        .addColorStop( 1, baseDarker3Property );
+      const overFillHorizontal = new LinearGradient(0, 0, buttonWidth, 0)
+        .addColorStop(0, transparentWhite)
+        .addColorStop(horizontalHighlightStop / 2, new Color(255, 255, 255, 0))
+        .addColorStop(horizontalShadowStop, baseTransparentProperty)
+        .addColorStop(1, baseDarker3Property);
 
-      const downFillVertical = new LinearGradient( 0, 0, 0, buttonHeight )
-        .addColorStop( 0, baseBrighter7Property )
-        .addColorStop( verticalHighlightStop * 0.67, baseDarker3Property )
-        .addColorStop( verticalShadowStop, baseBrighter2Property )
-        .addColorStop( 1, baseDarker5Property );
+      const downFillVertical = new LinearGradient(0, 0, 0, buttonHeight)
+        .addColorStop(0, baseBrighter7Property)
+        .addColorStop(verticalHighlightStop * 0.67, baseDarker3Property)
+        .addColorStop(verticalShadowStop, baseBrighter2Property)
+        .addColorStop(1, baseDarker5Property);
 
       // Cache gradients
-      buttonBackground.cachedPaints = [ upFillVertical, overFillVertical, downFillVertical ];
-      horizontalShadingPath.cachedPaints = [ upFillHorizontal, overFillHorizontal ];
+      buttonBackground.cachedPaints = [upFillVertical, overFillVertical, downFillVertical];
+      horizontalShadingPath.cachedPaints = [upFillHorizontal, overFillHorizontal];
 
-      interactionStateListener && interactionStateProperty.unlink( interactionStateListener );
+      interactionStateListener && interactionStateProperty.unlink(interactionStateListener);
 
       // Change colors to match interactionState
-      interactionStateListener = ( interactionState: ButtonInteractionState ) => {
+      interactionStateListener = (interactionState: ButtonInteractionState) => {
 
-        switch( interactionState ) {
+        switch (interactionState) {
 
           case ButtonInteractionState.IDLE:
             buttonBackground.fill = upFillVertical;
@@ -382,18 +383,18 @@ class ThreeDAppearanceStrategy {
             break;
 
           default:
-            throw new Error( `unsupported interactionState: ${interactionState}` );
+            throw new Error(`unsupported interactionState: ${interactionState}`);
         }
       };
-      interactionStateProperty.link( interactionStateListener );
+      interactionStateProperty.link(interactionStateListener);
 
     };
-    buttonBackground.selfBoundsProperty.link( listener );
+    buttonBackground.selfBoundsProperty.link(listener);
 
     this.disposeThreeDAppearanceStrategy = () => {
-      buttonBackground.selfBoundsProperty.unlink( listener );
-      if ( interactionStateProperty.hasListener( interactionStateListener ) ) {
-        interactionStateProperty.unlink( interactionStateListener );
+      buttonBackground.selfBoundsProperty.unlink(listener);
+      if (interactionStateProperty.hasListener(interactionStateListener)) {
+        interactionStateProperty.unlink(interactionStateListener);
       }
 
       baseBrighter7Property.dispose();
@@ -413,4 +414,4 @@ class ThreeDAppearanceStrategy {
 
 RectangularButton.ThreeDAppearanceStrategy = ThreeDAppearanceStrategy;
 
-sun.register( 'RectangularButton', RectangularButton );
+sun.register('RectangularButton', RectangularButton);

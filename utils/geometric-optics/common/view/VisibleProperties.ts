@@ -8,14 +8,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import BooleanProperty from '../../../../axon/js/BooleanProperty.js';
-import Property from '../../../../axon/js/Property.js';
-import { PhetioObjectOptions } from '../../../../tandem/js/PhetioObject.js';
-import geometricOptics from '../../geometricOptics.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import Optic from '../model/Optic.js';
-import Mirror from '../../mirror/model/Mirror.js';
+import BooleanProperty from '../../../axon/BooleanProperty';
+import Property from '../../../axon/Property';
+import { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
+import geometricOptics from '../../geometricOptics';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import Tandem from '../../../tandem/Tandem';
+import Optic from '../model/Optic';
+import Mirror from '../../mirror/model/Mirror';
 
 type VisiblePropertiesOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
 
@@ -47,50 +47,50 @@ export default class VisibleProperties {
   // Resets things that are specific to this class.
   private readonly resetVisibleProperties: () => void;
 
-  public constructor( optic: Optic, providedOptions: VisiblePropertiesOptions ) {
+  public constructor(optic: Optic, providedOptions: VisiblePropertiesOptions) {
 
-    const isMirror = ( optic instanceof Mirror );
+    const isMirror = (optic instanceof Mirror);
     const isExclusivelyFlatMirror = optic.isExclusivelyFlatMirror();
 
-    this.focalPointsVisibleProperty = new BooleanProperty( true, {
+    this.focalPointsVisibleProperty = new BooleanProperty(true, {
       // Because a flat mirror's F point is at infinity, so this Property is irrelevant
-      tandem: isExclusivelyFlatMirror ? Tandem.OPT_OUT : providedOptions.tandem.createTandem( 'focalPointsVisibleProperty' ),
+      tandem: isExclusivelyFlatMirror ? Tandem.OPT_OUT : providedOptions.tandem.createTandem('focalPointsVisibleProperty'),
       phetioFeatured: true
-    } );
+    });
 
-    this.twoFPointsVisibleProperty = new BooleanProperty( false, {
+    this.twoFPointsVisibleProperty = new BooleanProperty(false, {
       // Because a flat mirror's 2F point is at infinity, so this Property is irrelevant
-      tandem: isExclusivelyFlatMirror ? Tandem.OPT_OUT : providedOptions.tandem.createTandem( 'twoFPointsVisibleProperty' ),
+      tandem: isExclusivelyFlatMirror ? Tandem.OPT_OUT : providedOptions.tandem.createTandem('twoFPointsVisibleProperty'),
       phetioFeatured: true
-    } );
+    });
 
-    this.virtualImageVisibleProperty = new BooleanProperty( true, {
-      tandem: providedOptions.tandem.createTandem( 'virtualImageVisibleProperty' ),
+    this.virtualImageVisibleProperty = new BooleanProperty(true, {
+      tandem: providedOptions.tandem.createTandem('virtualImageVisibleProperty'),
       phetioFeatured: true
-    } );
+    });
 
-    this.labelsVisibleProperty = new BooleanProperty( false, {
-      tandem: providedOptions.tandem.createTandem( 'labelsVisibleProperty' ),
+    this.labelsVisibleProperty = new BooleanProperty(false, {
+      tandem: providedOptions.tandem.createTandem('labelsVisibleProperty'),
       phetioFeatured: true
-    } );
+    });
 
-    this.secondPointVisibleProperty = new BooleanProperty( false, {
-      tandem: providedOptions.tandem.createTandem( 'secondPointVisibleProperty' ),
+    this.secondPointVisibleProperty = new BooleanProperty(false, {
+      tandem: providedOptions.tandem.createTandem('secondPointVisibleProperty'),
       phetioFeatured: true
-    } );
+    });
 
     // Mirrors cannot have guides, and guidesVisibleProperty should not be instrumented.
     // See https://github.com/phetsims/geometric-optics/issues/456
     const guidesVisiblePropertyOptions = isMirror ?
-      { validValues: [ false ] } :
-      { tandem: providedOptions.tandem.createTandem( 'guidesVisibleProperty' ) };
-    this.guidesVisibleProperty = new BooleanProperty( false, guidesVisiblePropertyOptions );
+      { validValues: [false] } :
+      { tandem: providedOptions.tandem.createTandem('guidesVisibleProperty') };
+    this.guidesVisibleProperty = new BooleanProperty(false, guidesVisiblePropertyOptions);
 
-    this.opticalAxisVisibleProperty = new BooleanProperty( true, {
-      tandem: providedOptions.tandem.createTandem( 'opticalAxisVisibleProperty' ),
+    this.opticalAxisVisibleProperty = new BooleanProperty(true, {
+      tandem: providedOptions.tandem.createTandem('opticalAxisVisibleProperty'),
       phetioFeatured: true,
       phetioDocumentation: 'PhET-iO only, not settable in the sim'
-    } );
+    });
 
     this.resetVisibleProperties = () => {
       this.focalPointsVisibleProperty.reset();
@@ -108,4 +108,4 @@ export default class VisibleProperties {
   }
 }
 
-geometricOptics.register( 'VisibleProperties', VisibleProperties );
+geometricOptics.register('VisibleProperties', VisibleProperties);

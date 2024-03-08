@@ -6,11 +6,11 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import KeyboardHelpSection from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSection.js';
-import TextKeyNode from '../../../../scenery-phet/js/keyboard/TextKeyNode.js';
-import KeyboardHelpIconFactory from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpIconFactory.js';
-import KeyboardHelpSectionRow from '../../../../scenery-phet/js/keyboard/help/KeyboardHelpSectionRow.js';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings.js';
+import KeyboardHelpSection from '../../../scenery-phet/keyboard/help/KeyboardHelpSection';
+import TextKeyNode from '../../../scenery-phet/keyboard/TextKeyNode';
+import KeyboardHelpIconFactory from '../../../scenery-phet/keyboard/help/KeyboardHelpIconFactory';
+import KeyboardHelpSectionRow from '../../../scenery-phet/keyboard/help/KeyboardHelpSectionRow';
+import GeometricOpticsStrings from '../../GeometricOpticsStrings';;
 
 export class RulerAndMarkerControlsSection extends KeyboardHelpSection {
 
@@ -20,25 +20,25 @@ export class RulerAndMarkerControlsSection extends KeyboardHelpSection {
     const spaceKeyNode = TextKeyNode.space();
     const enterKeyNode = TextKeyNode.enter();
     const escapeKeyNode = TextKeyNode.esc();
-    const spaceOrEnterKeyNode = KeyboardHelpIconFactory.iconOrIcon( spaceKeyNode, enterKeyNode );
+    const spaceOrEnterKeyNode = KeyboardHelpIconFactory.iconOrIcon(spaceKeyNode, enterKeyNode);
 
     // Rows that make up this KeyboardHelpSection. They need to be disposed.
     const rows = [
 
       // Space or Enter
-      KeyboardHelpSectionRow.labelWithIcon( GeometricOpticsStrings.keyboardHelpDialog.removeFromToolboxStringProperty,
-        spaceOrEnterKeyNode ),
+      KeyboardHelpSectionRow.labelWithIcon(GeometricOpticsStrings.keyboardHelpDialog.removeFromToolboxStringProperty,
+        spaceOrEnterKeyNode),
 
       // Esc
-      KeyboardHelpSectionRow.labelWithIcon( GeometricOpticsStrings.keyboardHelpDialog.returnToToolboxStringProperty, escapeKeyNode ),
+      KeyboardHelpSectionRow.labelWithIcon(GeometricOpticsStrings.keyboardHelpDialog.returnToToolboxStringProperty, escapeKeyNode),
 
       // J, for 'Jump'
-      KeyboardHelpSectionRow.createKeysRowFromStrings( [ 'J' ], GeometricOpticsStrings.keyboardHelpDialog.jumpToPointStringProperty )
+      KeyboardHelpSectionRow.createKeysRowFromStrings(['J'], GeometricOpticsStrings.keyboardHelpDialog.jumpToPointStringProperty)
     ];
 
-    super( GeometricOpticsStrings.keyboardHelpDialog.rulerAndMarkerControlsStringProperty, rows, {
+    super(GeometricOpticsStrings.keyboardHelpDialog.rulerAndMarkerControlsStringProperty, rows, {
       textMaxWidth: 300,
       isDisposable: false // See https://github.com/phetsims/geometric-optics/issues/483
-    } );
+    });
   }
 }

@@ -6,15 +6,15 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../../axon/js/DerivedProperty.js';
-import merge from '../../../phet-core/js/merge.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import SoundClip, { SoundClipOptions } from '../../../tambo/js/sound-generators/SoundClip.js';
-import SoundGenerator, { SoundGeneratorOptions } from '../../../tambo/js/sound-generators/SoundGenerator.js';
-import tambo from '../tambo.js';
-import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import TSoundPlayer from '../TSoundPlayer.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import DerivedProperty from '../../axon/DerivedProperty';
+import merge from '../../phet-core/merge';
+import optionize from '../../phet-core/optionize';
+import SoundClip, { type SoundClipOptions } from '../../tambo/sound-generators/SoundClip';
+import SoundGenerator, { type SoundGeneratorOptions } from '../../tambo/sound-generators/SoundGenerator';
+import tambo from '../tambo';
+import WrappedAudioBuffer from '../WrappedAudioBuffer';
+import type TSoundPlayer from '../TSoundPlayer';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
 
 type SelfOptions = {
 
@@ -48,66 +48,66 @@ class SoundClipChord extends SoundGenerator implements TSoundPlayer {
   // flag indicating whether this is currently playing
   public readonly isPlayingProperty: TReadOnlyProperty<boolean>;
 
-  public constructor( sound: WrappedAudioBuffer, providedOptions?: SoundClipChordOptions ) {
+  public constructor(sound: WrappedAudioBuffer, providedOptions?: SoundClipChordOptions) {
 
-    const options = optionize<SoundClipChordOptions, SelfOptions, SoundGeneratorOptions>()( {
+    const options = optionize<SoundClipChordOptions, SelfOptions, SoundGeneratorOptions>()({
       initialOutputLevel: 0.7,
       soundClipOptions: null,
       arpeggiate: false,
       arpeggiateTime: 0.10, // in seconds, the total time that it will take the chord to arpeggiate
-      chordPlaybackRates: [ Math.pow( 2, 1 / 12 ), Math.pow( 2, 4 / 12 ), Math.pow( 2, 7 / 12 ) ] // default to major chord
-    }, providedOptions );
+      chordPlaybackRates: [Math.pow(2, 1 / 12), Math.pow(2, 4 / 12), Math.pow(2, 7 / 12)] // default to major chord
+    }, providedOptions);
 
-    if ( options.soundClipOptions ) {
+    if (options.soundClipOptions) {
       assert && assert(
         options.soundClipOptions.initialPlaybackRate === undefined,
         'SoundClipChord sets the initialPlaybackRate for its SoundClips'
       );
     }
 
-    super( options );
+    super(options);
 
     this.arpeggiate = options.arpeggiate;
     this.arpeggiateTime = options.arpeggiateTime;
-    this.playbackSoundClips = options.chordPlaybackRates.map( playbackRate => {
-      const soundClip = new SoundClip( sound, merge( {
+    this.playbackSoundClips = options.chordPlaybackRates.map(playbackRate => {
+      const soundClip = new SoundClip(sound, merge({
         initialPlaybackRate: playbackRate
-      }, options.soundClipOptions ) );
-      soundClip.connect( this.soundSourceDestination );
+      }, options.soundClipOptions));
+      soundClip.connect(this.soundSourceDestination);
       return soundClip;
-    } );
+    });
 
-    this.isPlayingProperty = DerivedProperty.or( this.playbackSoundClips.map( soundClip => soundClip.isPlayingProperty ) );
+    this.isPlayingProperty = DerivedProperty.or(this.playbackSoundClips.map(soundClip => soundClip.isPlayingProperty));
   }
 
   /**
    * Play the chord.
    */
   public play(): void {
-    this.playbackSoundClips.forEach( ( soundClip, index ) => {
+    this.playbackSoundClips.forEach((soundClip, index) => {
       const delay = this.arpeggiate ? index * this.arpeggiateTime / this.playbackSoundClips.length : 0;
-      soundClip.play( delay );
-    } );
+      soundClip.play(delay);
+    });
   }
 
   /**
    * Stop the chord if it's playing.  This is mostly here to complete the TSoundPlayer interface.
    */
   public stop(): void {
-    this.playbackSoundClips.forEach( soundClip => {
+    this.playbackSoundClips.forEach(soundClip => {
       soundClip.stop();
-    } );
+    });
   }
 
   /**
    * Release any memory references in order to avoid memory leaks.
    */
   public override dispose(): void {
-    this.playbackSoundClips.forEach( soundClip => soundClip.dispose() );
+    this.playbackSoundClips.forEach(soundClip => soundClip.dispose());
     this.playbackSoundClips.length = 0;
     super.dispose();
   }
 }
 
-tambo.register( 'SoundClipChord', SoundClipChord );
+tambo.register('SoundClipChord', SoundClipChord);
 export default SoundClipChord;

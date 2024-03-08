@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import GOModel, { GOModelOptions } from '../../common/model/GOModel.js';
-import Lens from './Lens.js';
-import geometricOptics from '../../geometricOptics.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import OpticalObjectChoice from '../../common/model/OpticalObjectChoice.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import GOQueryParameters from '../../common/GOQueryParameters.js';
+import GOModel, { type GOModelOptions } from '../../common/model/GOModel';
+import Lens from './Lens';
+import geometricOptics from '../../geometricOptics';
+import Vector2 from '../../../dot/Vector2';
+import OpticalObjectChoice from '../../common/model/OpticalObjectChoice';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import GOQueryParameters from '../../common/GOQueryParameters';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -23,18 +23,18 @@ export default class LensModel extends GOModel {
 
   public readonly lens: Lens;
 
-  public constructor( providedOptions: LensModelOptions ) {
+  public constructor(providedOptions: LensModelOptions) {
 
     // See https://github.com/phetsims/geometric-optics/issues/397
     let opticalObjectChoices;
-    if ( GOQueryParameters.scene === 'framed' ) {
-      opticalObjectChoices = [ OpticalObjectChoice.PENCIL ];
+    if (GOQueryParameters.scene === 'framed') {
+      opticalObjectChoices = [OpticalObjectChoice.PENCIL];
     }
-    else if ( GOQueryParameters.scene === 'arrow' ) {
-      opticalObjectChoices = [ OpticalObjectChoice.ARROW ];
+    else if (GOQueryParameters.scene === 'arrow') {
+      opticalObjectChoices = [OpticalObjectChoice.ARROW];
     }
-    else if ( GOQueryParameters.scene === 'light' ) {
-      opticalObjectChoices = [ OpticalObjectChoice.LIGHT ];
+    else if (GOQueryParameters.scene === 'light') {
+      opticalObjectChoices = [OpticalObjectChoice.LIGHT];
     }
     else {
       opticalObjectChoices = [
@@ -46,23 +46,23 @@ export default class LensModel extends GOModel {
       ];
     }
 
-    const options = optionize<LensModelOptions, SelfOptions, GOModelOptions>()( {
+    const options = optionize<LensModelOptions, SelfOptions, GOModelOptions>()({
 
       // GOModelOptions
-      opticalObjectChoices: opticalObjectChoices,
-      arrowObject1Position: new Vector2( -160, 60 ),
-      arrowObject2Position: new Vector2( -125, 30 ),
-      framedObjectPosition: new Vector2( -170, 27 ),
-      lightObject1Position: new Vector2( -170, 20 ),
-      lightObject2Position: new Vector2( -124, -20 )
+      opticalObjectChoices,
+      arrowObject1Position: new Vector2(-160, 60),
+      arrowObject2Position: new Vector2(-125, 30),
+      framedObjectPosition: new Vector2(-170, 27),
+      lightObject1Position: new Vector2(-170, 20),
+      lightObject2Position: new Vector2(-124, -20)
 
-    }, providedOptions );
+    }, providedOptions);
 
-    const lens = new Lens( {
-      tandem: providedOptions.tandem.createTandem( 'lens' )
-    } );
+    const lens = new Lens({
+      tandem: providedOptions.tandem.createTandem('lens')
+    });
 
-    super( lens, options );
+    super(lens, options);
 
     this.lens = lens;
   }
@@ -73,4 +73,4 @@ export default class LensModel extends GOModel {
   }
 }
 
-geometricOptics.register( 'LensModel', LensModel );
+geometricOptics.register('LensModel', LensModel);

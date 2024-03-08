@@ -7,16 +7,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import NumberControl, { NumberControlOptions } from '../../../../scenery-phet/js/NumberControl.js';
-import geometricOptics from '../../geometricOptics.js';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings.js';
-import GOConstants from '../GOConstants.js';
-import Utils from '../../../../dot/js/Utils.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import { EmptySelfOptions, optionize4 } from '../../../../phet-core/js/optionize.js';
-import DerivedStringProperty from '../../../../axon/js/DerivedStringProperty.js';
+import NumberControl, { type NumberControlOptions } from '../../../scenery-phet/NumberControl';
+import geometricOptics from '../../geometricOptics';
+import GeometricOpticsStrings from '../../GeometricOpticsStrings';
+import GOConstants from '../GOConstants';
+import Utils from '../../../dot/Utils';
+import NumberProperty from '../../../axon/NumberProperty';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import { type EmptySelfOptions, optionize4 } from '../../../phet-core/optionize';
+import DerivedStringProperty from '../../../axon/DerivedStringProperty';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -29,43 +29,43 @@ export default class FocalLengthControl extends NumberControl {
    * @param focalLengthProperty - signed
    * @param providedOptions
    */
-  public constructor( focalLengthMagnitudeProperty: NumberProperty,
-                      focalLengthProperty: TReadOnlyProperty<number>,
-                      providedOptions: FocalLengthControlOptions ) {
+  public constructor(focalLengthMagnitudeProperty: NumberProperty,
+    focalLengthProperty: TReadOnlyProperty<number>,
+    providedOptions: FocalLengthControlOptions) {
 
     const range = focalLengthMagnitudeProperty.range;
 
-    const titleStringProperty = new DerivedStringProperty( [
+    const titleStringProperty = new DerivedStringProperty([
       focalLengthProperty,
       GeometricOpticsStrings.focalLengthPositiveStringProperty,
       GeometricOpticsStrings.focalLengthNegativeStringProperty
-    ], ( focalLength: number, focalLengthPositiveString: string, focalLengthNegativeString: string ) =>
-      ( focalLength >= 0 ) ? focalLengthPositiveString : focalLengthNegativeString, {
-      tandem: providedOptions.tandem.createTandem( 'titleStringProperty' )
-    } );
+    ], (focalLength: number, focalLengthPositiveString: string, focalLengthNegativeString: string) =>
+      (focalLength >= 0) ? focalLengthPositiveString : focalLengthNegativeString, {
+      tandem: providedOptions.tandem.createTandem('titleStringProperty')
+    });
 
     const options = optionize4<FocalLengthControlOptions, SelfOptions, NumberControlOptions>()(
       {}, GOConstants.NUMBER_CONTROL_OPTIONS, {
 
-        // NumberControlOptions
-        delta: GOConstants.FOCAL_LENGTH_SPINNER_STEP,
-        numberDisplayOptions: {
-          decimalPlaces: GOConstants.FOCAL_LENGTH_DECIMAL_PLACES,
-          valuePattern: GeometricOpticsStrings.valueCentimetersPatternStringProperty
-        },
-        sliderOptions: {
-          constrainValue: ( value: number ) => Utils.roundToInterval( value, GOConstants.FOCAL_LENGTH_SLIDER_STEP ),
-          keyboardStep: GOConstants.FOCAL_LENGTH_KEYBOARD_STEP, // used by all alternative-input devices
-          shiftKeyboardStep: GOConstants.FOCAL_LENGTH_SHIFT_KEYBOARD_STEP, // finer grain, used by keyboard only
-          pageKeyboardStep: GOConstants.FOCAL_LENGTH_PAGE_KEYBOARD_STEP
-        },
-        isDisposable: false
-      }, providedOptions );
+      // NumberControlOptions
+      delta: GOConstants.FOCAL_LENGTH_SPINNER_STEP,
+      numberDisplayOptions: {
+        decimalPlaces: GOConstants.FOCAL_LENGTH_DECIMAL_PLACES,
+        valuePattern: GeometricOpticsStrings.valueCentimetersPatternStringProperty
+      },
+      sliderOptions: {
+        constrainValue: (value: number) => Utils.roundToInterval(value, GOConstants.FOCAL_LENGTH_SLIDER_STEP),
+        keyboardStep: GOConstants.FOCAL_LENGTH_KEYBOARD_STEP, // used by all alternative-input devices
+        shiftKeyboardStep: GOConstants.FOCAL_LENGTH_SHIFT_KEYBOARD_STEP, // finer grain, used by keyboard only
+        pageKeyboardStep: GOConstants.FOCAL_LENGTH_PAGE_KEYBOARD_STEP
+      },
+      isDisposable: false
+    }, providedOptions);
 
-    super( titleStringProperty, focalLengthMagnitudeProperty, range, options );
+    super(titleStringProperty, focalLengthMagnitudeProperty, range, options);
 
-    this.addLinkedElement( focalLengthMagnitudeProperty );
+    this.addLinkedElement(focalLengthMagnitudeProperty);
   }
 }
 
-geometricOptics.register( 'FocalLengthControl', FocalLengthControl );
+geometricOptics.register('FocalLengthControl', FocalLengthControl);

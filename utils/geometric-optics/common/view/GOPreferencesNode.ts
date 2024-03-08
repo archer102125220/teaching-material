@@ -10,14 +10,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
-import geometricOptics from '../../geometricOptics.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import FocalLengthModelTypeControl from './FocalLengthModelTypeControl.js';
-import GOPreferences from '../model/GOPreferences.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import { GOSimOptions } from '../../GOSim.js';
-import Add2FPointsCheckbox from './Add2FPointsCheckbox.js';
+import { VBox, type VBoxOptions } from '../../../scenery/imports';
+import geometricOptics from '../../geometricOptics';
+import optionize from '../../../phet-core/optionize';
+import FocalLengthModelTypeControl from './FocalLengthModelTypeControl';
+import GOPreferences from '../model/GOPreferences';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import { type GOSimOptions } from '../../GOSim';
+import Add2FPointsCheckbox from './Add2FPointsCheckbox';
 
 type SelfOptions = PickRequired<GOSimOptions, 'isBasicsVersion'>;
 
@@ -25,32 +25,32 @@ type GOPreferencesNodeOptions = SelfOptions & PickRequired<VBoxOptions, 'tandem'
 
 export default class GOPreferencesNode extends VBox {
 
-  public constructor( providedOptions: GOPreferencesNodeOptions ) {
+  public constructor(providedOptions: GOPreferencesNodeOptions) {
 
-    const options = optionize<GOPreferencesNodeOptions, SelfOptions, VBoxOptions>()( {
+    const options = optionize<GOPreferencesNodeOptions, SelfOptions, VBoxOptions>()({
 
       // VBoxOptions
       align: 'left',
       spacing: 20,
       phetioVisiblePropertyInstrumented: false
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     // 'Add "2F Points" checkbox' checkbox
     // The name should technically be add2FPointsCheckboxCheckbox, but that confused everyone who saw it.
-    const add2FPointsCheckbox = new Add2FPointsCheckbox( GOPreferences.add2FPointsCheckboxProperty, {
-      tandem: options.tandem.createTandem( 'add2FPointsCheckbox' )
-    } );
+    const add2FPointsCheckbox = new Add2FPointsCheckbox(GOPreferences.add2FPointsCheckboxProperty, {
+      tandem: options.tandem.createTandem('add2FPointsCheckbox')
+    });
 
     // 'Focal Length control' radio buttons
-    const focalLengthModelTypeControl = new FocalLengthModelTypeControl( GOPreferences.focalLengthModelTypeProperty, {
-      tandem: options.tandem.createTandem( 'focalLengthModelTypeControl' )
-    } );
+    const focalLengthModelTypeControl = new FocalLengthModelTypeControl(GOPreferences.focalLengthModelTypeProperty, {
+      tandem: options.tandem.createTandem('focalLengthModelTypeControl')
+    });
 
-    this.children = [ add2FPointsCheckbox, focalLengthModelTypeControl ];
+    this.children = [add2FPointsCheckbox, focalLengthModelTypeControl];
   }
 
 }
 
-geometricOptics.register( 'GOPreferencesNode', GOPreferencesNode );
+geometricOptics.register('GOPreferencesNode', GOPreferencesNode);

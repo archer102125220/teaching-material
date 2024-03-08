@@ -8,11 +8,11 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import * as lodash from 'lodash';
+// import * as lodash from 'lodash';
 
 declare global {
 
   // Specify the correct type for lodash as a global object to work around the TS2686 warning in WebStorm/IntelliJ
   // See https://github.com/phetsims/chipper/issues/1402
-  const _: typeof lodash;
+  // const _: typeof lodash;
 }

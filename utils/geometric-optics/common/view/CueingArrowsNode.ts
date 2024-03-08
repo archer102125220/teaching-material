@@ -6,15 +6,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import geometricOptics from '../../geometricOptics.js';
-import { NodeTranslationOptions, Path, PathOptions } from '../../../../scenery/js/imports.js';
-import ArrowShape from '../../../../scenery-phet/js/ArrowShape.js';
-import { Shape } from '../../../../kite/js/imports.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import PickOptional from '../../../../phet-core/js/types/PickOptional.js';
-import GOPreferences from '../model/GOPreferences.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import geometricOptics from '../../geometricOptics';
+import { type NodeTranslationOptions, Path, type PathOptions } from '../../../scenery/imports';
+import ArrowShape from '../../../scenery-phet/ArrowShape';
+import { Shape } from '../../../kite/imports';
+import optionize from '../../../phet-core/optionize';
+import type PickOptional from '../../../phet-core/types/PickOptional';
+import GOPreferences from '../model/GOPreferences';
+import DerivedProperty from '../../../axon/DerivedProperty';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
 
 type CueingArrowsDirection = 'horizontal' | 'vertical' | 'both';
 
@@ -32,9 +32,9 @@ export default class CueingArrowsNode extends Path {
   // length of the arrows, from tip to tip
   private readonly length: number;
 
-  public constructor( providedOptions?: CueingArrowsNodeOptions ) {
+  public constructor(providedOptions?: CueingArrowsNodeOptions) {
 
-    const options = optionize<CueingArrowsNodeOptions, SelfOptions, PathOptions>()( {
+    const options = optionize<CueingArrowsNodeOptions, SelfOptions, PathOptions>()({
 
       // CueingArrowsNodeOptions
       direction: 'both',
@@ -45,20 +45,20 @@ export default class CueingArrowsNode extends Path {
       stroke: 'black',
       isDisposable: false
 
-    }, providedOptions );
+    }, providedOptions);
 
-    super( createArrowsShape( options.direction, options.length ), options );
+    super(createArrowsShape(options.direction, options.length), options);
 
     this.length = options.length;
 
-    this.boundsProperty.link( () => {
-      this.touchArea = this.localBounds.dilated( 5 );
-      this.mouseArea = this.localBounds.dilated( 3 );
-    } );
+    this.boundsProperty.link(() => {
+      this.touchArea = this.localBounds.dilated(5);
+      this.mouseArea = this.localBounds.dilated(3);
+    });
   }
 
-  public setDirection( direction: CueingArrowsDirection ): void {
-    this.shape = createArrowsShape( direction, this.length );
+  public setDirection(direction: CueingArrowsDirection): void {
+    this.shape = createArrowsShape(direction, this.length);
   }
 
   /**
@@ -66,12 +66,12 @@ export default class CueingArrowsNode extends Path {
    * @param inputEnabledProperty - is input enabled for the associated Node?
    * @param wasDraggedProperty - has the associated Node been dragged?
    */
-  public static createVisibleProperty( inputEnabledProperty: TReadOnlyProperty<boolean>,
-                                       wasDraggedProperty: TReadOnlyProperty<boolean> ): TReadOnlyProperty<boolean> {
+  public static createVisibleProperty(inputEnabledProperty: TReadOnlyProperty<boolean>,
+    wasDraggedProperty: TReadOnlyProperty<boolean>): TReadOnlyProperty<boolean> {
     return new DerivedProperty(
-      [ GOPreferences.cueingArrowsEnabledProperty, inputEnabledProperty, wasDraggedProperty ],
-      ( cueingArrowsEnabled, inputEnabled, wasDragged ) =>
-        ( cueingArrowsEnabled && inputEnabled && !wasDragged ) );
+      [GOPreferences.cueingArrowsEnabledProperty, inputEnabledProperty, wasDraggedProperty],
+      (cueingArrowsEnabled, inputEnabled, wasDragged) =>
+        (cueingArrowsEnabled && inputEnabled && !wasDragged));
   }
 }
 
@@ -82,20 +82,20 @@ const ARROW_SHAPE_OPTIONS = {
   tailWidth: 3
 };
 
-function createArrowsShape( direction: CueingArrowsDirection, length: number ): Shape {
+function createArrowsShape(direction: CueingArrowsDirection, length: number): Shape {
   let shape;
-  if ( direction === 'horizontal' ) {
-    shape = new ArrowShape( -length / 2, 0, length / 2, 0, ARROW_SHAPE_OPTIONS );
+  if (direction === 'horizontal') {
+    shape = new ArrowShape(-length / 2, 0, length / 2, 0, ARROW_SHAPE_OPTIONS);
   }
-  else if ( direction === 'vertical' ) {
-    shape = new ArrowShape( 0, -length / 2, 0, length / 2, ARROW_SHAPE_OPTIONS );
+  else if (direction === 'vertical') {
+    shape = new ArrowShape(0, -length / 2, 0, length / 2, ARROW_SHAPE_OPTIONS);
   }
   else {
-    const leftRightArrowShape = new ArrowShape( -length / 2, 0, length / 2, 0, ARROW_SHAPE_OPTIONS );
-    const upDownArrowShape = new ArrowShape( 0, -length / 2, 0, length / 2, ARROW_SHAPE_OPTIONS );
-    shape = Shape.union( [ leftRightArrowShape, upDownArrowShape ] );
+    const leftRightArrowShape = new ArrowShape(-length / 2, 0, length / 2, 0, ARROW_SHAPE_OPTIONS);
+    const upDownArrowShape = new ArrowShape(0, -length / 2, 0, length / 2, ARROW_SHAPE_OPTIONS);
+    shape = Shape.union([leftRightArrowShape, upDownArrowShape]);
   }
   return shape;
 }
 
-geometricOptics.register( 'CueingArrowsNode', CueingArrowsNode );
+geometricOptics.register('CueingArrowsNode', CueingArrowsNode);

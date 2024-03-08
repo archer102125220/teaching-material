@@ -7,19 +7,19 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import GeometricOpticsStrings from '../../GeometricOpticsStrings.js';
-import geometricOptics from '../../geometricOptics.js';
-import { FocalLengthModelType } from '../model/FocalLengthModelType.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { Text, VBox, VBoxOptions } from '../../../../scenery/js/imports.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import PickOptional from '../../../../phet-core/js/types/PickOptional.js';
-import Property from '../../../../axon/js/Property.js';
-import PreferencesDialog from '../../../../joist/js/preferences/PreferencesDialog.js';
-import { AquaRadioButtonGroupItem } from '../../../../sun/js/AquaRadioButtonGroup.js';
-import VerticalAquaRadioButtonGroup, { VerticalAquaRadioButtonGroupOptions } from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import GeometricOpticsStrings from '../../GeometricOpticsStrings';
+import geometricOptics from '../../geometricOptics';
+import { type FocalLengthModelType } from '../model/FocalLengthModelType';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import { Text, VBox, type VBoxOptions } from '../../../scenery/imports';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import type PickOptional from '../../../phet-core/types/PickOptional';
+import Property from '../../../axon/Property';
+import PreferencesDialog from '../../../joist/preferences/PreferencesDialog';
+import { type AquaRadioButtonGroupItem } from '../../../sun/AquaRadioButtonGroup';
+import VerticalAquaRadioButtonGroup, { type VerticalAquaRadioButtonGroupOptions } from '../../../sun/VerticalAquaRadioButtonGroup';
+import Tandem from '../../../tandem/Tandem';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -35,9 +35,9 @@ export default class FocalLengthModelTypeControl extends VBox {
    * @param focalLengthModelTypeProperty - whether to set focal length directly or indirectly
    * @param providedOptions
    */
-  public constructor( focalLengthModelTypeProperty: Property<FocalLengthModelType>, providedOptions: FocalLengthModelTypeOptions ) {
+  public constructor(focalLengthModelTypeProperty: Property<FocalLengthModelType>, providedOptions: FocalLengthModelTypeOptions) {
 
-    const options = optionize<FocalLengthModelTypeOptions, SelfOptions, VBoxOptions>()( {
+    const options = optionize<FocalLengthModelTypeOptions, SelfOptions, VBoxOptions>()({
 
       // VBoxOptions
       spacing: 8,
@@ -45,22 +45,22 @@ export default class FocalLengthModelTypeControl extends VBox {
       visiblePropertyOptions: {
         phetioFeatured: true
       }
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
-    const labelText = new Text( GeometricOpticsStrings.focalLengthControlStringProperty, {
+    const labelText = new Text(GeometricOpticsStrings.focalLengthControlStringProperty, {
       font: PreferencesDialog.CONTENT_FONT,
-      tandem: options.tandem.createTandem( 'labelText' )
-    } );
+      tandem: options.tandem.createTandem('labelText')
+    });
 
-    const radioButtonGroup = new FocalLengthModelTypeRadioButtonGroup( focalLengthModelTypeProperty, {
-      tandem: options.tandem.createTandem( 'radioButtonGroup' )
-    } );
+    const radioButtonGroup = new FocalLengthModelTypeRadioButtonGroup(focalLengthModelTypeProperty, {
+      tandem: options.tandem.createTandem('radioButtonGroup')
+    });
 
-    this.children = [ labelText, radioButtonGroup ];
+    this.children = [labelText, radioButtonGroup];
 
-    this.addLinkedElement( focalLengthModelTypeProperty );
+    this.addLinkedElement(focalLengthModelTypeProperty);
 
     this.disposeFocalLengthModelTypeControl = (): void => {
       labelText.dispose();
@@ -88,10 +88,10 @@ class FocalLengthModelTypeRadioButtonGroup extends VerticalAquaRadioButtonGroup<
    * @param focalLengthModelTypeProperty - whether to set focal length directly or indirectl
    * @param providedOptions
    */
-  public constructor( focalLengthModelTypeProperty: Property<FocalLengthModelType>,
-                      providedOptions: FocalLengthControlRadioButtonGroupOptions ) {
+  public constructor(focalLengthModelTypeProperty: Property<FocalLengthModelType>,
+    providedOptions: FocalLengthControlRadioButtonGroupOptions) {
 
-    const options = optionize<FocalLengthControlRadioButtonGroupOptions, FocalLengthModelTypeRadioButtonGroupSelfOptions, VerticalAquaRadioButtonGroupOptions>()( {
+    const options = optionize<FocalLengthControlRadioButtonGroupOptions, FocalLengthModelTypeRadioButtonGroupSelfOptions, VerticalAquaRadioButtonGroupOptions>()({
 
       // VerticalAquaRadioButtonGroupOptions
       spacing: 8,
@@ -99,14 +99,14 @@ class FocalLengthModelTypeRadioButtonGroup extends VerticalAquaRadioButtonGroup<
       radioButtonOptions: {
         phetioVisiblePropertyInstrumented: false
       }
-    }, providedOptions );
+    }, providedOptions);
 
     const items = [
-      createItem( 'direct', GeometricOpticsStrings.radioButton.directStringProperty, options.tandem, 'directRadioButton' ),
-      createItem( 'indirect', GeometricOpticsStrings.radioButton.indirectStringProperty, options.tandem, 'indirectRadioButton' )
+      createItem('direct', GeometricOpticsStrings.radioButton.directStringProperty, options.tandem, 'directRadioButton'),
+      createItem('indirect', GeometricOpticsStrings.radioButton.indirectStringProperty, options.tandem, 'indirectRadioButton')
     ];
 
-    super( focalLengthModelTypeProperty, items, options );
+    super(focalLengthModelTypeProperty, items, options);
   }
 }
 
@@ -117,19 +117,19 @@ class FocalLengthModelTypeRadioButtonGroup extends VerticalAquaRadioButtonGroup<
  * @param groupTandem - used to associate the item's tandem with the radio-button group
  * @param itemTandemName - used to create the item's tandem
  */
-function createItem( value: FocalLengthModelType,
-                     labelStringProperty: TReadOnlyProperty<string>,
-                     groupTandem: Tandem,
-                     itemTandemName: string ): AquaRadioButtonGroupItem<FocalLengthModelType> {
+function createItem(value: FocalLengthModelType,
+  labelStringProperty: TReadOnlyProperty<string>,
+  groupTandem: Tandem,
+  itemTandemName: string): AquaRadioButtonGroupItem<FocalLengthModelType> {
   return {
-    value: value,
-    createNode: tandem => new Text( labelStringProperty, {
+    value,
+    createNode: tandem => new Text(labelStringProperty, {
       font: PreferencesDialog.CONTENT_FONT,
       maxWidth: 500,
-      tandem: tandem.createTandem( 'labelText' )
-    } ),
+      tandem: tandem.createTandem('labelText')
+    }),
     tandemName: itemTandemName
   };
 }
 
-geometricOptics.register( 'FocalLengthModelTypeControl', FocalLengthModelTypeControl );
+geometricOptics.register('FocalLengthModelTypeControl', FocalLengthModelTypeControl);

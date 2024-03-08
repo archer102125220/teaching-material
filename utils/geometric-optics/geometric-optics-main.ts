@@ -12,13 +12,19 @@ import GOSim from './GOSim';
 
 
 export function GeometricOpticsInit(container: Element) {
-
-  simLauncher.launch(() => {
-    const sim = new GOSim(GeometricOpticsStrings['geometric-optics'].titleStringProperty, {
-      isBasicsVersion: false,
-      phetioDesigned: true
-    }, { container });
-    sim.start();
+  return new Promise((resolve, reject) => {
+    try {
+      simLauncher.launch(() => {
+        const sim = new GOSim(GeometricOpticsStrings['geometric-optics'].titleStringProperty, {
+          isBasicsVersion: false,
+          phetioDesigned: true
+        }, { container });
+        sim.start();
+        resolve({ simLauncher, sim });
+      });
+    } catch (error) {
+      reject(error);
+    }
   });
 }
 

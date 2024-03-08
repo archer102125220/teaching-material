@@ -8,52 +8,52 @@
  * @author Martin Veillette
  */
 
-import { HBox, Node } from '../../../../scenery/js/imports.js';
-import geometricOptics from '../../geometricOptics.js';
-import FocalLengthControl from './FocalLengthControl.js';
-import GOPreferences from '../model/GOPreferences.js';
-import RadiusOfCurvatureControl from './RadiusOfCurvatureControl.js';
-import Lens from '../../lens/model/Lens.js';
-import IndexOfRefractionControl from './IndexOfRefractionControl.js';
-import DiameterControl from './DiameterControl.js';
-import Optic from '../model/Optic.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
+import { HBox, Node } from '../../../scenery/imports';
+import geometricOptics from '../../geometricOptics';
+import FocalLengthControl from './FocalLengthControl';
+import GOPreferences from '../model/GOPreferences';
+import RadiusOfCurvatureControl from './RadiusOfCurvatureControl';
+import Lens from '../../lens/model/Lens';
+import IndexOfRefractionControl from './IndexOfRefractionControl';
+import DiameterControl from './DiameterControl';
+import Optic from '../model/Optic';
+import Tandem from '../../../tandem/Tandem';
+import DerivedProperty from '../../../axon/DerivedProperty';
 
 const X_SPACING = 15; // horizontal space between control
 const ALIGN = 'bottom'; // align bottoms of all NumberControls
 
 export default class OpticSubpanel extends HBox {
 
-  public constructor( optic: Optic, tandem: Tandem ) {
+  public constructor(optic: Optic, tandem: Tandem) {
 
     const children = [];
 
     // An exclusively-flat mirror (as in the Basics version) has no controls for focal length.
-    if ( !optic.isExclusivelyFlatMirror() ) {
+    if (!optic.isExclusivelyFlatMirror()) {
 
       // Controls for 'direct' focal-length model
-      children.push( new DirectFocalLengthControls( optic, tandem ) );
+      children.push(new DirectFocalLengthControls(optic, tandem));
 
       // Controls for 'indirect' focal-length model
-      children.push( new IndirectFocalLengthControls( optic, tandem ) );
+      children.push(new IndirectFocalLengthControls(optic, tandem));
     }
 
     // Diameter control, relevant for all optics
-    const diameterControl = new DiameterControl( optic.diameterProperty, {
-      tandem: tandem.createTandem( 'diameterControl' )
-    } );
-    children.push( diameterControl );
+    const diameterControl = new DiameterControl(optic.diameterProperty, {
+      tandem: tandem.createTandem('diameterControl')
+    });
+    children.push(diameterControl);
 
-    super( {
-      children: children,
+    super({
+      children,
       spacing: X_SPACING,
       align: ALIGN,
       visiblePropertyOptions: {
         phetioFeatured: true
       },
-      tandem: tandem
-    } );
+      tandem
+    });
   }
 }
 
@@ -64,21 +64,21 @@ export default class OpticSubpanel extends HBox {
  */
 class DirectFocalLengthControls extends Node {
 
-  public constructor( optic: Optic, tandem: Tandem ) {
+  public constructor(optic: Optic, tandem: Tandem) {
 
     // Focal Length
-    const focalLengthControl = new FocalLengthControl( optic.directFocalLengthModel.focalLengthMagnitudeProperty,
+    const focalLengthControl = new FocalLengthControl(optic.directFocalLengthModel.focalLengthMagnitudeProperty,
       optic.focalLengthProperty, {
-        tandem: tandem.createTandem( 'focalLengthControl' )
-      } );
+      tandem: tandem.createTandem('focalLengthControl')
+    });
 
-    super( {
-      children: [ focalLengthControl ],
-      visibleProperty: new DerivedProperty( [ GOPreferences.focalLengthModelTypeProperty, optic.opticSurfaceTypeProperty ],
-        ( focalLengthModelType, opticSurfaceType ) =>
-          ( focalLengthModelType === 'direct' ) && ( opticSurfaceType !== 'flat' ) )
+    super({
+      children: [focalLengthControl],
+      visibleProperty: new DerivedProperty([GOPreferences.focalLengthModelTypeProperty, optic.opticSurfaceTypeProperty],
+        (focalLengthModelType, opticSurfaceType) =>
+          (focalLengthModelType === 'direct') && (opticSurfaceType !== 'flat'))
       // no tandem, do not instrument!
-    } );
+    });
   }
 }
 
@@ -89,7 +89,7 @@ class DirectFocalLengthControls extends Node {
  */
 class IndirectFocalLengthControls extends HBox {
 
-  public constructor( optic: Optic, tandem: Tandem ) {
+  public constructor(optic: Optic, tandem: Tandem) {
 
     const children = [];
 
@@ -97,29 +97,29 @@ class IndirectFocalLengthControls extends HBox {
     const radiusOfCurvatureControl = new RadiusOfCurvatureControl(
       optic.indirectFocalLengthModel.radiusOfCurvatureMagnitudeProperty,
       optic.radiusOfCurvatureProperty, {
-        tandem: tandem.createTandem( 'radiusOfCurvatureControl' )
-      } );
-    children.push( radiusOfCurvatureControl );
+      tandem: tandem.createTandem('radiusOfCurvatureControl')
+    });
+    children.push(radiusOfCurvatureControl);
 
     // Index of Refraction (for lens only)
-    if ( optic instanceof Lens ) {
-      const indexOfRefractionControl = new IndexOfRefractionControl( optic.indirectFocalLengthModel.indexOfRefractionProperty, {
-        tandem: tandem.createTandem( 'indexOfRefractionControl' )
-      } );
-      children.push( indexOfRefractionControl );
+    if (optic instanceof Lens) {
+      const indexOfRefractionControl = new IndexOfRefractionControl(optic.indirectFocalLengthModel.indexOfRefractionProperty, {
+        tandem: tandem.createTandem('indexOfRefractionControl')
+      });
+      children.push(indexOfRefractionControl);
     }
 
-    super( {
-      children: children,
+    super({
+      children,
       spacing: X_SPACING,
       align: ALIGN,
-      visibleProperty: new DerivedProperty( [ GOPreferences.focalLengthModelTypeProperty, optic.opticSurfaceTypeProperty ],
-        ( focalLengthModelType, opticSurfaceType ) =>
-          ( focalLengthModelType === 'indirect' ) && ( opticSurfaceType !== 'flat' )
+      visibleProperty: new DerivedProperty([GOPreferences.focalLengthModelTypeProperty, optic.opticSurfaceTypeProperty],
+        (focalLengthModelType, opticSurfaceType) =>
+          (focalLengthModelType === 'indirect') && (opticSurfaceType !== 'flat')
       )
       // no tandem, do not instrument!
-    } );
+    });
   }
 }
 
-geometricOptics.register( 'OpticSubpanel', OpticSubpanel );
+geometricOptics.register('OpticSubpanel', OpticSubpanel);
