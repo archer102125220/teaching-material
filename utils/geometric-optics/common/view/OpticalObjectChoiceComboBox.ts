@@ -7,14 +7,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import EnumerationProperty from '../../../../axon/js/EnumerationProperty.js';
-import { AlignBox, AlignGroup, HBox, Image, Node, NodeTranslationOptions, Text } from '../../../../scenery/js/imports.js';
-import ComboBox, { ComboBoxItem, ComboBoxOptions } from '../../../../sun/js/ComboBox.js';
-import geometricOptics from '../../geometricOptics.js';
-import GOConstants from '../GOConstants.js';
-import OpticalObjectChoice from '../model/OpticalObjectChoice.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
+import EnumerationProperty from '../../../axon/EnumerationProperty';
+import { AlignBox, AlignGroup, HBox, Image, Node, type NodeTranslationOptions, Text } from '../../../scenery/imports';
+import ComboBox, { type ComboBoxItem, type ComboBoxOptions } from '../../../sun/ComboBox';
+import geometricOptics from '../../geometricOptics';
+import GOConstants from '../GOConstants';
+import OpticalObjectChoice from '../model/OpticalObjectChoice';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -29,10 +29,10 @@ export default class OpticalObjectChoiceComboBox extends ComboBox<OpticalObjectC
    * @param listParent - parent for the listbox popup
    * @param providedOptions
    */
-  public constructor( opticalObjectChoiceProperty: EnumerationProperty<OpticalObjectChoice>, listParent: Node,
-                      providedOptions: OpticalObjectChoiceComboBoxOptions ) {
+  public constructor(opticalObjectChoiceProperty: EnumerationProperty<OpticalObjectChoice>, listParent: Node,
+    providedOptions: OpticalObjectChoiceComboBoxOptions) {
 
-    const options = optionize<OpticalObjectChoiceComboBoxOptions, SelfOptions, ComboBoxOptions>()( {
+    const options = optionize<OpticalObjectChoiceComboBoxOptions, SelfOptions, ComboBoxOptions>()({
 
       // ComboBoxOptions
       highlightFill: 'rgb( 168, 192, 245 )',
@@ -41,48 +41,48 @@ export default class OpticalObjectChoiceComboBox extends ComboBox<OpticalObjectC
       yMargin: 5,
       buttonTouchAreaXDilation: 5,
       buttonTouchAreaYDilation: 5
-    }, providedOptions );
+    }, providedOptions);
 
     // To make all icons have the same effective dimensions
     const iconsAlignGroup = new AlignGroup();
 
     // Create a ComboBoxItem for each representation.
     const items: ComboBoxItem<OpticalObjectChoice>[] = [];
-    assert && assert( opticalObjectChoiceProperty.validValues ); // {OpticalObjectChoice[]|undefined}
-    opticalObjectChoiceProperty.validValues!.forEach( ( opticalObjectChoice: OpticalObjectChoice ) => {
+    assert && assert(opticalObjectChoiceProperty.validValues); // {OpticalObjectChoice[]|undefined}
+    opticalObjectChoiceProperty.validValues!.forEach((opticalObjectChoice: OpticalObjectChoice) => {
 
       const itemTandemName = `${opticalObjectChoice.tandemPrefix}${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`;
 
       // create text
-      const labelText = new Text( opticalObjectChoice.labelStringProperty, {
+      const labelText = new Text(opticalObjectChoice.labelStringProperty, {
         font: GOConstants.CONTROL_FONT,
         maxWidth: 100,
-        tandem: options.tandem.createTandem( itemTandemName ).createTandem( 'labelText' )
-      } );
+        tandem: options.tandem.createTandem(itemTandemName).createTandem('labelText')
+      });
 
       // create icon
-      const icon = ( opticalObjectChoice.icon instanceof Node ) ?
-                   new Node( { children: [ opticalObjectChoice.icon ] } ) :
-                   new Image( opticalObjectChoice.icon, { scale: 0.5 } );
-      const iconAlignBox = new AlignBox( icon, {
+      const icon = (opticalObjectChoice.icon instanceof Node) ?
+        new Node({ children: [opticalObjectChoice.icon] }) :
+        new Image(opticalObjectChoice.icon, { scale: 0.5 });
+      const iconAlignBox = new AlignBox(icon, {
         group: iconsAlignGroup
-      } );
+      });
 
-      const hBox = new HBox( {
+      const hBox = new HBox({
         spacing: 5,
-        children: [ iconAlignBox, labelText ]
-      } );
+        children: [iconAlignBox, labelText]
+      });
 
       // create and add combo box item to the array
-      items.push( {
+      items.push({
         value: opticalObjectChoice,
         createNode: () => hBox,
         tandemName: itemTandemName
-      } );
-    } );
+      });
+    });
 
-    super( opticalObjectChoiceProperty, items, listParent, options );
+    super(opticalObjectChoiceProperty, items, listParent, options);
   }
 }
 
-geometricOptics.register( 'OpticalObjectChoiceComboBox', OpticalObjectChoiceComboBox );
+geometricOptics.register('OpticalObjectChoiceComboBox', OpticalObjectChoiceComboBox);

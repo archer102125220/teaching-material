@@ -6,9 +6,9 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Enumeration from '../../../phet-core/js/Enumeration.js';
-import EnumerationValue from '../../../phet-core/js/EnumerationValue.js';
-import joist from '../joist.js';
+import Enumeration from '../../phet-core/Enumeration';
+import EnumerationValue from '../../phet-core/EnumerationValue';
+import joist from '../joist';
 
 export default class PreferencesType extends EnumerationValue {
   public static readonly OVERVIEW = new PreferencesType();
@@ -18,7 +18,7 @@ export default class PreferencesType extends EnumerationValue {
   public static readonly INPUT = new PreferencesType();
   public static readonly LOCALIZATION = new PreferencesType();
 
-  public static readonly enumeration = new Enumeration( PreferencesType );
+  public static readonly enumeration = new Enumeration(PreferencesType);
 }
 
-joist.register( 'PreferencesType', PreferencesType );
+joist.register('PreferencesType', PreferencesType);

@@ -8,17 +8,17 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { KeyboardListener, voicingUtteranceQueue } from '../../../scenery/js/imports.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import resetAllSoundPlayer from '../../../tambo/js/shared-sound-players/resetAllSoundPlayer.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import ActivationUtterance from '../../../utterance-queue/js/ActivationUtterance.js';
-import PhetColorScheme from '../PhetColorScheme.js';
-import sceneryPhet from '../sceneryPhet.js';
-import SceneryPhetConstants from '../SceneryPhetConstants.js';
-import SceneryPhetStrings from '../SceneryPhetStrings.js';
-import ResetButton, { ResetButtonOptions } from './ResetButton.js';
+import { KeyboardListener, voicingUtteranceQueue } from '../../scenery/imports';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import resetAllSoundPlayer from '../../tambo/shared-sound-players/resetAllSoundPlayer';
+import optionize from '../../phet-core/optionize';
+import Tandem from '../../tandem/Tandem';
+import ActivationUtterance from '../../utterance-queue/ActivationUtterance';
+import PhetColorScheme from '../PhetColorScheme';
+import sceneryPhet from '../sceneryPhet';
+import SceneryPhetConstants from '../SceneryPhetConstants';
+import SceneryPhetStrings from '../SceneryPhetStrings';
+import ResetButton, { type ResetButtonOptions } from './ResetButton';
 
 const MARGIN_COEFFICIENT = 5 / SceneryPhetConstants.DEFAULT_BUTTON_RADIUS;
 
@@ -32,9 +32,9 @@ export default class ResetAllButton extends ResetButton {
 
   private readonly disposeResetAllButton: () => void;
 
-  public constructor( providedOptions?: ResetAllButtonOptions ) {
+  public constructor(providedOptions?: ResetAllButtonOptions) {
 
-    const options = optionize<ResetAllButtonOptions, SelfOptions, ResetButtonOptions>()( {
+    const options = optionize<ResetAllButtonOptions, SelfOptions, ResetButtonOptions>()({
 
       // ResetAllButtonOptions
       radius: SceneryPhetConstants.DEFAULT_BUTTON_RADIUS,
@@ -62,23 +62,23 @@ export default class ResetAllButton extends ResetButton {
       // voicing
       voicingNameResponse: SceneryPhetStrings.a11y.resetAll.labelStringProperty,
       voicingContextResponse: SceneryPhetStrings.a11y.voicing.resetAll.contextResponseStringProperty
-    }, providedOptions );
+    }, providedOptions);
 
-    assert && assert( options.xMargin === undefined && options.yMargin === undefined, 'resetAllButton sets margins' );
+    assert && assert(options.xMargin === undefined && options.yMargin === undefined, 'resetAllButton sets margins');
     options.xMargin = options.yMargin = options.radius * MARGIN_COEFFICIENT;
 
-    super( options );
+    super(options);
 
     // a11y - when reset all button is fired, disable alerts so that there isn't an excessive stream of alerts
     // while many Properties are reset. When callbacks are ended for reset all, enable alerts again and announce an
     // alert that everything was reset.
-    const resetUtterance = new ActivationUtterance( { alert: SceneryPhetStrings.a11y.resetAll.alertStringProperty } );
+    const resetUtterance = new ActivationUtterance({ alert: SceneryPhetStrings.a11y.resetAll.alertStringProperty });
     let voicingEnabledOnFire = voicingUtteranceQueue.enabled;
     const ariaEnabledOnFirePerUtteranceQueueMap = new Map(); // Keep track of the enabled of each connected description UtteranceQueue
-    this.pushButtonModel.isFiringProperty.lazyLink( ( isFiring: boolean ) => {
+    this.pushButtonModel.isFiringProperty.lazyLink((isFiring: boolean) => {
 
       // Handle voicingUtteranceQueue
-      if ( isFiring ) {
+      if (isFiring) {
         voicingEnabledOnFire = voicingUtteranceQueue.enabled;
         voicingUtteranceQueue.enabled = false;
         voicingUtteranceQueue.clear();
@@ -86,11 +86,11 @@ export default class ResetAllButton extends ResetButton {
       else {
 
         // every ResetAllButton has the option to reset to the last PhET-iO state if desired.
-        if ( Tandem.PHET_IO_ENABLED && options.phetioRestoreScreenStateOnReset &&
+        if (Tandem.PHET_IO_ENABLED && options.phetioRestoreScreenStateOnReset &&
 
-             // even though this is Tandem.REQUIRED, still be graceful if not yet instrumented
-             this.isPhetioInstrumented() ) {
-          phet.phetio.phetioEngine.phetioStateEngine.restoreStateForScreen( options.tandem );
+          // even though this is Tandem.REQUIRED, still be graceful if not yet instrumented
+          this.isPhetioInstrumented()) {
+          phet.phetio.phetioEngine.phetioStateEngine.restoreStateForScreen(options.tandem);
         }
 
         // restore the enabled state to each utteranceQueue after resetting
@@ -100,34 +100,34 @@ export default class ResetAllButton extends ResetButton {
       }
 
       // Handle each connected description UtteranceQueue
-      this.forEachUtteranceQueue( utteranceQueue => {
+      this.forEachUtteranceQueue(utteranceQueue => {
 
-        if ( isFiring ) {
+        if (isFiring) {
 
           // mute and clear the utteranceQueue
-          ariaEnabledOnFirePerUtteranceQueueMap.set( utteranceQueue, utteranceQueue.enabled );
+          ariaEnabledOnFirePerUtteranceQueueMap.set(utteranceQueue, utteranceQueue.enabled);
           utteranceQueue.enabled = false;
           utteranceQueue.clear();
         }
         else {
-          utteranceQueue.enabled = ariaEnabledOnFirePerUtteranceQueueMap.get( utteranceQueue ) || utteranceQueue.enabled;
-          utteranceQueue.addToBack( resetUtterance );
+          utteranceQueue.enabled = ariaEnabledOnFirePerUtteranceQueueMap.get(utteranceQueue) || utteranceQueue.enabled;
+          utteranceQueue.addToBack(resetUtterance);
         }
-      } );
-    } );
+      });
+    });
 
-    const keyboardListener = new KeyboardListener( {
-      keys: [ 'alt+r' ],
+    const keyboardListener = new KeyboardListener({
+      keys: ['alt+r'],
       callback: () => this.pdomClick(),
       global: true,
 
       // fires on up because the listener will often call interruptSubtreeInput (interrupting this keyboard listener)
       listenerFireTrigger: 'up'
-    } );
-    this.addInputListener( keyboardListener );
+    });
+    this.addInputListener(keyboardListener);
 
     this.disposeResetAllButton = () => {
-      this.removeInputListener( keyboardListener );
+      this.removeInputListener(keyboardListener);
       ariaEnabledOnFirePerUtteranceQueueMap.clear();
     };
   }
@@ -138,4 +138,4 @@ export default class ResetAllButton extends ResetButton {
   }
 }
 
-sceneryPhet.register( 'ResetAllButton', ResetAllButton );
+sceneryPhet.register('ResetAllButton', ResetAllButton);

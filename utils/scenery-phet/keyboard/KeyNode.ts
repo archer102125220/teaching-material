@@ -11,11 +11,11 @@
  * @author Jesse Greenberg
  */
 
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import { AlignBox, Node, NodeOptions, Rectangle, TColor } from '../../../scenery/js/imports.js';
-import sceneryPhet from '../sceneryPhet.js';
+import Bounds2 from '../../dot/Bounds2';
+import optionize from '../../phet-core/optionize';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import { AlignBox, Node, type NodeOptions, Rectangle, type TColor } from '../../scenery/imports';
+import sceneryPhet from '../sceneryPhet';
 
 type XAlign = 'left' | 'center' | 'right';
 type YAlign = 'top' | 'center' | 'bottom';
@@ -62,9 +62,9 @@ export type KeyNodeOptions = SelfOptions & StrictOmit<NodeOptions, 'children'>;
 
 export default class KeyNode extends Node {
 
-  public constructor( keyIcon: Node, providedOptions?: KeyNodeOptions ) {
+  public constructor(keyIcon: Node, providedOptions?: KeyNodeOptions) {
 
-    const options = optionize<KeyNodeOptions, SelfOptions, NodeOptions>()( {
+    const options = optionize<KeyNodeOptions, SelfOptions, NodeOptions>()({
       keyFill: 'white',
       keyShadowFill: 'black',
       lineWidth: 1.3,
@@ -80,71 +80,71 @@ export default class KeyNode extends Node {
       keyHeight: 23,
       minKeyWidth: 23, // default equal to keyHeight, a square key as the minimum.
       forceSquareKey: false
-    }, providedOptions );
+    }, providedOptions);
 
     // Add the height scale to a new node based on the height, with keyIcon as a child so that we don't mutate the parameter node.
-    const heightScaleNode = new Node( { children: [ keyIcon ] } );
+    const heightScaleNode = new Node({ children: [keyIcon] });
 
     // Add the scale to a new node based on the width
-    const widthScaleNode = new Node( { children: [ heightScaleNode ] } );
+    const widthScaleNode = new Node({ children: [heightScaleNode] });
 
     // place content in an align box so that the key surrounding the icon has minimum bounds calculated above
     // with support for margins
-    const content = new AlignBox( widthScaleNode, {
+    const content = new AlignBox(widthScaleNode, {
       xAlign: options.xAlign,
       yAlign: options.yAlign,
       xMargin: options.xMargin,
       yMargin: options.yMargin
-    } );
+    });
 
     // background (shadow rectangle)
-    const backgroundShadow = new Rectangle( 0, 0, 1, 1, options.cornerRadius, options.cornerRadius, {
+    const backgroundShadow = new Rectangle(0, 0, 1, 1, options.cornerRadius, options.cornerRadius, {
       fill: options.keyShadowFill
-    } );
+    });
 
     // foreground
-    const whiteForeground = new Rectangle( 0, 0, 1, 1, options.cornerRadius, options.cornerRadius, {
+    const whiteForeground = new Rectangle(0, 0, 1, 1, options.cornerRadius, options.cornerRadius, {
       fill: options.keyFill,
       stroke: 'black',
       lineWidth: options.lineWidth
-    } );
+    });
 
-    keyIcon.boundsProperty.link( () => {
+    keyIcon.boundsProperty.link(() => {
 
       // scale down the size of the keyIcon passed in if it is taller than the max height of the icon
       let heightScalar = 1;
       const availableHeightForKeyIcon = options.keyHeight - options.yPadding; // adjust for the vertical margin
-      if ( keyIcon.height > availableHeightForKeyIcon ) {
+      if (keyIcon.height > availableHeightForKeyIcon) {
         heightScalar = availableHeightForKeyIcon / keyIcon.height;
       }
 
-      heightScaleNode.setScaleMagnitude( heightScalar );
+      heightScaleNode.setScaleMagnitude(heightScalar);
 
       // Set the keyWidth to either be the minimum, or the width of the icon + padding, which ever is larger.
-      let keyWidth = Math.max( options.minKeyWidth, heightScaleNode.width + options.xPadding );
+      let keyWidth = Math.max(options.minKeyWidth, heightScaleNode.width + options.xPadding);
 
       // Make the width the same as the height by scaling down the icon if necessary
-      if ( options.forceSquareKey ) {
+      if (options.forceSquareKey) {
 
         // If we are forcing square, we may have to scale the node down to fit
         const availableWidthForKeyIcon = options.minKeyWidth - options.xPadding; // adjust for the horizontal margin
 
         let widthScalar = 1;
-        if ( keyIcon.width > availableWidthForKeyIcon ) {
+        if (keyIcon.width > availableWidthForKeyIcon) {
           widthScalar = availableWidthForKeyIcon / keyIcon.width;
         }
 
         // Set the width to the height to make sure the alignBounds below are set correctly as a square.
         keyWidth = options.keyHeight;
 
-        widthScaleNode.setScaleMagnitude( widthScalar );
+        widthScaleNode.setScaleMagnitude(widthScalar);
       }
 
-      content.setAlignBounds( new Bounds2( 0, 0, keyWidth, options.keyHeight ) );
-      backgroundShadow.setRectBounds( content.bounds.shiftedXY(
-        options.xShadowOffset, options.yShadowOffset ) );
-      whiteForeground.setRectBounds( content.bounds );
-    } );
+      content.setAlignBounds(new Bounds2(0, 0, keyWidth, options.keyHeight));
+      backgroundShadow.setRectBounds(content.bounds.shiftedXY(
+        options.xShadowOffset, options.yShadowOffset));
+      whiteForeground.setRectBounds(content.bounds);
+    });
 
     // children of the icon node, including the background shadow, foreground key, and content icon
     options.children = [
@@ -156,8 +156,8 @@ export default class KeyNode extends Node {
       content
     ];
 
-    super( options );
+    super(options);
   }
 }
 
-sceneryPhet.register( 'KeyNode', KeyNode );
+sceneryPhet.register('KeyNode', KeyNode);

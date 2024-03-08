@@ -15,7 +15,7 @@
  */
 
 import cleanArray from '../../phet-core/cleanArray';
-import Pool from '../../phet-core/js/Pool';
+import Pool from '../../phet-core/Pool';
 import { kite, Subpath } from '../imports';
 
 let globaId = 0;

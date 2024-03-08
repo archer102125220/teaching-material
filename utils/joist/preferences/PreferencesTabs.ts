@@ -7,17 +7,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import TProperty from '../../../axon/js/TProperty.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import globeSolidShape from '../../../sherpa/js/fontawesome-5/globeSolidShape.js';
-import { HBox, HBoxOptions, KeyboardListener, Node, Path } from '../../../scenery/js/imports.js';
-import joist from '../joist.js';
-import JoistStrings from '../JoistStrings.js';
-import PreferencesType from './PreferencesType.js';
-import PreferencesTab from './PreferencesTab.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
-import Multilink from '../../../axon/js/Multilink.js';
+import _ from 'lodash';
+
+import type TProperty from '../../axon/TProperty';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
+import globeSolidShape from '../../sherpa/fontawesome-5/globeSolidShape';
+import { HBox, type HBoxOptions, KeyboardListener, Node, Path } from '../../scenery/imports';
+import joist from '../joist';
+import JoistStrings from '../JoistStrings';
+import PreferencesType from './PreferencesType';
+import PreferencesTab from './PreferencesTab';
+import type PickRequired from '../../phet-core/types/PickRequired';
+import Multilink from '../../axon/Multilink';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -33,8 +35,8 @@ class PreferencesTabs extends HBox {
   private readonly selectedPanelProperty: TProperty<PreferencesType>;
   private readonly content: PreferencesTab[] = [];
 
-  public constructor( supportedTabs: PreferencesType[], selectedPanelProperty: TProperty<PreferencesType>, providedOptions: PreferencesTabsOptions ) {
-    const options = optionize<PreferencesTabsOptions, SelfOptions, HBoxOptions>()( {
+  public constructor(supportedTabs: PreferencesType[], selectedPanelProperty: TProperty<PreferencesType>, providedOptions: PreferencesTabsOptions) {
+    const options = optionize<PreferencesTabsOptions, SelfOptions, HBoxOptions>()({
       isDisposable: false,
 
       // pdom
@@ -43,104 +45,104 @@ class PreferencesTabs extends HBox {
       groupFocusHighlight: true,
       spacing: DEFAULT_TAB_SPACING,
       align: 'bottom'
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.selectedPanelProperty = selectedPanelProperty;
 
-    const isTabSupported = ( preferencesType: PreferencesType ) => _.includes( supportedTabs, preferencesType );
+    const isTabSupported = (preferencesType: PreferencesType) => _.includes(supportedTabs, preferencesType);
 
     // A dilation of the pointer areas makes it so that highlights that sorround the tabs are flush against eachother
     // which looks better, see https://github.com/phetsims/joist/issues/932
     const dilation = options.spacing / 2;
-    if ( isTabSupported( PreferencesType.OVERVIEW ) ) {
-      this.content.push( new PreferencesTab( JoistStrings.preferences.tabs.overview.titleStringProperty, selectedPanelProperty, PreferencesType.OVERVIEW, {
+    if (isTabSupported(PreferencesType.OVERVIEW)) {
+      this.content.push(new PreferencesTab(JoistStrings.preferences.tabs.overview.titleStringProperty, selectedPanelProperty, PreferencesType.OVERVIEW, {
         pointerAreaXDilation: dilation,
-        tandem: options.tandem.createTandem( 'overviewTab' )
-      } ) );
+        tandem: options.tandem.createTandem('overviewTab')
+      }));
     }
-    if ( isTabSupported( PreferencesType.SIMULATION ) ) {
-      this.content.push( new PreferencesTab( JoistStrings.preferences.tabs.simulation.titleStringProperty, selectedPanelProperty, PreferencesType.SIMULATION, {
+    if (isTabSupported(PreferencesType.SIMULATION)) {
+      this.content.push(new PreferencesTab(JoistStrings.preferences.tabs.simulation.titleStringProperty, selectedPanelProperty, PreferencesType.SIMULATION, {
         pointerAreaXDilation: dilation,
-        tandem: options.tandem.createTandem( 'simulationTab' )
-      } ) );
+        tandem: options.tandem.createTandem('simulationTab')
+      }));
     }
-    if ( isTabSupported( PreferencesType.VISUAL ) ) {
-      this.content.push( new PreferencesTab( JoistStrings.preferences.tabs.visual.titleStringProperty, selectedPanelProperty, PreferencesType.VISUAL, {
+    if (isTabSupported(PreferencesType.VISUAL)) {
+      this.content.push(new PreferencesTab(JoistStrings.preferences.tabs.visual.titleStringProperty, selectedPanelProperty, PreferencesType.VISUAL, {
         pointerAreaXDilation: dilation,
-        tandem: options.tandem.createTandem( 'visualTab' )
-      } ) );
+        tandem: options.tandem.createTandem('visualTab')
+      }));
     }
-    if ( isTabSupported( PreferencesType.AUDIO ) ) {
-      this.content.push( new PreferencesTab( JoistStrings.preferences.tabs.audio.titleStringProperty, selectedPanelProperty, PreferencesType.AUDIO, {
+    if (isTabSupported(PreferencesType.AUDIO)) {
+      this.content.push(new PreferencesTab(JoistStrings.preferences.tabs.audio.titleStringProperty, selectedPanelProperty, PreferencesType.AUDIO, {
         pointerAreaXDilation: dilation,
-        tandem: options.tandem.createTandem( 'audioTab' )
-      } ) );
+        tandem: options.tandem.createTandem('audioTab')
+      }));
     }
-    if ( isTabSupported( PreferencesType.INPUT ) ) {
-      this.content.push( new PreferencesTab( JoistStrings.preferences.tabs.input.titleStringProperty, selectedPanelProperty, PreferencesType.INPUT, {
+    if (isTabSupported(PreferencesType.INPUT)) {
+      this.content.push(new PreferencesTab(JoistStrings.preferences.tabs.input.titleStringProperty, selectedPanelProperty, PreferencesType.INPUT, {
         pointerAreaXDilation: dilation,
-        tandem: options.tandem.createTandem( 'inputTab' )
-      } ) );
+        tandem: options.tandem.createTandem('inputTab')
+      }));
     }
-    if ( isTabSupported( PreferencesType.LOCALIZATION ) ) {
-      this.content.push( new PreferencesTab( JoistStrings.preferences.tabs.localization.titleStringProperty, selectedPanelProperty, PreferencesType.LOCALIZATION, {
+    if (isTabSupported(PreferencesType.LOCALIZATION)) {
+      this.content.push(new PreferencesTab(JoistStrings.preferences.tabs.localization.titleStringProperty, selectedPanelProperty, PreferencesType.LOCALIZATION, {
         pointerAreaXDilation: dilation,
 
         // Display a globe icon next to the localization label
-        iconNode: new Path( globeSolidShape, {
+        iconNode: new Path(globeSolidShape, {
           scale: 1 / 25, // by inspection
           fill: 'black'
-        } ),
+        }),
 
-        tandem: options.tandem.createTandem( 'localizationTab' )
-      } ) );
+        tandem: options.tandem.createTandem('localizationTab')
+      }));
     }
 
     this.children = this.content;
 
     // If the currently selected tab is hidden via phet-io, then select the first visible tab (if there is one)
-    Multilink.multilinkAny( [ selectedPanelProperty, ...this.content.map( tab => tab.visibleProperty ) ], () => {
+    Multilink.multilinkAny([selectedPanelProperty, ...this.content.map(tab => tab.visibleProperty)], () => {
 
       // Find the tab corresponding to the current selection
-      const tab = this.content.find( tab => tab.value === selectedPanelProperty.value )!;
+      const tab = this.content.find(tab => tab.value === selectedPanelProperty.value)!;
 
       // If the selected tab is not showing...
-      if ( !tab.visibleProperty.value ) {
+      if (!tab.visibleProperty.value) {
 
         // Find the leftmost tab that is showing (if there are any showing tabs)
-        const firstShowingTab = this.content.find( tab => tab.visibleProperty.value );
-        if ( firstShowingTab ) {
+        const firstShowingTab = this.content.find(tab => tab.visibleProperty.value);
+        if (firstShowingTab) {
           selectedPanelProperty.value = firstShowingTab.value;
         }
       }
-    } );
+    });
 
     // pdom - keyboard support to move through tabs with arrow keys
-    const keyboardListener = new KeyboardListener( {
-      keys: [ 'arrowRight', 'arrowLeft', 'arrowUp', 'arrowDown' ],
-      callback: ( event, keysPressed, listener ) => {
-        assert && assert( event, 'event is required for this listener' );
+    const keyboardListener = new KeyboardListener({
+      keys: ['arrowRight', 'arrowLeft', 'arrowUp', 'arrowDown'],
+      callback: (event, keysPressed, listener) => {
+        assert && assert(event, 'event is required for this listener');
         const sceneryEvent = event!;
 
-        if ( listener.keysDown ) {
+        if (listener.keysDown) {
 
           // reserve keyboard events for dragging to prevent default panning behavior with zoom features, prevented
           // for all arrow keys even though only the left/right keys navigate tabs
           sceneryEvent.pointer.reserveForKeyboardDrag();
         }
-        else if ( keysPressed === 'arrowRight' || keysPressed === 'arrowLeft' ) {
+        else if (keysPressed === 'arrowRight' || keysPressed === 'arrowLeft') {
 
           // prevent "native" behavior so that Safari doesn't make an error sound with arrow keys in full screen mode
-          assert && assert( sceneryEvent.domEvent, 'domEvent is required for this listener' );
+          assert && assert(sceneryEvent.domEvent, 'domEvent is required for this listener');
           sceneryEvent.domEvent!.preventDefault();
 
           const direction = keysPressed === 'arrowRight' ? 1 : -1;
-          for ( let i = 0; i < this.content.length; i++ ) {
-            if ( this.selectedButton === this.content[ i ] ) {
-              const nextButtonContent = this.content[ i + direction ];
-              if ( nextButtonContent ) {
+          for (let i = 0; i < this.content.length; i++) {
+            if (this.selectedButton === this.content[i]) {
+              const nextButtonContent = this.content[i + direction];
+              if (nextButtonContent) {
 
                 // select the next tab and move focus to it - a listener on selectedPanelProperty sets the next
                 // selectedButton and makes it focusable
@@ -156,20 +158,20 @@ class PreferencesTabs extends HBox {
 
       // this listener responds to both key down and key up events
       listenerFireTrigger: 'both'
-    } );
-    this.addInputListener( keyboardListener );
+    });
+    this.addInputListener(keyboardListener);
 
     const selectedPanelListener = () => {
-      this.content.forEach( content => {
-        if ( content.value === this.selectedPanelProperty.value ) {
+      this.content.forEach(content => {
+        if (content.value === this.selectedPanelProperty.value) {
           this.selectedButton = content;
         }
-      } );
+      });
     };
-    selectedPanelProperty.link( selectedPanelListener );
+    selectedPanelProperty.link(selectedPanelListener);
 
     // if there is only one tab, it is not interactive
-    if ( supportedTabs.length === 1 ) {
+    if (supportedTabs.length === 1) {
       this.focusable = false;
       this.inputEnabledProperty.value = false;
     }
@@ -179,9 +181,9 @@ class PreferencesTabs extends HBox {
    * Returns the visibleProperty for the Tab associated with the PreferencesType. PreferencesTabs need to be hidden
    * if the Tab becomes invisible (mostly needed for PhET-iO).
    */
-  public getTabVisibleProperty( preferencesType: PreferencesType ): TReadOnlyProperty<boolean> {
-    const tab = _.find( this.content, content => content.value === preferencesType );
-    assert && assert( tab, `tab not found for PreferencesType, ${preferencesType.name}` );
+  public getTabVisibleProperty(preferencesType: PreferencesType): TReadOnlyProperty<boolean> {
+    const tab = _.find(this.content, content => content.value === preferencesType);
+    assert && assert(tab, `tab not found for PreferencesType, ${preferencesType.name}`);
     return tab!.visibleProperty;
   }
 
@@ -189,13 +191,13 @@ class PreferencesTabs extends HBox {
    * Move focus to the selected tab. Useful when the Preferences dialog is opened.
    */
   public focusSelectedTab(): void {
-    this.content.forEach( content => {
-      if ( content.value === this.selectedPanelProperty.value ) {
+    this.content.forEach(content => {
+      if (content.value === this.selectedPanelProperty.value) {
         content.focus();
       }
-    } );
+    });
   }
 }
 
-joist.register( 'PreferencesTabs', PreferencesTabs );
+joist.register('PreferencesTabs', PreferencesTabs);
 export default PreferencesTabs;

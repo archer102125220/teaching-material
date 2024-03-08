@@ -6,15 +6,15 @@
  * @author Jesse Greenberg
  */
 
-import { LineJoin, Shape } from '../../../kite/js/imports.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import { TColor, Path } from '../../../scenery/js/imports.js';
-import sceneryPhet from '../sceneryPhet.js';
-import KeyNode, { KeyNodeOptions } from './KeyNode.js';
+import { type LineJoin, Shape } from '../../kite/imports';
+import optionize from '../../phet-core/optionize';
+import { type TColor, Path } from '../../scenery/imports';
+import sceneryPhet from '../sceneryPhet';
+import KeyNode, { type KeyNodeOptions } from './KeyNode';
 
 // constants
 const DEFAULT_ARROW_HEIGHT = 10;
-const DEFAULT_ARROW_WIDTH = 0.6 * Math.sqrt( 3 ) * DEFAULT_ARROW_HEIGHT; // for an isosceles triangle
+const DEFAULT_ARROW_WIDTH = 0.6 * Math.sqrt(3) * DEFAULT_ARROW_HEIGHT; // for an isosceles triangle
 
 type Direction = 'up' | 'down' | 'left' | 'right';
 
@@ -39,11 +39,11 @@ export type ArrowKeyNodeOptions = SelfOptions & KeyNodeOptions;
 
 export default class ArrowKeyNode extends KeyNode {
 
-  public constructor( direction: Direction, providedOptions?: ArrowKeyNodeOptions ) {
+  public constructor(direction: Direction, providedOptions?: ArrowKeyNodeOptions) {
 
-    assert && assert( DIRECTION_ANGLES[ direction ] !== undefined, 'Arrow direction must be one of DIRECTION_ANGLES' );
+    assert && assert(DIRECTION_ANGLES[direction] !== undefined, 'Arrow direction must be one of DIRECTION_ANGLES');
 
-    const options = optionize<ArrowKeyNodeOptions, SelfOptions, KeyNodeOptions>()( {
+    const options = optionize<ArrowKeyNodeOptions, SelfOptions, KeyNodeOptions>()({
 
       // SelfOptions
       arrowFill: 'black',
@@ -56,7 +56,7 @@ export default class ArrowKeyNode extends KeyNode {
       // KeyNodeOptions
       yPadding: 13, // this way the arrows will be scaled down and given proper margin in the key
       forceSquareKey: true // arrow keys are typically square
-    }, providedOptions );
+    }, providedOptions);
 
     const arrowHeight = options.arrowHeight;
     const arrowWidth = options.arrowWidth;
@@ -67,19 +67,19 @@ export default class ArrowKeyNode extends KeyNode {
 
     // draw the arrow shape - default shape pointing up
     const arrowShape = new Shape();
-    arrowShape.moveTo( arrowHeight / 2, 0 ).lineTo( arrowHeight, arrowWidth + 0 ).lineTo( 0, arrowWidth + 0 ).close();
+    arrowShape.moveTo(arrowHeight / 2, 0).lineTo(arrowHeight, arrowWidth + 0).lineTo(0, arrowWidth + 0).close();
 
-    const arrowPath = new Path( arrowShape, {
+    const arrowPath = new Path(arrowShape, {
       fill: arrowFill,
       stroke: arrowStroke,
       lineJoin: arrowLineJoin,
       lineWidth: arrowLineWidth,
-      rotation: DIRECTION_ANGLES[ direction ]
-    } );
+      rotation: DIRECTION_ANGLES[direction]
+    });
 
     // place the arrow in the key
-    super( arrowPath, options );
+    super(arrowPath, options);
   }
 }
 
-sceneryPhet.register( 'ArrowKeyNode', ArrowKeyNode );
+sceneryPhet.register('ArrowKeyNode', ArrowKeyNode);

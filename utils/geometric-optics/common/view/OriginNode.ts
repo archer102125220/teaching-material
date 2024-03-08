@@ -6,15 +6,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Circle } from '../../../../scenery/js/imports.js';
-import geometricOptics from '../../geometricOptics.js';
+import { Circle } from '../../../scenery/imports';
+import geometricOptics from '../../geometricOptics';
 
 export default class OriginNode extends Circle {
   public constructor() {
-    super( 3, {
+    super(3, {
       fill: 'red'
-    } );
+    });
   }
 }
 
-geometricOptics.register( 'OriginNode', OriginNode );
+geometricOptics.register('OriginNode', OriginNode);

@@ -6,18 +6,18 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Emitter from '../../axon/js/Emitter.js';
-import TEmitter from '../../axon/js/TEmitter.js';
-import optionize, { EmptySelfOptions } from '../../phet-core/js/optionize.js';
-import PhetioObject, { PhetioObjectOptions } from '../../tandem/js/PhetioObject.js';
-import IOType from '../../tandem/js/types/IOType.js';
-import NullableIO from '../../tandem/js/types/NullableIO.js';
-import NumberIO from '../../tandem/js/types/NumberIO.js';
-import OrIO from '../../tandem/js/types/OrIO.js';
-import StringIO from '../../tandem/js/types/StringIO.js';
-import { ResolvedResponse } from './ResponsePacket.js';
-import Utterance from './Utterance.js';
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
+import Emitter from '../axon/Emitter';
+import type TEmitter from '../axon/TEmitter';
+import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
+import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
+import IOType from '../tandem/types/IOType';
+import NullableIO from '../tandem/types/NullableIO';
+import NumberIO from '../tandem/types/NumberIO';
+import OrIO from '../tandem/types/OrIO';
+import StringIO from '../tandem/types/StringIO';
+import { type ResolvedResponse } from './ResponsePacket';
+import Utterance from './Utterance';
+import utteranceQueueNamespace from './utteranceQueueNamespace';
 
 type SelfOptions = {
   respectResponseCollectorProperties?: boolean;
@@ -43,31 +43,31 @@ abstract class Announcer extends PhetioObject {
   // Emits an event when this Announcer is finished with an Utterance. It is up
   // to the Announcer subclass to emit this because different speech technologies may have different APIs
   // to determine when speaking is finished.
-  public readonly announcementCompleteEmitter: TEmitter<[ Utterance, ResolvedResponse ]>;
+  public readonly announcementCompleteEmitter: TEmitter<[Utterance, ResolvedResponse]>;
 
-  public constructor( providedOptions?: AnnouncerOptions ) {
-    const options = optionize<AnnouncerOptions, SelfOptions, PhetioObjectOptions>()( {
+  public constructor(providedOptions?: AnnouncerOptions) {
+    const options = optionize<AnnouncerOptions, SelfOptions, PhetioObjectOptions>()({
       respectResponseCollectorProperties: true,
       phetioType: Announcer.AnnouncerIO,
       phetioState: false
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.respectResponseCollectorProperties = options.respectResponseCollectorProperties;
 
-    this.announcementCompleteEmitter = new Emitter( {
-      parameters: [ {
+    this.announcementCompleteEmitter = new Emitter({
+      parameters: [{
         name: 'utterance', phetioType: Utterance.UtteranceIO
       }, {
         name: 'text',
-        phetioType: NullableIO( OrIO( [ StringIO, NumberIO ] ) )
-      } ],
-      tandem: options.tandem?.createTandem( 'announcementCompleteEmitter' ),
+        phetioType: NullableIO(OrIO([StringIO, NumberIO]))
+      }],
+      tandem: options.tandem?.createTandem('announcementCompleteEmitter'),
       phetioReadOnly: true,
       phetioDocumentation: 'The announcement that has just completed. The Utterance text could potentially differ from ' +
-                           'the exact text that was announced, so both are emitted. Use `text` for an exact match of what was announced.'
-    } );
+        'the exact text that was announced, so both are emitted. Use `text` for an exact match of what was announced.'
+    });
   }
 
   /**
@@ -77,13 +77,13 @@ abstract class Announcer extends PhetioObject {
    * @param utterance - Utterance with content to announce
    * @param [providedOptions] - specify support for options particular to this announcer's features.
    */
-  public abstract announce( announceText: ResolvedResponse, utterance: Utterance, providedOptions?: AnnouncerAnnounceOptions ): void;
+  public abstract announce(announceText: ResolvedResponse, utterance: Utterance, providedOptions?: AnnouncerAnnounceOptions): void;
 
   /**
    * Cancel announcement if this Announcer is currently announcing the Utterance. Does nothing
    * to queued Utterances. The announcer needs to implement cancellation of speech.
    */
-  public abstract cancelUtterance( utterance: Utterance ): void;
+  public abstract cancelUtterance(utterance: Utterance): void;
 
   /**
    ’   * Cancel announcement of any Utterance that is being spoken. The announcer needs to implement cancellation of speech.
@@ -95,7 +95,7 @@ abstract class Announcer extends PhetioObject {
    * the new Utterance is of higher priority. But subclasses may re-implement this function if it has special logic
    * or announcerOptions that override this behavior.
    */
-  public shouldUtteranceCancelOther( utterance: Utterance, utteranceToCancel: Utterance ): boolean {
+  public shouldUtteranceCancelOther(utterance: Utterance, utteranceToCancel: Utterance): boolean {
     return utteranceToCancel.priorityProperty.value < utterance.priorityProperty.value;
   }
 
@@ -103,15 +103,15 @@ abstract class Announcer extends PhetioObject {
    * Intended to be overridden by subtypes if necessary as a way to order the queue if there is announcer
    * specific logic.
    */
-  public onUtterancePriorityChange( utterance: Utterance ): void {
+  public onUtterancePriorityChange(utterance: Utterance): void {
     // See subclass for implementation
   }
 
-  public static AnnouncerIO = new IOType( 'AnnouncerIO', {
+  public static AnnouncerIO = new IOType('AnnouncerIO', {
     valueType: Announcer,
     documentation: 'Announces text to a specific browser technology (like aria-live or web speech)'
-  } );
+  });
 }
 
-utteranceQueueNamespace.register( 'Announcer', Announcer );
+utteranceQueueNamespace.register('Announcer', Announcer);
 export default Announcer;

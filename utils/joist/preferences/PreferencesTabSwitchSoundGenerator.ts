@@ -3,22 +3,22 @@
 /**
  * @author John Blanco (PhET Interactive Simulations)
  */
-import Disposable from '../../../axon/js/Disposable.js';
-import EnumerationProperty from '../../../axon/js/EnumerationProperty.js';
-import SoundClip, { SoundClipOptions } from '../../../tambo/js/sound-generators/SoundClip.js';
-import cardFlip_mp3 from '../../sounds/cardFlip_mp3.js';
-import joist from '../joist.js';
-import PreferencesType from './PreferencesType.js';
+import Disposable from '../../axon/Disposable';
+import EnumerationProperty from '../../axon/EnumerationProperty';
+import SoundClip, { type SoundClipOptions } from '../../tambo/sound-generators/SoundClip';
+import cardFlip_mp3 from '@/assets/sounds/joist/cardFlip_mp3';
+import joist from '../joist';
+import PreferencesType from './PreferencesType';
 
 class PreferencesTabSwitchSoundGenerator extends SoundClip {
 
-  public constructor( selectedTabProperty: EnumerationProperty<PreferencesType>, options: SoundClipOptions ) {
+  public constructor(selectedTabProperty: EnumerationProperty<PreferencesType>, options: SoundClipOptions) {
 
-    super( cardFlip_mp3, options );
+    super(cardFlip_mp3, options);
 
     const playSound = () => { this.play(); };
 
-    selectedTabProperty.lazyLink( playSound );
+    selectedTabProperty.lazyLink(playSound);
   }
 
   public override dispose(): void {
@@ -26,5 +26,5 @@ class PreferencesTabSwitchSoundGenerator extends SoundClip {
   }
 }
 
-joist.register( 'PreferencesTabSwitchSoundGenerator', PreferencesTabSwitchSoundGenerator );
+joist.register('PreferencesTabSwitchSoundGenerator', PreferencesTabSwitchSoundGenerator);
 export default PreferencesTabSwitchSoundGenerator;

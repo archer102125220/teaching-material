@@ -7,19 +7,19 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import RectangularRadioButtonGroup, { RectangularRadioButtonGroupOptions } from '../../../../sun/js/buttons/RectangularRadioButtonGroup.js';
-import geometricOptics from '../../geometricOptics.js';
-import GOColors from '../GOColors.js';
-import Optic from '../model/Optic.js';
-import { OpticSurfaceType } from '../model/OpticSurfaceType.js';
-import Lens from '../../lens/model/Lens.js';
-import MirrorNode from '../../mirror/view/MirrorNode.js';
-import LensNode from '../../lens/view/LensNode.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import { NodeTranslationOptions } from '../../../../scenery/js/imports.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import { GOSimOptions } from '../../GOSim.js';
+import RectangularRadioButtonGroup, { type RectangularRadioButtonGroupOptions } from '../../../sun/buttons/RectangularRadioButtonGroup';
+import geometricOptics from '../../geometricOptics';
+import GOColors from '../GOColors';
+import Optic from '../model/Optic';
+import { type OpticSurfaceType } from '../model/OpticSurfaceType';
+import Lens from '../../lens/model/Lens';
+import MirrorNode from '../../mirror/view/MirrorNode';
+import LensNode from '../../lens/view/LensNode';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import { type NodeTranslationOptions } from '../../../scenery/imports';
+import Tandem from '../../../tandem/Tandem';
+import { type GOSimOptions } from '../../GOSim';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -30,9 +30,9 @@ type OpticShapeRadioButtonGroupOptions = SelfOptions &
 
 export default class OpticSurfaceTypeRadioButtonGroup extends RectangularRadioButtonGroup<OpticSurfaceType> {
 
-  public constructor( optic: Optic, providedOptions: OpticShapeRadioButtonGroupOptions ) {
+  public constructor(optic: Optic, providedOptions: OpticShapeRadioButtonGroupOptions) {
 
-    const options = optionize<OpticShapeRadioButtonGroupOptions, SelfOptions, RectangularRadioButtonGroupOptions>()( {
+    const options = optionize<OpticShapeRadioButtonGroupOptions, SelfOptions, RectangularRadioButtonGroupOptions>()({
 
       // RectangularRadioButtonGroupOptions
       visible: !providedOptions.isBasicsVersion, // not visible in the Basics version
@@ -52,23 +52,23 @@ export default class OpticSurfaceTypeRadioButtonGroup extends RectangularRadioBu
           selectedLineWidth: 2
         }
       }
-    }, providedOptions );
+    }, providedOptions);
 
     // A radio button for each shape supported by the optic
-    assert && assert( optic.opticSurfaceTypeProperty.validValues ); // {OpticSurfaceType[]|undefined}
+    assert && assert(optic.opticSurfaceTypeProperty.validValues); // {OpticSurfaceType[]|undefined}
     const validValues = optic.opticSurfaceTypeProperty.validValues!;
 
     const items = validValues.map(
-      ( opticSurfaceType: OpticSurfaceType ) => {
+      (opticSurfaceType: OpticSurfaceType) => {
         return {
           value: opticSurfaceType,
-          createNode: ( tandem: Tandem ) => ( optic instanceof Lens ) ? LensNode.createIconNode( opticSurfaceType ) : MirrorNode.createIconNode( opticSurfaceType ),
+          createNode: (tandem: Tandem) => (optic instanceof Lens) ? LensNode.createIconNode(opticSurfaceType) : MirrorNode.createIconNode(opticSurfaceType),
           tandemName: `${opticSurfaceType}RadioButton`
         };
-      } );
+      });
 
-    super( optic.opticSurfaceTypeProperty, items, options );
+    super(optic.opticSurfaceTypeProperty, items, options);
   }
 }
 
-geometricOptics.register( 'OpticSurfaceTypeRadioButtonGroup', OpticSurfaceTypeRadioButtonGroup );
+geometricOptics.register('OpticSurfaceTypeRadioButtonGroup', OpticSurfaceTypeRadioButtonGroup);

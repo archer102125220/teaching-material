@@ -17,8 +17,7 @@ import Vector2 from './Vector2';
 import Vector3 from './Vector3';
 import EnumerationValue from '../phet-core/EnumerationValue';
 import Enumeration from '../phet-core/Enumeration';
-// @ts-expect-error
-import Pool, { TPoolable } from '../phet-core/Pool';
+import Pool, { type TPoolable } from '../phet-core/Pool';
 
 export class Matrix3Type extends EnumerationValue {
   public static readonly OTHER = new Matrix3Type();
