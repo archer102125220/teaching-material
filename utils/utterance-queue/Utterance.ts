@@ -18,29 +18,29 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../axon/js/DerivedProperty.js';
-import ReadOnlyProperty from '../../axon/js/ReadOnlyProperty.js';
-import TinyProperty from '../../axon/js/TinyProperty.js';
-import DynamicProperty, { DynamicPropertyOptions } from '../../axon/js/DynamicProperty.js';
-import NumberProperty from '../../axon/js/NumberProperty.js';
-import optionize from '../../phet-core/js/optionize.js';
-import IOType from '../../tandem/js/types/IOType.js';
-import StringIO from '../../tandem/js/types/StringIO.js';
-import responseCollector from './responseCollector.js';
-import ResponsePacket, { ResolvedResponse } from './ResponsePacket.js';
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
-import TProperty from '../../axon/js/TProperty.js';
-import NullableIO from '../../tandem/js/types/NullableIO.js';
-import NumberIO from '../../tandem/js/types/NumberIO.js';
-import OrIO from '../../tandem/js/types/OrIO.js';
-import Property from '../../axon/js/Property.js';
-import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
-import Disposable, { DisposableOptions } from '../../axon/js/Disposable.js';
+import DerivedProperty from '../axon/DerivedProperty';
+import ReadOnlyProperty from '../axon/ReadOnlyProperty';
+import TinyProperty from '../axon/TinyProperty';
+import DynamicProperty, { type DynamicPropertyOptions } from '../axon/DynamicProperty';
+import NumberProperty from '../axon/NumberProperty';
+import optionize from '../phet-core/optionize';
+import IOType from '../tandem/types/IOType';
+import StringIO from '../tandem/types/StringIO';
+import responseCollector from './responseCollector';
+import ResponsePacket, { type ResolvedResponse } from './ResponsePacket';
+import utteranceQueueNamespace from './utteranceQueueNamespace';
+import type TProperty from '../axon/TProperty';
+import NullableIO from '../tandem/types/NullableIO';
+import NumberIO from '../tandem/types/NumberIO';
+import OrIO from '../tandem/types/OrIO';
+import Property from '../axon/Property';
+import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
+import Disposable, { type DisposableOptions } from '../axon/Disposable';
 
 // constants
 const DEFAULT_PRIORITY = 1;
 
-export type TAlertable = ResolvedResponse | ( () => string ) | TReadOnlyProperty<string> | ResponsePacket | Utterance;
+export type TAlertable = ResolvedResponse | (() => string) | TReadOnlyProperty<string> | ResponsePacket | Utterance;
 
 type AlertableNoUtterance = Exclude<TAlertable, Utterance>;
 
@@ -144,11 +144,11 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
   // the previous value of the resolved "alert". See getAlertText().
   private previousAlertText: ResolvedResponse;
 
-  public constructor( providedOptions?: UtteranceOptions ) {
+  public constructor(providedOptions?: UtteranceOptions) {
 
-    const options = optionize<UtteranceOptions, SelfOptions, DisposableOptions>()( {
+    const options = optionize<UtteranceOptions, SelfOptions, DisposableOptions>()({
       alert: null,
-      predicate: function() { return true; },
+      predicate: function () { return true; },
       canAnnounceProperties: [],
       descriptionCanAnnounceProperties: [],
       voicingCanAnnounceProperties: [],
@@ -156,9 +156,9 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
       alertMaximumDelay: Number.MAX_VALUE,
       announcerOptions: {},
       priority: DEFAULT_PRIORITY
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.id = globalIdCounter++;
 
@@ -166,23 +166,23 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
 
     this.predicate = options.predicate;
 
-    this.canAnnounceProperty = new AnnouncingControlProperty( {
+    this.canAnnounceProperty = new AnnouncingControlProperty({
       dependentProperties: options.canAnnounceProperties
-    } );
-    this.descriptionCanAnnounceProperty = new AnnouncingControlProperty( {
+    });
+    this.descriptionCanAnnounceProperty = new AnnouncingControlProperty({
       dependentProperties: options.descriptionCanAnnounceProperties
-    } );
-    this.voicingCanAnnounceProperty = new AnnouncingControlProperty( {
+    });
+    this.voicingCanAnnounceProperty = new AnnouncingControlProperty({
       dependentProperties: options.voicingCanAnnounceProperties
 
-    } );
+    });
     this.alertStableDelay = options.alertStableDelay;
 
     this.alertMaximumDelay = options.alertMaximumDelay;
 
     this.announcerOptions = options.announcerOptions;
 
-    this.priorityProperty = new NumberProperty( options.priority );
+    this.priorityProperty = new NumberProperty(options.priority);
 
     this.previousAlertText = null;
   }
@@ -192,14 +192,14 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
    * @param respectResponseCollectorProperties - if false, then do not listen to the value of responseCollector
    *                                              for creating the ResponsePacket conglomerate (just combine all available).
    */
-  private static getAlertStringFromResponsePacket( alert: ResponsePacket, respectResponseCollectorProperties: boolean ): string {
+  private static getAlertStringFromResponsePacket(alert: ResponsePacket, respectResponseCollectorProperties: boolean): string {
 
     const responsePacketOptions = alert.serialize();
 
-    if ( !respectResponseCollectorProperties ) {
+    if (!respectResponseCollectorProperties) {
       responsePacketOptions.ignoreProperties = true;
     }
-    return responseCollector.collectResponses( responsePacketOptions );
+    return responseCollector.collectResponses(responsePacketOptions);
   }
 
   /**
@@ -208,9 +208,9 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
    * @param respectResponseCollectorProperties=false - if false, then do not listen to the value of responseCollector
    *                                              for creating the ResponsePacket conglomerate (just combine all that are supplied).
    */
-  public getAlertText( respectResponseCollectorProperties = false ): ResolvedResponse {
+  public getAlertText(respectResponseCollectorProperties = false): ResolvedResponse {
 
-    const alert = Utterance.alertableToText( this._alert, respectResponseCollectorProperties );
+    const alert = Utterance.alertableToText(this._alert, respectResponseCollectorProperties);
 
     this.previousAlertText = alert;
     return alert;
@@ -220,11 +220,11 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
     return this._alert;
   }
 
-  public get alert(): AlertableNoUtterance {return this.getAlert(); }
+  public get alert(): AlertableNoUtterance { return this.getAlert(); }
 
-  public set alert( alert: AlertableNoUtterance ) { this.setAlert( alert ); }
+  public set alert(alert: AlertableNoUtterance) { this.setAlert(alert); }
 
-  public setAlert( alert: AlertableNoUtterance ): void {
+  public setAlert(alert: AlertableNoUtterance): void {
     this._alert = alert;
   }
 
@@ -235,7 +235,7 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
    * https://github.com/phetsims/gravity-force-lab-basics/issues/146, but does it for you? Be sure there is good
    * reason changing this value.
    */
-  public setAlertStableDelay( delay: number ): void {
+  public setAlertStableDelay(delay: number): void {
     this.alertStableDelay = delay;
   }
 
@@ -245,7 +245,7 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
 
   public toStateObject(): SerializedUtterance {
     return {
-      alert: NullableIO( OrIO( [ StringIO, NumberIO ] ) ).toStateObject( this.getAlertText() )
+      alert: NullableIO(OrIO([StringIO, NumberIO])).toStateObject(this.getAlertText())
     };
   }
 
@@ -259,12 +259,12 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
    * of this.canAnnounceProperty. Setting new canAnnounceProperties has no impact on the listeners added to
    * this.canAnnounceProperty.
    */
-  public setCanAnnounceProperties( canAnnounceProperties: TReadOnlyProperty<boolean>[] ): void {
-    this.canAnnounceProperty.setDependentProperties( canAnnounceProperties );
+  public setCanAnnounceProperties(canAnnounceProperties: TReadOnlyProperty<boolean>[]): void {
+    this.canAnnounceProperty.setDependentProperties(canAnnounceProperties);
   }
 
-  public set canAnnounceProperties( canAnnounceProperties: TReadOnlyProperty<boolean>[] ) {
-    this.setCanAnnounceProperties( canAnnounceProperties );
+  public set canAnnounceProperties(canAnnounceProperties: TReadOnlyProperty<boolean>[]) {
+    this.setCanAnnounceProperties(canAnnounceProperties);
   }
 
   public get canAnnounceProperties(): TReadOnlyProperty<boolean>[] { return this.getCanAnnounceProperties(); }
@@ -284,12 +284,12 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
    * listeners added to this.descriptionCanAnnounceProperty. To announce to AriaLiveAnnouncer, this.canAnnounceProperty
    * must also be true
    */
-  public setDescriptionCanAnnounceProperties( descriptionCanAnnounceProperties: TReadOnlyProperty<boolean>[] ): void {
-    this.descriptionCanAnnounceProperty.setDependentProperties( descriptionCanAnnounceProperties );
+  public setDescriptionCanAnnounceProperties(descriptionCanAnnounceProperties: TReadOnlyProperty<boolean>[]): void {
+    this.descriptionCanAnnounceProperty.setDependentProperties(descriptionCanAnnounceProperties);
   }
 
-  public set descriptionCanAnnounceProperties( descriptionCanAnnounceProperties: TReadOnlyProperty<boolean>[] ) {
-    this.setDescriptionCanAnnounceProperties( descriptionCanAnnounceProperties );
+  public set descriptionCanAnnounceProperties(descriptionCanAnnounceProperties: TReadOnlyProperty<boolean>[]) {
+    this.setDescriptionCanAnnounceProperties(descriptionCanAnnounceProperties);
   }
 
   public get descriptionCanAnnounceProperties(): TReadOnlyProperty<boolean>[] { return this.getDescriptionCanAnnounceProperties(); }
@@ -309,12 +309,12 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
    * on the listeners added to this.voicingCanAnnounceProperty. To announce to SpeechSynthesisAnnouncer,
    * this.canAnnounceProperty must also be true.
    */
-  public setVoicingCanAnnounceProperties( voicingCanAnnounceProperties: TReadOnlyProperty<boolean>[] ): void {
-    this.voicingCanAnnounceProperty.setDependentProperties( voicingCanAnnounceProperties );
+  public setVoicingCanAnnounceProperties(voicingCanAnnounceProperties: TReadOnlyProperty<boolean>[]): void {
+    this.voicingCanAnnounceProperty.setDependentProperties(voicingCanAnnounceProperties);
   }
 
-  public set voicingCanAnnounceProperties( voicingCanAnnounceProperties: TReadOnlyProperty<boolean>[] ) {
-    this.setVoicingCanAnnounceProperties( voicingCanAnnounceProperties );
+  public set voicingCanAnnounceProperties(voicingCanAnnounceProperties: TReadOnlyProperty<boolean>[]) {
+    this.setVoicingCanAnnounceProperties(voicingCanAnnounceProperties);
   }
 
   public get voicingCanAnnounceProperties(): TReadOnlyProperty<boolean>[] { return this.getVoicingCanAnnounceProperties(); }
@@ -345,19 +345,19 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
    * @param respectResponseCollectorProperties=false - if false, then do not listen to the value of responseCollector
    *                                              for creating the ResponsePacket conglomerate (just combine all that are supplied).
    */
-  public static alertableToText( alertable: TAlertable, respectResponseCollectorProperties = false ): ResolvedResponse {
+  public static alertableToText(alertable: TAlertable, respectResponseCollectorProperties = false): ResolvedResponse {
     let alert: ResolvedResponse;
 
-    if ( typeof alertable === 'function' ) {
+    if (typeof alertable === 'function') {
       alert = alertable();
     }
-    else if ( alertable instanceof ResponsePacket ) {
-      alert = Utterance.getAlertStringFromResponsePacket( alertable, respectResponseCollectorProperties );
+    else if (alertable instanceof ResponsePacket) {
+      alert = Utterance.getAlertStringFromResponsePacket(alertable, respectResponseCollectorProperties);
     }
-    else if ( alertable instanceof Utterance ) {
-      return alertable.getAlertText( respectResponseCollectorProperties );
+    else if (alertable instanceof Utterance) {
+      return alertable.getAlertText(respectResponseCollectorProperties);
     }
-    else if ( alertable instanceof ReadOnlyProperty || alertable instanceof TinyProperty ) {
+    else if (alertable instanceof ReadOnlyProperty || alertable instanceof TinyProperty) {
       alert = alertable.value;
     }
     else {
@@ -375,14 +375,14 @@ class Utterance extends Disposable implements FeatureSpecificAnnouncingControlPr
   public static readonly DEFAULT_PRIORITY = DEFAULT_PRIORITY;
   public static readonly LOW_PRIORITY = 0;
 
-  public static readonly UtteranceIO = new IOType( 'UtteranceIO', {
+  public static readonly UtteranceIO = new IOType('UtteranceIO', {
     valueType: Utterance,
     documentation: 'Announces text to a specific browser technology (like aria-live or web speech)',
-    toStateObject: ( utterance: Utterance ) => utterance.toStateObject(),
+    toStateObject: (utterance: Utterance) => utterance.toStateObject(),
     stateSchema: {
-      alert: NullableIO( OrIO( [ StringIO, NumberIO ] ) )
+      alert: NullableIO(OrIO([StringIO, NumberIO]))
     }
-  } );
+  });
 }
 
 type AnnouncingControlPropertySelfOptions = {
@@ -403,39 +403,39 @@ class AnnouncingControlProperty extends DynamicProperty<boolean, boolean, TReadO
   // unaffected on the canAnnounceProperty.
   private readonly implementationProperty: Property<TReadOnlyProperty<boolean>>;
 
-  public constructor( providedOptions?: AnnouncingControlPropertyOptions ) {
+  public constructor(providedOptions?: AnnouncingControlPropertyOptions) {
 
-    const options = optionize<AnnouncingControlPropertyOptions, AnnouncingControlPropertySelfOptions, AnnouncingControlPropertyParentOptions>()( {
+    const options = optionize<AnnouncingControlPropertyOptions, AnnouncingControlPropertySelfOptions, AnnouncingControlPropertyParentOptions>()({
       dependentProperties: []
-    }, providedOptions );
+    }, providedOptions);
 
-    const implementationProperty = new Property<TReadOnlyProperty<boolean>>( new TinyProperty( false ) );
+    const implementationProperty = new Property<TReadOnlyProperty<boolean>>(new TinyProperty(false));
 
-    super( implementationProperty );
+    super(implementationProperty);
 
     this._dependentProperties = [];
     this.implementationProperty = implementationProperty;
-    this.setDependentProperties( options.dependentProperties );
+    this.setDependentProperties(options.dependentProperties);
   }
 
   /**
    * Set the Properties controlling this Property's value. All Properties must be true for this Property to be true.
    */
-  public setDependentProperties( dependentProperties: TReadOnlyProperty<boolean>[] ): void {
-    if ( this.implementationProperty.value ) {
+  public setDependentProperties(dependentProperties: TReadOnlyProperty<boolean>[]): void {
+    if (this.implementationProperty.value) {
       this.implementationProperty.value.dispose();
     }
 
     // If no dependentProperties provided, use a dummy Property that will always allow this Utterance to announce.
-    const dependencyProperties = dependentProperties.length === 0 ? [ new TinyProperty( true ) ] : dependentProperties;
+    const dependencyProperties = dependentProperties.length === 0 ? [new TinyProperty(true)] : dependentProperties;
 
-    this.implementationProperty.value = DerivedProperty.and( dependencyProperties );
+    this.implementationProperty.value = DerivedProperty.and(dependencyProperties);
 
     this._dependentProperties = dependentProperties;
   }
 
 
-  public set dependentProperties( dependentProperties: TReadOnlyProperty<boolean>[] ) { this.setDependentProperties( dependentProperties ); }
+  public set dependentProperties(dependentProperties: TReadOnlyProperty<boolean>[]) { this.setDependentProperties(dependentProperties); }
 
   public get dependentProperties() { return this.getDependentProperties(); }
 
@@ -444,7 +444,7 @@ class AnnouncingControlProperty extends DynamicProperty<boolean, boolean, TReadO
    * All must be true for the announcement to occur.
    */
   public getDependentProperties(): TReadOnlyProperty<boolean>[] {
-    return this._dependentProperties.slice( 0 ); // defensive copy
+    return this._dependentProperties.slice(0); // defensive copy
   }
 
   public override dispose(): void {
@@ -454,5 +454,5 @@ class AnnouncingControlProperty extends DynamicProperty<boolean, boolean, TReadO
   }
 }
 
-utteranceQueueNamespace.register( 'Utterance', Utterance );
+utteranceQueueNamespace.register('Utterance', Utterance);
 export default Utterance;

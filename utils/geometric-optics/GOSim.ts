@@ -16,7 +16,7 @@ import optionize from '../phet-core/optionize';
 import GOPreferencesNode from './common/view/GOPreferencesNode';
 import type PickOptional from '../phet-core/types/PickOptional';
 import PreferencesModel from '../joist/preferences/PreferencesModel';
-import TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
 import { Node } from '../scenery/imports';
 import GOKeyboardHelpContent from './common/view/GOKeyboardHelpContent';
 

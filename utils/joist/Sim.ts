@@ -51,7 +51,7 @@ import packageJSON from './packageJSON';
 import PreferencesModel from './preferences/PreferencesModel';
 import Profiler from './Profiler';
 import QueryParametersWarningDialog from './QueryParametersWarningDialog';
-import Screen, { AnyScreen } from './Screen';
+import Screen, { type AnyScreen } from './Screen';
 import ScreenSelectionSoundGenerator from './ScreenSelectionSoundGenerator';
 import ScreenshotGenerator from './ScreenshotGenerator';
 import selectScreens from './selectScreens';
@@ -61,7 +61,7 @@ import LegendsOfLearningSupport from './thirdPartySupport/LegendsOfLearningSuppo
 import Toolbar from './toolbar/Toolbar';
 import updateCheck from './updateCheck';
 import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import { CreditsData } from './CreditsNode';
+import { type CreditsData } from './CreditsNode';
 import { type PopupableNode } from '../sun/Popupable';
 import type PickOptional from '../phet-core/types/PickOptional';
 import Multilink from '../axon/Multilink';
@@ -426,7 +426,7 @@ export default class Sim extends PhetioObject {
       // If using the TWEEN animation library, then update tweens before rendering the scene.
       // Update the tweens after the model is updated but before the view step.
       // See https://github.com/phetsims/joist/issues/401.
-      //TODO https://github.com/phetsims/joist/issues/404 run TWEENs for the selected screen only
+      // TODO https://github.com/phetsims/joist/issues/404 run TWEENs for the selected screen only
       if (window.TWEEN) {
         window.TWEEN.update(phet.joist.elapsedTime);
       }
@@ -553,8 +553,8 @@ export default class Sim extends PhetioObject {
         // If the 'screens' query parameter selects only 1 screen and both the sim and screen name are not the empty
         // string, then update the nav bar title to include a hyphen and the screen name after the sim name.
         return StringUtils.fillIn(titleWithScreenPattern, {
-          simName: simName,
-          screenName: screenName
+          simName,
+          screenName
         });
       }
       else if (isMultiScreenSimDisplayingSingleScreen && screenName) {
@@ -875,7 +875,7 @@ export default class Sim extends PhetioObject {
   }
 
   private resize(width: number, height: number): void {
-    console.log({ width: width, height: height });
+    console.log({ width, height });
     this.resizeAction.execute(width, height);
   }
 

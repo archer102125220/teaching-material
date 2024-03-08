@@ -1,0 +1,38 @@
+// Copyright 2022-2023, University of Colorado Boulder
+
+/**
+ * Guides is a pair of guides (top and bottom) associated with the same point-of-interest.
+ *
+ * @author Chris Malley (PixelZoom, Inc.)
+ */
+
+import Disposable from '../../../axon/Disposable';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import Vector2 from '../../../dot/Vector2';
+import Optic from './Optic';
+import geometricOptics from '../../geometricOptics';
+import Guide from './Guide';
+
+export default class Guides {
+
+  // the pair of guides
+  public readonly topGuide: Guide;
+  public readonly bottomGuide: Guide;
+
+  /**
+   * @param optic - the optic that these guides are associated with
+   * @param opticalObjectPositionProperty - position of the optical object
+   */
+  public constructor(optic: Optic, opticalObjectPositionProperty: TReadOnlyProperty<Vector2>) {
+
+    this.topGuide = new Guide(optic, opticalObjectPositionProperty, 'top');
+
+    this.bottomGuide = new Guide(optic, opticalObjectPositionProperty, 'bottom');
+  }
+
+  public dispose(): void {
+    Disposable.assertNotDisposable();
+  }
+}
+
+geometricOptics.register('Guides', Guides);

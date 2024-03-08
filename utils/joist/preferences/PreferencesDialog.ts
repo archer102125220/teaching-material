@@ -9,39 +9,39 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import EnumerationProperty from '../../../axon/js/EnumerationProperty.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
-import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import { HSeparator, KeyboardListener, Text, VBox } from '../../../scenery/js/imports.js';
-import Dialog, { DialogOptions } from '../../../sun/js/Dialog.js';
-import soundManager from '../../../tambo/js/soundManager.js';
-import joist from '../joist.js';
-import JoistStrings from '../JoistStrings.js';
-import PreferencesModel from './PreferencesModel.js';
-import PreferencesPanels from './PreferencesPanels.js';
-import PreferencesTabs from './PreferencesTabs.js';
-import PreferencesTabSwitchSoundGenerator from './PreferencesTabSwitchSoundGenerator.js';
-import PreferencesType from './PreferencesType.js';
+import EnumerationProperty from '../../axon/EnumerationProperty';
+import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
+import type PickRequired from '../../phet-core/types/PickRequired';
+import PhetFont from '../../scenery-phet/PhetFont';
+import { HSeparator, KeyboardListener, Text, VBox } from '../../scenery/imports';
+import Dialog, { type DialogOptions } from '../../sun/Dialog';
+import soundManager from '../../tambo/soundManager';
+import joist from '../joist';
+import JoistStrings from '../JoistStrings';
+import PreferencesModel from './PreferencesModel';
+import PreferencesPanels from './PreferencesPanels';
+import PreferencesTabs from './PreferencesTabs';
+import PreferencesTabSwitchSoundGenerator from './PreferencesTabSwitchSoundGenerator';
+import PreferencesType from './PreferencesType';
 
 // constants
-const TITLE_FONT = new PhetFont( { size: 24, weight: 'bold' } );
+const TITLE_FONT = new PhetFont({ size: 24, weight: 'bold' });
 
-const TAB_FONT = new PhetFont( 20 );
+const TAB_FONT = new PhetFont(20);
 const TAB_MAX_WIDTH = 120;
 const TAB_OPTIONS = {
   font: TAB_FONT,
   maxWidth: TAB_MAX_WIDTH
 };
 
-const CONTENT_FONT = new PhetFont( 16 );
+const CONTENT_FONT = new PhetFont(16);
 const CONTENT_MAX_WIDTH = 500;
 const PANEL_SECTION_CONTENT_OPTIONS = {
   font: CONTENT_FONT,
   maxWidth: CONTENT_MAX_WIDTH
 };
 
-const PANEL_SECTION_LABEL_FONT = new PhetFont( { weight: 'bold', size: 16 } );
+const PANEL_SECTION_LABEL_FONT = new PhetFont({ weight: 'bold', size: 16 });
 const PANEL_SECTION_LABEL_MAX_WIDTH = 360;
 const PANEL_SECTION_LABEL_OPTIONS = {
   font: PANEL_SECTION_LABEL_FONT,
@@ -54,18 +54,18 @@ class PreferencesDialog extends Dialog {
   private readonly preferencesTabs: PreferencesTabs;
   private readonly preferencesPanels: PreferencesPanels;
 
-  public constructor( preferencesModel: PreferencesModel, providedOptions?: PreferencesDialogOptions ) {
+  public constructor(preferencesModel: PreferencesModel, providedOptions?: PreferencesDialogOptions) {
 
-    const titleText = new Text( JoistStrings.preferences.titleStringProperty, {
+    const titleText = new Text(JoistStrings.preferences.titleStringProperty, {
       font: TITLE_FONT,
       maxWidth: CONTENT_MAX_WIDTH, // The width of the title should be the same max as for a panel section
 
       // pdom
       tagName: 'h1',
       innerContent: JoistStrings.preferences.titleStringProperty
-    } );
+    });
 
-    const options = optionize<PreferencesDialogOptions, EmptySelfOptions, DialogOptions>()( {
+    const options = optionize<PreferencesDialogOptions, EmptySelfOptions, DialogOptions>()({
       titleAlign: 'center',
       title: titleText,
       isDisposable: false,
@@ -77,76 +77,76 @@ class PreferencesDialog extends Dialog {
 
       // pdom
       positionInPDOM: true
-    }, providedOptions );
+    }, providedOptions);
 
     // determine which tabs will be supported in this Dialog, true if any entry in a configuration has content
-    const supportedTabs = [ PreferencesType.OVERVIEW ]; // There is always an "Overview" tab
-    preferencesModel.supportsSimulationPreferences() && supportedTabs.push( PreferencesType.SIMULATION );
-    preferencesModel.supportsVisualPreferences() && supportedTabs.push( PreferencesType.VISUAL );
-    preferencesModel.supportsAudioPreferences() && supportedTabs.push( PreferencesType.AUDIO );
-    preferencesModel.supportsInputPreferences() && supportedTabs.push( PreferencesType.INPUT );
-    preferencesModel.supportsLocalizationPreferences() && supportedTabs.push( PreferencesType.LOCALIZATION );
-    assert && assert( supportedTabs.length > 0, 'Trying to create a PreferencesDialog with no tabs, check PreferencesModel' );
+    const supportedTabs = [PreferencesType.OVERVIEW]; // There is always an "Overview" tab
+    preferencesModel.supportsSimulationPreferences() && supportedTabs.push(PreferencesType.SIMULATION);
+    preferencesModel.supportsVisualPreferences() && supportedTabs.push(PreferencesType.VISUAL);
+    preferencesModel.supportsAudioPreferences() && supportedTabs.push(PreferencesType.AUDIO);
+    preferencesModel.supportsInputPreferences() && supportedTabs.push(PreferencesType.INPUT);
+    preferencesModel.supportsLocalizationPreferences() && supportedTabs.push(PreferencesType.LOCALIZATION);
+    assert && assert(supportedTabs.length > 0, 'Trying to create a PreferencesDialog with no tabs, check PreferencesModel');
 
     // the selected PreferencesType, indicating which tab is visible in the Dialog
-    const selectedTabProperty = new EnumerationProperty( PreferencesType.OVERVIEW, {
+    const selectedTabProperty = new EnumerationProperty(PreferencesType.OVERVIEW, {
       validValues: supportedTabs,
-      tandem: options.tandem.createTandem( 'selectedTabProperty' )
-    } );
+      tandem: options.tandem.createTandem('selectedTabProperty')
+    });
 
     // the set of tabs you can click to activate a tab panel
-    const preferencesTabs = new PreferencesTabs( supportedTabs, selectedTabProperty, {
-      tandem: options.tandem.createTandem( 'preferencesTabs' )
-    } );
+    const preferencesTabs = new PreferencesTabs(supportedTabs, selectedTabProperty, {
+      tandem: options.tandem.createTandem('preferencesTabs')
+    });
 
     // the panels of content with UI components to select preferences, only one is displayed at a time
-    const preferencesPanels = new PreferencesPanels( preferencesModel, supportedTabs, selectedTabProperty, preferencesTabs, {
-      tandem: options.tandem.createTandem( 'preferencesPanels' )
-    } );
+    const preferencesPanels = new PreferencesPanels(preferencesModel, supportedTabs, selectedTabProperty, preferencesTabs, {
+      tandem: options.tandem.createTandem('preferencesPanels')
+    });
 
     // visual separator between tabs and panels - as long as the widest separated content, which may change with i18n
 
-    const content = new VBox( {
+    const content = new VBox({
       children: [
         preferencesTabs,
-        new HSeparator( {
+        new HSeparator({
           layoutOptions: {
             bottomMargin: 20,
             stretch: true
           }
-        } ),
+        }),
         preferencesPanels
       ]
-    } );
+    });
 
     // sound generation for tab switching
-    const tabSwitchSoundGenerator = new PreferencesTabSwitchSoundGenerator( selectedTabProperty, {
+    const tabSwitchSoundGenerator = new PreferencesTabSwitchSoundGenerator(selectedTabProperty, {
       initialOutputLevel: 0.2
-    } );
-    soundManager.addSoundGenerator( tabSwitchSoundGenerator, {
+    });
+    soundManager.addSoundGenerator(tabSwitchSoundGenerator, {
       categoryName: 'user-interface'
-    } );
+    });
 
-    super( content, options );
+    super(content, options);
 
     this.preferencesTabs = preferencesTabs;
     this.preferencesPanels = preferencesPanels;
 
     // pdom - When the "down" arrow is pressed on the group of tabs, move focus to the selected panel
-    preferencesTabs.addInputListener( new KeyboardListener( {
-      keys: [ 'arrowDown' ],
+    preferencesTabs.addInputListener(new KeyboardListener({
+      keys: ['arrowDown'],
       callback: () => {
         this.focusSelectedPanel();
       }
-    } ) );
-    content.addInputListener( new KeyboardListener( {
-      keys: [ 'arrowUp' ],
+    }));
+    content.addInputListener(new KeyboardListener({
+      keys: ['arrowUp'],
       callback: event => {
-        if ( event && this.preferencesPanels.isFocusableSelectedContent( event.target ) ) {
+        if (event && this.preferencesPanels.isFocusableSelectedContent(event.target)) {
           this.focusSelectedTab();
         }
       }
-    } ) );
+    }));
   }
 
   /**
@@ -193,5 +193,5 @@ class PreferencesDialog extends Dialog {
   public static readonly LABEL_CONTENT_SPACING = 10;
 }
 
-joist.register( 'PreferencesDialog', PreferencesDialog );
+joist.register('PreferencesDialog', PreferencesDialog);
 export default PreferencesDialog;

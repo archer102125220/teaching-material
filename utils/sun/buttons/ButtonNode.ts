@@ -8,28 +8,30 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../../axon/js/DerivedProperty.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import Multilink, { UnknownMultilink } from '../../../axon/js/Multilink.js';
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import Dimension2 from '../../../dot/js/Dimension2.js';
-import optionize, { combineOptions } from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import { AlignBox, AlignBoxXAlign, AlignBoxYAlign, Brightness, Color, Contrast, Grayscale, isHeightSizable, isWidthSizable, LayoutConstraint, Node, NodeOptions, PaintableNode, PaintColorProperty, Path, PressListener, PressListenerOptions, SceneryConstants, Sizable, SizableOptions, TColor, TPaint, Voicing, VoicingOptions } from '../../../scenery/js/imports.js';
-import ColorConstants from '../ColorConstants.js';
-import sun from '../sun.js';
-import ButtonInteractionState from './ButtonInteractionState.js';
-import ButtonModel from './ButtonModel.js';
-import TButtonAppearanceStrategy, { TButtonAppearanceStrategyOptions } from './TButtonAppearanceStrategy.js';
-import TContentAppearanceStrategy, { TContentAppearanceStrategyOptions } from './TContentAppearanceStrategy.js';
-import TinyProperty from '../../../axon/js/TinyProperty.js';
+import DerivedProperty from '../../axon/DerivedProperty';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import Multilink, { type UnknownMultilink } from '../../axon/Multilink';
+import Bounds2 from '../../dot/Bounds2';
+import Dimension2 from '../../dot/Dimension2';
+import optionize, { combineOptions } from '../../phet-core/optionize';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import { AlignBox, type AlignBoxXAlign, type AlignBoxYAlign, Brightness, Color, Contrast, Grayscale, isHeightSizable, isWidthSizable, LayoutConstraint, Node, type NodeOptions, type PaintableNode, PaintColorProperty, Path, PressListener, type PressListenerOptions, SceneryConstants, Sizable, type SizableOptions, type TColor, type TPaint, Voicing, type VoicingOptions } from '../../scenery/imports';
+import ColorConstants from '../ColorConstants';
+import sun from '../sun';
+import ButtonInteractionState from './ButtonInteractionState';
+import ButtonModel from './ButtonModel';
+import type TButtonAppearanceStrategy from './TButtonAppearanceStrategy';
+import type { TButtonAppearanceStrategyOptions } from './TButtonAppearanceStrategy';
+import type TContentAppearanceStrategy from './TContentAppearanceStrategy';
+import type { TContentAppearanceStrategyOptions } from './TContentAppearanceStrategy';
+import TinyProperty from '../../axon/TinyProperty';
 
 // constants
-const CONTRAST_FILTER = new Contrast( 0.7 );
-const BRIGHTNESS_FILTER = new Brightness( 1.2 );
+const CONTRAST_FILTER = new Contrast(0.7);
+const BRIGHTNESS_FILTER = new Brightness(1.2);
 
 // if there is content, style can be applied to a containing Node around it.
-type EnabledAppearanceStrategy = ( enabled: boolean, button: Node, background: Node, content: Node | null ) => void;
+type EnabledAppearanceStrategy = (enabled: boolean, button: Node, background: Node, content: Node | null) => void;
 
 type SelfOptions = {
 
@@ -93,7 +95,7 @@ export type ButtonNodeOptions = SelfOptions & ParentOptions;
 // used directly.
 export type ExternalButtonNodeOptions = StrictOmit<ButtonNodeOptions, 'minUnstrokedWidth' | 'minUnstrokedHeight'>;
 
-export default class ButtonNode extends Sizable( Voicing( Node ) ) {
+export default class ButtonNode extends Sizable(Voicing(Node)) {
 
   protected buttonModel: ButtonModel;
   private readonly _settableBaseColorProperty: PaintColorProperty;
@@ -117,12 +119,12 @@ export default class ButtonNode extends Sizable( Voicing( Node ) ) {
    * @param interactionStateProperty - a Property that is used to drive the visual appearance of the button
    * @param providedOptions - this type does not mutate its options, but relies on the subtype to
    */
-  protected constructor( buttonModel: ButtonModel,
-                         buttonBackground: Path,
-                         interactionStateProperty: TReadOnlyProperty<ButtonInteractionState>,
-                         providedOptions?: ButtonNodeOptions ) {
+  protected constructor(buttonModel: ButtonModel,
+    buttonBackground: Path,
+    interactionStateProperty: TReadOnlyProperty<ButtonInteractionState>,
+    providedOptions?: ButtonNodeOptions) {
 
-    const options = optionize<ButtonNodeOptions, StrictOmit<SelfOptions, 'listenerOptions'>, ParentOptions>()( {
+    const options = optionize<ButtonNodeOptions, StrictOmit<SelfOptions, 'listenerOptions'>, ParentOptions>()({
 
       content: null,
       minUnstrokedWidth: null,
@@ -139,11 +141,11 @@ export default class ButtonNode extends Sizable( Voicing( Node ) ) {
       buttonAppearanceStrategyOptions: {},
       contentAppearanceStrategy: null,
       contentAppearanceStrategyOptions: {},
-      enabledAppearanceStrategy: ( enabled, button, background, content ) => {
-        background.filters = enabled ? [] : [ CONTRAST_FILTER, BRIGHTNESS_FILTER ];
+      enabledAppearanceStrategy: (enabled, button, background, content) => {
+        background.filters = enabled ? [] : [CONTRAST_FILTER, BRIGHTNESS_FILTER];
 
-        if ( content ) {
-          content.filters = enabled ? [] : [ Grayscale.FULL ];
+        if (content) {
+          content.filters = enabled ? [] : [Grayscale.FULL];
           content.opacity = enabled ? 1 : SceneryConstants.DISABLED_OPACITY;
         }
       },
@@ -156,41 +158,41 @@ export default class ButtonNode extends Sizable( Voicing( Node ) ) {
       // phet-io
       visiblePropertyOptions: { phetioFeatured: true },
       phetioEnabledPropertyInstrumented: true // opt into default PhET-iO instrumented enabledProperty
-    }, providedOptions );
+    }, providedOptions);
 
-    options.listenerOptions = combineOptions<PressListenerOptions>( {
-      tandem: options.tandem?.createTandem( 'pressListener' )
-    }, options.listenerOptions );
+    options.listenerOptions = combineOptions<PressListenerOptions>({
+      tandem: options.tandem?.createTandem('pressListener')
+    }, options.listenerOptions);
 
-    assert && options.enabledProperty && assert( options.enabledProperty === buttonModel.enabledProperty,
-      'if options.enabledProperty is provided, it must === buttonModel.enabledProperty' );
+    assert && options.enabledProperty && assert(options.enabledProperty === buttonModel.enabledProperty,
+      'if options.enabledProperty is provided, it must === buttonModel.enabledProperty');
     options.enabledProperty = buttonModel.enabledProperty;
 
-    assert && assert( options.aspectRatio === null || ( isFinite( options.aspectRatio ) && options.aspectRatio > 0 ),
-      `ButtonNode aspectRatio should be a positive finite value if non-null. Instead received ${options.aspectRatio}.` );
+    assert && assert(options.aspectRatio === null || (isFinite(options.aspectRatio) && options.aspectRatio > 0),
+      `ButtonNode aspectRatio should be a positive finite value if non-null. Instead received ${options.aspectRatio}.`);
 
     super();
 
     this.content = options.content;
     this.buttonModel = buttonModel;
 
-    this._settableBaseColorProperty = new PaintColorProperty( options.baseColor );
-    this._disabledColorProperty = new PaintColorProperty( options.disabledColor );
+    this._settableBaseColorProperty = new PaintColorProperty(options.baseColor);
+    this._disabledColorProperty = new PaintColorProperty(options.disabledColor);
 
-    this.baseColorProperty = new DerivedProperty( [
+    this.baseColorProperty = new DerivedProperty([
       this._settableBaseColorProperty,
       this.enabledProperty,
       this._disabledColorProperty
-    ], ( color, enabled, disabledColor ) => {
+    ], (color, enabled, disabledColor) => {
       return enabled ? color : disabledColor;
-    } );
+    });
 
-    this._pressListener = buttonModel.createPressListener( options.listenerOptions );
-    this.addInputListener( this._pressListener );
+    this._pressListener = buttonModel.createPressListener(options.listenerOptions);
+    this.addInputListener(this._pressListener);
 
-    assert && assert( buttonBackground.fill === null, 'ButtonNode controls the fill for the buttonBackground' );
+    assert && assert(buttonBackground.fill === null, 'ButtonNode controls the fill for the buttonBackground');
     buttonBackground.fill = this.baseColorProperty;
-    this.addChild( buttonBackground );
+    this.addChild(buttonBackground);
 
     // Hook up the strategy that will control the button's appearance.
     const buttonAppearanceStrategy = new options.buttonAppearanceStrategy(
@@ -202,7 +204,7 @@ export default class ButtonNode extends Sizable( Voicing( Node ) ) {
 
     // Optionally hook up the strategy that will control the content's appearance.
     let contentAppearanceStrategy: InstanceType<TContentAppearanceStrategy>;
-    if ( options.contentAppearanceStrategy && options.content ) {
+    if (options.contentAppearanceStrategy && options.content) {
       contentAppearanceStrategy = new options.contentAppearanceStrategy(
         options.content,
         interactionStateProperty, options.contentAppearanceStrategyOptions
@@ -215,7 +217,7 @@ export default class ButtonNode extends Sizable( Voicing( Node ) ) {
     let alignBox: AlignBox | null = null;
     let updateAlignBounds: UnknownMultilink | null = null;
 
-    if ( options.content ) {
+    if (options.content) {
 
       const content = options.content;
 
@@ -223,7 +225,7 @@ export default class ButtonNode extends Sizable( Voicing( Node ) ) {
       // See https://github.com/phetsims/sun/issues/654#issuecomment-718944669
       content.pickable = false;
 
-      this.buttonNodeConstraint = new ButtonNodeConstraint( this, {
+      this.buttonNodeConstraint = new ButtonNodeConstraint(this, {
         content: options.content,
         xMargin: options.xMargin,
         yMargin: options.yMargin,
@@ -231,11 +233,11 @@ export default class ButtonNode extends Sizable( Voicing( Node ) ) {
         minUnstrokedWidth: options.minUnstrokedWidth,
         minUnstrokedHeight: options.minUnstrokedHeight,
         aspectRatio: options.aspectRatio
-      } );
+      });
       this.layoutSizeProperty = this.buttonNodeConstraint.layoutSizeProperty;
 
       // Align content in the button rectangle. Must be disposed since it adds listener to content bounds.
-      alignBox = new AlignBox( content, {
+      alignBox = new AlignBox(content, {
         xAlign: options.xAlign,
         yAlign: options.yAlign,
 
@@ -245,31 +247,31 @@ export default class ButtonNode extends Sizable( Voicing( Node ) ) {
         rightMargin: options.xMargin - options.xContentOffset,
         topMargin: options.yMargin + options.yContentOffset,
         bottomMargin: options.yMargin - options.yContentOffset
-      } );
+      });
 
       // Dynamically adjust alignBounds.
       updateAlignBounds = Multilink.multilink(
-        [ buttonBackground.boundsProperty, this.layoutSizeProperty ],
-        ( backgroundBounds, size ) => {
-          alignBox!.alignBounds = Bounds2.point( backgroundBounds.center ).dilatedXY( size.width / 2, size.height / 2 );
+        [buttonBackground.boundsProperty, this.layoutSizeProperty],
+        (backgroundBounds, size) => {
+          alignBox!.alignBounds = Bounds2.point(backgroundBounds.center).dilatedXY(size.width / 2, size.height / 2);
         }
       );
-      this.addChild( alignBox );
+      this.addChild(alignBox);
     }
     else {
-      assert && assert( options.minUnstrokedWidth !== null );
-      assert && assert( options.minUnstrokedHeight !== null );
+      assert && assert(options.minUnstrokedWidth !== null);
+      assert && assert(options.minUnstrokedHeight !== null);
 
-      this.layoutSizeProperty = new TinyProperty( new Dimension2(
+      this.layoutSizeProperty = new TinyProperty(new Dimension2(
         options.minUnstrokedWidth! + this.maxLineWidth,
         options.minUnstrokedHeight! + this.maxLineWidth
-      ) );
+      ));
     }
 
-    this.mutate( options );
+    this.mutate(options);
 
     // No need to dispose because enabledProperty is disposed in Node
-    this.enabledProperty.link( enabled => options.enabledAppearanceStrategy( enabled, this, buttonBackground, alignBox ) );
+    this.enabledProperty.link(enabled => options.enabledAppearanceStrategy(enabled, this, buttonBackground, alignBox));
 
     this.disposeButtonNode = () => {
       alignBox && alignBox.dispose();
@@ -291,9 +293,9 @@ export default class ButtonNode extends Sizable( Voicing( Node ) ) {
   /**
    * Sets the base color, which is the main background fill color used for the button.
    */
-  public setBaseColor( baseColor: TColor ): void { this._settableBaseColorProperty.paint = baseColor; }
+  public setBaseColor(baseColor: TColor): void { this._settableBaseColorProperty.paint = baseColor; }
 
-  public set baseColor( baseColor: TColor ) { this.setBaseColor( baseColor ); }
+  public set baseColor(baseColor: TColor) { this.setBaseColor(baseColor); }
 
   public get baseColor(): TColor { return this.getBaseColor(); }
 
@@ -308,7 +310,7 @@ export default class ButtonNode extends Sizable( Voicing( Node ) ) {
    * rarely be used.
    */
   public pdomClick(): void {
-    this._pressListener.click( null );
+    this._pressListener.click(null);
   }
 
   /**
@@ -335,23 +337,23 @@ export class FlatAppearanceStrategy {
    * @param baseColorProperty - base color from which other colors are derived
    * @param [providedOptions]
    */
-  public constructor( buttonBackground: PaintableNode,
-                      interactionStateProperty: TReadOnlyProperty<ButtonInteractionState>,
-                      baseColorProperty: TReadOnlyProperty<Color>,
-                      providedOptions?: TButtonAppearanceStrategyOptions ) {
+  public constructor(buttonBackground: PaintableNode,
+    interactionStateProperty: TReadOnlyProperty<ButtonInteractionState>,
+    baseColorProperty: TReadOnlyProperty<Color>,
+    providedOptions?: TButtonAppearanceStrategyOptions) {
 
     // dynamic colors
-    const baseBrighter4Property = new PaintColorProperty( baseColorProperty, { luminanceFactor: 0.4 } );
-    const baseDarker4Property = new PaintColorProperty( baseColorProperty, { luminanceFactor: -0.4 } );
+    const baseBrighter4Property = new PaintColorProperty(baseColorProperty, { luminanceFactor: 0.4 });
+    const baseDarker4Property = new PaintColorProperty(baseColorProperty, { luminanceFactor: -0.4 });
 
     // various fills that are used to alter the button's appearance
     const upFillProperty = baseColorProperty;
     const overFillProperty = baseBrighter4Property;
     const downFillProperty = baseDarker4Property;
 
-    const options = combineOptions<TButtonAppearanceStrategyOptions>( {
+    const options = combineOptions<TButtonAppearanceStrategyOptions>({
       stroke: baseDarker4Property
-    }, providedOptions );
+    }, providedOptions);
 
     const lineWidth = typeof options.lineWidth === 'number' ? options.lineWidth : 1;
 
@@ -362,11 +364,11 @@ export class FlatAppearanceStrategy {
     this.maxLineWidth = buttonBackground.hasStroke() ? lineWidth : 0;
 
     // Cache colors
-    buttonBackground.cachedPaints = [ upFillProperty, overFillProperty, downFillProperty ];
+    buttonBackground.cachedPaints = [upFillProperty, overFillProperty, downFillProperty];
 
     // Change colors to match interactionState
-    function interactionStateListener( interactionState: ButtonInteractionState ): void {
-      switch( interactionState ) {
+    function interactionStateListener(interactionState: ButtonInteractionState): void {
+      switch (interactionState) {
 
         case ButtonInteractionState.IDLE:
           buttonBackground.fill = upFillProperty;
@@ -381,17 +383,17 @@ export class FlatAppearanceStrategy {
           break;
 
         default:
-          throw new Error( `unsupported interactionState: ${interactionState}` );
+          throw new Error(`unsupported interactionState: ${interactionState}`);
       }
     }
 
     // Do the initial update explicitly, then lazy link to the properties.  This keeps the number of initial updates to
     // a minimum and allows us to update some optimization flags the first time the base color is actually changed.
-    interactionStateProperty.link( interactionStateListener );
+    interactionStateProperty.link(interactionStateListener);
 
     this.disposeFlatAppearanceStrategy = () => {
-      if ( interactionStateProperty.hasListener( interactionStateListener ) ) {
-        interactionStateProperty.unlink( interactionStateListener );
+      if (interactionStateProperty.hasListener(interactionStateListener)) {
+        interactionStateProperty.unlink(interactionStateListener);
       }
       baseBrighter4Property.dispose();
       baseDarker4Property.dispose();
@@ -415,7 +417,7 @@ type ButtonNodeConstraintOptions = {
 
 class ButtonNodeConstraint extends LayoutConstraint {
 
-  public readonly layoutSizeProperty: TinyProperty<Dimension2> = new TinyProperty<Dimension2>( new Dimension2( 0, 0 ) );
+  public readonly layoutSizeProperty: TinyProperty<Dimension2> = new TinyProperty<Dimension2>(new Dimension2(0, 0));
 
   private readonly buttonNode: ButtonNode;
   private readonly content: Node;
@@ -431,9 +433,9 @@ class ButtonNodeConstraint extends LayoutConstraint {
   private lastLocalPreferredWidth = 0;
   private lastLocalPreferredHeight = 0;
 
-  public constructor( buttonNode: ButtonNode, options: ButtonNodeConstraintOptions ) {
+  public constructor(buttonNode: ButtonNode, options: ButtonNodeConstraintOptions) {
 
-    super( buttonNode );
+    super(buttonNode);
 
     // Save everything, so we can run things in the layout method
     this.buttonNode = buttonNode;
@@ -445,10 +447,10 @@ class ButtonNodeConstraint extends LayoutConstraint {
     this.minUnstrokedHeight = options.minUnstrokedHeight;
     this.aspectRatio = options.aspectRatio;
 
-    this.buttonNode.localPreferredWidthProperty.lazyLink( this._updateLayoutListener );
-    this.buttonNode.localPreferredHeightProperty.lazyLink( this._updateLayoutListener );
+    this.buttonNode.localPreferredWidthProperty.lazyLink(this._updateLayoutListener);
+    this.buttonNode.localPreferredHeightProperty.lazyLink(this._updateLayoutListener);
 
-    this.addNode( this.content, false );
+    this.addNode(this.content, false);
 
     this.layout();
   }
@@ -461,38 +463,38 @@ class ButtonNodeConstraint extends LayoutConstraint {
 
     // Only allow an initial update if we are not sizable in that dimension
     let minimumWidth = Math.max(
-      ( this.isFirstLayout || buttonNode.widthSizable )
-      ? ( isWidthSizable( content ) ? content.minimumWidth || 0 : content.width ) + this.xMargin * 2
-      : buttonNode.localMinimumWidth!,
-      ( this.minUnstrokedWidth === null ? 0 : this.minUnstrokedWidth + this.maxLineWidth )
+      (this.isFirstLayout || buttonNode.widthSizable)
+        ? (isWidthSizable(content) ? content.minimumWidth || 0 : content.width) + this.xMargin * 2
+        : buttonNode.localMinimumWidth!,
+      (this.minUnstrokedWidth === null ? 0 : this.minUnstrokedWidth + this.maxLineWidth)
     );
     let minimumHeight = Math.max(
-      ( this.isFirstLayout || buttonNode.heightSizable )
-      ? ( isHeightSizable( content ) ? content.minimumHeight || 0 : content.height ) + this.yMargin * 2
-      : buttonNode.localMinimumHeight!,
-      ( this.minUnstrokedHeight === null ? 0 : this.minUnstrokedHeight + this.maxLineWidth )
+      (this.isFirstLayout || buttonNode.heightSizable)
+        ? (isHeightSizable(content) ? content.minimumHeight || 0 : content.height) + this.yMargin * 2
+        : buttonNode.localMinimumHeight!,
+      (this.minUnstrokedHeight === null ? 0 : this.minUnstrokedHeight + this.maxLineWidth)
     );
 
-    if ( this.aspectRatio !== null ) {
-      if ( minimumWidth < minimumHeight * this.aspectRatio ) {
+    if (this.aspectRatio !== null) {
+      if (minimumWidth < minimumHeight * this.aspectRatio) {
         minimumWidth = minimumHeight * this.aspectRatio;
       }
-      if ( minimumHeight < minimumWidth / this.aspectRatio ) {
+      if (minimumHeight < minimumWidth / this.aspectRatio) {
         minimumHeight = minimumWidth / this.aspectRatio;
       }
     }
 
     // Our resulting sizes (allow setting preferred width/height on the buttonNode)
-    this.lastLocalPreferredWidth = this.isFirstLayout || isWidthSizable( buttonNode )
-                                   ? Math.max( minimumWidth, buttonNode.localPreferredWidth || 0 )
-                                   : this.lastLocalPreferredWidth;
-    this.lastLocalPreferredHeight = this.isFirstLayout || isHeightSizable( buttonNode )
-                                    ? Math.max( minimumHeight, buttonNode.localPreferredHeight || 0 )
-                                    : this.lastLocalPreferredHeight;
+    this.lastLocalPreferredWidth = this.isFirstLayout || isWidthSizable(buttonNode)
+      ? Math.max(minimumWidth, buttonNode.localPreferredWidth || 0)
+      : this.lastLocalPreferredWidth;
+    this.lastLocalPreferredHeight = this.isFirstLayout || isHeightSizable(buttonNode)
+      ? Math.max(minimumHeight, buttonNode.localPreferredHeight || 0)
+      : this.lastLocalPreferredHeight;
 
     this.isFirstLayout = false;
 
-    this.layoutSizeProperty.value = new Dimension2( this.lastLocalPreferredWidth, this.lastLocalPreferredHeight );
+    this.layoutSizeProperty.value = new Dimension2(this.lastLocalPreferredWidth, this.lastLocalPreferredHeight);
 
     // Set minimums at the end
     buttonNode.localMinimumWidth = minimumWidth;
@@ -500,8 +502,8 @@ class ButtonNodeConstraint extends LayoutConstraint {
   }
 
   public override dispose(): void {
-    this.buttonNode.localPreferredWidthProperty.unlink( this._updateLayoutListener );
-    this.buttonNode.localPreferredHeightProperty.unlink( this._updateLayoutListener );
+    this.buttonNode.localPreferredWidthProperty.unlink(this._updateLayoutListener);
+    this.buttonNode.localPreferredHeightProperty.unlink(this._updateLayoutListener);
 
     super.dispose();
   }
@@ -509,4 +511,4 @@ class ButtonNodeConstraint extends LayoutConstraint {
 
 ButtonNode.FlatAppearanceStrategy = FlatAppearanceStrategy;
 
-sun.register( 'ButtonNode', ButtonNode );
+sun.register('ButtonNode', ButtonNode);

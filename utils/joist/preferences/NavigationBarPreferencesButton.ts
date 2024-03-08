@@ -6,19 +6,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import { Color, Image } from '../../../scenery/js/imports.js';
-import preferencesIconOnWhite_png from '../../images/preferencesIconOnWhite_png.js'; // on a white navbar
-import preferencesIcon_png from '../../images/preferencesIcon_png.js'; // on a black navbar
-import Dialog from '../../../sun/js/Dialog.js';
-import PhetioCapsule from '../../../tandem/js/PhetioCapsule.js';
-import joist from '../joist.js';
-import JoistButton, { JoistButtonOptions } from '../JoistButton.js';
-import JoistStrings from '../JoistStrings.js';
-import PreferencesDialog from './PreferencesDialog.js';
-import PreferencesModel from './PreferencesModel.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
+import { Color, Image } from '../../scenery/imports';
+import preferencesIconOnWhite_png from '@/assets/images/joist/preferencesIconOnWhite_png'; // on a white navbar
+import preferencesIcon_png from '@/assets/images/joist/preferencesIcon_png'; // on a black navbar
+import Dialog from '../../sun/Dialog';
+import PhetioCapsule from '../../tandem/PhetioCapsule';
+import joist from '../joist';
+import JoistButton, { type JoistButtonOptions } from '../JoistButton';
+import JoistStrings from '../JoistStrings';
+import PreferencesDialog from './PreferencesDialog';
+import PreferencesModel from './PreferencesModel';
+import type PickRequired from '../../phet-core/types/PickRequired';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
 
 type SelfOptions = EmptySelfOptions;
 export type NavigationBarPreferencesButtonOptions = SelfOptions & PickRequired<JoistButtonOptions, 'tandem'> & Pick<JoistButtonOptions, 'pointerAreaDilationX' | 'pointerAreaDilationY'>;
@@ -28,10 +28,10 @@ const DESIRED_ICON_HEIGHT = 18.85;
 
 class NavigationBarPreferencesButton extends JoistButton {
 
-  public constructor( preferencesModel: PreferencesModel, backgroundColorProperty: TReadOnlyProperty<Color>,
-                      providedOptions: NavigationBarPreferencesButtonOptions ) {
+  public constructor(preferencesModel: PreferencesModel, backgroundColorProperty: TReadOnlyProperty<Color>,
+    providedOptions: NavigationBarPreferencesButtonOptions) {
 
-    const options = optionize<NavigationBarPreferencesButtonOptions, SelfOptions, JoistButtonOptions>()( {
+    const options = optionize<NavigationBarPreferencesButtonOptions, SelfOptions, JoistButtonOptions>()({
 
       listener: () => {
         const preferencesDialog = preferencesDialogCapsule.getElement();
@@ -51,38 +51,38 @@ class NavigationBarPreferencesButton extends JoistButton {
       visiblePropertyOptions: {
         phetioFeatured: true
       }
-    }, providedOptions );
+    }, providedOptions);
 
-    const icon = new Image( preferencesIcon_png, {
+    const icon = new Image(preferencesIcon_png, {
       scale: DESIRED_ICON_HEIGHT / preferencesIcon_png.height,
       pickable: false
-    } );
+    });
 
-    super( icon, backgroundColorProperty, options );
+    super(icon, backgroundColorProperty, options);
 
-    const preferencesDialogCapsule = new PhetioCapsule<PreferencesDialog>( tandem => {
-      return new PreferencesDialog( preferencesModel, {
-        tandem: tandem,
+    const preferencesDialogCapsule = new PhetioCapsule<PreferencesDialog>(tandem => {
+      return new PreferencesDialog(preferencesModel, {
+        tandem,
         focusOnHideNode: this
-      } );
+      });
     }, [], {
-      tandem: options.tandem.createTandem( 'preferencesDialogCapsule' ),
-      phetioType: PhetioCapsule.PhetioCapsuleIO( Dialog.DialogIO ),
+      tandem: options.tandem.createTandem('preferencesDialogCapsule'),
+      phetioType: PhetioCapsule.PhetioCapsuleIO(Dialog.DialogIO),
       disposeOnClear: false
-    } );
+    });
 
     // change the icon so that it is visible when the background changes from dark to light
-    backgroundColorProperty.link( backgroundColor => {
-      icon.image = backgroundColor.equals( Color.BLACK ) ? preferencesIcon_png : preferencesIconOnWhite_png;
-    } );
+    backgroundColorProperty.link(backgroundColor => {
+      icon.image = backgroundColor.equals(Color.BLACK) ? preferencesIcon_png : preferencesIconOnWhite_png;
+    });
 
     // pdom - Signal to screen readers that the button will open a dialog. For some reason, this also seems to
     // prevent a bug in iOS Safari where two events are dispatched to the screen on activation instead of one.
     // The result was that one press would open the dialog and the second buggy press would immediately close it.
     // Make sure that the dialog can be opened on iOS Safari before removing this.
-    this.setPDOMAttribute( 'aria-haspopup', true );
+    this.setPDOMAttribute('aria-haspopup', true);
   }
 }
 
-joist.register( 'NavigationBarPreferencesButton', NavigationBarPreferencesButton );
+joist.register('NavigationBarPreferencesButton', NavigationBarPreferencesButton);
 export default NavigationBarPreferencesButton;

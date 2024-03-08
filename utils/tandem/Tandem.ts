@@ -21,17 +21,17 @@ import tandemNamespace from './tandemNamespace';
 
 // constants
 // Tandem can't depend on joist, so cannot use packageJSON module
-const packageJSON = _.hasIn(window, 'phet.chipper.packageObject') ? phet.chipper.packageObject : { name: 'placeholder' };
+const packageJSON = _.hasIn(window, 'phet.chipper.packageObject') ? window.phet.chipper.packageObject : { name: 'placeholder' };
 
 const PHET_IO_ENABLED = _.hasIn(window, 'phet.preloads.phetio');
-const PRINT_MISSING_TANDEMS = PHET_IO_ENABLED && phet.preloads.phetio.queryParameters.phetioPrintMissingTandems;
+const PRINT_MISSING_TANDEMS = PHET_IO_ENABLED && window.phet.preloads.phetio.queryParameters.phetioPrintMissingTandems;
 
 // Validation defaults to true, but can be overridden to be false in package.json.
 const IS_VALIDATION_DEFAULT = _.hasIn(packageJSON, 'phet.phet-io.validation') ? !!packageJSON.phet['phet-io'].validation : true;
 
 // The default value for validation can be overridden with a query parameter ?phetioValidation={true|false}.
-const IS_VALIDATION_QUERY_PARAMETER_SPECIFIED = window.QueryStringMachine && QueryStringMachine.containsKey('phetioValidation');
-const IS_VALIDATION_SPECIFIED = (PHET_IO_ENABLED && IS_VALIDATION_QUERY_PARAMETER_SPECIFIED) ? !!phet.preloads.phetio.queryParameters.phetioValidation :
+const IS_VALIDATION_QUERY_PARAMETER_SPECIFIED = window.QueryStringMachine && window.QueryStringMachine.containsKey('phetioValidation');
+const IS_VALIDATION_SPECIFIED = (PHET_IO_ENABLED && IS_VALIDATION_QUERY_PARAMETER_SPECIFIED) ? !!window.phet.preloads.phetio.queryParameters.phetioValidation :
   (PHET_IO_ENABLED && IS_VALIDATION_DEFAULT);
 
 const VALIDATION = PHET_IO_ENABLED && IS_VALIDATION_SPECIFIED && !PRINT_MISSING_TANDEMS;
@@ -440,8 +440,8 @@ class Tandem {
   /**
    * When generating an API (whether to output a file or for in-memory comparison), this is marked as true.
    */
-  public static readonly API_GENERATION = Tandem.PHET_IO_ENABLED && (phet.preloads.phetio.queryParameters.phetioPrintAPI ||
-    phet.preloads.phetio.queryParameters.phetioCompareAPI);
+  public static readonly API_GENERATION = Tandem.PHET_IO_ENABLED && (window.phet.preloads.phetio.queryParameters.phetioPrintAPI ||
+    window.phet.preloads.phetio.queryParameters.phetioCompareAPI);
 
   /**
    * If PhET-iO is running with validation enabled.
