@@ -48,8 +48,8 @@ class Loop {
    * @returns {Loop} - This reference for chaining
    */
   initialize(shapeId, closed) {
-    assert && assert(typeof shapeId === 'number');
-    assert && assert(typeof closed === 'boolean');
+    window.assert && window.assert(typeof shapeId === 'number');
+    window.assert && window.assert(typeof closed === 'boolean');
 
     // @public {number}
     this.shapeId = shapeId;

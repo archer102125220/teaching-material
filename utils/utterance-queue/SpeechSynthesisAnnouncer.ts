@@ -311,7 +311,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
       }
     });
 
-    assert && assert(this.enabledComponentImplementation.enabledProperty.isSettable(), 'enabledProperty must be settable');
+    window.assert && window.assert(this.enabledComponentImplementation.enabledProperty.isSettable(), 'enabledProperty must be settable');
     this.enabledProperty = this.enabledComponentImplementation.enabledProperty;
 
     this.mainWindowVoicingEnabledProperty = new BooleanProperty(true, {
@@ -360,11 +360,11 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * @param [providedOptions]
    */
   public initialize(userGestureEmitter: TEmitter, providedOptions?: SpeechSynthesisInitializeOptions): void {
-    assert && assert(!this.initialized, 'can only be initialized once');
-    assert && assert(SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'trying to initialize speech, but speech is not supported on this platform.');
+    window.assert && window.assert(!this.initialized, 'can only be initialized once');
+    window.assert && window.assert(SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'trying to initialize speech, but speech is not supported on this platform.');
 
     // See top level type documentation.
-    assert && assert(initializeCount === 0, 'Only one instance of SpeechSynthesisAnnouncer can be initialized at a time.');
+    window.assert && window.assert(initializeCount === 0, 'Only one instance of SpeechSynthesisAnnouncer can be initialized at a time.');
     initializeCount++;
 
     const options = optionize<SpeechSynthesisInitializeOptions>()({
@@ -446,7 +446,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
         this.timeSincePendingUtterance + dt : 0;
 
       if (this.timeSincePendingUtterance > PENDING_UTTERANCE_DELAY) {
-        assert && assert(this.speakingSpeechSynthesisUtteranceWrapper, 'should have this.speakingSpeechSynthesisUtteranceWrapper');
+        window.assert && window.assert(this.speakingSpeechSynthesisUtteranceWrapper, 'should have this.speakingSpeechSynthesisUtteranceWrapper');
 
         // It has been too long since we requested speech without speaking, the synth is likely failing on this platform
         this.handleSpeechSynthesisEnd(this.speakingSpeechSynthesisUtteranceWrapper!.announceText, this.speakingSpeechSynthesisUtteranceWrapper!);
@@ -525,8 +525,8 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * https://github.com/phetsims/scenery/issues/1282/ for discussion and this decision.
    */
   public getPrioritizedVoices(): SpeechSynthesisVoice[] {
-    assert && assert(this.initialized, 'No voices available until the SpeechSynthesisAnnouncer is initialized');
-    assert && assert(this.voicesProperty.value.length > 0, 'No voices available to provided a prioritized list.');
+    window.assert && window.assert(this.initialized, 'No voices available until the SpeechSynthesisAnnouncer is initialized');
+    window.assert && window.assert(this.voicesProperty.value.length > 0, 'No voices available to provided a prioritized list.');
 
     const allVoices = this.voicesProperty.value.slice();
 
@@ -660,7 +660,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * Request speech with SpeechSynthesis.
    */
   private requestSpeech(announceText: ResolvedResponse, utterance: Utterance): void {
-    assert && assert(SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'trying to speak with speechSynthesis, but it is not supported on this platform');
+    window.assert && window.assert(SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'trying to speak with speechSynthesis, but it is not supported on this platform');
 
     this.debug && console.log('requestSpeech', announceText);
 
@@ -690,7 +690,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
     const startListener = () => {
       this.startSpeakingEmitter.emit(stringToSpeak, utterance);
 
-      assert && assert(this.speakingSpeechSynthesisUtteranceWrapper, 'should have been set in requestSpeech');
+      window.assert && window.assert(this.speakingSpeechSynthesisUtteranceWrapper, 'should have been set in requestSpeech');
       this.speakingSpeechSynthesisUtteranceWrapper!.started = true;
 
       speechSynthUtterance.removeEventListener('start', startListener);
@@ -709,7 +709,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
     // https://github.com/phetsims/john-travoltage/issues/435 and https://github.com/phetsims/utterance-queue/issues/52
     const speechSynthesisUtteranceWrapper = new SpeechSynthesisUtteranceWrapper(utterance, announceText, speechSynthUtterance, false, endListener, startListener);
 
-    assert && assert(this.speakingSpeechSynthesisUtteranceWrapper === null, 'Wrapper should be null, we should have received an end event to clear it before the next one.');
+    window.assert && window.assert(this.speakingSpeechSynthesisUtteranceWrapper === null, 'Wrapper should be null, we should have received an end event to clear it before the next one.');
     this.speakingSpeechSynthesisUtteranceWrapper = speechSynthesisUtteranceWrapper;
 
     speechSynthUtterance.addEventListener('start', startListener);
@@ -784,7 +784,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * Speech API. Every references has a check to ensure that the synth is available.
    */
   private getSynth(): null | SpeechSynthesis {
-    assert && assert(SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'Trying to use SpeechSynthesis, but it is not supported on this platform.');
+    window.assert && window.assert(SpeechSynthesisAnnouncer.isSpeechSynthesisSupported(), 'Trying to use SpeechSynthesis, but it is not supported on this platform.');
     return this.synth;
   }
 
@@ -857,7 +857,7 @@ class SpeechSynthesisAnnouncer extends Announcer {
    * Cancel the synth. This will silence speech. This will silence any speech and cancel the
    */
   private cancelSynth(): void {
-    assert && assert(this.initialized, 'must be initialized to use synth');
+    window.assert && window.assert(this.initialized, 'must be initialized to use synth');
     const synth = this.getSynth()!;
     synth && synth.cancel();
   }

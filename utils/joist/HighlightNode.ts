@@ -32,7 +32,7 @@ class HighlightNode extends HBox {
       pickable: false
     }, providedOptions);
 
-    assert && assert(options.spacing === undefined, 'HighlightNode sets spacing');
+    window.assert && window.assert(options.spacing === undefined, 'HighlightNode sets spacing');
     options.spacing = width;
 
     const innerColor = options.fill;
@@ -47,7 +47,7 @@ class HighlightNode extends HBox {
     const leftBar = new Rectangle(0, 0, options.highlightWidth, height, barOptions);
     const rightBar = new Rectangle(0, 0, options.highlightWidth, height, barOptions);
 
-    assert && assert(!options.children, 'HighlightNode sets children');
+    window.assert && window.assert(!options.children, 'HighlightNode sets children');
     options.children = [leftBar, rightBar];
 
     super(options);

@@ -329,7 +329,7 @@ class SimpleDragHandler extends PhetioObject {
           );
         sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-        assert && assert(event.pointer === this.pointer, 'Wrong pointer in up');
+        window.assert && window.assert(event.pointer === this.pointer, 'Wrong pointer in up');
         if (
           !(event.pointer instanceof Mouse) ||
           event.domEvent.button === this.mouseButton

@@ -49,7 +49,7 @@ export default class MirrorShapes implements OpticShapes {
 
     const sign = Math.sign(radiusOfCurvature);
     const magnitude = Math.abs(radiusOfCurvature);
-    assert && assert(magnitude > diameter / 2);
+    window.assert && window.assert(magnitude > diameter / 2);
 
     // convenience variable
     const backingThickness = options.backingThickness;

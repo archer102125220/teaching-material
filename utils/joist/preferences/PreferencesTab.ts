@@ -7,20 +7,20 @@
  * @author Jesse Greenberg
  */
 
-import joist from '../joist.js';
-import { HighlightPath, HBox, Line, Node, NodeOptions, PressListener, Rectangle, Text, Voicing, VoicingOptions } from '../../../scenery/js/imports.js';
-import PreferencesType from './PreferencesType.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import PreferencesDialog from './PreferencesDialog.js';
-import Multilink from '../../../axon/js/Multilink.js';
-import JoistStrings from '../JoistStrings.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
+import joist from '../joist';
+import { HighlightPath, HBox, Line, Node, type NodeOptions, PressListener, Rectangle, Text, Voicing, type VoicingOptions } from '../../scenery/imports';
+import PreferencesType from './PreferencesType';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import type TProperty from '../../axon/TProperty';
+import optionize from '../../phet-core/optionize';
+import PreferencesDialog from './PreferencesDialog';
+import Multilink from '../../axon/Multilink';
+import JoistStrings from '../JoistStrings';
+import Tandem from '../../tandem/Tandem';
+import type PickRequired from '../../phet-core/types/PickRequired';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
 
-import PatternStringProperty from '../../../axon/js/PatternStringProperty.js';
+import PatternStringProperty from '../../axon/PatternStringProperty';
 
 type SelfOptions = {
 
@@ -33,7 +33,7 @@ type SelfOptions = {
 type PreferencesTabOptions = SelfOptions & PickRequired<NodeOptions, 'tandem'> & StrictOmit<NodeOptions, 'children'>;
 type ParentOptions = NodeOptions & VoicingOptions;
 
-class PreferencesTab extends Voicing( Node ) {
+class PreferencesTab extends Voicing(Node) {
 
   // The value of this tab, when this tab is Pressed, the panel of this PreferencesType will be displayed.
   public readonly value: PreferencesType;
@@ -44,9 +44,9 @@ class PreferencesTab extends Voicing( Node ) {
    * @param value - PreferencesType shown when this tab is selected
    * @param providedOptions
    */
-  public constructor( labelProperty: TReadOnlyProperty<string>, property: TProperty<PreferencesType>, value: PreferencesType, providedOptions: PreferencesTabOptions ) {
+  public constructor(labelProperty: TReadOnlyProperty<string>, property: TProperty<PreferencesType>, value: PreferencesType, providedOptions: PreferencesTabOptions) {
 
-    const options = optionize<PreferencesTabOptions, SelfOptions, ParentOptions>()( {
+    const options = optionize<PreferencesTabOptions, SelfOptions, ParentOptions>()({
       iconNode: null,
       pointerAreaXDilation: 0,
 
@@ -63,57 +63,57 @@ class PreferencesTab extends Voicing( Node ) {
       focusable: true,
       containerTagName: 'li',
       containerAriaRole: 'presentation'
-    }, providedOptions );
+    }, providedOptions);
 
     // Visual contents for the tab, label Text and optional icon Node
-    const text = new Text( labelProperty, PreferencesDialog.TAB_OPTIONS );
-    const tabContents: Node[] = [ text ];
-    if ( options.iconNode ) {
-      tabContents.push( options.iconNode );
+    const text = new Text(labelProperty, PreferencesDialog.TAB_OPTIONS);
+    const tabContents: Node[] = [text];
+    if (options.iconNode) {
+      tabContents.push(options.iconNode);
     }
-    const contentsBox = new HBox( {
+    const contentsBox = new HBox({
       children: tabContents,
       spacing: 8
-    } );
+    });
 
     // background Node behind the tab contents for layout spacing and to increase the clickable area of the tab
-    const backgroundNode = new Rectangle( {
-      children: [ contentsBox ]
-    } );
+    const backgroundNode = new Rectangle({
+      children: [contentsBox]
+    });
 
     // Pink underline Node to indicate which tab is selected
-    const underlineNode = new Line( 0, 0, 0, 0, {
+    const underlineNode = new Line(0, 0, 0, 0, {
       stroke: HighlightPath.INNER_FOCUS_COLOR,
       lineWidth: 5
-    } );
+    });
 
-    super( options );
-    this.children = [ backgroundNode, underlineNode ];
+    super(options);
+    this.children = [backgroundNode, underlineNode];
 
-    contentsBox.boundsProperty.link( bounds => {
+    contentsBox.boundsProperty.link(bounds => {
 
       // margin around the tabContents
-      backgroundNode.rectBounds = bounds.dilatedXY( 15, 10 );
+      backgroundNode.rectBounds = bounds.dilatedXY(15, 10);
 
       underlineNode.x2 = bounds.width;
 
       // spacing between the underline and the tabContents
-      underlineNode.centerTop = bounds.centerBottom.plusXY( 0, 5 );
+      underlineNode.centerTop = bounds.centerBottom.plusXY(0, 5);
 
-      this.mouseArea = this.localBounds.dilatedX( options.pointerAreaXDilation );
+      this.mouseArea = this.localBounds.dilatedX(options.pointerAreaXDilation);
       this.touchArea = this.mouseArea;
-    } );
+    });
 
     this.value = value;
 
-    const voicingPatternStringProperty = new PatternStringProperty( JoistStrings.a11y.preferences.tabs.tabResponsePatternStringProperty, {
+    const voicingPatternStringProperty = new PatternStringProperty(JoistStrings.a11y.preferences.tabs.tabResponsePatternStringProperty, {
       title: labelProperty
-    }, { tandem: Tandem.OPT_OUT } );
+    }, { tandem: Tandem.OPT_OUT });
     this.voicingNameResponse = voicingPatternStringProperty;
 
-    const pressListener = new PressListener( {
+    const pressListener = new PressListener({
       press: () => {
-        property.set( value );
+        property.set(value);
 
         // speak the object response on activation
         this.voicingSpeakNameResponse();
@@ -121,20 +121,20 @@ class PreferencesTab extends Voicing( Node ) {
 
       // phet-io
       tandem: Tandem.OPT_OUT // We don't want to instrument components for preferences, https://github.com/phetsims/joist/issues/744#issuecomment-1196028362
-    } );
-    this.addInputListener( pressListener );
+    });
+    this.addInputListener(pressListener);
 
-    Multilink.multilink( [ property, pressListener.isOverProperty ], ( selectedTab, isOver ) => {
+    Multilink.multilink([property, pressListener.isOverProperty], (selectedTab, isOver) => {
       backgroundNode.opacity = selectedTab === value ? 1 :
-                               isOver ? 0.8 :
-                               0.6;
+        isOver ? 0.8 :
+          0.6;
 
       this.focusable = selectedTab === value;
       underlineNode.visible = selectedTab === value;
-    } );
+    });
   }
 }
 
 
-joist.register( 'PreferencesTab', PreferencesTab );
+joist.register('PreferencesTab', PreferencesTab);
 export default PreferencesTab;

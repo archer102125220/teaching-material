@@ -185,8 +185,8 @@ class LocalizedString {
 
     const index = localeOrder.indexOf(locale);
     if (index >= 0) {
-      assert && assert(localeOrder[localeOrder.length - 1] === 'en');
-      assert && assert(index + 1 < localeOrder.length);
+      window.assert && window.assert(localeOrder[localeOrder.length - 1] === 'en');
+      window.assert && window.assert(index + 1 < localeOrder.length);
       return localeOrder[index + 1];
     }
     else {
@@ -211,7 +211,7 @@ class LocalizedString {
    * Reset to the initial value for the specified locale, used for testing.
    */
   public restoreInitialValue(locale: Locale): void {
-    assert && assert(typeof this.initialValues[locale] === 'string', 'initial value expected for', locale);
+    window.assert && window.assert(typeof this.initialValues[locale] === 'string', 'initial value expected for', locale);
     this.property.value = this.initialValues[locale]!;
   }
 }

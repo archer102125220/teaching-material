@@ -8,10 +8,10 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import optionize from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import { GridBox, GridBoxOptions, Node, SceneryConstants } from '../../../scenery/js/imports.js';
-import joist from '../joist.js';
+import optionize from '../../phet-core/optionize';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import { GridBox, type GridBoxOptions, Node, SceneryConstants } from '../../scenery/imports';
+import joist from '../joist';
 
 type SelfOptions = {
 
@@ -45,8 +45,8 @@ export type PreferencesControlOptions = SelfOptions & GridBoxOptions;
 // [[descriptionNode                   ]]
 class PreferencesControl extends GridBox {
 
-  public constructor( providedOptions?: PreferencesControlOptions ) {
-    const options = optionize<PreferencesControlOptions, StrictOmit<SelfOptions, 'labelNode' | 'descriptionNode' | 'controlNode'>, GridBoxOptions>()( {
+  public constructor(providedOptions?: PreferencesControlOptions) {
+    const options = optionize<PreferencesControlOptions, StrictOmit<SelfOptions, 'labelNode' | 'descriptionNode' | 'controlNode'>, GridBoxOptions>()({
       headingControl: false,
       labelSpacing: 10,
       valueLabelXSpacing: 8,
@@ -56,15 +56,15 @@ class PreferencesControl extends GridBox {
       layoutOptions: {
         stretch: !providedOptions?.headingControl
       }
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
-    if ( options.controlNode ) {
-      assert && assert( options.controlNode.layoutOptions === null, 'PreferencesControl will control layout' );
-      this.enabledProperty.link( enabled => {
+    if (options.controlNode) {
+      window.assert && window.assert(options.controlNode.layoutOptions === null, 'PreferencesControl will control layout');
+      this.enabledProperty.link(enabled => {
         options.controlNode!.enabled = enabled;
-      } );
+      });
 
       options.controlNode.layoutOptions = {
         row: 0,
@@ -72,23 +72,23 @@ class PreferencesControl extends GridBox {
         xAlign: 'right'
       };
 
-      this.addChild( options.controlNode );
+      this.addChild(options.controlNode);
     }
 
-    if ( options.labelNode ) {
-      assert && assert( options.labelNode.layoutOptions === null, 'PreferencesControl will control layout' );
+    if (options.labelNode) {
+      window.assert && window.assert(options.labelNode.layoutOptions === null, 'PreferencesControl will control layout');
       options.labelNode.layoutOptions = {
         row: 0,
         column: 0,
         xAlign: 'left',
         rightMargin: options.labelSpacing
       };
-      this.addChild( options.labelNode );
+      this.addChild(options.labelNode);
     }
 
     // descriptionNode will be in the second row if a labelNode is provided.
-    if ( options.descriptionNode && options.labelNode ) {
-      assert && assert( options.descriptionNode.layoutOptions === null, 'PreferencesControl will control layout' );
+    if (options.descriptionNode && options.labelNode) {
+      window.assert && window.assert(options.descriptionNode.layoutOptions === null, 'PreferencesControl will control layout');
       options.descriptionNode.layoutOptions = {
         row: 1,
         column: 0,
@@ -97,19 +97,19 @@ class PreferencesControl extends GridBox {
         stretch: true,
         minContentWidth: 480
       };
-      this.addChild( options.descriptionNode );
+      this.addChild(options.descriptionNode);
     }
 
 
     // descriptionNode will be in the first row if labelNode is not provided.
-    else if ( options.descriptionNode ) {
-      assert && assert( options.descriptionNode.layoutOptions === null, 'PreferencesControl will control layout' );
+    else if (options.descriptionNode) {
+      window.assert && window.assert(options.descriptionNode.layoutOptions === null, 'PreferencesControl will control layout');
       options.descriptionNode.layoutOptions = {
         row: 0,
         column: 0,
         xAlign: 'left'
       };
-      this.addChild( options.descriptionNode );
+      this.addChild(options.descriptionNode);
     }
 
     // This component manages disabledOpacity, we don't want it to compound over subcomponents.
@@ -117,5 +117,5 @@ class PreferencesControl extends GridBox {
   }
 }
 
-joist.register( 'PreferencesControl', PreferencesControl );
+joist.register('PreferencesControl', PreferencesControl);
 export default PreferencesControl;

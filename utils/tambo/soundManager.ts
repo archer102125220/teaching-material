@@ -166,14 +166,14 @@ class SoundManager extends PhetioObject {
     simSettingPhetioStateProperty: TReadOnlyProperty<boolean>,
     providedOptions?: SoundGeneratorInitializationOptions): void {
 
-    assert && assert(!this.initialized, 'can\'t initialize the sound manager more than once');
+    window.assert && window.assert(!this.initialized, 'can\'t initialize the sound manager more than once');
 
     const options = optionize<SoundGeneratorInitializationOptions, SoundGeneratorInitializationOptions>()({
       categories: ['sim-specific', 'user-interface']
     }, providedOptions);
 
     // options validation
-    assert && assert(
+    window.assert && window.assert(
       options.categories.length === _.uniq(options.categories).length,
       'categories must be unique'
     );
@@ -224,7 +224,7 @@ class SoundManager extends PhetioObject {
     this.dryGainNode.connect(this.mainGainNode);
 
     // Create and hook up gain nodes for each of the defined categories.
-    assert && assert(this.convolver !== null && this.dryGainNode !== null, 'some audio nodes have not been initialized');
+    window.assert && window.assert(this.convolver !== null && this.dryGainNode !== null, 'some audio nodes have not been initialized');
     options.categories.forEach(categoryName => {
       const gainNode = phetAudioContext.createGain();
       gainNode.connect(this.convolver!);
@@ -273,7 +273,7 @@ class SoundManager extends PhetioObject {
     duckMainOutputLevelProperty.lazyLink(duckOutput => {
 
       // State checking - make sure the ducking gain node exists.
-      assert && assert(this.duckingGainNode, 'ducking listener fired, but no ducking gain node exists');
+      window.assert && window.assert(this.duckingGainNode, 'ducking listener fired, but no ducking gain node exists');
 
       // Use time constant values that will turn down the output level faster than it will turn it up.  This sounds
       // better, since it prevents overlap with the voice.
@@ -424,11 +424,11 @@ class SoundManager extends PhetioObject {
     }
 
     // state checking - make sure the needed nodes have been created
-    assert && assert(this.convolver !== null && this.dryGainNode !== null, 'some audio nodes have not been initialized');
+    window.assert && window.assert(this.convolver !== null && this.dryGainNode !== null, 'some audio nodes have not been initialized');
 
     // Verify that this is not a duplicate addition.
     const hasSoundGenerator = this.hasSoundGenerator(soundGenerator);
-    assert && assert(!hasSoundGenerator, 'can\'t add the same sound generator twice');
+    window.assert && window.assert(!hasSoundGenerator, 'can\'t add the same sound generator twice');
 
     // default options
     const options = optionize<SoundGeneratorAddOptions, SoundGeneratorAddOptions>()({
@@ -438,7 +438,7 @@ class SoundManager extends PhetioObject {
     }, providedOptions);
 
     // option validation
-    assert && assert(
+    window.assert && window.assert(
       _.includes(_.values(SoundLevelEnum), options.sonificationLevel),
       `invalid value for sonification level: ${options.sonificationLevel}`
     );
@@ -449,7 +449,7 @@ class SoundManager extends PhetioObject {
       soundGenerator.connect(this.dryGainNode!);
     }
     else {
-      assert && assert(
+      window.assert && window.assert(
         this.gainNodesForCategories.has(options.categoryName),
         `category does not exist : ${options.categoryName}`
       );
@@ -492,7 +492,7 @@ class SoundManager extends PhetioObject {
     if (!this.initialized) {
 
       const toRemove = this.soundGeneratorsAwaitingAdd.filter(s => s.soundGenerator === soundGenerator);
-      assert && assert(toRemove.length > 0, 'unable to remove sound generator - not found');
+      window.assert && window.assert(toRemove.length > 0, 'unable to remove sound generator - not found');
       while (toRemove.length > 0) {
         arrayRemove(this.soundGeneratorsAwaitingAdd, toRemove[0]);
         toRemove.shift();
@@ -513,7 +513,7 @@ class SoundManager extends PhetioObject {
     }
 
     // make sure it is actually present on the list
-    assert && assert(soundGeneratorInfo, 'unable to remove sound generator - not found');
+    window.assert && window.assert(soundGeneratorInfo, 'unable to remove sound generator - not found');
 
     // disconnect the sound generator from any audio nodes to which it may be connected
     if (soundGenerator.isConnectedTo(this.convolver!)) {
@@ -554,7 +554,7 @@ class SoundManager extends PhetioObject {
     }
 
     // range check
-    assert && assert(level >= 0 && level <= 1, `output level value out of range: ${level}`);
+    window.assert && window.assert(level >= 0 && level <= 1, `output level value out of range: ${level}`);
 
     this._mainOutputLevel = level;
     if (this.enabledProperty.value) {
@@ -595,13 +595,13 @@ class SoundManager extends PhetioObject {
       return;
     }
 
-    assert && assert(this.initialized, 'output levels for categories cannot be added until initialization has been done');
+    window.assert && window.assert(this.initialized, 'output levels for categories cannot be added until initialization has been done');
 
     // range check
-    assert && assert(outputLevel >= 0 && outputLevel <= 1, `output level value out of range: ${outputLevel}`);
+    window.assert && window.assert(outputLevel >= 0 && outputLevel <= 1, `output level value out of range: ${outputLevel}`);
 
     // verify that the specified category exists
-    assert && assert(this.gainNodesForCategories.get(categoryName), `no category with name = ${categoryName}`);
+    window.assert && window.assert(this.gainNodesForCategories.get(categoryName), `no category with name = ${categoryName}`);
 
     // Set the gain value on the appropriate gain node.
     const gainNode = this.gainNodesForCategories.get(categoryName);
@@ -623,7 +623,7 @@ class SoundManager extends PhetioObject {
    * Remove a ducking Property that had been previously added.
    */
   public removeDuckingProperty(duckingProperty: TReadOnlyProperty<boolean>): void {
-    assert && assert(this.duckingProperties.includes(duckingProperty), 'ducking Property not present');
+    window.assert && window.assert(this.duckingProperties.includes(duckingProperty), 'ducking Property not present');
     this.duckingProperties.remove(duckingProperty);
   }
 
@@ -642,7 +642,7 @@ class SoundManager extends PhetioObject {
 
     // Get the GainNode for the specified category.
     const gainNode = this.gainNodesForCategories.get(categoryName);
-    assert && assert(gainNode, `no category with name = ${categoryName}`);
+    window.assert && window.assert(gainNode, `no category with name = ${categoryName}`);
 
     return gainNode!.gain.value;
   }
@@ -661,7 +661,7 @@ class SoundManager extends PhetioObject {
     }
 
     if (newReverbLevel !== this._reverbLevel) {
-      assert && assert(newReverbLevel >= 0 && newReverbLevel <= 1, `reverb value out of range: ${newReverbLevel}`);
+      window.assert && window.assert(newReverbLevel >= 0 && newReverbLevel <= 1, `reverb value out of range: ${newReverbLevel}`);
       const now = phetAudioContext.currentTime;
       this.reverbGainNode!.gain.linearRampToValueAtTime(newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME);
       this.dryGainNode!.gain.linearRampToValueAtTime(1 - newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME);

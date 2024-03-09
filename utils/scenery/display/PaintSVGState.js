@@ -73,7 +73,7 @@ class PaintSVGState {
    * @param {null|string|Color|LinearGradient|RadialGradient|Pattern} fill
    */
   updateFill(svgBlock, fill) {
-    assert && assert(this.svgBlock === svgBlock);
+    window.assert && window.assert(this.svgBlock === svgBlock);
 
     // NOTE: If fill.isPaint === true, this should be different if we switched to a different SVG block.
     const fillStyle = paintToSVGStyle(fill, svgBlock);
@@ -105,7 +105,7 @@ class PaintSVGState {
    * @param {null|string|Color|LinearGradient|RadialGradient|Pattern} fill
    */
   updateStroke(svgBlock, stroke) {
-    assert && assert(this.svgBlock === svgBlock);
+    window.assert && window.assert(this.svgBlock === svgBlock);
 
     // NOTE: If stroke.isPaint === true, this should be different if we switched to a different SVG block.
     const strokeStyle = paintToSVGStyle(stroke, svgBlock);

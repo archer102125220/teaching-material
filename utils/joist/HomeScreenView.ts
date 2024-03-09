@@ -92,8 +92,8 @@ class HomeScreenView extends ScreenView {
 
     this.screenButtons = _.map(model.simScreens, (screen: AnyScreen) => {
 
-      assert && assert(screen.nameProperty.value, `name is required for screen ${model.simScreens.indexOf(screen)}`);
-      assert && assert(screen.homeScreenIcon, `homeScreenIcon is required for screen ${screen.nameProperty.value}`);
+      window.assert && window.assert(screen.nameProperty.value, `name is required for screen ${model.simScreens.indexOf(screen)}`);
+      window.assert && window.assert(screen.homeScreenIcon, `homeScreenIcon is required for screen ${screen.nameProperty.value}`);
 
       const homeScreenButton = new HomeScreenButton(
         screen,

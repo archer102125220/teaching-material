@@ -119,12 +119,12 @@ export default class RectangularButton extends ButtonNode {
     }, providedOptions);
 
     if (!options.content) {
-      assert && assert(options.size !== undefined, 'button dimensions needed if no content is supplied.');
+      window.assert && window.assert(options.size !== undefined, 'button dimensions needed if no content is supplied.');
     }
 
     if (options.size) {
-      assert && assert(options.xMargin < options.size.width, 'xMargin cannot be larger than width');
-      assert && assert(options.yMargin < options.size.height, 'yMargin cannot be larger than height');
+      window.assert && window.assert(options.xMargin < options.size.width, 'xMargin cannot be larger than width');
+      window.assert && window.assert(options.yMargin < options.size.height, 'yMargin cannot be larger than height');
 
       options.minUnstrokedWidth = options.size.width;
       options.minUnstrokedHeight = options.size.height;
@@ -188,8 +188,8 @@ export default class RectangularButton extends ButtonNode {
           isWidthSizable ? layoutSize.width - this.maxLineWidth : buttonWidth,
           isHeightSizable ? layoutSize.height - this.maxLineWidth : buttonHeight,
           options);
-        assert && assert(!isWidthSizable || buttonBackground.width <= layoutSize.width + 1e-7, 'button width cannot exceed layout width');
-        assert && assert(!isHeightSizable || buttonBackground.height <= layoutSize.height + 1e-7, 'button width cannot exceed layout height');
+        window.assert && window.assert(!isWidthSizable || buttonBackground.width <= layoutSize.width + 1e-7, 'button width cannot exceed layout width');
+        window.assert && window.assert(!isHeightSizable || buttonBackground.height <= layoutSize.height + 1e-7, 'button width cannot exceed layout height');
       }
 
       if (isFirstlayout || isWidthSizable || isHeightSizable) {
@@ -306,8 +306,8 @@ class ThreeDAppearanceStrategy {
       horizontalShadingPath.shape = buttonBackground.shape;
 
       // compute color stops for gradient, see issue #148
-      assert && assert(buttonWidth >= HORIZONTAL_HIGHLIGHT_GRADIENT_LENGTH + SHADE_GRADIENT_LENGTH);
-      assert && assert(buttonHeight >= VERTICAL_HIGHLIGHT_GRADIENT_LENGTH + SHADE_GRADIENT_LENGTH);
+      window.assert && window.assert(buttonWidth >= HORIZONTAL_HIGHLIGHT_GRADIENT_LENGTH + SHADE_GRADIENT_LENGTH);
+      window.assert && window.assert(buttonHeight >= VERTICAL_HIGHLIGHT_GRADIENT_LENGTH + SHADE_GRADIENT_LENGTH);
       const verticalHighlightStop = Math.min(VERTICAL_HIGHLIGHT_GRADIENT_LENGTH / buttonHeight, 1);
       const verticalShadowStop = Math.max(1 - SHADE_GRADIENT_LENGTH / buttonHeight, 0);
       const horizontalHighlightStop = Math.min(HORIZONTAL_HIGHLIGHT_GRADIENT_LENGTH / buttonWidth, 1);

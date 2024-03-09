@@ -83,7 +83,7 @@ class SVGGradientStop implements TPoolable {
    * Called when our color is a Property and it changes.
    */
   private onPropertyChange(newValue: Color | string | null, oldValue: Color | string | null): void {
-    assert && assert(this.isActiveSVGGradientStop());
+    window.assert && window.assert(this.isActiveSVGGradientStop());
     const activeSelf = this as ActiveSVGGradientStop;
 
     if (this.lastColor !== null) {
@@ -105,7 +105,7 @@ class SVGGradientStop implements TPoolable {
    * Should be called when the color stop's value may have changed.
    */
   private markDirty(): void {
-    assert && assert(this.isActiveSVGGradientStop());
+    window.assert && window.assert(this.isActiveSVGGradientStop());
 
     this.dirty = true;
     (this as ActiveSVGGradientStop).svgGradient.markDirty();
@@ -120,7 +120,7 @@ class SVGGradientStop implements TPoolable {
     }
     this.dirty = false;
 
-    assert && assert(this.isActiveSVGGradientStop());
+    window.assert && window.assert(this.isActiveSVGGradientStop());
     const activeSelf = this as ActiveSVGGradientStop;
 
     sceneryLog && sceneryLog.Paints && sceneryLog.Paints(`[SVGGradientStop] update: ${activeSelf.svgGradient.gradient.id} : ${this.ratio}`);
@@ -151,7 +151,7 @@ class SVGGradientStop implements TPoolable {
     // Since this needs to be done quickly, and we don't particularly care about slight rounding differences (it's
     // being used for display purposes only, and is never shown to the user), we use the built-in JS toFixed instead of
     // Dot's version of toFixed. See https://github.com/phetsims/kite/issues/50
-    const stopOpacityRule = `stop-opacity: ${scratchColor.a.toFixed(20)};`; // eslint-disable-line bad-sim-text
+    const stopOpacityRule = `stop-opacity: ${scratchColor.a.toFixed(20)};`;
 
     // For GC, mutate the color so it is just RGB and output that CSS also
     scratchColor.alpha = 1;
@@ -166,7 +166,7 @@ class SVGGradientStop implements TPoolable {
    * Disposes, so that it can be reused from the pool.
    */
   public dispose(): void {
-    assert && assert(this.isActiveSVGGradientStop());
+    window.assert && window.assert(this.isActiveSVGGradientStop());
     const activeSelf = this as ActiveSVGGradientStop;
 
     sceneryLog && sceneryLog.Paints && sceneryLog.Paints(`[SVGGradientStop] dispose: ${activeSelf.svgGradient.gradient.id} : ${this.ratio}`);

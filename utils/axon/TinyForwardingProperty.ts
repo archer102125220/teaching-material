@@ -74,7 +74,7 @@ export default class TinyForwardingProperty<ValueType> extends TinyProperty<Valu
 
       this.clearTargetProperty();
 
-      assert && assert(!this.targetProperty, 'just cleared');
+      window.assert && window.assert(!this.targetProperty, 'just cleared');
 
       // If we're switching away from a targetProperty, prefer no notification (so set our value to the last value)
       this.setPropertyValue(newValueOrTargetProperty);
@@ -126,7 +126,7 @@ export default class TinyForwardingProperty<ValueType> extends TinyProperty<Valu
     this.targetProperty = newTargetProperty;
 
     if (this.targetProperty) {
-      assert && assert(this.forwardingListener, 'forwardingListener is not set yet');
+      window.assert && window.assert(this.forwardingListener, 'forwardingListener is not set yet');
       this.targetProperty.lazyLink(this.forwardingListener!);
       this.setPropertyValue(this.targetProperty.value);
     }
@@ -169,7 +169,7 @@ export default class TinyForwardingProperty<ValueType> extends TinyProperty<Valu
    */
   public override set(value: ValueType): this {
     if (this.targetProperty) {
-      assert && assert(this.targetProperty.isSettable(), 'targetProperty must be settable');
+      window.assert && window.assert(this.targetProperty.isSettable(), 'targetProperty must be settable');
       this.targetProperty.set(value);
     }
     else {
@@ -184,7 +184,7 @@ export default class TinyForwardingProperty<ValueType> extends TinyProperty<Valu
   public setTargetPropertyInstrumented<NodeType extends NodeLike>(targetPropertyInstrumented: boolean, node: NodeType): NodeType {
 
     // See Node.initializePhetioObject for more details on this assertion
-    assert && assert(!node.isPhetioInstrumented(), 'this option only works if it is passed in before this Node is instrumented');
+    window.assert && window.assert(!node.isPhetioInstrumented(), 'this option only works if it is passed in before this Node is instrumented');
 
     this.targetPropertyInstrumented = targetPropertyInstrumented;
 
@@ -201,14 +201,14 @@ export default class TinyForwardingProperty<ValueType> extends TinyProperty<Valu
    * @param createProperty - creates an "owned" Property
    */
   public initializePhetio(node: NodeLike, tandemName: string, createProperty: () => TProperty<ValueType>): void {
-    assert && assert(!this.phetioInitialized, 'already initialized');
-    assert && assert(!this.ownedPhetioProperty, 'Already created the ownedPhetioProperty');
+    window.assert && window.assert(!this.phetioInitialized, 'already initialized');
+    window.assert && window.assert(!this.ownedPhetioProperty, 'Already created the ownedPhetioProperty');
 
     if (!this.targetProperty && this.targetPropertyInstrumented) {
 
       this.ownedPhetioProperty = createProperty();
-      assert && assert(this.ownedPhetioProperty instanceof Property, 'The owned property should be an AXON/Property');
-      assert && assert(this.ownedPhetioProperty instanceof ReadOnlyProperty && this.ownedPhetioProperty.isPhetioInstrumented(), 'The owned property should be PhET-iO instrumented');
+      window.assert && window.assert(this.ownedPhetioProperty instanceof Property, 'The owned property should be an AXON/Property');
+      window.assert && window.assert(this.ownedPhetioProperty instanceof ReadOnlyProperty && this.ownedPhetioProperty.isPhetioInstrumented(), 'The owned property should be PhET-iO instrumented');
 
       this.setTargetProperty(node, tandemName, this.ownedPhetioProperty);
     }

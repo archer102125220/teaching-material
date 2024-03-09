@@ -87,7 +87,7 @@ function snapshotEquals(assert, a, b, threshold, message, extraDom) {
 
     isEqual = false;
   }
-  assert.ok(isEqual, message);
+  window.assert.ok(isEqual, message);
   return isEqual;
 }
 

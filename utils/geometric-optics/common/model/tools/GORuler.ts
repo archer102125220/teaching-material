@@ -33,7 +33,7 @@ class GORuler extends GOTool {
 
   public constructor(providedOptions: GORulerOptions) {
 
-    assert && assert(isFinite(providedOptions.length) && providedOptions.length > 0);
+    window.assert && window.assert(isFinite(providedOptions.length) && providedOptions.length > 0);
 
     super(providedOptions);
 
@@ -46,7 +46,7 @@ class GORuler extends GOTool {
    * Scales the length of the ruler based on zoomScale.
    */
   public scaleLength(zoomScale: number): void {
-    assert && assert(isFinite(zoomScale) && zoomScale > 0);
+    window.assert && window.assert(isFinite(zoomScale) && zoomScale > 0);
     this.length = this.nominalLength / zoomScale;
   }
 }

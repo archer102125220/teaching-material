@@ -16,27 +16,29 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Utils from '../../../dot/js/Utils.js';
-import Range from '../../../dot/js/Range.js';
-import assertHasProperties from '../../../phet-core/js/assertHasProperties.js';
-import Orientation from '../../../phet-core/js/Orientation.js';
-import { animatedPanZoomSingleton, DelayedMutate, KeyboardUtils, Node, NodeOptions, PDOMPointer, PDOMUtils, PDOMValueType, SceneryEvent, SceneryListenerFunction, TInputListener, Voicing, VoicingOptions } from '../../../scenery/js/imports.js';
-import Utterance from '../../../utterance-queue/js/Utterance.js';
-import sun from '../sun.js';
-import optionize, { combineOptions } from '../../../phet-core/js/optionize.js';
-import Multilink, { UnknownMultilink } from '../../../axon/js/Multilink.js';
-import UtteranceQueue from '../../../utterance-queue/js/UtteranceQueue.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import Constructor from '../../../phet-core/js/types/Constructor.js';
-import IntentionalAny from '../../../phet-core/js/types/IntentionalAny.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import DynamicProperty from '../../../axon/js/DynamicProperty.js';
-import Property from '../../../axon/js/Property.js';
-import platform from '../../../phet-core/js/platform.js';
+import _ from 'lodash';
+
+import Utils from '../../dot/Utils';
+import Range from '../../dot/Range';
+import assertHasProperties from '../../phet-core/assertHasProperties';
+import Orientation from '../../phet-core/Orientation';
+import { animatedPanZoomSingleton, DelayedMutate, KeyboardUtils, Node, type NodeOptions, PDOMPointer, PDOMUtils, type PDOMValueType, SceneryEvent, type SceneryListenerFunction, type TInputListener, Voicing, type VoicingOptions } from '../../scenery/imports';
+import Utterance from '../../utterance-queue/Utterance';
+import sun from '../sun';
+import optionize, { combineOptions } from '../../phet-core/optionize';
+import Multilink, { type UnknownMultilink } from '../../axon/Multilink';
+import UtteranceQueue from '../../utterance-queue/UtteranceQueue';
+import type TProperty from '../../axon/TProperty';
+import type Constructor from '../../phet-core/types/Constructor';
+import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import DynamicProperty from '../../axon/DynamicProperty';
+import Property from '../../axon/Property';
+import platform from '../../phet-core/platform';
 
 // constants
 const DEFAULT_TAG_NAME = 'input';
-const toString = ( v: IntentionalAny ) => `${v}`;
+const toString = (v: IntentionalAny) => `${v}`;
 
 // Options for the Voicing response that happens at the end of
 const DEFAULT_VOICING_ON_END_RESPONSE_OPTIONS = {
@@ -53,7 +55,7 @@ type CreateTextFunction = {
    * @param valueOnStart - the value at the start of the interaction, the value on keydown for press and hold
    * @returns - text/response/string to be set to the primarySibling, null means nothing will happen
    * */
-  ( pdomMappedValue: number, newValue: number, valueOnStart: number | null ): PDOMValueType | null;
+  (pdomMappedValue: number, newValue: number, valueOnStart: number | null): PDOMValueType | null;
 
   // if this function needs resetting, include a `reset` field on this function to be called when the
   // AccessibleValueHandler is reset.
@@ -73,7 +75,7 @@ export type VoicingOnEndResponseOptions = {
 };
 
 // Function signature for voicingOnEndResponse.
-export type VoicingOnEndResponse = ( valueOnStart: number, providedOptions?: VoicingOnEndResponseOptions ) => void;
+export type VoicingOnEndResponse = (valueOnStart: number, providedOptions?: VoicingOnEndResponseOptions) => void;
 
 const ACCESSIBLE_VALUE_HANDLER_OPTIONS: string[] = [
   'startInput',
@@ -102,23 +104,23 @@ type SelfOptions = {
   enabledRangeProperty: TReadOnlyProperty<Range>;
 
   // called when input begins from user interaction
-  startInput?: ( event: SceneryEvent ) => void;
+  startInput?: (event: SceneryEvent) => void;
 
   // called when input ends from user interaction
-  endInput?: ( event: SceneryEvent | null ) => void;
+  endInput?: (event: SceneryEvent | null) => void;
 
   // Called after any user input onto this component. The value will most likely change as a result of this input,
   // but doesn't have to, like when at the min/max of the value range. Useful for input devices that support "press
   // and hold" input. However, beware that some input devices, such as a switch, have no concept of "press and hold"
   // and will trigger once per input. In those cases, this function will be called once per input (each input will look
   // like startInput->onInput->endInput all from one browser event).
-  onInput?: ( event: SceneryEvent ) => void;
+  onInput?: (event: SceneryEvent) => void;
 
   // Constrains the value, returning a new value for the valueProperty instead. Called before the valueProperty is set.
   // Subtypes can use this for other forms of input as well.
   // For keyboard input, this is only called when the shift key is NOT down because it is often the case that
   // shiftKeyboardStep is a smaller step size then what is allowed by constrainValue.
-  constrainValue?: ( value: number ) => number;
+  constrainValue?: (value: number) => number;
 
   // delta for the valueProperty for each press of the arrow keys
   keyboardStep?: number;
@@ -160,14 +162,14 @@ type SelfOptions = {
    * For this reason, it is important that the mapped "min" would not be bigger than the mapped "max" from the
    * enabledRangeProperty.
    */
-  a11yMapPDOMValue?: ( value: number ) => number;
+  a11yMapPDOMValue?: (value: number) => number;
 
   /**
    * Called before constraining and setting the Property. This is useful in rare cases where the value being set
    * by AccessibleValueHandler may change based on outside logic. This is for mapping value changes from input listeners
    * assigned in this type (keyboard/alt-input) to a new value before the value is set.
    */
-  a11yMapValue?: ( newValue: number, previousValue: number ) => number;
+  a11yMapValue?: (newValue: number, previousValue: number) => number;
 
   /**
    * If true, the aria-valuetext will be spoken every value change, even if the aria-valuetext doesn't
@@ -234,15 +236,15 @@ export type AccessibleValueHandlerOptions = SelfOptions & VoicingOptions; // do 
  * @param Type
  * @param optionsArgPosition - zero-indexed number that the options argument is provided at
  */
-const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: SuperType, optionsArgPosition: number ) => { // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
-  const AccessibleValueHandlerClass = DelayedMutate( 'AccessibleValueHandler', ACCESSIBLE_VALUE_HANDLER_OPTIONS, class AccessibleValueHandler extends Voicing( Type ) {
+const AccessibleValueHandler = <SuperType extends Constructor<Node>>(Type: SuperType, optionsArgPosition: number) => { // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
+  const AccessibleValueHandlerClass = DelayedMutate('AccessibleValueHandler', ACCESSIBLE_VALUE_HANDLER_OPTIONS, class AccessibleValueHandler extends Voicing(Type) {
     private readonly _valueProperty: TProperty<number>;
     private _enabledRangeProperty: TReadOnlyProperty<Range>;
     private _startInput: SceneryListenerFunction = _.noop;
     private _onInput: SceneryListenerFunction = _.noop;
-    private _endInput: ( ( event: SceneryEvent | null ) => void ) = _.noop;
-    private _constrainValue: ( ( value: number ) => number ) = _.identity;
-    private _a11yMapValue: ( ( newValue: number, previousValue: number ) => number ) = _.identity;
+    private _endInput: ((event: SceneryEvent | null) => void) = _.noop;
+    private _constrainValue: ((value: number) => number) = _.identity;
+    private _a11yMapValue: ((newValue: number, previousValue: number) => number) = _.identity;
     private _panTargetNode: Node | null = null;
     private _keyboardStep!: number; // will be initialized based on the enabled range
     private _shiftKeyboardStep!: number; // will be initialized based on the enabled range
@@ -290,7 +292,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
 
     // key is the event.code for the range key, value is whether it is down
     private _rangeKeysDown: Record<string, boolean> = {};
-    private _a11yMapPDOMValue: ( ( value: number ) => number ) = _.identity;
+    private _a11yMapPDOMValue: ((value: number) => number) = _.identity;
     private _a11yCreateAriaValueText: CreateTextFunction = toString; // by default make sure it returns a string
     private _dependenciesMultilink: UnknownMultilink | null = null;
     private _a11yRepeatEqualValueText = true;
@@ -311,51 +313,51 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
     private readonly _a11yValueTextUpdateListener: () => void;
     private readonly _disposeAccessibleValueHandler: () => void;
 
-    public constructor( ...args: IntentionalAny[] ) {
+    public constructor(...args: IntentionalAny[]) {
 
-      const providedOptions = args[ optionsArgPosition ] as AccessibleValueHandlerOptions;
+      const providedOptions = args[optionsArgPosition] as AccessibleValueHandlerOptions;
 
-      assert && assert( providedOptions, 'providedOptions has required options' );
-      assert && assert( providedOptions.enabledRangeProperty, 'enabledRangeProperty is a required option' );
-      assert && assert( providedOptions.valueProperty, 'valueProperty is a required option' );
+      window.assert && window.assert(providedOptions, 'providedOptions has required options');
+      window.assert && window.assert(providedOptions.enabledRangeProperty, 'enabledRangeProperty is a required option');
+      window.assert && window.assert(providedOptions.valueProperty, 'valueProperty is a required option');
 
-      assert && providedOptions && assert( !providedOptions.hasOwnProperty( 'tagName' ) || providedOptions.tagName === null,
-        'AccessibleValueHandler sets its own tagName. Only provide tagName to clear accessible content from the PDOM' );
+      assert && providedOptions && assert(!providedOptions.hasOwnProperty('tagName') || providedOptions.tagName === null,
+        'AccessibleValueHandler sets its own tagName. Only provide tagName to clear accessible content from the PDOM');
 
       // cannot be set by client
-      assert && providedOptions && assert( !providedOptions.hasOwnProperty( 'inputType' ), 'AccessibleValueHandler sets its own inputType.' );
+      assert && providedOptions && assert(!providedOptions.hasOwnProperty('inputType'), 'AccessibleValueHandler sets its own inputType.');
 
       // if rounding to keyboard step, keyboardStep must be defined so values aren't skipped and the slider
       // doesn't get stuck while rounding to the nearest value, see https://github.com/phetsims/sun/issues/410
-      if ( assert && providedOptions && providedOptions.roundToStepSize ) {
-        assert( providedOptions.keyboardStep, 'rounding to keyboardStep, define appropriate keyboardStep to round to' );
+      if (assert && providedOptions && providedOptions.roundToStepSize) {
+        assert(providedOptions.keyboardStep, 'rounding to keyboardStep, define appropriate keyboardStep to round to');
       }
 
       // Override options
-      args[ optionsArgPosition ] = optionize<AccessibleValueHandlerOptions, SelfOptions, ParentOptions>()( {
+      args[optionsArgPosition] = optionize<AccessibleValueHandlerOptions, SelfOptions, ParentOptions>()({
         // @ts-expect-error - TODO: we should be able to have the public API be just null, and internally set to string, Limitation (IV), see https://github.com/phetsims/phet-core/issues/128
         tagName: DEFAULT_TAG_NAME,
 
         // parent options that we must provide a default to use
         inputType: 'range'
-      }, providedOptions );
-      super( ...args );
+      }, providedOptions);
+      super(...args);
 
       // members of the Node API that are used by this trait
-      assertHasProperties( this, [ 'inputValue', 'setPDOMAttribute' ] );
+      assertHasProperties(this, ['inputValue', 'setPDOMAttribute']);
 
       const valueProperty = providedOptions.valueProperty;
       const enabledRangeProperty = providedOptions.enabledRangeProperty;
 
-      if ( providedOptions.reverseAlternativeInput ) {
+      if (providedOptions.reverseAlternativeInput) {
 
         // A DynamicProperty will invert the value before setting it to the actual valueProperty, and similarly
         // invert if the valueProperty changes externally.
-        this._valueProperty = new DynamicProperty( new Property( valueProperty ), {
+        this._valueProperty = new DynamicProperty(new Property(valueProperty), {
           bidirectional: true,
-          map: ( propertyValue: number ) => enabledRangeProperty.value.max - propertyValue,
-          inverseMap: ( propertyValue: number ) => enabledRangeProperty.value.max - propertyValue
-        } );
+          map: (propertyValue: number) => enabledRangeProperty.value.max - propertyValue,
+          inverseMap: (propertyValue: number) => enabledRangeProperty.value.max - propertyValue
+        });
       }
       else {
         this._valueProperty = valueProperty;
@@ -363,12 +365,12 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
 
       this._enabledRangeProperty = enabledRangeProperty;
 
-      this._a11yValueTextUpdateListener = this.invalidateAriaValueText.bind( this );
+      this._a11yValueTextUpdateListener = this.invalidateAriaValueText.bind(this);
 
       // initialized with setters that validate
-      this.keyboardStep = ( enabledRangeProperty.get().max - enabledRangeProperty.get().min ) / 20;
-      this.shiftKeyboardStep = ( enabledRangeProperty.get().max - enabledRangeProperty.get().min ) / 100;
-      this.pageKeyboardStep = ( enabledRangeProperty.get().max - enabledRangeProperty.get().min ) / 10;
+      this.keyboardStep = (enabledRangeProperty.get().max - enabledRangeProperty.get().min) / 20;
+      this.shiftKeyboardStep = (enabledRangeProperty.get().max - enabledRangeProperty.get().min) / 100;
+      this.pageKeyboardStep = (enabledRangeProperty.get().max - enabledRangeProperty.get().min) / 10;
 
       this._valueOnStart = valueProperty.value;
 
@@ -376,27 +378,27 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       this.invalidateA11yDependencies();
 
       // listeners, must be unlinked in dispose
-      const enabledRangeObserver = this.invalidateEnabledRange.bind( this );
-      this._enabledRangeProperty.link( enabledRangeObserver );
+      const enabledRangeObserver = this.invalidateEnabledRange.bind(this);
+      this._enabledRangeProperty.link(enabledRangeObserver);
 
       // when the property changes, be sure to update the accessible input value and aria-valuetext which is read
       // by assistive technology when the value changes
-      const valuePropertyListener = this.invalidateValueProperty.bind( this );
-      this._valueProperty.link( valuePropertyListener );
+      const valuePropertyListener = this.invalidateValueProperty.bind(this);
+      this._valueProperty.link(valuePropertyListener);
 
       // A listener that will be attached to the pointer to prevent other listeners from attaching.
       this._pdomPointerListener = {
         interrupt: (): void => {
-          this._onInteractionEnd( null );
+          this._onInteractionEnd(null);
         }
       };
 
       this._disposeAccessibleValueHandler = () => {
-        this._enabledRangeProperty.unlink( enabledRangeObserver );
-        this._valueProperty.unlink( valuePropertyListener );
+        this._enabledRangeProperty.unlink(enabledRangeObserver);
+        this._valueProperty.unlink(valuePropertyListener);
 
-        if ( providedOptions.reverseAlternativeInput ) {
-          assert && assert(
+        if (providedOptions.reverseAlternativeInput) {
+          window.assert && window.assert(
             this._valueProperty instanceof DynamicProperty,
             'Only a DynamicProperty can be disposed, otherwise this is disposing a Property that AccessibleValueHandler does not have ownership over.'
           );
@@ -409,7 +411,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       };
     }
 
-    public set startInput( value: SceneryListenerFunction ) {
+    public set startInput(value: SceneryListenerFunction) {
       this._startInput = value;
     }
 
@@ -417,7 +419,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._startInput;
     }
 
-    public set onInput( value: SceneryListenerFunction ) {
+    public set onInput(value: SceneryListenerFunction) {
       this._onInput = value;
     }
 
@@ -425,7 +427,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._onInput;
     }
 
-    public set endInput( value: ( ( event: SceneryEvent | null ) => void ) ) {
+    public set endInput(value: ((event: SceneryEvent | null) => void)) {
       this._endInput = value;
     }
 
@@ -433,17 +435,17 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._endInput;
     }
 
-    public set constrainValue( value: ( ( value: number ) => number ) ) {
+    public set constrainValue(value: ((value: number) => number)) {
       // NOTE: Not currently re-constraining the value on set, since hopefully other things are doing this action.
       // If that's not done, we should do something about it here.
       this._constrainValue = value;
     }
 
-    public get constrainValue(): ( ( value: number ) => number ) {
+    public get constrainValue(): ((value: number) => number) {
       return this._constrainValue;
     }
 
-    public set panTargetNode( value: Node | null ) {
+    public set panTargetNode(value: Node | null) {
       this._panTargetNode = value;
     }
 
@@ -451,7 +453,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._panTargetNode;
     }
 
-    public set roundToStepSize( value: boolean ) {
+    public set roundToStepSize(value: boolean) {
       this._roundToStepSize = value;
     }
 
@@ -459,27 +461,27 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._roundToStepSize;
     }
 
-    public set a11yMapPDOMValue( value: ( ( value: number ) => number ) ) {
+    public set a11yMapPDOMValue(value: ((value: number) => number)) {
       this._a11yMapPDOMValue = value;
 
-      this.invalidateEnabledRange( this._enabledRangeProperty.value );
+      this.invalidateEnabledRange(this._enabledRangeProperty.value);
       this.invalidateValueProperty();
       this.invalidateAriaValueText();
     }
 
-    public get a11yMapPDOMValue(): ( ( value: number ) => number ) {
+    public get a11yMapPDOMValue(): ((value: number) => number) {
       return this._a11yMapPDOMValue;
     }
 
-    public set a11yMapValue( value: ( ( newValue: number, previousValue: number ) => number ) ) {
+    public set a11yMapValue(value: ((newValue: number, previousValue: number) => number)) {
       this._a11yMapValue = value;
     }
 
-    public get a11yMapValue(): ( ( newValue: number, previousValue: number ) => number ) {
+    public get a11yMapValue(): ((newValue: number, previousValue: number) => number) {
       return this._a11yMapValue;
     }
 
-    public set a11yRepeatEqualValueText( value: boolean ) {
+    public set a11yRepeatEqualValueText(value: boolean) {
       this._a11yRepeatEqualValueText = value;
 
       this.invalidateAriaValueText();
@@ -489,7 +491,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._a11yRepeatEqualValueText;
     }
 
-    public set a11yCreateAriaValueText( value: CreateTextFunction ) {
+    public set a11yCreateAriaValueText(value: CreateTextFunction) {
       this._a11yCreateAriaValueText = value;
 
       this.invalidateAriaValueText();
@@ -499,7 +501,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._a11yCreateAriaValueText;
     }
 
-    public set a11yCreateContextResponseAlert( value: CreateTextFunction | null ) {
+    public set a11yCreateContextResponseAlert(value: CreateTextFunction | null) {
       this._a11yCreateContextResponseAlert = value;
     }
 
@@ -507,7 +509,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._a11yCreateContextResponseAlert;
     }
 
-    public set contextResponsePerValueChangeDelay( value: number ) {
+    public set contextResponsePerValueChangeDelay(value: number) {
       this._contextResponsePerValueChangeDelay = value;
     }
 
@@ -515,7 +517,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._contextResponsePerValueChangeDelay;
     }
 
-    public set contextResponseMaxDelay( value: number ) {
+    public set contextResponseMaxDelay(value: number) {
       this._contextResponseMaxDelay = value;
     }
 
@@ -523,7 +525,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._contextResponseMaxDelay;
     }
 
-    public set voicingOnEndResponseOptions( value: VoicingOnEndResponseOptions ) {
+    public set voicingOnEndResponseOptions(value: VoicingOnEndResponseOptions) {
       this._voicingOnEndResponseOptions = value;
     }
 
@@ -532,18 +534,18 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
     }
 
     private invalidateAriaValueText(): void {
-      this._updateAriaValueText( this._oldValue );
+      this._updateAriaValueText(this._oldValue);
 
       this._oldValue = this._valueProperty.value;
     }
 
-    private invalidateEnabledRange( enabledRange: Range ): void {
-      const mappedMin = this._getMappedValue( enabledRange.min );
-      const mappedMax = this._getMappedValue( enabledRange.max );
+    private invalidateEnabledRange(enabledRange: Range): void {
+      const mappedMin = this._getMappedValue(enabledRange.min);
+      const mappedMax = this._getMappedValue(enabledRange.max);
 
       // pdom - update enabled slider range for AT, required for screen reader events to behave correctly
-      this.setPDOMAttribute( 'min', mappedMin );
-      this.setPDOMAttribute( 'max', mappedMax );
+      this.setPDOMAttribute('min', mappedMin);
+      this.setPDOMAttribute('max', mappedMax);
 
       // update the step attribute slider element - this attribute is only added because it is required to
       // receive accessibility events on all browsers, and is totally separate from the step values above that
@@ -557,7 +559,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       // set the aria-valuenow attribute in case the AT requires it to read the value correctly, some may
       // fall back on this from aria-valuetext see
       // https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/ARIA_Techniques/Using_the_aria-valuetext_attribute#Possible_effects_on_user_agents_and_assistive_technology
-      this.setPDOMAttribute( 'aria-valuenow', mappedValue );
+      this.setPDOMAttribute('aria-valuenow', mappedValue);
 
       // update the PDOM input value on Property change
       this.inputValue = mappedValue;
@@ -568,7 +570,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       // dispose the previous multilink, there is only one set of dependencies, though they can be overwritten.
       this._dependenciesMultilink && this._dependenciesMultilink.dispose();
 
-      this._dependenciesMultilink = Multilink.multilinkAny( this._a11yDependencies.concat( [ this._valueProperty ] ), this._a11yValueTextUpdateListener );
+      this._dependenciesMultilink = Multilink.multilinkAny(this._a11yDependencies.concat([this._valueProperty]), this._a11yValueTextUpdateListener);
     }
 
     /**
@@ -576,9 +578,9 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      * changes. Use this method to set the dependency Properties for this value handler. This will blow away the
      * previous list (like Node.children).
      */
-    public setA11yDependencies( dependencies: TReadOnlyProperty<IntentionalAny>[] ): void {
-      assert && assert( !dependencies.includes( this._valueProperty ),
-        'The value Property is already a dependency, and does not need to be added to this list' );
+    public setA11yDependencies(dependencies: TReadOnlyProperty<IntentionalAny>[]): void {
+      window.assert && window.assert(!dependencies.includes(this._valueProperty),
+        'The value Property is already a dependency, and does not need to be added to this list');
 
       this._a11yDependencies = dependencies;
 
@@ -589,29 +591,29 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       return this._a11yDependencies;
     }
 
-    public set a11yDependencies( value: TReadOnlyProperty<IntentionalAny>[] ) {
-      this.setA11yDependencies( value );
+    public set a11yDependencies(value: TReadOnlyProperty<IntentionalAny>[]) {
+      this.setA11yDependencies(value);
     }
 
     public get a11yDependencies(): TReadOnlyProperty<IntentionalAny>[] {
       return this.getA11yDependencies();
     }
 
-    private _updateAriaValueText( oldPropertyValue: number | null ): void {
+    private _updateAriaValueText(oldPropertyValue: number | null): void {
       const mappedValue = this._getMappedValue();
 
       // create the dynamic aria-valuetext from a11yCreateAriaValueText.
-      const newAriaValueTextValueType = this._a11yCreateAriaValueText( mappedValue, this._valueProperty.value, oldPropertyValue );
-      let newAriaValueText = PDOMUtils.unwrapStringProperty( newAriaValueTextValueType )!;
+      const newAriaValueTextValueType = this._a11yCreateAriaValueText(mappedValue, this._valueProperty.value, oldPropertyValue);
+      let newAriaValueText = PDOMUtils.unwrapStringProperty(newAriaValueTextValueType)!;
 
       // eslint-disable-next-line no-simple-type-checking-assertions
-      assert && assert( typeof newAriaValueText === 'string' );
+      window.assert && window.assert(typeof newAriaValueText === 'string');
 
       // Make sure that the new aria-valuetext is different from the previous one, so that if they are the same
       // the screen reader will still read the new text - adding a hairSpace registers as a new string, but the
       // screen reader won't read that character.
       const hairSpace = '\u200A';
-      if ( this._a11yRepeatEqualValueText && this.ariaValueText && newAriaValueText === this.ariaValueText.replace( new RegExp( hairSpace, 'g' ), '' ) ) {
+      if (this._a11yRepeatEqualValueText && this.ariaValueText && newAriaValueText === this.ariaValueText.replace(new RegExp(hairSpace, 'g'), '')) {
         newAriaValueText = this.ariaValueText + hairSpace;
       }
 
@@ -629,22 +631,22 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       // Alerting will occur to each connected display's UtteranceQueue, but we should only increment delay once per
       // time this function is called.
       let timesChangedBeforeAlertingIncremented = false;
-      if ( this._a11yCreateContextResponseAlert ) {
+      if (this._a11yCreateContextResponseAlert) {
 
         const mappedValue = this._getMappedValue();
-        const endInteractionAlert = this._a11yCreateContextResponseAlert( mappedValue, this._valueProperty.value, this._valueOnStart );
+        const endInteractionAlert = this._a11yCreateContextResponseAlert(mappedValue, this._valueProperty.value, this._valueOnStart);
 
         // only if it returned an alert
-        if ( endInteractionAlert ) {
+        if (endInteractionAlert) {
           this._contextResponseUtterance.alert = endInteractionAlert;
-          this.forEachUtteranceQueue( ( utteranceQueue: UtteranceQueue ) => {
+          this.forEachUtteranceQueue((utteranceQueue: UtteranceQueue) => {
 
             // Only increment a single time, this has the constraint that if different utteranceQueues move this
             // alert through at a different time, the delay could be inconsistent, but in general it should work well.
-            if ( timesChangedBeforeAlertingIncremented ) {
+            if (timesChangedBeforeAlertingIncremented) {
               // use the current value for this._timesChangedBeforeAlerting
             }
-            else if ( utteranceQueue.hasUtterance( this._contextResponseUtterance ) ) {
+            else if (utteranceQueue.hasUtterance(this._contextResponseUtterance)) {
               timesChangedBeforeAlertingIncremented = true;
               this._timesChangedBeforeAlerting++;
             }
@@ -655,11 +657,11 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
             // Adjust the delay of the utterance based on number of times it has been re-added to the queue. Each
             // time the aria-valuetext changes, this method is called, we want to make sure to give enough time for the
             // aria-valuetext to fully complete before alerting this context response.
-            this._contextResponseUtterance.alertStableDelay = Math.min( this._contextResponseMaxDelay,
-              this._timesChangedBeforeAlerting * this._contextResponsePerValueChangeDelay );
+            this._contextResponseUtterance.alertStableDelay = Math.min(this._contextResponseMaxDelay,
+              this._timesChangedBeforeAlerting * this._contextResponsePerValueChangeDelay);
 
-            utteranceQueue.addToBack( this._contextResponseUtterance );
-          } );
+            utteranceQueue.addToBack(this._contextResponseUtterance);
+          });
         }
       }
     }
@@ -675,15 +677,15 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
 
       this._timesChangedBeforeAlerting = 0;
       // on reset, make sure that the PDOM descriptions are completely up to date.
-      this._updateAriaValueText( null );
+      this._updateAriaValueText(null);
     }
 
     /**
      * get the formatted value based on the current value of the Property.
      * @param [value] - if not provided, will use the current value of the valueProperty
      */
-    private _getMappedValue( value: number = this._valueProperty.value ): number {
-      return this._a11yMapPDOMValue( value );
+    private _getMappedValue(value: number = this._valueProperty.value): number {
+      return this._a11yMapPDOMValue(value);
     }
 
     /**
@@ -692,11 +694,11 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      */
     public getAccessibleValueHandlerInputListener(): TInputListener {
       return {
-        keydown: this.handleKeyDown.bind( this ),
-        keyup: this.handleKeyUp.bind( this ),
-        input: this.handleInput.bind( this ),
-        change: this.handleChange.bind( this ),
-        blur: this.handleBlur.bind( this )
+        keydown: this.handleKeyDown.bind(this),
+        keyup: this.handleKeyUp.bind(this),
+        input: this.handleInput.bind(this),
+        change: this.handleChange.bind(this),
+        blur: this.handleBlur.bind(this)
       };
     }
 
@@ -711,13 +713,13 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      *
      * Add this as an input listener to the `keydown` event to the Node mixing in AccessibleValueHandler.
      */
-    public handleKeyDown( event: SceneryEvent<KeyboardEvent> ): void {
+    public handleKeyDown(event: SceneryEvent<KeyboardEvent>): void {
 
       const domEvent = event.domEvent!;
 
-      const key = KeyboardUtils.getEventCode( domEvent );
+      const key = KeyboardUtils.getEventCode(domEvent);
 
-      if ( !key ) {
+      if (!key) {
         return;
       }
 
@@ -726,14 +728,14 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
 
       // if we receive a 'tab' keydown event, do not allow the browser to react to this like a submission and
       // prevent responding to the `input` event
-      if ( KeyboardUtils.isKeyEvent( domEvent, KeyboardUtils.KEY_TAB ) ) {
+      if (KeyboardUtils.isKeyEvent(domEvent, KeyboardUtils.KEY_TAB)) {
         this._blockInput = true;
       }
 
-      if ( this.enabledProperty.get() ) {
+      if (this.enabledProperty.get()) {
 
         // Prevent default so browser doesn't change input value automatically
-        if ( KeyboardUtils.isRangeKey( domEvent ) ) {
+        if (KeyboardUtils.isRangeKey(domEvent)) {
 
           // This should prevent any "change" and "input" events so we don't change the value twice, but it also
           // prevents a VoiceOver issue where pressing arrow keys both changes the slider value AND moves the
@@ -744,7 +746,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
           // On Mac, we don't get a keyup event when the meta key is down so don't change the value or do
           // anything that assumes we will get a corresponding keyup event, see
           // https://stackoverflow.com/questions/11818637/why-does-javascript-drop-keyup-events-when-the-metakey-is-pressed-on-mac-browser
-          if ( !domEvent.metaKey ) {
+          if (!domEvent.metaKey) {
 
             // signify that this listener is reserved for dragging so that other listeners can change
             // their behavior during scenery event dispatch
@@ -754,39 +756,39 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
             let useConstrainValue = true;
 
             // if this is the first keydown this is the start of the drag interaction
-            if ( !this._anyKeysDown() ) {
-              this._onInteractionStart( event );
+            if (!this._anyKeysDown()) {
+              this._onInteractionStart(event);
             }
 
             // track that a new key is being held down
-            this._rangeKeysDown[ key ] = true;
+            this._rangeKeysDown[key] = true;
 
             let newValue = this._valueProperty.get();
-            if ( KeyboardUtils.isAnyKeyEvent( domEvent, [ KeyboardUtils.KEY_END, KeyboardUtils.KEY_HOME ] ) ) {
+            if (KeyboardUtils.isAnyKeyEvent(domEvent, [KeyboardUtils.KEY_END, KeyboardUtils.KEY_HOME])) {
 
               // on 'end' and 'home' snap to max and min of enabled range respectively (this is typical browser
               // behavior for sliders)
-              if ( key === KeyboardUtils.KEY_END ) {
+              if (key === KeyboardUtils.KEY_END) {
                 newValue = this._enabledRangeProperty.get().max;
               }
-              else if ( key === KeyboardUtils.KEY_HOME ) {
+              else if (key === KeyboardUtils.KEY_HOME) {
                 newValue = this._enabledRangeProperty.get().min;
               }
             }
             else {
               let stepSize;
-              if ( key === KeyboardUtils.KEY_PAGE_UP || key === KeyboardUtils.KEY_PAGE_DOWN ) {
+              if (key === KeyboardUtils.KEY_PAGE_UP || key === KeyboardUtils.KEY_PAGE_DOWN) {
                 // on page up and page down, the default step size is 1/10 of the range (this is typical browser behavior)
                 stepSize = this.pageKeyboardStep;
 
-                if ( key === KeyboardUtils.KEY_PAGE_UP ) {
+                if (key === KeyboardUtils.KEY_PAGE_UP) {
                   newValue = this._valueProperty.get() + stepSize;
                 }
-                else if ( key === KeyboardUtils.KEY_PAGE_DOWN ) {
+                else if (key === KeyboardUtils.KEY_PAGE_DOWN) {
                   newValue = this._valueProperty.get() - stepSize;
                 }
               }
-              else if ( KeyboardUtils.isArrowKey( domEvent ) ) {
+              else if (KeyboardUtils.isArrowKey(domEvent)) {
 
                 // if the shift key is pressed down, modify the step size (this is atypical browser behavior for sliders)
                 stepSize = domEvent.shiftKey ? this.shiftKeyboardStep : this.keyboardStep;
@@ -796,21 +798,21 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
                 // constrainValue. See https://github.com/phetsims/sun/issues/698.
                 useConstrainValue = !domEvent.shiftKey;
 
-                if ( key === KeyboardUtils.KEY_RIGHT_ARROW || key === KeyboardUtils.KEY_UP_ARROW ) {
+                if (key === KeyboardUtils.KEY_RIGHT_ARROW || key === KeyboardUtils.KEY_UP_ARROW) {
                   newValue = this._valueProperty.get() + stepSize;
                 }
-                else if ( key === KeyboardUtils.KEY_LEFT_ARROW || key === KeyboardUtils.KEY_DOWN_ARROW ) {
+                else if (key === KeyboardUtils.KEY_LEFT_ARROW || key === KeyboardUtils.KEY_DOWN_ARROW) {
                   newValue = this._valueProperty.get() - stepSize;
                 }
 
-                if ( this._roundToStepSize ) {
-                  newValue = roundValue( newValue, this._valueProperty.get(), stepSize );
+                if (this._roundToStepSize) {
+                  newValue = roundValue(newValue, this._valueProperty.get(), stepSize);
                 }
               }
             }
 
             // Map the value.
-            const mappedValue = this._a11yMapValue( newValue, this._valueProperty.get() );
+            const mappedValue = this._a11yMapValue(newValue, this._valueProperty.get());
 
             // Optionally constrain the value. Only constrain if modifying by shiftKeyboardStep because that step size
             // may allow finer precision than constrainValue. This is a workaround for
@@ -818,20 +820,20 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
             // are smaller than values allowed by constrainValue. In https://github.com/phetsims/sun/issues/703 we
             // will work to resolve this more generally.
             let constrainedValue = mappedValue;
-            if ( useConstrainValue ) {
-              constrainedValue = this._constrainValue( mappedValue );
+            if (useConstrainValue) {
+              constrainedValue = this._constrainValue(mappedValue);
             }
 
             // limit the value to the enabled range
-            this._valueProperty.set( Utils.clamp( constrainedValue, this._enabledRangeProperty.get().min, this._enabledRangeProperty.get().max ) );
+            this._valueProperty.set(Utils.clamp(constrainedValue, this._enabledRangeProperty.get().min, this._enabledRangeProperty.get().max));
 
             // optional callback after the valueProperty is set (even if set to the same value) so that the listener
             // can use the new value.
-            this._onInput( event );
+            this._onInput(event);
 
             // after any keyboard input, make sure that the Node stays in view
             const panTargetNode = this._panTargetNode || this;
-            animatedPanZoomSingleton.initialized && animatedPanZoomSingleton.listener.panToNode( panTargetNode, true, panTargetNode.limitPanDirection );
+            animatedPanZoomSingleton.initialized && animatedPanZoomSingleton.listener.panToNode(panTargetNode, true, panTargetNode.limitPanDirection);
           }
         }
       }
@@ -841,26 +843,26 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      * Handle key up event on this accessible slider, managing the shift key, and calling an optional endDrag
      * function on release. Add this as an input listener to the node mixing in AccessibleValueHandler.
      */
-    protected handleKeyUp( event: SceneryEvent<KeyboardEvent> ): void {
-      const key = KeyboardUtils.getEventCode( event.domEvent )!;
+    protected handleKeyUp(event: SceneryEvent<KeyboardEvent>): void {
+      const key = KeyboardUtils.getEventCode(event.domEvent)!;
 
       // handle case where user tabbed to this input while an arrow key might have been held down
-      if ( this._allKeysUp() ) {
+      if (this._allKeysUp()) {
         return;
       }
 
       // reset shift key flag when we release it
-      if ( KeyboardUtils.SHIFT_KEYS.includes( key ) ) {
+      if (KeyboardUtils.SHIFT_KEYS.includes(key)) {
         this._shiftKey = false;
       }
 
-      if ( this.enabledProperty.get() ) {
-        if ( KeyboardUtils.isRangeKey( event.domEvent ) ) {
-          this._rangeKeysDown[ key ] = false;
+      if (this.enabledProperty.get()) {
+        if (KeyboardUtils.isRangeKey(event.domEvent)) {
+          this._rangeKeysDown[key] = false;
 
           // when all range keys are released, we are done dragging
-          if ( this._allKeysUp() ) {
-            this._onInteractionEnd( event );
+          if (this._allKeysUp()) {
+            this._onInteractionEnd(event);
           }
         }
       }
@@ -873,10 +875,10 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      *
      * Add this as a listener to the 'change' input event on the Node that is mixing in AccessibleValueHandler.
      */
-    protected handleChange( event: SceneryEvent ): void {
+    protected handleChange(event: SceneryEvent): void {
 
-      if ( !this._a11yInputHandled ) {
-        this.handleInput( event );
+      if (!this._a11yInputHandled) {
+        this.handleInput(event);
       }
 
       this._a11yInputHandled = false;
@@ -895,44 +897,44 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      *
      * Add this as a listener to the `input` event on the Node that is mixing in AccessibleValueHandler.
      */
-    protected handleInput( event: SceneryEvent ): void {
-      if ( this.enabledProperty.get() && !this._blockInput ) {
+    protected handleInput(event: SceneryEvent): void {
+      if (this.enabledProperty.get() && !this._blockInput) {
 
         // don't handle again on "change" event
         this._a11yInputHandled = true;
 
         let newValue = this._valueProperty.get();
 
-        const inputValue = parseFloat( ( event.domEvent!.target as HTMLInputElement ).value );
+        const inputValue = parseFloat((event.domEvent!.target as HTMLInputElement).value);
         const stepSize = this._shiftKey ? this.shiftKeyboardStep : this.keyboardStep;
         const mappedValue = this._getMappedValue();
 
         // start of change event is start of drag
-        this._onInteractionStart( event );
+        this._onInteractionStart(event);
 
-        if ( inputValue > mappedValue ) {
+        if (inputValue > mappedValue) {
           newValue = this._valueProperty.get() + stepSize;
         }
-        else if ( inputValue < mappedValue ) {
+        else if (inputValue < mappedValue) {
           newValue = this._valueProperty.get() - stepSize;
         }
 
-        if ( this._roundToStepSize ) {
-          newValue = roundValue( newValue, this._valueProperty.get(), stepSize );
+        if (this._roundToStepSize) {
+          newValue = roundValue(newValue, this._valueProperty.get(), stepSize);
         }
 
         // limit to enabled range
-        newValue = Utils.clamp( newValue, this._enabledRangeProperty.get().min, this._enabledRangeProperty.get().max );
+        newValue = Utils.clamp(newValue, this._enabledRangeProperty.get().min, this._enabledRangeProperty.get().max);
 
         // optionally constrain value
-        this._valueProperty.set( this._constrainValue( this._a11yMapValue( newValue, this._valueProperty.get() ) ) );
+        this._valueProperty.set(this._constrainValue(this._a11yMapValue(newValue, this._valueProperty.get())));
 
         // only one change per input, but still call optional onInput function - after valueProperty is set (even if
         // set to the same value) so listener can use new value.
-        this._onInput( event );
+        this._onInput(event);
 
         // end of change is the end of a drag
-        this._onInteractionEnd( event );
+        this._onInteractionEnd(event);
       }
 
       // don't block the next input after receiving one, some AT may send either `keydown` or `input` events
@@ -945,11 +947,11 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      *
      * Add this as a listener on the `blur` event to the Node that is mixing in AccessibleValueHandler.
      */
-    protected handleBlur( event: SceneryEvent<FocusEvent> ): void {
+    protected handleBlur(event: SceneryEvent<FocusEvent>): void {
 
       // if any range keys are currently down, call end drag because user has stopped dragging to do something else
-      if ( this._anyKeysDown() ) {
-        this._onInteractionEnd( event );
+      if (this._anyKeysDown()) {
+        this._onInteractionEnd(event);
       }
 
       // reset flag in case we shift-tabbed away from slider
@@ -966,12 +968,12 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      * Interaction with this input has started, save the value on start so that it can be used as an "old" value
      * when generating the context response with option a11yCreateContextResponse.
      */
-    private _onInteractionStart( event: SceneryEvent ): void {
+    private _onInteractionStart(event: SceneryEvent): void {
       this._pdomPointer = event.pointer as PDOMPointer;
-      this._pdomPointer.addInputListener( this._pdomPointerListener, true );
+      this._pdomPointer.addInputListener(this._pdomPointerListener, true);
 
       this._valueOnStart = this._valueProperty.value;
-      this._startInput( event );
+      this._startInput(event);
     }
 
     /**
@@ -980,29 +982,29 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      *
      * @param [event] - Event is not guaranteed because we need to support interruption
      */
-    private _onInteractionEnd( event: SceneryEvent | null ): void {
+    private _onInteractionEnd(event: SceneryEvent | null): void {
 
       this.alertContextResponse();
-      this.voicingOnEndResponse( this._valueOnStart );
-      this._endInput( event );
+      this.voicingOnEndResponse(this._valueOnStart);
+      this._endInput(event);
 
       // detach the pointer listener that was attached on keydown
-      assert && assert( this._pdomPointer, 'Pointer should be assigned' );
-      assert && assert( this._pdomPointer!.attachedListener === this._pdomPointerListener, 'pointer listener should be attached' );
-      this._pdomPointer!.removeInputListener( this._pdomPointerListener );
+      window.assert && window.assert(this._pdomPointer, 'Pointer should be assigned');
+      window.assert && window.assert(this._pdomPointer!.attachedListener === this._pdomPointerListener, 'pointer listener should be attached');
+      this._pdomPointer!.removeInputListener(this._pdomPointerListener);
       this._pdomPointer = null;
     }
 
     /**
      * Set the delta for the value Property when using arrow keys to interact with the Node.
      */
-    public setKeyboardStep( keyboardStep: number ): void {
-      assert && assert( keyboardStep >= 0, 'keyboard step must be non-negative' );
+    public setKeyboardStep(keyboardStep: number): void {
+      window.assert && window.assert(keyboardStep >= 0, 'keyboard step must be non-negative');
 
       this._keyboardStep = keyboardStep;
     }
 
-    public set keyboardStep( keyboardStep: number ) { this.setKeyboardStep( keyboardStep ); }
+    public set keyboardStep(keyboardStep: number) { this.setKeyboardStep(keyboardStep); }
 
     public get keyboardStep(): number { return this.getKeyboardStep(); }
 
@@ -1016,13 +1018,13 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
     /**
      * Set the delta for value Property when using arrow keys with shift to interact with the Node.
      */
-    public setShiftKeyboardStep( shiftKeyboardStep: number ): void {
-      assert && assert( shiftKeyboardStep >= 0, 'shift keyboard step must be non-negative' );
+    public setShiftKeyboardStep(shiftKeyboardStep: number): void {
+      window.assert && window.assert(shiftKeyboardStep >= 0, 'shift keyboard step must be non-negative');
 
       this._shiftKeyboardStep = shiftKeyboardStep;
     }
 
-    public set shiftKeyboardStep( shiftKeyboardStep: number ) { this.setShiftKeyboardStep( shiftKeyboardStep ); }
+    public set shiftKeyboardStep(shiftKeyboardStep: number) { this.setShiftKeyboardStep(shiftKeyboardStep); }
 
     public get shiftKeyboardStep(): number { return this.getShiftKeyboardStep(); }
 
@@ -1045,13 +1047,13 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
     /**
      * Set the delta for value Property when using page up/page down to interact with the Node.
      */
-    public setPageKeyboardStep( pageKeyboardStep: number ): void {
-      assert && assert( pageKeyboardStep >= 0, 'page keyboard step must be non-negative' );
+    public setPageKeyboardStep(pageKeyboardStep: number): void {
+      window.assert && window.assert(pageKeyboardStep >= 0, 'page keyboard step must be non-negative');
 
       this._pageKeyboardStep = pageKeyboardStep;
     }
 
-    public set pageKeyboardStep( pageKeyboardStep: number ) { this.setPageKeyboardStep( pageKeyboardStep ); }
+    public set pageKeyboardStep(pageKeyboardStep: number) { this.setPageKeyboardStep(pageKeyboardStep); }
 
     public get pageKeyboardStep(): number { return this.getPageKeyboardStep(); }
 
@@ -1067,13 +1069,13 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      * Depending on the value of this attribute, a screen reader will give different indications about which
      * arrow keys should be used
      */
-    public setAriaOrientation( orientation: Orientation ): void {
+    public setAriaOrientation(orientation: Orientation): void {
 
       this._ariaOrientation = orientation;
-      this.setPDOMAttribute( 'aria-orientation', orientation.ariaOrientation );
+      this.setPDOMAttribute('aria-orientation', orientation.ariaOrientation);
     }
 
-    public set ariaOrientation( orientation: Orientation ) { this.setAriaOrientation( orientation ); }
+    public set ariaOrientation(orientation: Orientation) { this.setAriaOrientation(orientation); }
 
     public get ariaOrientation(): Orientation { return this._ariaOrientation; }
 
@@ -1089,7 +1091,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      * Returns true if all range keys are currently up (not held down).
      */
     private _allKeysUp(): boolean {
-      return _.every( this._rangeKeysDown, entry => !entry );
+      return _.every(this._rangeKeysDown, entry => !entry);
     }
 
     /**
@@ -1097,7 +1099,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      * startDrag or endDrag based on interaction.
      */
     private _anyKeysDown(): boolean {
-      return !!_.find( this._rangeKeysDown, entry => entry );
+      return !!_.find(this._rangeKeysDown, entry => entry);
     }
 
     /**
@@ -1135,29 +1137,29 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
       let stepValue: number | string = 'any';
 
       // TODO: Remove when iOS Safari supports the 'any', see https://github.com/phetsims/a11y-research/issues/191
-      if ( platform.mobileSafari ) {
+      if (platform.mobileSafari) {
 
-        const smallestStep = Math.min( this.keyboardStep, this.shiftKeyboardStep, this.pageKeyboardStep );
-        stepValue = Math.pow( 10, -Utils.numberOfDecimalPlaces( smallestStep ) );
+        const smallestStep = Math.min(this.keyboardStep, this.shiftKeyboardStep, this.pageKeyboardStep);
+        stepValue = Math.pow(10, -Utils.numberOfDecimalPlaces(smallestStep));
 
-        const mappedMin = this._getMappedValue( this._enabledRangeProperty.get().min );
-        const mappedMax = this._getMappedValue( this._enabledRangeProperty.get().max );
+        const mappedMin = this._getMappedValue(this._enabledRangeProperty.get().min);
+        const mappedMax = this._getMappedValue(this._enabledRangeProperty.get().max);
         const mappedLength = mappedMax - mappedMin;
 
         // If the step is too small relative to full range for VoiceOver to receive input, fall back to a portion of
         // the max value as a workaround.
-        if ( stepValue / mappedLength < 1e-5 ) {
+        if (stepValue / mappedLength < 1e-5) {
           stepValue = mappedMax / 100;
 
           // Limit the precision of the calculated value.  This is necessary because otherwise floating point
           // inaccuracies can lead to problematic behaviors with screen readers,
           // see https://github.com/phetsims/greenhouse-effect/issues/388. The number of significant digits was chosen
           // somewhat arbitrarily.
-          stepValue = Number( stepValue.toPrecision( 8 ) );
+          stepValue = Number(stepValue.toPrecision(8));
         }
       }
 
-      this.setPDOMAttribute( 'step', stepValue );
+      this.setPDOMAttribute('step', stepValue);
     }
 
     /**
@@ -1168,26 +1170,26 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
      * @param valueOnStart - Property value at the start of the interaction.
      * @param providedOptions
      */
-    public voicingOnEndResponse( valueOnStart: number, providedOptions?: VoicingOnEndResponseOptions ): void {
-      const options = combineOptions<VoicingOnEndResponseOptions>( {}, this._voicingOnEndResponseOptions, providedOptions );
+    public voicingOnEndResponse(valueOnStart: number, providedOptions?: VoicingOnEndResponseOptions): void {
+      const options = combineOptions<VoicingOnEndResponseOptions>({}, this._voicingOnEndResponseOptions, providedOptions);
 
       const valueChanged = valueOnStart !== this._valueProperty.value;
       const valueAtMinMax = this._valueProperty.value === this._enabledRangeProperty.value.min ||
-                            this._valueProperty.value === this._enabledRangeProperty.value.max;
+        this._valueProperty.value === this._enabledRangeProperty.value.max;
 
       // content required to speak a response and add to back of UtteranceQueue.
-      const responseContentExists = !!( options.withNameResponse && this.voicingNameResponse ) ||
-                                    !!( options.withObjectResponse && this.voicingObjectResponse );
-      const shouldSpeak = ( !options.onlyOnValueChange || // speak each time if onlyOnValueChange is false.
-                            valueAtMinMax || // always speak at edges, for "go beyond" responses
-                            valueChanged ) && // If the value changed
-                          responseContentExists;
+      const responseContentExists = !!(options.withNameResponse && this.voicingNameResponse) ||
+        !!(options.withObjectResponse && this.voicingObjectResponse);
+      const shouldSpeak = (!options.onlyOnValueChange || // speak each time if onlyOnValueChange is false.
+        valueAtMinMax || // always speak at edges, for "go beyond" responses
+        valueChanged) && // If the value changed
+        responseContentExists;
 
-      shouldSpeak && this.voicingSpeakFullResponse( {
+      shouldSpeak && this.voicingSpeakFullResponse({
         nameResponse: options.withNameResponse ? this.voicingNameResponse : null,
         objectResponse: options.withObjectResponse ? this.voicingObjectResponse : null,
         hintResponse: null // no hint, there was just a successful interaction
-      } );
+      });
     }
 
     public override dispose(): void {
@@ -1195,7 +1197,7 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
 
       super.dispose();
     }
-  } );
+  });
 
   /**
    * {Array.<string>} - String keys for all the allowed options that will be set by Node.mutate( options ), in
@@ -1204,14 +1206,14 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>( Type: Supe
    * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
    *       cases that may apply.
    */
-  AccessibleValueHandlerClass.prototype._mutatorKeys = ACCESSIBLE_VALUE_HANDLER_OPTIONS.concat( AccessibleValueHandlerClass.prototype._mutatorKeys );
+  AccessibleValueHandlerClass.prototype._mutatorKeys = ACCESSIBLE_VALUE_HANDLER_OPTIONS.concat(AccessibleValueHandlerClass.prototype._mutatorKeys);
 
-  assert && assert( AccessibleValueHandlerClass.prototype._mutatorKeys.length === _.uniq( AccessibleValueHandlerClass.prototype._mutatorKeys ).length, 'duplicate mutator keys in AccessibleValueHandler' );
+  window.assert && window.assert(AccessibleValueHandlerClass.prototype._mutatorKeys.length === _.uniq(AccessibleValueHandlerClass.prototype._mutatorKeys).length, 'duplicate mutator keys in AccessibleValueHandler');
 
   return AccessibleValueHandlerClass;
 };
 
-sun.register( 'AccessibleValueHandler', AccessibleValueHandler );
+sun.register('AccessibleValueHandler', AccessibleValueHandler);
 
 /**
  * Round the value to the nearest step size.
@@ -1220,15 +1222,15 @@ sun.register( 'AccessibleValueHandler', AccessibleValueHandler );
  * @param currentValue - current value of the Property associated with this slider
  * @param stepSize - the delta for this manipulation
  */
-const roundValue = function( newValue: number, currentValue: number, stepSize: number ): number {
+const roundValue = function (newValue: number, currentValue: number, stepSize: number): number {
   let roundValue = newValue;
-  if ( stepSize !== 0 ) {
+  if (stepSize !== 0) {
 
     // round the value to the nearest keyboard step
-    roundValue = Utils.roundSymmetric( roundValue / stepSize ) * stepSize;
+    roundValue = Utils.roundSymmetric(roundValue / stepSize) * stepSize;
 
     // go back a step if we went too far due to rounding
-    roundValue = correctRounding( roundValue, currentValue, stepSize );
+    roundValue = correctRounding(roundValue, currentValue, stepSize);
   }
   return roundValue;
 };
@@ -1238,17 +1240,17 @@ const roundValue = function( newValue: number, currentValue: number, stepSize: n
  * keyboard interaction. This function corrects that.
  *
  */
-const correctRounding = function( newValue: number, currentValue: number, stepSize: number ): number {
+const correctRounding = function (newValue: number, currentValue: number, stepSize: number): number {
   let correctedValue = newValue;
 
-  const proposedStep = Math.abs( newValue - currentValue );
+  const proposedStep = Math.abs(newValue - currentValue);
   const stepToFar = proposedStep > stepSize;
 
   // it is possible that proposedStep will be larger than the stepSize but only because of precision
   // constraints with floating point values, don't correct if that is the cases
-  const stepsAboutEqual = Utils.equalsEpsilon( proposedStep, stepSize, 1e-14 );
-  if ( stepToFar && !stepsAboutEqual ) {
-    correctedValue += ( newValue > currentValue ) ? ( -stepSize ) : stepSize;
+  const stepsAboutEqual = Utils.equalsEpsilon(proposedStep, stepSize, 1e-14);
+  if (stepToFar && !stepsAboutEqual) {
+    correctedValue += (newValue > currentValue) ? (-stepSize) : stepSize;
   }
   return correctedValue;
 };

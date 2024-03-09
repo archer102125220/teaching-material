@@ -93,8 +93,8 @@ export default class Multilink<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
 
     this.dependencies = dependencies;
 
-    assert && assert(dependencies.every(_.identity), 'dependencies should all be truthy');
-    assert && assert(dependencies.length === _.uniq(dependencies).length, 'duplicate dependencies');
+    window.assert && window.assert(dependencies.every(_.identity), 'dependencies should all be truthy');
+    window.assert && window.assert(dependencies.length === _.uniq(dependencies).length, 'duplicate dependencies');
 
     this.dependencyListeners = new Map();
 
@@ -135,12 +135,12 @@ export default class Multilink<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
    * Returns dependencies that are guaranteed to be defined internally.
    */
   private get definedDependencies(): Dependencies<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> {
-    assert && assert(this.dependencies !== null, 'Dependencies should be defined, has this Property been disposed?');
+    window.assert && window.assert(this.dependencies !== null, 'Dependencies should be defined, has this Property been disposed?');
     return this.dependencies!;
   }
 
   public dispose(): void {
-    assert && assert(this.dependencies, 'A Multilink cannot be disposed twice.');
+    window.assert && window.assert(this.dependencies, 'A Multilink cannot be disposed twice.');
 
     const dependencies = this.definedDependencies;
 
@@ -148,7 +148,7 @@ export default class Multilink<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12
     for (let i = 0; i < dependencies.length; i++) {
       const dependency = dependencies[i];
       const listener = this.dependencyListeners.get(dependency)!;
-      assert && assert(listener, 'The listener should exist');
+      window.assert && window.assert(listener, 'The listener should exist');
 
       if (dependency.hasListener(listener)) {
         dependency.unlink(listener);

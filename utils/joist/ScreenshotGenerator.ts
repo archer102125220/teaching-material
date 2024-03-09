@@ -19,7 +19,7 @@ class ScreenshotGenerator {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d')!;
 
-    assert && assert(context);
+    window.assert && window.assert(context);
     const backingScale = Utils.backingScale(context) * scale;
     canvas.width = sim.display.width * backingScale;
     canvas.height = sim.display.height * backingScale;

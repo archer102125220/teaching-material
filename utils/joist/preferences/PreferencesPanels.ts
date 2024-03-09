@@ -149,7 +149,7 @@ class PreferencesPanels extends Node {
         return currentContent;
       }
     }
-    assert && assert(false, 'should never not have a selected panel content.');
+    window.assert && window.assert(false, 'should never not have a selected panel content.');
     return null;
   }
 

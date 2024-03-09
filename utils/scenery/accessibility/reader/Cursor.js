@@ -311,7 +311,7 @@ class Cursor {
         labelWithId = label;
       }
     });
-    assert && assert(labelWithId, 'No label found for id');
+    window.assert && window.assert(labelWithId, 'No label found for id');
 
     return labelWithId;
   }

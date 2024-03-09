@@ -19,7 +19,7 @@ import type IntentionalAny from '../../phet-core/types/IntentionalAny';
  * @param type - Should be a PressListener-based type
  */
 const SpriteListenable = memoize(<SuperType extends Constructor<PressListener>>(type: SuperType) => {
-  assert && assert(_.includes(inheritance(type), PressListener), 'Only PressListener subtypes should mix SpriteListenable');
+  window.assert && window.assert(_.includes(inheritance(type), PressListener), 'Only PressListener subtypes should mix SpriteListenable');
 
   return class extends type {
 

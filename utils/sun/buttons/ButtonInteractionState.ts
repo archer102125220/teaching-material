@@ -6,9 +6,9 @@
  * @author John Blanco
  */
 
-import Enumeration from '../../../phet-core/js/Enumeration.js';
-import EnumerationValue from '../../../phet-core/js/EnumerationValue.js';
-import sun from '../sun.js';
+import Enumeration from '../../phet-core/Enumeration';
+import EnumerationValue from '../../phet-core/EnumerationValue';
+import sun from '../sun';
 
 export default class ButtonInteractionState extends EnumerationValue {
 
@@ -21,7 +21,7 @@ export default class ButtonInteractionState extends EnumerationValue {
   // the button is being pressed by the user
   public static readonly PRESSED = new ButtonInteractionState();
 
-  public static readonly enumeration = new Enumeration( ButtonInteractionState );
+  public static readonly enumeration = new Enumeration(ButtonInteractionState);
 }
 
-sun.register( 'ButtonInteractionState', ButtonInteractionState );
+sun.register('ButtonInteractionState', ButtonInteractionState);

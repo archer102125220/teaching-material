@@ -46,7 +46,7 @@ export default class FramedObject extends HTMLImageElementObject {
 
         // If the object choice isn't a framed object, fallback to PENCIL.
         if (!objectHTMLImageElements) {
-          assert && assert(OpticalObjectChoice.PENCIL.objectHTMLImageElements);
+          window.assert && window.assert(OpticalObjectChoice.PENCIL.objectHTMLImageElements);
           objectHTMLImageElements = OpticalObjectChoice.PENCIL.objectHTMLImageElements!;
         }
 

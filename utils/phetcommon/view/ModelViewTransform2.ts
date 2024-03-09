@@ -126,7 +126,7 @@ class ModelViewTransform2 extends Transform3 {
 
   protected override validateMatrix(matrix: Matrix3): void {
     super.validateMatrix(matrix);
-    assert && assert(matrix.isAligned(), 'matrix must be aligned, ModelViewTransform2 does not support arbitrary rotations');
+    window.assert && window.assert(matrix.isAligned(), 'matrix must be aligned, ModelViewTransform2 does not support arbitrary rotations');
   }
 
   // -------------------------------------------------------------------------------------------------------------

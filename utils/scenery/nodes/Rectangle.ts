@@ -127,11 +127,11 @@ export default class Rectangle extends SuperType {
       if (x instanceof Bounds2) {
         // new Rectangle( bounds2, { ... } )
         if (typeof y !== 'number') {
-          assert && assert(arguments.length === 1 || arguments.length === 2,
+          window.assert && window.assert(arguments.length === 1 || arguments.length === 2,
             'new Rectangle( bounds, { ... } ) should only take one or two arguments');
-          assert && assert(y === undefined || typeof y === 'object',
+          window.assert && window.assert(y === undefined || typeof y === 'object',
             'new Rectangle( bounds, { ... } ) second parameter should only ever be an options object');
-          assert && assert(y === undefined || Object.getPrototypeOf(y) === Object.prototype,
+          window.assert && window.assert(y === undefined || Object.getPrototypeOf(y) === Object.prototype,
             'Extra prototype on Node options object is a code smell');
 
           if (assert && y) {
@@ -145,11 +145,11 @@ export default class Rectangle extends SuperType {
         }
         // Rectangle( bounds2, cornerXRadius, cornerYRadius, { ... } )
         else {
-          assert && assert(arguments.length === 3 || arguments.length === 4,
+          window.assert && window.assert(arguments.length === 3 || arguments.length === 4,
             'new Rectangle( bounds, cornerXRadius, cornerYRadius, { ... } ) should only take three or four arguments');
-          assert && assert(height === undefined || typeof height === 'object',
+          window.assert && window.assert(height === undefined || typeof height === 'object',
             'new Rectangle( bounds, cornerXRadius, cornerYRadius, { ... } ) fourth parameter should only ever be an options object');
-          assert && assert(height === undefined || Object.getPrototypeOf(height) === Object.prototype,
+          window.assert && window.assert(height === undefined || Object.getPrototypeOf(height) === Object.prototype,
             'Extra prototype on Node options object is a code smell');
 
           if (assert && height) {
@@ -174,11 +174,11 @@ export default class Rectangle extends SuperType {
     }
     // new Rectangle( x, y, width, height, { ... } )
     else if (cornerYRadius === undefined) {
-      assert && assert(arguments.length === 4 || arguments.length === 5,
+      window.assert && window.assert(arguments.length === 4 || arguments.length === 5,
         'new Rectangle( x, y, width, height, { ... } ) should only take four or five arguments');
-      assert && assert(cornerXRadius === undefined || typeof cornerXRadius === 'object',
+      window.assert && window.assert(cornerXRadius === undefined || typeof cornerXRadius === 'object',
         'new Rectangle( x, y, width, height, { ... } ) fifth parameter should only ever be an options object');
-      assert && assert(cornerXRadius === undefined || Object.getPrototypeOf(cornerXRadius) === Object.prototype,
+      window.assert && window.assert(cornerXRadius === undefined || Object.getPrototypeOf(cornerXRadius) === Object.prototype,
         'Extra prototype on Node options object is a code smell');
 
       if (assert && cornerXRadius) {
@@ -197,11 +197,11 @@ export default class Rectangle extends SuperType {
     }
     // new Rectangle( x, y, width, height, cornerXRadius, cornerYRadius, { ... } )
     else {
-      assert && assert(arguments.length === 6 || arguments.length === 7,
+      window.assert && window.assert(arguments.length === 6 || arguments.length === 7,
         'new Rectangle( x, y, width, height, cornerXRadius, cornerYRadius{ ... } ) should only take six or seven arguments');
-      assert && assert(options === undefined || typeof options === 'object',
+      window.assert && window.assert(options === undefined || typeof options === 'object',
         'new Rectangle( x, y, width, height, cornerXRadius, cornerYRadius{ ... } ) seventh parameter should only ever be an options object');
-      assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+      window.assert && window.assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
         'Extra prototype on Node options object is a code smell');
 
       if (assert && providedOptions) {
@@ -312,9 +312,9 @@ export default class Rectangle extends SuperType {
     const hasXRadius = cornerXRadius !== undefined;
     const hasYRadius = cornerYRadius !== undefined;
 
-    assert && assert(isFinite(x) && isFinite(y) &&
+    window.assert && window.assert(isFinite(x) && isFinite(y) &&
       isFinite(width) && isFinite(height), 'x/y/width/height should be finite numbers');
-    assert && assert(!hasXRadius || isFinite(cornerXRadius) &&
+    window.assert && window.assert(!hasXRadius || isFinite(cornerXRadius) &&
       (!hasYRadius || isFinite(cornerYRadius)),
       'Corner radii (if provided) should be finite numbers');
 
@@ -348,7 +348,7 @@ export default class Rectangle extends SuperType {
    * Sets the x coordinate of the left side of this rectangle (in the local coordinate frame).
    */
   public setRectX(x: number): this {
-    assert && assert(isFinite(x), 'rectX should be a finite number');
+    window.assert && window.assert(isFinite(x), 'rectX should be a finite number');
 
     if (this._rectX !== x) {
       this._rectX = x;
@@ -378,7 +378,7 @@ export default class Rectangle extends SuperType {
    * Sets the y coordinate of the top side of this rectangle (in the local coordinate frame).
    */
   public setRectY(y: number): this {
-    assert && assert(isFinite(y), 'rectY should be a finite number');
+    window.assert && window.assert(isFinite(y), 'rectY should be a finite number');
 
     if (this._rectY !== y) {
       this._rectY = y;
@@ -408,7 +408,7 @@ export default class Rectangle extends SuperType {
    * Sets the width of the rectangle (in the local coordinate frame).
    */
   public setRectWidth(width: number): this {
-    assert && assert(isFinite(width), 'rectWidth should be a finite number');
+    window.assert && window.assert(isFinite(width), 'rectWidth should be a finite number');
 
     if (this._rectWidth !== width) {
       this._rectWidth = width;
@@ -438,7 +438,7 @@ export default class Rectangle extends SuperType {
    * Sets the height of the rectangle (in the local coordinate frame).
    */
   public setRectHeight(height: number): this {
-    assert && assert(isFinite(height), 'rectHeight should be a finite number');
+    window.assert && window.assert(isFinite(height), 'rectHeight should be a finite number');
 
     if (this._rectHeight !== height) {
       this._rectHeight = height;
@@ -474,7 +474,7 @@ export default class Rectangle extends SuperType {
    * radius will be equal to cornerXRadius (or a smaller radius if the rectangle is too small).
    */
   public setCornerXRadius(radius: number): this {
-    assert && assert(isFinite(radius), 'cornerXRadius should be a finite number');
+    window.assert && window.assert(isFinite(radius), 'cornerXRadius should be a finite number');
 
     if (this._cornerXRadius !== radius) {
       this._cornerXRadius = radius;
@@ -510,7 +510,7 @@ export default class Rectangle extends SuperType {
    * radius will be equal to cornerYRadius (or a smaller radius if the rectangle is too small).
    */
   public setCornerYRadius(radius: number): this {
-    assert && assert(isFinite(radius), 'cornerYRadius should be a finite number');
+    window.assert && window.assert(isFinite(radius), 'cornerYRadius should be a finite number');
 
     if (this._cornerYRadius !== radius) {
       this._cornerYRadius = radius;
@@ -651,15 +651,15 @@ export default class Rectangle extends SuperType {
    * Notifies that the rectangle has changed, and invalidates path information and our cached shape.
    */
   protected invalidateRectangle(): void {
-    assert && assert(isFinite(this._rectX), `A rectangle needs to have a finite x (${this._rectX})`);
-    assert && assert(isFinite(this._rectY), `A rectangle needs to have a finite y (${this._rectY})`);
-    assert && assert(this._rectWidth >= 0 && isFinite(this._rectWidth),
+    window.assert && window.assert(isFinite(this._rectX), `A rectangle needs to have a finite x (${this._rectX})`);
+    window.assert && window.assert(isFinite(this._rectY), `A rectangle needs to have a finite y (${this._rectY})`);
+    window.assert && window.assert(this._rectWidth >= 0 && isFinite(this._rectWidth),
       `A rectangle needs to have a non-negative finite width (${this._rectWidth})`);
-    assert && assert(this._rectHeight >= 0 && isFinite(this._rectHeight),
+    window.assert && window.assert(this._rectHeight >= 0 && isFinite(this._rectHeight),
       `A rectangle needs to have a non-negative finite height (${this._rectHeight})`);
-    assert && assert(this._cornerXRadius >= 0 && isFinite(this._cornerXRadius),
+    window.assert && window.assert(this._cornerXRadius >= 0 && isFinite(this._cornerXRadius),
       `A rectangle needs to have a non-negative finite arcWidth (${this._cornerXRadius})`);
-    assert && assert(this._cornerYRadius >= 0 && isFinite(this._cornerYRadius),
+    window.assert && window.assert(this._cornerYRadius >= 0 && isFinite(this._cornerYRadius),
       `A rectangle needs to have a non-negative finite arcHeight (${this._cornerYRadius})`);
 
     // sets our 'cache' to null, so we don't always have to recompute our shape
@@ -875,7 +875,7 @@ export default class Rectangle extends SuperType {
    * NOTE: If there are different horizontal and vertical corner radii, this will fail an assertion and return the horizontal radius.
    */
   public getCornerRadius(): number {
-    assert && assert(this._cornerXRadius === this._cornerYRadius,
+    window.assert && window.assert(this._cornerXRadius === this._cornerYRadius,
       'getCornerRadius() invalid if x/y radii are different');
 
     return this._cornerXRadius;

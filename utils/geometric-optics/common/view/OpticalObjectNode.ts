@@ -7,16 +7,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { InteractiveHighlighting, Node, NodeOptions } from '../../../../scenery/js/imports.js';
-import geometricOptics from '../../geometricOptics.js';
-import CueingArrowsNode from './CueingArrowsNode.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import PickOptional from '../../../../phet-core/js/types/PickOptional.js';
-import { ObjectDragMode } from './ObjectDragMode.js';
-import OpticalObject from '../model/OpticalObject.js';
-import TProperty from '../../../../axon/js/TProperty.js';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import { InteractiveHighlighting, Node, type NodeOptions } from '../../../scenery/imports';
+import geometricOptics from '../../geometricOptics';
+import CueingArrowsNode from './CueingArrowsNode';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import type PickOptional from '../../../phet-core/types/PickOptional';
+import { type ObjectDragMode } from './ObjectDragMode';
+import OpticalObject from '../model/OpticalObject';
+import type TProperty from '../../../axon/TProperty';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -24,7 +24,7 @@ export type OpticalObjectNodeOptions = SelfOptions &
   PickRequired<NodeOptions, 'tandem'> &
   PickOptional<NodeOptions, 'visibleProperty'>;
 
-export default class OpticalObjectNode extends InteractiveHighlighting( Node ) {
+export default class OpticalObjectNode extends InteractiveHighlighting(Node) {
 
   private readonly wasDraggedProperty: TProperty<boolean>;
   protected readonly cueingArrowsNode: CueingArrowsNode;
@@ -35,12 +35,12 @@ export default class OpticalObjectNode extends InteractiveHighlighting( Node ) {
    * @param wasDraggedProperty - was this optical object dragged?
    * @param providedOptions
    */
-  protected constructor( opticalObject: OpticalObject,
-                         objectDragModeProperty: TReadOnlyProperty<ObjectDragMode>,
-                         wasDraggedProperty: TProperty<boolean>,
-                         providedOptions: OpticalObjectNodeOptions ) {
+  protected constructor(opticalObject: OpticalObject,
+    objectDragModeProperty: TReadOnlyProperty<ObjectDragMode>,
+    wasDraggedProperty: TProperty<boolean>,
+    providedOptions: OpticalObjectNodeOptions) {
 
-    const options = optionize<OpticalObjectNodeOptions, SelfOptions, NodeOptions>()( {
+    const options = optionize<OpticalObjectNodeOptions, SelfOptions, NodeOptions>()({
 
       // NodeOptions
       tagName: 'div',
@@ -48,32 +48,32 @@ export default class OpticalObjectNode extends InteractiveHighlighting( Node ) {
       isDisposable: false,
       phetioVisiblePropertyInstrumented: false,
       phetioInputEnabledPropertyInstrumented: true
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.wasDraggedProperty = wasDraggedProperty;
 
-    this.cueingArrowsNode = new CueingArrowsNode( {
-      visibleProperty: CueingArrowsNode.createVisibleProperty( this.inputEnabledProperty, wasDraggedProperty )
-    } );
-    this.addChild( this.cueingArrowsNode );
+    this.cueingArrowsNode = new CueingArrowsNode({
+      visibleProperty: CueingArrowsNode.createVisibleProperty(this.inputEnabledProperty, wasDraggedProperty)
+    });
+    this.addChild(this.cueingArrowsNode);
 
     // Update cursor and cueing arrows to reflect how this Node is draggable.
-    objectDragModeProperty.link( objectDragMode => {
-      if ( objectDragMode === 'freeDragging' ) {
+    objectDragModeProperty.link(objectDragMode => {
+      if (objectDragMode === 'freeDragging') {
         this.cursor = 'pointer';
-        this.cueingArrowsNode.setDirection( 'both' );
+        this.cueingArrowsNode.setDirection('both');
       }
       else {
 
         // horizontal dragging
         this.cursor = 'ew-resize';
-        this.cueingArrowsNode.setDirection( 'horizontal' );
+        this.cueingArrowsNode.setDirection('horizontal');
       }
-    } );
+    });
 
-    this.addLinkedElement( opticalObject );
+    this.addLinkedElement(opticalObject);
   }
 
   /**
@@ -84,4 +84,4 @@ export default class OpticalObjectNode extends InteractiveHighlighting( Node ) {
   }
 }
 
-geometricOptics.register( 'OpticalObjectNode', OpticalObjectNode );
+geometricOptics.register('OpticalObjectNode', OpticalObjectNode);

@@ -14,7 +14,7 @@ import IntentionalAny from './types/IntentionalAny';
  * @param path a path to global, such as 'phet.joist.sim'
  */
 const getGlobal = (path: string): IntentionalAny | null => {
-  assert && assert(path.trim() === path, 'path must be trimmed');
+  window.assert && window.assert(path.trim() === path, 'path must be trimmed');
   const global = _.get(window, path);
   return global !== undefined ? global : null;
 };

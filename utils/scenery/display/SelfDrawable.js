@@ -16,8 +16,8 @@ class SelfDrawable extends Drawable {
    * @param {Instance} instance
    */
   constructor(renderer, instance) {
-    assert && assert(typeof renderer === 'number');
-    assert && assert(instance);
+    window.assert && window.assert(typeof renderer === 'number');
+    window.assert && window.assert(instance);
 
     super();
 

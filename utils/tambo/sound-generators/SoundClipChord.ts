@@ -59,7 +59,7 @@ class SoundClipChord extends SoundGenerator implements TSoundPlayer {
     }, providedOptions);
 
     if (options.soundClipOptions) {
-      assert && assert(
+      window.assert && window.assert(
         options.soundClipOptions.initialPlaybackRate === undefined,
         'SoundClipChord sets the initialPlaybackRate for its SoundClips'
       );

@@ -20,11 +20,11 @@ QUnit.test( 'ResponsePacket.copy()', async assert => {
 
   const testIt = ( message: string ) => {
 
-    assert.ok( x.nameResponse === 'nameResponse', `nameResponse: ${message}` );
-    assert.ok( x.objectResponse === 'objectResponse', `objectResponse: ${message}` );
-    assert.ok( x.contextResponse === 'contextResponse', `contextResponse: ${message}` );
-    assert.ok( x.hintResponse === null, `hintResponse: ${message}` );
-    assert.ok( x.ignoreProperties === new ResponsePacket().ignoreProperties, `ignoreProperties: ${message}` );
+    window.assert.ok( x.nameResponse === 'nameResponse', `nameResponse: ${message}` );
+    window.assert.ok( x.objectResponse === 'objectResponse', `objectResponse: ${message}` );
+    window.assert.ok( x.contextResponse === 'contextResponse', `contextResponse: ${message}` );
+    window.assert.ok( x.hintResponse === null, `hintResponse: ${message}` );
+    window.assert.ok( x.ignoreProperties === new ResponsePacket().ignoreProperties, `ignoreProperties: ${message}` );
   };
 
   testIt( 'fromConstructor' );

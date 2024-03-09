@@ -16,7 +16,7 @@ const cache = new IOTypeCache<readonly string[]>();
 
 const StringUnionIO = <ParameterType extends readonly string[]>(unionValues: ParameterType): IOType<ParameterType, string> => {
 
-  assert && assert(unionValues, 'StringUnionIO needs unionValues');
+  window.assert && window.assert(unionValues, 'StringUnionIO needs unionValues');
 
   if (!cache.has(unionValues)) {
     const typeName = unionValues.join(',');

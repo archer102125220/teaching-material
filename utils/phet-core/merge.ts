@@ -32,8 +32,8 @@ function merge<A, B, C, D, E>(a: A, b: B, c: C, d: D, e: E): A & B & C & D & E;
  */
 function merge(target: IntentionalAny, ...sources: IntentionalAny[]): IntentionalAny {
   assert && assertIsMergeable(target);
-  assert && assert(target !== null, 'target should not be null'); // assertIsMergeable supports null
-  assert && assert(sources.length > 0, 'at least one source expected');
+  window.assert && window.assert(target !== null, 'target should not be null'); // assertIsMergeable supports null
+  window.assert && window.assert(sources.length > 0, 'at least one source expected');
 
   _.each(sources, source => {
     if (source) {
@@ -48,7 +48,7 @@ function merge(target: IntentionalAny, ...sources: IntentionalAny[]): Intentiona
           if (_.endsWith(property, OPTIONS_SUFFIX) && property !== OPTIONS_SUFFIX) {
 
             // *Options property value cannot be undefined, if truthy, it we be validated with assertIsMergeable via recursion.
-            assert && assert(sourceProperty !== undefined, 'nested *Options should not be undefined');
+            window.assert && window.assert(sourceProperty !== undefined, 'nested *Options should not be undefined');
             target[property] = merge(target[property] || {}, sourceProperty);
           }
           else {
@@ -67,7 +67,7 @@ function merge(target: IntentionalAny, ...sources: IntentionalAny[]): Intentiona
  * This function must be called like: assert && assertIsMergeable( arg );
  */
 function assertIsMergeable(object: IntentionalAny): void {
-  assert && assert(object === null ||
+  window.assert && window.assert(object === null ||
     (object && typeof object === 'object' && Object.getPrototypeOf(object) === Object.prototype),
     'object is not compatible with merge');
 
@@ -75,9 +75,9 @@ function assertIsMergeable(object: IntentionalAny): void {
     // ensure that options keys are not ES5 setters or getters
     Object.keys(object).forEach(prop => {
       const ownPropertyDescriptor = Object.getOwnPropertyDescriptor(object, prop)!;
-      assert && assert(!ownPropertyDescriptor.hasOwnProperty('set'),
+      window.assert && window.assert(!ownPropertyDescriptor.hasOwnProperty('set'),
         'cannot use merge with an object that has a setter');
-      assert && assert(!ownPropertyDescriptor.hasOwnProperty('get'),
+      window.assert && window.assert(!ownPropertyDescriptor.hasOwnProperty('get'),
         'cannot use merge with an object that has a getter');
     });
   }

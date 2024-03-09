@@ -29,7 +29,7 @@ export default class ActivationUtterance extends Utterance {
       alertStableDelay: 500
     }, providedOptions );
 
-    assert && assert( options.alertStableDelay >= 500, 'Utterance will likely be duplicated if activated with key press and hold' );
+    window.assert && window.assert( options.alertStableDelay >= 500, 'Utterance will likely be duplicated if activated with key press and hold' );
 
     super( options );
   }

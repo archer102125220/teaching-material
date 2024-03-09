@@ -27,7 +27,7 @@ export default class LinearGradient extends Gradient {
    * @param y1 - Y coordinate of the end point (ratio 1) in the local coordinate frame
    */
   public constructor(x0: number, y0: number, x1: number, y1: number) {
-    assert && assert(isFinite(x0) && isFinite(y0) && isFinite(x1) && isFinite(y1));
+    window.assert && window.assert(isFinite(x0) && isFinite(y0) && isFinite(x1) && isFinite(y1));
 
     super();
 

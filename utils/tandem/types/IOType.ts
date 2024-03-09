@@ -30,7 +30,7 @@ const VALIDATE_OPTIONS_FALSE = { validateValidator: false };
  */
 const getCoreTypeName = (ioTypeName: IOTypeName): string => {
   const index = ioTypeName.indexOf(PhetioConstants.IO_TYPE_SUFFIX);
-  assert && assert(index >= 0, 'IO should be in the type name');
+  window.assert && window.assert(index >= 0, 'IO should be in the type name');
   return ioTypeName.substring(0, index);
 };
 
@@ -258,7 +258,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
     // Assert that toStateObject method is provided for value StateSchemas. Do this with the following logic:
     // 1. It is acceptable to not provide a stateSchema (for IOTypes that aren't stateful)
     // 2. You must either provide a toStateObject, or have a composite StateSchema. Composite state schemas support default serialization methods.
-    assert && assert(!this.stateSchema || (toStateObjectSupplied || this.stateSchema.isComposite()),
+    window.assert && window.assert(!this.stateSchema || (toStateObjectSupplied || this.stateSchema.isComposite()),
       'toStateObject method must be provided for value StateSchemas');
 
     this.toStateObject = (coreObject: T) => {
@@ -318,11 +318,11 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
 
     if (assert) {
 
-      assert && assert(supertype || this.typeName === 'ObjectIO', 'supertype is required');
-      assert && assert(!this.typeName.includes('.'), 'Dots should not appear in type names');
-      assert && assert(this.typeName.split(/[<(]/)[0].endsWith(PhetioConstants.IO_TYPE_SUFFIX), `IOType name must end with ${PhetioConstants.IO_TYPE_SUFFIX}`);
+      window.assert && window.assert(supertype || this.typeName === 'ObjectIO', 'supertype is required');
+      window.assert && window.assert(!this.typeName.includes('.'), 'Dots should not appear in type names');
+      window.assert && window.assert(this.typeName.split(/[<(]/)[0].endsWith(PhetioConstants.IO_TYPE_SUFFIX), `IOType name must end with ${PhetioConstants.IO_TYPE_SUFFIX}`);
       // eslint-disable-next-line no-prototype-builtins
-      assert && assert(this.hasOwnProperty('typeName'), 'this.typeName is required');
+      window.assert && window.assert(this.hasOwnProperty('typeName'), 'this.typeName is required');
 
       // assert that each public method adheres to the expected schema
       this.methods && Object.values(this.methods).forEach((methodObject: IOTypeMethod) => {
@@ -331,11 +331,11 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
             `invocableForReadOnlyElements must be of type boolean: ${methodObject.invocableForReadOnlyElements}`);
         }
       });
-      assert && assert(this.documentation.length > 0, 'documentation must be provided');
+      window.assert && window.assert(this.documentation.length > 0, 'documentation must be provided');
 
       // eslint-disable-next-line no-prototype-builtins
       this.methods && this.hasOwnProperty('methodOrder') && this.methodOrder.forEach(methodName => {
-        assert && assert(this.methods![methodName], `methodName not in public methods: ${methodName}`);
+        window.assert && window.assert(this.methods![methodName], `methodName not in public methods: ${methodName}`);
       });
 
       if (supertype) {
@@ -343,16 +343,16 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
         assert && this.events && this.events.forEach(event => {
 
           // Make sure events are not listed again
-          assert && assert(!_.some(typeHierarchy, t => t.events.includes(event)), `IOType should not declare event that parent also has: ${event}`);
+          window.assert && window.assert(!_.some(typeHierarchy, t => t.events.includes(event)), `IOType should not declare event that parent also has: ${event}`);
         });
       }
       else {
 
         // The root IOType must supply all 4 state methods.
-        assert && assert(typeof options.toStateObject === 'function', 'toStateObject must be defined');
-        assert && assert(typeof options.fromStateObject === 'function', 'fromStateObject must be defined');
-        assert && assert(typeof options.stateObjectToCreateElementArguments === 'function', 'stateObjectToCreateElementArguments must be defined');
-        assert && assert(typeof options.applyState === 'function', 'applyState must be defined');
+        window.assert && window.assert(typeof options.toStateObject === 'function', 'toStateObject must be defined');
+        window.assert && window.assert(typeof options.fromStateObject === 'function', 'fromStateObject must be defined');
+        window.assert && window.assert(typeof options.stateObjectToCreateElementArguments === 'function', 'stateObjectToCreateElementArguments must be defined');
+        window.assert && window.assert(typeof options.applyState === 'function', 'applyState must be defined');
       }
     }
   }
@@ -489,9 +489,9 @@ IOType.ObjectIO = new IOType<PhetioObject, null>(TandemConstants.OBJECT_IO_TYPE_
 
     if (phet && phet.tandem && phet.tandem.Tandem.VALIDATION) {
 
-      assert && assert(coreObject.tandem, 'coreObject must be PhET-iO object');
+      window.assert && window.assert(coreObject.tandem, 'coreObject must be PhET-iO object');
 
-      assert && assert(!coreObject.phetioState,
+      window.assert && window.assert(!coreObject.phetioState,
         `fell back to root serialization state for ${coreObject.tandem.phetioID}. Potential solutions:
          * mark the type as phetioState: false
          * create a custom toStateObject method in your IOType

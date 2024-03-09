@@ -34,7 +34,7 @@ class MinusNode extends Rectangle {
       fill: 'black'
     }, providedOptions);
 
-    assert && assert(options.size.width >= options.size.height);
+    window.assert && window.assert(options.size.width >= options.size.height);
 
     super(0, 0, options.size.width, options.size.height, options);
   }

@@ -21,28 +21,28 @@ QUnit.test( 'basics', assert => {
 
   const aNode = new Node();
   const aDisplayedProperty = new DisplayedProperty( aNode );
-  assert.ok( aDisplayedProperty.value === false, 'not connected, not displayed' );
+  window.assert.ok( aDisplayedProperty.value === false, 'not connected, not displayed' );
 
   rootNode.addChild( aNode );
   display.updateDisplay();
 
-  assert.ok( aDisplayedProperty.value === true, 'connected, displayed' );
+  window.assert.ok( aDisplayedProperty.value === true, 'connected, displayed' );
 
   rootNode.visible = false;
   display.updateDisplay();
 
-  assert.ok( aDisplayedProperty.value === false, 'connected, parent not visible, not displayed' );
+  window.assert.ok( aDisplayedProperty.value === false, 'connected, parent not visible, not displayed' );
 
   aNode.visible = false;
   rootNode.visible = true;
   display.updateDisplay();
 
-  assert.ok( aDisplayedProperty.value === false, 'connected, not visible, not displayed' );
+  window.assert.ok( aDisplayedProperty.value === false, 'connected, not visible, not displayed' );
 
   aNode.visible = true;
   display.updateDisplay();
 
-  assert.ok( aDisplayedProperty.value === true, 'back to visible, displayed' );
+  window.assert.ok( aDisplayedProperty.value === true, 'back to visible, displayed' );
 
   display.dispose();
   display.domElement.parentElement.removeChild( display.domElement );
@@ -68,14 +68,14 @@ QUnit.test( 'pdom visibility', assert => {
   pdomParentForA.pdomOrder = [ aNode ];
   display.updateDisplay();
 
-  assert.ok( aDisplayedProperty.value === true, 'visible even with pdomOrder, displayed' );
+  window.assert.ok( aDisplayedProperty.value === true, 'visible even with pdomOrder, displayed' );
 
   aParent.visible = false;
   display.updateDisplay();
 
 
   // This test fails and @zepumph doesn't think it should! // TODO support pdom visibility, https://github.com/phetsims/scenery/issues/1167
-  // assert.ok( aDisplayedProperty.value === true, 'pdomOrder makes it visible, displayed' );
+  // window.assert.ok( aDisplayedProperty.value === true, 'pdomOrder makes it visible, displayed' );
 
 
   // Some more tests to run:

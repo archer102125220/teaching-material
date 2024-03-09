@@ -80,8 +80,8 @@ class Transform3 {
    * @protected
    */
   validateMatrix( matrix ) {
-    assert && assert( matrix instanceof Matrix3, 'matrix was incorrect type' );
-    assert && assert( matrix.isFinite(), 'matrix must be finite' );
+    window.assert && window.assert( matrix instanceof Matrix3, 'matrix was incorrect type' );
+    window.assert && window.assert( matrix.isFinite(), 'matrix must be finite' );
   }
 
   /**
@@ -131,7 +131,7 @@ class Transform3 {
   prependTranslation( x, y ) {
     // See scenery#119 for more details on the need.
 
-    assert && assert( typeof x === 'number' && typeof y === 'number' && isFinite( x ) && isFinite( y ),
+    window.assert && window.assert( typeof x === 'number' && typeof y === 'number' && isFinite( x ) && isFinite( y ),
       'Attempted to prepend non-finite or non-number (x,y) to the transform' );
 
     this.matrix.prependTranslation( x, y );
@@ -345,7 +345,7 @@ class Transform3 {
    */
   transformX( x ) {
     const m = this.getMatrix();
-    assert && assert( !m.m01(), 'Transforming an X value with a rotation/shear is ill-defined' );
+    window.assert && window.assert( !m.m01(), 'Transforming an X value with a rotation/shear is ill-defined' );
     return m.m00() * x + m.m02();
   }
 
@@ -359,7 +359,7 @@ class Transform3 {
    */
   transformY( y ) {
     const m = this.getMatrix();
-    assert && assert( !m.m10(), 'Transforming a Y value with a rotation/shear is ill-defined' );
+    window.assert && window.assert( !m.m10(), 'Transforming a Y value with a rotation/shear is ill-defined' );
     return m.m11() * y + m.m12();
   }
 
@@ -495,7 +495,7 @@ class Transform3 {
    */
   inverseX( x ) {
     const m = this.getInverse();
-    assert && assert( !m.m01(), 'Inverting an X value with a rotation/shear is ill-defined' );
+    window.assert && window.assert( !m.m01(), 'Inverting an X value with a rotation/shear is ill-defined' );
     return m.m00() * x + m.m02();
   }
 
@@ -511,7 +511,7 @@ class Transform3 {
    */
   inverseY( y ) {
     const m = this.getInverse();
-    assert && assert( !m.m10(), 'Inverting a Y value with a rotation/shear is ill-defined' );
+    window.assert && window.assert( !m.m10(), 'Inverting a Y value with a rotation/shear is ill-defined' );
     return m.m11() * y + m.m12();
   }
 
@@ -527,7 +527,7 @@ class Transform3 {
    */
   inverseDeltaX( x ) {
     const m = this.getInverse();
-    assert && assert( !m.m01(), 'Inverting an X value with a rotation/shear is ill-defined' );
+    window.assert && window.assert( !m.m01(), 'Inverting an X value with a rotation/shear is ill-defined' );
     // same as this.inverseDelta2( new Vector2( x, 0 ) ).x;
     return m.m00() * x;
   }
@@ -544,7 +544,7 @@ class Transform3 {
    */
   inverseDeltaY( y ) {
     const m = this.getInverse();
-    assert && assert( !m.m10(), 'Inverting a Y value with a rotation/shear is ill-defined' );
+    window.assert && window.assert( !m.m10(), 'Inverting a Y value with a rotation/shear is ill-defined' );
     // same as this.inverseDelta2( new Vector2( 0, y ) ).y;
     return m.m11() * y;
   }

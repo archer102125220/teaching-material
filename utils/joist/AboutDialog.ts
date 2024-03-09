@@ -65,7 +65,7 @@ export default class AboutDialog extends Dialog {
 
     // Dynamic modules are loaded in simLauncher and accessed through their namespace
     const Brand: TBrand = phet.brand.Brand;
-    assert && assert(Brand, 'Brand should exist by now');
+    window.assert && window.assert(Brand, 'Brand should exist by now');
 
     let children = [];
 

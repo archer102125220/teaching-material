@@ -88,7 +88,7 @@ const Sizable = memoize(<SuperType extends Constructor<Node>>(type: SuperType) =
     }
 
     public get preferredSize(): Dimension2 | null {
-      assert && assert((this.preferredWidth === null) === (this.preferredHeight === null),
+      window.assert && window.assert((this.preferredWidth === null) === (this.preferredHeight === null),
         'Cannot get a preferredSize when one of preferredWidth/preferredHeight is null');
 
       if (this.preferredWidth === null || this.preferredHeight === null) {
@@ -105,7 +105,7 @@ const Sizable = memoize(<SuperType extends Constructor<Node>>(type: SuperType) =
     }
 
     public get localPreferredSize(): Dimension2 | null {
-      assert && assert((this.localPreferredWidth === null) === (this.localPreferredHeight === null),
+      window.assert && window.assert((this.localPreferredWidth === null) === (this.localPreferredHeight === null),
         'Cannot get a preferredSize when one of preferredWidth/preferredHeight is null');
 
       if (this.localPreferredWidth === null || this.localPreferredHeight === null) {
@@ -122,7 +122,7 @@ const Sizable = memoize(<SuperType extends Constructor<Node>>(type: SuperType) =
     }
 
     public get minimumSize(): Dimension2 | null {
-      assert && assert((this.minimumWidth === null) === (this.minimumHeight === null),
+      window.assert && window.assert((this.minimumWidth === null) === (this.minimumHeight === null),
         'Cannot get a minimumSize when one of minimumWidth/minimumHeight is null');
 
       if (this.minimumWidth === null || this.minimumHeight === null) {
@@ -139,7 +139,7 @@ const Sizable = memoize(<SuperType extends Constructor<Node>>(type: SuperType) =
     }
 
     public get localMinimumSize(): Dimension2 | null {
-      assert && assert((this.localMinimumWidth === null) === (this.localMinimumHeight === null),
+      window.assert && window.assert((this.localMinimumWidth === null) === (this.localMinimumHeight === null),
         'Cannot get a minimumSize when one of minimumWidth/minimumHeight is null');
 
       if (this.localMinimumWidth === null || this.localMinimumHeight === null) {
@@ -156,7 +156,7 @@ const Sizable = memoize(<SuperType extends Constructor<Node>>(type: SuperType) =
     }
 
     public get sizable(): boolean {
-      assert && assert(this.widthSizable === this.heightSizable,
+      window.assert && window.assert(this.widthSizable === this.heightSizable,
         'widthSizable and heightSizable not the same, which is required for the sizable getter');
       return this.widthSizable;
     }

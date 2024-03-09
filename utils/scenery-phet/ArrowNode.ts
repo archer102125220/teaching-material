@@ -55,7 +55,7 @@ export default class ArrowNode extends Path {
     }, providedOptions);
 
     // things you're likely to mess up, add more as needed
-    assert && assert(options.headWidth > options.tailWidth);
+    window.assert && window.assert(options.headWidth > options.tailWidth);
 
     super(null);
 

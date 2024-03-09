@@ -31,7 +31,7 @@ const assertMutuallyExclusiveOptions = function (options: object | null | undefi
     if (usedElementsFromEachSet.filter(usedElements => usedElements.length > 0).length > 1) {
 
       // Output the errant options.
-      assert && assert(false, `Cannot simultaneously specify ${usedElementsFromEachSet.join(' and ')}`);
+      window.assert && window.assert(false, `Cannot simultaneously specify ${usedElementsFromEachSet.join(' and ')}`);
     }
   }
 };

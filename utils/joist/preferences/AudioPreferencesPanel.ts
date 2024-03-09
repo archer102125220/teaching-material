@@ -6,22 +6,22 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { HBox, Text, VBox, VBoxOptions } from '../../../scenery/js/imports.js';
-import joist from '../joist.js';
-import JoistStrings from '../JoistStrings.js';
-import PreferencesDialog from './PreferencesDialog.js';
-import { AudioModel } from './PreferencesModel.js';
-import PreferencesControl from './PreferencesControl.js';
-import SoundPanelSection from './SoundPanelSection.js';
-import VoicingPanelSection from './VoicingPanelSection.js';
-import PreferencesPanelSection from './PreferencesPanelSection.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
-import PreferencesPanel, { PreferencesPanelOptions } from './PreferencesPanel.js';
-import PreferencesType from './PreferencesType.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import ToggleSwitch, { ToggleSwitchOptions } from '../../../sun/js/ToggleSwitch.js';
-import { combineOptions } from '../../../phet-core/js/optionize.js';
-import PreferencesDialogConstants from './PreferencesDialogConstants.js';
+import { HBox, Text, VBox, type VBoxOptions } from '../../scenery/imports';
+import joist from '../joist';
+import JoistStrings from '../JoistStrings';
+import PreferencesDialog from './PreferencesDialog';
+import { type AudioModel } from './PreferencesModel';
+import PreferencesControl from './PreferencesControl';
+import SoundPanelSection from './SoundPanelSection';
+import VoicingPanelSection from './VoicingPanelSection';
+import PreferencesPanelSection from './PreferencesPanelSection';
+import type PickRequired from '../../phet-core/types/PickRequired';
+import PreferencesPanel, { type PreferencesPanelOptions } from './PreferencesPanel';
+import PreferencesType from './PreferencesType';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
+import { combineOptions } from '../../phet-core/optionize';
+import PreferencesDialogConstants from './PreferencesDialogConstants';
 
 // constants
 const audioFeaturesStringProperty = JoistStrings.preferences.tabs.audio.audioFeatures.titleStringProperty;
@@ -36,10 +36,10 @@ class AudioPreferencesTabPanel extends PreferencesPanel {
    * @param tabVisibleProperty
    * @param providedOptions
    */
-  public constructor( audioModel: AudioModel, selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean>, providedOptions: AudioPreferencesPanelOptions ) {
-    super( PreferencesType.AUDIO, selectedTabProperty, tabVisibleProperty, {
+  public constructor(audioModel: AudioModel, selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean>, providedOptions: AudioPreferencesPanelOptions) {
+    super(PreferencesType.AUDIO, selectedTabProperty, tabVisibleProperty, {
       labelContent: audioFeaturesStringProperty
-    } );
+    });
 
     // Some contents of this Dialog will be dynamically removed. Dont resize when this happens because we don't want
     // to shift contents of the entire Preferences dialog.
@@ -48,71 +48,71 @@ class AudioPreferencesTabPanel extends PreferencesPanel {
       spacing: PreferencesDialog.CONTENT_SPACING,
       excludeInvisibleChildrenFromBounds: false
     };
-    const leftContent = new VBox( contentOptions );
-    const rightContent = new VBox( contentOptions );
+    const leftContent = new VBox(contentOptions);
+    const rightContent = new VBox(contentOptions);
 
-    if ( audioModel.supportsVoicing ) {
-      const voicingPanelSection = new VoicingPanelSection( audioModel );
-      leftContent.addChild( voicingPanelSection );
+    if (audioModel.supportsVoicing) {
+      const voicingPanelSection = new VoicingPanelSection(audioModel);
+      leftContent.addChild(voicingPanelSection);
     }
 
-    if ( audioModel.supportsSound ) {
+    if (audioModel.supportsSound) {
 
       // If only one of the audio features are in use, do not include the toggle switch to
       // enable/disable that feature because the control is redundant. The audio output should go
       // through the "Audio Features" toggle only.
       const hideSoundToggle = audioModel.supportsVoicing !== audioModel.supportsSound;
 
-      const soundPanelSection = new SoundPanelSection( audioModel, {
+      const soundPanelSection = new SoundPanelSection(audioModel, {
         includeTitleToggleSwitch: !hideSoundToggle
-      } );
-      rightContent.addChild( soundPanelSection );
+      });
+      rightContent.addChild(soundPanelSection);
     }
 
-    const sections = new HBox( {
+    const sections = new HBox({
       align: 'top',
       spacing: 10,
-      children: [ leftContent, rightContent ],
+      children: [leftContent, rightContent],
       tagName: 'div' // Must have PDOM content to support toggling enabled in the PDOM. Could be removed after https://github.com/phetsims/scenery/issues/1514
-    } );
+    });
 
-    audioModel.customPreferences.forEach( ( customPreference, i ) => {
+    audioModel.customPreferences.forEach((customPreference, i) => {
       const container = i % 2 === 0 ? leftContent : rightContent;
-      const customContent = customPreference.createContent( providedOptions.tandem );
-      const preferencesPanelSection = new PreferencesPanelSection( {
+      const customContent = customPreference.createContent(providedOptions.tandem);
+      const preferencesPanelSection = new PreferencesPanelSection({
         contentNode: customContent,
         contentNodeOptions: {
           excludeInvisibleChildrenFromBounds: true
         },
         contentLeftMargin: 0
-      } );
-      container.addChild( preferencesPanelSection );
-    } );
+      });
+      container.addChild(preferencesPanelSection);
+    });
 
-    const audioFeaturesText = new Text( audioFeaturesStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-    const audioFeaturesSwitch = new ToggleSwitch( audioModel.audioEnabledProperty, false, true, combineOptions<ToggleSwitchOptions>( {
+    const audioFeaturesText = new Text(audioFeaturesStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS);
+    const audioFeaturesSwitch = new ToggleSwitch(audioModel.audioEnabledProperty, false, true, combineOptions<ToggleSwitchOptions>({
       a11yName: audioFeaturesStringProperty
-    }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ) );
-    const allAudioSwitch = new PreferencesControl( {
+    }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS));
+    const allAudioSwitch = new PreferencesControl({
       labelNode: audioFeaturesText,
       controlNode: audioFeaturesSwitch,
       headingControl: true
-    } );
+    });
 
-    const audioEnabledListener = ( enabled: boolean ) => {
+    const audioEnabledListener = (enabled: boolean) => {
       sections.enabled = enabled;
     };
 
-    audioModel.audioEnabledProperty.link( audioEnabledListener );
+    audioModel.audioEnabledProperty.link(audioEnabledListener);
 
-    const panelContent = new VBox( {
+    const panelContent = new VBox({
       align: 'center',
       spacing: 25,
-      children: [ allAudioSwitch, sections ]
-    } );
-    this.addChild( panelContent );
+      children: [allAudioSwitch, sections]
+    });
+    this.addChild(panelContent);
   }
 }
 
-joist.register( 'AudioPreferencesTabPanel', AudioPreferencesTabPanel );
+joist.register('AudioPreferencesTabPanel', AudioPreferencesTabPanel);
 export default AudioPreferencesTabPanel;

@@ -129,7 +129,7 @@ const DEFAULTS: OptionizeDefaults<StrictOmit<SelfOptions, 'phetioDynamicElementN
 // If you run into a type error here, feel free to add any type that is supported by the browsers "structured cloning algorithm" https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Structured_clone_algorithm
 type EventMetadata = Record<string, string | boolean | number | Array<string | boolean | number>>;
 
-assert && assert( EventType.phetioType.toStateObject( DEFAULTS.phetioEventType ) === TandemConstants.PHET_IO_OBJECT_METADATA_DEFAULTS.phetioEventType,
+window.assert && window.assert( EventType.phetioType.toStateObject( DEFAULTS.phetioEventType ) === TandemConstants.PHET_IO_OBJECT_METADATA_DEFAULTS.phetioEventType,
   'phetioEventType must have the same default as the default metadata values.' );
 
 // Options for creating a PhetioObject
@@ -137,7 +137,7 @@ type SelfOptions = StrictOmit<Partial<PhetioElementMetadata>, 'phetioTypeName' |
   'phetioIsArchetype' | 'phetioEventType'> & {
 
   // This is the only place in the project where this is allowed
-  tandem?: Tandem; // eslint-disable-line bad-sim-text
+  tandem?: Tandem;
   descriptionTandem?: Tandem;
   phetioType?: IOType;
   phetioEventType?: EventType;
@@ -210,10 +210,10 @@ class PhetioObject extends Disposable {
    */
   protected initializePhetioObject( baseOptions: Partial<PhetioObjectOptions>, providedOptions: PhetioObjectOptions ): void {
 
-    assert && assert( !baseOptions.hasOwnProperty( 'isDisposable' ), 'baseOptions should not contain isDisposable' );
+    window.assert && window.assert( !baseOptions.hasOwnProperty( 'isDisposable' ), 'baseOptions should not contain isDisposable' );
     this.initializeDisposable( providedOptions );
 
-    assert && assert( providedOptions, 'initializePhetioObject must be called with providedOptions' );
+    window.assert && window.assert( providedOptions, 'initializePhetioObject must be called with providedOptions' );
 
     // call before we exit early to support logging unsupplied Tandems.
     providedOptions.tandem && Tandem.onMissingTandem( providedOptions.tandem );
@@ -240,7 +240,7 @@ class PhetioObject extends Disposable {
       return;
     }
 
-    assert && assert( !this.phetioObjectInitialized, 'cannot initialize twice' );
+    window.assert && window.assert( !this.phetioObjectInitialized, 'cannot initialize twice' );
 
     // Guard validation on assert to avoid calling a large number of no-ops when assertions are disabled, see https://github.com/phetsims/tandem/issues/200
     assert && validate( providedOptions.tandem, { valueType: Tandem } );
@@ -262,7 +262,7 @@ class PhetioObject extends Disposable {
     assert && validate( options.phetioDynamicElement, merge( {}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioDynamicElement must be a boolean' } ) );
     assert && validate( options.phetioDesigned, merge( {}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioDesigned must be a boolean' } ) );
 
-    assert && assert( this.linkedElements !== null, 'this means addLinkedElement was called before instrumentation of this PhetioObject' );
+    window.assert && window.assert( this.linkedElements !== null, 'this means addLinkedElement was called before instrumentation of this PhetioObject' );
 
     // optional - Indicates that an object is a archetype for a dynamic class. Settable only by
     // PhetioEngine and by classes that create dynamic elements when creating their archetype (like PhetioGroup) through
@@ -349,7 +349,7 @@ class PhetioObject extends Disposable {
     // Make sure playback shows in the phetioEventMetadata
     if ( this._phetioPlayback ) {
       this._phetioEventMetadata = this._phetioEventMetadata || {};
-      assert && assert( !this._phetioEventMetadata.hasOwnProperty( 'playback' ), 'phetioEventMetadata.playback should not already exist' );
+      window.assert && window.assert( !this._phetioEventMetadata.hasOwnProperty( 'playback' ), 'phetioEventMetadata.playback should not already exist' );
       this._phetioEventMetadata.playback = true;
     }
 
@@ -364,7 +364,7 @@ class PhetioObject extends Disposable {
         return this.tandem.name.endsWith( suffix ) ||
                this.tandem.name.endsWith( PhetioObject.swapCaseOfFirstCharacter( suffix ) );
       } );
-      assert && assert( matches.length > 0, 'Incorrect Tandem suffix, expected = ' + suffixArray.join( ', ' ) + '. actual = ' + this.tandem.phetioID );
+      window.assert && window.assert( matches.length > 0, 'Incorrect Tandem suffix, expected = ' + suffixArray.join( ', ' ) + '. actual = ' + this.tandem.phetioID );
     }
   }
 
@@ -376,67 +376,67 @@ class PhetioObject extends Disposable {
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioType(): IOType {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioType only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioType only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioType;
   }
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioState(): boolean {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioState only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioState only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioState;
   }
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioReadOnly(): boolean {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioReadOnly only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioReadOnly only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioReadOnly;
   }
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioDocumentation(): string {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioDocumentation only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioDocumentation only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioDocumentation;
   }
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioEventType(): EventType {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioEventType only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioEventType only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioEventType;
   }
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioHighFrequency(): boolean {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioHighFrequency only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioHighFrequency only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioHighFrequency;
   }
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioPlayback(): boolean {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioPlayback only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioPlayback only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioPlayback;
   }
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioDynamicElement(): boolean {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioDynamicElement only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioDynamicElement only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioDynamicElement;
   }
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioFeatured(): boolean {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioFeatured only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioFeatured only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioFeatured;
   }
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioEventMetadata(): EventMetadata | null {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioEventMetadata only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioEventMetadata only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioEventMetadata;
   }
 
   // throws an assertion error in brands other than PhET-iO
   public get phetioDesigned(): boolean {
-    assert && assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioDesigned only accessible for instrumented objects in PhET-iO brand.' );
+    window.assert && window.assert( PHET_IO_ENABLED && this.isPhetioInstrumented(), 'phetioDesigned only accessible for instrumented objects in PhET-iO brand.' );
     return this._phetioDesigned;
   }
 
@@ -459,16 +459,16 @@ class PhetioObject extends Disposable {
         getData: null
       }, providedOptions );
 
-      assert && assert( this.phetioObjectInitialized, 'phetioObject should be initialized' );
+      window.assert && window.assert( this.phetioObjectInitialized, 'phetioObject should be initialized' );
       assert && options.data && assert( typeof options.data === 'object' );
       assert && options.getData && assert( typeof options.getData === 'function' );
-      assert && assert( arguments.length === 1 || arguments.length === 2, 'Prevent usage of incorrect signature' );
+      window.assert && window.assert( arguments.length === 1 || arguments.length === 2, 'Prevent usage of incorrect signature' );
 
       // TODO: don't drop PhET-iO events if they are created before we have a dataStream global. https://github.com/phetsims/phet-io/issues/1875
       if ( !_.hasIn( window, 'phet.phetio.dataStream' ) ) {
 
         // If you hit this, then it is likely related to https://github.com/phetsims/scenery/issues/1124 and we would like to know about it!
-        // assert && assert( false, 'trying to create an event before the data stream exists' );
+        // window.assert && window.assert( false, 'trying to create an event before the data stream exists' );
 
         this.phetioMessageStack.push( SKIPPING_MESSAGE );
         return;
@@ -510,7 +510,7 @@ class PhetioObject extends Disposable {
   public phetioEndEvent(): void {
     if ( PHET_IO_ENABLED && this.isPhetioInstrumented() ) {
 
-      assert && assert( this.phetioMessageStack.length > 0, 'Must have messages to pop' );
+      window.assert && window.assert( this.phetioMessageStack.length > 0, 'Must have messages to pop' );
       const topMessageIndex = this.phetioMessageStack.pop();
 
       // The message was started as a high frequency event to be skipped, so the end is a no-op
@@ -526,8 +526,8 @@ class PhetioObject extends Disposable {
    * Set any instrumented descendants of this PhetioObject to the same value as this.phetioDynamicElement.
    */
   public propagateDynamicFlagsToDescendants(): void {
-    assert && assert( Tandem.PHET_IO_ENABLED, 'phet-io should be enabled' );
-    assert && assert( phet.phetio && phet.phetio.phetioEngine, 'Dynamic elements cannot be created statically before phetioEngine exists.' );
+    window.assert && window.assert( Tandem.PHET_IO_ENABLED, 'phet-io should be enabled' );
+    window.assert && window.assert( phet.phetio && phet.phetio.phetioEngine, 'Dynamic elements cannot be created statically before phetioEngine exists.' );
     const phetioEngine = phet.phetio.phetioEngine;
 
     // in the same order as bufferedPhetioObjects
@@ -537,11 +537,11 @@ class PhetioObject extends Disposable {
       const phetioID = tandem.phetioID;
 
       if ( phetioEngine.hasPhetioObject( phetioID ) || ( !Tandem.launched && unlaunchedPhetioIDs.includes( phetioID ) ) ) {
-        assert && assert( this.isPhetioInstrumented() );
+        window.assert && window.assert( this.isPhetioInstrumented() );
         const phetioObject = phetioEngine.hasPhetioObject( phetioID ) ? phetioEngine.getPhetioElement( phetioID ) :
                              Tandem.bufferedPhetioObjects[ unlaunchedPhetioIDs.indexOf( phetioID ) ];
 
-        assert && assert( phetioObject, 'should have a phetioObject here' );
+        window.assert && window.assert( phetioObject, 'should have a phetioObject here' );
 
         // Order matters here! The phetioIsArchetype needs to be first to ensure that the setPhetioDynamicElement
         // setter can opt out for archetypes.
@@ -559,8 +559,8 @@ class PhetioObject extends Disposable {
    * Used in PhetioEngine
    */
   public setPhetioDynamicElement( phetioDynamicElement: boolean ): void {
-    assert && assert( !this.phetioNotifiedObjectCreated, 'should not change dynamic element flags after notifying this PhetioObject\'s creation.' );
-    assert && assert( this.isPhetioInstrumented() );
+    window.assert && window.assert( !this.phetioNotifiedObjectCreated, 'should not change dynamic element flags after notifying this PhetioObject\'s creation.' );
+    window.assert && window.assert( this.isPhetioInstrumented() );
 
     // All archetypes are static (non-dynamic)
     this._phetioDynamicElement = this.phetioIsArchetype ? false : phetioDynamicElement;
@@ -579,7 +579,7 @@ class PhetioObject extends Disposable {
    * Mark this PhetioObject as an archetype for dynamic elements.
    */
   public markDynamicElementArchetype(): void {
-    assert && assert( !this.phetioNotifiedObjectCreated, 'should not change dynamic element flags after notifying this PhetioObject\'s creation.' );
+    window.assert && window.assert( !this.phetioNotifiedObjectCreated, 'should not change dynamic element flags after notifying this PhetioObject\'s creation.' );
 
     this.phetioIsArchetype = true;
     this.setPhetioDynamicElement( false ); // because archetypes aren't dynamic elements
@@ -632,7 +632,7 @@ class PhetioObject extends Disposable {
         // The linkage is only featured if the parent and the element are both also featured
         phetioFeatured: this.phetioFeatured && element.phetioFeatured
       }, providedOptions );
-      assert && assert( Array.isArray( this.linkedElements ), 'linkedElements should be an array' );
+      window.assert && window.assert( Array.isArray( this.linkedElements ), 'linkedElements should be an array' );
 
       let tandem: Tandem | null = null;
       if ( providedOptions && providedOptions.tandem ) {
@@ -660,7 +660,7 @@ class PhetioObject extends Disposable {
    */
   public removeLinkedElements( potentiallyLinkedElement: PhetioObject ): void {
     if ( this.isPhetioInstrumented() && this.linkedElements ) {
-      assert && assert( potentiallyLinkedElement.isPhetioInstrumented() );
+      window.assert && window.assert( potentiallyLinkedElement.isPhetioInstrumented() );
 
       const toRemove = this.linkedElements.filter( linkedElement => linkedElement.element === potentiallyLinkedElement );
       toRemove.forEach( linkedElement => {
@@ -690,7 +690,7 @@ class PhetioObject extends Disposable {
    * We don't want 'linked' mode to map from cardNode all the way to cardValueProperty (at least automatically), see https://github.com/phetsims/tandem/issues/300
    */
   public getPhetioMouseHitTarget( fromLinking = false ): PhetioObject | 'phetioNotSelectable' {
-    assert && assert( phet.tandem.phetioElementSelectionProperty.value !== 'none', 'getPhetioMouseHitTarget should not be called when phetioElementSelectionProperty is none' );
+    window.assert && window.assert( phet.tandem.phetioElementSelectionProperty.value !== 'none', 'getPhetioMouseHitTarget should not be called when phetioElementSelectionProperty is none' );
 
     // Don't get a linked element for a linked element (recursive link element searching)
     if ( !fromLinking && phet.tandem.phetioElementSelectionProperty.value === 'linked' ) {
@@ -798,7 +798,7 @@ class PhetioObject extends Disposable {
       return 'noCorrespondingLinkedElement';
     }
 
-    assert && assert( linkedChild, 'phetioElement is needed' );
+    window.assert && window.assert( linkedChild, 'phetioElement is needed' );
     return linkedChild.element;
   }
 
@@ -826,11 +826,11 @@ class PhetioObject extends Disposable {
       animationFrameTimer.runOnNextTick( () => {
 
         // Uninstrumented PhetioObjects don't have a phetioMessageStack attribute.
-        assert && assert( !this.hasOwnProperty( 'phetioMessageStack' ) || this.phetioMessageStack.length === 0,
+        window.assert && window.assert( !this.hasOwnProperty( 'phetioMessageStack' ) || this.phetioMessageStack.length === 0,
           'phetioMessageStack should be clear' );
 
         descendants.forEach( descendant => {
-          assert && assert( descendant.isDisposed, `All descendants must be disposed by the next frame: ${descendant.tandem.phetioID}` );
+          window.assert && window.assert( descendant.isDisposed, `All descendants must be disposed by the next frame: ${descendant.tandem.phetioID}` );
         } );
       } );
     }
@@ -913,7 +913,7 @@ class LinkedElement extends PhetioObject {
   public readonly element: PhetioObject;
 
   public constructor( coreElement: PhetioObject, providedOptions?: LinkedElementOptions ) {
-    assert && assert( !!coreElement, 'coreElement should be defined' );
+    window.assert && window.assert( !!coreElement, 'coreElement should be defined' );
 
     const options = optionize<LinkedElementOptions, EmptySelfOptions, PhetioObjectOptions>()( {
       phetioType: LinkedElementIO,
@@ -924,7 +924,7 @@ class LinkedElement extends PhetioObject {
     }, providedOptions );
 
     // References cannot be changed by PhET-iO
-    assert && assert( !options.hasOwnProperty( 'phetioReadOnly' ), 'phetioReadOnly set by LinkedElement' );
+    window.assert && window.assert( !options.hasOwnProperty( 'phetioReadOnly' ), 'phetioReadOnly set by LinkedElement' );
     options.phetioReadOnly = true;
 
     super( options );

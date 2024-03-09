@@ -41,11 +41,11 @@ class Edge {
    * @returns {Edge} - This reference for chaining
    */
   initialize( segment, startVertex, endVertex ) {
-    assert && assert( segment instanceof Segment );
-    assert && assert( startVertex instanceof Vertex );
-    assert && assert( endVertex instanceof Vertex );
-    assert && assert( segment.start.distance( startVertex.point ) < 1e-3 );
-    assert && assert( segment.end.distance( endVertex.point ) < 1e-3 );
+    window.assert && window.assert( segment instanceof Segment );
+    window.assert && window.assert( startVertex instanceof Vertex );
+    window.assert && window.assert( endVertex instanceof Vertex );
+    window.assert && window.assert( segment.start.distance( startVertex.point ) < 1e-3 );
+    window.assert && window.assert( segment.end.distance( endVertex.point ) < 1e-3 );
 
     // @public {Segment|null} - Null when disposed (in pool)
     this.segment = segment;
@@ -125,7 +125,7 @@ class Edge {
    * @returns {Vertex}
    */
   getOtherVertex( vertex ) {
-    assert && assert( vertex === this.startVertex || vertex === this.endVertex );
+    window.assert && window.assert( vertex === this.startVertex || vertex === this.endVertex );
 
     return this.startVertex === vertex ? this.endVertex : this.startVertex;
   }
@@ -138,7 +138,7 @@ class Edge {
     this.forwardHalf.updateReferences();
     this.reversedHalf.updateReferences();
 
-    assert && assert( !( this.segment instanceof Line ) || this.startVertex !== this.endVertex,
+    window.assert && window.assert( !( this.segment instanceof Line ) || this.startVertex !== this.endVertex,
       'No line segments for same vertices' );
   }
 

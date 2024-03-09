@@ -583,7 +583,7 @@ class CanvasBlock extends FittedBlock {
         `markDirtyDrawable on CanvasBlock#${this.id} with ${drawable.toString()}`
       );
 
-    assert && assert(drawable);
+    window.assert && window.assert(drawable);
 
     if (assert) {
       // Catch infinite loops
@@ -648,7 +648,7 @@ class CanvasBlock extends FittedBlock {
       instance = instance.parent
     ) {
       const node = instance.node;
-      assert && assert(this.filterListenerCountMap[node.id] > 0);
+      window.assert && window.assert(this.filterListenerCountMap[node.id] > 0);
       this.filterListenerCountMap[node.id]--;
       if (this.filterListenerCountMap[node.id] === 0) {
         delete this.filterListenerCountMap[node.id];
@@ -696,7 +696,7 @@ class CanvasBlock extends FittedBlock {
       );
     sceneryLog && sceneryLog.CanvasBlock && sceneryLog.push();
 
-    assert && assert(drawable.parentDrawable === this);
+    window.assert && window.assert(drawable.parentDrawable === this);
 
     // For now, mark it as dirty so that we redraw anything containing it. In the future, we could have more advanced
     // behavior that figures out the intersection-region for what was moved and what it was moved past, but that's

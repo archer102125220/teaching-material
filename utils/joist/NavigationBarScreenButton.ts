@@ -51,8 +51,8 @@ class NavigationBarScreenButton extends Voicing(Node) {
     screen: AnyScreen, simScreenIndex: number, navBarHeight: number,
     providedOptions: NavigationBarScreenButtonOptions) {
 
-    assert && assert(screen.nameProperty.value, `name is required for screen ${simScreenIndex}`);
-    assert && assert(screen.navigationBarIcon, `navigationBarIcon is required for screen ${screen.nameProperty.value}`);
+    window.assert && window.assert(screen.nameProperty.value, `name is required for screen ${simScreenIndex}`);
+    window.assert && window.assert(screen.navigationBarIcon, `navigationBarIcon is required for screen ${screen.nameProperty.value}`);
 
     const options = optionize<NavigationBarScreenButtonOptions, SelfOptions, ParentOptions>()({
       cursor: 'pointer',
@@ -69,7 +69,7 @@ class NavigationBarScreenButton extends Voicing(Node) {
       voicingHintResponse: screen.descriptionContent
     }, providedOptions);
 
-    assert && assert(!options.innerContent, 'NavigationBarScreenButton sets its own innerContent');
+    window.assert && window.assert(!options.innerContent, 'NavigationBarScreenButton sets its own innerContent');
 
     super();
 
@@ -80,7 +80,7 @@ class NavigationBarScreenButton extends Voicing(Node) {
       this.voicingNameResponse = name;
     });
 
-    assert && assert(screen.navigationBarIcon, 'navigationBarIcon should exist');
+    window.assert && window.assert(screen.navigationBarIcon, 'navigationBarIcon should exist');
     // icon
     const icon = new Node({
       children: [screen.navigationBarIcon!], // wrap in case this icon is used in multiple place (eg, home screen and navbar)
@@ -230,7 +230,7 @@ class NavigationBarScreenButton extends Voicing(Node) {
       text.maxWidth = this.width;
     }
 
-    needsIconMaxWidth && assert && assert(Utils.toFixed(this.width, 0) === Utils.toFixed(options.maxButtonWidth!, 0),
+    needsIconMaxWidth && window.assert && window.assert(Utils.toFixed(this.width, 0) === Utils.toFixed(options.maxButtonWidth!, 0),
       `this.width ${this.width} !== options.maxButtonWidth ${options.maxButtonWidth}`);
 
     // A custom focus highlight so that the bottom of the highlight does not get cut-off below the navigation bar.

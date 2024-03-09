@@ -94,7 +94,7 @@ class PitchedPopGenerator extends SoundGenerator {
    */
   public playPop( relativePitch: number, duration = DEFAULT_POP_DURATION ): void {
 
-    assert && assert( relativePitch >= 0 && relativePitch <= 1, 'relative pitch value out of range' );
+    window.assert && window.assert( relativePitch >= 0 && relativePitch <= 1, 'relative pitch value out of range' );
 
     if ( !this.fullyEnabled ) {
 

@@ -31,8 +31,8 @@ QUnit.test( 'translateNode', assert => {
     ListenerTestUtils.mouseDown( display, 10, 10 );
     ListenerTestUtils.mouseMove( display, 20, 15 );
     ListenerTestUtils.mouseUp( display, 20, 15 );
-    assert.equal( rect.x, 10, 'Drag with translateNode should have changed the x translation' );
-    assert.equal( rect.y, 5, 'Drag with translateNode should have changed the y translation' );
+    window.assert.equal( rect.x, 10, 'Drag with translateNode should have changed the x translation' );
+    window.assert.equal( rect.y, 5, 'Drag with translateNode should have changed the y translation' );
     listener.dispose();
   } );
 } );
@@ -50,8 +50,8 @@ QUnit.test( 'translateNode with applyOffset:false', assert => {
     ListenerTestUtils.mouseDown( display, 10, 10 );
     ListenerTestUtils.mouseMove( display, 20, 15 );
     ListenerTestUtils.mouseUp( display, 20, 15 );
-    assert.equal( rect.x, 20, 'Drag should place the rect with its origin at the last mouse position (x)' );
-    assert.equal( rect.y, 15, 'Drag should place the rect with its origin at the last mouse position (y)' );
+    window.assert.equal( rect.x, 20, 'Drag should place the rect with its origin at the last mouse position (x)' );
+    window.assert.equal( rect.y, 15, 'Drag should place the rect with its origin at the last mouse position (y)' );
     listener.dispose();
   } );
 } );
@@ -70,8 +70,8 @@ QUnit.test( 'translateNode with trackAncestors', assert => {
     node.x = 5;
     ListenerTestUtils.mouseMove( display, 20, 15 );
     ListenerTestUtils.mouseUp( display, 20, 15 );
-    assert.equal( rect.x, 5, 'The x shift of 10 on the base node will have wiped out half of the drag change' );
-    assert.equal( rect.y, 5, 'No y movement occurred of the base node' );
+    window.assert.equal( rect.x, 5, 'The x shift of 10 on the base node will have wiped out half of the drag change' );
+    window.assert.equal( rect.y, 5, 'No y movement occurred of the base node' );
     listener.dispose();
   } );
 } );
@@ -91,8 +91,8 @@ QUnit.test( 'positionProperty with hooks', assert => {
     ListenerTestUtils.mouseDown( display, 10, 10 );
     ListenerTestUtils.mouseMove( display, 20, 15 );
     ListenerTestUtils.mouseUp( display, 20, 15 );
-    assert.equal( positionProperty.value.x, 10, 'Drag with translateNode should have changed the x translation' );
-    assert.equal( positionProperty.value.y, 5, 'Drag with translateNode should have changed the y translation' );
+    window.assert.equal( positionProperty.value.x, 10, 'Drag with translateNode should have changed the x translation' );
+    window.assert.equal( positionProperty.value.y, 5, 'Drag with translateNode should have changed the y translation' );
     listener.dispose();
   } );
 } );
@@ -118,8 +118,8 @@ QUnit.test( 'positionProperty with hooks and transform', assert => {
     ListenerTestUtils.mouseDown( display, 10, 10 );
     ListenerTestUtils.mouseMove( display, 20, 15 );
     ListenerTestUtils.mouseUp( display, 20, 15 );
-    assert.equal( Utils.roundSymmetric( rect.x ), 15, '[x] Started at 5, moved by 10' );
-    assert.equal( Utils.roundSymmetric( rect.y ), 8, '[y] Started at 3, moved by 5' );
+    window.assert.equal( Utils.roundSymmetric( rect.x ), 15, '[x] Started at 5, moved by 10' );
+    window.assert.equal( Utils.roundSymmetric( rect.y ), 8, '[y] Started at 3, moved by 5' );
     listener.dispose();
   } );
 } );
@@ -143,8 +143,8 @@ QUnit.test( 'positionProperty with dragBounds', assert => {
     ListenerTestUtils.mouseDown( display, 10, 10 );
     ListenerTestUtils.mouseMove( display, 50, 30 );
     ListenerTestUtils.mouseUp( display, 50, 30 );
-    assert.equal( positionProperty.value.x, 5, '[x] Should be limited to 5 by dragBounds' );
-    assert.equal( positionProperty.value.y, 5, '[y] Should be limited to 5 by dragBounds  ' );
+    window.assert.equal( positionProperty.value.x, 5, '[x] Should be limited to 5 by dragBounds' );
+    window.assert.equal( positionProperty.value.y, 5, '[y] Should be limited to 5 by dragBounds  ' );
     listener.dispose();
   } );
 } );

@@ -62,8 +62,8 @@ export default class Line extends Path {
     if (typeof x1 === 'object') {
       if (x1 instanceof Vector2) {
         // assumes Line( Vector2, Vector2, options ), where x2 is our options
-        assert && assert(x2 === undefined || typeof x2 === 'object');
-        assert && assert(x2 === undefined || Object.getPrototypeOf(x2) === Object.prototype,
+        window.assert && window.assert(x2 === undefined || typeof x2 === 'object');
+        window.assert && window.assert(x2 === undefined || Object.getPrototypeOf(x2) === Object.prototype,
           'Extra prototype on Node options object is a code smell');
 
         options = extendDefined<LineOptions>({
@@ -79,10 +79,10 @@ export default class Line extends Path {
       }
       else {
         // assumes Line( { ... } ), init to zero for now
-        assert && assert(y1 === undefined);
+        window.assert && window.assert(y1 === undefined);
 
         // Options object is under the x1 name
-        assert && assert(x1 === undefined || Object.getPrototypeOf(x1) === Object.prototype,
+        window.assert && window.assert(x1 === undefined || Object.getPrototypeOf(x1) === Object.prototype,
           'Extra prototype on Node options object is a code smell');
 
         options = extendDefined({
@@ -92,11 +92,11 @@ export default class Line extends Path {
     }
     else {
       // new Line( x1, y1, x2, y2, [options] )
-      assert && assert(x1 !== undefined &&
+      window.assert && window.assert(x1 !== undefined &&
         typeof y1 === 'number' &&
         typeof x2 === 'number' &&
         typeof y2 === 'number');
-      assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+      window.assert && window.assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
         'Extra prototype on Node options object is a code smell');
 
       options = extendDefined<LineOptions>({
@@ -120,7 +120,7 @@ export default class Line extends Path {
    * @param y2 - the end y coordinate
    */
   public setLine(x1: number, y1: number, x2: number, y2: number): this {
-    assert && assert(x1 !== undefined &&
+    window.assert && window.assert(x1 !== undefined &&
       y1 !== undefined &&
       x2 !== undefined &&
       y2 !== undefined, 'parameters need to be defined');
@@ -150,14 +150,14 @@ export default class Line extends Path {
     if (typeof x1 === 'number') {
 
       // setPoint1( x1, y1 );
-      assert && assert(x1 !== undefined && y1 !== undefined, 'parameters need to be defined');
+      window.assert && window.assert(x1 !== undefined && y1 !== undefined, 'parameters need to be defined');
       this._x1 = x1;
       this._y1 = y1!;
     }
     else {
 
       // setPoint1( Vector2 )
-      assert && assert(x1.x !== undefined && x1.y !== undefined, 'parameters need to be defined');
+      window.assert && window.assert(x1.x !== undefined && x1.y !== undefined, 'parameters need to be defined');
       this._x1 = x1.x;
       this._y1 = x1.y;
     }
@@ -182,13 +182,13 @@ export default class Line extends Path {
   setPoint2(x2: number | Vector2, y2?: number): this {  // eslint-disable-line @typescript-eslint/explicit-member-accessibility
     if (typeof x2 === 'number') {
       // setPoint2( x2, y2 );
-      assert && assert(x2 !== undefined && y2 !== undefined, 'parameters need to be defined');
+      window.assert && window.assert(x2 !== undefined && y2 !== undefined, 'parameters need to be defined');
       this._x2 = x2;
       this._y2 = y2!;
     }
     else {
       // setPoint2( Vector2 )
-      assert && assert(x2.x !== undefined && x2.y !== undefined, 'parameters need to be defined');
+      window.assert && window.assert(x2.x !== undefined && x2.y !== undefined, 'parameters need to be defined');
       this._x2 = x2.x;
       this._y2 = x2.y;
     }
@@ -329,10 +329,10 @@ export default class Line extends Path {
    * Notifies that the line has changed and invalidates path information and our cached shape.
    */
   private invalidateLine(): void {
-    assert && assert(isFinite(this._x1), `A line needs to have a finite x1 (${this._x1})`);
-    assert && assert(isFinite(this._y1), `A line needs to have a finite y1 (${this._y1})`);
-    assert && assert(isFinite(this._x2), `A line needs to have a finite x2 (${this._x2})`);
-    assert && assert(isFinite(this._y2), `A line needs to have a finite y2 (${this._y2})`);
+    window.assert && window.assert(isFinite(this._x1), `A line needs to have a finite x1 (${this._x1})`);
+    window.assert && window.assert(isFinite(this._y1), `A line needs to have a finite y1 (${this._y1})`);
+    window.assert && window.assert(isFinite(this._x2), `A line needs to have a finite x2 (${this._x2})`);
+    window.assert && window.assert(isFinite(this._y2), `A line needs to have a finite y2 (${this._y2})`);
 
     // sets our 'cache' to null, so we don't always have to recompute our shape
     this._shape = null;
@@ -405,7 +405,7 @@ export default class Line extends Path {
           bounds.addCoordinates(this._x2 + sy, this._y2 - sx);
         }
         else {
-          assert && assert(lineCap === 'square');
+          window.assert && window.assert(lineCap === 'square');
 
           // four points just using the perpendicular stroked offsets (sy,-sx) and (-sy,sx) and parallel stroked offsets
           bounds.addCoordinates(this._x1 - sx - sy, this._y1 - sy + sx);

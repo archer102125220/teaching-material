@@ -243,29 +243,29 @@ class GrabDragInteraction extends EnabledComponent {
           'if provided, interactiveHighlight must be a Path to support highlightChangedEmitter'
         );
     }
-    assert && assert(typeof options.onGrab === 'function');
-    assert && assert(typeof options.onRelease === 'function');
-    assert && assert(typeof options.onGrabbable === 'function');
-    assert && assert(typeof options.onDraggable === 'function');
-    assert && assert(typeof options.showDragCueNode === 'function');
-    assert && assert(typeof options.showGrabCueNode === 'function');
-    assert && assert(Array.isArray(options.listenersForDragState));
-    assert && assert(Array.isArray(options.listenersForGrabState));
-    assert && assert(options.grabbableOptions instanceof Object);
-    assert && assert(options.grabCueOptions instanceof Object);
+    window.assert && window.assert(typeof options.onGrab === 'function');
+    window.assert && window.assert(typeof options.onRelease === 'function');
+    window.assert && window.assert(typeof options.onGrabbable === 'function');
+    window.assert && window.assert(typeof options.onDraggable === 'function');
+    window.assert && window.assert(typeof options.showDragCueNode === 'function');
+    window.assert && window.assert(typeof options.showGrabCueNode === 'function');
+    window.assert && window.assert(Array.isArray(options.listenersForDragState));
+    window.assert && window.assert(Array.isArray(options.listenersForGrabState));
+    window.assert && window.assert(options.grabbableOptions instanceof Object);
+    window.assert && window.assert(options.grabCueOptions instanceof Object);
     assert &&
       assert(
         options.grabCueOptions.visible === undefined,
         'Should not set visibility of the cue node'
       );
-    assert && assert(options.draggableOptions instanceof Object);
+    window.assert && window.assert(options.draggableOptions instanceof Object);
     assert &&
       assert(
         !options.listenersForDragState.includes(keyboardDragListener),
         'GrabDragInteraction adds the KeyboardDragListener to listenersForDragState'
       );
     if (options.dragCueNode !== null) {
-      assert && assert(options.dragCueNode instanceof Node);
+      window.assert && window.assert(options.dragCueNode instanceof Node);
       assert &&
         assert(
           !options.dragCueNode.parent,

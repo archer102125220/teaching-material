@@ -59,8 +59,8 @@ export default class FireListener extends PressListener implements TInputListene
       phetioReadOnly: PhetioObject.DEFAULT_OPTIONS.phetioReadOnly
     }, providedOptions);
 
-    assert && assert(typeof options.fire === 'function', 'The fire callback should be a function');
-    assert && assert(typeof options.fireOnDown === 'boolean', 'fireOnDown should be a boolean');
+    window.assert && window.assert(typeof options.fire === 'function', 'The fire callback should be a function');
+    window.assert && window.assert(typeof options.fireOnDown === 'boolean', 'fireOnDown should be a boolean');
 
     // @ts-expect-error TODO see https://github.com/phetsims/phet-core/issues/128
     super(options);

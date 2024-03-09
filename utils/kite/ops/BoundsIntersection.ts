@@ -204,7 +204,7 @@ export default class BoundsIntersection {
 
       const positionA = a.positionAt(aT);
       const positionB = b.positionAt(bT);
-      assert && assert(positionA.distance(positionB) < 1e-10);
+      window.assert && window.assert(positionA.distance(positionB) < 1e-10);
 
       results.push(new SegmentIntersection(positionA.average(positionB), aT, bT));
     }

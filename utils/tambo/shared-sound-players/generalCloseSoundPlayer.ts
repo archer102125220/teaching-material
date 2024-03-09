@@ -6,15 +6,15 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import generalClose_mp3 from '../../sounds/generalClose_mp3.js';
-import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
-import tambo from '../tambo.js';
+import generalClose_mp3 from '@/assets/sounds/tambo/generalClose_mp3';
+import SoundClipPlayer from '../sound-generators/SoundClipPlayer';
+import tambo from '../tambo';
 
 // create the shared sound instance
-const generalCloseSoundPlayer = new SoundClipPlayer( generalClose_mp3, {
+const generalCloseSoundPlayer = new SoundClipPlayer(generalClose_mp3, {
   soundClipOptions: { initialOutputLevel: 0.4 },
   soundManagerOptions: { categoryName: 'user-interface' }
-} );
+});
 
-tambo.register( 'generalCloseSoundPlayer', generalCloseSoundPlayer );
+tambo.register('generalCloseSoundPlayer', generalCloseSoundPlayer);
 export default generalCloseSoundPlayer;

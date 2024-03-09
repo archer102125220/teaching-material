@@ -18,8 +18,8 @@ export default class HueRotate extends ColorMatrixFilter {
    * @param amount - In radians, the amount of hue to color-shift
    */
   public constructor( amount: number ) {
-    assert && assert( isFinite( amount ), 'HueRotate amount should be finite' );
-    assert && assert( amount >= 0, 'HueRotate amount should be non-negative' );
+    window.assert && window.assert( isFinite( amount ), 'HueRotate amount should be finite' );
+    window.assert && window.assert( amount >= 0, 'HueRotate amount should be non-negative' );
 
     const cos = Math.cos( amount );
     const sin = Math.sin( amount );

@@ -171,8 +171,8 @@ export default class PDOMDisplaysInfo {
     sceneryLog && sceneryLog.PDOMDisplaysInfo && sceneryLog.PDOMDisplaysInfo(`addAllPDOMDisplays n#${this.node.id}`);
     sceneryLog && sceneryLog.PDOMDisplaysInfo && sceneryLog.push();
 
-    assert && assert(this.pdomDisplays.length === 0, 'Should be empty before adding everything');
-    assert && assert(this.canHavePDOMDisplays(), 'Should happen when we can store pdomDisplays');
+    window.assert && window.assert(this.pdomDisplays.length === 0, 'Should be empty before adding everything');
+    window.assert && window.assert(this.canHavePDOMDisplays(), 'Should happen when we can store pdomDisplays');
 
     let i;
     const displays: Display[] = [];
@@ -202,12 +202,12 @@ export default class PDOMDisplaysInfo {
     sceneryLog && sceneryLog.PDOMDisplaysInfo && sceneryLog.PDOMDisplaysInfo(`removeAllPDOMDisplays n#${this.node.id}`);
     sceneryLog && sceneryLog.PDOMDisplaysInfo && sceneryLog.push();
 
-    assert && assert(!this.canHavePDOMDisplays(), 'Should happen when we cannot store pdomDisplays');
+    window.assert && window.assert(!this.canHavePDOMDisplays(), 'Should happen when we cannot store pdomDisplays');
 
     // TODO: is there a way to avoid a copy? https://github.com/phetsims/scenery/issues/1581
     this.removePDOMDisplays(this.pdomDisplays.slice());
 
-    assert && assert(this.pdomDisplays.length === 0, 'Should be empty after removing everything');
+    window.assert && window.assert(this.pdomDisplays.length === 0, 'Should be empty after removing everything');
 
     sceneryLog && sceneryLog.PDOMDisplaysInfo && sceneryLog.pop();
   }
@@ -219,7 +219,7 @@ export default class PDOMDisplaysInfo {
     sceneryLog && sceneryLog.PDOMDisplaysInfo && sceneryLog.PDOMDisplaysInfo(`addPDOMDisplays n#${this.node.id} numDisplays:${displays.length}`);
     sceneryLog && sceneryLog.PDOMDisplaysInfo && sceneryLog.push();
 
-    assert && assert(Array.isArray(displays));
+    window.assert && window.assert(Array.isArray(displays));
 
     // Simplifies things if we can stop no-ops here.
     if (displays.length !== 0) {
@@ -246,8 +246,8 @@ export default class PDOMDisplaysInfo {
     sceneryLog && sceneryLog.PDOMDisplaysInfo && sceneryLog.PDOMDisplaysInfo(`removePDOMDisplays n#${this.node.id} numDisplays:${displays.length}`);
     sceneryLog && sceneryLog.PDOMDisplaysInfo && sceneryLog.push();
 
-    assert && assert(Array.isArray(displays));
-    assert && assert(this.pdomDisplays.length >= displays.length, 'there should be at least as many PDOMDisplays as Displays');
+    window.assert && window.assert(Array.isArray(displays));
+    window.assert && window.assert(this.pdomDisplays.length >= displays.length, 'there should be at least as many PDOMDisplays as Displays');
 
     // Simplifies things if we can stop no-ops here.
     if (displays.length !== 0) {
@@ -255,7 +255,7 @@ export default class PDOMDisplaysInfo {
 
       for (i = displays.length - 1; i >= 0; i--) {
         const index = this.pdomDisplays.lastIndexOf(displays[i]);
-        assert && assert(index >= 0);
+        window.assert && window.assert(index >= 0);
         this.pdomDisplays.splice(i, 1);
       }
 

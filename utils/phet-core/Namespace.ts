@@ -55,7 +55,7 @@ class Namespace {
       if (!isHMR) {
 
         // @ts-expect-error
-        assert && assert(!this[key], `${key} is already registered for namespace ${this.name}`);
+        window.assert && window.assert(!this[key], `${key} is already registered for namespace ${this.name}`);
       }
 
       // @ts-expect-error
@@ -71,7 +71,7 @@ class Namespace {
 
         if (!isHMR) {
           // @ts-expect-error
-          assert && assert(!!parent[keys[i]],
+          window.assert && window.assert(!!parent[keys[i]],
             `${[this.name].concat(keys.slice(0, i + 1)).join('.')} needs to be defined to register ${key}`);
         }
 
@@ -84,7 +84,7 @@ class Namespace {
 
       if (!isHMR) {
         // @ts-expect-error
-        assert && assert(!parent[lastKey], `${key} is already registered for namespace ${this.name}`);
+        window.assert && window.assert(!parent[lastKey], `${key} is already registered for namespace ${this.name}`);
       }
 
       // @ts-expect-error

@@ -70,7 +70,7 @@ export type PaintableNode = Path | Text;
 const PAINTABLE_DRAWABLE_MARK_FLAGS = ['fill', 'stroke', 'lineWidth', 'lineOptions', 'cachedPaints'];
 
 const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType) => {
-  assert && assert(_.includes(inheritance(type), Node), 'Only Node subtypes should mix Paintable');
+  window.assert && window.assert(_.includes(inheritance(type), Node), 'Only Node subtypes should mix Paintable');
 
   return class PaintableMixin extends type {
 
@@ -111,7 +111,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      * can also be provided.
      */
     public setFill(fill: TPaint): this {
-      assert && assert(PaintDef.isPaintDef(fill), 'Invalid fill type');
+      window.assert && window.assert(PaintDef.isPaintDef(fill), 'Invalid fill type');
 
       if (assert && typeof fill === 'string') {
         Color.checkPaintString(fill);
@@ -170,7 +170,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      * can also be provided.
      */
     public setStroke(stroke: TPaint): this {
-      assert && assert(PaintDef.isPaintDef(stroke), 'Invalid stroke type');
+      window.assert && window.assert(PaintDef.isPaintDef(stroke), 'Invalid stroke type');
 
       if (assert && typeof stroke === 'string') {
         Color.checkPaintString(stroke);
@@ -282,7 +282,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      * Sets the line width that will be applied to strokes on this Node.
      */
     public setLineWidth(lineWidth: number): this {
-      assert && assert(lineWidth >= 0, `lineWidth should be non-negative instead of ${lineWidth}`);
+      window.assert && window.assert(lineWidth >= 0, `lineWidth should be non-negative instead of ${lineWidth}`);
 
       if (this.getLineWidth() !== lineWidth) {
         this._lineDrawingStyles.lineWidth = lineWidth;
@@ -314,7 +314,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      * - 'square' draws a square outline around the end point (like butt, but extended by 1/2 line width out)
      */
     public setLineCap(lineCap: LineCap): this {
-      assert && assert(lineCap === 'butt' || lineCap === 'round' || lineCap === 'square',
+      window.assert && window.assert(lineCap === 'butt' || lineCap === 'round' || lineCap === 'square',
         `lineCap should be one of "butt", "round" or "square", not ${lineCap}`);
 
       if (this._lineDrawingStyles.lineCap !== lineCap) {
@@ -348,7 +348,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      * - 'bevel' connects with a single line segment.
      */
     public setLineJoin(lineJoin: LineJoin): this {
-      assert && assert(lineJoin === 'miter' || lineJoin === 'round' || lineJoin === 'bevel',
+      window.assert && window.assert(lineJoin === 'miter' || lineJoin === 'round' || lineJoin === 'bevel',
         `lineJoin should be one of "miter", "round" or "bevel", not ${lineJoin}`);
 
       if (this._lineDrawingStyles.lineJoin !== lineJoin) {
@@ -379,7 +379,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      * it gets cut off to the 'bevel' behavior.
      */
     public setMiterLimit(miterLimit: number): this {
-      assert && assert(isFinite(miterLimit), 'miterLimit should be a finite number');
+      window.assert && window.assert(isFinite(miterLimit), 'miterLimit should be a finite number');
 
       if (this._lineDrawingStyles.miterLimit !== miterLimit) {
         this._lineDrawingStyles.miterLimit = miterLimit;
@@ -409,7 +409,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      * indicates no dashing.
      */
     public setLineDash(lineDash: number[]): this {
-      assert && assert(Array.isArray(lineDash) && lineDash.every(n => typeof n === 'number' && isFinite(n) && n >= 0),
+      window.assert && window.assert(Array.isArray(lineDash) && lineDash.every(n => typeof n === 'number' && isFinite(n) && n >= 0),
         'lineDash should be an array of finite non-negative numbers');
 
       if (this._lineDrawingStyles.lineDash !== lineDash) {
@@ -446,7 +446,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      * Sets the offset of the line dash pattern from the start of the stroke. Defaults to 0.
      */
     public setLineDashOffset(lineDashOffset: number): this {
-      assert && assert(isFinite(lineDashOffset),
+      window.assert && window.assert(isFinite(lineDashOffset),
         `lineDashOffset should be a number, not ${lineDashOffset}`);
 
       if (this._lineDrawingStyles.lineDashOffset !== lineDashOffset) {
@@ -556,7 +556,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      */
     public removeCachedPaint(paint: TPaint): void {
       if (paint instanceof Paint) {
-        assert && assert(_.includes(this._cachedPaints, paint));
+        window.assert && window.assert(_.includes(this._cachedPaints, paint));
 
         arrayRemove(this._cachedPaints, paint);
 
@@ -571,7 +571,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      * Applies the fill to a Canvas context wrapper, before filling. (scenery-internal)
      */
     public beforeCanvasFill(wrapper: CanvasContextWrapper): void {
-      assert && assert(this.getFillValue() !== null);
+      window.assert && window.assert(this.getFillValue() !== null);
 
       const fillValue = this.getFillValue()!;
 
@@ -615,7 +615,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
         
         // @ts-expect-error
         const scaleVector: Vector2 = strokeValue.transformMatrix.getScaleVector();
-        assert && assert(Math.abs(scaleVector.x - scaleVector.y) < 1e-7, 'You cannot specify a pattern or gradient to a stroke that does not have a symmetric scale.');
+        window.assert && window.assert(Math.abs(scaleVector.x - scaleVector.y) < 1e-7, 'You cannot specify a pattern or gradient to a stroke that does not have a symmetric scale.');
         const matrixMultiplier = 1 / scaleVector.x;
 
         wrapper.context.save();

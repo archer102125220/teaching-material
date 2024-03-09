@@ -116,7 +116,7 @@ export default class KeyboardHelpSection extends ReadingBlock(VBox) {
     for (let i = 0; i < content.length; i++) {
       const helpSectionRow = content[i];
 
-      assert && assert(helpSectionRow.text.maxWidth === null, 'KeyboardHelpSection sets maxWidth for children');
+      window.assert && window.assert(helpSectionRow.text.maxWidth === null, 'KeyboardHelpSection sets maxWidth for children');
       helpSectionRow.text.maxWidth = options.textMaxWidth;
 
       icons.push(helpSectionRow.icon);
@@ -143,7 +143,7 @@ export default class KeyboardHelpSection extends ReadingBlock(VBox) {
     });
 
     // heading and content aligned in a VBox
-    assert && assert(!options.children, 'KeyboardHelpSection sets children');
+    window.assert && window.assert(!options.children, 'KeyboardHelpSection sets children');
     options.children = [headingText, contentHBox];
 
     super(options);
@@ -200,11 +200,11 @@ export default class KeyboardHelpSection extends ReadingBlock(VBox) {
    * edge of the icon VBox. Then increases spacing of all other content HBoxes accordingly.
    */
   public static alignHelpSectionIcons(sectionArray: KeyboardHelpSection[]): void {
-    assert && assert(sectionArray.length > 0, 'Must provide at least one KeyboardHelpSection to align.');
+    window.assert && window.assert(sectionArray.length > 0, 'Must provide at least one KeyboardHelpSection to align.');
 
     // left edge of icons farthest to the right in the array of KeyboardHelpSection
     const leftMostKeyboardHelpSection = _.maxBy(sectionArray, section => section.iconVBox.left);
-    assert && assert(leftMostKeyboardHelpSection,
+    window.assert && window.assert(leftMostKeyboardHelpSection,
       'There must be a KeyboardHelpSection if sectionArray has entries.');
     const maxLeftEdge = leftMostKeyboardHelpSection!.iconVBox.left;
 

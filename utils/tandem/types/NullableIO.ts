@@ -28,7 +28,7 @@ const cache = new IOTypeCache();
 // eslint-disable-next-line no-use-before-define
 const NullableIO = <ParameterType, ParameterStateType extends PatternStateSelfType, PatternStateSelfType>(parameterType: IOType<ParameterType, ParameterStateType, PatternStateSelfType>): IOType => {
 
-  assert && assert(parameterType, 'NullableIO needs parameterType');
+  window.assert && window.assert(parameterType, 'NullableIO needs parameterType');
 
   if (!cache.has(parameterType)) {
     cache.set(parameterType, new IOType<ParameterType | null, ParameterStateType | null>(`NullableIO<${parameterType.typeName}>`, {

@@ -323,9 +323,9 @@ export default class Validation {
         }
         if (valueComparisonStrategy === 'equalsFunction') {
           const validComparable = validValue as ComparableObject;
-          assert && assert(!!validComparable.equals, 'no equals function for 1st arg');
-          assert && assert(!!value.equals, 'no equals function for 2nd arg');
-          assert && assert(validComparable.equals(value) === value.equals(validComparable), 'incompatible equality checks');
+          window.assert && window.assert(!!validComparable.equals, 'no equals function for 1st arg');
+          window.assert && window.assert(!!value.equals, 'no equals function for 2nd arg');
+          window.assert && window.assert(validComparable.equals(value) === value.equals(validComparable), 'incompatible equality checks');
 
           return validComparable.equals(value);
         }

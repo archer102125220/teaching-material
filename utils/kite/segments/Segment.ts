@@ -200,8 +200,8 @@ export default abstract class Segment {
    * Given that this segment is represented by the interval [0,1]
    */
   public slice(t0: number, t1: number): Segment {
-    assert && assert(t0 >= 0 && t0 <= 1 && t1 >= 0 && t1 <= 1, 'Parametric value out of range');
-    assert && assert(t0 < t1);
+    window.assert && window.assert(t0 >= 0 && t0 <= 1 && t1 >= 0 && t1 <= 1, 'Parametric value out of range');
+    window.assert && window.assert(t0 < t1);
 
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     let segment: Segment = this;
@@ -227,7 +227,7 @@ export default abstract class Segment {
       // assume binary subdivision
       const t = tList[i];
       const arr = right.subdivided(t);
-      assert && assert(arr.length === 2);
+      window.assert && window.assert(arr.length === 2);
       result.push(arr[0]);
       right = arr[1];
 
@@ -294,7 +294,7 @@ export default abstract class Segment {
    *                       between segments
    */
   public getDashValues(lineDash: number[], lineDashOffset: number, distanceEpsilon: number, curveEpsilon: number): DashValues {
-    assert && assert(lineDash.length > 0, 'Do not call with an empty dash array');
+    window.assert && window.assert(lineDash.length > 0, 'Do not call with an empty dash array');
 
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
@@ -400,10 +400,10 @@ export default abstract class Segment {
     end = end || pointMap(this.end);
     const middle = pointMap(this.positionAt(0.5));
 
-    assert && assert(minLevels <= maxLevels);
-    assert && assert(options.distanceEpsilon === null || typeof options.distanceEpsilon === 'number');
-    assert && assert(options.curveEpsilon === null || typeof options.curveEpsilon === 'number');
-    assert && assert(!pointMap || typeof pointMap === 'function');
+    window.assert && window.assert(minLevels <= maxLevels);
+    window.assert && window.assert(options.distanceEpsilon === null || typeof options.distanceEpsilon === 'number');
+    window.assert && window.assert(options.curveEpsilon === null || typeof options.curveEpsilon === 'number');
+    window.assert && window.assert(!pointMap || typeof pointMap === 'function');
 
     // i.e. we will have finished = maxLevels === 0 || ( minLevels <= 0 && epsilonConstraints ), just didn't want to one-line it
     let finished = maxLevels === 0; // bail out once we reach our maximum number of subdivision levels
@@ -779,7 +779,7 @@ export default abstract class Segment {
   public static deserialize(obj: SerializedSegment): Segment {
     // TODO: just import them now that we have circular reference protection, and switch between https://github.com/phetsims/kite/issues/76
     // @ts-expect-error TODO: namespacing https://github.com/phetsims/kite/issues/76
-    assert && assert(obj.type && kite[obj.type] && kite[obj.type].deserialize);
+    window.assert && window.assert(obj.type && kite[obj.type] && kite[obj.type].deserialize);
 
     // @ts-expect-error TODO: namespacing https://github.com/phetsims/kite/issues/76
     return kite[obj.type].deserialize(obj);

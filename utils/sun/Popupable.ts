@@ -80,7 +80,7 @@ const Popupable = <SuperType extends Constructor<Node>>(type: SuperType, options
 
       // `config` is required for Popupable, to work well with ...args but all fields of the config are optional
       const requiredConfig = args[args.length - 1];
-      assert && assert(requiredConfig !== undefined, 'config object is required for Popupable.');
+      window.assert && window.assert(requiredConfig !== undefined, 'config object is required for Popupable.');
 
       const showPopup = gracefulBind('phet.joist.sim.showPopup') as Exclude<PopupableOptions['showPopup'], undefined>;
       const hidePopup = gracefulBind('phet.joist.sim.hidePopup') as Exclude<PopupableOptions['hidePopup'], undefined>;
@@ -96,7 +96,7 @@ const Popupable = <SuperType extends Constructor<Node>>(type: SuperType, options
       }, providedOptions);
 
       // see https://github.com/phetsims/joist/issues/293
-      assert && assert(options.isModal, 'Non-modal popups not currently supported');
+      window.assert && window.assert(options.isModal, 'Non-modal popups not currently supported');
 
       this.layoutBounds = options.layoutBounds;
       this._focusOnShowNode = options.focusOnShowNode;

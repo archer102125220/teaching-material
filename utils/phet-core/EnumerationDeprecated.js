@@ -52,7 +52,7 @@
  *
  *     // @param {Scene} mode - value from Scene EnumerationDeprecated
  *     setSceneMode( mode ) {
- *       assert && assert( Scene.includes( mode ) );
+ *       window.assert && window.assert( Scene.includes( mode ) );
  *       //...
  *     }
  *
@@ -80,7 +80,7 @@ class EnumerationDeprecated {
       'EnumerationDeprecated should be exchanged for classes that extend EnumerationValue, see WilderEnumerationPatterns for examples.'
     );
 
-    assert && assert(config, 'config must be provided');
+    window.assert && window.assert(config, 'config must be provided');
 
     const keysProvided = !!config.keys;
     const mapProvided = !!config.map;
@@ -108,7 +108,7 @@ class EnumerationDeprecated {
       config
     );
 
-    assert && assert(Array.isArray(keys), 'Values should be an array');
+    window.assert && window.assert(Array.isArray(keys), 'Values should be an array');
     assert &&
       assert(
         _.uniq(keys).length === keys.length,
@@ -261,8 +261,8 @@ class EnumerationDeprecated {
    * @public
    */
   static byKeys(keys, options) {
-    assert && assert(Array.isArray(keys), 'keys must be an array');
-    assert && assert(!options || options.keys === undefined);
+    window.assert && window.assert(Array.isArray(keys), 'keys must be an array');
+    window.assert && window.assert(!options || options.keys === undefined);
     return new EnumerationDeprecated(merge({ keys: keys }, options));
   }
 
@@ -274,7 +274,7 @@ class EnumerationDeprecated {
    * @public
    */
   static byMap(map, options) {
-    assert && assert(!options || options.map === undefined);
+    window.assert && window.assert(!options || options.map === undefined);
     if (assert) {
       const values = _.values(map);
       assert &&

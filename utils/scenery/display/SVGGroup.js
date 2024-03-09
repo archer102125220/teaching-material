@@ -496,7 +496,7 @@ class SVGGroup {
       sceneryLog.SVGGroup(`dispose ${this.toString()}`);
     sceneryLog && sceneryLog.SVGGroup && sceneryLog.push();
 
-    assert && assert(this.children.length === 0, 'Should be empty by now');
+    window.assert && window.assert(this.children.length === 0, 'Should be empty by now');
 
     if (this.hasFilter) {
       this.svgGroup.removeAttribute('filter');

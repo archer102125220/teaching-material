@@ -17,8 +17,8 @@ export default class Brightness extends ColorMatrixFilter {
    * @param amount - How bright to be, from 0 (dark), 1 (normal), or larger values to brighten
    */
   public constructor(amount: number) {
-    assert && assert(isFinite(amount), 'Brightness amount should be finite');
-    assert && assert(amount >= 0, 'Brightness amount should be non-negative');
+    window.assert && window.assert(isFinite(amount), 'Brightness amount should be finite');
+    window.assert && window.assert(amount >= 0, 'Brightness amount should be non-negative');
 
     super(
       amount, 0, 0, 0, 0,

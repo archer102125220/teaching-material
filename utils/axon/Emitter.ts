@@ -51,7 +51,7 @@ export default class Emitter<T extends TEmitterParameter[] = []> extends PhetioD
    * Emit to notify listeners
    */
   public emit(...args: T): void {
-    assert && assert(this.tinyEmitter instanceof TinyEmitter, 'Emitter should not emit until constructor complete');
+    window.assert && window.assert(this.tinyEmitter instanceof TinyEmitter, 'Emitter should not emit until constructor complete');
     assert && this.validateArguments(...args);
 
     // Although this is not the idiomatic pattern (since it is guarded in the phetioStartEvent), this function is

@@ -60,7 +60,7 @@
 
 import _ from 'lodash';
 
-import 'himalaya';
+import himalaya from 'himalaya';
 import type TProperty from '../../axon/TProperty';
 import { type PropertyOptions } from '../../axon/Property';
 import StringProperty from '../../axon/StringProperty';
@@ -79,7 +79,7 @@ import type RequiredOption from '../../phet-core/types/RequiredOption';
 
 // @ts-expect-error - Since himalaya isn't in tsconfig
 const himalayaVar = himalaya;
-assert && assert(himalayaVar, 'himalaya dependency needed for RichText.');
+window.assert && window.assert(himalayaVar, 'himalaya dependency needed for RichText.');
 
 // Options that can be used in the constructor, with mutate(), or directly as setters/getters
 // each of these options has an associated setter, see setter methods for more documentation
@@ -669,7 +669,7 @@ export default class RichText extends WidthSizable(Node) {
    * (0 width, correctly-positioned height). See https://github.com/phetsims/scenery/issues/769.
    */
   private appendEmptyLeaf(): void {
-    assert && assert(this.lineContainer.getChildrenCount() === 0);
+    window.assert && window.assert(this.lineContainer.getChildrenCount() === 0);
 
     this.appendLine(RichTextLeaf.pool.create('', true, this._font, this._boundsMethod, this._fill, this._stroke, this._lineWidth));
   }
@@ -817,7 +817,7 @@ export default class RichText extends WidthSizable(Node) {
         const dirAttributeString = RichTextUtils.himalayaGetAttribute('dir', element);
 
         if (dirAttributeString) {
-          assert && assert(dirAttributeString === 'ltr' || dirAttributeString === 'rtl',
+          window.assert && window.assert(dirAttributeString === 'ltr' || dirAttributeString === 'rtl',
             'Span dir attributes should be ltr or rtl.');
           isLTR = dirAttributeString === 'ltr';
         }
@@ -828,7 +828,7 @@ export default class RichText extends WidthSizable(Node) {
         const referencedId = RichTextUtils.himalayaGetAttribute('id', element);
         const referencedNode = referencedId ? (this._nodes[referencedId] || null) : null;
 
-        assert && assert(referencedNode,
+        window.assert && window.assert(referencedNode,
           referencedId
             ? `Could not find a matching item in RichText's nodes for ${referencedId}. It should be provided in the nodes option`
             : 'No id attribute provided for a given <node> element');
@@ -913,7 +913,7 @@ export default class RichText extends WidthSizable(Node) {
         }
 
         // Ignore things if there is no matching href
-        assert && assert(href,
+        window.assert && window.assert(href,
           `Could not find a matching item in RichText's links for ${originalHref}. It should be provided in the links option, or links should be turned to true (to allow the string to create its own urls`);
         if (href) {
           if (this._linkFill !== null) {
@@ -1041,7 +1041,7 @@ export default class RichText extends WidthSizable(Node) {
    * @param string - The string to display. If it's a number, it will be cast to a string
    */
   public setString(string: string | number): this {
-    assert && assert(string !== null && string !== undefined, 'String should be defined and non-null. Use the empty string if needed.');
+    window.assert && window.assert(string !== null && string !== undefined, 'String should be defined and non-null. Use the empty string if needed.');
 
     // cast it to a string (for numbers, etc., and do it before the change guard so we don't accidentally trigger on non-changed string)
     string = `${string}`;
@@ -1066,7 +1066,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the method that is used to determine bounds from the text. See Text.setBoundsMethod for details
    */
   public setBoundsMethod(method: TextBoundsMethod): this {
-    assert && assert(method === 'fast' || method === 'fastCanvas' || method === 'accurate' || method === 'hybrid', 'Unknown Text boundsMethod');
+    window.assert && window.assert(method === 'fast' || method === 'fastCanvas' || method === 'accurate' || method === 'hybrid', 'Unknown Text boundsMethod');
     if (method !== this._boundsMethod) {
       this._boundsMethod = method;
       this.rebuildRichText();
@@ -1178,7 +1178,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the scale (relative to 1) of any string under subscript (<sub>) elements.
    */
   public setSubScale(subScale: number): this {
-    assert && assert(isFinite(subScale) && subScale > 0);
+    window.assert && window.assert(isFinite(subScale) && subScale > 0);
 
     if (this._subScale !== subScale) {
       this._subScale = subScale;
@@ -1202,7 +1202,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the horizontal spacing before any subscript (<sub>) elements.
    */
   public setSubXSpacing(subXSpacing: number): this {
-    assert && assert(isFinite(subXSpacing));
+    window.assert && window.assert(isFinite(subXSpacing));
 
     if (this._subXSpacing !== subXSpacing) {
       this._subXSpacing = subXSpacing;
@@ -1226,7 +1226,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the adjustment offset to the vertical placement of any subscript (<sub>) elements.
    */
   public setSubYOffset(subYOffset: number): this {
-    assert && assert(isFinite(subYOffset));
+    window.assert && window.assert(isFinite(subYOffset));
 
     if (this._subYOffset !== subYOffset) {
       this._subYOffset = subYOffset;
@@ -1250,7 +1250,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the scale (relative to 1) of any string under superscript (<sup>) elements.
    */
   public setSupScale(supScale: number): this {
-    assert && assert(isFinite(supScale) && supScale > 0);
+    window.assert && window.assert(isFinite(supScale) && supScale > 0);
 
     if (this._supScale !== supScale) {
       this._supScale = supScale;
@@ -1274,7 +1274,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the horizontal spacing before any superscript (<sup>) elements.
    */
   public setSupXSpacing(supXSpacing: number): this {
-    assert && assert(isFinite(supXSpacing));
+    window.assert && window.assert(isFinite(supXSpacing));
 
     if (this._supXSpacing !== supXSpacing) {
       this._supXSpacing = supXSpacing;
@@ -1298,7 +1298,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the adjustment offset to the vertical placement of any superscript (<sup>) elements.
    */
   public setSupYOffset(supYOffset: number): this {
-    assert && assert(isFinite(supYOffset));
+    window.assert && window.assert(isFinite(supYOffset));
 
     if (this._supYOffset !== supYOffset) {
       this._supYOffset = supYOffset;
@@ -1323,7 +1323,7 @@ export default class RichText extends WidthSizable(Node) {
    * baseline to the top of the text bounds.
    */
   public setCapHeightScale(capHeightScale: number): this {
-    assert && assert(isFinite(capHeightScale) && capHeightScale > 0);
+    window.assert && window.assert(isFinite(capHeightScale) && capHeightScale > 0);
 
     if (this._capHeightScale !== capHeightScale) {
       this._capHeightScale = capHeightScale;
@@ -1348,7 +1348,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the lineWidth of underline lines.
    */
   public setUnderlineLineWidth(underlineLineWidth: number): this {
-    assert && assert(isFinite(underlineLineWidth) && underlineLineWidth > 0);
+    window.assert && window.assert(isFinite(underlineLineWidth) && underlineLineWidth > 0);
 
     if (this._underlineLineWidth !== underlineLineWidth) {
       this._underlineLineWidth = underlineLineWidth;
@@ -1373,7 +1373,7 @@ export default class RichText extends WidthSizable(Node) {
    * text bounds.
    */
   public setUnderlineHeightScale(underlineHeightScale: number): this {
-    assert && assert(isFinite(underlineHeightScale) && underlineHeightScale > 0);
+    window.assert && window.assert(isFinite(underlineHeightScale) && underlineHeightScale > 0);
 
     if (this._underlineHeightScale !== underlineHeightScale) {
       this._underlineHeightScale = underlineHeightScale;
@@ -1398,7 +1398,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the lineWidth of strikethrough lines.
    */
   public setStrikethroughLineWidth(strikethroughLineWidth: number): this {
-    assert && assert(isFinite(strikethroughLineWidth) && strikethroughLineWidth > 0);
+    window.assert && window.assert(isFinite(strikethroughLineWidth) && strikethroughLineWidth > 0);
 
     if (this._strikethroughLineWidth !== strikethroughLineWidth) {
       this._strikethroughLineWidth = strikethroughLineWidth;
@@ -1423,7 +1423,7 @@ export default class RichText extends WidthSizable(Node) {
    * text bounds.
    */
   public setStrikethroughHeightScale(strikethroughHeightScale: number): this {
-    assert && assert(isFinite(strikethroughHeightScale) && strikethroughHeightScale > 0);
+    window.assert && window.assert(isFinite(strikethroughHeightScale) && strikethroughHeightScale > 0);
 
     if (this._strikethroughHeightScale !== strikethroughHeightScale) {
       this._strikethroughHeightScale = strikethroughHeightScale;
@@ -1489,7 +1489,7 @@ export default class RichText extends WidthSizable(Node) {
   }
 
   public setLinks(links: RichTextLinks): this {
-    assert && assert(links === true || Object.getPrototypeOf(links) === Object.prototype);
+    window.assert && window.assert(links === true || Object.getPrototypeOf(links) === Object.prototype);
 
     if (this._links !== links) {
       this._links = links;
@@ -1510,7 +1510,7 @@ export default class RichText extends WidthSizable(Node) {
   public get links(): RichTextLinks { return this.getLinks(); }
 
   public setNodes(nodes: Record<string, Node>): this {
-    assert && assert(Object.getPrototypeOf(nodes) === Object.prototype);
+    window.assert && window.assert(Object.getPrototypeOf(nodes) === Object.prototype);
 
     if (this._nodes !== nodes) {
       this._nodes = nodes;
@@ -1551,7 +1551,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the alignment of text (only relevant if there are multiple lines).
    */
   public setAlign(align: RichTextAlign): this {
-    assert && assert(align === 'left' || align === 'center' || align === 'right');
+    window.assert && window.assert(align === 'left' || align === 'center' || align === 'right');
 
     if (this._align !== align) {
       this._align = align;
@@ -1575,7 +1575,7 @@ export default class RichText extends WidthSizable(Node) {
    * Sets the leading (spacing between lines)
    */
   public setLeading(leading: number): this {
-    assert && assert(isFinite(leading));
+    window.assert && window.assert(isFinite(leading));
 
     if (this._leading !== leading) {
       this._leading = leading;
@@ -1602,7 +1602,7 @@ export default class RichText extends WidthSizable(Node) {
    * @param lineWrap - If it's a number, it should be greater than 0.
    */
   public setLineWrap(lineWrap: RequiredOption<SelfOptions, 'lineWrap'>): this {
-    assert && assert(lineWrap === null || lineWrap === 'stretch' || (isFinite(lineWrap) && lineWrap > 0));
+    window.assert && window.assert(lineWrap === null || lineWrap === 'stretch' || (isFinite(lineWrap) && lineWrap > 0));
 
     if (this._lineWrap !== lineWrap) {
       this._lineWrap = lineWrap;
@@ -1625,7 +1625,7 @@ export default class RichText extends WidthSizable(Node) {
   public override mutate(options?: RichTextOptions): this {
 
     if (assert && options && options.hasOwnProperty('string') && options.hasOwnProperty(Text.STRING_PROPERTY_NAME) && options.stringProperty) {
-      assert && assert(options.stringProperty.value === options.string, 'If both string and stringProperty are provided, then values should match');
+      window.assert && window.assert(options.stringProperty.value === options.string, 'If both string and stringProperty are provided, then values should match');
     }
 
     return super.mutate(options);

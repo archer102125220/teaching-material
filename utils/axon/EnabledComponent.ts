@@ -75,7 +75,7 @@ export default class EnabledComponent extends Disposable {
   }
 
   private setEnabled(enabled: boolean): void {
-    assert && assert(this.enabledProperty.isSettable(), 'cannot set enabledProperty');
+    window.assert && window.assert(this.enabledProperty.isSettable(), 'cannot set enabledProperty');
     this.enabledProperty.value = enabled;
   }
 

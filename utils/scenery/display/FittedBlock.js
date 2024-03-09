@@ -29,7 +29,7 @@ class FittedBlock extends Block {
     // @private {Instance}
     this.transformRootInstance = transformRootInstance;
 
-    assert && assert(typeof transformRootInstance.isDisplayRoot === 'boolean');
+    window.assert && window.assert(typeof transformRootInstance.isDisplayRoot === 'boolean');
 
     // @private {boolean}
     this.canBeFullDisplay = transformRootInstance.isDisplayRoot;
@@ -227,7 +227,7 @@ class FittedBlock extends Block {
    * @param {Instance|null} instance
    */
   addCommonFitInstance(instance) {
-    assert && assert(this.commonFitInstance === null);
+    window.assert && window.assert(this.commonFitInstance === null);
 
     if (instance) {
       this.commonFitInstance = instance;

@@ -65,7 +65,7 @@ class Enumeration<T extends EnumerationValue> implements TEnumeration<T> {
     // values appear after previously existing enumeration values
     const types = _.reverse(inheritance(Enumeration));
 
-    assert && assert(types.includes(instanceType), 'the specified type should be in its own hierarchy');
+    window.assert && window.assert(types.includes(instanceType), 'the specified type should be in its own hierarchy');
 
     this.keys = [];
     this.values = [];
@@ -73,7 +73,7 @@ class Enumeration<T extends EnumerationValue> implements TEnumeration<T> {
       Object.keys(type).forEach(key => {
         const value = type[key];
         if (value instanceof instanceType) {
-          assert && assert(key === key.toUpperCase(), 'keys should be upper case by convention');
+          window.assert && window.assert(key === key.toUpperCase(), 'keys should be upper case by convention');
           this.keys.push(key);
           this.values.push(value);
 
@@ -87,8 +87,8 @@ class Enumeration<T extends EnumerationValue> implements TEnumeration<T> {
       });
     });
 
-    assert && assert(this.keys.length > 0, 'no keys found');
-    assert && assert(this.values.length > 0, 'no values found');
+    window.assert && window.assert(this.keys.length > 0, 'no keys found');
+    window.assert && window.assert(this.values.length > 0, 'no values found');
 
     this.Enumeration = Enumeration as Constructor<T> & Record<string, T>;
     EnumerationValue.sealedCache.add(Enumeration);

@@ -82,7 +82,7 @@ export default class Panel extends Sizable(Node) {
 
     const options = optionize3<PanelOptions, SelfOptions, SuperOptions>()({}, DEFAULT_OPTIONS, providedOptions);
 
-    assert && assert(_.includes(ALIGN_VALUES, options.align), `invalid align: ${options.align}`);
+    window.assert && window.assert(_.includes(ALIGN_VALUES, options.align), `invalid align: ${options.align}`);
 
     super();
 
@@ -174,11 +174,11 @@ class PanelConstraint extends LayoutConstraint {
 
     this.panel = panel;
 
-    assert && assert(typeof options.minWidth === 'number', 'Panel minWidth should be a number');
-    assert && assert(typeof options.xMargin === 'number', 'Panel xMargin should be a number');
-    assert && assert(typeof options.yMargin === 'number', 'Panel yMargin should be a number');
-    assert && assert(typeof options.lineWidth === 'number', 'Panel lineWidth should be a number');
-    assert && assert(ALIGN_VALUES.includes(options.align), `Panel align should be one of ${ALIGN_VALUES}`);
+    window.assert && window.assert(typeof options.minWidth === 'number', 'Panel minWidth should be a number');
+    window.assert && window.assert(typeof options.xMargin === 'number', 'Panel xMargin should be a number');
+    window.assert && window.assert(typeof options.yMargin === 'number', 'Panel yMargin should be a number');
+    window.assert && window.assert(typeof options.lineWidth === 'number', 'Panel lineWidth should be a number');
+    window.assert && window.assert(ALIGN_VALUES.includes(options.align), `Panel align should be one of ${ALIGN_VALUES}`);
 
     this.minWidth = options.minWidth;
     this.minHeight = options.minHeight;

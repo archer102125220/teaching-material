@@ -95,7 +95,7 @@ export default class Picker {
    * @param useTouch - Whether touch-specific customizations (and acceleration) applies
    */
   public hitTest(point: Vector2, useMouse: boolean, useTouch: boolean): Trail | null {
-    assert && assert(point, 'trailUnderPointer requires a point');
+    window.assert && window.assert(point, 'trailUnderPointer requires a point');
 
     sceneryLog && sceneryLog.hitTest && sceneryLog.hitTest(`-------------- ${this.node.constructor.name}#${this.node.id}`);
 
@@ -148,15 +148,15 @@ export default class Picker {
     let pruningBounds;
     if (useMouse) {
       pruningBounds = isInclusive ? this.mouseInclusiveBounds : this.mouseExclusiveBounds;
-      assert && assert(isInclusive ? !this.mouseInclusiveDirty : !this.mouseExclusiveDirty);
+      window.assert && window.assert(isInclusive ? !this.mouseInclusiveDirty : !this.mouseExclusiveDirty);
     }
     else if (useTouch) {
       pruningBounds = isInclusive ? this.touchInclusiveBounds : this.touchExclusiveBounds;
-      assert && assert(isInclusive ? !this.touchInclusiveDirty : !this.touchExclusiveDirty);
+      window.assert && window.assert(isInclusive ? !this.touchInclusiveDirty : !this.touchExclusiveDirty);
     }
     else {
       pruningBounds = this.node.bounds;
-      assert && assert(!this.node._boundsDirty);
+      window.assert && window.assert(!this.node._boundsDirty);
     }
 
     // Bail quickly if our point is not inside the bounds for the subtree.
@@ -659,7 +659,7 @@ export default class Picker {
     // Our subtreePrunable value depends on our pickable count, make sure it gets updated.
     this.checkSubtreePrunable();
 
-    assert && assert(this.subtreePickableCount >= 0, 'subtree pickable count should be guaranteed to be >= 0');
+    window.assert && window.assert(this.subtreePickableCount >= 0, 'subtree pickable count should be guaranteed to be >= 0');
 
     if (!this.selfPruned && wasZero !== isZero) {
       // Update our parents if our count changed (AND if it matters, i.e. we aren't selfPruned).

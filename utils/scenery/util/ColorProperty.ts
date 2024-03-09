@@ -16,8 +16,8 @@ export default class ColorProperty extends Property<Color> {
 
     // client cannot specify superclass options that are controlled by this type
     if (providedOptions) {
-      assert && assert(!providedOptions.hasOwnProperty('valueType'), 'ColorProperty sets valueType');
-      assert && assert(!providedOptions.hasOwnProperty('phetioType'), 'ColorProperty sets phetioType');
+      window.assert && window.assert(!providedOptions.hasOwnProperty('valueType'), 'ColorProperty sets valueType');
+      window.assert && window.assert(!providedOptions.hasOwnProperty('phetioType'), 'ColorProperty sets phetioType');
     }
 
     const options = optionize<PropertyOptions<Color>, EmptySelfOptions, PropertyOptions<Color>>()({

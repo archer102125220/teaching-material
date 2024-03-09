@@ -263,20 +263,20 @@ export default class PressListener extends EnabledComponent implements TInputLis
       phetioFeatured: PhetioObject.DEFAULT_OPTIONS.phetioFeatured
     }, providedOptions);
 
-    assert && assert(typeof options.mouseButton === 'number' && options.mouseButton >= 0 && options.mouseButton % 1 === 0,
+    window.assert && window.assert(typeof options.mouseButton === 'number' && options.mouseButton >= 0 && options.mouseButton % 1 === 0,
       'mouseButton should be a non-negative integer');
-    assert && assert(options.pressCursor === null || typeof options.pressCursor === 'string',
+    window.assert && window.assert(options.pressCursor === null || typeof options.pressCursor === 'string',
       'pressCursor should either be a string or null');
-    assert && assert(typeof options.press === 'function',
+    window.assert && window.assert(typeof options.press === 'function',
       'The press callback should be a function');
-    assert && assert(typeof options.release === 'function',
+    window.assert && window.assert(typeof options.release === 'function',
       'The release callback should be a function');
-    assert && assert(typeof options.drag === 'function',
+    window.assert && window.assert(typeof options.drag === 'function',
       'The drag callback should be a function');
-    assert && assert(options.targetNode === null || options.targetNode instanceof Node,
+    window.assert && window.assert(options.targetNode === null || options.targetNode instanceof Node,
       'If provided, targetNode should be a Node');
-    assert && assert(typeof options.attach === 'boolean', 'attach should be a boolean');
-    assert && assert(typeof options.a11yLooksPressedInterval === 'number',
+    window.assert && window.assert(typeof options.attach === 'boolean', 'attach should be a boolean');
+    window.assert && window.assert(typeof options.a11yLooksPressedInterval === 'number',
       'a11yLooksPressedInterval should be a number');
 
     super(options);
@@ -418,7 +418,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * The main node that this listener is responsible for dragging.
    */
   public getCurrentTarget(): Node {
-    assert && assert(this.isPressed, 'We have no currentTarget if we are not pressed');
+    window.assert && window.assert(this.isPressed, 'We have no currentTarget if we are not pressed');
 
     return (this as PressedPressListener).pressedTrail.lastNode();
   }
@@ -468,7 +468,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * @returns success - Returns whether the press was actually started
    */
   public press(event: PressListenerEvent, targetNode?: Node, callback?: () => void): boolean {
-    assert && assert(event, 'An event is required');
+    window.assert && window.assert(event, 'An event is required');
 
     sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} press`);
 
@@ -523,7 +523,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
     sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} drag`);
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-    assert && assert(this.isPressed, 'Can only drag while pressed');
+    window.assert && window.assert(this.isPressed, 'Can only drag while pressed');
 
     this._dragListener(event, this);
 
@@ -626,7 +626,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * setCreatePanTargetBounds() for more documentation.
    */
   public setCreatePanTargetBoundsFromTrail(trail: Trail): void {
-    assert && assert(trail.length > 0, 'trail has no Nodes to provide localBounds');
+    window.assert && window.assert(trail.length > 0, 'trail has no Nodes to provide localBounds');
     this.setCreatePanTargetBounds(() => trail.localToGlobalBounds(trail.lastNode().localBounds));
   }
 
@@ -708,7 +708,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * @param [callback] - to be run at the end of the function, but only on success
    */
   private onPress(event: PressListenerEvent, targetNode: Node | null, callback: (() => void) | null): void {
-    assert && assert(!this.isDisposed, 'Should not press on a disposed listener');
+    window.assert && window.assert(!this.isDisposed, 'Should not press on a disposed listener');
 
     const givenTargetNode = targetNode || this._targetNode;
 
@@ -738,7 +738,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * @param [callback] - called at the end of the release
    */
   private onRelease(event: PressListenerEvent | null, callback: (() => void) | null): void {
-    assert && assert(this.isPressed, 'This listener is not pressed');
+    window.assert && window.assert(this.isPressed, 'This listener is not pressed');
     const pressedListener = this as PressedPressListener;
 
     pressedListener.pointer.removeInputListener(this._pointerListener);
@@ -848,7 +848,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
     // still pressed by the time we get here. If not pressed, then there is nothing to do.
     // See https://github.com/phetsims/capacitor-lab-basics/issues/251
     if (this.isPressed) {
-      assert && assert(event.pointer === this.pointer);
+      window.assert && window.assert(event.pointer === this.pointer);
 
       this.release(event);
     }
@@ -869,7 +869,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
     // still pressed by the time we get here. If not pressed, then there is nothing to do.
     // See https://github.com/phetsims/capacitor-lab-basics/issues/251
     if (this.isPressed) {
-      assert && assert(event.pointer === this.pointer);
+      window.assert && window.assert(event.pointer === this.pointer);
 
       this.interrupt(); // will mark as interrupted and release()
     }
@@ -890,7 +890,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
     // still pressed by the time we get here. If not pressed, then there is nothing to do.
     // See https://github.com/phetsims/capacitor-lab-basics/issues/251
     if (this.isPressed) {
-      assert && assert(event.pointer === this.pointer);
+      window.assert && window.assert(event.pointer === this.pointer);
 
       if (this._collapseDragEvents) {
         this._pendingCollapsedDragEvent = event;
@@ -983,7 +983,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
 
     // Get the Display related to this accessible event.
     const accessibleDisplays = event.trail.rootNode().getRootedDisplays().filter(display => display.isAccessible());
-    assert && assert(accessibleDisplays.length === 1,
+    window.assert && window.assert(accessibleDisplays.length === 1,
       'cannot focus node with zero or multiple accessible displays attached');
     //
     this.display = accessibleDisplays[0];

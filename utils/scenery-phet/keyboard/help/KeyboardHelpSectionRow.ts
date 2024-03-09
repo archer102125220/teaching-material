@@ -158,7 +158,7 @@ class KeyboardHelpSectionRow {
    */
   public static createKeysRow(keyIcons: Node[], labelString: string | TReadOnlyProperty<string>,
     providedOptions?: LabelWithIconOptions): KeyboardHelpSectionRow {
-    assert && assert(keyIcons.length > 0, 'expected keys');
+    window.assert && window.assert(keyIcons.length > 0, 'expected keys');
     let keysNode: Node | null = null;
     for (let i = 0; i < keyIcons.length; i++) {
       const keyNode = keyIcons[i];
@@ -168,7 +168,7 @@ class KeyboardHelpSectionRow {
       keysNode = keysNode ? KeyboardHelpIconFactory.iconPlusIcon(keysNode, keyNode) : keyNode;
     }
 
-    assert && assert(keysNode, 'keysNode must be defined since there were more than zero keyIcons.');
+    window.assert && window.assert(keysNode, 'keysNode must be defined since there were more than zero keyIcons.');
     return KeyboardHelpSectionRow.labelWithIcon(labelString, keysNode!, providedOptions);
   }
 

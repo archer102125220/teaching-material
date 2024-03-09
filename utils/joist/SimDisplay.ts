@@ -239,7 +239,7 @@ export default class SimDisplay extends Display {
 
     // fire or synthesize keyboard input events
     if (phet.chipper.queryParameters.fuzzBoard && document.hasFocus()) {
-      assert && assert(phet.chipper.queryParameters.supportsInteractiveDescription, 'fuzzBoard can only run with interactive description enabled.');
+      window.assert && window.assert(phet.chipper.queryParameters.supportsInteractiveDescription, 'fuzzBoard can only run with interactive description enabled.');
       this.keyboardFuzzer.fuzzBoardEvents(phet.chipper.queryParameters.fuzzRate);
     }
   }

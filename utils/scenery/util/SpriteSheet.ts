@@ -75,7 +75,7 @@ export default class SpriteSheet {
 
     // TODO: potentially support larger texture sizes based on reported capabilities (could cause fewer draw calls?) https://github.com/phetsims/scenery/issues/1581
     this.bounds = new Bounds2( 0, 0, MAX_DIMENSION.width, MAX_DIMENSION.height );
-    assert && assert( this.bounds.minX === 0 && this.bounds.minY === 0, 'Assumed constraint later on for transforms' );
+    window.assert && window.assert( this.bounds.minX === 0 && this.bounds.minY === 0, 'Assumed constraint later on for transforms' );
 
     this.width = this.bounds.width;
     this.height = this.bounds.height;
@@ -109,7 +109,7 @@ export default class SpriteSheet {
    */
   private createTexture(): void {
     const gl = this.gl!;
-    assert && assert( gl );
+    window.assert && window.assert( gl );
 
     this.texture = gl.createTexture();
     gl.bindTexture( gl.TEXTURE_2D, this.texture );
@@ -138,13 +138,13 @@ export default class SpriteSheet {
    * Updates a pre-existing texture with our current Canvas.
    */
   public updateTexture(): void {
-    assert && assert( this.gl, 'SpriteSheet needs context to updateTexture()' );
+    window.assert && window.assert( this.gl, 'SpriteSheet needs context to updateTexture()' );
 
     if ( this.dirty ) {
       this.dirty = false;
 
       const gl = this.gl!;
-      assert && assert( gl );
+      window.assert && window.assert( gl );
 
       gl.bindTexture( gl.TEXTURE_2D, this.texture );
       gl.texImage2D( gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, this.canvas );
@@ -180,7 +180,7 @@ export default class SpriteSheet {
       const unusedSprite = this.unusedSprites[ i ];
       if ( unusedSprite.image === image ) {
         unusedSprite.count++;
-        assert && assert( unusedSprite.count === 1, 'Count should be exactly 1 after coming back from being unused' );
+        window.assert && window.assert( unusedSprite.count === 1, 'Count should be exactly 1 after coming back from being unused' );
         this.unusedSprites.splice( i, 1 ); // remove it from the unused array
         this.usedSprites.push( unusedSprite ); // add it to the used array
         return unusedSprite;
@@ -240,7 +240,7 @@ export default class SpriteSheet {
         break;
       }
     }
-    assert && assert( usedSprite!, 'Sprite not found for removeImage' );
+    window.assert && window.assert( usedSprite!, 'Sprite not found for removeImage' );
 
     // if we have no more references to the image/sprite
     if ( --usedSprite!.count <= 0 ) {
@@ -282,7 +282,7 @@ export default class SpriteSheet {
    * along the edges is filled with the next closest pixel in the actual image.
    */
   private copyImageWithGutter( image: HTMLCanvasElement | HTMLImageElement, width: number, height: number, binX: number, binY: number ): void {
-    assert && assert( GUTTER_SIZE === 1 );
+    window.assert && window.assert( GUTTER_SIZE === 1 );
 
     // Corners, all 1x1
     this.copyImageRegion( image, 1, 1, 0, 0, binX, binY );

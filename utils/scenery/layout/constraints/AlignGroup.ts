@@ -68,13 +68,13 @@ export default class AlignGroup extends Disposable {
    * It is also possible to create AlignBox instances independently and assign their 'group' to this AlignGroup.
    */
   public constructor(providedOptions?: AlignGroupOptions) {
-    assert && assert(providedOptions === undefined || Object.getPrototypeOf(providedOptions) === Object.prototype,
+    window.assert && window.assert(providedOptions === undefined || Object.getPrototypeOf(providedOptions) === Object.prototype,
       'Extra prototype on options object is a code smell');
 
     const options = optionize3<AlignGroupOptions, SelfOptions, DisposableOptions>()({}, DEFAULT_OPTIONS, providedOptions);
 
-    assert && assert(typeof options.matchHorizontal === 'boolean');
-    assert && assert(typeof options.matchVertical === 'boolean');
+    window.assert && window.assert(typeof options.matchHorizontal === 'boolean');
+    window.assert && window.assert(typeof options.matchVertical === 'boolean');
 
     super(options);
 

@@ -41,7 +41,7 @@ class Vertex {
    * @returns {Vertex} - This reference for chaining
    */
   initialize(point) {
-    assert && assert(point instanceof Vector2);
+    window.assert && window.assert(point instanceof Vector2);
 
     // @public {Vector2}
     this.point = point;

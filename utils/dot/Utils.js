@@ -54,7 +54,7 @@ const Utils = {
    * @returns {number}
    */
   moduloBetweenDown(value, min, max) {
-    assert && assert(max > min, 'max > min required for moduloBetween');
+    window.assert && window.assert(max > min, 'max > min required for moduloBetween');
 
     const divisor = max - min;
 
@@ -551,7 +551,7 @@ const Utils = {
    * @returns {number}
    */
   roundSymmetric(value) {
-    return (value < 0 ? -1 : 1) * Math.round(Math.abs(value)); // eslint-disable-line bad-sim-text
+    return (value < 0 ? -1 : 1) * Math.round(Math.abs(value));
   },
 
   /**
@@ -567,7 +567,7 @@ const Utils = {
    * @returns {string}
    */
   toFixed(value, decimalPlaces) {
-    assert && assert(typeof value === 'number');
+    window.assert && window.assert(typeof value === 'number');
     assert &&
       assert(
         Number.isInteger(decimalPlaces),

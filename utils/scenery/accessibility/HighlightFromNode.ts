@@ -80,7 +80,7 @@ class HighlightFromNode extends HighlightPath {
 
     // cleanup the previous listener
     if (this.observedBoundsProperty) {
-      assert && assert(this.boundsListener, 'should be a listener if there is a previous focusHighlightNode');
+      window.assert && window.assert(this.boundsListener, 'should be a listener if there is a previous focusHighlightNode');
       this.observedBoundsProperty.unlink(this.boundsListener!);
     }
 

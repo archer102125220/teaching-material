@@ -25,7 +25,7 @@ export default class TinyOverrideProperty<T> extends TinyProperty<T> {
 
     this._targetProperty = targetProperty;
 
-    assert && assert(!this.isOverridden, 'Should not be overridden on startup');
+    window.assert && window.assert(!this.isOverridden, 'Should not be overridden on startup');
 
     // We'll need to listen to our target to dispatch notifications
     this._targetListener = this.onTargetPropertyChange.bind(this);

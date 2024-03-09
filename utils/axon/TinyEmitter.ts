@@ -99,7 +99,7 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
    * Notify listeners
    */
   public emit(...args: T): void {
-    assert && assert(!this.isDisposed, 'should not be called if disposed');
+    window.assert && window.assert(!this.isDisposed, 'should not be called if disposed');
 
     // optional callback, before notifying listeners
     this.onBeforeNotify && this.onBeforeNotify.apply(null, args);
@@ -148,8 +148,8 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
    * Adds a listener which will be called during emit.
    */
   public addListener(listener: TEmitterListener<T>): void {
-    assert && assert(!this.isDisposed, 'Cannot add a listener to a disposed TinyEmitter');
-    assert && assert(!this.hasListener(listener), 'Cannot add the same listener twice');
+    window.assert && window.assert(!this.isDisposed, 'Cannot add a listener to a disposed TinyEmitter');
+    window.assert && window.assert(!this.hasListener(listener), 'Cannot add the same listener twice');
 
     // If a listener is added during an emit(), we must make a copy of the current list of listeners--the newly added
     // listener will be available for the next emit() but not the one in progress.  This is to match behavior with
@@ -220,7 +220,7 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
    * Checks whether a listener is registered with this Emitter
    */
   public hasListener(listener: TEmitterListener<T>): boolean {
-    assert && assert(arguments.length === 1, 'Emitter.hasListener should be called with 1 argument');
+    window.assert && window.assert(arguments.length === 1, 'Emitter.hasListener should be called with 1 argument');
     return this.listeners.has(listener);
   }
 
@@ -228,7 +228,7 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
    * Returns true if there are any listeners.
    */
   public hasListeners(): boolean {
-    assert && assert(arguments.length === 0, 'Emitter.hasListeners should be called without arguments');
+    window.assert && window.assert(arguments.length === 0, 'Emitter.hasListeners should be called without arguments');
     return this.listeners.size > 0;
   }
 

@@ -61,7 +61,7 @@ const RichTextUtils = {
     styleElements.forEach(styleKeyValue => {
       if (styleKeyValue.length > 0) {
         const keyValueTuple = styleKeyValue.split(':');
-        assert && assert(keyValueTuple.length === 2, 'too many colons');
+        window.assert && window.assert(keyValueTuple.length === 2, 'too many colons');
         styleMap[keyValueTuple[0].trim()] = keyValueTuple[1].trim();
       }
     });

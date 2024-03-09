@@ -23,10 +23,10 @@ class CompletePiecewiseLinearFunction {
 
   // Assumed to be sorted by x value, and continuous
   public constructor(points: Vector2[]) {
-    assert && assert(points.length > 0);
+    window.assert && window.assert(points.length > 0);
     assert && points.forEach((point, i) => {
       if (i < points.length - 1) {
-        assert && assert(point.x < points[i + 1].x,
+        window.assert && window.assert(point.x < points[i + 1].x,
           'Points should be strictly increasing in x value (ordered by their x value)');
       }
     });
@@ -55,7 +55,7 @@ class CompletePiecewiseLinearFunction {
    * list.
    */
   public findMatchingPair(x: number): [Vector2, Vector2] {
-    assert && assert(this.points.length > 1);
+    window.assert && window.assert(this.points.length > 1);
 
     let i = 0;
     while (i < this.points.length - 2 && this.points[i + 1].x < x) {

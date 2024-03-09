@@ -121,7 +121,7 @@ export default class CallbackTimer {
   }
 
   public set delay(delay: number) {
-    assert && assert(delay >= 0, `bad value for delay: ${delay}`);
+    window.assert && window.assert(delay >= 0, `bad value for delay: ${delay}`);
 
     this._delay = delay;
   }
@@ -131,7 +131,7 @@ export default class CallbackTimer {
   }
 
   public set interval(interval: number) {
-    assert && assert(interval > 0, `bad value for interval: ${interval}`);
+    window.assert && window.assert(interval > 0, `bad value for interval: ${interval}`);
 
     this._interval = interval;
   }

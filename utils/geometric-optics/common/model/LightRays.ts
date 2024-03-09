@@ -131,7 +131,7 @@ function getRayDirections(raysType: RaysType, opticalObjectPosition: Vector2, op
   // vector from object to optic
   const objectOpticVector = optic.positionProperty.value.minus(opticalObjectPosition);
 
-  assert && assert(objectOpticVector.magnitude !== 0,
+  window.assert && window.assert(objectOpticVector.magnitude !== 0,
     `unexpected zero-magnitude vector: objectOpticVector=${objectOpticVector}, ` +
     `optic.position=${optic.positionProperty.value}, opticalObjectPosition=${opticalObjectPosition}`);
 

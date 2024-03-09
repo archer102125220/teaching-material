@@ -60,7 +60,7 @@ class ResponseCollector extends PhetioObject {
     // see ResponsePacket for supported options
     const options = optionize3<SpeakableNullableResolvedOptions>()({}, ResponsePacket.DEFAULT_OPTIONS, providedOptions);
 
-    assert && assert(options.responsePatternCollection instanceof ResponsePatternCollection);
+    window.assert && window.assert(options.responsePatternCollection instanceof ResponsePatternCollection);
 
     const usesNames = !!(options.nameResponse && (this.nameResponsesEnabledProperty.get() || options.ignoreProperties));
     const usesObjectChanges = !!(options.objectResponse && (this.objectResponsesEnabledProperty.get() || options.ignoreProperties));

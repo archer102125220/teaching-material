@@ -149,9 +149,9 @@ class AnimatedPanZoomListener extends PanZoomListener {
     let boundGestureChangeListener: null | ((event: GestureEvent) => void) = null;
 
     this.gestureStartAction = new PhetioAction(domEvent => {
-      assert && assert(domEvent.pageX, 'pageX required on DOMEvent');
-      assert && assert(domEvent.pageY, 'pageY required on DOMEvent');
-      assert && assert(domEvent.scale, 'scale required on DOMEvent');
+      window.assert && window.assert(domEvent.pageX, 'pageX required on DOMEvent');
+      window.assert && window.assert(domEvent.pageY, 'pageY required on DOMEvent');
+      window.assert && window.assert(domEvent.scale, 'scale required on DOMEvent');
 
       // prevent Safari from doing anything native with this gesture
       domEvent.preventDefault();
@@ -168,7 +168,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
 
 
     this.gestureChangeAction = new PhetioAction(domEvent => {
-      assert && assert(domEvent.scale, 'scale required on DOMEvent');
+      window.assert && window.assert(domEvent.scale, 'scale required on DOMEvent');
 
       // prevent Safari from changing position or scale natively
       domEvent.preventDefault();
@@ -263,7 +263,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
           // Filter out any pointers that no longer have an attached listener due to interruption from things like opening
           // the context menu with a right click.
           this._attachedPointers = this._attachedPointers.filter(pointer => pointer.attachedListener);
-          assert && assert(this._attachedPointers.length <= 10, 'Not clearing attachedPointers, there is probably a memory leak');
+          window.assert && window.assert(this._attachedPointers.length <= 10, 'Not clearing attachedPointers, there is probably a memory leak');
         }
 
         // Only reposition if one of the attached pointers is down and dragging within the drag bounds area, or if one
@@ -383,7 +383,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
 
       // Only use the first one so that unique dragging behaviors don't "fight" if multiple pointers are down.
       const activeListener = this._attachedPointers[0].attachedListener!;
-      assert && assert(activeListener, 'The attached Pointer is expected to have an attached listener.');
+      window.assert && window.assert(activeListener, 'The attached Pointer is expected to have an attached listener.');
 
       if (activeListener.listener instanceof PressListener ||
         activeListener.listener instanceof KeyboardDragListener) {
@@ -417,7 +417,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
 
       // Only use the first one so that unique dragging behaviors don't "fight" if multiple pointers are down.
       const activeListener = this._attachedPointers[0].attachedListener!;
-      assert && assert(activeListener, 'The attached Pointer is expected to have an attached listener.');
+      window.assert && window.assert(activeListener, 'The attached Pointer is expected to have an attached listener.');
 
       if (activeListener.createPanTargetBounds) {
 
@@ -444,7 +444,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
           // https://github.com/phetsims/scenery/issues/1356#issuecomment-1039678678
           if (target.instances.length === 1) {
             const trail = target.instances[0].trail!;
-            assert && assert(trail, 'The target should be in one scene graph and have an instance with a trail.');
+            window.assert && window.assert(trail, 'The target should be in one scene graph and have an instance with a trail.');
             globalBoundsToView = trail.parentToGlobalBounds(target.visibleBounds);
           }
         }
@@ -549,7 +549,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
    */
   public keydown(event: SceneryEvent): void {
     const domEvent = event.domEvent!;
-    assert && assert(domEvent instanceof KeyboardEvent, 'keydown event must be a KeyboardEvent'); // eslint-disable-line no-simple-type-checking-assertions
+    window.assert && window.assert(domEvent instanceof KeyboardEvent, 'keydown event must be a KeyboardEvent'); // eslint-disable-line no-simple-type-checking-assertions
 
     // on any keyboard reposition interrupt the middle press panning
     this.cancelMiddlePress();
@@ -588,7 +588,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
     }
     if (previousFocus && previousFocus.trail.lastNode() && previousFocus.trail.lastNode().focusPanTargetBoundsProperty) {
       const previousBoundsProperty = previousFocus.trail.lastNode().focusPanTargetBoundsProperty!;
-      assert && assert(this._focusBoundsListener && previousBoundsProperty.hasListener(this._focusBoundsListener),
+      window.assert && window.assert(this._focusBoundsListener && previousBoundsProperty.hasListener(this._focusBoundsListener),
         'Focus bounds listener should be linked to the previous Node'
       );
       previousBoundsProperty.unlink(this._focusBoundsListener!);
@@ -699,10 +699,10 @@ class AnimatedPanZoomListener extends PanZoomListener {
    */
   private handleMiddlePress(dt: number): void {
     const middlePress = this.middlePress!;
-    assert && assert(middlePress, 'MiddlePress must be defined to handle');
+    window.assert && window.assert(middlePress, 'MiddlePress must be defined to handle');
 
     const sourcePosition = this.sourcePosition!;
-    assert && assert(sourcePosition, 'sourcePosition must be defined to handle middle press, be sure to call initializePositions');
+    window.assert && window.assert(sourcePosition, 'sourcePosition must be defined to handle middle press, be sure to call initializePositions');
 
     if (dt > 0) {
       const currentPoint = middlePress.pointer.point;
@@ -805,7 +805,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
     const sourcePosition = this.sourcePosition!;
-    assert && assert(sourcePosition, 'sourcePosition must be defined to handle key press, be sure to call initializePositions');
+    window.assert && window.assert(sourcePosition, 'sourcePosition must be defined to handle key press, be sure to call initializePositions');
 
     const newScale = keyPress.scale;
     const currentScale = this.getCurrentScale();
@@ -836,10 +836,10 @@ class AnimatedPanZoomListener extends PanZoomListener {
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
     const domEvent = event.domEvent!;
-    assert && assert(domEvent instanceof WheelEvent, 'wheel event must be a WheelEvent'); // eslint-disable-line no-simple-type-checking-assertions
+    window.assert && window.assert(domEvent instanceof WheelEvent, 'wheel event must be a WheelEvent'); // eslint-disable-line no-simple-type-checking-assertions
 
     const sourcePosition = this.sourcePosition!;
-    assert && assert(sourcePosition, 'sourcePosition must be defined to handle wheel, be sure to call initializePositions');
+    window.assert && window.assert(sourcePosition, 'sourcePosition must be defined to handle wheel, be sure to call initializePositions');
 
     // prevent any native browser zoom and don't allow browser to go 'back' or 'forward' a page with certain gestures
     domEvent.preventDefault();
@@ -941,7 +941,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
    * @param panDirection - if provided, we will only pan in the direction specified, null for all directions
    */
   public panToNode(node: Node, panToCenter: boolean, panDirection?: LimitPanDirection | null): void {
-    assert && assert(this._panBounds.isFinite(), 'panBounds should be defined when panning.');
+    window.assert && window.assert(this._panBounds.isFinite(), 'panBounds should be defined when panning.');
     this.keepBoundsInView(node.globalBounds, panToCenter, panDirection);
   }
 
@@ -959,9 +959,9 @@ class AnimatedPanZoomListener extends PanZoomListener {
    * @param panDirection - if provided, we will only pan in the direction specified, null for all directions
    */
   private keepBoundsInView(globalBounds: Bounds2, panToCenter: boolean, panDirection?: LimitPanDirection | null): void {
-    assert && assert(this._panBounds.isFinite(), 'panBounds should be defined when panning.');
+    window.assert && window.assert(this._panBounds.isFinite(), 'panBounds should be defined when panning.');
     const sourcePosition = this.sourcePosition!;
-    assert && assert(sourcePosition, 'sourcePosition must be defined to handle keepBoundsInView, be sure to call initializePositions');
+    window.assert && window.assert(sourcePosition, 'sourcePosition must be defined to handle keepBoundsInView, be sure to call initializePositions');
 
     const boundsInTargetFrame = this._targetNode.globalToLocalBounds(globalBounds);
     const translationDelta = new Vector2(0, 0);
@@ -1043,15 +1043,15 @@ class AnimatedPanZoomListener extends PanZoomListener {
    * @param dt - in seconds
    */
   private animateToTargets(dt: number): void {
-    assert && assert(this.boundsFinite, 'initializePositions must be called at least once before animating');
+    window.assert && window.assert(this.boundsFinite, 'initializePositions must be called at least once before animating');
 
     const sourcePosition = this.sourcePosition!;
-    assert && assert(sourcePosition, 'sourcePosition must be defined to animate, be sure to all initializePositions');
-    assert && assert(sourcePosition.isFinite(), 'How can the source position not be a finite Vector2?');
+    window.assert && window.assert(sourcePosition, 'sourcePosition must be defined to animate, be sure to all initializePositions');
+    window.assert && window.assert(sourcePosition.isFinite(), 'How can the source position not be a finite Vector2?');
 
     const destinationPosition = this.destinationPosition!;
-    assert && assert(destinationPosition, 'destinationPosition must be defined to animate, be sure to all initializePositions');
-    assert && assert(destinationPosition.isFinite(), 'How can the destination position not be a finite Vector2?');
+    window.assert && window.assert(destinationPosition, 'destinationPosition must be defined to animate, be sure to all initializePositions');
+    window.assert && window.assert(destinationPosition.isFinite(), 'How can the destination position not be a finite Vector2?');
 
     // only animate to targets if within this precision so that we don't animate forever, since animation speed
     // is dependent on the difference betwen source and destination positions
@@ -1084,12 +1084,12 @@ class AnimatedPanZoomListener extends PanZoomListener {
           translationDelta.set(translationDifference);
         }
 
-        assert && assert(translationDelta.isFinite(), 'Trying to translate with a non-finite Vector2');
+        window.assert && window.assert(translationDelta.isFinite(), 'Trying to translate with a non-finite Vector2');
         this.translateDelta(translationDelta);
       }
 
       if (scaleDirty) {
-        assert && assert(this.scaleGestureTargetPosition, 'there must be a scale target point');
+        window.assert && window.assert(this.scaleGestureTargetPosition, 'there must be a scale target point');
 
         const scaleDifference = this.destinationScale - this.sourceScale;
         let scaleDelta = scaleDifference * dt * 6;
@@ -1104,7 +1104,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
         this.setDestinationPosition(sourcePosition);
       }
       else if (this.destinationScale !== this.sourceScale) {
-        assert && assert(this.scaleGestureTargetPosition, 'there must be a scale target point');
+        window.assert && window.assert(this.scaleGestureTargetPosition, 'there must be a scale target point');
 
         // not far enough to animate but close enough that we can set destination equal to source to avoid further
         // animation steps
@@ -1152,7 +1152,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
 
     // drag bounds eroded a bit so that repositioning during drag occurs as the pointer gets close to the edge.
     this._dragBounds = bounds.erodedXY(bounds.width * 0.1, bounds.height * 0.1);
-    assert && assert(this._dragBounds.hasNonzeroArea(), 'drag bounds must have some width and height');
+    window.assert && window.assert(this._dragBounds.hasNonzeroArea(), 'drag bounds must have some width and height');
   }
 
   /**
@@ -1168,11 +1168,11 @@ class AnimatedPanZoomListener extends PanZoomListener {
    * this point. Destination is in the local coordinate frame of the target node.
    */
   private setDestinationPosition(destination: Vector2): void {
-    assert && assert(this.boundsFinite, 'bounds must be finite before setting destination positions');
-    assert && assert(destination.isFinite(), 'provided destination position is not defined');
+    window.assert && window.assert(this.boundsFinite, 'bounds must be finite before setting destination positions');
+    window.assert && window.assert(destination.isFinite(), 'provided destination position is not defined');
 
     const sourcePosition = this.sourcePosition!;
-    assert && assert(sourcePosition, 'sourcePosition must be defined to set destination position, be sure to call initializePositions');
+    window.assert && window.assert(sourcePosition, 'sourcePosition must be defined to set destination position, be sure to call initializePositions');
 
     // limit destination position to be within the available bounds pan bounds
     scratchBounds.setMinMax(
@@ -1199,7 +1199,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
    * a speed in the coordinate frame of the parent of this listener's target Node.
    */
   private getTranslationSpeed(translationDistance: number): number {
-    assert && assert(translationDistance >= 0, 'distance for getTranslationSpeed should be a non-negative number');
+    window.assert && window.assert(translationDistance >= 0, 'distance for getTranslationSpeed should be a non-negative number');
 
     // The larger the scale, that faster we want to translate because the distances between source and destination
     // are smaller when zoomed in. Otherwise, speeds will be slower while zoomed in.
@@ -1253,7 +1253,7 @@ class AnimatedPanZoomListener extends PanZoomListener {
     }
 
     nearestIndex = nearestIndex!;
-    assert && assert(nearestIndex !== null, 'nearestIndex should have been found');
+    window.assert && window.assert(nearestIndex !== null, 'nearestIndex should have been found');
     let nextIndex = zoomIn ? nearestIndex + 1 : nearestIndex - 1;
     nextIndex = Utils.clamp(nextIndex, 0, this.discreteScales.length - 1);
     return this.discreteScales[nextIndex];
@@ -1346,7 +1346,7 @@ class KeyPress {
 
         // if not the body, focused node should be contained by the body - error loudly if the browser reports
         // that this is not the case
-        assert && assert(document.body.contains(firstFocusable), 'focusable should be attached to the body');
+        window.assert && window.assert(document.body.contains(firstFocusable), 'focusable should be attached to the body');
 
         // assumes that focusable DOM elements are correctly positioned, which should be the case - an alternative
         // could be to use Displat.getTrailFromPDOMIndicesString(), but that function requires information that is not
@@ -1357,7 +1357,7 @@ class KeyPress {
       }
     }
 
-    assert && assert(scratchScaleTargetVector.isFinite(), 'target position not defined');
+    window.assert && window.assert(scratchScaleTargetVector.isFinite(), 'target position not defined');
     return scratchScaleTargetVector;
   }
 }
@@ -1387,7 +1387,7 @@ class Wheel {
    */
   public constructor(event: SceneryEvent, targetScale: number) {
     const domEvent = event.domEvent as WheelEvent;
-    assert && assert(domEvent instanceof WheelEvent, 'SceneryEvent should have a DOMEvent from the wheel input'); // eslint-disable-line no-simple-type-checking-assertions
+    window.assert && window.assert(domEvent instanceof WheelEvent, 'SceneryEvent should have a DOMEvent from the wheel input'); // eslint-disable-line no-simple-type-checking-assertions
 
     this.isCtrlKeyDown = domEvent.ctrlKey;
     this.scaleDelta = domEvent.deltaY > 0 ? -0.5 : 0.5;
@@ -1423,7 +1423,7 @@ class MiddlePress {
   public readonly initialPoint: Vector2;
 
   public constructor(pointer: Mouse, trail: Trail) {
-    assert && assert(pointer.type === 'mouse', 'incorrect pointer type');
+    window.assert && window.assert(pointer.type === 'mouse', 'incorrect pointer type');
 
     this.pointer = pointer;
     this.trail = trail;
@@ -1439,7 +1439,7 @@ class MiddlePress {
  */
 const calculateDiscreteScales = (minScale: number, maxScale: number): number[] => {
 
-  assert && assert(minScale >= 1, 'min scales less than one are currently not supported');
+  window.assert && window.assert(minScale >= 1, 'min scales less than one are currently not supported');
 
   // will take this many key presses to reach maximum scale from minimum scale
   const steps = 8;

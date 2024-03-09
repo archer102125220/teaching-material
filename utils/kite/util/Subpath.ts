@@ -151,11 +151,11 @@ class Subpath {
    * CAUTION: REALLY! Make sure we invalidate() after this is called
    */
   private addSegmentDirectly(segment: Segment): this {
-    assert && assert(segment.start.isFinite(), 'Segment start is infinite');
-    assert && assert(segment.end.isFinite(), 'Segment end is infinite');
-    assert && assert(segment.startTangent.isFinite(), 'Segment startTangent is infinite');
-    assert && assert(segment.endTangent.isFinite(), 'Segment endTangent is infinite');
-    assert && assert(segment.bounds.isEmpty() || segment.bounds.isFinite(), 'Segment bounds is infinite and non-empty');
+    window.assert && window.assert(segment.start.isFinite(), 'Segment start is infinite');
+    window.assert && window.assert(segment.end.isFinite(), 'Segment end is infinite');
+    window.assert && window.assert(segment.startTangent.isFinite(), 'Segment startTangent is infinite');
+    window.assert && window.assert(segment.endTangent.isFinite(), 'Segment endTangent is infinite');
+    window.assert && window.assert(segment.bounds.isEmpty() || segment.bounds.isFinite(), 'Segment bounds is infinite and non-empty');
     this.segments.push(segment);
 
     // Hook up an invalidation listener, so if this segment is invalidated, it will invalidate our subpath!
@@ -216,7 +216,7 @@ class Subpath {
    * Returns the first point of this subpath
    */
   public getFirstPoint(): Vector2 {
-    assert && assert(this.points.length);
+    window.assert && window.assert(this.points.length);
 
     return _.first(this.points)!;
   }
@@ -225,7 +225,7 @@ class Subpath {
    * Returns the last point of this subpath
    */
   public getLastPoint(): Vector2 {
-    assert && assert(this.points.length);
+    window.assert && window.assert(this.points.length);
 
     return _.last(this.points)!;
   }
@@ -234,7 +234,7 @@ class Subpath {
    * Returns the first segment of this subpath
    */
   public getFirstSegment(): Segment {
-    assert && assert(this.segments.length);
+    window.assert && window.assert(this.segments.length);
 
     return _.first(this.segments)!;
   }
@@ -243,7 +243,7 @@ class Subpath {
    * Returns the last segment of this subpath
    */
   public getLastSegment(): Segment {
-    assert && assert(this.segments.length);
+    window.assert && window.assert(this.segments.length);
 
     return _.last(this.segments)!;
   }
@@ -284,7 +284,7 @@ class Subpath {
    * Returns a line that would close this subpath
    */
   public getClosingSegment(): Line {
-    assert && assert(this.hasClosingSegment(), 'Implicit closing segment unnecessary on a fully closed path');
+    window.assert && window.assert(this.hasClosingSegment(), 'Implicit closing segment unnecessary on a fully closed path');
     return new Line(this.getLastPoint(), this.getFirstPoint());
   }
 
@@ -325,7 +325,7 @@ class Subpath {
    * Converts this subpath to a new subpath made of many line segments (approximating the current subpath)
    */
   public toPiecewiseLinear(options: PiecewiseLinearOptions): Subpath {
-    assert && assert(!options.pointMap, 'For use with pointMap, please use nonlinearTransformed');
+    window.assert && window.assert(!options.pointMap, 'For use with pointMap, please use nonlinearTransformed');
     return new Subpath(_.flatten(_.map(this.segments, segment => segment.toPiecewiseLinearSegments(options))), undefined, this.closed);
   }
 
@@ -425,7 +425,7 @@ class Subpath {
     }
 
     // return a cached version if possible
-    assert && assert(!this._strokedSubpathsComputed || (this._strokedStyles && this._strokedSubpaths));
+    window.assert && window.assert(!this._strokedSubpathsComputed || (this._strokedStyles && this._strokedSubpaths));
     if (this._strokedSubpathsComputed && this._strokedStyles!.equals(lineStyles)) {
       return this._strokedSubpaths!;
     }
@@ -519,7 +519,7 @@ class Subpath {
     const combineSegmentArrays = (left: Segment[][], right: Segment[][]) => {
       const combined = left[left.length - 1].concat(right[0]);
       const result = left.slice(0, left.length - 1).concat([combined]).concat(right.slice(1));
-      assert && assert(result.length === left.length + right.length - 1);
+      window.assert && window.assert(result.length === left.length + right.length - 1);
       return result;
     };
 
@@ -612,7 +612,7 @@ class Subpath {
    * Returns a Subpath from the serialized representation.
    */
   public static deserialize(obj: SerializedSubpath): Subpath {
-    assert && assert(obj.type === 'Subpath');
+    window.assert && window.assert(obj.type === 'Subpath');
 
     return new Subpath(obj.segments.map(Segment.deserialize), obj.points.map(pt => new Vector2(pt.x, pt.y)), obj.closed);
   }

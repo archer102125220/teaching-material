@@ -89,8 +89,8 @@ export default class Pool<T extends Constructor> {
       useDefaultConstruction: false
     }, providedOptionsSpread[ 0 ] );
 
-    assert && assert( options.maxSize >= 0 );
-    assert && assert( options.initialSize >= 0 );
+    window.assert && window.assert( options.maxSize >= 0 );
+    window.assert && window.assert( options.initialSize >= 0 );
 
     this._maxPoolSize = options.maxSize;
 
@@ -105,7 +105,7 @@ export default class Pool<T extends Constructor> {
     this.DefaultConstructor = this.partialConstructor( ...options.defaultArguments! ); 
 
     this.initialize = options.initialize;
-    assert && assert( this.initialize, 'Either pass in an initialize option, or provide a method named initialize on the type with the proper signature' );
+    window.assert && window.assert( this.initialize, 'Either pass in an initialize option, or provide a method named initialize on the type with the proper signature' );
 
     this.useDefaultConstruction = options.useDefaultConstruction;
 
@@ -159,7 +159,7 @@ export default class Pool<T extends Constructor> {
    * Sets the maximum pool size.
    */
   public set maxPoolSize( value: number ) {
-    assert && assert( value === Number.POSITIVE_INFINITY || ( Number.isInteger( value ) && value >= 0 ), 'maxPoolSize should be a non-negative integer or infinity' );
+    window.assert && window.assert( value === Number.POSITIVE_INFINITY || ( Number.isInteger( value ) && value >= 0 ), 'maxPoolSize should be a non-negative integer or infinity' );
 
     this._maxPoolSize = value;
   }

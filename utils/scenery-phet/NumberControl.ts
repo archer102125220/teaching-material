@@ -246,7 +246,7 @@ export default class NumberControl extends WidthSizable(Node) {
 
     // A groupFocusHighlight is only included if using arrowButtons. When there are arrowButtons it is important
     // to indicate that the whole control is only one stop in the traversal order. This is set by NumberControl.
-    assert && assert(initialOptions.groupFocusHighlight === undefined, 'NumberControl sets groupFocusHighlight');
+    window.assert && window.assert(initialOptions.groupFocusHighlight === undefined, 'NumberControl sets groupFocusHighlight');
 
     super();
 
@@ -260,12 +260,12 @@ export default class NumberControl extends WidthSizable(Node) {
     // Create a function that will be used to constrain the slider value to the provided range and the same delta as
     // the arrow buttons, see https://github.com/phetsims/scenery-phet/issues/384.
     const constrainValue = (value: number) => {
-      assert && assert(options.delta !== undefined);
+      window.assert && window.assert(options.delta !== undefined);
       const newValue = Utils.roundToInterval(value, options.delta);
       return getCurrentRange().constrainValue(newValue);
     };
 
-    assert && assert(
+    window.assert && window.assert(
       initialOptions.soundGenerator === DEFAULT_SOUND || _.isEmpty(initialOptions.valueChangeSoundGeneratorOptions),
       'options should only be supplied when using default sound generator'
     );
@@ -368,9 +368,9 @@ export default class NumberControl extends WidthSizable(Node) {
     }, initialOptions);
 
     // validate options
-    assert && assert(!(options as IntentionalAny).startDrag, 'use options.startCallback instead of options.startDrag');
-    assert && assert(!(options as IntentionalAny).endDrag, 'use options.endCallback instead of options.endDrag');
-    assert && assert(!options.tagName,
+    window.assert && window.assert(!(options as IntentionalAny).startDrag, 'use options.startCallback instead of options.startDrag');
+    window.assert && window.assert(!(options as IntentionalAny).endDrag, 'use options.endCallback instead of options.endDrag');
+    window.assert && window.assert(!options.tagName,
       'Provide accessibility through options.sliderOptions which will be applied to the NumberControl Node.');
 
     if (options.enabledRangeProperty) {
@@ -379,7 +379,7 @@ export default class NumberControl extends WidthSizable(Node) {
 
     // pdom - for alternative input, the number control is accessed entirely through slider interaction and these
     // arrow buttons are not tab navigable
-    assert && assert(options.arrowButtonOptions.tagName === undefined,
+    window.assert && window.assert(options.arrowButtonOptions.tagName === undefined,
       'NumberControl\'s accessible content is just the slider, do not set accessible content on the buttons. Instead ' +
       'set a11y through options.sliderOptions.');
     options.arrowButtonOptions.tagName = null;
@@ -403,7 +403,7 @@ export default class NumberControl extends WidthSizable(Node) {
       }, options.sliderOptions);
     }
 
-    assert && assert(!options.sliderOptions.hasOwnProperty('phetioType'), 'NumberControl sets phetioType');
+    window.assert && window.assert(!options.sliderOptions.hasOwnProperty('phetioType'), 'NumberControl sets phetioType');
 
     // slider options set by NumberControl, note this may not be the long term pattern, see https://github.com/phetsims/phet-info/issues/96
     options.sliderOptions = combineOptions<NumberControlSliderOptions>({
@@ -439,7 +439,7 @@ export default class NumberControl extends WidthSizable(Node) {
 
       const touchAreaXDilation = options.arrowButtonOptions.touchAreaXDilation!;
       const mouseAreaXDilation = options.arrowButtonOptions.mouseAreaXDilation!;
-      assert && assert(touchAreaXDilation !== undefined && mouseAreaXDilation !== undefined,
+      window.assert && window.assert(touchAreaXDilation !== undefined && mouseAreaXDilation !== undefined,
         'Should be defined, since we have defaults above');
 
       decrementButton = new ArrowButton('left', () => {
@@ -498,7 +498,7 @@ export default class NumberControl extends WidthSizable(Node) {
       // Disable the arrow buttons if the slider currently has focus
       arrowEnabledListener = () => {
         const value = numberProperty.value;
-        assert && assert(options.arrowButtonOptions.enabledEpsilon !== undefined);
+        window.assert && window.assert(options.arrowButtonOptions.enabledEpsilon !== undefined);
         decrementButton!.enabled = (value - options.arrowButtonOptions.enabledEpsilon! > getCurrentRange().min && !this.slider.isFocused());
         incrementButton!.enabled = (value + options.arrowButtonOptions.enabledEpsilon! < getCurrentRange().max && !this.slider.isFocused());
       };
@@ -517,13 +517,13 @@ export default class NumberControl extends WidthSizable(Node) {
 
     // major ticks for the slider
     const majorTicks = options.sliderOptions.majorTicks!;
-    assert && assert(majorTicks);
+    window.assert && window.assert(majorTicks);
     for (let i = 0; i < majorTicks.length; i++) {
       this.slider.addMajorTick(majorTicks[i].value, majorTicks[i].label);
     }
 
     // minor ticks, exclude values where we already have major ticks
-    assert && assert(options.sliderOptions.minorTickSpacing !== undefined);
+    window.assert && window.assert(options.sliderOptions.minorTickSpacing !== undefined);
     if (options.sliderOptions.minorTickSpacing! > 0) {
       for (let minorTickValue = numberRange.min; minorTickValue <= numberRange.max;) {
         if (!_.find(majorTicks, majorTick => majorTick.value === minorTickValue)) {
@@ -623,8 +623,8 @@ export default class NumberControl extends WidthSizable(Node) {
     }, providedOptions);
 
     return (titleNode, numberDisplay, slider, decrementButton, incrementButton) => {
-      assert && assert(decrementButton, 'There is no decrementButton!');
-      assert && assert(incrementButton, 'There is no incrementButton!');
+      window.assert && window.assert(decrementButton, 'There is no decrementButton!');
+      window.assert && window.assert(incrementButton, 'There is no incrementButton!');
 
       slider.mutateLayoutOptions({
         grow: 1
@@ -666,8 +666,8 @@ export default class NumberControl extends WidthSizable(Node) {
     }, providedOptions);
 
     return (titleNode, numberDisplay, slider, decrementButton, incrementButton) => {
-      assert && assert(decrementButton);
-      assert && assert(incrementButton);
+      window.assert && window.assert(decrementButton);
+      window.assert && window.assert(incrementButton);
 
       slider.mutateLayoutOptions({
         stretch: true
@@ -706,8 +706,8 @@ export default class NumberControl extends WidthSizable(Node) {
     }, providedOptions);
 
     return (titleNode, numberDisplay, slider, decrementButton, incrementButton) => {
-      assert && assert(decrementButton);
-      assert && assert(incrementButton);
+      window.assert && window.assert(decrementButton);
+      window.assert && window.assert(incrementButton);
 
       slider.mutateLayoutOptions({
         stretch: true
@@ -848,7 +848,7 @@ function validateCallbacks(options: NumberControlOptions): void {
   const specificCallbacksPresent = arrowCallbacksPresent || sliderCallbacksPresent;
 
   // only general or component specific callbacks are supported
-  assert && assert(!(normalCallbacksPresent && specificCallbacksPresent),
+  window.assert && window.assert(!(normalCallbacksPresent && specificCallbacksPresent),
     'Use general callbacks like "startCallback" or specific callbacks like "sliderOptions.startDrag" but not both.');
 }
 

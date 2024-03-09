@@ -63,8 +63,8 @@ export default abstract class LayoutConstraint {
    * See Node's _activeParentLayoutConstraint for more information.
    */
   public addNode(node: Node, addLock = true): void {
-    assert && assert(!this._listenedNodes.has(node));
-    assert && assert(!addLock || !node._activeParentLayoutConstraint, 'This node is already managed by a layout container - make sure to wrap it in a Node if DAG, removing it from an old layout container, etc.');
+    window.assert && window.assert(!this._listenedNodes.has(node));
+    window.assert && window.assert(!addLock || !node._activeParentLayoutConstraint, 'This node is already managed by a layout container - make sure to wrap it in a Node if DAG, removing it from an old layout container, etc.');
 
     if (addLock) {
       node._activeParentLayoutConstraint = this;
@@ -88,7 +88,7 @@ export default abstract class LayoutConstraint {
    * (scenery-internal)
    */
   public removeNode(node: Node): void {
-    assert && assert(this._listenedNodes.has(node));
+    window.assert && window.assert(this._listenedNodes.has(node));
 
     // Optional, since we might not have added the "lock" in addNode
     if (node._activeParentLayoutConstraint === this) {
@@ -188,7 +188,7 @@ export default abstract class LayoutConstraint {
     // anymore. We have some infinite-loop detection here for common development errors.
     if (this.isLocked) {
       assert && count++;
-      assert && assert(++count < 500, 'Likely infinite loop detected, are we triggering layout within the layout?');
+      window.assert && window.assert(++count < 500, 'Likely infinite loop detected, are we triggering layout within the layout?');
       this._layoutAttemptDuringLock = true;
     }
     else {

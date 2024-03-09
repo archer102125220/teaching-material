@@ -48,7 +48,7 @@ export default class OpticalObjectChoiceComboBox extends ComboBox<OpticalObjectC
 
     // Create a ComboBoxItem for each representation.
     const items: ComboBoxItem<OpticalObjectChoice>[] = [];
-    assert && assert(opticalObjectChoiceProperty.validValues); // {OpticalObjectChoice[]|undefined}
+    window.assert && window.assert(opticalObjectChoiceProperty.validValues); // {OpticalObjectChoice[]|undefined}
     opticalObjectChoiceProperty.validValues!.forEach((opticalObjectChoice: OpticalObjectChoice) => {
 
       const itemTandemName = `${opticalObjectChoice.tandemPrefix}${ComboBox.ITEM_TANDEM_NAME_SUFFIX}`;

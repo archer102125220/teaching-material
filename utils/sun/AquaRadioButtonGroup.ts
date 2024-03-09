@@ -100,11 +100,11 @@ export default class AquaRadioButtonGroup<T> extends FlowBox {
     const radioButtons = items.map((item, index) => {
 
       // @ts-expect-error - runtime check to prevent prior pattern, see https://github.com/phetsims/sun/issues/794
-      assert && assert(!item.tandem, 'Cannot specify tandem any more');
+      window.assert && window.assert(!item.tandem, 'Cannot specify tandem any more');
 
       const node = nodes[index];
 
-      assert && assert(!node.hasPDOMContent,
+      window.assert && window.assert(!node.hasPDOMContent,
         'Accessibility is provided by AquaRadioButton and AquaRadioButtonGroupItem.labelContent. ' +
         'Additional PDOM content in the provided Node could break accessibility.');
 
@@ -180,7 +180,7 @@ export default class AquaRadioButtonGroup<T> extends FlowBox {
    */
   public getButton(value: T): AquaRadioButton<T> {
     const button = _.find(this.radioButtons, (radioButton: AquaRadioButton<T>) => radioButton.value === value);
-    assert && assert(button, `no radio button found for value ${value}`);
+    window.assert && window.assert(button, `no radio button found for value ${value}`);
     return button!;
   }
 }

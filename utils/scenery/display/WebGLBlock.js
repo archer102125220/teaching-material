@@ -210,7 +210,7 @@ class WebGLBlock extends FittedBlock {
       sceneryLog.WebGLBlock(`setupContext #${this.id}`);
     sceneryLog && sceneryLog.WebGLBlock && sceneryLog.push();
 
-    assert && assert(gl, 'Should have an actual context if this is called');
+    window.assert && window.assert(gl, 'Should have an actual context if this is called');
 
     this.isContextLost = false;
 
@@ -269,7 +269,7 @@ class WebGLBlock extends FittedBlock {
     // TODO: Can we move this to before the update() step? Could happen same-frame in that case. https://github.com/phetsims/scenery/issues/1581
     // NOTE: We don't want to rely on a common timer, so we're using the built-in form on purpose.
     window.setTimeout(function () {
-      // eslint-disable-line bad-sim-text
+     
       sceneryLog &&
         sceneryLog.WebGLBlock &&
         sceneryLog.WebGLBlock(`Executing delayed rebuilding #${this.id}`);
@@ -481,7 +481,7 @@ class WebGLBlock extends FittedBlock {
         ) {
           desiredProcessor = this.vertexColorPolygonsProcessor;
         }
-        assert && assert(desiredProcessor);
+        window.assert && window.assert(desiredProcessor);
 
         // swap processors if necessary
         if (desiredProcessor !== currentProcessor) {
@@ -550,8 +550,8 @@ class WebGLBlock extends FittedBlock {
         `markDirtyDrawable on WebGLBlock#${this.id} with ${drawable.toString()}`
       );
 
-    assert && assert(drawable);
-    assert && assert(!drawable.isDisposed);
+    window.assert && window.assert(drawable);
+    window.assert && window.assert(!drawable.isDisposed);
 
     // TODO: instance check to see if it is a canvas cache (usually we don't need to call update on our drawables) https://github.com/phetsims/scenery/issues/1581
     this.dirtyDrawables.push(drawable);
@@ -681,7 +681,7 @@ class WebGLBlock extends FittedBlock {
       );
     sceneryLog && sceneryLog.WebGLBlock && sceneryLog.push();
 
-    assert && assert(drawable.parentDrawable === this);
+    window.assert && window.assert(drawable.parentDrawable === this);
 
     this.markDirty();
 
@@ -761,7 +761,7 @@ class CustomProcessor extends Processor {
    * @param {Drawable} drawable
    */
   processDrawable(drawable) {
-    assert && assert(drawable.webglRenderer === Renderer.webglCustom);
+    window.assert && window.assert(drawable.webglRenderer === Renderer.webglCustom);
 
     this.drawable = drawable;
     this.draw();
@@ -781,7 +781,7 @@ class CustomProcessor extends Processor {
   draw() {
     if (this.drawable) {
       const count = this.drawable.draw();
-      assert && assert(typeof count === 'number');
+      window.assert && window.assert(typeof count === 'number');
       this.drawCount += count;
       this.drawable = null;
     }
@@ -793,7 +793,7 @@ class VertexColorPolygons extends Processor {
    * @param {Float32Array} projectionMatrixArray - Projection matrix entries
    */
   constructor(projectionMatrixArray) {
-    assert && assert(projectionMatrixArray instanceof Float32Array);
+    window.assert && window.assert(projectionMatrixArray instanceof Float32Array);
 
     super();
 
@@ -818,7 +818,7 @@ class VertexColorPolygons extends Processor {
    * @param {WebGLRenderingContext} gl
    */
   initializeContext(gl) {
-    assert && assert(gl, 'Should be an actual context');
+    window.assert && window.assert(gl, 'Should be an actual context');
 
     // @private {WebGLRenderingContext}
     this.gl = gl;
@@ -973,7 +973,7 @@ class TexturedTrianglesProcessor extends Processor {
    * @param {Float32Array} projectionMatrixArray - Projection matrix entries
    */
   constructor(projectionMatrixArray) {
-    assert && assert(projectionMatrixArray instanceof Float32Array);
+    window.assert && window.assert(projectionMatrixArray instanceof Float32Array);
 
     super();
 
@@ -998,7 +998,7 @@ class TexturedTrianglesProcessor extends Processor {
    * @param {WebGLRenderingContext} gl
    */
   initializeContext(gl) {
-    assert && assert(gl, 'Should be an actual context');
+    window.assert && window.assert(gl, 'Should be an actual context');
 
     // @private {WebGLRenderingContext}
     this.gl = gl;
@@ -1118,7 +1118,7 @@ class TexturedTrianglesProcessor extends Processor {
    * @private
    */
   draw() {
-    assert && assert(this.currentSpriteSheet);
+    window.assert && window.assert(this.currentSpriteSheet);
     const gl = this.gl;
 
     // (uniform) projection transform into normalized device coordinates

@@ -22,8 +22,8 @@ export default class SegmentIntersection {
    * @param bT - The parametric value for the second segment at the location of the intersection
    */
   public constructor( point: Vector2, aT: number, bT: number ) {
-    assert && assert( aT >= -1e-10 && aT <= 1 + 1e-10, 'aT out of range' );
-    assert && assert( bT >= -1e-10 && bT <= 1 + 1e-10, 'bT out of range' );
+    window.assert && window.assert( aT >= -1e-10 && aT <= 1 + 1e-10, 'aT out of range' );
+    window.assert && window.assert( bT >= -1e-10 && bT <= 1 + 1e-10, 'bT out of range' );
 
     this.point = point;
 

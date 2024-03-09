@@ -119,71 +119,71 @@ const HeightSizable = memoize(<SuperType extends Constructor<Node>>(type: SuperT
     }
 
     public get preferredHeight(): number | null {
-      assert && assert(this.preferredHeightProperty,
+      window.assert && window.assert(this.preferredHeightProperty,
         'HeightSizable options should be set from a later mutate() call instead of the super constructor');
       return this.preferredHeightProperty.value;
     }
 
     public set preferredHeight(value: number | null) {
-      assert && assert(this.preferredHeightProperty,
+      window.assert && window.assert(this.preferredHeightProperty,
         'HeightSizable options should be set from a later mutate() call instead of the super constructor');
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0),
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0),
         'preferredHeight should be null or a non-negative finite number');
 
       this.preferredHeightProperty.value = value;
     }
 
     public get localPreferredHeight(): number | null {
-      assert && assert(this.localPreferredHeightProperty,
+      window.assert && window.assert(this.localPreferredHeightProperty,
         'HeightSizable options should be set from a later mutate() call instead of the super constructor');
       return this.localPreferredHeightProperty.value;
     }
 
     public set localPreferredHeight(value: number | null) {
-      assert && assert(this.localPreferredHeightProperty,
+      window.assert && window.assert(this.localPreferredHeightProperty,
         'HeightSizable options should be set from a later mutate() call instead of the super constructor');
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0),
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0),
         'localPreferredHeight should be null or a non-negative finite number');
 
       this.localPreferredHeightProperty.value = value;
     }
 
     public get minimumHeight(): number | null {
-      assert && assert(this.minimumHeightProperty,
+      window.assert && window.assert(this.minimumHeightProperty,
         'HeightSizable options should be set from a later mutate() call instead of the super constructor');
       return this.minimumHeightProperty.value;
     }
 
     public set minimumHeight(value: number | null) {
-      assert && assert(this.minimumHeightProperty,
+      window.assert && window.assert(this.minimumHeightProperty,
         'HeightSizable options should be set from a later mutate() call instead of the super constructor');
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       this.minimumHeightProperty.value = value;
     }
 
     public get localMinimumHeight(): number | null {
-      assert && assert(this.localMinimumHeightProperty,
+      window.assert && window.assert(this.localMinimumHeightProperty,
         'HeightSizable options should be set from a later mutate() call instead of the super constructor');
       return this.localMinimumHeightProperty.value;
     }
 
     public set localMinimumHeight(value: number | null) {
-      assert && assert(this.localMinimumHeightProperty,
+      window.assert && window.assert(this.localMinimumHeightProperty,
         'HeightSizable options should be set from a later mutate() call instead of the super constructor');
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       this.localMinimumHeightProperty.value = value;
     }
 
     public override get heightSizable(): boolean {
-      assert && assert(this.isHeightResizableProperty,
+      window.assert && window.assert(this.isHeightResizableProperty,
         'HeightSizable options should be set from a later mutate() call instead of the super constructor');
       return this.isHeightResizableProperty.value;
     }
 
     public override set heightSizable(value: boolean) {
-      assert && assert(this.isHeightResizableProperty,
+      window.assert && window.assert(this.isHeightResizableProperty,
         'HeightSizable options should be set from a later mutate() call instead of the super constructor');
       this.isHeightResizableProperty.value = value;
     }

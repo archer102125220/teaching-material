@@ -313,7 +313,7 @@ export default class Display {
    * @param [providedOptions]
    */
   public constructor(rootNode: Node, providedOptions?: DisplayOptions) {
-    assert && assert(rootNode, 'rootNode is a required parameter');
+    window.assert && window.assert(rootNode, 'rootNode is a required parameter');
 
     // OHTWO TODO: hybrid batching (option to batch until an event like 'up' that might be needed for security issues) https://github.com/phetsims/scenery/issues/1581
 
@@ -489,7 +489,7 @@ export default class Display {
       PDOMTree.rebuildInstanceTree(this._rootPDOMInstance);
 
       // add the accessible DOM as a child of this DOM element
-      assert && assert(this._rootPDOMInstance.peer, 'Peer should be created from createFromPool');
+      window.assert && window.assert(this._rootPDOMInstance.peer, 'Peer should be created from createFromPool');
       this._domElement.appendChild(this._rootPDOMInstance.peer!.primarySibling!);
 
       const ariaLiveContainer = ariaLiveAnnouncer.ariaLiveContainer;
@@ -579,8 +579,8 @@ export default class Display {
     }
 
     this._rootBackbone = this._rootBackbone || this._baseInstance!.groupDrawable;
-    assert && assert(this._rootBackbone, 'We are guaranteed a root backbone as the groupDrawable on the base instance');
-    assert && assert(this._rootBackbone === this._baseInstance!.groupDrawable, 'We don\'t want the base instance\'s groupDrawable to change');
+    window.assert && window.assert(this._rootBackbone, 'We are guaranteed a root backbone as the groupDrawable on the base instance');
+    window.assert && window.assert(this._rootBackbone === this._baseInstance!.groupDrawable, 'We don\'t want the base instance\'s groupDrawable to change');
 
 
     if (assertSlow) { this._rootBackbone!.audit(true, false, true); } // allow pending blocks / dirty
@@ -717,7 +717,7 @@ export default class Display {
     }
 
     if (node) {
-      assert && assert(node.isPhetioInstrumented(), 'a PhetioMouseHit should be instrumented');
+      window.assert && window.assert(node.isPhetioInstrumented(), 'a PhetioMouseHit should be instrumented');
     }
     return node;
   }
@@ -759,7 +759,7 @@ export default class Display {
   public get rootNode(): Node { return this.getRootNode(); }
 
   public getRootBackbone(): BackboneDrawable {
-    assert && assert(this._rootBackbone);
+    window.assert && window.assert(this._rootBackbone);
     return this._rootBackbone!;
   }
 
@@ -784,10 +784,10 @@ export default class Display {
    * Changes the size that the Display's DOM element will be after the next updateDisplay()
    */
   public setSize(size: Dimension2): void {
-    assert && assert(size.width % 1 === 0, 'Display.width should be an integer');
-    assert && assert(size.width > 0, 'Display.width should be greater than zero');
-    assert && assert(size.height % 1 === 0, 'Display.height should be an integer');
-    assert && assert(size.height > 0, 'Display.height should be greater than zero');
+    window.assert && window.assert(size.width % 1 === 0, 'Display.width should be an integer');
+    window.assert && window.assert(size.width > 0, 'Display.width should be greater than zero');
+    window.assert && window.assert(size.height % 1 === 0, 'Display.height should be an integer');
+    window.assert && window.assert(size.height > 0, 'Display.height should be greater than zero');
 
     console.log({ size });
     // console.dir( this._domElement );
@@ -855,7 +855,7 @@ export default class Display {
    * Will be applied to the root DOM element on updateDisplay(), and no sooner.
    */
   public setBackgroundColor(color: Color | string | null): this {
-    assert && assert(color === null || typeof color === 'string' || color instanceof Color);
+    window.assert && window.assert(color === null || typeof color === 'string' || color instanceof Color);
 
     this._backgroundColor = color;
 
@@ -938,7 +938,7 @@ export default class Display {
    * see https://github.com/phetsims/scenery/issues/883.
    */
   private handleFullScreenNavigation(domEvent: KeyboardEvent): void {
-    assert && assert(this.pdomRootElement, 'There must be a PDOM to support keyboard navigation');
+    window.assert && window.assert(this.pdomRootElement, 'There must be a PDOM to support keyboard navigation');
 
     if (FullScreen.isFullScreen() && KeyboardUtils.isKeyEvent(domEvent, KeyboardUtils.KEY_TAB)) {
       const rootElement = this.pdomRootElement;
@@ -1008,7 +1008,7 @@ export default class Display {
    * (scenery-internal)
    */
   public markForReducedReferences(item: { reduceReferences: () => void }): void {
-    assert && assert(!!item.reduceReferences);
+    window.assert && window.assert(!!item.reduceReferences);
 
     this._reduceReferencesNeeded.push(item);
   }
@@ -1045,7 +1045,7 @@ export default class Display {
   }
 
   private updateBackgroundColor(): void {
-    assert && assert(this._backgroundColor === null ||
+    window.assert && window.assert(this._backgroundColor === null ||
       typeof this._backgroundColor === 'string' ||
       this._backgroundColor instanceof Color);
 
@@ -1287,7 +1287,7 @@ export default class Display {
 
       // eslint-disable-next-line bad-sim-text
       console.log(this._domElement?.parentElement?.clientWidth || window.innerWidth, this._domElement?.parentElement?.clientHeight || window.innerHeight);
-      this.setWidthHeight(this._domElement?.parentElement?.clientWidth || window.innerWidth, this._domElement?.parentElement?.clientHeight || window.innerHeight); // eslint-disable-line bad-sim-text
+      this.setWidthHeight(this._domElement?.parentElement?.clientWidth || window.innerWidth, this._domElement?.parentElement?.clientHeight || window.innerHeight);
     };
     window.addEventListener('resize', resizer);
     resizer();
@@ -1332,7 +1332,7 @@ export default class Display {
    * NOTE: This can be reversed with detachEvents().
    */
   public initializeEvents(options?: InputOptions): void {
-    assert && assert(!this._input, 'Events cannot be attached twice to a display (for now)');
+    window.assert && window.assert(!this._input, 'Events cannot be attached twice to a display (for now)');
 
     // TODO: refactor here https://github.com/phetsims/scenery/issues/1581
     const input = new Input(this, !this._listenToOnlyElement, this._batchDOMEvents, this._assumeFullWindow, this._passiveEvents, options);
@@ -1345,7 +1345,7 @@ export default class Display {
    * Detach already-attached input event handling (from initializeEvents()).
    */
   public detachEvents(): void {
-    assert && assert(this._input, 'detachEvents() should be called only when events are attached');
+    window.assert && window.assert(this._input, 'detachEvents() should be called only when events are attached');
 
     this._input!.disconnectListeners();
     this._input = null;
@@ -1356,7 +1356,7 @@ export default class Display {
    * Adds an input listener.
    */
   public addInputListener(listener: TInputListener): this {
-    assert && assert(!_.includes(this._inputListeners, listener), 'Input listener already registered on this Display');
+    window.assert && window.assert(!_.includes(this._inputListeners, listener), 'Input listener already registered on this Display');
 
     // don't allow listeners to be added multiple times
     if (!_.includes(this._inputListeners, listener)) {
@@ -1370,7 +1370,7 @@ export default class Display {
    */
   public removeInputListener(listener: TInputListener): this {
     // ensure the listener is in our list
-    assert && assert(_.includes(this._inputListeners, listener));
+    window.assert && window.assert(_.includes(this._inputListeners, listener));
 
     this._inputListeners.splice(_.indexOf(this._inputListeners, listener), 1);
 
@@ -1447,7 +1447,7 @@ export default class Display {
    * (scenery-internal)
    */
   public ensureNotPainting(): void {
-    assert && assert(!this._isPainting,
+    window.assert && window.assert(!this._isPainting,
       'This should not be run in the call tree of updateDisplay(). If you see this, it is likely that either the ' +
       'last updateDisplay() had a thrown error and it is trying to be run again (in which case, investigate that ' +
       'error), OR code was run/triggered from inside an updateDisplay() that has the potential to cause an infinite ' +
@@ -1840,8 +1840,8 @@ export default class Display {
    */
   public iframeDebug(): void {
     const iframe = document.createElement('iframe');
-    iframe.width = '' + window.innerWidth; // eslint-disable-line bad-sim-text
-    iframe.height = '' + window.innerHeight; // eslint-disable-line bad-sim-text
+    iframe.width = '' + window.innerWidth;
+    iframe.height = '' + window.innerHeight;
     iframe.style.position = 'absolute';
     iframe.style.left = '0';
     iframe.style.top = '0';
@@ -1985,7 +1985,7 @@ export default class Display {
 
       const displayImg = doc.createElement('img');
       const src = canvasUrlMap[displayCanvas.id];
-      assert && assert(src, 'Must have missed a toDataURL() on a Canvas');
+      window.assert && window.assert(src, 'Must have missed a toDataURL() on a Canvas');
 
       displayImg.src = src;
       displayImg.setAttribute('style', cssText);
@@ -2036,7 +2036,7 @@ export default class Display {
               completeFunction();
             }
 
-            assert && assert(replacedImages >= 0);
+            window.assert && window.assert(replacedImages >= 0);
           };
           refImage.onerror = () => {
             // NOTE: not much we can do, leave this element alone.
@@ -2046,7 +2046,7 @@ export default class Display {
               completeFunction();
             }
 
-            assert && assert(replacedImages >= 0);
+            window.assert && window.assert(replacedImages >= 0);
           };
 
           // Kick off loading of the image.
@@ -2111,7 +2111,7 @@ export default class Display {
     this._rootNode.removeRootedDisplay(this);
 
     if (this._accessible) {
-      assert && assert(this._boundHandleFullScreenNavigation, '_boundHandleFullScreenNavigation was not added to the keyStateTracker');
+      window.assert && window.assert(this._boundHandleFullScreenNavigation, '_boundHandleFullScreenNavigation was not added to the keyStateTracker');
       globalKeyStateTracker.keydownEmitter.removeListener(this._boundHandleFullScreenNavigation!);
       this._rootPDOMInstance!.dispose();
     }
@@ -2185,7 +2185,7 @@ export default class Display {
    * Returns true when NO nodes in the subtree are disposed.
    */
   private static assertSubtreeDisposed(node: Node): void {
-    assert && assert(!node.isDisposed, 'Disposed nodes should not be included in a scene graph to display.');
+    window.assert && window.assert(!node.isDisposed, 'Disposed nodes should not be included in a scene graph to display.');
 
     if (assert) {
       for (let i = 0; i < node.children.length; i++) {
@@ -2198,7 +2198,7 @@ export default class Display {
    * Adds an input listener to be fired for ANY Display
    */
   public static addInputListener(listener: TInputListener): void {
-    assert && assert(!_.includes(Display.inputListeners, listener), 'Input listener already registered');
+    window.assert && window.assert(!_.includes(Display.inputListeners, listener), 'Input listener already registered');
 
     // don't allow listeners to be added multiple times
     if (!_.includes(Display.inputListeners, listener)) {
@@ -2211,7 +2211,7 @@ export default class Display {
    */
   public static removeInputListener(listener: TInputListener): void {
     // ensure the listener is in our list
-    assert && assert(_.includes(Display.inputListeners, listener));
+    window.assert && window.assert(_.includes(Display.inputListeners, listener));
 
     Display.inputListeners.splice(_.indexOf(Display.inputListeners, listener), 1);
   }

@@ -80,7 +80,7 @@ class DownUpListener extends PhetioObject {
           );
         sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-        assert && assert(event.pointer === this.pointer);
+        window.assert && window.assert(event.pointer === this.pointer);
         if (
           !(event.pointer instanceof Mouse) ||
           event.domEvent.button === this.options.mouseButton
@@ -114,7 +114,7 @@ class DownUpListener extends PhetioObject {
           );
         sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
-        assert && assert(event.pointer === this.pointer);
+        window.assert && window.assert(event.pointer === this.pointer);
         this.buttonUp(event);
 
         sceneryLog && sceneryLog.InputListener && sceneryLog.pop();

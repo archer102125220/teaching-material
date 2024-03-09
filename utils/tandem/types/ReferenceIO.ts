@@ -24,13 +24,13 @@ export type ReferenceIOState = {
 };
 
 const ReferenceIO = (parameterType: IOType): IOType => {
-  assert && assert(parameterType, 'ReferenceIO needs parameterType');
+  window.assert && window.assert(parameterType, 'ReferenceIO needs parameterType');
 
   const cacheKey = parameterType;
 
   if (!cache.has(cacheKey)) {
 
-    assert && assert(typeof parameterType.typeName === 'string', 'type name should be a string');
+    window.assert && window.assert(typeof parameterType.typeName === 'string', 'type name should be a string');
     cache.set(cacheKey, new IOType(`ReferenceIO<${parameterType.typeName}>`, {
       isValidValue: value => Validation.isValueValid(value, parameterType.validator),
       documentation: 'Uses reference identity for serializing and deserializing, and validates based on its parameter PhET-iO Type.',
@@ -59,7 +59,7 @@ const ReferenceIO = (parameterType: IOType): IOType => {
        * @throws CouldNotYetDeserializeError
        */
       fromStateObject(stateObject: ReferenceIOState) {
-        assert && assert(stateObject && typeof stateObject.phetioID === 'string', 'phetioID should be a string');
+        window.assert && window.assert(stateObject && typeof stateObject.phetioID === 'string', 'phetioID should be a string');
         if (phet.phetio.phetioEngine.hasPhetioObject(stateObject.phetioID)) {
           return phet.phetio.phetioEngine.getPhetioElement(stateObject.phetioID);
         }
@@ -72,7 +72,7 @@ const ReferenceIO = (parameterType: IOType): IOType => {
        * References should be using fromStateObject to get a copy of the PhET-iO Element.
        */
       applyState(coreObject) {
-        assert && assert(false, `ReferenceIO is meant to be used as DataType serialization (see fromStateObject) for phetioID: ${coreObject.tandem.phetioID}`);
+        window.assert && window.assert(false, `ReferenceIO is meant to be used as DataType serialization (see fromStateObject) for phetioID: ${coreObject.tandem.phetioID}`);
       }
     }));
   }

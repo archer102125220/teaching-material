@@ -6,15 +6,15 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import pause_mp3 from '../../sounds/pause_mp3.js';
-import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
-import tambo from '../tambo.js';
+import pause_mp3 from '@/assets/sounds/tambo/pause_mp3';
+import SoundClipPlayer from '../sound-generators/SoundClipPlayer';
+import tambo from '../tambo';
 
 // create the shared sound instance
-const pauseSoundPlayer = new SoundClipPlayer( pause_mp3, {
+const pauseSoundPlayer = new SoundClipPlayer(pause_mp3, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
-} );
+});
 
-tambo.register( 'pauseSoundPlayer', pauseSoundPlayer );
+tambo.register('pauseSoundPlayer', pauseSoundPlayer);
 export default pauseSoundPlayer;

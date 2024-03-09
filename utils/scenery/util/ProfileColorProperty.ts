@@ -59,14 +59,14 @@ export default class ProfileColorProperty extends ColorProperty {
     });
 
     // eslint-disable-next-line no-prototype-builtins
-    assert && assert(colorProfileMap.hasOwnProperty(SceneryConstants.DEFAULT_COLOR_PROFILE), 'default color profile must be provided');
-    assert && assert(!!colorProfileMap[SceneryConstants.DEFAULT_COLOR_PROFILE], 'default color profile must be truthy');
+    window.assert && window.assert(colorProfileMap.hasOwnProperty(SceneryConstants.DEFAULT_COLOR_PROFILE), 'default color profile must be provided');
+    window.assert && window.assert(!!colorProfileMap[SceneryConstants.DEFAULT_COLOR_PROFILE], 'default color profile must be truthy');
 
     // Fallback to default if a color was not supplied.
     super(Color.toColor(colorProfileMap[colorProfileProperty.value] || colorProfileMap[SceneryConstants.DEFAULT_COLOR_PROFILE]), options);
 
     // See https://github.com/phetsims/scenery/issues/1512
-    assert && assert(!this.isPhetioInstrumented() ||
+    window.assert && window.assert(!this.isPhetioInstrumented() ||
       _.find(ProfileColorProperty.TANDEM_NAME_SUFFIXES, suffix => tandem.name.endsWith(suffix)) ||
       tandem.name === 'colorProperty' || tandem.name === 'fillProperty' || tandem.name === 'strokeProperty',
       `invalid tandem.name: ${tandem?.phetioID}`);
@@ -98,7 +98,7 @@ export default class ProfileColorProperty extends ColorProperty {
     // assert that names are unique
     if (assert) {
       const matches = instances.filter(e => e.name === this.name);
-      assert && assert(matches.length === 0, 'cannot use the same name for two different ProfileColorProperty instances: ' + name);
+      window.assert && window.assert(matches.length === 0, 'cannot use the same name for two different ProfileColorProperty instances: ' + name);
     }
 
     // Register with the static list for the HTML color editor

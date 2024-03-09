@@ -207,11 +207,11 @@ export default class Dialog extends Popupable(Panel, 1) {
       ariaRole: 'dialog'
     }, providedOptions);
 
-    assert && assert(options.sim, 'sim must be provided, as Dialog needs a Sim instance');
+    window.assert && window.assert(options.sim, 'sim must be provided, as Dialog needs a Sim instance');
 
-    assert && assert(options.xMargin === undefined, 'Dialog sets xMargin');
+    window.assert && window.assert(options.xMargin === undefined, 'Dialog sets xMargin');
     options.xMargin = 0;
-    assert && assert(options.yMargin === undefined, 'Dialog sets yMargin');
+    window.assert && window.assert(options.yMargin === undefined, 'Dialog sets yMargin');
     options.yMargin = 0;
 
     // if left margin is specified in options, use it. otherwise, set it to make the left right gutters symmetrical
@@ -219,8 +219,8 @@ export default class Dialog extends Popupable(Panel, 1) {
       options.leftMargin = options.xSpacing + options.closeButtonLength + options.closeButtonRightMargin;
     }
 
-    assert && assert(options.maxHeight === null || typeof options.maxHeight === 'number');
-    assert && assert(options.maxWidth === null || typeof options.maxWidth === 'number');
+    window.assert && window.assert(options.maxHeight === null || typeof options.maxHeight === 'number');
+    window.assert && window.assert(options.maxWidth === null || typeof options.maxWidth === 'number');
 
     // Apply maxWidth/maxHeight depending on the margins and layoutBounds
     if (!options.maxWidth && options.layoutBounds) {
@@ -306,14 +306,14 @@ export default class Dialog extends Popupable(Panel, 1) {
 
     // pdom - fall back to focusing the closeButton by default if there is no focusOnShowNode or the
     // content is not focusable
-    assert && assert(pdomOrder[0]);
+    window.assert && window.assert(pdomOrder[0]);
     options.focusOnShowNode = options.focusOnShowNode ? options.focusOnShowNode :
       pdomOrder[0]!.focusable ? pdomOrder[0] :
         closeButton;
 
 
-    assert && assert(options.focusOnShowNode instanceof Node, 'should be non-null and defined');
-    assert && assert(options.focusOnShowNode!.focusable, 'focusOnShowNode must be focusable.');
+    window.assert && window.assert(options.focusOnShowNode instanceof Node, 'should be non-null and defined');
+    window.assert && window.assert(options.focusOnShowNode!.focusable, 'focusOnShowNode must be focusable.');
 
     // Align content, title, and close button using spacing and margin options
 
@@ -396,7 +396,7 @@ export default class Dialog extends Popupable(Panel, 1) {
     const keyboardListener = new KeyboardListener({
       keys: ['escape', 'tab', 'shift+tab'],
       callback: (event, keysPressed) => {
-        assert && assert(event && event.domEvent, 'event should be non-null and defined for this listener');
+        window.assert && window.assert(event && event.domEvent, 'event should be non-null and defined for this listener');
         const domEvent = event!.domEvent!;
 
         if (keysPressed === 'escape') {
@@ -408,7 +408,7 @@ export default class Dialog extends Popupable(Panel, 1) {
           // prevent a particular bug in Windows 7/8.1 Firefox where focus gets trapped in the document
           // when the navigation bar is hidden and there is only one focusable element in the DOM
           // see https://bugzilla.mozilla.org/show_bug.cgi?id=910136
-          assert && assert(FocusManager.pdomFocus); // {Focus|null}
+          window.assert && window.assert(FocusManager.pdomFocus); // {Focus|null}
           const activeId = FocusManager.pdomFocus!.trail.getUniqueId();
           const noNextFocusable = PDOMUtils.getNextFocusable().id === activeId;
           const noPreviousFocusable = PDOMUtils.getPreviousFocusable().id === activeId;

@@ -116,7 +116,7 @@ class PDOMInstance {
    * @returns - Returns 'this' reference, for chaining
    */
   public initializePDOMInstance(parent: PDOMInstance | null, display: Display, trail: Trail): PDOMInstance {
-    assert && assert(!this.id || this.isDisposed, 'If we previously existed, we need to have been disposed');
+    window.assert && window.assert(!this.id || this.isDisposed, 'If we previously existed, we need to have been disposed');
 
     // unique ID
     this.id = this.id || globalId++;
@@ -182,7 +182,7 @@ class PDOMInstance {
       // The peer is not fully constructed until this update function is called, see https://github.com/phetsims/scenery/issues/832
       // Trail Ids will never change, so update them eagerly, a single time during construction.
       this.peer!.update(UNIQUE_ID_STRATEGY === PDOMUniqueIdStrategy.TRAIL_ID);
-      assert && assert(this.peer!.primarySibling, 'accessible peer must have a primarySibling upon completion of construction');
+      window.assert && window.assert(this.peer!.primarySibling, 'accessible peer must have a primarySibling upon completion of construction');
 
       // Scan over all of the nodes in our trail (that are NOT in our parent's trail) to check for pdomDisplays
       // so we can initialize our invisibleCount and add listeners.
@@ -227,7 +227,7 @@ class PDOMInstance {
     for (let i = 0; i < pdomInstances.length; i++) {
       // Append the container parent to the end (so that, when provided in order, we don't have to resort below
       // when initializing).
-      assert && assert(!!this.peer!.primarySibling, 'Primary sibling must be defined to insert elements.');
+      window.assert && window.assert(!!this.peer!.primarySibling, 'Primary sibling must be defined to insert elements.');
 
       // @ts-expect-error - when PDOMPeer is converted to TS this ts-expect-error can probably be removed
       PDOMUtils.insertElements(this.peer.primarySibling!, pdomInstances[i].peer.topLevelElements);
@@ -238,7 +238,7 @@ class PDOMInstance {
     }
 
     if (assert && this.node) {
-      assert && assert(this.node instanceof Node);
+      window.assert && window.assert(this.node instanceof Node);
 
       // If you hit this when mutating both children and innerContent at the same time, it is an issue with scenery,
       // remove once in a single step and the add the other in the next step.
@@ -357,7 +357,7 @@ class PDOMInstance {
       const wasVisible = this.invisibleCount === 0;
 
       this.invisibleCount += (isNodeVisible ? -1 : 1);
-      assert && assert(this.invisibleCount >= 0 && this.invisibleCount <= this.relativeNodes!.length);
+      window.assert && window.assert(this.invisibleCount >= 0 && this.invisibleCount <= this.relativeNodes!.length);
 
       const isVisible = this.invisibleCount === 0;
 
@@ -373,12 +373,12 @@ class PDOMInstance {
    * will do this for us.
    */
   private updateVisibility(): void {
-    assert && assert(!!this.peer, 'Peer needs to be available on update visibility.');
+    window.assert && window.assert(!!this.peer, 'Peer needs to be available on update visibility.');
     this.peer!.setVisible(this.invisibleCount <= 0);
 
     // if we hid a parent element, blur focus if active element was an ancestor
     if (!this.peer!.isVisible() && FocusManager.pdomFocusedNode) {
-      assert && assert(FocusManager.pdomFocusedNode.pdomInstances.length === 1,
+      window.assert && window.assert(FocusManager.pdomFocusedNode.pdomInstances.length === 1,
         'focusable Nodes do not support DAG, and should be connected with an instance if focused.');
 
       // NOTE: We don't seem to be able to import normally here
@@ -392,7 +392,7 @@ class PDOMInstance {
    * Returns whether the parallel DOM for this instance and its ancestors are not hidden.
    */
   public isGloballyVisible(): boolean {
-    assert && assert(!!this.peer, 'PDOMPeer needs to be available, has this PDOMInstance been disposed?');
+    window.assert && window.assert(!!this.peer, 'PDOMPeer needs to be available, has this PDOMInstance been disposed?');
 
     // If this peer is hidden, then return because that attribute will bubble down to children,
     // otherwise recurse to parent.
@@ -439,7 +439,7 @@ class PDOMInstance {
         instances.push(potentialInstance); // length will always be 1
       }
 
-      assert && assert(instances.length <= 1, 'If we select more than one this way, we have problems');
+      window.assert && window.assert(instances.length <= 1, 'If we select more than one this way, we have problems');
     }
     else {
       for (i = 0; i < effectiveChildren.length; i++) {
@@ -464,20 +464,20 @@ class PDOMInstance {
     // It's simpler/faster to just grab our order directly with one recursion, rather than specifying a sorting
     // function (since a lot gets re-evaluated in that case).
 
-    assert && assert(this.peer !== null, 'peer required for sort');
+    window.assert && window.assert(this.peer !== null, 'peer required for sort');
     let nodeForTrail: Node;
     if (this.isRootInstance) {
 
-      assert && assert(this.display !== null, 'Display should be available for the root');
+      window.assert && window.assert(this.display !== null, 'Display should be available for the root');
       nodeForTrail = this.display!.rootNode;
     }
     else {
-      assert && assert(this.node !== null, 'Node should be defined, were we disposed?');
+      window.assert && window.assert(this.node !== null, 'Node should be defined, were we disposed?');
       nodeForTrail = this.node!;
     }
     const targetChildren = this.getChildOrdering(new Trail(nodeForTrail));
 
-    assert && assert(targetChildren.length === this.children.length, 'sorting should not change number of children');
+    window.assert && window.assert(targetChildren.length === this.children.length, 'sorting should not change number of children');
 
     // {Array.<PDOMInstance>}
     this.children = targetChildren;
@@ -505,7 +505,7 @@ class PDOMInstance {
       if (needsOrderChange) {
         const pivotElement = focusedChildInstance.peer!.getTopLevelElementContainingPrimarySibling();
         const pivotIndex = desiredOrder.indexOf(pivotElement);
-        assert && assert(pivotIndex >= 0);
+        window.assert && window.assert(pivotIndex >= 0);
 
         // Insert all elements before the pivot element
         for (let j = 0; j < pivotIndex; j++) {
@@ -594,7 +594,7 @@ class PDOMInstance {
       return indicesString.join(PDOMUtils.PDOM_UNIQUE_ID_SEPARATOR);
     }
     else {
-      assert && assert(UNIQUE_ID_STRATEGY === PDOMUniqueIdStrategy.TRAIL_ID);
+      window.assert && window.assert(UNIQUE_ID_STRATEGY === PDOMUniqueIdStrategy.TRAIL_ID);
 
       return this.trail!.getUniqueId();
     }
@@ -605,7 +605,7 @@ class PDOMInstance {
    * ids from such a change. Update peer ids for provided instances and all descendants of provided instances.
    */
   private updateDescendantPeerIds(pdomInstances: PDOMInstance[]): void {
-    assert && assert(UNIQUE_ID_STRATEGY === PDOMUniqueIdStrategy.INDICES, 'method should not be used with uniqueId comes from TRAIL_ID');
+    window.assert && window.assert(UNIQUE_ID_STRATEGY === PDOMUniqueIdStrategy.INDICES, 'method should not be used with uniqueId comes from TRAIL_ID');
     const toUpdate = Array.from(pdomInstances);
     while (toUpdate.length > 0) {
       const pdomInstance = toUpdate.shift()!;
@@ -624,7 +624,7 @@ class PDOMInstance {
       return display.getTrailFromPDOMIndicesString(uniqueId);
     }
     else {
-      assert && assert(UNIQUE_ID_STRATEGY === PDOMUniqueIdStrategy.TRAIL_ID);
+      window.assert && window.assert(UNIQUE_ID_STRATEGY === PDOMUniqueIdStrategy.TRAIL_ID);
       return Trail.fromUniqueId(display.rootNode, uniqueId);
     }
   }
@@ -639,7 +639,7 @@ class PDOMInstance {
       `Disposing ${this.toString()}`);
     sceneryLog && sceneryLog.PDOMInstance && sceneryLog.push();
 
-    assert && assert(!!this.peer, 'PDOMPeer required, were we already disposed?');
+    window.assert && window.assert(!!this.peer, 'PDOMPeer required, were we already disposed?');
     const thisPeer = this.peer!;
 
     // Disconnect DOM and remove listeners
@@ -707,10 +707,10 @@ class PDOMInstance {
       'Should only call auditRoot() on the root PDOMInstance for a display');
 
     function audit(fakeInstance: FakeInstance, pdomInstance: PDOMInstance): void {
-      assert && assert(fakeInstance.children.length === pdomInstance.children.length,
+      window.assert && window.assert(fakeInstance.children.length === pdomInstance.children.length,
         'Different number of children in accessible instance');
 
-      assert && assert(fakeInstance.node === pdomInstance.node, 'Node mismatch for PDOMInstance');
+      window.assert && window.assert(fakeInstance.node === pdomInstance.node, 'Node mismatch for PDOMInstance');
 
       for (let i = 0; i < pdomInstance.children.length; i++) {
         audit(fakeInstance.children[i], pdomInstance.children[i]);
@@ -728,7 +728,7 @@ class PDOMInstance {
         }
       }
 
-      assert && assert(isVisible === shouldBeVisible, 'Instance visibility mismatch');
+      window.assert && window.assert(isVisible === shouldBeVisible, 'Instance visibility mismatch');
     }
 
     audit(PDOMInstance.createFakePDOMTree(rootNode), this);
@@ -761,7 +761,7 @@ class PDOMInstance {
 
     // firstGoodNode might not be attached to a Display either! Maybe client just hasn't gotten to it yet, so we
     // fail gracefully-ish?
-    // assert && assert( baseTrails.length > 0, '"good node" in trail with gap not attached to root')
+    // window.assert && window.assert( baseTrails.length > 0, '"good node" in trail with gap not attached to root')
     if (baseTrails.length === 0) {
       return trail;
     }
@@ -772,7 +772,7 @@ class PDOMInstance {
       baseTrail.addDescendant(trail.nodes[i]);
     }
 
-    assert && assert(baseTrail.isValid(), `trail not valid: ${trail.uniqueId}`);
+    window.assert && window.assert(baseTrail.isValid(), `trail not valid: ${trail.uniqueId}`);
 
     return baseTrail;
   }

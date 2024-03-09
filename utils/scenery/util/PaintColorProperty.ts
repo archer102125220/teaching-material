@@ -83,7 +83,7 @@ export default class PaintColorProperty extends Property<Color> {
    * Sets the current paint of the PaintColorProperty.
    */
   public setPaint(paint: TPaint): void {
-    assert && assert(PaintDef.isPaintDef(paint));
+    window.assert && window.assert(PaintDef.isPaintDef(paint));
 
     this._paint = paint;
     this._paintObserver.setPrimary(paint);
@@ -119,7 +119,7 @@ export default class PaintColorProperty extends Property<Color> {
    * the paint.
    */
   public setLuminanceFactor(luminanceFactor: number): void {
-    assert && assert(luminanceFactor >= -1 && luminanceFactor <= 1);
+    window.assert && window.assert(luminanceFactor >= -1 && luminanceFactor <= 1);
 
     if (this.luminanceFactor !== luminanceFactor) {
       this._luminanceFactor = luminanceFactor;

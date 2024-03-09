@@ -15,7 +15,7 @@ QUnit.module('QueryStringMachine');
 // assert shadows window.assert
 QUnit.test('basic tests', (assert) => {
   const value = 'hello';
-  assert.equal(value, 'hello', 'We expect value to be hello');
+  window.assert.equal(value, 'hello', 'We expect value to be hello');
 
   const schemaMap = {
     height: {
@@ -57,7 +57,7 @@ QUnit.test('basic tests', (assert) => {
     }
   };
 
-  assert.deepEqual(
+  window.assert.deepEqual(
     QueryStringMachine.getAllForString(schemaMap, ''),
     {
       height: 6,
@@ -70,7 +70,7 @@ QUnit.test('basic tests', (assert) => {
     'A blank query string should provide defaults'
   );
 
-  assert.deepEqual(
+  window.assert.deepEqual(
     QueryStringMachine.getAllForString(schemaMap, '?height=7&isWebGL'),
     {
       height: 7,
@@ -83,7 +83,7 @@ QUnit.test('basic tests', (assert) => {
     'Query parameter values should be parsed'
   );
 
-  assert.deepEqual(
+  window.assert.deepEqual(
     QueryStringMachine.getAllForString(schemaMap, '?screens='),
     {
       height: 6,
@@ -96,7 +96,7 @@ QUnit.test('basic tests', (assert) => {
     'No value for screens should result in an empty array '
   );
 
-  assert.deepEqual(
+  window.assert.deepEqual(
     QueryStringMachine.getAllForString(
       schemaMap,
       '?height=7&isWebGL&custom=DEF'
@@ -112,7 +112,7 @@ QUnit.test('basic tests', (assert) => {
     'Custom query parameter should be supported'
   );
 
-  assert.deepEqual(
+  window.assert.deepEqual(
     QueryStringMachine.getAllForString(
       schemaMap,
       '?isWebGL&screens=1,2,3,5&colors=yellow,orange,pink'
@@ -133,7 +133,7 @@ QUnit.test('basic tests', (assert) => {
       type: 'flag'
     }
   };
-  assert.deepEqual(
+  window.assert.deepEqual(
     QueryStringMachine.getAllForString(flagSchema, '?flag'),
     {
       flag: true
@@ -141,7 +141,7 @@ QUnit.test('basic tests', (assert) => {
     'Flag was provided'
   );
 
-  assert.deepEqual(
+  window.assert.deepEqual(
     QueryStringMachine.getAllForString(flagSchema, '?flag='),
     {
       flag: true
@@ -149,17 +149,17 @@ QUnit.test('basic tests', (assert) => {
     'Flag was provided with no value'
   );
 
-  assert.throws(() => {
+  window.assert.throws(() => {
     QueryStringMachine.getAllForString(flagSchema, '?flag=hello');
   }, 'Flags cannot have values');
 
-  assert.throws(() => {
+  window.assert.throws(() => {
     QueryStringMachine.getAllForString(flagSchema, '?flag=true');
   }, 'Flags cannot have values');
 
   // Test that isValidValue is supported for arrays with a contrived check (element sum == 7).
   // With an input of [2,4,0], QSM should throw an error, and it should be caught here.
-  assert.throws(() => {
+  window.assert.throws(() => {
     QueryStringMachine.getAllForString(
       {
         numbers: {
@@ -179,7 +179,7 @@ QUnit.test('basic tests', (assert) => {
     );
   }, 'Array error handling should catch exception');
 
-  assert.throws(() => {
+  window.assert.throws(() => {
     QueryStringMachine.getAllForString(
       {
         sim: {
@@ -190,7 +190,7 @@ QUnit.test('basic tests', (assert) => {
     );
   }, 'Catch missing required query parameter');
 
-  assert.deepEqual(
+  window.assert.deepEqual(
     QueryStringMachine.getForString(
       'hello',
       {
@@ -211,7 +211,7 @@ QUnit.test('basic tests', (assert) => {
     'Arrays should support defaultValue and validValues'
   );
 
-  assert.throws(() => {
+  window.assert.throws(() => {
     QueryStringMachine.getForString(
       'hello',
       {
@@ -230,7 +230,7 @@ QUnit.test('basic tests', (assert) => {
     );
   }, 'Catch invalid value for array');
 
-  assert.deepEqual(
+  window.assert.deepEqual(
     QueryStringMachine.getForString(
       'screens',
       {
@@ -249,37 +249,37 @@ QUnit.test('basic tests', (assert) => {
 
 // Tests for our own deepEquals method
 QUnit.test('deepEquals', (assert) => {
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(7, 7),
     true,
     '7 should equal itself'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(7, 8),
     false,
     '7 should not equal 8'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(7, '7'),
     false,
     '7 should not equal "7"'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals({ 0: 'A' }, 'A'),
     false,
     'string tests'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(['hello', 7], ['hello', 7]),
     true,
     'array equality test'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(['hello', 7], ['hello', '7']),
     false,
     'array inequality test'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(
       ['hello', { hello: true }],
       ['hello', { hello: true }]
@@ -287,7 +287,7 @@ QUnit.test('deepEquals', (assert) => {
     true,
     'object in array inequality test'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(
       ['hello', { hello: true }],
       ['hello', { hello: false }]
@@ -295,7 +295,7 @@ QUnit.test('deepEquals', (assert) => {
     false,
     'object in array  inequality test'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(
       { x: [{ y: 'hello' }, true, 123, 'x'] },
       { x: [{ y: 'hello' }, true, 123, 'x'] }
@@ -303,7 +303,7 @@ QUnit.test('deepEquals', (assert) => {
     true,
     'object in array  inequality test'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(
       { x: [{ y: 'hello' }, true, 123, 'x'] },
       { x: [true, { y: 'hello' }, true, 123, 'x'] }
@@ -311,7 +311,7 @@ QUnit.test('deepEquals', (assert) => {
     false,
     'object in array  inequality test'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(
       { x: [{ y: 'hello' }, true, 123, 'x'] },
       { y: [{ y: 'hello' }, true, 123, 'x'] }
@@ -319,18 +319,18 @@ QUnit.test('deepEquals', (assert) => {
     false,
     'object in array  inequality test'
   );
-  assert.equal(QueryStringMachine.deepEquals(null, null), true, 'null null');
-  assert.equal(
+  window.assert.equal(QueryStringMachine.deepEquals(null, null), true, 'null null');
+  window.assert.equal(
     QueryStringMachine.deepEquals(null, undefined),
     false,
     'null undefined'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(undefined, undefined),
     true,
     'undefined undefined'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(
       () => {},
       () => {}
@@ -339,7 +339,7 @@ QUnit.test('deepEquals', (assert) => {
     'different implementations of similar functions'
   );
   const f = function () {};
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.deepEquals(f, f),
     true,
     'same reference function'
@@ -347,47 +347,47 @@ QUnit.test('deepEquals', (assert) => {
 });
 
 QUnit.test('removeKeyValuePair', (assert) => {
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.removeKeyValuePair('?time=now', 'time'),
     '',
     'Remove single occurrence'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.removeKeyValuePair('?time=now&place=here', 'time'),
     '?place=here',
     'Remove single occurrence but leave other'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.removeKeyValuePair('?time=now&time=later', 'time'),
     '',
     'Remove multiple occurrences'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.removeKeyValuePair('?time=now&time', 'time'),
     '',
     'Remove multiple occurrences, one with value'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.removeKeyValuePair('?place=here&time=now', 'time'),
     '?place=here',
     'Different order'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.removeKeyValuePair('?time&place', 'time'),
     '?place',
     'Remove with no values'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.removeKeyValuePair('?place&time', 'time'),
     '?place',
     'Remove with no values'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.removeKeyValuePair('?place&time', 'times'),
     '?place&time',
     'Key to remove not present'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.removeKeyValuePair(
       '?sim=ohms-law&phetioValidation&phetioDebug=true',
       'fuzz'
@@ -395,14 +395,14 @@ QUnit.test('removeKeyValuePair', (assert) => {
     '?sim=ohms-law&phetioValidation&phetioDebug=true',
     'Key to remove not present'
   );
-  assert.equal(
+  window.assert.equal(
     QueryStringMachine.removeKeyValuePair('', 'fuzz'),
     '',
     'No search present'
   );
 
   if (window.assert) {
-    assert.throws(
+    window.assert.throws(
       () => QueryStringMachine.removeKeyValuePair('time=now', 'time'),
       'Not removed if there is no question mark'
     );
@@ -411,7 +411,7 @@ QUnit.test('removeKeyValuePair', (assert) => {
 
 QUnit.test('appendQueryString', (assert) => {
   const test = function (url, queryParameters, expected) {
-    assert.equal(
+    window.assert.equal(
       QueryStringMachine.appendQueryString(url, queryParameters),
       expected,
       `${url} + ${queryParameters} should be ok`
@@ -457,7 +457,7 @@ QUnit.test('appendQueryString', (assert) => {
 
 QUnit.test('getSingleQueryParameterString', (assert) => {
   const test = function (url, key, expected) {
-    assert.equal(
+    window.assert.equal(
       QueryStringMachine.getSingleQueryParameterString(key, url),
       expected,
       `${url} + ${key} should be equal`
@@ -501,31 +501,31 @@ QUnit.test('public query parameters should be graceful', (assert) => {
     screensSchema,
     '?screens=1'
   );
-  assert.ok(screens.length === 1);
-  assert.ok(screens[0] === 1);
+  window.assert.ok(screens.length === 1);
+  window.assert.ok(screens[0] === 1);
 
   screens = QueryStringMachine.getForString(
     'screens',
     screensSchema,
     '?screens=1.1'
   );
-  assert.ok(QueryStringMachine.warnings.length === 1);
-  assert.ok(screens === null, 'should have the default value');
+  window.assert.ok(QueryStringMachine.warnings.length === 1);
+  window.assert.ok(screens === null, 'should have the default value');
   screens = QueryStringMachine.getForString(
     'screens',
     screensSchema,
     '?screens=54890,fd'
   );
-  assert.ok(QueryStringMachine.warnings.length === 2);
-  assert.ok(screens === null, 'should have the default value');
+  window.assert.ok(QueryStringMachine.warnings.length === 2);
+  window.assert.ok(screens === null, 'should have the default value');
 
   screens = QueryStringMachine.getForString(
     'screens',
     screensSchema,
     '?screens=1,1,1'
   );
-  assert.ok(QueryStringMachine.warnings.length === 3);
-  assert.ok(screens === null, 'should have the default value');
+  window.assert.ok(QueryStringMachine.warnings.length === 3);
+  window.assert.ok(screens === null, 'should have the default value');
 
   // should use the fallback
   screens = QueryStringMachine.getForString(
@@ -533,7 +533,7 @@ QUnit.test('public query parameters should be graceful', (assert) => {
     screensSchema,
     '?screens=Hello1,1,Goose1'
   );
-  assert.ok(screens === null, 'should have the default value');
+  window.assert.ok(screens === null, 'should have the default value');
 
   QueryStringMachine.warnings.length = 0;
 
@@ -555,33 +555,33 @@ QUnit.test('public query parameters should be graceful', (assert) => {
     otherScreensSchema,
     '?screens=first'
   );
-  assert.ok(screens.length === 1);
-  assert.ok(screens[0] === 'first');
+  window.assert.ok(screens.length === 1);
+  window.assert.ok(screens[0] === 'first');
 
   screens = QueryStringMachine.getForString(
     'screens',
     otherScreensSchema,
     '?screens=first,notFirst'
   );
-  assert.ok(screens.length === 2);
-  assert.ok(screens[0] === 'first');
-  assert.ok(screens[1] === 'notFirst');
+  window.assert.ok(screens.length === 2);
+  window.assert.ok(screens[0] === 'first');
+  window.assert.ok(screens[1] === 'notFirst');
 
   screens = QueryStringMachine.getForString(
     'screens',
     otherScreensSchema,
     '?screens=firsfdt,notFisrst'
   );
-  assert.ok(QueryStringMachine.warnings.length === 1);
-  assert.ok(screens === null);
+  window.assert.ok(QueryStringMachine.warnings.length === 1);
+  window.assert.ok(screens === null);
 
   screens = QueryStringMachine.getForString(
     'screens',
     otherScreensSchema,
     '?screens=firsfdt,1'
   );
-  assert.ok(QueryStringMachine.warnings.length === 2);
-  assert.ok(screens === null);
+  window.assert.ok(QueryStringMachine.warnings.length === 2);
+  window.assert.ok(screens === null);
 
   QueryStringMachine.warnings.length = 0;
 
@@ -591,16 +591,16 @@ QUnit.test('public query parameters should be graceful', (assert) => {
   };
 
   let flag = QueryStringMachine.getForString('flag', flagSchema, '?flag=true');
-  assert.ok(flag === true);
-  assert.ok(QueryStringMachine.warnings.length === 1);
+  window.assert.ok(flag === true);
+  window.assert.ok(QueryStringMachine.warnings.length === 1);
 
   flag = QueryStringMachine.getForString('flag', flagSchema, '?flag=');
-  assert.ok(flag === true);
-  assert.ok(QueryStringMachine.warnings.length === 1);
+  window.assert.ok(flag === true);
+  window.assert.ok(QueryStringMachine.warnings.length === 1);
 
   flag = QueryStringMachine.getForString('flag', flagSchema, '?hello');
-  assert.ok(flag === false);
-  assert.ok(QueryStringMachine.warnings.length === 1);
+  window.assert.ok(flag === false);
+  window.assert.ok(QueryStringMachine.warnings.length === 1);
 
   QueryStringMachine.warnings.length = 0;
 });

@@ -59,7 +59,7 @@ export default class StickyToggleButtonModel<T> extends ButtonModel {
     } );
 
     this.toggledEmitter.addListener( () => {
-      assert && assert( this.valueProperty.value === this.valueUp || this.valueProperty.value === this.valueDown,
+      window.assert && window.assert( this.valueProperty.value === this.valueUp || this.valueProperty.value === this.valueDown,
         `unrecognized value: ${this.valueProperty.value}` );
       this.valueProperty.value = this.valueProperty.value === this.valueUp ? this.valueDown : this.valueUp;
     } );

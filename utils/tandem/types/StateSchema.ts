@@ -102,10 +102,10 @@ export default class StateSchema<T, SelfStateType> {
    */
   public defaultApplyState(coreObject: T, stateObject: CompositeStateObjectType): void {
 
-    assert && assert(this.isComposite(), 'defaultApplyState from stateSchema only applies to composite stateSchemas');
+    window.assert && window.assert(this.isComposite(), 'defaultApplyState from stateSchema only applies to composite stateSchemas');
     for (const stateKey in this.compositeSchema) {
       if (this.compositeSchema.hasOwnProperty(stateKey)) {
-        assert && assert(stateObject.hasOwnProperty(stateKey), `stateObject does not have expected schema key: ${stateKey}`);
+        window.assert && window.assert(stateObject.hasOwnProperty(stateKey), `stateObject does not have expected schema key: ${stateKey}`);
 
         // The IOType for the key in the composite.
         const schemaIOType = this.compositeSchema[stateKey];
@@ -119,7 +119,7 @@ export default class StateSchema<T, SelfStateType> {
           coreObject[coreObjectAccessorName] = this.compositeSchema[stateKey].fromStateObject(stateObject[stateKey]);
         }
         else {
-          assert && assert(schemaIOType.defaultDeserializationMethod === 'applyState', 'unexpected deserialization method');
+          window.assert && window.assert(schemaIOType.defaultDeserializationMethod === 'applyState', 'unexpected deserialization method');
 
           // Using applyState to deserialize sub-component
           // @ts-expect-error, I don't know how to tell typescript that we are accessing an expected key on the PhetioObject subtype. Likely there is no way with making things generic.
@@ -135,7 +135,7 @@ export default class StateSchema<T, SelfStateType> {
    * well as if the coreObject has an es5 getter instead of an actual field.
    */
   public defaultToStateObject(coreObject: T): SelfStateType {
-    assert && assert(this.isComposite(), 'defaultToStateObject from stateSchema only applies to composite stateSchemas');
+    window.assert && window.assert(this.isComposite(), 'defaultToStateObject from stateSchema only applies to composite stateSchemas');
 
     const stateObject = {};
     for (const stateKey in this.compositeSchema) {
@@ -158,7 +158,7 @@ export default class StateSchema<T, SelfStateType> {
           }
 
           const isValue = !!descriptor && descriptor.hasOwnProperty('value') && descriptor.writable;
-          assert && assert(isValue || isGetter,
+          window.assert && window.assert(isValue || isGetter,
             `cannot get state because coreObject does not have expected schema key: ${coreObjectAccessorName}`);
 
         }
@@ -176,7 +176,7 @@ export default class StateSchema<T, SelfStateType> {
    */
   private getCoreObjectAccessorName(stateKey: string, coreObject: T): string {
 
-    assert && assert(!stateKey.startsWith('__'), 'State keys should not start with too many underscores: ' + stateKey + '. When serializing ', coreObject);
+    window.assert && window.assert(!stateKey.startsWith('__'), 'State keys should not start with too many underscores: ' + stateKey + '. When serializing ', coreObject);
 
     // Does the class field start with an underscore? We need to cover two cases here. The first is where the underscore
     // was added to make a private state key. The second, is where the core class only has the underscore-prefixed
@@ -244,13 +244,13 @@ export default class StateSchema<T, SelfStateType> {
         }
         else {
           console.error('key should be a string', key);
-          assert && assert(false, 'key should be a string');
+          window.assert && window.assert(false, 'key should be a string');
         }
       });
       return valid;
     }
     else {
-      assert && assert(this.validator, 'validator must be present if not composite');
+      window.assert && window.assert(this.validator, 'validator must be present if not composite');
       const valueStateObject = stateObject;
 
       if (assert && toAssert) {
@@ -298,7 +298,7 @@ export default class StateSchema<T, SelfStateType> {
    * schema of sub-components.
    */
   public static asValue<T, StateType>(displayString: string, validator: Validator<IntentionalAny>): StateSchema<T, StateType> {
-    assert && assert(validator, 'validator required');
+    window.assert && window.assert(validator, 'validator required');
     return new StateSchema<T, StateType>({
       validator,
       displayString

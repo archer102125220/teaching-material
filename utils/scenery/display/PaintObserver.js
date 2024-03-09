@@ -270,7 +270,7 @@ class PaintObserver {
 
     const id = property.id;
     const count = --this.secondaryPropertyCountsMap[id];
-    assert && assert(count >= 0, 'We should have had a reference before');
+    window.assert && window.assert(count >= 0, 'We should have had a reference before');
 
     if (count === 0) {
       delete this.secondaryPropertyCountsMap[id];

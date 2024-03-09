@@ -32,7 +32,7 @@ const EnumerationIO = <T extends EnumerationValue>(enumerationContainer: Enumera
 
     const ioTypeName = `EnumerationIO(${joinKeys(keys)})`;
 
-    assert && assert(
+    window.assert && window.assert(
       !Array.from(cache.values()).find(ioType => ioType.typeName === ioTypeName),
       'There was already another IOType with the same name: ' + ioTypeName
     );
@@ -42,8 +42,8 @@ const EnumerationIO = <T extends EnumerationValue>(enumerationContainer: Enumera
       documentation: `Possible values: ${keys.join(', ')}.${additionalDocs}`,
       toStateObject: (value: T) => enumeration.getKey(value),
       fromStateObject: (stateObject: string): T => {
-        assert && assert(typeof stateObject === 'string', 'unsupported EnumerationIO value type, expected string'); // eslint-disable-line no-simple-type-checking-assertions
-        assert && assert(keys.includes(stateObject), `Unrecognized value: ${stateObject}`);
+        window.assert && window.assert(typeof stateObject === 'string', 'unsupported EnumerationIO value type, expected string'); // eslint-disable-line no-simple-type-checking-assertions
+        window.assert && window.assert(keys.includes(stateObject), `Unrecognized value: ${stateObject}`);
         return enumeration.getValue(stateObject)!;
       },
       stateSchema: StateSchema.asValue<EnumerationValue, string>(`${joinKeys(keys)}`, {

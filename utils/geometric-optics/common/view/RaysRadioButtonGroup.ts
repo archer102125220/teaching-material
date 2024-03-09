@@ -7,18 +7,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Text } from '../../../../scenery/js/imports.js';
-import VerticalAquaRadioButtonGroup, { VerticalAquaRadioButtonGroupOptions } from '../../../../sun/js/VerticalAquaRadioButtonGroup.js';
-import geometricOptics from '../../geometricOptics.js';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings.js';
-import GOConstants from '../GOConstants.js';
-import { RaysType } from '../model/RaysType.js';
-import { AquaRadioButtonGroupItem } from '../../../../sun/js/AquaRadioButtonGroup.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
-import Property from '../../../../axon/js/Property.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { Text } from '../../../scenery/imports';
+import VerticalAquaRadioButtonGroup, { type VerticalAquaRadioButtonGroupOptions } from '../../../sun/VerticalAquaRadioButtonGroup';
+import geometricOptics from '../../geometricOptics';
+import GeometricOpticsStrings from '../../GeometricOpticsStrings';
+import GOConstants from '../GOConstants';
+import { type RaysType } from '../model/RaysType';
+import { type AquaRadioButtonGroupItem } from '../../../sun/AquaRadioButtonGroup';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import Tandem from '../../../tandem/Tandem';
+import Property from '../../../axon/Property';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -26,9 +26,9 @@ type RaysRadioButtonGroupOptions = SelfOptions & PickRequired<VerticalAquaRadioB
 
 export default class RaysRadioButtonGroup extends VerticalAquaRadioButtonGroup<RaysType> {
 
-  public constructor( raysTypeProperty: Property<RaysType>, providedOptions: RaysRadioButtonGroupOptions ) {
+  public constructor(raysTypeProperty: Property<RaysType>, providedOptions: RaysRadioButtonGroupOptions) {
 
-    const options = optionize<RaysRadioButtonGroupOptions, SelfOptions, VerticalAquaRadioButtonGroupOptions>()( {
+    const options = optionize<RaysRadioButtonGroupOptions, SelfOptions, VerticalAquaRadioButtonGroupOptions>()({
 
       // VerticalAquaRadioButtonGroupOptions
       spacing: 4,
@@ -36,17 +36,17 @@ export default class RaysRadioButtonGroup extends VerticalAquaRadioButtonGroup<R
       radioButtonOptions: { radius: 7 },
       touchAreaXDilation: 10,
       mouseAreaXDilation: 10
-    }, providedOptions );
+    }, providedOptions);
 
     // items for ray Mode radio buttons
     const items = [
-      createItem( 'marginal', GeometricOpticsStrings.radioButton.marginalStringProperty, options.tandem, 'marginalRadioButton' ),
-      createItem( 'principal', GeometricOpticsStrings.radioButton.principalStringProperty, options.tandem, 'principalRadioButton' ),
-      createItem( 'many', GeometricOpticsStrings.radioButton.manyStringProperty, options.tandem, 'manyRadioButton' ),
-      createItem( 'none', GeometricOpticsStrings.radioButton.noneStringProperty, options.tandem, 'noneRadioButton' )
+      createItem('marginal', GeometricOpticsStrings.radioButton.marginalStringProperty, options.tandem, 'marginalRadioButton'),
+      createItem('principal', GeometricOpticsStrings.radioButton.principalStringProperty, options.tandem, 'principalRadioButton'),
+      createItem('many', GeometricOpticsStrings.radioButton.manyStringProperty, options.tandem, 'manyRadioButton'),
+      createItem('none', GeometricOpticsStrings.radioButton.noneStringProperty, options.tandem, 'noneRadioButton')
     ];
 
-    super( raysTypeProperty, items, options );
+    super(raysTypeProperty, items, options);
   }
 }
 
@@ -57,19 +57,19 @@ export default class RaysRadioButtonGroup extends VerticalAquaRadioButtonGroup<R
  * @param groupTandem - used to associate the item's tandem with the radio-button group
  * @param itemTandemName - used to create the item's tandem
  */
-function createItem( value: RaysType,
-                     labelStringProperty: TReadOnlyProperty<string>,
-                     groupTandem: Tandem,
-                     itemTandemName: string ): AquaRadioButtonGroupItem<RaysType> {
+function createItem(value: RaysType,
+  labelStringProperty: TReadOnlyProperty<string>,
+  groupTandem: Tandem,
+  itemTandemName: string): AquaRadioButtonGroupItem<RaysType> {
   return {
-    value: value,
-    createNode: tandem => new Text( labelStringProperty, {
+    value,
+    createNode: tandem => new Text(labelStringProperty, {
       font: GOConstants.CONTROL_FONT,
       maxWidth: 65,
-      tandem: tandem.createTandem( 'labelText' )
-    } ),
+      tandem: tandem.createTandem('labelText')
+    }),
     tandemName: itemTandemName
   };
 }
 
-geometricOptics.register( 'RaysRadioButtonGroup', RaysRadioButtonGroup );
+geometricOptics.register('RaysRadioButtonGroup', RaysRadioButtonGroup);

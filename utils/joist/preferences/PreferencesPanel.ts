@@ -6,14 +6,14 @@
  * @author Jesse Greenberg
  */
 
-import joist from '../joist.js';
-import { Node, NodeOptions } from '../../../scenery/js/imports.js';
-import Multilink from '../../../axon/js/Multilink.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import PreferencesType from './PreferencesType.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import Tandem from '../../../tandem/js/Tandem.js';
+import joist from '../joist';
+import { Node, type NodeOptions } from '../../scenery/imports';
+import Multilink from '../../axon/Multilink';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import PreferencesType from './PreferencesType';
+import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import Tandem from '../../tandem/Tandem';
 
 type SelfOptions = EmptySelfOptions;
 export type PreferencesPanelOptions = StrictOmit<NodeOptions, 'tagName' | 'labelTagName'>;
@@ -26,26 +26,26 @@ class PreferencesPanel extends Node {
    * @param tabVisibleProperty - Is the Tab for this panel invisible (so this panel should also be invisible)?
    * @param providedOptions
    */
-  public constructor( preferencesType: PreferencesType, selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean>, providedOptions?: PreferencesPanelOptions ) {
-    const options = optionize<PreferencesPanelOptions, SelfOptions, NodeOptions>()( {
+  public constructor(preferencesType: PreferencesType, selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean>, providedOptions?: PreferencesPanelOptions) {
+    const options = optionize<PreferencesPanelOptions, SelfOptions, NodeOptions>()({
 
       // pdom
       tagName: 'div',
       labelTagName: 'h2'
-    }, providedOptions );
+    }, providedOptions);
 
     // don't instrument the Panel Node itself, though many subclasses make it required for subcomponents
     options.tandem = Tandem.OPT_OUT;
 
-    super( options );
+    super(options);
 
     // This panel is only visible when selected tab is this preferencesType, but it can also be hidden explicitly by
     // PhET-iO.
-    Multilink.multilink( [ selectedTabProperty, tabVisibleProperty ], ( selectedTab, tabVisible ) => {
+    Multilink.multilink([selectedTabProperty, tabVisibleProperty], (selectedTab, tabVisible) => {
       this.visible = selectedTab === preferencesType && tabVisible;
-    } );
+    });
   }
 }
 
-joist.register( 'PreferencesPanel', PreferencesPanel );
+joist.register('PreferencesPanel', PreferencesPanel);
 export default PreferencesPanel;

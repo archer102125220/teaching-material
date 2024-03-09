@@ -23,7 +23,7 @@ const SpeechSynthesisParentPolyfill = {
       throw new Error( 'SpeechSynthesis is supported here, the polyfill should not overwrite it' );
     }
 
-    assert && assert( window.parent, 'This polyfill requires a parent frame implementation of SpeechSynthesis.' );
+    window.assert && window.assert( window.parent, 'This polyfill requires a parent frame implementation of SpeechSynthesis.' );
 
     // @ts-expect-error - Very hacky, this prototype solution is not getting work anymore. No need for better solution.
     window.SpeechSynthesis = window.parent.SpeechSynthesis;

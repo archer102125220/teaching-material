@@ -35,7 +35,7 @@ import {
 QUnit.module('Trail');
 
 function equalsApprox(assert, a, b, message) {
-  assert.ok(
+  window.assert.ok(
     Math.abs(a - b) < 0.0000001,
     `${(message ? `${message}: ` : '') + a} =? ${b}`
   );
@@ -83,18 +83,18 @@ QUnit.test('Dirty bounds propagation test', (assert) => {
 
   node.validateBounds();
 
-  assert.ok(!node._childBoundsDirty);
+  window.assert.ok(!node._childBoundsDirty);
 
   node.children[0].children[3].children[0].invalidateBounds();
 
-  assert.ok(node._childBoundsDirty);
+  window.assert.ok(node._childBoundsDirty);
 });
 
 QUnit.test('Canvas 2D Context and Features', (assert) => {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
 
-  assert.ok(context, 'context');
+  window.assert.ok(context, 'context');
 
   const neededMethods = [
     'arc',
@@ -120,7 +120,7 @@ QUnit.test('Canvas 2D Context and Features', (assert) => {
     'strokeStyle'
   ];
   _.each(neededMethods, (method) => {
-    assert.ok(context[method] !== undefined, `context.${method}`);
+    window.assert.ok(context[method] !== undefined, `context.${method}`);
   });
 });
 
@@ -129,62 +129,62 @@ QUnit.test('Trail next/previous', (assert) => {
 
   // walk it forward
   let trail = new Trail([node]);
-  assert.equal(1, trail.length);
+  window.assert.equal(1, trail.length);
   trail = trail.next();
-  assert.equal(2, trail.length);
+  window.assert.equal(2, trail.length);
   trail = trail.next();
-  assert.equal(3, trail.length);
+  window.assert.equal(3, trail.length);
   trail = trail.next();
-  assert.equal(3, trail.length);
+  window.assert.equal(3, trail.length);
   trail = trail.next();
-  assert.equal(4, trail.length);
+  window.assert.equal(4, trail.length);
   trail = trail.next();
-  assert.equal(3, trail.length);
+  window.assert.equal(3, trail.length);
   trail = trail.next();
-  assert.equal(3, trail.length);
+  window.assert.equal(3, trail.length);
   trail = trail.next();
-  assert.equal(4, trail.length);
+  window.assert.equal(4, trail.length);
   trail = trail.next();
-  assert.equal(5, trail.length);
+  window.assert.equal(5, trail.length);
   trail = trail.next();
-  assert.equal(4, trail.length);
+  window.assert.equal(4, trail.length);
   trail = trail.next();
-  assert.equal(3, trail.length);
+  window.assert.equal(3, trail.length);
   trail = trail.next();
-  assert.equal(2, trail.length);
+  window.assert.equal(2, trail.length);
   trail = trail.next();
-  assert.equal(2, trail.length);
+  window.assert.equal(2, trail.length);
 
   // make sure walking off the end gives us null
-  assert.equal(null, trail.next());
+  window.assert.equal(null, trail.next());
 
   trail = trail.previous();
-  assert.equal(2, trail.length);
+  window.assert.equal(2, trail.length);
   trail = trail.previous();
-  assert.equal(3, trail.length);
+  window.assert.equal(3, trail.length);
   trail = trail.previous();
-  assert.equal(4, trail.length);
+  window.assert.equal(4, trail.length);
   trail = trail.previous();
-  assert.equal(5, trail.length);
+  window.assert.equal(5, trail.length);
   trail = trail.previous();
-  assert.equal(4, trail.length);
+  window.assert.equal(4, trail.length);
   trail = trail.previous();
-  assert.equal(3, trail.length);
+  window.assert.equal(3, trail.length);
   trail = trail.previous();
-  assert.equal(3, trail.length);
+  window.assert.equal(3, trail.length);
   trail = trail.previous();
-  assert.equal(4, trail.length);
+  window.assert.equal(4, trail.length);
   trail = trail.previous();
-  assert.equal(3, trail.length);
+  window.assert.equal(3, trail.length);
   trail = trail.previous();
-  assert.equal(3, trail.length);
+  window.assert.equal(3, trail.length);
   trail = trail.previous();
-  assert.equal(2, trail.length);
+  window.assert.equal(2, trail.length);
   trail = trail.previous();
-  assert.equal(1, trail.length);
+  window.assert.equal(1, trail.length);
 
   // make sure walking off the start gives us null
-  assert.equal(null, trail.previous());
+  window.assert.equal(null, trail.previous());
 });
 
 QUnit.test('Trail comparison', (assert) => {
@@ -199,14 +199,14 @@ QUnit.test('Trail comparison', (assert) => {
     currentTrail = currentTrail.next();
   }
 
-  assert.equal(13, trails.length, 'Trail for each node');
+  window.assert.equal(13, trails.length, 'Trail for each node');
 
   for (let i = 0; i < trails.length; i++) {
     for (let j = i; j < trails.length; j++) {
       const comparison = trails[i].compare(trails[j]);
 
       // make sure that every trail compares as expected (0 and they are equal, -1 and i < j)
-      assert.equal(i === j ? 0 : i < j ? -1 : 1, comparison, `${i},${j}`);
+      window.assert.equal(i === j ? 0 : i < j ? -1 : 1, comparison, `${i},${j}`);
     }
   }
 });
@@ -223,7 +223,7 @@ QUnit.test('Trail eachTrailBetween', (assert) => {
     currentTrail = currentTrail.next();
   }
 
-  assert.equal(
+  window.assert.equal(
     13,
     trails.length,
     `Trails: ${_.map(trails, (trail) => trail.toString()).join('\n')}`
@@ -242,15 +242,15 @@ QUnit.test('Trail eachTrailBetween', (assert) => {
         node
       );
       const trailString = `${i},${j} ${trails[i].toString()} to ${trails[j].toString()}`;
-      assert.ok(
+      window.assert.ok(
         inclusiveList[0].equals(trails[i]),
         `inclusive start on ${trailString} is ${inclusiveList[0].toString()}`
       );
-      assert.ok(
+      window.assert.ok(
         inclusiveList[inclusiveList.length - 1].equals(trails[j]),
         `inclusive end on ${trailString}is ${inclusiveList[inclusiveList.length - 1].toString()}`
       );
-      assert.equal(
+      window.assert.equal(
         inclusiveList.length,
         j - i + 1,
         `inclusive length on ${trailString} is ${inclusiveList.length}, ${_.map(inclusiveList, (trail) => trail.toString()).join('\n')}`
@@ -267,7 +267,7 @@ QUnit.test('Trail eachTrailBetween', (assert) => {
           true,
           node
         );
-        assert.equal(
+        window.assert.equal(
           exclusiveList.length,
           j - i - 1,
           `exclusive length on ${i},${j}`
@@ -290,7 +290,7 @@ QUnit.test(
           // should skip
           return true;
         }
-        assert.ok(
+        window.assert.ok(
           pointer.trail.isVisible(),
           `Trail visibility for ${pointer.trail.toString()}`
         );
@@ -310,7 +310,10 @@ QUnit.test('Trail eachTrailUnder with subtree skipping', (assert) => {
       // should skip
       return true;
     }
-    assert.ok(trail.isVisible(), `Trail visibility for ${trail.toString()}`);
+    window.assert.ok(
+      trail.isVisible(),
+      `Trail visibility for ${trail.toString()}`
+    );
     return false;
   });
 });
@@ -318,35 +321,35 @@ QUnit.test('Trail eachTrailUnder with subtree skipping', (assert) => {
 QUnit.test('TrailPointer render comparison', (assert) => {
   const node = createTestNodeTree();
 
-  assert.equal(
+  window.assert.equal(
     0,
     new TrailPointer(node.getUniqueTrail(), true).compareRender(
       new TrailPointer(node.getUniqueTrail(), true)
     ),
     'Same before pointer'
   );
-  assert.equal(
+  window.assert.equal(
     0,
     new TrailPointer(node.getUniqueTrail(), false).compareRender(
       new TrailPointer(node.getUniqueTrail(), false)
     ),
     'Same after pointer'
   );
-  assert.equal(
+  window.assert.equal(
     -1,
     new TrailPointer(node.getUniqueTrail(), true).compareRender(
       new TrailPointer(node.getUniqueTrail(), false)
     ),
     'Same node before/after root'
   );
-  assert.equal(
+  window.assert.equal(
     -1,
     new TrailPointer(node.children[0].getUniqueTrail(), true).compareRender(
       new TrailPointer(node.children[0].getUniqueTrail(), false)
     ),
     'Same node before/after nonroot'
   );
-  assert.equal(
+  window.assert.equal(
     0,
     new TrailPointer(
       node.children[0].children[1].children[0].getUniqueTrail(),
@@ -417,10 +420,10 @@ QUnit.test('TrailPointer render comparison', (assert) => {
       const comparison = pointers[i].compareRender(pointers[j]);
 
       if (comparison === -1) {
-        assert.ok(i < j, `${i},${j}`);
+        window.assert.ok(i < j, `${i},${j}`);
       }
       if (comparison === 1) {
-        assert.ok(i > j, `${i},${j}`);
+        window.assert.ok(i > j, `${i},${j}`);
       }
     }
   }
@@ -489,7 +492,7 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
       const comparison = pointers[i].compareNested(pointers[j]);
 
       // make sure that every pointer compares as expected (0 and they are equal, -1 and i < j)
-      assert.equal(
+      window.assert.equal(
         comparison,
         i === j ? 0 : i < j ? -1 : 1,
         `compareNested: ${i},${j}`
@@ -504,7 +507,7 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
 
     const forwardsCopy = a.copy();
     forwardsCopy.nestedForwards();
-    assert.equal(
+    window.assert.equal(
       forwardsCopy.compareNested(b),
       0,
       `forwardsPointerCheck ${i - 1} to ${i}`
@@ -512,7 +515,7 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
 
     const backwardsCopy = b.copy();
     backwardsCopy.nestedBackwards();
-    assert.equal(
+    window.assert.equal(
       backwardsCopy.compareNested(a),
       0,
       `backwardsPointerCheck ${i} to ${i - 1}`
@@ -531,7 +534,7 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
         },
         false
       );
-      assert.equal(
+      window.assert.equal(
         contents.length,
         j - i + 1,
         `depthFirstUntil inclusive ${i},${j} count check`
@@ -542,7 +545,7 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
       for (let k = 0; k < contents.length; k++) {
         const comparison = contents[k].compareNested(pointers[i + k]);
         if (comparison !== 0) {
-          assert.equal(
+          window.assert.equal(
             comparison,
             0,
             `depthFirstUntil inclusive ${i},${j},${k} comparison check ${contents[k].trail.indices.join()} - ${pointers[i + k].trail.indices.join()}`
@@ -550,7 +553,10 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
           isOk = false;
         }
       }
-      assert.ok(isOk, `depthFirstUntil inclusive ${i},${j} comparison check`);
+      window.assert.ok(
+        isOk,
+        `depthFirstUntil inclusive ${i},${j} comparison check`
+      );
     }
   }
 
@@ -566,7 +572,7 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
         },
         true
       );
-      assert.equal(
+      window.assert.equal(
         contents.length,
         j - i - 1,
         `depthFirstUntil exclusive ${i},${j} count check`
@@ -577,7 +583,7 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
       for (let k = 0; k < contents.length; k++) {
         const comparison = contents[k].compareNested(pointers[i + k + 1]);
         if (comparison !== 0) {
-          assert.equal(
+          window.assert.equal(
             comparison,
             0,
             `depthFirstUntil exclusive ${i},${j},${k} comparison check ${contents[k].trail.indices.join()} - ${pointers[i + k].trail.indices.join()}`
@@ -585,7 +591,10 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
           isOk = false;
         }
       }
-      assert.ok(isOk, `depthFirstUntil exclusive ${i},${j} comparison check`);
+      window.assert.ok(
+        isOk,
+        `depthFirstUntil exclusive ${i},${j} comparison check`
+      );
     }
   }
 });
@@ -638,7 +647,7 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
 //         _.each( allTrails, function( trail ) {
 //           if ( trail ) {
 //             let msg = 'union check of trail ' + trail.toString() + ' with ' + a.toString() + ' and ' + b.toString() + ' with union ' + union.toString();
-//            assert.equal( a.exclusiveContains( trail ) || b.exclusiveContains( trail ), union.exclusiveContains( trail ), msg );
+//            window.assert.equal( a.exclusiveContains( trail ) || b.exclusiveContains( trail ), union.exclusiveContains( trail ), msg );
 //           }
 //         } );
 //       } else {
@@ -654,7 +663,7 @@ QUnit.test('TrailPointer nested comparison and fowards/backwards', (assert) => {
 //             }
 //           }
 //         } );
-//         assert.ok( containsAnything && wouldBeBadUnion, 'Not a bad union?: ' + a.toString() + ' and ' + b.toString() + ' with union ' + union.toString() );
+//         window.assert.ok( containsAnything && wouldBeBadUnion, 'Not a bad union?: ' + a.toString() + ' and ' + b.toString() + ' with union ' + union.toString() );
 //       }
 //     }
 //   }
@@ -664,7 +673,7 @@ QUnit.test('Text width measurement in canvas', (assert) => {
   const canvas = document.createElement('canvas');
   const context = canvas.getContext('2d');
   const metrics = context.measureText('Hello World');
-  assert.ok(metrics.width, 'metrics.width');
+  window.assert.ok(metrics.width, 'metrics.width');
 });
 
 QUnit.test('Sceneless node handling', (assert) => {
@@ -685,48 +694,54 @@ QUnit.test('Sceneless node handling', (assert) => {
 
   b.validateBounds();
 
-  assert.ok(true, 'so we have at least 1 test in this set');
+  window.assert.ok(true, 'so we have at least 1 test in this set');
 });
 
 QUnit.test('Correct bounds on rectangle', (assert) => {
   const rectBounds = Utils.canvasAccurateBounds((context) => {
     context.fillRect(100, 100, 200, 200);
   });
-  assert.ok(Math.abs(rectBounds.minX - 100) < 0.01, rectBounds.minX);
-  assert.ok(Math.abs(rectBounds.minY - 100) < 0.01, rectBounds.minY);
-  assert.ok(Math.abs(rectBounds.maxX - 300) < 0.01, rectBounds.maxX);
-  assert.ok(Math.abs(rectBounds.maxY - 300) < 0.01, rectBounds.maxY);
+  window.assert.ok(Math.abs(rectBounds.minX - 100) < 0.01, rectBounds.minX);
+  window.assert.ok(Math.abs(rectBounds.minY - 100) < 0.01, rectBounds.minY);
+  window.assert.ok(Math.abs(rectBounds.maxX - 300) < 0.01, rectBounds.maxX);
+  window.assert.ok(Math.abs(rectBounds.maxY - 300) < 0.01, rectBounds.maxY);
 });
 
 QUnit.test('Consistent and precise bounds range on Text', (assert) => {
   const textBounds = Utils.canvasAccurateBounds((context) => {
     context.fillText('test string', 0, 0);
   });
-  assert.ok(textBounds.isConsistent, textBounds.toString());
+  window.assert.ok(textBounds.isConsistent, textBounds.toString());
 
   // precision of 0.001 (or lower given different parameters) is possible on non-Chome browsers (Firefox, IE9, Opera)
-  assert.ok(textBounds.precision < 0.15, `precision: ${textBounds.precision}`);
+  window.assert.ok(
+    textBounds.precision < 0.15,
+    `precision: ${textBounds.precision}`
+  );
 });
 
 QUnit.test('Consistent and precise bounds range on Text', (assert) => {
   const text = new Text('0\u0489');
   const textBounds = TextBounds.accurateCanvasBoundsFallback(text);
-  assert.ok(textBounds.isConsistent, textBounds.toString());
+  window.assert.ok(textBounds.isConsistent, textBounds.toString());
 
   // precision of 0.001 (or lower given different parameters) is possible on non-Chome browsers (Firefox, IE9, Opera)
-  assert.ok(textBounds.precision < 1, `precision: ${textBounds.precision}`);
+  window.assert.ok(
+    textBounds.precision < 1,
+    `precision: ${textBounds.precision}`
+  );
 });
 
 QUnit.test('ES5 Setter / Getter tests', (assert) => {
   const node = new Path(null);
   const fill = '#abcdef';
   node.fill = fill;
-  assert.equal(node.fill, fill);
-  assert.equal(node.getFill(), fill);
+  window.assert.equal(node.fill, fill);
+  window.assert.equal(node.getFill(), fill);
 
   const otherNode = new Path(Shape.rectangle(0, 0, 10, 10), { fill });
 
-  assert.equal(otherNode.fill, fill);
+  window.assert.equal(otherNode.fill, fill);
 });
 
 QUnit.test('Piccolo-like behavior', (assert) => {
@@ -788,14 +803,14 @@ QUnit.test('Path with empty shape', (assert) => {
   const scene = new Node();
   const node = new Path(new Shape());
   scene.addChild(node);
-  assert.ok(true, 'so we have at least 1 test in this set');
+  window.assert.ok(true, 'so we have at least 1 test in this set');
 });
 
 QUnit.test('Path with null shape', (assert) => {
   const scene = new Node();
   const node = new Path(null);
   scene.addChild(node);
-  assert.ok(true, 'so we have at least 1 test in this set');
+  window.assert.ok(true, 'so we have at least 1 test in this set');
 });
 
 QUnit.test('Display resize event', (assert) => {
@@ -814,9 +829,9 @@ QUnit.test('Display resize event', (assert) => {
 
   display.setWidthHeight(712, 217);
 
-  assert.equal(width, 712, 'Scene resize width');
-  assert.equal(height, 217, 'Scene resize height');
-  assert.equal(count, 1, 'Scene resize count');
+  window.assert.equal(width, 712, 'Scene resize width');
+  window.assert.equal(height, 217, 'Scene resize height');
+  window.assert.equal(count, 1, 'Scene resize count');
 });
 
 QUnit.test('Bounds events', (assert) => {
@@ -832,39 +847,39 @@ QUnit.test('Bounds events', (assert) => {
   const epsilon = 0.0000001;
 
   node.childBoundsProperty.lazyLink(() => {
-    assert.ok(
+    window.assert.ok(
       node.childBounds.equalsEpsilon(new Bounds2(10, 0, 110, 30), epsilon),
       `Parent child bounds check: ${node.childBounds.toString()}`
     );
   });
 
   node.boundsProperty.lazyLink(() => {
-    assert.ok(
+    window.assert.ok(
       node.bounds.equalsEpsilon(new Bounds2(10, 10, 110, 40), epsilon),
       `Parent bounds check: ${node.bounds.toString()}`
     );
   });
 
   node.selfBoundsProperty.lazyLink(() => {
-    assert.ok(false, 'Self bounds should not change for parent node');
+    window.assert.ok(false, 'Self bounds should not change for parent node');
   });
 
   rect.selfBoundsProperty.lazyLink(() => {
-    assert.ok(
+    window.assert.ok(
       rect.selfBounds.equalsEpsilon(new Bounds2(0, 0, 100, 30), epsilon),
       `Self bounds check: ${rect.selfBounds.toString()}`
     );
   });
 
   rect.boundsProperty.lazyLink(() => {
-    assert.ok(
+    window.assert.ok(
       rect.bounds.equalsEpsilon(new Bounds2(10, 0, 110, 30), epsilon),
       `Bounds check: ${rect.bounds.toString()}`
     );
   });
 
   rect.childBoundsProperty.lazyLink(() => {
-    assert.ok(false, 'Child bounds should not change for leaf node');
+    window.assert.ok(false, 'Child bounds should not change for leaf node');
   });
 
   rect.rectHeight = 30;
@@ -875,7 +890,7 @@ QUnit.test('Using a color instance', (assert) => {
   const scene = new Node();
 
   const rect = new Rectangle(0, 0, 100, 50);
-  assert.ok(rect.fill === null, 'Always starts with a null fill');
+  window.assert.ok(rect.fill === null, 'Always starts with a null fill');
   scene.addChild(rect);
   const color = new Color(255, 0, 0);
   rect.fill = color;
@@ -887,22 +902,22 @@ QUnit.test('Bounds and Visible Bounds', (assert) => {
   const rect = new Rectangle(0, 0, 100, 50);
   node.addChild(rect);
 
-  assert.ok(
+  window.assert.ok(
     node.visibleBounds.equals(new Bounds2(0, 0, 100, 50)),
     'Visible Bounds Visible'
   );
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 0, 100, 50)),
     'Complete Bounds Visible'
   );
 
   rect.visible = false;
 
-  assert.ok(
+  window.assert.ok(
     node.visibleBounds.equals(Bounds2.NOTHING),
     'Visible Bounds Invisible'
   );
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 0, 100, 50)),
     'Complete Bounds Invisible'
   );
@@ -914,34 +929,34 @@ QUnit.test('localBounds override', (assert) => {
   node.addChild(rect);
 
   rect.localBounds = new Bounds2(0, 0, 50, 50);
-  assert.ok(
+  window.assert.ok(
     node.localBounds.equals(new Bounds2(0, 0, 50, 50)),
     'localBounds override on self'
   );
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 5, 50, 55)),
     'localBounds override on self'
   );
 
   rect.localBounds = new Bounds2(0, 0, 50, 100);
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 5, 50, 105)),
     'localBounds override 2nd on self'
   );
 
   // reset local bounds (have them computed again)
   rect.localBounds = null;
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 5, 100, 55)),
     'localBounds override reset on self'
   );
 
   node.localBounds = new Bounds2(0, 0, 50, 200);
-  assert.ok(
+  window.assert.ok(
     node.localBounds.equals(new Bounds2(0, 0, 50, 200)),
     'localBounds override on parent'
   );
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 5, 50, 205)),
     'localBounds override on parent'
   );
@@ -982,13 +997,22 @@ QUnit.test('getTrails/getUniqueTrail', (assert) => {
 
   // getUniqueTrail()
   window.assert &&
-    assert.throws(() => {
+    window.assert.throws(() => {
       d.getUniqueTrail();
     }, 'D has no unique trail, since there are two');
-  assert.ok(a.getUniqueTrail().equals(new Trail([a])), 'a.getUniqueTrail()');
-  assert.ok(b.getUniqueTrail().equals(new Trail([a, b])), 'b.getUniqueTrail()');
-  assert.ok(c.getUniqueTrail().equals(new Trail([a, c])), 'c.getUniqueTrail()');
-  assert.ok(
+  window.assert.ok(
+    a.getUniqueTrail().equals(new Trail([a])),
+    'a.getUniqueTrail()'
+  );
+  window.assert.ok(
+    b.getUniqueTrail().equals(new Trail([a, b])),
+    'b.getUniqueTrail()'
+  );
+  window.assert.ok(
+    c.getUniqueTrail().equals(new Trail([a, c])),
+    'c.getUniqueTrail()'
+  );
+  window.assert.ok(
     e.getUniqueTrail().equals(new Trail([a, c, e])),
     'e.getUniqueTrail()'
   );
@@ -996,55 +1020,65 @@ QUnit.test('getTrails/getUniqueTrail', (assert) => {
   // getTrails()
   let trails;
   trails = a.getTrails();
-  assert.ok(
+  window.assert.ok(
     trails.length === 1 && trails[0].equals(new Trail([a])),
     'a.getTrails()'
   );
   trails = b.getTrails();
-  assert.ok(
+  window.assert.ok(
     trails.length === 1 && trails[0].equals(new Trail([a, b])),
     'b.getTrails()'
   );
   trails = c.getTrails();
-  assert.ok(
+  window.assert.ok(
     trails.length === 1 && trails[0].equals(new Trail([a, c])),
     'c.getTrails()'
   );
   trails = d.getTrails();
-  assert.ok(
+  window.assert.ok(
     trails.length === 2 &&
       compareTrailArrays(trails, [new Trail([a, b, d]), new Trail([a, c, d])]),
     'd.getTrails()'
   );
   trails = e.getTrails();
-  assert.ok(
+  window.assert.ok(
     trails.length === 1 && trails[0].equals(new Trail([a, c, e])),
     'e.getTrails()'
   );
 
   // getUniqueTrail( predicate )
   window.assert &&
-    assert.throws(() => {
+    window.assert.throws(() => {
       e.getUniqueTrail((node) => false);
     }, 'Fails on false predicate');
   window.assert &&
-    assert.throws(() => {
+    window.assert.throws(() => {
       e.getUniqueTrail((node) => false);
     }, 'Fails on false predicate');
-  assert.ok(
+  window.assert.ok(
     e.getUniqueTrail((node) => node === a).equals(new Trail([a, c, e]))
   );
-  assert.ok(e.getUniqueTrail((node) => node === c).equals(new Trail([c, e])));
-  assert.ok(e.getUniqueTrail((node) => node === e).equals(new Trail([e])));
-  assert.ok(d.getUniqueTrail((node) => node === b).equals(new Trail([b, d])));
-  assert.ok(d.getUniqueTrail((node) => node === c).equals(new Trail([c, d])));
-  assert.ok(d.getUniqueTrail((node) => node === d).equals(new Trail([d])));
+  window.assert.ok(
+    e.getUniqueTrail((node) => node === c).equals(new Trail([c, e]))
+  );
+  window.assert.ok(
+    e.getUniqueTrail((node) => node === e).equals(new Trail([e]))
+  );
+  window.assert.ok(
+    d.getUniqueTrail((node) => node === b).equals(new Trail([b, d]))
+  );
+  window.assert.ok(
+    d.getUniqueTrail((node) => node === c).equals(new Trail([c, d]))
+  );
+  window.assert.ok(
+    d.getUniqueTrail((node) => node === d).equals(new Trail([d]))
+  );
 
   // getTrails( predicate )
   trails = d.getTrails((node) => false);
-  assert.ok(trails.length === 0);
+  window.assert.ok(trails.length === 0);
   trails = d.getTrails((node) => true);
-  assert.ok(
+  window.assert.ok(
     compareTrailArrays(trails, [
       new Trail([a, b, d]),
       new Trail([b, d]),
@@ -1054,13 +1088,15 @@ QUnit.test('getTrails/getUniqueTrail', (assert) => {
     ])
   );
   trails = d.getTrails((node) => node === a);
-  assert.ok(
+  window.assert.ok(
     compareTrailArrays(trails, [new Trail([a, b, d]), new Trail([a, c, d])])
   );
   trails = d.getTrails((node) => node === b);
-  assert.ok(compareTrailArrays(trails, [new Trail([b, d])]));
+  window.assert.ok(compareTrailArrays(trails, [new Trail([b, d])]));
   trails = d.getTrails((node) => node.parents.length === 1);
-  assert.ok(compareTrailArrays(trails, [new Trail([b, d]), new Trail([c, d])]));
+  window.assert.ok(
+    compareTrailArrays(trails, [new Trail([b, d]), new Trail([c, d])])
+  );
 });
 
 QUnit.test('getLeafTrails', (assert) => {
@@ -1079,18 +1115,18 @@ QUnit.test('getLeafTrails', (assert) => {
 
   // getUniqueLeafTrail()
   window.assert &&
-    assert.throws(() => {
+    window.assert.throws(() => {
       a.getUniqueLeafTrail();
     }, 'A has no unique leaf trail, since there are three');
-  assert.ok(
+  window.assert.ok(
     b.getUniqueLeafTrail().equals(new Trail([b, d])),
     'a.getUniqueLeafTrail()'
   );
-  assert.ok(
+  window.assert.ok(
     d.getUniqueLeafTrail().equals(new Trail([d])),
     'b.getUniqueLeafTrail()'
   );
-  assert.ok(
+  window.assert.ok(
     e.getUniqueLeafTrail().equals(new Trail([e])),
     'c.getUniqueLeafTrail()'
   );
@@ -1098,7 +1134,7 @@ QUnit.test('getLeafTrails', (assert) => {
   // getLeafTrails()
   let trails;
   trails = a.getLeafTrails();
-  assert.ok(
+  window.assert.ok(
     trails.length === 3 &&
       compareTrailArrays(trails, [
         new Trail([a, b, d]),
@@ -1108,45 +1144,45 @@ QUnit.test('getLeafTrails', (assert) => {
     'a.getLeafTrails()'
   );
   trails = b.getLeafTrails();
-  assert.ok(
+  window.assert.ok(
     trails.length === 1 && trails[0].equals(new Trail([b, d])),
     'b.getLeafTrails()'
   );
   trails = c.getLeafTrails();
-  assert.ok(
+  window.assert.ok(
     trails.length === 2 &&
       compareTrailArrays(trails, [new Trail([c, d]), new Trail([c, e])]),
     'c.getLeafTrails()'
   );
   trails = d.getLeafTrails();
-  assert.ok(
+  window.assert.ok(
     trails.length === 1 && trails[0].equals(new Trail([d])),
     'd.getLeafTrails()'
   );
   trails = e.getLeafTrails();
-  assert.ok(
+  window.assert.ok(
     trails.length === 1 && trails[0].equals(new Trail([e])),
     'e.getLeafTrails()'
   );
 
   // getUniqueLeafTrail( predicate )
   window.assert &&
-    assert.throws(() => {
+    window.assert.throws(() => {
       e.getUniqueLeafTrail((node) => false);
     }, 'Fails on false predicate');
   window.assert &&
-    assert.throws(() => {
+    window.assert.throws(() => {
       a.getUniqueLeafTrail((node) => true);
     }, 'Fails on multiples');
-  assert.ok(
+  window.assert.ok(
     a.getUniqueLeafTrail((node) => node === e).equals(new Trail([a, c, e]))
   );
 
   // getLeafTrails( predicate )
   trails = a.getLeafTrails((node) => false);
-  assert.ok(trails.length === 0);
+  window.assert.ok(trails.length === 0);
   trails = a.getLeafTrails((node) => true);
-  assert.ok(
+  window.assert.ok(
     compareTrailArrays(trails, [
       new Trail([a]),
       new Trail([a, b]),
@@ -1159,7 +1195,7 @@ QUnit.test('getLeafTrails', (assert) => {
 
   // getLeafTrailsTo( node )
   trails = a.getLeafTrailsTo(d);
-  assert.ok(
+  window.assert.ok(
     compareTrailArrays(trails, [new Trail([a, b, d]), new Trail([a, c, d])])
   );
 });
@@ -1198,7 +1234,7 @@ QUnit.test('Line stroked bounds', (assert) => {
     _.each(caps, (cap) => {
       line.lineCap = cap;
 
-      assert.ok(
+      window.assert.ok(
         line.bounds.equalsEpsilon(
           line.getShape().getStrokedShape(line.getLineStyles()).bounds,
           0.0001
@@ -1213,64 +1249,70 @@ QUnit.test('maxWidth/maxHeight for Node', (assert) => {
   const rect = new Rectangle(0, 0, 100, 50, { fill: 'red' });
   const node = new Node({ children: [rect] });
 
-  assert.ok(node.bounds.equals(new Bounds2(0, 0, 100, 50)), 'Initial bounds');
+  window.assert.ok(
+    node.bounds.equals(new Bounds2(0, 0, 100, 50)),
+    'Initial bounds'
+  );
 
   node.maxWidth = 50;
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 0, 50, 25)),
     'Halved transform after max width of half'
   );
 
   node.maxWidth = 120;
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 0, 100, 50)),
     'Back to normal after a big max width'
   );
 
   node.scale(2);
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 0, 200, 100)),
     'Scale up should be unaffected'
   );
 
   node.maxWidth = 25;
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 0, 50, 25)),
     'Scaled back down with both applied'
   );
 
   node.maxWidth = null;
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(0, 0, 200, 100)),
     'Without maxWidth'
   );
 
   node.scale(0.5);
 
-  assert.ok(node.bounds.equals(new Bounds2(0, 0, 100, 50)), 'Back to normal');
+  window.assert.ok(
+    node.bounds.equals(new Bounds2(0, 0, 100, 50)),
+    'Back to normal'
+  );
 
   node.left = 50;
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(50, 0, 150, 50)),
     'After a translation'
   );
 
   node.maxWidth = 50;
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(50, 0, 100, 25)),
     'maxWidth being applied after a translation, in local frame'
   );
 
   rect.rectWidth = 200;
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(50, 0, 100, 12.5)),
     'Now with a bigger rectangle'
   );
@@ -1278,21 +1320,21 @@ QUnit.test('maxWidth/maxHeight for Node', (assert) => {
   rect.rectWidth = 100;
   node.maxWidth = null;
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(50, 0, 150, 50)),
     'Back to a translation'
   );
 
   rect.maxWidth = 50;
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(50, 0, 100, 25)),
     'After maxWidth A'
   );
 
   rect.maxHeight = 12.5;
 
-  assert.ok(
+  window.assert.ok(
     node.bounds.equals(new Bounds2(50, 0, 75, 12.5)),
     'After maxHeight A'
   );
@@ -1300,32 +1342,32 @@ QUnit.test('maxWidth/maxHeight for Node', (assert) => {
 
 QUnit.test('Spacers', (assert) => {
   const spacer = new Spacer(100, 50, { x: 50 });
-  assert.ok(
+  window.assert.ok(
     spacer.bounds.equals(new Bounds2(50, 0, 150, 50)),
     'Spacer bounds with translation'
   );
 
   const hstrut = new HStrut(100, { y: 50 });
-  assert.ok(
+  window.assert.ok(
     hstrut.bounds.equals(new Bounds2(0, 50, 100, 50)),
     'HStrut bounds with translation'
   );
 
   const vstrut = new VStrut(100, { x: 50 });
-  assert.ok(
+  window.assert.ok(
     vstrut.bounds.equals(new Bounds2(50, 0, 50, 100)),
     'VStrut bounds with translation'
   );
 
-  assert.throws(() => {
+  window.assert.throws(() => {
     spacer.addChild(new Node());
   }, 'No way to add children to Spacer');
 
-  assert.throws(() => {
+  window.assert.throws(() => {
     hstrut.addChild(new Node());
   }, 'No way to add children to HStrut');
 
-  assert.throws(() => {
+  window.assert.throws(() => {
     vstrut.addChild(new Node());
   }, 'No way to add children to VStrut');
 });
@@ -1341,172 +1383,181 @@ QUnit.test('Renderer Summary', (assert) => {
   const node = new Node({ children: [canvasNode, webglNode, rect] });
   const emptyNode = new Node();
 
-  assert.ok(
+  window.assert.ok(
     canvasNode._rendererSummary.isSubtreeFullyCompatible(
       Renderer.bitmaskCanvas
     ),
     'CanvasNode fully compatible: Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     !canvasNode._rendererSummary.isSubtreeFullyCompatible(Renderer.bitmaskSVG),
     'CanvasNode not fully compatible: SVG'
   );
-  assert.ok(
+  window.assert.ok(
     canvasNode._rendererSummary.isSubtreeContainingCompatible(
       Renderer.bitmaskCanvas
     ),
     'CanvasNode partially compatible: Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     !canvasNode._rendererSummary.isSubtreeContainingCompatible(
       Renderer.bitmaskSVG
     ),
     'CanvasNode not partially compatible: SVG'
   );
-  assert.ok(
+  window.assert.ok(
     canvasNode._rendererSummary.isSingleCanvasSupported(),
     'CanvasNode supports single Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     !canvasNode._rendererSummary.isSingleSVGSupported(),
     'CanvasNode does not support single SVG'
   );
-  assert.ok(
+  window.assert.ok(
     !canvasNode._rendererSummary.isNotPainted(),
     'CanvasNode is painted'
   );
-  assert.ok(
+  window.assert.ok(
     canvasNode._rendererSummary.areBoundsValid(),
     'CanvasNode has valid bounds'
   );
 
-  assert.ok(
+  window.assert.ok(
     webglNode._rendererSummary.isSubtreeFullyCompatible(Renderer.bitmaskWebGL),
     'WebGLNode fully compatible: WebGL'
   );
-  assert.ok(
+  window.assert.ok(
     !webglNode._rendererSummary.isSubtreeFullyCompatible(Renderer.bitmaskSVG),
     'WebGLNode not fully compatible: SVG'
   );
-  assert.ok(
+  window.assert.ok(
     webglNode._rendererSummary.isSubtreeContainingCompatible(
       Renderer.bitmaskWebGL
     ),
     'WebGLNode partially compatible: WebGL'
   );
-  assert.ok(
+  window.assert.ok(
     !webglNode._rendererSummary.isSubtreeContainingCompatible(
       Renderer.bitmaskSVG
     ),
     'WebGLNode not partially compatible: SVG'
   );
-  assert.ok(
+  window.assert.ok(
     !webglNode._rendererSummary.isSingleCanvasSupported(),
     'WebGLNode does not support single Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     !webglNode._rendererSummary.isSingleSVGSupported(),
     'WebGLNode does not support single SVG'
   );
-  assert.ok(!webglNode._rendererSummary.isNotPainted(), 'WebGLNode is painted');
-  assert.ok(
+  window.assert.ok(
+    !webglNode._rendererSummary.isNotPainted(),
+    'WebGLNode is painted'
+  );
+  window.assert.ok(
     webglNode._rendererSummary.areBoundsValid(),
     'WebGLNode has valid bounds'
   );
 
-  assert.ok(
+  window.assert.ok(
     rect._rendererSummary.isSubtreeFullyCompatible(Renderer.bitmaskCanvas),
     'Rectangle fully compatible: Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     rect._rendererSummary.isSubtreeFullyCompatible(Renderer.bitmaskSVG),
     'Rectangle fully compatible: SVG'
   );
-  assert.ok(
+  window.assert.ok(
     rect._rendererSummary.isSubtreeContainingCompatible(Renderer.bitmaskCanvas),
     'Rectangle partially compatible: Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     rect._rendererSummary.isSubtreeContainingCompatible(Renderer.bitmaskSVG),
     'Rectangle partially compatible: SVG'
   );
-  assert.ok(
+  window.assert.ok(
     rect._rendererSummary.isSingleCanvasSupported(),
     'Rectangle does support single Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     rect._rendererSummary.isSingleSVGSupported(),
     'Rectangle does support single SVG'
   );
-  assert.ok(!rect._rendererSummary.isNotPainted(), 'Rectangle is painted');
-  assert.ok(
+  window.assert.ok(
+    !rect._rendererSummary.isNotPainted(),
+    'Rectangle is painted'
+  );
+  window.assert.ok(
     rect._rendererSummary.areBoundsValid(),
     'Rectangle has valid bounds'
   );
 
-  assert.ok(
+  window.assert.ok(
     !node._rendererSummary.isSubtreeFullyCompatible(Renderer.bitmaskCanvas),
     'Container node fully compatible: Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     !node._rendererSummary.isSubtreeFullyCompatible(Renderer.bitmaskSVG),
     'Container node not fully compatible: SVG'
   );
-  assert.ok(
+  window.assert.ok(
     node._rendererSummary.isSubtreeContainingCompatible(Renderer.bitmaskCanvas),
     'Container node partially compatible: Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     node._rendererSummary.isSubtreeContainingCompatible(Renderer.bitmaskSVG),
     'Container node partially compatible: SVG'
   );
-  assert.ok(
+  window.assert.ok(
     !node._rendererSummary.isSingleCanvasSupported(),
     'Container node does not support single Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     !node._rendererSummary.isSingleSVGSupported(),
     'Container node does not support single SVG'
   );
-  assert.ok(!node._rendererSummary.isNotPainted(), 'Container node is painted');
-  assert.ok(
+  window.assert.ok(
+    !node._rendererSummary.isNotPainted(),
+    'Container node is painted'
+  );
+  window.assert.ok(
     node._rendererSummary.areBoundsValid(),
     'Container node has valid bounds'
   );
 
-  assert.ok(
+  window.assert.ok(
     emptyNode._rendererSummary.isSubtreeFullyCompatible(Renderer.bitmaskCanvas),
     'Empty node fully compatible: Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     emptyNode._rendererSummary.isSubtreeFullyCompatible(Renderer.bitmaskSVG),
     'Empty node fully compatible: SVG'
   );
-  assert.ok(
+  window.assert.ok(
     !emptyNode._rendererSummary.isSubtreeContainingCompatible(
       Renderer.bitmaskCanvas
     ),
     'Empty node partially compatible: Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     !emptyNode._rendererSummary.isSubtreeContainingCompatible(
       Renderer.bitmaskSVG
     ),
     'Empty node partially compatible: SVG'
   );
-  assert.ok(
+  window.assert.ok(
     emptyNode._rendererSummary.isSingleCanvasSupported(),
     'Empty node supports single Canvas'
   );
-  assert.ok(
+  window.assert.ok(
     emptyNode._rendererSummary.isSingleSVGSupported(),
     'Empty node supports single SVG'
   );
-  assert.ok(
+  window.assert.ok(
     emptyNode._rendererSummary.isNotPainted(),
     'Empty node is not painted'
   );
-  assert.ok(
+  window.assert.ok(
     emptyNode._rendererSummary.areBoundsValid(),
     'Empty node has valid bounds'
   );

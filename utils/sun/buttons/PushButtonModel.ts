@@ -196,7 +196,7 @@ export default class PushButtonModel extends ButtonModel {
   public fire(): void {
 
     // Make sure the button is not already firing, see https://github.com/phetsims/energy-skate-park-basics/issues/380
-    assert && assert(!this.isFiringProperty.value, 'Cannot fire when already firing');
+    window.assert && window.assert(!this.isFiringProperty.value, 'Cannot fire when already firing');
     this.isFiringProperty.value = true;
     this.firedEmitter.emit();
     this.isFiringProperty.value = false;

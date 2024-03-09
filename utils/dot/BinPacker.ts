@@ -129,7 +129,7 @@ export class Bin {
    * Finds an unused bin with open area that is at least width-x-height in size. (dot-internal)
    */
   public findAvailableBin(width: number, height: number): Bin | null {
-    assert && assert(width > 0 && height > 0, 'Empty bin requested?');
+    window.assert && window.assert(width > 0 && height > 0, 'Empty bin requested?');
 
     // If we are marked as used ourself, we can't be used
     if (this.isUsed) {
@@ -160,11 +160,11 @@ export class Bin {
    * Splits this bin into multiple child bins, and returns the child with the dimensions (width,height). (dot-internal)
    */
   public split(width: number, height: number): Bin {
-    assert && assert(this.bounds.width >= width && this.bounds.height >= height,
+    window.assert && window.assert(this.bounds.width >= width && this.bounds.height >= height,
       'Bin does not have space');
-    assert && assert(!this.isSplit, 'Bin should not be re-split');
-    assert && assert(!this.isUsed, 'Bin should not be split when used');
-    assert && assert(width > 0 && height > 0, 'Empty bin requested?');
+    window.assert && window.assert(!this.isSplit, 'Bin should not be re-split');
+    window.assert && window.assert(!this.isUsed, 'Bin should not be split when used');
+    window.assert && window.assert(width > 0 && height > 0, 'Empty bin requested?');
 
     // if our dimensions match exactly, don't split (return ourself)
     if (width === this.bounds.width && height === this.bounds.height) {
@@ -216,8 +216,8 @@ export class Bin {
    * Mark this bin as used. (dot-internal)
    */
   public use(): void {
-    assert && assert(!this.isSplit, 'Should not mark a split bin as used');
-    assert && assert(!this.isUsed, 'Should not mark a used bin as used');
+    window.assert && window.assert(!this.isSplit, 'Should not mark a split bin as used');
+    window.assert && window.assert(!this.isUsed, 'Should not mark a used bin as used');
 
     this.isUsed = true;
   }
@@ -226,7 +226,7 @@ export class Bin {
    * Mark this bin as not used, and attempt to collapse split parents if all children are unused. (dot-internal)
    */
   public unuse(): void {
-    assert && assert(this.isUsed, 'Can only unuse a used instance');
+    window.assert && window.assert(this.isUsed, 'Can only unuse a used instance');
 
     this.isUsed = false;
 
@@ -239,7 +239,7 @@ export class Bin {
    * to clean up unused data structures.
    */
   private attemptToCollapse(): void {
-    assert && assert(this.isSplit, 'Should only attempt to collapse split bins');
+    window.assert && window.assert(this.isSplit, 'Should only attempt to collapse split bins');
 
     // Bail out if a single child isn't able to be collapsed. If it is not split or used, it won't have any children
     // or needs.

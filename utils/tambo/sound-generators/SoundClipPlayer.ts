@@ -16,11 +16,11 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import soundManager, { SoundGeneratorAddOptions } from '../soundManager.js';
-import tambo from '../tambo.js';
-import SoundClip, { SoundClipOptions } from './SoundClip.js';
-import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import optionize from '../../../phet-core/js/optionize.js';
+import soundManager, { type SoundGeneratorAddOptions } from '../soundManager';
+import tambo from '../tambo';
+import SoundClip, { type SoundClipOptions } from './SoundClip';
+import WrappedAudioBuffer from '../WrappedAudioBuffer';
+import optionize from '../../phet-core/optionize';
 
 export type SoundClipPlayerOptions = {
   soundClipOptions?: SoundClipOptions;
@@ -35,17 +35,17 @@ class SoundClipPlayer {
    * @param wrappedAudioBuffer - a Web Audio audio buffer containing decoded audio samples
    * @param [providedOptions]
    */
-  public constructor( wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipPlayerOptions ) {
+  public constructor(wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipPlayerOptions) {
 
-    const options = optionize<SoundClipPlayerOptions, SoundClipPlayerOptions>()( {
+    const options = optionize<SoundClipPlayerOptions, SoundClipPlayerOptions>()({
       soundClipOptions: {},
       soundManagerOptions: {}
-    }, providedOptions );
+    }, providedOptions);
 
-    this._soundClip = new SoundClip( wrappedAudioBuffer, options.soundClipOptions );
+    this._soundClip = new SoundClip(wrappedAudioBuffer, options.soundClipOptions);
 
     // automatically register this sound clip with the sound manager
-    soundManager.addSoundGenerator( this._soundClip, options.soundManagerOptions );
+    soundManager.addSoundGenerator(this._soundClip, options.soundManagerOptions);
   }
 
   /**
@@ -72,6 +72,6 @@ class SoundClipPlayer {
   }
 }
 
-tambo.register( 'SoundClipPlayer', SoundClipPlayer );
+tambo.register('SoundClipPlayer', SoundClipPlayer);
 
 export default SoundClipPlayer;

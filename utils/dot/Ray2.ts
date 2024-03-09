@@ -25,7 +25,7 @@ export default class Ray2 {
     this.position = position;
     this.direction = direction;
 
-    assert && assert( Math.abs( direction.magnitude - 1 ) < 0.01, 'the direction must be a unit vector' );
+    window.assert && window.assert( Math.abs( direction.magnitude - 1 ) < 0.01, 'the direction must be a unit vector' );
   }
 
   /**

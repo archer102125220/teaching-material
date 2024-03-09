@@ -36,7 +36,7 @@ export default class LanguageSelectionNode extends Rectangle {
     // The english name of the locale is reported for accessibility because PDOM strings are not translatable.
     // If you use the localized name, it might change the screen reader voice.
     const localeInfo = localeInfoModule[locale];
-    assert && assert(localeInfo, `No localeInfo for ${locale}`);
+    window.assert && window.assert(localeInfo, `No localeInfo for ${locale}`);
     const englishLocaleString = localeInfo.name;
 
     const text = new Text(string, {

@@ -258,7 +258,7 @@ const PDOMUtils = {
           ? valueOrProperty
           : valueOrProperty.value;
 
-    assert && assert(result === null || typeof result === 'string');
+    window.assert && window.assert(result === null || typeof result === 'string');
 
     return result;
   },
@@ -325,7 +325,7 @@ const PDOMUtils = {
    * @returns {HTMLElement}
    */
   getRandomFocusable(random) {
-    assert && assert(random, 'Random expected');
+    window.assert && window.assert(random, 'Random expected');
 
     const linearDOM = getLinearDOMElements(document.body);
     const focusableElements = [];
@@ -435,8 +435,8 @@ const PDOMUtils = {
    *                                    "formatting" tags in it
    */
   setTextContent(domElement, textContent) {
-    assert && assert(domElement instanceof Element); // parent to HTMLElement, to support other namespaces
-    assert && assert(textContent === null || typeof textContent === 'string');
+    window.assert && window.assert(domElement instanceof Element); // parent to HTMLElement, to support other namespaces
+    window.assert && window.assert(textContent === null || typeof textContent === 'string');
 
     if (textContent === null) {
       domElement.innerHTML = '';
@@ -547,8 +547,8 @@ const PDOMUtils = {
    * @param {HTMLElement} [beforeThisElement] - if not supplied, the insertBefore call will just use 'null'
    */
   insertElements(element, childrenToAdd, beforeThisElement) {
-    assert && assert(element instanceof window.Element);
-    assert && assert(Array.isArray(childrenToAdd));
+    window.assert && window.assert(element instanceof window.Element);
+    window.assert && window.assert(Array.isArray(childrenToAdd));
     for (let i = 0; i < childrenToAdd.length; i++) {
       const childToAdd = childrenToAdd[i];
       element.insertBefore(childToAdd, beforeThisElement || null);

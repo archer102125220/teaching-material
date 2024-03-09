@@ -110,9 +110,9 @@ export default class ComboBoxButton<T> extends RectangularPushButton {
       accessibleNameBehavior: ACCESSIBLE_NAME_BEHAVIOR
     }, providedOptions);
 
-    assert && assert(_.includes(ALIGN_VALUES, options.align),
+    window.assert && window.assert(_.includes(ALIGN_VALUES, options.align),
       `invalid align: ${options.align}`);
-    assert && assert(_.includes(ARROW_DIRECTION_VALUES, options.arrowDirection),
+    window.assert && window.assert(_.includes(ARROW_DIRECTION_VALUES, options.arrowDirection),
       `invalid arrowDirection: ${options.arrowDirection}`);
 
     // To improve readability
@@ -246,7 +246,7 @@ export default class ComboBoxButton<T> extends RectangularPushButton {
 
     const itemProperty = new DerivedProperty([property], value => {
       const item = _.find(items, item => item.value === value)!;
-      assert && assert(item, `no item found for value: ${value}`);
+      window.assert && window.assert(item, `no item found for value: ${value}`);
       return item;
     });
 

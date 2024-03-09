@@ -123,8 +123,8 @@ export default abstract class Pointer {
    * @param type - the type of the pointer; can different for each subtype
    */
   protected constructor(initialPoint: Vector2, type: PointerType) {
-    assert && assert(initialPoint === null || initialPoint instanceof Vector2);
-    assert && assert(Object.getPrototypeOf(this) !== Pointer.prototype, 'Pointer is an abstract class');
+    window.assert && window.assert(initialPoint === null || initialPoint instanceof Vector2);
+    window.assert && window.assert(Object.getPrototypeOf(this) !== Pointer.prototype, 'Pointer is an abstract class');
 
     this.point = initialPoint;
     this.type = type;
@@ -185,17 +185,17 @@ export default abstract class Pointer {
     sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`addInputListener to ${this.toString()} attach:${attach}`);
     sceneryLog && sceneryLog.Pointer && sceneryLog.push();
 
-    assert && assert(listener, 'A listener must be provided');
-    assert && assert(attach === undefined || typeof attach === 'boolean',
+    window.assert && window.assert(listener, 'A listener must be provided');
+    window.assert && window.assert(attach === undefined || typeof attach === 'boolean',
       'If provided, the attach parameter should be a boolean value');
 
-    assert && assert(!_.includes(this._listeners, listener),
+    window.assert && window.assert(!_.includes(this._listeners, listener),
       'Attempted to add an input listener that was already added');
 
     this._listeners.push(listener);
 
     if (attach) {
-      assert && assert(listener.interrupt, 'Interrupt should exist on attached listeners');
+      window.assert && window.assert(listener.interrupt, 'Interrupt should exist on attached listeners');
       this.attach(listener as TAttachableInputListener);
     }
 
@@ -209,10 +209,10 @@ export default abstract class Pointer {
     sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`removeInputListener to ${this.toString()}`);
     sceneryLog && sceneryLog.Pointer && sceneryLog.push();
 
-    assert && assert(listener, 'A listener must be provided');
+    window.assert && window.assert(listener, 'A listener must be provided');
 
     const index = _.indexOf(this._listeners, listener);
-    assert && assert(index !== -1, 'Could not find the input listener to remove');
+    window.assert && window.assert(index !== -1, 'Could not find the input listener to remove');
 
     // If this listener is our attached listener, also detach it
     if (this.isAttached() && listener === this._attachedListener) {
@@ -296,7 +296,7 @@ export default abstract class Pointer {
   private attach(listener: TAttachableInputListener): void {
     sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`Attaching to ${this.toString()}`);
 
-    assert && assert(!this.isAttached(), 'Attempted to attach to an already attached pointer');
+    window.assert && window.assert(!this.isAttached(), 'Attempted to attach to an already attached pointer');
 
     this.attachedProperty.value = true;
     this._attachedListener = listener;
@@ -351,8 +351,8 @@ export default abstract class Pointer {
   private detach(listener: TAttachableInputListener): void {
     sceneryLog && sceneryLog.Pointer && sceneryLog.Pointer(`Detaching from ${this.toString()}`);
 
-    assert && assert(this.isAttached(), 'Cannot detach a listener if one is not attached');
-    assert && assert(this._attachedListener === listener, 'Cannot detach a different listener');
+    window.assert && window.assert(this.isAttached(), 'Cannot detach a listener if one is not attached');
+    window.assert && window.assert(this._attachedListener === listener, 'Cannot detach a different listener');
 
     this.attachedProperty.value = false;
     this._attachedListener = null;
@@ -371,20 +371,20 @@ export default abstract class Pointer {
    * for valid entries.
    */
   public addIntent(intent: Intent): void {
-    assert && assert(Intent.enumeration.includes(intent), 'trying to set unsupported intent for Pointer');
+    window.assert && window.assert(Intent.enumeration.includes(intent), 'trying to set unsupported intent for Pointer');
 
     if (!this._intents.includes(intent)) {
       this._intents.push(intent);
     }
 
-    assert && assert(this._intents.length <= Intent.enumeration.values.length, 'to many Intents saved, memory leak likely');
+    window.assert && window.assert(this._intents.length <= Intent.enumeration.values.length, 'to many Intents saved, memory leak likely');
   }
 
   /**
    * Remove an Intent from the Pointer. See addIntent for more information.
    */
   public removeIntent(intent: Intent): void {
-    assert && assert(Intent.enumeration.includes(intent), 'trying to set unsupported intent for Pointer');
+    window.assert && window.assert(Intent.enumeration.includes(intent), 'trying to set unsupported intent for Pointer');
 
     if (this._intents.includes(intent)) {
       const index = this._intents.indexOf(intent);
@@ -420,7 +420,7 @@ export default abstract class Pointer {
         }
       };
 
-      assert && assert(this._listenerForDragReserve === null, 'still a listener to reserve pointer, memory leak likely');
+      window.assert && window.assert(this._listenerForDragReserve === null, 'still a listener to reserve pointer, memory leak likely');
       this._listenerForDragReserve = listener;
       this.addInputListener(this._listenerForDragReserve);
     }
@@ -450,7 +450,7 @@ export default abstract class Pointer {
         this._listenerForKeyboardDragReserve = null;
       };
 
-      assert && assert(this._listenerForDragReserve === null, 'still a listener on Pointer for reserve, memory leak likely');
+      window.assert && window.assert(this._listenerForDragReserve === null, 'still a listener on Pointer for reserve, memory leak likely');
       this._listenerForKeyboardDragReserve = listener;
       this.addInputListener(this._listenerForKeyboardDragReserve);
     }
@@ -492,8 +492,8 @@ export default abstract class Pointer {
       this.removeInputListener(this._listenerForKeyboardDragReserve);
     }
 
-    assert && assert(this._attachedListener === null, 'Attached listeners should be cleared before pointer disposal');
-    assert && assert(this._listeners.length === 0, 'Should not have listeners when a pointer is disposed');
+    window.assert && window.assert(this._attachedListener === null, 'Attached listeners should be cleared before pointer disposal');
+    window.assert && window.assert(this._listeners.length === 0, 'Should not have listeners when a pointer is disposed');
   }
 
   public toString(): string {

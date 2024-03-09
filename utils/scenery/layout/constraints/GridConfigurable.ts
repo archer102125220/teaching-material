@@ -145,7 +145,7 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
     public get xAlign(): HorizontalLayoutAlign | null {
       const result = this._xAlign === null ? null : this._xAlign.horizontal;
 
-      assert && assert(result === null || typeof result === 'string');
+      window.assert && window.assert(result === null || typeof result === 'string');
 
       return result;
     }
@@ -154,13 +154,13 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set xAlign(value: HorizontalLayoutAlign | null) {
-      assert && assert(value === null || HorizontalLayoutAlignValues.includes(value),
+      window.assert && window.assert(value === null || HorizontalLayoutAlignValues.includes(value),
         `align ${value} not supported, the valid values are ${HorizontalLayoutAlignValues} or null`);
 
       // remapping align values to an independent set, so they aren't orientation-dependent
       const mappedValue = LayoutAlign.horizontalAlignToInternal(value);
 
-      assert && assert(mappedValue === null || mappedValue instanceof LayoutAlign);
+      window.assert && window.assert(mappedValue === null || mappedValue instanceof LayoutAlign);
 
       if (this._xAlign !== mappedValue) {
         this._xAlign = mappedValue;
@@ -175,7 +175,7 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
     public get yAlign(): VerticalLayoutAlign | null {
       const result = this._yAlign === null ? null : this._yAlign.vertical;
 
-      assert && assert(result === null || typeof result === 'string');
+      window.assert && window.assert(result === null || typeof result === 'string');
 
       return result;
     }
@@ -184,13 +184,13 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set yAlign(value: VerticalLayoutAlign | null) {
-      assert && assert(value === null || VerticalLayoutAlignValues.includes(value),
+      window.assert && window.assert(value === null || VerticalLayoutAlignValues.includes(value),
         `align ${value} not supported, the valid values are ${VerticalLayoutAlignValues} or null`);
 
       // remapping align values to an independent set, so they aren't orientation-dependent
       const mappedValue = LayoutAlign.verticalAlignToInternal(value);
 
-      assert && assert(mappedValue === null || mappedValue instanceof LayoutAlign);
+      window.assert && window.assert(mappedValue === null || mappedValue instanceof LayoutAlign);
 
       if (this._yAlign !== mappedValue) {
         this._yAlign = mappedValue;
@@ -203,7 +203,7 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public get grow(): number | null {
-      assert && assert(this._xGrow === this._yGrow);
+      window.assert && window.assert(this._xGrow === this._yGrow);
 
       return this._xGrow;
     }
@@ -212,7 +212,7 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set grow(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
 
       if (this._xGrow !== value || this._yGrow !== value) {
         this._xGrow = value;
@@ -233,7 +233,7 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set xGrow(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
 
       if (this._xGrow !== value) {
         this._xGrow = value;
@@ -253,7 +253,7 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set yGrow(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
 
       if (this._yGrow !== value) {
         this._yGrow = value;
@@ -266,7 +266,7 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public get stretch(): boolean | null {
-      assert && assert(this._xStretch === this._yStretch);
+      window.assert && window.assert(this._xStretch === this._yStretch);
 
       return this._xStretch;
     }
@@ -275,7 +275,7 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set stretch(value: boolean | null) {
-      assert && assert(value === null || typeof value === 'boolean');
+      window.assert && window.assert(value === null || typeof value === 'boolean');
 
       if (this._xStretch !== value || this._yStretch !== value) {
         this._xStretch = value;
@@ -296,7 +296,7 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set xStretch(value: boolean | null) {
-      assert && assert(value === null || typeof value === 'boolean');
+      window.assert && window.assert(value === null || typeof value === 'boolean');
 
       if (this._xStretch !== value) {
         this._xStretch = value;
@@ -316,7 +316,7 @@ const GridConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set yStretch(value: boolean | null) {
-      assert && assert(value === null || typeof value === 'boolean');
+      window.assert && window.assert(value === null || typeof value === 'boolean');
 
       if (this._yStretch !== value) {
         this._yStretch = value;

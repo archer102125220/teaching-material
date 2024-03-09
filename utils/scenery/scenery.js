@@ -158,7 +158,7 @@ extend( scenery, {
     }
 
     if ( name ) {
-      assert && assert( logProperties[ name ],
+      window.assert && window.assert( logProperties[ name ],
         `Unknown logger: ${name}, please use periods (.) to separate different log names` );
 
       window.sceneryLog[ name ] = window.sceneryLog[ name ] || function( ob, styleOverride ) {

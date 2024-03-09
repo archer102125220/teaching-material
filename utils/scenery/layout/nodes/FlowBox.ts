@@ -145,7 +145,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
   private onFlowBoxChildRemoved(node: Node): void {
 
     const cell = this._cellMap.get(node)!;
-    assert && assert(cell);
+    window.assert && window.assert(cell);
 
     this._cellMap.delete(node);
 
@@ -174,7 +174,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
 
   public getCell(node: Node): FlowCell {
     const result = this._cellMap.get(node)!;
-    assert && assert(result);
+    window.assert && window.assert(result);
 
     return result;
   }
@@ -228,7 +228,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
   }
 
   public get align(): HorizontalLayoutAlign | VerticalLayoutAlign {
-    assert && assert(typeof this._constraint.align === 'string');
+    window.assert && window.assert(typeof this._constraint.align === 'string');
 
     return this._constraint.align!;
   }
@@ -238,7 +238,7 @@ export default class FlowBox extends LayoutNode<FlowConstraint> {
   }
 
   public get stretch(): boolean {
-    assert && assert(typeof this._constraint.stretch === 'boolean');
+    window.assert && window.assert(typeof this._constraint.stretch === 'boolean');
 
     return this._constraint.stretch!;
   }

@@ -217,7 +217,7 @@ class SegmentNode<T> {
    * Replaces one child with another
    */
   public swapChild(oldChild: SegmentNode<T>, newChild: SegmentNode<T>): void {
-    assert && assert(this.left === oldChild || this.right === oldChild);
+    window.assert && window.assert(this.left === oldChild || this.right === oldChild);
 
     if (this.left === oldChild) {
       this.left = newChild;
@@ -232,7 +232,7 @@ class SegmentNode<T> {
   }
 
   public otherChild(node: SegmentNode<T>): SegmentNode<T> {
-    assert && assert(this.hasChild(node));
+    window.assert && window.assert(this.hasChild(node));
 
     return ((this.left === node) ? this.right : this.left)!;
   }
@@ -241,7 +241,7 @@ class SegmentNode<T> {
    * Tree operation needed for red-black self-balancing
    */
   public leftRotate(tree: SegmentTree<T>): void {
-    assert && assert(this.hasChildren() && this.right!.hasChildren());
+    window.assert && window.assert(this.hasChildren() && this.right!.hasChildren());
 
     if (this.right!.hasChildren()) {
       const y = this.right!;
@@ -300,7 +300,7 @@ class SegmentNode<T> {
    * Tree operation needed for red-black self-balancing
    */
   public rightRotate(tree: SegmentTree<T>): void {
-    assert && assert(this.hasChildren() && this.left!.hasChildren());
+    window.assert && window.assert(this.hasChildren() && this.left!.hasChildren());
 
     const x = this.left!;
     const gamma = this.right!;
@@ -357,7 +357,7 @@ class SegmentNode<T> {
    * Called after an insertion (or potentially deletion in the future) that handles red-black tree rebalancing.
    */
   public fixRedBlack(tree: SegmentTree<T>): void {
-    assert && assert(!this.isBlack);
+    window.assert && window.assert(!this.isBlack);
 
     if (!this.parent) {
       this.isBlack = true;
@@ -417,7 +417,7 @@ class SegmentNode<T> {
    * Triggers a split of whatever interval contains this value (or is a no-op if we already split at it before).
    */
   public split(n: number, tree: SegmentTree<T>): void {
-    assert && assert(this.contains(n));
+    window.assert && window.assert(this.contains(n));
 
     // Ignore splits if we are already split on them
     if (n === this.min || n === this.max) {
@@ -498,7 +498,7 @@ class SegmentNode<T> {
 
     if (this.min >= min && this.max <= max) {
       // We are fully contained
-      assert && assert(this.items.includes(item));
+      window.assert && window.assert(this.items.includes(item));
       arrayRemove(this.items, item);
     }
     else if (this.hasChildren()) {

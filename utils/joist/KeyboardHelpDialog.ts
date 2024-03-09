@@ -58,7 +58,7 @@ export default class KeyboardHelpDialog extends Dialog {
     const contentTandem = options.tandem.createTandem('content');
     const screenContentNodes: Node[] = [];
     screens.forEach(screen => {
-      assert && assert(screen.createKeyboardHelpNode, 'if any screen has keyboard help content, then all screens need content');
+      window.assert && window.assert(screen.createKeyboardHelpNode, 'if any screen has keyboard help content, then all screens need content');
       const screenTandem = screen.tandem.supplied ? contentTandem.createTandem(screen.tandem.name) : Tandem.REQUIRED;
       const keyboardHelpNode = screen.createKeyboardHelpNode!(screenTandem);
       screenContentNodes.push(keyboardHelpNode);
@@ -80,7 +80,7 @@ export default class KeyboardHelpDialog extends Dialog {
     const tabHintLine = new TabHintLine();
 
     // stack the two items with a bit of spacing
-    assert && assert(!options.title, 'KeyboardHelpDialog sets title');
+    window.assert && window.assert(!options.title, 'KeyboardHelpDialog sets title');
     const titleVBox = new VBox({
       children: [shortcutsTitleText, tabHintLine],
       spacing: 5,
@@ -97,10 +97,10 @@ export default class KeyboardHelpDialog extends Dialog {
 
     // When the screen changes, swap out keyboard help content to the selected screen's content
     Multilink.multilink([screenProperty, this.isShowingProperty], (screen, isShowing) => {
-      assert && assert(screens.includes(screen), 'double check that this is an expected screen');
+      window.assert && window.assert(screens.includes(screen), 'double check that this is an expected screen');
       const currentContentNode = screenContentNodes[screens.indexOf(screen)]!;
       if (isShowing) {
-        assert && assert(currentContentNode, 'a displayed KeyboardHelpButton for a screen should have content');
+        window.assert && window.assert(currentContentNode, 'a displayed KeyboardHelpButton for a screen should have content');
         content.children = [currentContentNode];
       }
     });

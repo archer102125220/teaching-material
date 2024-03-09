@@ -135,7 +135,7 @@ export default class AlignBox extends SuperType {
     };
     super(initialOptions);
 
-    assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+    window.assert && window.assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
       'Extra prototype on Node options object is a code smell');
 
     this._content = content;
@@ -228,7 +228,7 @@ export default class AlignBox extends SuperType {
    * NOTE: If the group is a valid AlignGroup, it will be responsible for setting the alignBounds.
    */
   public setAlignBounds(alignBounds: Bounds2 | null): this {
-    assert && assert(alignBounds === null || (alignBounds instanceof Bounds2 && !alignBounds.isEmpty() && alignBounds.isFinite()),
+    window.assert && window.assert(alignBounds === null || (alignBounds instanceof Bounds2 && !alignBounds.isEmpty() && alignBounds.isFinite()),
       'alignBounds should be a non-empty finite Bounds2');
 
     this._xSet = true;
@@ -262,7 +262,7 @@ export default class AlignBox extends SuperType {
    * Sets the attachment to an AlignGroup. When attached, our alignBounds will be controlled by the group.
    */
   public setGroup(group: AlignGroup | null): this {
-    assert && assert(group === null || group instanceof AlignGroup, 'group should be an AlignGroup');
+    window.assert && window.assert(group === null || group instanceof AlignGroup, 'group should be an AlignGroup');
 
     if (this._group !== group) {
       // Remove from a previous group
@@ -296,7 +296,7 @@ export default class AlignBox extends SuperType {
    * Sets the horizontal alignment of this box.
    */
   public setXAlign(xAlign: AlignBoxXAlign): this {
-    assert && assert(AlignBoxXAlignValues.includes(xAlign), `xAlign should be one of: ${AlignBoxXAlignValues}`);
+    window.assert && window.assert(AlignBoxXAlignValues.includes(xAlign), `xAlign should be one of: ${AlignBoxXAlignValues}`);
 
     if (this._xAlign !== xAlign) {
       this._xAlign = xAlign;
@@ -323,7 +323,7 @@ export default class AlignBox extends SuperType {
    * Sets the vertical alignment of this box.
    */
   public setYAlign(yAlign: AlignBoxYAlign): this {
-    assert && assert(AlignBoxYAlignValues.includes(yAlign), `xAlign should be one of: ${AlignBoxYAlignValues}`);
+    window.assert && window.assert(AlignBoxYAlignValues.includes(yAlign), `xAlign should be one of: ${AlignBoxYAlignValues}`);
 
     if (this._yAlign !== yAlign) {
       this._yAlign = yAlign;
@@ -353,7 +353,7 @@ export default class AlignBox extends SuperType {
    * box.
    */
   public setMargin(margin: number): this {
-    assert && assert(isFinite(margin) && margin >= 0,
+    window.assert && window.assert(isFinite(margin) && margin >= 0,
       'margin should be a finite non-negative number');
 
     if (this._leftMargin !== margin ||
@@ -377,7 +377,7 @@ export default class AlignBox extends SuperType {
    * Returns the current margin of this box (assuming all margin values are the same).
    */
   public getMargin(): number {
-    assert && assert(this._leftMargin === this._rightMargin &&
+    window.assert && window.assert(this._leftMargin === this._rightMargin &&
       this._leftMargin === this._topMargin &&
       this._leftMargin === this._bottomMargin,
       'Getting margin does not have a unique result if the left and right margins are different');
@@ -391,7 +391,7 @@ export default class AlignBox extends SuperType {
    * right sides of this box.
    */
   public setXMargin(xMargin: number): this {
-    assert && assert(isFinite(xMargin) && xMargin >= 0,
+    window.assert && window.assert(isFinite(xMargin) && xMargin >= 0,
       'xMargin should be a finite non-negative number');
 
     if (this._leftMargin !== xMargin || this._rightMargin !== xMargin) {
@@ -412,7 +412,7 @@ export default class AlignBox extends SuperType {
    * Returns the current horizontal margin of this box (assuming the left and right margins are the same).
    */
   public getXMargin(): number {
-    assert && assert(this._leftMargin === this._rightMargin,
+    window.assert && window.assert(this._leftMargin === this._rightMargin,
       'Getting xMargin does not have a unique result if the left and right margins are different');
     return this._leftMargin;
   }
@@ -424,7 +424,7 @@ export default class AlignBox extends SuperType {
    * bottom sides of this box.
    */
   public setYMargin(yMargin: number): this {
-    assert && assert(isFinite(yMargin) && yMargin >= 0,
+    window.assert && window.assert(isFinite(yMargin) && yMargin >= 0,
       'yMargin should be a finite non-negative number');
 
     if (this._topMargin !== yMargin || this._bottomMargin !== yMargin) {
@@ -445,7 +445,7 @@ export default class AlignBox extends SuperType {
    * Returns the current vertical margin of this box (assuming the top and bottom margins are the same).
    */
   public getYMargin(): number {
-    assert && assert(this._topMargin === this._bottomMargin,
+    window.assert && window.assert(this._topMargin === this._bottomMargin,
       'Getting yMargin does not have a unique result if the top and bottom margins are different');
     return this._topMargin;
   }
@@ -457,7 +457,7 @@ export default class AlignBox extends SuperType {
    * the box.
    */
   public setLeftMargin(leftMargin: number): this {
-    assert && assert(isFinite(leftMargin) && leftMargin >= 0,
+    window.assert && window.assert(isFinite(leftMargin) && leftMargin >= 0,
       'leftMargin should be a finite non-negative number');
 
     if (this._leftMargin !== leftMargin) {
@@ -488,7 +488,7 @@ export default class AlignBox extends SuperType {
    * the container.
    */
   public setRightMargin(rightMargin: number): this {
-    assert && assert(isFinite(rightMargin) && rightMargin >= 0,
+    window.assert && window.assert(isFinite(rightMargin) && rightMargin >= 0,
       'rightMargin should be a finite non-negative number');
 
     if (this._rightMargin !== rightMargin) {
@@ -519,7 +519,7 @@ export default class AlignBox extends SuperType {
    * container.
    */
   public setTopMargin(topMargin: number): this {
-    assert && assert(isFinite(topMargin) && topMargin >= 0,
+    window.assert && window.assert(isFinite(topMargin) && topMargin >= 0,
       'topMargin should be a finite non-negative number');
 
     if (this._topMargin !== topMargin) {
@@ -550,7 +550,7 @@ export default class AlignBox extends SuperType {
    * container.
    */
   public setBottomMargin(bottomMargin: number): this {
-    assert && assert(isFinite(bottomMargin) && bottomMargin >= 0,
+    window.assert && window.assert(isFinite(bottomMargin) && bottomMargin >= 0,
       'bottomMargin should be a finite non-negative number');
 
     if (this._bottomMargin !== bottomMargin) {
@@ -728,12 +728,12 @@ class AlignBoxConstraint extends LayoutConstraint {
         this.updateProperty('right', -box.rightMargin);
       }
       else if (box.xAlign === 'stretch') {
-        assert && assert(isWidthSizable(content), 'xAlign:stretch can only be used if WidthSizable is mixed into the content');
+        window.assert && window.assert(isWidthSizable(content), 'xAlign:stretch can only be used if WidthSizable is mixed into the content');
         (content as WidthSizableNode).preferredWidth = box.localWidth - box.leftMargin - box.rightMargin;
         this.updateProperty('left', box.leftMargin);
       }
       else {
-        assert && assert(`Bad xAlign: ${box.xAlign}`);
+        window.assert && window.assert(`Bad xAlign: ${box.xAlign}`);
       }
 
       if (box.yAlign === 'center') {
@@ -746,12 +746,12 @@ class AlignBoxConstraint extends LayoutConstraint {
         this.updateProperty('bottom', -box.bottomMargin);
       }
       else if (box.yAlign === 'stretch') {
-        assert && assert(isHeightSizable(content), 'yAlign:stretch can only be used if HeightSizable is mixed into the content');
+        window.assert && window.assert(isHeightSizable(content), 'yAlign:stretch can only be used if HeightSizable is mixed into the content');
         (content as HeightSizableNode).preferredHeight = box.localHeight - box.topMargin - box.bottomMargin;
         this.updateProperty('top', box.topMargin);
       }
       else {
-        assert && assert(`Bad yAlign: ${box.yAlign}`);
+        window.assert && window.assert(`Bad yAlign: ${box.yAlign}`);
       }
     }
 

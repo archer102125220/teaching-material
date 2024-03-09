@@ -45,7 +45,7 @@ export default class ManualConstraint<T extends Node[]> extends LayoutConstraint
 
   public constructor(ancestorNode: Node, nodes: T, layoutCallback: LayoutCallback<T>) {
 
-    assert && assert(Array.isArray(nodes) && _.every(nodes, node => node instanceof Node));
+    window.assert && window.assert(Array.isArray(nodes) && _.every(nodes, node => node instanceof Node));
 
     super(ancestorNode);
 
@@ -73,7 +73,7 @@ export default class ManualConstraint<T extends Node[]> extends LayoutConstraint
   public override layout(): void {
     super.layout();
 
-    assert && assert(_.every(this.nodes, node => !node.isDisposed));
+    window.assert && window.assert(_.every(this.nodes, node => !node.isDisposed));
 
     // Don't do layout if something is missing
     const isMissingProxy = _.some(this.cells, cell => !cell.isConnected());

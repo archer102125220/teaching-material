@@ -38,7 +38,7 @@ const audioContextStateChangeMonitor = {
       stateChangeListenerArrays.push(listenerArray);
 
       // make sure there isn't something already listening to this context's state change
-      assert && assert(!audioContext.onstatechange, 'a listener function is already registered for this context');
+      window.assert && window.assert(!audioContext.onstatechange, 'a listener function is already registered for this context');
 
       // hook up a function that will fire all listeners on a state change
       audioContext.onstatechange = () => {
@@ -61,10 +61,10 @@ const audioContextStateChangeMonitor = {
 
     // remove the listener for the listener array, checking for various problems along the way
     const audioContextIndex = monitoredAudioContexts.indexOf(audioContext);
-    assert && assert(audioContextIndex >= 0, 'audio context not found');
+    window.assert && window.assert(audioContextIndex >= 0, 'audio context not found');
     const listenerArray = stateChangeListenerArrays[audioContextIndex];
     const listenerIndex = listenerArray.indexOf(listener);
-    assert && assert(listenerIndex >= 0, 'listener not found for specified audio context');
+    window.assert && window.assert(listenerIndex >= 0, 'listener not found for specified audio context');
     listenerArray.splice(listenerIndex, 1);
   },
 

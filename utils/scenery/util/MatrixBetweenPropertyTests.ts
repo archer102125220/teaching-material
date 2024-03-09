@@ -23,7 +23,7 @@ QUnit.test( 'MatrixBetweenProperty connectivity', assert => {
 
   const checkMatrix = ( matrix: Matrix3 | null, message: string ) => {
     const propMatrix = matrixBetweenProperty.value;
-    assert.ok( propMatrix === matrix || ( matrix && propMatrix && matrix.equals( propMatrix ) ), message );
+    window.assert.ok( propMatrix === matrix || ( matrix && propMatrix && matrix.equals( propMatrix ) ), message );
   };
 
   checkMatrix( null, 'no connection at all' );
@@ -122,7 +122,7 @@ QUnit.test( 'MatrixBetweenProperty transforms (local)', assert => {
 
   const checkMatrix = ( matrix: Matrix3 | null, message: string ) => {
     const propMatrix = matrixBetweenProperty.value;
-    assert.ok( propMatrix === matrix || ( matrix && propMatrix && matrix.equals( propMatrix ) ), `message expected\n${matrix}\n\ngot\n${propMatrix}` );
+    window.assert.ok( propMatrix === matrix || ( matrix && propMatrix && matrix.equals( propMatrix ) ), `message expected\n${matrix}\n\ngot\n${propMatrix}` );
   };
 
   checkMatrix( null, 'no connection at all' );
@@ -247,7 +247,7 @@ QUnit.test( 'MatrixBetweenProperty transforms (parent)', assert => {
 
   const checkMatrix = ( matrix: Matrix3 | null, message: string ) => {
     const propMatrix = matrixBetweenProperty.value;
-    assert.ok( propMatrix === matrix || ( matrix && propMatrix && matrix.equals( propMatrix ) ), `${message} expected\n${matrix}\n\ngot\n${propMatrix}` );
+    window.assert.ok( propMatrix === matrix || ( matrix && propMatrix && matrix.equals( propMatrix ) ), `${message} expected\n${matrix}\n\ngot\n${propMatrix}` );
   };
 
   checkMatrix( null, 'no connection at all' );

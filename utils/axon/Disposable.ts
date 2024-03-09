@@ -46,9 +46,9 @@ class Disposable {
       // overridden after the Node constructor (which may happen).
       const protoDispose = this.dispose;
       this.dispose = () => {
-        assert && assert(!this._isDisposed, 'This Disposable has already been disposed, and cannot be disposed again');
+        window.assert && window.assert(!this._isDisposed, 'This Disposable has already been disposed, and cannot be disposed again');
         protoDispose.call(this);
-        assert && assert(this._isDisposed, 'Disposable.dispose() call is missing from an overridden dispose method');
+        window.assert && window.assert(this._isDisposed, 'Disposable.dispose() call is missing from an overridden dispose method');
       };
     }
   }
@@ -82,7 +82,7 @@ class Disposable {
 
   public dispose(): void {
     assert && !this._isDisposable && Disposable.assertNotDisposable();
-    assert && assert(!this._isDisposed, 'Disposable can only be disposed once');
+    window.assert && window.assert(!this._isDisposed, 'Disposable can only be disposed once');
     this._disposeEmitter.emit();
     this._disposeEmitter.dispose();
     this._isDisposed = true;
@@ -91,7 +91,7 @@ class Disposable {
   public static assertNotDisposable(): void {
 
     // eslint-disable-next-line bad-sim-text
-    assert && assert(false, 'dispose is not supported, exists for the lifetime of the sim');
+    window.assert && window.assert(false, 'dispose is not supported, exists for the lifetime of the sim');
   }
 }
 

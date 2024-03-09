@@ -23,7 +23,7 @@ const cache = new IOTypeCache();
  * This caching implementation should be kept in sync with the other parametric IOType caching implementations.
  */
 const ArrayIO = <ParameterType, ParameterStateType>( parameterType: IOType<ParameterType, ParameterStateType> ): IOType<ParameterType[], ParameterStateType[]> => {
-  assert && assert( !!parameterType, 'parameterType should be defined' );
+  window.assert && window.assert( !!parameterType, 'parameterType should be defined' );
   if ( !cache.has( parameterType ) ) {
     cache.set( parameterType, new IOType<ParameterType[], ParameterStateType[]>( `ArrayIO<${parameterType.typeName}>`, {
       valueType: Array,

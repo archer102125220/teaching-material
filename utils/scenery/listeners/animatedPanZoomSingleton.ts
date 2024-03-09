@@ -20,7 +20,7 @@ class AnimatedPanZoomSingleton {
   }
 
   public dispose(): void {
-    assert && assert(this._listener, 'No listener, call initialize first.');
+    window.assert && window.assert(this._listener, 'No listener, call initialize first.');
     this._listener!.dispose();
     this._listener = null;
   }
@@ -29,7 +29,7 @@ class AnimatedPanZoomSingleton {
    * Returns the AnimatedPanZoomListener.
    */
   public get listener(): AnimatedPanZoomListener {
-    assert && assert(this._listener, 'No listener, call initialize first.');
+    window.assert && window.assert(this._listener, 'No listener, call initialize first.');
     return this._listener!;
   }
 

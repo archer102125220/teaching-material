@@ -31,8 +31,8 @@ class CountMap {
    * @param {number} [quantity]
    */
   increment( key, quantity = 1 ) {
-    assert && assert( typeof quantity === 'number' );
-    assert && assert( quantity >= 1 );
+    window.assert && window.assert( typeof quantity === 'number' );
+    window.assert && window.assert( quantity >= 1 );
 
     if ( this.map.has( key ) ) {
       this.map.get( key ).count += quantity;
@@ -51,8 +51,8 @@ class CountMap {
    * @param {number} [quantity]
    */
   decrement( key, quantity = 1 ) {
-    assert && assert( typeof quantity === 'number' );
-    assert && assert( quantity >= 1 );
+    window.assert && window.assert( typeof quantity === 'number' );
+    window.assert && window.assert( quantity >= 1 );
 
     const entry = this.map.get( key );
 

@@ -48,7 +48,7 @@ function moveBackward(node: Node): void {
 // factored out for use with the deprecated method name too
 function unlinkIndex(this: Node, index: number): void {
   const method = map[index];
-  assert && assert(this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
+  window.assert && window.assert(this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
   this.parents[0].childrenChangedEmitter.removeListener(method);
   delete map[index];
 }
@@ -81,7 +81,7 @@ const IndexedNodeIO = new IOType('IndexedNodeIO', {
   toStateObject: node => {
     const stateObject: { index: number | null } = { index: null };
     if (node.parents[0]) {
-      assert && assert(node.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
+      window.assert && window.assert(node.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
       stateObject.index = node.parents[0].indexOfChild(node);
     }
     return stateObject;
@@ -90,7 +90,7 @@ const IndexedNodeIO = new IOType('IndexedNodeIO', {
     const nodeParent = node.parents[0];
 
     if (nodeParent && stateObject.index) {
-      assert && assert(node.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
+      window.assert && window.assert(node.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
 
       // Swap the child at the destination index with current position of this Node, that way the operation is atomic.
       // This implementation assumes that all children are instrumented IndexedNodeIO instances and can have state set
@@ -117,12 +117,12 @@ const IndexedNodeIO = new IOType('IndexedNodeIO', {
 
         // The callback which signifies the current index
         const callback = () => {
-          assert && assert(this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
+          window.assert && window.assert(this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
           const index = this.parents[0].indexOfChild(this);
           listener(index);
         };
 
-        assert && assert(this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
+        window.assert && window.assert(this.parents.length === 1, 'IndexedNodeIO only supports nodes with a single parent');
         this.parents[0].childrenChangedEmitter.addListener(callback);
         callback();
 

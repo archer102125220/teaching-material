@@ -15,7 +15,7 @@ import type Constructor from '../../../phet-core/types/Constructor';
 import { Node, scenery } from '../../imports';
 
 const RichTextCleanable = memoize(<SuperType extends Constructor>(type: SuperType) => {
-  assert && assert(_.includes(inheritance(type), Node), 'Only Node subtypes should mix Paintable');
+  window.assert && window.assert(_.includes(inheritance(type), Node), 'Only Node subtypes should mix Paintable');
 
   return class RichTextCleanableMixin extends type {
     public get isCleanable(): boolean {

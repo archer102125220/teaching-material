@@ -15,7 +15,7 @@ export type VBoxOptions = StrictOmit<FlowBoxOptions, 'orientation'>;
 
 export default class VBox extends FlowBox {
   public constructor(providedOptions?: VBoxOptions) {
-    assert && assert(!providedOptions || !(providedOptions as FlowBoxOptions).orientation, 'VBox sets orientation');
+    window.assert && window.assert(!providedOptions || !(providedOptions as FlowBoxOptions).orientation, 'VBox sets orientation');
 
     super(optionize<VBoxOptions, SelfOptions, FlowBoxOptions>()({
       orientation: 'vertical'
@@ -23,7 +23,7 @@ export default class VBox extends FlowBox {
   }
 
   protected override onFlowBoxChildInserted(node: Node, index: number): void {
-    assert && assert(!(node instanceof VSeparator), 'VSeparator should not be used in an VBox. Use HSeparator instead');
+    window.assert && window.assert(!(node instanceof VSeparator), 'VSeparator should not be used in an VBox. Use HSeparator instead');
 
     super.onFlowBoxChildInserted(node, index);
   }

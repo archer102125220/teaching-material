@@ -104,11 +104,11 @@ export default class Path extends Paintable(Node) {
    *                             along-side options for Node
    */
   public constructor(shape: Shape | string | null, providedOptions?: PathOptions) {
-    assert && assert(providedOptions === undefined || Object.getPrototypeOf(providedOptions) === Object.prototype,
+    window.assert && window.assert(providedOptions === undefined || Object.getPrototypeOf(providedOptions) === Object.prototype,
       'Extra prototype on Node options object is a code smell');
 
     if (shape || providedOptions?.shape) {
-      assert && assert(!shape || !providedOptions?.shape, 'Do not define shape twice. Check constructor and providedOptions.');
+      window.assert && window.assert(!shape || !providedOptions?.shape, 'Do not define shape twice. Check constructor and providedOptions.');
     }
 
     const options = optionize<PathOptions, SelfOptions, ParentOptions>()({
@@ -130,7 +130,7 @@ export default class Path extends Paintable(Node) {
   }
 
   public setShape(shape: Shape | string | null): this {
-    assert && assert(shape === null || typeof shape === 'string' || shape instanceof Shape,
+    window.assert && window.assert(shape === null || typeof shape === 'string' || shape instanceof Shape,
       'A path\'s shape should either be null, a string, or a Shape');
 
     if (this._shape !== shape) {
@@ -177,7 +177,7 @@ export default class Path extends Paintable(Node) {
    *       the shape is set to null).
    */
   public getStrokedShape(): Shape {
-    assert && assert(this.hasShape(), 'We cannot stroke a non-existing shape');
+    window.assert && window.assert(this.hasShape(), 'We cannot stroke a non-existing shape');
 
     // Lazily compute the stroked shape. It should be set to null when we need to recompute it
     if (!this._strokedShape) {
@@ -245,7 +245,7 @@ export default class Path extends Paintable(Node) {
    * Attaches a listener to our Shape that will be called whenever the Shape changes.
    */
   private attachShapeListener(): void {
-    assert && assert(!this._invalidShapeListenerAttached, 'We do not want to have two listeners attached!');
+    window.assert && window.assert(!this._invalidShapeListenerAttached, 'We do not want to have two listeners attached!');
 
     // Do not attach shape listeners if we are disposed
     if (!this.isDisposed) {
@@ -258,7 +258,7 @@ export default class Path extends Paintable(Node) {
    * Detaches a previously-attached listener added to our Shape (see attachShapeListener).
    */
   private detachShapeListener(): void {
-    assert && assert(this._invalidShapeListenerAttached, 'We cannot detach an unattached listener');
+    window.assert && window.assert(this._invalidShapeListenerAttached, 'We cannot detach an unattached listener');
 
     this._shape!.invalidatedEmitter.removeListener(this._invalidShapeListener);
     this._invalidShapeListenerAttached = false;
@@ -279,7 +279,7 @@ export default class Path extends Paintable(Node) {
   }
 
   public setBoundsMethod(boundsMethod: PathBoundsMethod): this {
-    assert && assert(boundsMethod === 'accurate' ||
+    window.assert && window.assert(boundsMethod === 'accurate' ||
       boundsMethod === 'unstroked' ||
       boundsMethod === 'tightPadding' ||
       boundsMethod === 'safePadding' ||
@@ -371,7 +371,7 @@ export default class Path extends Paintable(Node) {
    * Returns our self bounds when our rendered self is transformed by the matrix.
    */
   public override getTransformedSelfBounds(matrix: Matrix3): Bounds2 {
-    assert && assert(this.hasShape());
+    window.assert && window.assert(this.hasShape());
 
     return (this._stroke ? this.getStrokedShape() : this.getShape())!.getBoundsWithTransform(matrix);
   }

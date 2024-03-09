@@ -98,7 +98,7 @@ class ScreenView extends Node {
     super(options);
 
     if (assert && this.isPhetioInstrumented()) {
-      assert && assert(options.tandem.name === 'view', 'tandem name should be view');
+      window.assert && window.assert(options.tandem.name === 'view', 'tandem name should be view');
     }
 
     // the bounds the confine the layout of the view.
@@ -126,7 +126,7 @@ class ScreenView extends Node {
     // focusability of the title, and then focus it. See https://github.com/phetsims/ratio-and-proportion/issues/321
     this.visibleProperty.lazyLink(visible => {
       if (visible) {
-        assert && assert(!this.pdomTitleNode.focusable, 'about to set to be focusable');
+        window.assert && window.assert(!this.pdomTitleNode.focusable, 'about to set to be focusable');
         this.pdomTitleNode.focusable = true;
         this.pdomTitleNode.focus();
       }
@@ -221,7 +221,7 @@ class ScreenView extends Node {
    * constructor options, but this method can be used directly when necessary.
    */
   public setScreenSummaryContent(node: Node | null): void {
-    assert && assert(node !== this._screenSummaryContent, 'this is already the screen summary Node content');
+    window.assert && window.assert(node !== this._screenSummaryContent, 'this is already the screen summary Node content');
 
     this._screenSummaryContent && this.pdomScreenSummaryNode.removeChild(this._screenSummaryContent);
 

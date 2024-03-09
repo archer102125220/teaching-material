@@ -32,7 +32,7 @@ const DirectionEnum = EnumerationDeprecated.byKeys( [
      * @returns {boolean}
      */
     DirectionEnum.isRelativeDirection = function( direction ) {
-      assert && assert( DirectionEnum.hasOwnProperty( direction ) );
+      window.assert && window.assert( DirectionEnum.hasOwnProperty( direction ) );
       return direction === DirectionEnum.LEFT ||
              direction === DirectionEnum.RIGHT ||
              direction === DirectionEnum.UP ||
@@ -45,7 +45,7 @@ const DirectionEnum = EnumerationDeprecated.byKeys( [
      * @returns {Array.<DirectionEnum>}
      */
     DirectionEnum.directionToRelativeDirections = function( direction ) {
-      assert && assert( DirectionEnum.hasOwnProperty( direction ) );
+      window.assert && window.assert( DirectionEnum.hasOwnProperty( direction ) );
       return direction === DirectionEnum.UP_LEFT ? [ DirectionEnum.UP, DirectionEnum.LEFT ] :
              direction === DirectionEnum.UP_RIGHT ? [ DirectionEnum.UP, DirectionEnum.RIGHT ] :
              direction === DirectionEnum.DOWN_LEFT ? [ DirectionEnum.DOWN, DirectionEnum.LEFT ] :
@@ -59,7 +59,7 @@ const DirectionEnum = EnumerationDeprecated.byKeys( [
      * @returns {boolean}
      */
     DirectionEnum.isHorizontalDirection = function( direction ) {
-      assert && assert( DirectionEnum.hasOwnProperty( direction ) );
+      window.assert && window.assert( DirectionEnum.hasOwnProperty( direction ) );
       return direction === DirectionEnum.LEFT ||
              direction === DirectionEnum.RIGHT;
     };
@@ -71,7 +71,7 @@ const DirectionEnum = EnumerationDeprecated.byKeys( [
      * @returns {DirectionEnum|null}
      */
     DirectionEnum.keyToDirection = function( key ) {
-      assert && assert( typeof key === 'string' );
+      window.assert && window.assert( typeof key === 'string' );
 
       if ( key === KeyboardUtils.KEY_UP_ARROW || key === KeyboardUtils.KEY_W ) {
         return DirectionEnum.UP;

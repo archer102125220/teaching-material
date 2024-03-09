@@ -76,7 +76,7 @@ type StringsType = {
   }
 };
 
-// console.log( JSON.stringify( phet.chipper.strings ) );
+// console.log( JSON.stringify( window.phet.chipper.strings ) );
 const GeometricOpticsStrings = getStringModule( 'GEOMETRIC_OPTICS' ) as StringsType;
 
 geometricOptics.register( 'GeometricOpticsStrings', GeometricOpticsStrings );

@@ -17,9 +17,9 @@ export default class Grayscale extends ColorMatrixFilter {
    * @param [amount] - The amount of the effect, from 0 (none) to 1 (full)
    */
   public constructor(amount = 1) {
-    assert && assert(isFinite(amount), 'Grayscale amount should be finite');
-    assert && assert(amount >= 0, 'Grayscale amount should be non-negative');
-    assert && assert(amount <= 1, 'Grayscale amount should be no greater than 1');
+    window.assert && window.assert(isFinite(amount), 'Grayscale amount should be finite');
+    window.assert && window.assert(amount >= 0, 'Grayscale amount should be non-negative');
+    window.assert && window.assert(amount <= 1, 'Grayscale amount should be no greater than 1');
 
     const n = 1 - amount;
 

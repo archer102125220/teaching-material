@@ -97,10 +97,10 @@ class RulerNode extends Node {
     }, providedOptions);
 
     // things you're likely to mess up, add more as needed
-    assert && assert(Math.floor(rulerWidth / majorTickWidth) + 1 === majorTickLabels.length); // do we have enough major tick labels?
-    assert && assert(options.unitsMajorTickIndex < majorTickLabels.length);
-    assert && assert(options.majorTickHeight < rulerHeight / 2);
-    assert && assert(options.minorTickHeight < rulerHeight / 2);
+    window.assert && window.assert(Math.floor(rulerWidth / majorTickWidth) + 1 === majorTickLabels.length); // do we have enough major tick labels?
+    window.assert && window.assert(options.unitsMajorTickIndex < majorTickLabels.length);
+    window.assert && window.assert(options.majorTickHeight < rulerHeight / 2);
+    window.assert && window.assert(options.minorTickHeight < rulerHeight / 2);
 
     super();
 
@@ -172,7 +172,7 @@ class RulerNode extends Node {
 
           // make sure the units label fits between the tick mark labels
           unitsLabelMaxWidth = majorTickLabelNode.left - options.unitsSpacing - unitsLabelText.left;
-          assert && assert(unitsLabelMaxWidth > 0, 'space for units label is negative or zero');
+          window.assert && window.assert(unitsLabelMaxWidth > 0, 'space for units label is negative or zero');
           unitsLabelText.maxWidth = unitsLabelMaxWidth;
         }
 

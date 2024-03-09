@@ -45,6 +45,11 @@ const className = computed(() => {
 });
 
 async function handleGeometricOptics() {
+  await import('@/utils/joist/splash');
+  await import('@/utils/chipper/initialize-globals');
+  await import('@/utils/assert/assert');
+  await import('@/utils/tandem/PhetioIDUtils');
+  // await import('@/utils/chipper/phet-io/phetioCompareAPIs');
   const _geometricOpticsModule = await import(
     '@/utils/geometric-optics/geometric-optics-main'
   );

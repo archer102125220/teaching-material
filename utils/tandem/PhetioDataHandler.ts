@@ -82,7 +82,7 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
     }, providedOptions);
 
     assert && PhetioDataHandler.validateParameters(options.parameters, !!options.tandem?.supplied);
-    assert && assert(options.phetioType === undefined,
+    window.assert && window.assert(options.phetioType === undefined,
       'PhetioDataHandler sets its own phetioType. Instead provide parameter phetioTypes through `options.parameters` with a phetioOuterType');
 
     // list of parameters, see options.parameters. Filter out phetioPrivate parameters, all `phetioPrivate`
@@ -96,7 +96,7 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
     if (options.phetioPlayback) {
       options.phetioEventMetadata = options.phetioEventMetadata || {}; // phetioEventMetadata defaults to null
 
-      assert && assert(!options.phetioEventMetadata.hasOwnProperty('dataKeys'),
+      window.assert && window.assert(!options.phetioEventMetadata.hasOwnProperty('dataKeys'),
         'dataKeys should be supplied by PhetioDataHandler, not elsewhere');
 
       options.phetioEventMetadata.dataKeys = options.parameters.map(paramToName);
@@ -127,7 +127,7 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
     for (let i = 0; i < parameters.length; i++) {
       const parameter = parameters[i]; // metadata about a single parameter
 
-      assert && assert(Object.getPrototypeOf(parameter) === Object.prototype,
+      window.assert && window.assert(Object.getPrototypeOf(parameter) === Object.prototype,
         'Extra prototype on parameter object is a code smell');
 
       reachedPhetioPrivate = reachedPhetioPrivate || parameter.phetioPrivate!;
@@ -142,11 +142,11 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
         'name', 'phetioType', 'phetioDocumentation'
       ]);
 
-      assert && assert(_.intersection(Object.keys(parameter), Validation.VALIDATOR_KEYS).length > 0,
+      window.assert && window.assert(_.intersection(Object.keys(parameter), Validation.VALIDATOR_KEYS).length > 0,
         `validator must be specified for parameter ${i}`);
 
       for (const key in parameter) {
-        assert && assert(PARAMETER_KEYS.includes(key), `unrecognized parameter key: ${key}`);
+        window.assert && window.assert(PARAMETER_KEYS.includes(key), `unrecognized parameter key: ${key}`);
       }
 
       // Changing after construction indicates a logic error.
@@ -164,7 +164,7 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
    * Validate that provided args match the expected schema given via options.parameters.
    */
   protected validateArguments(...args: T): void {
-    assert && assert(args.length === this.parameters.length,
+    window.assert && window.assert(args.length === this.parameters.length,
       `Emitted unexpected number of args. Expected: ${this.parameters.length} and received ${args.length}`
     );
     for (let i = 0; i < this.parameters.length; i++) {
@@ -182,7 +182,7 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
    * Validate that provided args match the expected schema given via options.parameters.
    */
   public getValidationErrors(...args: T): Array<string | null> {
-    assert && assert(args.length === this.parameters.length,
+    window.assert && window.assert(args.length === this.parameters.length,
       `Emitted unexpected number of args. Expected: ${this.parameters.length} and received ${args.length}`
     );
     return this.parameters.map((parameter, index) => {
@@ -196,7 +196,7 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
    */
   public getPhetioData(...args: T): null | Record<string, unknown> {
 
-    assert && assert(Tandem.PHET_IO_ENABLED, 'should only get phet-io data in phet-io brand');
+    window.assert && window.assert(Tandem.PHET_IO_ENABLED, 'should only get phet-io data in phet-io brand');
 
     // null if there are no arguments. dataStream.js omits null values for data
     let data: Record<string, object> | null = null;
@@ -207,7 +207,7 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
       for (let i = 0; i < this.parameters.length; i++) {
         const element = this.parameters[i];
         if (!element.phetioPrivate) {
-          assert && assert(element.name, 'name required');
+          window.assert && window.assert(element.name, 'name required');
           data[element.name!] = element.phetioType!.toStateObject(args[i]);
         }
       }

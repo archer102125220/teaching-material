@@ -122,7 +122,7 @@ export default class AquaRadioButton<T> extends WidthSizable(Voicing(Node)) {
 
     }, providedOptions);
 
-    assert && assert(!options.tandem.supplied || options.tandem.name.endsWith(AquaRadioButton.TANDEM_NAME_SUFFIX),
+    window.assert && window.assert(!options.tandem.supplied || options.tandem.name.endsWith(AquaRadioButton.TANDEM_NAME_SUFFIX),
       `AquaRadioButton tandem.name must end with ${AquaRadioButton.TANDEM_NAME_SUFFIX}: ${options.tandem.phetioID}`);
 
     super();

@@ -89,12 +89,12 @@ class NoiseGenerator extends SoundGenerator {
       lfoType: 'sine'
     }, providedOptions );
 
-    assert && assert(
+    window.assert && window.assert(
       [ 'white', 'pink', 'brown' ].includes( options.noiseType ),
       `invalid noise type: ${options.noiseType}`
     );
 
-    assert && assert(
+    window.assert && window.assert(
     options.lfoInitialDepth >= 0 && options.lfoInitialDepth <= 1,
       `invalid value for lfoInitialDepth: ${options.lfoInitialDepth}`
     );

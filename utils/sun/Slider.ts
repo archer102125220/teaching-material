@@ -224,7 +224,7 @@ export default class Slider extends Sizable(AccessibleSlider(Node, 0)) {
 
     const rangeProperty = range instanceof Range ? new TinyProperty(range) : range;
 
-    assert && assert(options.soundGenerator === Slider.DEFAULT_SOUND || _.isEmpty(options.valueChangeSoundGeneratorOptions),
+    window.assert && window.assert(options.soundGenerator === Slider.DEFAULT_SOUND || _.isEmpty(options.valueChangeSoundGeneratorOptions),
       'options should only be supplied when using default sound generator');
 
     // If no sound generator was provided, create the default.
@@ -274,7 +274,7 @@ export default class Slider extends Sizable(AccessibleSlider(Node, 0)) {
 
     const thumbTandem = options.tandem.createTandem(Slider.THUMB_NODE_TANDEM_NAME);
     if (Tandem.VALIDATION && options.thumbNode) {
-      assert && assert(options.thumbNode.tandem.equals(thumbTandem),
+      window.assert && window.assert(options.thumbNode.tandem.equals(thumbTandem),
         `Passed-in thumbNode must have the correct tandem. Expected: ${thumbTandem.phetioID}, actual: ${options.thumbNode.tandem.phetioID}`
       );
     }
@@ -334,7 +334,7 @@ export default class Slider extends Sizable(AccessibleSlider(Node, 0)) {
     const trackTandem = options.tandem.createTandem(Slider.TRACK_NODE_TANDEM_NAME);
 
     if (Tandem.VALIDATION && options.trackNode) {
-      assert && assert(options.trackNode.tandem.equals(trackTandem),
+      window.assert && window.assert(options.trackNode.tandem.equals(trackTandem),
         `Passed-in trackNode must have the correct tandem. Expected: ${trackTandem.phetioID}, actual: ${options.trackNode.tandem.phetioID}`
       );
     }
@@ -343,7 +343,7 @@ export default class Slider extends Sizable(AccessibleSlider(Node, 0)) {
     sliderParts.push(trackSpacer);
 
     // Assertion to get around mutating the null-default based on the slider orientation.
-    assert && assert(superOptions.trackSize, 'trackSize should not be null');
+    window.assert && window.assert(superOptions.trackSize, 'trackSize should not be null');
 
     this.track = options.trackNode || new DefaultSliderTrack(valueProperty, range, {
 
@@ -507,7 +507,7 @@ export default class Slider extends Sizable(AccessibleSlider(Node, 0)) {
     }
 
     // must be after the button is instrumented
-    // assert && assert( !this.isPhetioInstrumented() || this.enabledRangeProperty.isPhetioInstrumented() );
+    // window.assert && window.assert( !this.isPhetioInstrumented() || this.enabledRangeProperty.isPhetioInstrumented() );
     !ownsEnabledRangeProperty && this.enabledRangeProperty instanceof ReadOnlyProperty && this.addLinkedElement(this.enabledRangeProperty, {
       tandemName: 'enabledRangeProperty'
     });
@@ -662,7 +662,7 @@ class SliderConstraint extends LayoutConstraint {
     // asymmetry when the slider thumb is off the edges of the track.  See https://github.com/phetsims/sun/issues/282
     this.trackSpacer.localBounds = track.localBounds.dilatedX(thumb.width / 2);
 
-    assert && assert(track.minimumWidth !== null);
+    window.assert && window.assert(track.minimumWidth !== null);
 
     // Our track's (exterior) minimum width will INCLUDE "visual overflow" e.g. stroke. The actual range used for
     // computation of where the thumb/ticks go will be the "interior" width (excluding the visual overflow), e.g.

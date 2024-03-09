@@ -276,8 +276,8 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
       phetioReadOnly: true
     }, providedOptions);
 
-    assert && assert(options.shiftDragSpeed <= options.dragSpeed, 'shiftDragSpeed should be less than or equal to shiftDragSpeed, it is intended to provide more fine-grained control');
-    assert && assert(options.shiftDragDelta <= options.dragDelta, 'shiftDragDelta should be less than or equal to dragDelta, it is intended to provide more fine-grained control');
+    window.assert && window.assert(options.shiftDragSpeed <= options.dragSpeed, 'shiftDragSpeed should be less than or equal to shiftDragSpeed, it is intended to provide more fine-grained control');
+    window.assert && window.assert(options.shiftDragDelta <= options.dragDelta, 'shiftDragDelta should be less than or equal to dragDelta, it is intended to provide more fine-grained control');
 
     super(options);
 
@@ -320,12 +320,12 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
 
     this.dragStartAction = new PhetioAction(event => {
       const key = KeyboardUtils.getEventCode(event.domEvent);
-      assert && assert(key, 'How can we have a null key for KeyboardDragListener?');
+      window.assert && window.assert(key, 'How can we have a null key for KeyboardDragListener?');
 
       // If there are no movement keys down, attach a listener to the Pointer that will tell the AnimatedPanZoomListener
       // to keep this Node in view
       if (!this.movementKeysDown && KeyboardUtils.isMovementKey(event.domEvent)) {
-        assert && assert(this._pointer === null, 'We should have cleared the Pointer reference by now.');
+        window.assert && window.assert(this._pointer === null, 'We should have cleared the Pointer reference by now.');
         this._pointer = event.pointer as PDOMPointer;
         event.pointer.addInputListener(this._pointerListener, true);
         this.isPressedProperty.value = true;
@@ -375,7 +375,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
       // If there are no movement keys down, attach a listener to the Pointer that will tell the AnimatedPanZoomListener
       // to keep this Node in view
       if (!this.movementKeysDown) {
-        assert && assert(event.pointer === this._pointer, 'How could the event Pointer be anything other than this PDOMPointer?');
+        window.assert && window.assert(event.pointer === this._pointer, 'How could the event Pointer be anything other than this PDOMPointer?');
         this._pointer!.removeInputListener(this._pointerListener);
         this._pointer = null;
         this.isPressedProperty.value = false;
@@ -496,7 +496,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * Setter for the moveOnHoldInterval property, see options.moveOnHoldInterval for more info.
    */
   public set moveOnHoldInterval(moveOnHoldInterval: number) {
-    assert && assert(moveOnHoldInterval > 0, 'if the moveOnHoldInterval is 0, then the dragging will be ' +
+    window.assert && window.assert(moveOnHoldInterval > 0, 'if the moveOnHoldInterval is 0, then the dragging will be ' +
       'dependent on how often the dragListener is stepped');
     this._moveOnHoldInterval = moveOnHoldInterval;
   }
@@ -519,8 +519,8 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * Get the current target Node of the drag.
    */
   public getCurrentTarget(): Node {
-    assert && assert(this.isPressed, 'We have no currentTarget if we are not pressed');
-    assert && assert(this._pointer && this._pointer.trail, 'Must have a Pointer with an active trail if we are pressed');
+    window.assert && window.assert(this.isPressed, 'We have no currentTarget if we are not pressed');
+    window.assert && window.assert(this._pointer && this._pointer.trail, 'Must have a Pointer with an active trail if we are pressed');
     return this._pointer!.trail!.lastNode();
   }
 
@@ -538,7 +538,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   public keydown(event: SceneryEvent): void {
     const domEvent = event.domEvent as KeyboardEvent;
     const key = KeyboardUtils.getEventCode(domEvent);
-    assert && assert(key, 'How can we have a null key from a keydown in KeyboardDragListener?');
+    window.assert && window.assert(key, 'How can we have a null key from a keydown in KeyboardDragListener?');
 
     // If the meta key is down (command key/windows key) prevent movement and do not preventDefault.
     // Meta key + arrow key is a command to go back a page, and we need to allow that. But also, macOS
@@ -900,7 +900,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * Return true if all keys in the list are currently held down.
    */
   public allKeysInListDown(keys: string[]): boolean {
-    assert && assert(keys.length > 0, 'You are testing to see if an empty list of keys is down?');
+    window.assert && window.assert(keys.length > 0, 'You are testing to see if an empty list of keys is down?');
 
     let allKeysDown = true;
 
@@ -922,7 +922,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    */
   private getKeyboardDragDirectionKeys(): KeyboardDragDirectionKeys {
     const directionKeys = KEYBOARD_DRAG_DIRECTION_KEY_MAP.get(this._keyboardDragDirection)!;
-    assert && assert(directionKeys, `No direction keys found in map for KeyboardDragDirection ${this._keyboardDragDirection}`);
+    window.assert && window.assert(directionKeys, `No direction keys found in map for KeyboardDragDirection ${this._keyboardDragDirection}`);
     return directionKeys;
   }
 
@@ -990,7 +990,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
    * Remove a hotkey that was added with addHotkey.
    */
   public removeHotkey(hotkey: Hotkey): void {
-    assert && assert(this._hotkeys.includes(hotkey), 'Trying to remove a hotkey that is not in the list of hotkeys.');
+    window.assert && window.assert(this._hotkeys.includes(hotkey), 'Trying to remove a hotkey that is not in the list of hotkeys.');
 
     const hotkeyIndex = this._hotkeys.indexOf(hotkey);
     this._hotkeys.splice(hotkeyIndex, 1);
@@ -1044,7 +1044,7 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
     this.resetPressAndHold();
 
     if (this._pointer) {
-      assert && assert(this._pointer.listeners.includes(this._pointerListener),
+      window.assert && window.assert(this._pointer.listeners.includes(this._pointerListener),
         'A reference to the Pointer means it should have the pointerListener');
       this._pointer.removeInputListener(this._pointerListener);
       this._pointer = null;

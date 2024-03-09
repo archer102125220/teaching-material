@@ -66,7 +66,7 @@ export default class DirectFocalLengthModel extends PhetioObject implements Foca
       phetioDocumentation: 'magnitude of the focal length (no sign)'
     });
 
-    assert && assert(options.indexOfRefractionRange?.getLength() === 0, 'indexOfRefraction should be a fixed value');
+    window.assert && window.assert(options.indexOfRefractionRange?.getLength() === 0, 'indexOfRefraction should be a fixed value');
     this.indexOfRefractionProperty = new NumberProperty(options.indexOfRefractionRange.defaultValue, {
       range: options.indexOfRefractionRange,
       // units: unitless
@@ -95,7 +95,7 @@ export default class DirectFocalLengthModel extends PhetioObject implements Foca
    * Constrain values so that floating-point error doesn't cause range exceptions.
    */
   public syncToModel(model: FocalLengthModel): void {
-    assert && assert(model !== this);
+    window.assert && window.assert(model !== this);
     this.focalLengthMagnitudeProperty.value =
       this.focalLengthMagnitudeProperty.range.constrainValue(model.focalLengthMagnitudeProperty.value);
   }

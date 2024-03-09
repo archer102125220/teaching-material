@@ -71,7 +71,7 @@ export default class ToggleNode<T, N extends Node = Node> extends Node {
         }
       }
 
-      assert && assert(matches.length === 1, `Wrong number of matches: ${matches.length}`);
+      window.assert && window.assert(matches.length === 1, `Wrong number of matches: ${matches.length}`);
       if (options.unselectedChildrenSceneGraphStrategy === 'excluded') {
         this.children = matches;
       }

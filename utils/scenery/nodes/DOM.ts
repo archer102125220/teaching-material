@@ -50,16 +50,16 @@ export default class DOM extends Node {
    *                             along-side options for Node
    */
   public constructor(element: Element | JQuery, options?: DOMOptions) {
-    assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+    window.assert && window.assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
       'Extra prototype on Node options object is a code smell');
 
-    assert && assert(element instanceof window.Element || element.jquery, 'DOM nodes need to be passed an HTML/DOM element or a jQuery selection like $( ... )');
+    window.assert && window.assert(element instanceof window.Element || element.jquery, 'DOM nodes need to be passed an HTML/DOM element or a jQuery selection like $( ... )');
 
     // unwrap from jQuery if that is passed in, for consistency
     if (isJQueryElement(element)) {
       element = element[0];
 
-      assert && assert(element instanceof window.Element);
+      window.assert && window.assert(element instanceof window.Element);
     }
 
     super();
@@ -169,7 +169,7 @@ export default class DOM extends Node {
    * Changes the DOM element of this DOM node to another element.
    */
   public setElement(element: HTMLElement): this {
-    assert && assert(!this._element, 'We should only ever attach one DOMElement to a DOM node');
+    window.assert && window.assert(!this._element, 'We should only ever attach one DOMElement to a DOM node');
 
     if (this._element !== element) {
       if (this._element) {

@@ -28,7 +28,7 @@ export default class RelaxedManualConstraint<T extends Node[]> extends LayoutCon
   private readonly layoutCallback: LayoutCallback<T>;
 
   public constructor(ancestorNode: Node, nodes: T, layoutCallback: LayoutCallback<T>) {
-    assert && assert(Array.isArray(nodes) && _.every(nodes, node => node instanceof Node));
+    window.assert && window.assert(Array.isArray(nodes) && _.every(nodes, node => node instanceof Node));
 
     super(ancestorNode);
 
@@ -56,7 +56,7 @@ export default class RelaxedManualConstraint<T extends Node[]> extends LayoutCon
   public override layout(): void {
     super.layout();
 
-    assert && assert(_.every(this.nodes, node => !node.isDisposed));
+    window.assert && window.assert(_.every(this.nodes, node => !node.isDisposed));
 
     // If a cell is disconnected, pass in null
     const proxies = this.cells.map(cell => cell.isConnected() ? cell.proxy : null);

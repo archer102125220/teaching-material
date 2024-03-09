@@ -7,16 +7,16 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Node, VBox, VBoxOptions } from '../../../scenery/js/imports.js';
-import joist from '../joist.js';
-import PreferencesDialog from './PreferencesDialog.js';
-import { SimulationModel } from './PreferencesModel.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import PickRequired from '../../../phet-core/js/types/PickRequired.js';
-import PreferencesPanelSection from './PreferencesPanelSection.js';
-import PreferencesType from './PreferencesType.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import PreferencesPanel, { PreferencesPanelOptions } from './PreferencesPanel.js';
+import { Node, VBox, type VBoxOptions } from '../../scenery/imports';
+import joist from '../joist';
+import PreferencesDialog from './PreferencesDialog';
+import { type SimulationModel } from './PreferencesModel';
+import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
+import type PickRequired from '../../phet-core/types/PickRequired';
+import PreferencesPanelSection from './PreferencesPanelSection';
+import PreferencesType from './PreferencesType';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import PreferencesPanel, { type PreferencesPanelOptions } from './PreferencesPanel';
 
 type SelfOptions = EmptySelfOptions;
 type SimulationPreferencesPanelOptions = SelfOptions &
@@ -34,34 +34,34 @@ class SimulationPreferencesPanel extends PreferencesPanel {
    * @param tabVisibleProperty
    * @param [providedOptions]
    */
-  public constructor( simulationModel: SimulationModel, selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean>, providedOptions?: SimulationPreferencesPanelOptions ) {
-    const options = optionize<SimulationPreferencesPanelOptions, SelfOptions, VBoxOptions>()( {
+  public constructor(simulationModel: SimulationModel, selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean>, providedOptions?: SimulationPreferencesPanelOptions) {
+    const options = optionize<SimulationPreferencesPanelOptions, SelfOptions, VBoxOptions>()({
       labelContent: 'Simulation',
 
       // phet-io
       phetioVisiblePropertyInstrumented: false
-    }, providedOptions );
+    }, providedOptions);
 
-    super( PreferencesType.SIMULATION, selectedTabProperty, tabVisibleProperty, options );
+    super(PreferencesType.SIMULATION, selectedTabProperty, tabVisibleProperty, options);
 
-    const panelContent = new VBox( {
+    const panelContent = new VBox({
       align: 'left',
       spacing: PreferencesDialog.CONTENT_SPACING
-    } );
-    this.addChild( panelContent );
+    });
+    this.addChild(panelContent);
 
     // Just the provided panel content with its own spacing
     const providedChildren: Node[] = [];
 
-    simulationModel.customPreferences.forEach( customPreference => {
-      const contentNode = customPreference.createContent( options.tandem );
-      const preferencesPanelSection = new PreferencesPanelSection( { contentNode: contentNode } );
-      providedChildren.push( preferencesPanelSection );
-    } );
+    simulationModel.customPreferences.forEach(customPreference => {
+      const contentNode = customPreference.createContent(options.tandem);
+      const preferencesPanelSection = new PreferencesPanelSection({ contentNode: contentNode });
+      providedChildren.push(preferencesPanelSection);
+    });
 
     panelContent.children = providedChildren;
   }
 }
 
-joist.register( 'SimulationPreferencesPanel', SimulationPreferencesPanel );
+joist.register('SimulationPreferencesPanel', SimulationPreferencesPanel);
 export default SimulationPreferencesPanel;

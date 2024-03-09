@@ -64,7 +64,7 @@ class Range implements TRange {
    * Setter for min
    */
   public setMin( min: number ): void {
-    assert && assert( min <= this._max, `min must be <= max: ${min}` );
+    window.assert && window.assert( min <= this._max, `min must be <= max: ${min}` );
     this._min = min;
   }
 
@@ -87,7 +87,7 @@ class Range implements TRange {
    * Setter for max
    */
   public setMax( max: number ): void {
-    assert && assert( this._min <= max, `max must be >= to min: ${max}` );
+    window.assert && window.assert( this._min <= max, `max must be >= to min: ${max}` );
     this._max = max;
   }
 
@@ -95,7 +95,7 @@ class Range implements TRange {
    * Sets the minimum and maximum value of the range
    */
   public setMinMax( min: number, max: number ): this {
-    assert && assert( min <= max, `max must be >= to min. min: ${min}, max: ${max}` );
+    window.assert && window.assert( min <= max, `max must be >= to min. min: ${min}, max: ${max}` );
     this._min = min;
     this._max = max;
 
@@ -272,7 +272,7 @@ class Range implements TRange {
    * the Range. If the value is not contained in Range, then the return value will not be between 0 and 1.
    */
   public getNormalizedValue( value: number ): number {
-    assert && assert( this.getLength() !== 0, 'cannot get normalized value without a range length' );
+    window.assert && window.assert( this.getLength() !== 0, 'cannot get normalized value without a range length' );
     return ( value - this.min ) / this.getLength();
   }
 
@@ -282,7 +282,7 @@ class Range implements TRange {
    * usage.
    */
   public expandNormalizedValue( normalizedValue: number ): number {
-    assert && assert( this.getLength() !== 0, 'cannot get expand normalized value without a range length' );
+    window.assert && window.assert( this.getLength() !== 0, 'cannot get expand normalized value without a range length' );
     return normalizedValue * this.getLength() + this.min;
   }
 
@@ -303,7 +303,7 @@ class Range implements TRange {
 
   // Given a value and a delta to change that value, clamp the delta to make sure the value stays within range.
   public clampDelta( value: number, delta: number ): number {
-    assert && assert( this.contains( value ) );
+    window.assert && window.assert( this.contains( value ) );
     return value + delta < this.min ? this.min - value :
            value + delta > this.max ? this.max - value :
            delta;

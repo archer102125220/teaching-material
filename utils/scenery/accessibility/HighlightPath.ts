@@ -252,7 +252,7 @@ class HighlightPath extends Path {
    * @param focusedTrail - Trail to focused Node, to help search unique Trail to the transformSourceNode
    */
   public getUniqueHighlightTrail(focusedTrail: Trail): Trail {
-    assert && assert(this.transformSourceNode, 'getUniqueHighlightTrail requires a transformSourceNode');
+    window.assert && window.assert(this.transformSourceNode, 'getUniqueHighlightTrail requires a transformSourceNode');
     const transformSourceNode = this.transformSourceNode!;
 
     let uniqueTrail = null;
@@ -271,14 +271,14 @@ class HighlightPath extends Path {
       // multiple Trails that go through the focused Node it is impossible to determine the Trail to use for the
       // highlight. Either avoid DAG for the transformSourceNode or use a HighlightPath without
       // transformSourceNode.
-      assert && assert(extendedTrails.length === 1,
+      window.assert && window.assert(extendedTrails.length === 1,
         'No unique trail to highlight, either avoid DAG for transformSourceNode or don\'t use transformSourceNode with HighlightPath'
       );
 
       uniqueTrail = extendedTrails[0];
     }
 
-    assert && assert(uniqueTrail, 'no unique Trail found for getUniqueHighlightTrail');
+    window.assert && window.assert(uniqueTrail, 'no unique Trail found for getUniqueHighlightTrail');
     return uniqueTrail;
   }
 

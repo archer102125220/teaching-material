@@ -107,7 +107,7 @@ class ResponsePatternCollection {
     // https://www.carlrippon.com/typescript-assertion-signatures/
     // @ts-expect-error - see above comment
     const patternString = this[key];
-    assert && assert(patternString, `no pattern string found for key ${key}`);
+    window.assert && window.assert(patternString, `no pattern string found for key ${key}`);
     return patternString;
   }
 

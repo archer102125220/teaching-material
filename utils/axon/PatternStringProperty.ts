@@ -162,7 +162,7 @@ export default class PatternStringProperty<Values extends ValuesType> extends De
   unknown> {
   public constructor(patternProperty: TReadOnlyProperty<string>, values: Values, providedOptions?: PatternStringPropertyOptions<Values>) {
 
-    assert && assert(!(values.tandem instanceof Tandem), 'Did you intend to put tandem in providedOptions?');
+    window.assert && window.assert(!(values.tandem instanceof Tandem), 'Did you intend to put tandem in providedOptions?');
 
     const options = optionize<FirstParameterTypeToOptionize<Values>, OptionalSelfOptions<Values>, SuperOptions>()({
       formatNames: [],
@@ -191,7 +191,7 @@ export default class PatternStringProperty<Values extends ValuesType> extends De
         const decimalPlaces: number = (typeof options.decimalPlaces === 'number' || options.decimalPlaces === null)
           ? options.decimalPlaces
           : options.decimalPlaces[key]!;
-        assert && assert(decimalPlaces !== null);
+        window.assert && window.assert(decimalPlaces !== null);
 
         stringNumberMap = (value: string | number) => stringify(typeof value === 'number' ? Utils.toFixed(value, decimalPlaces) : value);
       }

@@ -207,7 +207,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      *  invalidateImage() instead of changing the image reference (calling setImage() multiple times)
      */
     public setImage(image: ImageableImage): this {
-      assert && assert(image, 'image should be available');
+      window.assert && window.assert(image, 'image should be available');
 
       // Generally, if a different value for image is provided, it has changed
       let hasImageChanged = this._image !== image;
@@ -280,7 +280,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      *       TODO: return the original result instead. https://github.com/phetsims/scenery/issues/1581
      */
     public getImage(): HTMLImageElement | HTMLCanvasElement {
-      assert && assert(this._image !== null);
+      window.assert && window.assert(this._image !== null);
 
       return this._image!;
     }
@@ -334,7 +334,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      *                                opacity.
      */
     public setImageOpacity(imageOpacity: number): void {
-      assert && assert(isFinite(imageOpacity) && imageOpacity >= 0 && imageOpacity <= 1,
+      window.assert && window.assert(isFinite(imageOpacity) && imageOpacity >= 0 && imageOpacity <= 1,
         `imageOpacity out of range: ${imageOpacity}`);
 
       if (this._imageOpacity !== imageOpacity) {
@@ -374,7 +374,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * @param width - Expected width of the image's unloaded content
      */
     public setInitialWidth(width: number): this {
-      assert && assert(width >= 0 && (width % 1 === 0), 'initialWidth should be a non-negative integer');
+      window.assert && window.assert(width >= 0 && (width % 1 === 0), 'initialWidth should be a non-negative integer');
 
       if (width !== this._initialWidth) {
         this._initialWidth = width;
@@ -417,7 +417,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * @param height - Expected height of the image's unloaded content
      */
     public setInitialHeight(height: number): this {
-      assert && assert(height >= 0 && (height % 1 === 0), 'initialHeight should be a non-negative integer');
+      window.assert && window.assert(height >= 0 && (height % 1 === 0), 'initialHeight should be a non-negative integer');
 
       if (height !== this._initialHeight) {
         this._initialHeight = height;
@@ -519,7 +519,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * @param level - A non-negative integer representing the number of mipmap levels to precompute.
      */
     public setMipmapInitialLevel(level: number): this {
-      assert && assert(level % 1 === 0 && level >= 0,
+      window.assert && window.assert(level % 1 === 0 && level >= 0,
         'mipmapInitialLevel should be a non-negative integer');
 
       if (this._mipmapInitialLevel !== level) {
@@ -554,7 +554,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * @param level - A non-negative integer representing the maximum mipmap level to compute.
      */
     public setMipmapMaxLevel(level: number): this {
-      assert && assert(level % 1 === 0 && level >= 0,
+      window.assert && window.assert(level % 1 === 0 && level >= 0,
         'mipmapMaxLevel should be a non-negative integer');
 
       if (this._mipmapMaxLevel !== level) {
@@ -686,7 +686,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * @param [additionalBias] - Can be provided to get per-call bias (we want some of this for Canvas output)
      */
     public getMipmapLevel(matrix: Matrix3, additionalBias = 0): number {
-      assert && assert(this._mipmap, 'Assumes mipmaps can be used');
+      window.assert && window.assert(this._mipmap, 'Assumes mipmaps can be used');
 
       // Handle high-dpi devices like retina with correct mipmap levels.
       const scale = Imageable.getApproximateMatrixScale(matrix) * (window.devicePixelRatio || 1);
@@ -698,7 +698,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * Returns the desired mipmap level (0-indexed) that should be used for the particular scale
      */
     public getMipmapLevelFromScale(scale: number, additionalBias = 0): number {
-      assert && assert(scale > 0, 'scale should be a positive number');
+      window.assert && window.assert(scale > 0, 'scale should be a positive number');
 
       // If we are shown larger than scale, ALWAYS choose the highest resolution
       if (scale >= 1) {
@@ -740,7 +740,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * @returns - Matching <canvas> for the level of detail
      */
     public getMipmapCanvas(level: number): HTMLCanvasElement {
-      assert && assert(level >= 0 &&
+      window.assert && window.assert(level >= 0 &&
         level < this._mipmapCanvases.length &&
         (level % 1) === 0);
 
@@ -760,7 +760,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * @returns - Matching data URL for the level of detail
      */
     public getMipmapURL(level: number): string {
-      assert && assert(level >= 0 &&
+      window.assert && window.assert(level >= 0 &&
         level < this._mipmapCanvases.length &&
         (level % 1) === 0);
 
@@ -803,7 +803,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
         return this._initialWidth; // either 0 (default), or the overridden value
       }
       else {
-        assert && assert(this._initialWidth === 0 || this._initialWidth === detectedWidth, 'Bad Image.initialWidth');
+        window.assert && window.assert(this._initialWidth === 0 || this._initialWidth === detectedWidth, 'Bad Image.initialWidth');
 
         return detectedWidth;
       }
@@ -826,7 +826,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
         return this._initialHeight; // either 0 (default), or the overridden value
       }
       else {
-        assert && assert(this._initialHeight === 0 || this._initialHeight === detectedHeight, 'Bad Image.initialHeight');
+        window.assert && window.assert(this._initialHeight === 0 || this._initialHeight === detectedHeight, 'Bad Image.initialHeight');
 
         return detectedHeight;
       }
@@ -838,7 +838,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * If our provided image is an HTMLImageElement, returns its URL (src). (scenery-internal)
      */
     public getImageURL(): string {
-      assert && assert(this._image instanceof HTMLImageElement, 'Only supported for HTML image elements');
+      window.assert && window.assert(this._image instanceof HTMLImageElement, 'Only supported for HTML image elements');
 
       return (this._image as HTMLImageElement).src;
     }
@@ -847,7 +847,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * Attaches our on-load listener to our current image.
      */
     private _attachImageLoadListener(): void {
-      assert && assert(!this._imageLoadListenerAttached, 'Should only be attached to one thing at a time');
+      window.assert && window.assert(!this._imageLoadListenerAttached, 'Should only be attached to one thing at a time');
 
       if (!this.isDisposed) {
         (this._image as HTMLImageElement).addEventListener('load', this._imageLoadListener);
@@ -859,7 +859,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * Detaches our on-load listener from our current image.
      */
     private _detachImageLoadListener(): void {
-      assert && assert(this._imageLoadListenerAttached, 'Needs to be attached first to be detached.');
+      window.assert && window.assert(this._imageLoadListenerAttached, 'Needs to be attached first to be detached.');
 
       (this._image as HTMLImageElement).removeEventListener('load', this._imageLoadListener);
       this._imageLoadListenerAttached = false;
@@ -869,7 +869,7 @@ const Imageable = <SuperType extends Constructor>(type: SuperType) => { // eslin
      * Called when our image has loaded (it was not yet loaded with then listener was added)
      */
     private _onImageLoad(): void {
-      assert && assert(this._imageLoadListenerAttached, 'If _onImageLoad is firing, it should be attached');
+      window.assert && window.assert(this._imageLoadListenerAttached, 'If _onImageLoad is firing, it should be attached');
 
       this.invalidateImage();
       this._detachImageLoadListener();
@@ -987,9 +987,9 @@ Imageable.hitTestDataToShape = (imageData: ImageData, width: number, height: num
  * @param height - Non-negative integer for the image's height
  */
 Imageable.createSVGImage = (url: string, width: number, height: number): SVGImageElement => {
-  assert && assert(isFinite(width) && width >= 0 && (width % 1) === 0,
+  window.assert && window.assert(isFinite(width) && width >= 0 && (width % 1) === 0,
     'width should be a non-negative finite integer');
-  assert && assert(isFinite(height) && height >= 0 && (height % 1) === 0,
+  window.assert && window.assert(isFinite(height) && height >= 0 && (height % 1) === 0,
     'height should be a non-negative finite integer');
 
   const element = document.createElementNS(svgns, 'image');

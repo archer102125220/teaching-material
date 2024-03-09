@@ -127,7 +127,7 @@ class UtteranceQueue<A extends Announcer = Announcer> extends PhetioObject {
       // Multiple UtteranceQueues may use the same Announcer, so we need to make sure that we are responding
       // to an announcement completion for the right Utterance.
       if (this.announcingUtteranceWrapper && utterance === this.announcingUtteranceWrapper.utterance) {
-        assert && assert(this.announcingUtteranceWrapper.announcingUtterancePriorityListener, 'announcingUtterancePriorityListener should be set on this.announcingUtteranceWrapper');
+        window.assert && window.assert(this.announcingUtteranceWrapper.announcingUtterancePriorityListener, 'announcingUtterancePriorityListener should be set on this.announcingUtteranceWrapper');
         const announcingUtterancePriorityListener = this.announcingUtteranceWrapper.announcingUtterancePriorityListener!;
 
         // It is possible that this.announcer is also used by a different UtteranceQueue so when
@@ -219,7 +219,7 @@ class UtteranceQueue<A extends Announcer = Announcer> extends PhetioObject {
    * You must add the utteranceWrapper to the queue before calling this function.
    */
   private addPriorityListenerAndPrioritizeQueue(utteranceWrapper: UtteranceWrapper): void {
-    assert && assert(!this.utteranceToPriorityListenerMap.has(utteranceWrapper.utterance),
+    window.assert && window.assert(!this.utteranceToPriorityListenerMap.has(utteranceWrapper.utterance),
       'About to add the priority listener twice and only one should exist on the Utterance. The listener should have been removed by removeOthersAndUpdateUtteranceWrapper.');
     const priorityListener = () => {
       this.prioritizeUtterances(utteranceWrapper);
@@ -259,7 +259,7 @@ class UtteranceQueue<A extends Announcer = Announcer> extends PhetioObject {
 
     const utteranceWrapperToUtteranceMapper = (utteranceWrapper: UtteranceWrapper) => utteranceWrapper.utterance === utterance;
 
-    assert && assert(_.find(this.queue, utteranceWrapperToUtteranceMapper), 'utterance to be removed not found in queue');
+    window.assert && window.assert(_.find(this.queue, utteranceWrapperToUtteranceMapper), 'utterance to be removed not found in queue');
 
     // remove all occurrences, if applicable
     const removedUtteranceWrappers = _.remove(this.queue, utteranceWrapperToUtteranceMapper);
@@ -307,7 +307,7 @@ class UtteranceQueue<A extends Announcer = Announcer> extends PhetioObject {
     // back were added.
     if (utteranceWrapperInQueue) {
       utteranceWrapperIndex = this.queue.indexOf(utteranceWrapperToPrioritize);
-      assert && assert(utteranceWrapperIndex > -1, 'utteranceWrapper is not in queue?');
+      window.assert && window.assert(utteranceWrapperIndex > -1, 'utteranceWrapper is not in queue?');
       const otherUtteranceWrapper = this.queue[utteranceWrapperIndex + 1];
       if (otherUtteranceWrapper && this.shouldUtteranceCancelOther(otherUtteranceWrapper.utterance, utteranceWrapperToPrioritize.utterance)) {
         this.removeUtterance(utteranceWrapperToPrioritize.utterance);
@@ -599,7 +599,7 @@ class UtteranceQueue<A extends Announcer = Announcer> extends PhetioObject {
       // only announce the utterance if not muted, the utterance permits announcing, and the utterance text is not empty
       if (!this._muted && utterancePermitsAnnounce && announceText !== '') {
 
-        assert && assert(this.announcingUtteranceWrapper === null, 'announcingUtteranceWrapper and its priorityProperty listener should have been disposed');
+        window.assert && window.assert(this.announcingUtteranceWrapper === null, 'announcingUtteranceWrapper and its priorityProperty listener should have been disposed');
 
         // Save a reference to the UtteranceWrapper and its priorityProperty listener while the Announcer is announcing
         // it so that it can be removed at the end of announcement.
@@ -631,7 +631,7 @@ class UtteranceQueue<A extends Announcer = Announcer> extends PhetioObject {
 
     // only remove listeners if they were added in initialize
     if (this._initialized) {
-      assert && assert(this.stepQueueListener);
+      window.assert && window.assert(this.stepQueueListener);
       stepTimer.removeListener(this.stepQueueListener!);
     }
 

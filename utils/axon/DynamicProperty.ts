@@ -268,7 +268,7 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
    * Listener added to ourself when we are bidirectional
    */
   private onSelfChange(value: ThisValueType): void {
-    assert && assert(this.bidirectional);
+    window.assert && window.assert(this.bidirectional);
 
     if (this.valuePropertyProperty.value !== null) {
       const innerProperty = this.derive(this.valuePropertyProperty.value);
@@ -303,7 +303,7 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
    * Resets the current property (if it's a Property instead of a TinyProperty)
    */
   public reset(): void {
-    assert && assert(this.bidirectional, 'Cannot reset a non-bidirectional DynamicProperty');
+    window.assert && window.assert(this.bidirectional, 'Cannot reset a non-bidirectional DynamicProperty');
 
     if (this.valuePropertyProperty.value !== null) {
       const property = this.derive(this.valuePropertyProperty.value);
@@ -315,7 +315,7 @@ export default class DynamicProperty<ThisValueType, InnerValueType, OuterValueTy
    * Prevent setting this Property manually if it is not marked as bidirectional.
    */
   public override set(value: ThisValueType): void {
-    assert && assert(this.bidirectional,
+    window.assert && window.assert(this.bidirectional,
       `Cannot set values directly to a non-bidirectional DynamicProperty, tried to set: ${value}`);
 
     this.isExternallyChanging = true;

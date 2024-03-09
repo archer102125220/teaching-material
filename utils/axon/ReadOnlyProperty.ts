@@ -147,14 +147,14 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
     if (options.units) {
       options.phetioEventMetadata = options.phetioEventMetadata || {};
       // eslint-disable-next-line no-prototype-builtins
-      assert && assert(!options.phetioEventMetadata.hasOwnProperty('units'), 'units should be supplied by Property, not elsewhere');
+      window.assert && window.assert(!options.phetioEventMetadata.hasOwnProperty('units'), 'units should be supplied by Property, not elsewhere');
       options.phetioEventMetadata.units = options.units;
     }
 
     if (assert && providedOptions) {
 
       // @ts-expect-error -- for checking JS code
-      assert && assert(!providedOptions.phetioType, 'Set phetioType via phetioValueType');
+      window.assert && window.assert(!providedOptions.phetioType, 'Set phetioType via phetioValueType');
     }
 
     // Construct the IOType
@@ -180,11 +180,11 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
       assert && Tandem.VALIDATION && assert(options.phetioType.parameterTypes![0],
         `phetioType parameter type must be specified (only one). Tandem.phetioID: ${this.tandem.phetioID}`);
 
-      assert && assert(options.phetioValueType !== IOType.ObjectIO,
+      window.assert && window.assert(options.phetioValueType !== IOType.ObjectIO,
         'PhET-iO Properties must specify a phetioValueType: ' + this.phetioID);
     }
 
-    assert && assert(!this.isPhetioInstrumented() ||
+    window.assert && window.assert(!this.isPhetioInstrumented() ||
       options.tandem.name.endsWith(ReadOnlyProperty.TANDEM_NAME_SUFFIX) ||
       options.tandem.name === 'property' ||
       options.tandem.name === DYNAMIC_ARCHETYPE_NAME, // It is ok to have dynamic element Properties (which would mean they are archetypes
@@ -211,7 +211,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
 
       // Validate the value type's phetioType of the Property, not the PropertyIO itself.
       // For example, for PropertyIO( BooleanIO ), assign this valueValidator's phetioType to be BooleanIO's validator.
-      assert && assert(!!this.valueValidator.phetioType.parameterTypes![0], 'unexpected number of parameters for Property');
+      window.assert && window.assert(!!this.valueValidator.phetioType.parameterTypes![0], 'unexpected number of parameters for Property');
 
       // This is the validator for the value, not for the Property itself
       this.valueValidator.phetioType = this.valueValidator.phetioType.parameterTypes![0];
@@ -243,7 +243,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
     if (assert && strictAxonDependencies && derivationStack.length > 0) {
       const currentDependencies = derivationStack[derivationStack.length - 1];
       if (!currentDependencies.includes(this)) {
-        assert && assert(false, 'accessed value outside of dependency tracking');
+        window.assert && window.assert(false, 'accessed value outside of dependency tracking');
       }
     }
     return this.tinyProperty.get();
@@ -332,7 +332,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
     });
 
     // notify listeners, optionally detect loops where this Property is set again before this completes.
-    assert && assert(!this.notifying || this.reentrant,
+    window.assert && window.assert(!this.notifying || this.reentrant,
       `reentry detected, value=${newValue}, oldValue=${oldValue}`);
     this.notifying = true;
 
@@ -363,13 +363,13 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    *          - null if isDeferred is true, or if the value is unchanged since calling setDeferred(true)
    */
   public setDeferred(isDeferred: boolean): (() => void) | null {
-    assert && assert(!this.isDisposed, 'cannot defer Property if already disposed.');
+    window.assert && window.assert(!this.isDisposed, 'cannot defer Property if already disposed.');
     if (isDeferred) {
-      assert && assert(!this.isDeferred, 'Property already deferred');
+      window.assert && window.assert(!this.isDeferred, 'Property already deferred');
       this.isDeferred = true;
     }
     else {
-      assert && assert(this.isDeferred, 'Property wasn\'t deferred');
+      window.assert && window.assert(this.isDeferred, 'Property wasn\'t deferred');
       this.isDeferred = false;
 
       const oldValue = this.get();
@@ -406,7 +406,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * See propertyStateHandlerSingleton.registerPhetioOrderDependency and https://github.com/phetsims/axon/issues/276 for more info.
    */
   public addPhetioStateDependencies(dependencies: Array<TReadOnlyProperty<IntentionalAny>>): void {
-    assert && assert(Array.isArray(dependencies), 'Array expected');
+    window.assert && window.assert(Array.isArray(dependencies), 'Array expected');
     for (let i = 0; i < dependencies.length; i++) {
       const dependencyProperty = dependencies[i];
 
@@ -536,7 +536,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * Returns true if there are any listeners.
    */
   public hasListeners(): boolean {
-    assert && assert(arguments.length === 0, 'Property.hasListeners should be called without arguments');
+    window.assert && window.assert(arguments.length === 0, 'Property.hasListeners should be called without arguments');
     return this.tinyProperty.hasListeners();
   }
 
@@ -546,7 +546,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * This caching implementation should be kept in sync with the other parametric IOType caching implementations.
    */
   public static PropertyIO<T, StateType>(parameterType: IOType<T, StateType>): IOType {
-    assert && assert(parameterType, 'PropertyIO needs parameterType');
+    window.assert && window.assert(parameterType, 'PropertyIO needs parameterType');
 
     if (!cache.has(parameterType)) {
       cache.set(parameterType, new IOType<ReadOnlyProperty<T>, ReadOnlyPropertyState<StateType>>(`PropertyIO<${parameterType.typeName}>`, {
@@ -560,7 +560,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
         events: [ReadOnlyProperty.CHANGED_EVENT_NAME],
         parameterTypes: [parameterType],
         toStateObject: property => {
-          assert && assert(parameterType.toStateObject, `toStateObject doesn't exist for ${parameterType.typeName}`);
+          window.assert && window.assert(parameterType.toStateObject, `toStateObject doesn't exist for ${parameterType.typeName}`);
           return {
             value: parameterType.toStateObject(property.value),
             validValues: NullableIO(ArrayIO(parameterType)).toStateObject(property.validValues === undefined ? null : property.validValues),
@@ -569,8 +569,8 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
         },
         applyState: (property, stateObject) => {
           const units = NullableIO(StringIO).fromStateObject(stateObject.units);
-          assert && assert(property.units === units, 'Property units do not match');
-          assert && assert(property.isSettable(), 'Property should be settable');
+          window.assert && window.assert(property.units === units, 'Property units do not match');
+          window.assert && window.assert(property.isSettable(), 'Property should be settable');
           property.unguardedSet(parameterType.fromStateObject(stateObject.value));
 
           if (stateObject.validValues) {

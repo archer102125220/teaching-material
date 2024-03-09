@@ -43,8 +43,8 @@ const BrowserEvents = {
    * @param {boolean|null} passiveEvents - The value of the `passive` option for adding/removing DOM event listeners
    */
   addDisplay(display, attachToWindow, passiveEvents) {
-    assert && assert(display instanceof Display);
-    assert && assert(typeof attachToWindow === 'boolean');
+    window.assert && window.assert(display instanceof Display);
+    window.assert && window.assert(typeof attachToWindow === 'boolean');
     assert &&
       assert(
         !_.includes(this.attachedDisplays, display),
@@ -88,8 +88,8 @@ const BrowserEvents = {
    * @param {boolean|null} passiveEvents - The value of the `passive` option for adding/removing DOM event listeners
    */
   removeDisplay(display, attachToWindow, passiveEvents) {
-    assert && assert(display instanceof Display);
-    assert && assert(typeof attachToWindow === 'boolean');
+    window.assert && window.assert(display instanceof Display);
+    window.assert && window.assert(typeof attachToWindow === 'boolean');
     assert &&
       assert(
         _.includes(this.attachedDisplays, display),
@@ -310,7 +310,7 @@ const BrowserEvents = {
    *                                       used.
    */
   addOrRemoveListeners(element, addOrRemove, passiveEvents) {
-    assert && assert(typeof addOrRemove === 'boolean');
+    window.assert && window.assert(typeof addOrRemove === 'boolean');
     assert &&
       assert(typeof passiveEvents === 'boolean' || passiveEvents === null);
 
@@ -355,7 +355,7 @@ const BrowserEvents = {
       }
 
       const callback = this[`on${type}`];
-      assert && assert(!!callback);
+      window.assert && window.assert(!!callback);
 
       // Workaround for older browsers needed,
       // see https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#Improving_scrolling_performance_with_passive_listeners

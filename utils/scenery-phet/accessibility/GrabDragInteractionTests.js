@@ -24,7 +24,7 @@ const movableString = 'movable';
 QUnit.module('GrabDragInteraction');
 
 QUnit.test('GrabDragInteraction defaults', (assert) => {
-  assert.ok(true, 'first test');
+  window.assert.ok(true, 'first test');
 
   const rootNode = new Node({ tagName: 'div' });
   const display = new Display(rootNode);
@@ -56,19 +56,19 @@ QUnit.test('GrabDragInteraction defaults', (assert) => {
     // GrabDragInteraction requires the page to be active to behave corectly, otherwise focus/blur events do not
     // fire. See https://github.com/phetsims/aqua/issues/134.
     if (document.hasFocus()) {
-      assert.ok(interaction.grabbable, 'default to grabbable');
-      assert.ok(
+      window.assert.ok(interaction.grabbable, 'default to grabbable');
+      window.assert.ok(
         a.tagName.toUpperCase() === 'BUTTON',
         'grabbable defaults to button'
       );
-      assert.ok(a.ariaRole === null, 'no role for grabbable');
-      assert.ok(
+      window.assert.ok(a.ariaRole === null, 'no role for grabbable');
+      window.assert.ok(
         a.ariaLabel.indexOf(thingString) >= 0,
         'ariaLabel should include thing string for grabbable'
       );
 
       const aElement = a.pdomInstances[0].peer.primarySibling;
-      assert.ok(
+      window.assert.ok(
         aElement.tagName === 'BUTTON',
         'grabbable defaults to button html element.'
       );
@@ -84,35 +84,35 @@ QUnit.test('GrabDragInteraction defaults', (assert) => {
   a.pdomInstances[0].peer.primarySibling.click();
 
   const testDefaultDraggable = () => {
-    assert.ok(
+    window.assert.ok(
       !interaction.grabbable,
       'should be draggable after click draggable'
     );
-    assert.ok(a.tagName.toUpperCase() === 'DIV', 'draggable defaults to div');
-    assert.ok(a.ariaRole === 'application', 'draggable gets application role');
-    assert.ok(
+    window.assert.ok(a.tagName.toUpperCase() === 'DIV', 'draggable defaults to div');
+    window.assert.ok(a.ariaRole === 'application', 'draggable gets application role');
+    window.assert.ok(
       a.ariaLabel.indexOf(thingString) >= 0,
       'ariaLabel should include thing string'
     );
-    assert.ok(
+    window.assert.ok(
       a.ariaLabel === a.innerContent,
       'ariaLabel should include thing string'
     );
 
     const aElement = a.pdomInstances[0].peer.primarySibling;
-    assert.ok(
+    window.assert.ok(
       aElement.tagName === 'DIV',
       'draggable defaults to div html element.'
     );
-    assert.ok(
+    window.assert.ok(
       aElement.getAttribute('aria-roledescription') === movableString,
       'aria role description should describe that it is movable by default'
     );
-    assert.ok(
+    window.assert.ok(
       aElement.innerHTML === a.ariaLabel,
       'element innerHTML should be same as model label'
     );
-    assert.ok(
+    window.assert.ok(
       aElement.getAttribute('aria-label') === a.ariaLabel,
       'element innerHTML should be same as model label'
     );

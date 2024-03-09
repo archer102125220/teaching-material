@@ -120,8 +120,8 @@ class AudioManager extends PhetioObject {
     if (sim.preferencesModel.audioModel.supportsSound && sim.preferencesModel.audioModel.supportsVoicing) {
 
       // state checking
-      assert && assert(voicingManager.initialized, 'voicingManager must be initialized before ducking can be set up');
-      assert && assert(soundManager.initialized, 'soundManager must be initialized before ducking can be set up');
+      window.assert && window.assert(voicingManager.initialized, 'voicingManager must be initialized before ducking can be set up');
+      window.assert && window.assert(soundManager.initialized, 'soundManager must be initialized before ducking can be set up');
 
       // Set up the ducking Property and hook it to the emitters that indicate when speaking is occurring in the voicing
       // manager.

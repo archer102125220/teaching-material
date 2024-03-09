@@ -142,7 +142,7 @@ const AccessibleNumberSpinner = <SuperType extends Constructor<Node>>(Type: Supe
             if (runningTimerCallbackEvent && key === KeyboardUtils.getEventCode(runningTimerCallbackEvent)) {
               this._emitKeyState(event.domEvent!, false);
               this._callbackTimer.stop(false);
-              assert && assert(downCallback);
+              window.assert && window.assert(downCallback);
               this._callbackTimer.removeCallback(downCallback!);
               downCallback = null;
               runningTimerCallbackEvent = null;
@@ -156,7 +156,7 @@ const AccessibleNumberSpinner = <SuperType extends Constructor<Node>>(Type: Supe
           // if a key is currently down when focus leaves the spinner, stop callbacks and emit that the
           // key is up
           if (downCallback) {
-            assert && assert(runningTimerCallbackEvent !== null, 'key should be down if running downCallback');
+            window.assert && window.assert(runningTimerCallbackEvent !== null, 'key should be down if running downCallback');
 
             this._emitKeyState(runningTimerCallbackEvent!, false);
             this._callbackTimer.stop(false);
@@ -211,7 +211,7 @@ const AccessibleNumberSpinner = <SuperType extends Constructor<Node>>(Type: Supe
      */
 
     private _accessibleNumberSpinnerHandleKeyDown(event: SceneryEvent<KeyboardEvent>): void {
-      assert && assert(event.domEvent, 'must have a domEvent');
+      window.assert && window.assert(event.domEvent, 'must have a domEvent');
       this.handleKeyDown(event);
       this._emitKeyState(event.domEvent!, true);
     }
@@ -250,7 +250,7 @@ const AccessibleNumberSpinner = <SuperType extends Constructor<Node>>(Type: Supe
    */
   AccessibleNumberSpinnerClass.prototype._mutatorKeys = ACCESSIBLE_NUMBER_SPINNER_OPTIONS.concat(AccessibleNumberSpinnerClass.prototype._mutatorKeys);
 
-  assert && assert(AccessibleNumberSpinnerClass.prototype._mutatorKeys.length === _.uniq(AccessibleNumberSpinnerClass.prototype._mutatorKeys).length, 'duplicate mutator keys in AccessibleNumberSpinner');
+  window.assert && window.assert(AccessibleNumberSpinnerClass.prototype._mutatorKeys.length === _.uniq(AccessibleNumberSpinnerClass.prototype._mutatorKeys).length, 'duplicate mutator keys in AccessibleNumberSpinner');
 
   return AccessibleNumberSpinnerClass;
 };

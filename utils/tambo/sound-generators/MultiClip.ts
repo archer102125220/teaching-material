@@ -15,11 +15,11 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
-import tambo from '../tambo.js';
-import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
-import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import optionize from '../../../phet-core/js/optionize.js';
+import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor';
+import tambo from '../tambo';
+import SoundGenerator, { type SoundGeneratorOptions } from './SoundGenerator';
+import WrappedAudioBuffer from '../WrappedAudioBuffer';
+import optionize from '../../phet-core/optionize';
 
 type SelfOptions = {
   initialPlaybackRate?: number;
@@ -45,7 +45,7 @@ class MultiClip<T> extends SoundGenerator {
   private playbackRate: number;
 
   // a listener for implementing deferred play requests, see usage for details
-  private audioContextStateChangeListener: null | ( ( state: string ) => void );
+  private audioContextStateChangeListener: null | ((state: string) => void);
 
   // time at which a deferred play request occurred, in milliseconds since epoch
   private timeOfDeferredPlayRequest: number;
@@ -56,29 +56,29 @@ class MultiClip<T> extends SoundGenerator {
    * associated with the value.
    * @param [providedOptions]
    */
-  public constructor( valueToWrappedAudioBufferMap: Map<T, WrappedAudioBuffer>, providedOptions?: MultiClipOptions ) {
+  public constructor(valueToWrappedAudioBufferMap: Map<T, WrappedAudioBuffer>, providedOptions?: MultiClipOptions) {
 
-    const options = optionize<MultiClipOptions, SelfOptions, MultiClipOptions>()( {
+    const options = optionize<MultiClipOptions, SelfOptions, MultiClipOptions>()({
       initialPlaybackRate: 1
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.activeBufferSources = [];
     this.valueToWrappedAudioBufferMap = valueToWrappedAudioBufferMap;
 
     // initialize the local gain node
     this.localGainNode = this.audioContext.createGain();
-    this.localGainNode.connect( this.soundSourceDestination );
+    this.localGainNode.connect(this.soundSourceDestination);
 
     // listen to the Property that indicates whether we are fully enabled and stop sounds if and when it goes false
-    this.fullyEnabledProperty.lazyLink( fullyEnabled => {
-      if ( !fullyEnabled ) {
+    this.fullyEnabledProperty.lazyLink(fullyEnabled => {
+      if (!fullyEnabled) {
         this.stopAll();
       }
-    } );
+    });
 
-    this.playbackRate = ( options.initialPlaybackRate === undefined ) ? 1 : options.initialPlaybackRate;
+    this.playbackRate = (options.initialPlaybackRate === undefined) ? 1 : options.initialPlaybackRate;
     this.audioContextStateChangeListener = null;
     this.timeOfDeferredPlayRequest = Number.NEGATIVE_INFINITY;
   }
@@ -86,48 +86,48 @@ class MultiClip<T> extends SoundGenerator {
   /**
    * play the sound associated with the provided value
    */
-  public playAssociatedSound( value: T, delay = 0 ): void {
+  public playAssociatedSound(value: T, delay = 0): void {
 
     // get the audio buffer for this value
-    const wrappedAudioBuffer = this.valueToWrappedAudioBufferMap.get( value );
+    const wrappedAudioBuffer = this.valueToWrappedAudioBufferMap.get(value);
 
     // verify that we have a sound for the provided value
-    assert && assert( wrappedAudioBuffer !== undefined, 'no sound found for provided value' );
+    window.assert && window.assert(wrappedAudioBuffer !== undefined, 'no sound found for provided value');
 
-    if ( this.audioContext.state === 'running' ) {
+    if (this.audioContext.state === 'running') {
 
       // play the sound (if enabled and fully decoded)
-      if ( this.fullyEnabled && wrappedAudioBuffer!.audioBufferProperty.value ) {
+      if (this.fullyEnabled && wrappedAudioBuffer!.audioBufferProperty.value) {
 
         const now = this.audioContext.currentTime;
 
         // make sure the local gain is set to unity value
-        this.localGainNode.gain.cancelScheduledValues( now );
-        this.localGainNode.gain.setValueAtTime( 1, now );
+        this.localGainNode.gain.cancelScheduledValues(now);
+        this.localGainNode.gain.setValueAtTime(1, now);
 
         // create an audio buffer source node and connect it to the previously data in the audio buffer
         const bufferSource = this.audioContext.createBufferSource();
         bufferSource.buffer = wrappedAudioBuffer!.audioBufferProperty.value;
-        bufferSource.playbackRate.setValueAtTime( this.playbackRate, this.audioContext.currentTime );
+        bufferSource.playbackRate.setValueAtTime(this.playbackRate, this.audioContext.currentTime);
 
         // connect this source node to the output
-        bufferSource.connect( this.localGainNode );
+        bufferSource.connect(this.localGainNode);
 
         // add this to the list of active sources so that it can be stopped if necessary
-        this.activeBufferSources.push( bufferSource );
+        this.activeBufferSources.push(bufferSource);
 
         // add a handler for when the sound finishes playing
         bufferSource.onended = () => {
 
           // remove the source from the list of active sources
-          const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
-          if ( indexOfSource > -1 ) {
-            this.activeBufferSources.splice( indexOfSource, 1 );
+          const indexOfSource = this.activeBufferSources.indexOf(bufferSource);
+          if (indexOfSource > -1) {
+            this.activeBufferSources.splice(indexOfSource, 1);
           }
         };
 
         // start the playback of the sound
-        bufferSource.start( now + delay );
+        bufferSource.start(now + delay);
       }
     }
     else {
@@ -136,8 +136,8 @@ class MultiClip<T> extends SoundGenerator {
       // due to the first interaction from the user, and also during fuzz testing.
 
       // Remove previous listener if present.
-      if ( this.audioContextStateChangeListener ) {
-        audioContextStateChangeMonitor.removeStateChangeListener( this.audioContext, this.audioContextStateChangeListener );
+      if (this.audioContextStateChangeListener) {
+        audioContextStateChangeMonitor.removeStateChangeListener(this.audioContext, this.audioContextStateChangeListener);
       }
 
       // Create and add a listener to play the specified sound when the audio context changes to the 'running' state.
@@ -145,10 +145,10 @@ class MultiClip<T> extends SoundGenerator {
       this.audioContextStateChangeListener = () => {
 
         // Only play the sound if it hasn't been too long, otherwise it may be irrelevant.
-        if ( ( Date.now() - this.timeOfDeferredPlayRequest ) / 1000 < MAX_PLAY_DEFER_TIME ) {
+        if ((Date.now() - this.timeOfDeferredPlayRequest) / 1000 < MAX_PLAY_DEFER_TIME) {
 
           // Play the sound, but delayed a little bit so that the gain nodes can be fully turned up in time.
-          this.playAssociatedSound( value, 0.1 );
+          this.playAssociatedSound(value, 0.1);
         }
         audioContextStateChangeMonitor.removeStateChangeListener(
           this.audioContext,
@@ -168,7 +168,7 @@ class MultiClip<T> extends SoundGenerator {
    * subsequent plays of sounds.
    * @param playbackRate - desired playback speed, 1 = normal speed
    */
-  public setPlaybackRate( playbackRate: number ): void {
+  public setPlaybackRate(playbackRate: number): void {
     this.playbackRate = playbackRate;
   }
 
@@ -180,8 +180,8 @@ class MultiClip<T> extends SoundGenerator {
     // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
     // down the gain, effectively doing a fade out, before stopping playback.
     const stopTime = this.audioContext.currentTime + STOP_DELAY_TIME;
-    this.localGainNode.gain.linearRampToValueAtTime( 0, stopTime );
-    this.activeBufferSources.forEach( source => { source.stop( stopTime ); } );
+    this.localGainNode.gain.linearRampToValueAtTime(0, stopTime);
+    this.activeBufferSources.forEach(source => { source.stop(stopTime); });
 
     // The WebAudio spec is a bit unclear about whether stopping a sound will trigger an onended event.  In testing
     // on Chrome in September 2018, I (jbphet) found that onended was NOT being fired when stop() was called, so the
@@ -190,5 +190,5 @@ class MultiClip<T> extends SoundGenerator {
   }
 }
 
-tambo.register( 'MultiClip', MultiClip );
+tambo.register('MultiClip', MultiClip);
 export default MultiClip;

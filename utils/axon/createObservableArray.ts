@@ -105,7 +105,7 @@ const createObservableArray = <T>(providedOptions?: ObservableArrayOptions<T>): 
   let emitterParameterOptions = null;
   if (options.phetioType) {
 
-    assert && assert(options.phetioType.typeName.startsWith('ObservableArrayIO'));
+    window.assert && window.assert(options.phetioType.typeName.startsWith('ObservableArrayIO'));
     emitterParameterOptions = { name: 'value', phetioType: options.phetioType.parameterTypes![0] };
   }
   // NOTE: Improve with Validation
@@ -149,12 +149,12 @@ const createObservableArray = <T>(providedOptions?: ObservableArrayOptions<T>): 
   // TODO: Maybe this can be improved when we have better support for this in https://github.com/phetsims/phet-io/issues/1661
   assert && elementAddedEmitter.addListener(() => {
     if (!isSettingPhetioStateProperty.value) {
-      assert && assert(lengthProperty.value === targetArray.length, 'lengthProperty out of sync while adding element');
+      window.assert && window.assert(lengthProperty.value === targetArray.length, 'lengthProperty out of sync while adding element');
     }
   });
   assert && elementRemovedEmitter.addListener(() => {
     if (!isSettingPhetioStateProperty.value) {
-      assert && assert(lengthProperty.value === targetArray.length, 'lengthProperty out of sync while removing element');
+      window.assert && window.assert(lengthProperty.value === targetArray.length, 'lengthProperty out of sync while removing element');
     }
   });
 
@@ -169,7 +169,7 @@ const createObservableArray = <T>(providedOptions?: ObservableArrayOptions<T>): 
      * @returns - the requested value
      */
     get: function (array: T[], key: keyof typeof methods, receiver): any {
-      assert && assert(array === targetArray, 'array should match the targetArray');
+      window.assert && window.assert(array === targetArray, 'array should match the targetArray');
       if (methods.hasOwnProperty(key)) {
         return methods[key];
       }
@@ -186,7 +186,7 @@ const createObservableArray = <T>(providedOptions?: ObservableArrayOptions<T>): 
      * @returns - success
      */
     set: function (array: T[], key: string | symbol, newValue: any): boolean {
-      assert && assert(array === targetArray, 'array should match the targetArray');
+      window.assert && window.assert(array === targetArray, 'array should match the targetArray');
       const oldValue = array[key as any];
 
       let removedElements = null;
@@ -213,7 +213,7 @@ const createObservableArray = <T>(providedOptions?: ObservableArrayOptions<T>): 
       else if (key === 'length') {
         lengthProperty.value = newValue;
 
-        assert && assert(removedElements, 'removedElements should be defined for key===length');
+        window.assert && window.assert(removedElements, 'removedElements should be defined for key===length');
         removedElements && removedElements.forEach(element => elementRemovedEmitter.emit(element));
       }
       return returnValue;
@@ -223,7 +223,7 @@ const createObservableArray = <T>(providedOptions?: ObservableArrayOptions<T>): 
      * This is the trap for the delete operator.
      */
     deleteProperty: function (array: T[], key: string | symbol): boolean {
-      assert && assert(array === targetArray, 'array should match the targetArray');
+      window.assert && window.assert(array === targetArray, 'array should match the targetArray');
 
       // If we're using the bracket operator [index] of Array, then parse the index between the brackets.
       const numberKey = Number(key);
@@ -267,7 +267,7 @@ const createObservableArray = <T>(providedOptions?: ObservableArrayOptions<T>): 
    * PhET-iO support
    *******************************************/
   if (options.tandem?.supplied) {
-    assert && assert(options.phetioType);
+    window.assert && window.assert(options.phetioType);
 
     observableArray.phetioElementType = options.phetioType.parameterTypes![0];
 
@@ -417,7 +417,7 @@ const methods = {
     return _.find((this as PrivateObservableArray<any>), predicate, fromIndex);
   },
   shuffle: function (random: FakeRandom<any>) {
-    assert && assert(random, 'random must be supplied');
+    window.assert && window.assert(random, 'random must be supplied');
 
     // preserve the same _array reference in case any clients got a reference to it with getArray()
     const shuffled = random.shuffle((this as PrivateObservableArray<any>));

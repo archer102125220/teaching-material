@@ -55,7 +55,7 @@ export default class MirrorModel extends GOModel {
 
     }, providedOptions);
 
-    assert && assert(!options.opticalObjectChoices.includes(OpticalObjectChoice.LIGHT),
+    window.assert && window.assert(!options.opticalObjectChoices.includes(OpticalObjectChoice.LIGHT),
       'Mirror screen does not support Light as an optical object choice');
 
     const mirror = new Mirror({

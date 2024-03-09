@@ -100,7 +100,7 @@ class KeyStateTracker {
         // for a key that is already being tracked and down)
         if (!this.isKeyDown(key)) {
           const key = KeyboardUtils.getEventCode(domEvent)!;
-          assert && assert(key, 'Could not find key from domEvent');
+          window.assert && window.assert(key, 'Could not find key from domEvent');
           this.keyState[key] = {
             keyDown: true,
             key,
@@ -187,7 +187,7 @@ class KeyStateTracker {
    */
   private correctModifierKeys(domEvent: KeyboardEvent): void {
     const key = KeyboardUtils.getEventCode(domEvent)!;
-    assert && assert(key, 'key not found from domEvent');
+    window.assert && window.assert(key, 'key not found from domEvent');
 
     // add modifier keys if they aren't down
     if (domEvent.shiftKey && !KeyboardUtils.isShiftKey(domEvent) && !this.shiftKeyDown) {
@@ -398,7 +398,7 @@ class KeyStateTracker {
    * @param key - KeyboardEvent.code for the key you are inspecting.
    */
   public timeDownForKey(key: string): number {
-    assert && assert(this.isKeyDown(key), 'cannot get timeDown on a key that is not pressed down');
+    window.assert && window.assert(this.isKeyDown(key), 'cannot get timeDown on a key that is not pressed down');
     return this.keyState[key].timeDown;
   }
 
@@ -438,7 +438,7 @@ class KeyStateTracker {
    * useful if you want to observe key presses while DOM focus not within the PDOM root.
    */
   public attachToWindow(): void {
-    assert && assert(!this.attachedToDocument, 'KeyStateTracker is already attached to document.');
+    window.assert && window.assert(!this.attachedToDocument, 'KeyStateTracker is already attached to document.');
 
     this.documentKeydownListener = event => {
       this.keydownUpdate(event);
@@ -494,9 +494,9 @@ class KeyStateTracker {
    * Detach listeners from the document that would update the state of this KeyStateTracker on key presses.
    */
   public detachFromDocument(): void {
-    assert && assert(this.attachedToDocument, 'KeyStateTracker is not attached to window.');
-    assert && assert(this.documentKeyupListener, 'keyup listener was not created or attached to window');
-    assert && assert(this.documentKeydownListener, 'keydown listener was not created or attached to window.');
+    window.assert && window.assert(this.attachedToDocument, 'KeyStateTracker is not attached to window.');
+    window.assert && window.assert(this.documentKeyupListener, 'keyup listener was not created or attached to window');
+    window.assert && window.assert(this.documentKeydownListener, 'keydown listener was not created or attached to window.');
 
     window.removeEventListener('keyup', this.documentKeyupListener!);
     window.removeEventListener('keydown', this.documentKeydownListener!);

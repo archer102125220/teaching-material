@@ -21,7 +21,7 @@ const utteranceQueue = new UtteranceQueue( ariaLiveAnnouncer );
 
 // helper es6 functions from  https://stackoverflow.com/questions/33289726/combination-of-async-function-await-settimeout/33292942
 function timeout( ms: number ): Promise<unknown> {
-  return new Promise( resolve => setTimeout( resolve, ms ) ); // eslint-disable-line bad-sim-text
+  return new Promise( resolve => setTimeout( resolve, ms ) );
 }
 
 let alerts: string[] = [];
@@ -36,7 +36,7 @@ QUnit.module( 'Utterance', {
     // step the timer, because utteranceQueue runs on timer
     let previousTime = Date.now(); // in ms
 
-    intervalID = window.setInterval( () => { // eslint-disable-line bad-sim-text
+    intervalID = window.setInterval( () => {
 
       // in ms
       const currentTime = Date.now();
@@ -89,16 +89,16 @@ QUnit.test( 'Basic Utterance testing', async assert => {
   utteranceQueue.addToBack( utterance );
 
   await timeout( sleepTiming );
-  assert.ok( alerts[ 0 ] === alertContent, 'first alert made it to ariaLiveAnnouncer' );
+  window.assert.ok( alerts[ 0 ] === alertContent, 'first alert made it to ariaLiveAnnouncer' );
 
   const otherAlert = 'alert';
   utterance.alert = otherAlert;
   utteranceQueue.addToBack( utterance );
   await timeout( sleepTiming );
-  assert.ok( alerts[ 0 ] === otherAlert, 'second alert made it to ariaLiveAnnouncer' );
+  window.assert.ok( alerts[ 0 ] === otherAlert, 'second alert made it to ariaLiveAnnouncer' );
 
   utterance.reset();
-  assert.ok( utterance[ 'previousAlertText' ] === null, 'previousAlertText reset' );
+  window.assert.ok( utterance[ 'previousAlertText' ] === null, 'previousAlertText reset' );
 } );
 
 QUnit.test( 'alertStable and alertStableDelay tests', async assert => {
@@ -113,12 +113,12 @@ QUnit.test( 'alertStable and alertStableDelay tests', async assert => {
   for ( let i = 0; i < numAlerts; i++ ) {
     utteranceQueue.addToBack( highFrequencyUtterance );
   }
-  assert.ok( utteranceQueue[ 'queue' ].length === 1, 'utterances should collapse by default after addToBack' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 1, 'utterances should collapse by default after addToBack' );
 
   await timeout( sleepTiming );
 
   // cleanup step
-  assert.ok( utteranceQueue[ 'queue' ].length === 0, 'cleared queue' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 0, 'cleared queue' );
 
   /////////////////////////////////////////
 
@@ -133,7 +133,7 @@ QUnit.test( 'alertStable and alertStableDelay tests', async assert => {
     utteranceQueue.addToBack( myUtterance );
   }
 
-  assert.ok( utteranceQueue[ 'queue' ].length === 1, 'same Utterance should override in queue' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 1, 'same Utterance should override in queue' );
   await timeout( sleepTiming );
 
   // The wrapper has the timing variables
@@ -141,15 +141,15 @@ QUnit.test( 'alertStable and alertStableDelay tests', async assert => {
 
   // It is a bit dependent on the system running as to if this sleep time will be too long to flush this one too.
   if ( utteranceWrapper ) {
-    assert.ok( utteranceWrapper.stableTime >= utteranceWrapper.timeInQueue, 'utterance should be in queue for at least stableDelay' );
+    window.assert.ok( utteranceWrapper.stableTime >= utteranceWrapper.timeInQueue, 'utterance should be in queue for at least stableDelay' );
 
-    assert.ok( utteranceQueue[ 'queue' ].length === 1, 'Alert still in queue after waiting less than alertStableDelay but more than stepInterval.' );
+    window.assert.ok( utteranceQueue[ 'queue' ].length === 1, 'Alert still in queue after waiting less than alertStableDelay but more than stepInterval.' );
   }
   await timeout( stableDelay );
 
-  assert.ok( utteranceQueue[ 'queue' ].length === 0, 'Utterance alerted after alertStableDelay time passed' );
-  assert.ok( alerts.length === 1, 'utterance ended up in alerts list' );
-  assert.ok( alerts[ 0 ] === myUtterance.alert, 'utterance text matches that which is expected' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 0, 'Utterance alerted after alertStableDelay time passed' );
+  window.assert.ok( alerts.length === 1, 'utterance ended up in alerts list' );
+  window.assert.ok( alerts[ 0 ] === myUtterance.alert, 'utterance text matches that which is expected' );
 } );
 
 QUnit.test( 'alertMaximumDelay tests', async assert => {
@@ -161,18 +161,18 @@ QUnit.test( 'alertMaximumDelay tests', async assert => {
   } );
 
   utteranceQueue.addToBack( highFrequencyUtterance );
-  assert.ok( utteranceQueue[ 'queue' ].length === 1, 'sanity 1' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 1, 'sanity 1' );
   await timeout( 100 );
-  assert.ok( utteranceQueue[ 'queue' ].length === 1, 'still has it, not stable, not max' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 1, 'still has it, not stable, not max' );
   utteranceQueue.addToBack( highFrequencyUtterance );
-  assert.ok( utteranceQueue[ 'queue' ].length === 1, 'sanity 2' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 1, 'sanity 2' );
   await timeout( 100 );
-  assert.ok( utteranceQueue[ 'queue' ].length === 1, 'still has it, not stable, not max, 2' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 1, 'still has it, not stable, not max, 2' );
   utteranceQueue.addToBack( highFrequencyUtterance );
-  assert.ok( utteranceQueue[ 'queue' ].length === 1, 'sanity 2' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 1, 'sanity 2' );
   await timeout( 150 );
-  assert.ok( utteranceQueue[ 'queue' ].length === 0, 'not stable, but past max' );
-  assert.ok( alerts[ 0 ] === rapidlyChanging, 'it was announced' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 0, 'not stable, but past max' );
+  window.assert.ok( alerts[ 0 ] === rapidlyChanging, 'it was announced' );
 } );
 
 QUnit.test( 'announceImmediately', async assert => {
@@ -180,16 +180,16 @@ QUnit.test( 'announceImmediately', async assert => {
   const myUtterance = new Utterance( { alert: myUtteranceText } );
 
   utteranceQueue.announceImmediately( myUtterance );
-  assert.ok( utteranceQueue[ 'queue' ].length === 0, 'should not be added to the queue' );
-  assert.ok( alerts[ 0 ] === myUtteranceText, 'should be immediately alerted' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 0, 'should not be added to the queue' );
+  window.assert.ok( alerts[ 0 ] === myUtteranceText, 'should be immediately alerted' );
 
   utteranceQueue.addToBack( myUtterance );
-  assert.ok( utteranceQueue[ 'queue' ].length === 1, 'one added to the queue' );
-  assert.ok( alerts.length === 1, 'still just one alert occurred' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 1, 'one added to the queue' );
+  window.assert.ok( alerts.length === 1, 'still just one alert occurred' );
   utteranceQueue.announceImmediately( myUtterance );
 
   // We expect myUtterance to still be in the queue because the announcer is not ready to announce yet.
-  assert.ok( utteranceQueue[ 'queue' ].length === 1, 'announceImmediately removed duplicates, but myUtterance still in queue' );
+  window.assert.ok( utteranceQueue[ 'queue' ].length === 1, 'announceImmediately removed duplicates, but myUtterance still in queue' );
 
   ////////////////////
   // NOTE: Commented out because this final test was not working well with a very laggy browser when testing on CT. It
@@ -199,8 +199,8 @@ QUnit.test( 'announceImmediately', async assert => {
   // // through the queue.
   // await timeout( sleepTiming + 100 );
   //
-  // assert.ok( alerts.length === 2, 'myUtterance announced immediately when Announcer was ready' + JSON.stringify( alerts ) );
-  // assert.ok( alerts[ 0 ] === myUtteranceText, 'announceImmediately Utterance was last alert' );
+  // window.assert.ok( alerts.length === 2, 'myUtterance announced immediately when Announcer was ready' + JSON.stringify( alerts ) );
+  // window.assert.ok( alerts[ 0 ] === myUtteranceText, 'announceImmediately Utterance was last alert' );
 } );
 
 
@@ -227,20 +227,20 @@ QUnit.test( 'ResponsePacket tests', async assert => {
   utteranceQueue.addToBack( utterance );
   await timeout( sleepTiming );
 
-  assert.ok( alerts[ 0 ].includes( NAME ), 'name expected' );
-  assert.ok( alerts[ 0 ].includes( OBJECT ), 'object expected' );
-  assert.ok( alerts[ 0 ].includes( CONTEXT ), 'context expected' );
-  assert.ok( alerts[ 0 ].includes( HINT ), 'hint expected' );
+  window.assert.ok( alerts[ 0 ].includes( NAME ), 'name expected' );
+  window.assert.ok( alerts[ 0 ].includes( OBJECT ), 'object expected' );
+  window.assert.ok( alerts[ 0 ].includes( CONTEXT ), 'context expected' );
+  window.assert.ok( alerts[ 0 ].includes( HINT ), 'hint expected' );
 
   responseCollector.nameResponsesEnabledProperty.value = false;
 
   utteranceQueue.addToBack( utterance );
   await timeout( sleepTiming );
 
-  assert.ok( !alerts[ 0 ].includes( NAME ), 'name expected' );
-  assert.ok( alerts[ 0 ].includes( OBJECT ), 'object expected' );
-  assert.ok( alerts[ 0 ].includes( CONTEXT ), 'context expected' );
-  assert.ok( alerts[ 0 ].includes( HINT ), 'hint expected' );
+  window.assert.ok( !alerts[ 0 ].includes( NAME ), 'name expected' );
+  window.assert.ok( alerts[ 0 ].includes( OBJECT ), 'object expected' );
+  window.assert.ok( alerts[ 0 ].includes( CONTEXT ), 'context expected' );
+  window.assert.ok( alerts[ 0 ].includes( HINT ), 'hint expected' );
 
   responseCollector.nameResponsesEnabledProperty.value = false;
   responseCollector.objectResponsesEnabledProperty.value = false;
@@ -250,8 +250,8 @@ QUnit.test( 'ResponsePacket tests', async assert => {
   utteranceQueue.addToBack( utterance );
   await timeout( sleepTiming );
 
-  assert.ok( !alerts[ 0 ].includes( NAME ), 'name not expected' );
-  assert.ok( !alerts[ 0 ].includes( OBJECT ), 'object not expected' );
-  assert.ok( !alerts[ 0 ].includes( CONTEXT ), 'context not expected' );
-  assert.ok( alerts[ 0 ] === HINT, 'hint expected' );
+  window.assert.ok( !alerts[ 0 ].includes( NAME ), 'name not expected' );
+  window.assert.ok( !alerts[ 0 ].includes( OBJECT ), 'object not expected' );
+  window.assert.ok( !alerts[ 0 ].includes( CONTEXT ), 'context not expected' );
+  window.assert.ok( alerts[ 0 ] === HINT, 'hint expected' );
 } );

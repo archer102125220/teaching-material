@@ -7,17 +7,17 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Property from '../../../axon/js/Property.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import { Circle, KeyboardListener, Node, Path, PDOMValueType } from '../../../scenery/js/imports.js';
-import BooleanRoundToggleButton, { BooleanRoundToggleButtonOptions } from '../../../sun/js/buttons/BooleanRoundToggleButton.js';
-import TSoundPlayer from '../../../tambo/js/TSoundPlayer.js';
-import pauseSoundPlayer from '../../../tambo/js/shared-sound-players/pauseSoundPlayer.js';
-import playSoundPlayer from '../../../tambo/js/shared-sound-players/playSoundPlayer.js';
-import PlayIconShape from '../PlayIconShape.js';
-import sceneryPhet from '../sceneryPhet.js';
-import SceneryPhetConstants from '../SceneryPhetConstants.js';
-import SceneryPhetStrings from '../SceneryPhetStrings.js';
+import Property from '../../axon/Property';
+import optionize from '../../phet-core/optionize';
+import { Circle, KeyboardListener, Node, Path, type PDOMValueType } from '../../scenery/imports';
+import BooleanRoundToggleButton, { type BooleanRoundToggleButtonOptions } from '../../sun/buttons/BooleanRoundToggleButton';
+import type TSoundPlayer from '../../tambo/TSoundPlayer';
+import pauseSoundPlayer from '../../tambo/shared-sound-players/pauseSoundPlayer';
+import playSoundPlayer from '../../tambo/shared-sound-players/playSoundPlayer';
+import PlayIconShape from '../PlayIconShape';
+import sceneryPhet from '../sceneryPhet';
+import SceneryPhetConstants from '../SceneryPhetConstants';
+import SceneryPhetStrings from '../SceneryPhetStrings';
 
 type SelfOptions = {
 
@@ -53,9 +53,9 @@ export default class PlayControlButton extends BooleanRoundToggleButton {
    * @param endPlayingIcon - icon for the button when pressing it will stop play
    * @param providedOptions
    */
-  public constructor( isPlayingProperty: Property<boolean>, endPlayingIcon: Node, providedOptions?: PlayControlButtonOptions ) {
+  public constructor(isPlayingProperty: Property<boolean>, endPlayingIcon: Node, providedOptions?: PlayControlButtonOptions) {
 
-    const options = optionize<PlayControlButtonOptions, SelfOptions, BooleanRoundToggleButtonOptions>()( {
+    const options = optionize<PlayControlButtonOptions, SelfOptions, BooleanRoundToggleButtonOptions>()({
 
       // SelfOptions
       radius: SceneryPhetConstants.PLAY_CONTROL_BUTTON_RADIUS,
@@ -71,70 +71,70 @@ export default class PlayControlButton extends BooleanRoundToggleButton {
       xMargin: 0,
       yMargin: 0
 
-    }, providedOptions );
+    }, providedOptions);
 
-    assert && assert( options.scaleFactorWhenNotPlaying > 0, 'button scale factor must be greater than 0' );
+    window.assert && window.assert(options.scaleFactorWhenNotPlaying > 0, 'button scale factor must be greater than 0');
 
     // play and pause icons are sized relative to the radius
     const playWidth = options.radius * 0.8;
     const playHeight = options.radius;
 
-    const playPath = new Path( new PlayIconShape( playWidth, playHeight ), {
+    const playPath = new Path(new PlayIconShape(playWidth, playHeight), {
       fill: 'black',
       centerX: options.radius * 0.05, // move to right slightly since we don't want it exactly centered
       centerY: 0
-    } );
+    });
 
     // put the play and stop symbols inside circles so they have the same bounds,
     // otherwise BooleanToggleNode will re-adjust their positions relative to each other
-    const playCircle = new Circle( options.radius, {
-      children: [ playPath ]
-    } );
+    const playCircle = new Circle(options.radius, {
+      children: [playPath]
+    });
 
     endPlayingIcon.centerX = 0;
     endPlayingIcon.centerY = 0;
 
-    const endPlayingCircle = new Circle( options.radius, {
-      children: [ endPlayingIcon ]
-    } );
+    const endPlayingCircle = new Circle(options.radius, {
+      children: [endPlayingIcon]
+    });
 
-    super( isPlayingProperty, endPlayingCircle, playCircle, options );
+    super(isPlayingProperty, endPlayingCircle, playCircle, options);
 
-    const isPlayingListener = ( isPlaying: boolean, oldValue: boolean | null ) => {
+    const isPlayingListener = (isPlaying: boolean, oldValue: boolean | null) => {
 
       // pdom - accessible name for the button
       this.innerContent = isPlaying ? options.endPlayingLabel
-                                    : options.startPlayingLabel;
+        : options.startPlayingLabel;
 
       // so we don't scale down the button immediately if isPlayingProperty is initially false
       const runningScale = oldValue === null ? 1 : 1 / options.scaleFactorWhenNotPlaying;
-      this.scale( isPlaying ? runningScale : options.scaleFactorWhenNotPlaying );
+      this.scale(isPlaying ? runningScale : options.scaleFactorWhenNotPlaying);
     };
-    isPlayingProperty.link( isPlayingListener );
+    isPlayingProperty.link(isPlayingListener);
 
     // a listener that toggles the isPlayingProperty with hotkey Alt+K, regardless of where focus is in the document
-    const keys = [ 'alt+k' ] as const;
+    const keys = ['alt+k'] as const;
     let globalKeyboardListener: KeyboardListener<typeof keys> | null = null;
-    if ( options.includeGlobalHotkey && phet.chipper.queryParameters.supportsInteractiveDescription ) {
-      globalKeyboardListener = new KeyboardListener( {
-        keys: keys,
+    if (options.includeGlobalHotkey && phet.chipper.queryParameters.supportsInteractiveDescription) {
+      globalKeyboardListener = new KeyboardListener({
+        keys,
         global: true,
         listenerFireTrigger: 'up',
         callback: () => {
-          isPlayingProperty.set( !isPlayingProperty.get() );
+          isPlayingProperty.set(!isPlayingProperty.get());
           const soundPlayer = isPlayingProperty.get() ? options.valueOnSoundPlayer : options.valueOffSoundPlayer;
-          if ( soundPlayer ) { soundPlayer.play(); }
+          if (soundPlayer) { soundPlayer.play(); }
         }
-      } );
-      this.addInputListener( globalKeyboardListener );
+      });
+      this.addInputListener(globalKeyboardListener);
     }
 
     this.disposePlayStopButton = () => {
-      if ( isPlayingProperty.hasListener( isPlayingListener ) ) {
-        isPlayingProperty.unlink( isPlayingListener );
+      if (isPlayingProperty.hasListener(isPlayingListener)) {
+        isPlayingProperty.unlink(isPlayingListener);
       }
-      if ( globalKeyboardListener ) {
-        this.removeInputListener( globalKeyboardListener );
+      if (globalKeyboardListener) {
+        this.removeInputListener(globalKeyboardListener);
         globalKeyboardListener.dispose();
       }
     };
@@ -146,4 +146,4 @@ export default class PlayControlButton extends BooleanRoundToggleButton {
   }
 }
 
-sceneryPhet.register( 'PlayControlButton', PlayControlButton );
+sceneryPhet.register('PlayControlButton', PlayControlButton);

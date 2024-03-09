@@ -136,7 +136,7 @@ export default class GOModel implements TModel {
     // Note that while the Light scene is specific to the Mirror screen, it was more straightforward to handle it
     // as an optional part of this base class.
     if (options.opticalObjectChoices.includes(OpticalObjectChoice.LIGHT)) {
-      assert && assert(this.optic instanceof Lens, 'Light is only supported by the Lens screen');
+      window.assert && window.assert(this.optic instanceof Lens, 'Light is only supported by the Lens screen');
       this.lightScene = new LightScene(this.optic as Lens, this.raysTypeProperty, {
         lightObject1Position: options.lightObject1Position,
         lightObject2Position: options.lightObject2Position,

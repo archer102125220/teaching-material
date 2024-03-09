@@ -7,56 +7,56 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { SceneryConstants, VoicingText, Text } from '../../../scenery/js/imports.js';
-import joist from '../joist.js';
-import PreferencesDialog from './PreferencesDialog.js';
-import PreferencesControl, { PreferencesControlOptions } from './PreferencesControl.js';
-import JoistStrings from '../JoistStrings.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import Property from '../../../axon/js/Property.js';
-import ToggleSwitch, { ToggleSwitchOptions } from '../../../sun/js/ToggleSwitch.js';
-import PreferencesDialogConstants from './PreferencesDialogConstants.js';
-import PatternStringProperty from '../../../axon/js/PatternStringProperty.js';
-import Tandem from '../../../tandem/js/Tandem.js';
+import { SceneryConstants, VoicingText, Text } from '../../scenery/imports';
+import joist from '../joist';
+import PreferencesDialog from './PreferencesDialog';
+import PreferencesControl, { type PreferencesControlOptions } from './PreferencesControl';
+import JoistStrings from '../JoistStrings';
+import optionize, { combineOptions, type EmptySelfOptions } from '../../phet-core/optionize';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import Property from '../../axon/Property';
+import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
+import PreferencesDialogConstants from './PreferencesDialogConstants';
+import PatternStringProperty from '../../axon/PatternStringProperty';
+import Tandem from '../../tandem/Tandem';
 
 type SelfOptions = EmptySelfOptions;
 type ParentOptions = PreferencesControlOptions;
 export type ProjectorModeToggleSwitchOptions = SelfOptions & StrictOmit<ParentOptions, 'labelNode' | 'descriptionNode'>;
 
 class ProjectorModeToggleSwitch extends PreferencesControl {
-  public constructor( colorProfileProperty: Property<string>, providedOptions?: ProjectorModeToggleSwitchOptions ) {
-    assert && assert(
-    phet.chipper.colorProfiles[ 0 ] !== SceneryConstants.PROJECTOR_COLOR_PROFILE &&
-    phet.chipper.colorProfiles.includes( SceneryConstants.PROJECTOR_COLOR_PROFILE ) &&
-    phet.chipper.colorProfiles.length === 2 &&
-    phet.chipper.colorProfiles[ 0 ] !== phet.chipper.colorProfiles[ 1 ],
-      'ProjectorModeToggleSwitch requires sims that support the projector color profile and one other color profile' );
+  public constructor(colorProfileProperty: Property<string>, providedOptions?: ProjectorModeToggleSwitchOptions) {
+    window.assert && window.assert(
+      phet.chipper.colorProfiles[0] !== SceneryConstants.PROJECTOR_COLOR_PROFILE &&
+      phet.chipper.colorProfiles.includes(SceneryConstants.PROJECTOR_COLOR_PROFILE) &&
+      phet.chipper.colorProfiles.length === 2 &&
+      phet.chipper.colorProfiles[0] !== phet.chipper.colorProfiles[1],
+      'ProjectorModeToggleSwitch requires sims that support the projector color profile and one other color profile');
 
-    const projectorModeLabel = new Text( JoistStrings.projectorModeStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS );
-    const projectorModeDescription = new VoicingText( JoistStrings.preferences.tabs.visual.projectorModeDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS );
+    const projectorModeLabel = new Text(JoistStrings.projectorModeStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS);
+    const projectorModeDescription = new VoicingText(JoistStrings.preferences.tabs.visual.projectorModeDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS);
 
     // Identify the non-projector color profile that this checkbox sets.
-    const otherColorProfile = phet.chipper.colorProfiles.find( ( colorProfile: string ) => colorProfile !== SceneryConstants.PROJECTOR_COLOR_PROFILE );
-    const projectorModeSwitch = new ToggleSwitch( colorProfileProperty, otherColorProfile, SceneryConstants.PROJECTOR_COLOR_PROFILE, combineOptions<ToggleSwitchOptions>( {
+    const otherColorProfile = phet.chipper.colorProfiles.find((colorProfile: string) => colorProfile !== SceneryConstants.PROJECTOR_COLOR_PROFILE);
+    const projectorModeSwitch = new ToggleSwitch(colorProfileProperty, otherColorProfile, SceneryConstants.PROJECTOR_COLOR_PROFILE, combineOptions<ToggleSwitchOptions>({
       a11yName: JoistStrings.projectorModeStringProperty
-    }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS ) );
+    }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS));
 
-    const projectorModePatternStringProperty = new PatternStringProperty( JoistStrings.a11y.preferences.tabs.labelledDescriptionPatternStringProperty, {
+    const projectorModePatternStringProperty = new PatternStringProperty(JoistStrings.a11y.preferences.tabs.labelledDescriptionPatternStringProperty, {
       label: JoistStrings.projectorModeStringProperty,
       description: JoistStrings.preferences.tabs.visual.projectorModeDescriptionStringProperty
-    }, { tandem: Tandem.OPT_OUT } );
+    }, { tandem: Tandem.OPT_OUT });
     projectorModeDescription.readingBlockNameResponse = projectorModePatternStringProperty;
 
-    const options = optionize<ProjectorModeToggleSwitchOptions, SelfOptions, ParentOptions>()( {
+    const options = optionize<ProjectorModeToggleSwitchOptions, SelfOptions, ParentOptions>()({
       labelNode: projectorModeLabel,
       descriptionNode: projectorModeDescription,
       controlNode: projectorModeSwitch
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
   }
 }
 
-joist.register( 'ProjectorModeToggleSwitch', ProjectorModeToggleSwitch );
+joist.register('ProjectorModeToggleSwitch', ProjectorModeToggleSwitch);
 export default ProjectorModeToggleSwitch;

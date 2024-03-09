@@ -123,7 +123,7 @@ export default class Color {
    * @param [a] - If provided, should be the alpha value
    */
   public set(r: number | Color | string | null, g?: number, b?: number, a?: number): this {
-    assert && assert(r !== undefined, 'Can\'t call Color.set( undefined )');
+    window.assert && window.assert(r !== undefined, 'Can\'t call Color.set( undefined )');
 
     if (r === null) {
       this.setRGBA(0, 0, 0, 0);
@@ -138,7 +138,7 @@ export default class Color {
     }
     // support for set( hex ) and set( hex, alpha )
     else if (b === undefined) {
-      assert && assert(g === undefined || typeof g === 'number');
+      window.assert && window.assert(g === undefined || typeof g === 'number');
 
       const red = (r >> 16) & 0xFF;
       const green = (r >> 8) & 0xFF;
@@ -148,7 +148,7 @@ export default class Color {
     }
     // support for set( r, g, b ) and set( r, g, b, a )
     else {
-      assert && assert(a === undefined || typeof a === 'number');
+      window.assert && window.assert(a === undefined || typeof a === 'number');
       this.setRGBA(r, g!, b, (a === undefined) ? 1 : a);
     }
 
@@ -284,7 +284,7 @@ export default class Color {
       // Since this needs to be done quickly, and we don't particularly care about slight rounding differences (it's
       // being used for display purposes only, and is never shown to the user), we use the built-in JS toFixed instead of
       // Dot's version of toFixed. See https://github.com/phetsims/kite/issues/50
-      let alpha = this.a.toFixed(20); // eslint-disable-line bad-sim-text
+      let alpha = this.a.toFixed(20);
       while (alpha.length >= 2 && alpha.endsWith('0') && alpha[alpha.length - 2] !== '.') {
         alpha = alpha.slice(0, alpha.length - 1);
       }
@@ -299,7 +299,7 @@ export default class Color {
    */
   public toCSS(): string {
     // verify that the cached value is correct (in debugging builds only, defeats the point of caching otherwise)
-    assert && assert(this._css === this.computeCSS(), `CSS cached value is ${this._css}, but the computed value appears to be ${this.computeCSS()}`);
+    window.assert && window.assert(this._css === this.computeCSS(), `CSS cached value is ${this._css}, but the computed value appears to be ${this.computeCSS()}`);
 
     return this._css!;
   }
@@ -343,19 +343,19 @@ export default class Color {
    * Called to update the internally cached CSS value
    */
   private updateColor(): void {
-    assert && assert(!this.immutable,
+    window.assert && window.assert(!this.immutable,
       'Cannot modify an immutable color. Likely caused by trying to mutate a color after it was used for a node fill/stroke');
 
-    assert && assert(typeof this.red === 'number' &&
+    window.assert && window.assert(typeof this.red === 'number' &&
       typeof this.green === 'number' &&
       typeof this.blue === 'number' &&
       typeof this.alpha === 'number',
       `Ensure color components are numeric: ${this.toString()}`);
 
-    assert && assert(isFinite(this.red) && isFinite(this.green) && isFinite(this.blue) && isFinite(this.alpha),
+    window.assert && window.assert(isFinite(this.red) && isFinite(this.green) && isFinite(this.blue) && isFinite(this.alpha),
       'Ensure color components are finite and not NaN');
 
-    assert && assert(this.red >= 0 && this.red <= 255 &&
+    window.assert && window.assert(this.red >= 0 && this.red <= 255 &&
       this.green >= 0 && this.green <= 255 &&
       this.red >= 0 && this.red <= 255 &&
       this.alpha >= 0 && this.alpha <= 1,
@@ -435,7 +435,7 @@ export default class Color {
   }
 
   private checkFactor(factor?: number): number {
-    assert && assert(factor === undefined || (factor >= 0 && factor <= 1), `factor must be between 0 and 1: ${factor}`);
+    window.assert && window.assert(factor === undefined || (factor >= 0 && factor <= 1), `factor must be between 0 and 1: ${factor}`);
 
     return (factor === undefined) ? 0.7 : factor;
   }
@@ -675,7 +675,7 @@ export default class Color {
   public static getLuminance(color: Color | string): number {
     const sceneryColor = Color.toColor(color);
     const luminance = (sceneryColor.red * 0.2126 + sceneryColor.green * 0.7152 + sceneryColor.blue * 0.0722);
-    assert && assert(luminance >= 0 && luminance <= 255, `unexpected luminance: ${luminance}`);
+    window.assert && window.assert(luminance >= 0 && luminance <= 255, `unexpected luminance: ${luminance}`);
     return luminance;
   }
 
@@ -694,7 +694,7 @@ export default class Color {
    * @param luminanceThreshold - colors with luminance < this value are dark, range [0,255], default 186
    */
   public static isDarkColor(color: Color | string, luminanceThreshold = 186): boolean {
-    assert && assert(luminanceThreshold >= 0 && luminanceThreshold <= 255,
+    window.assert && window.assert(luminanceThreshold >= 0 && luminanceThreshold <= 255,
       'invalid luminanceThreshold');
     return (Color.getLuminance(color) < luminanceThreshold);
   }

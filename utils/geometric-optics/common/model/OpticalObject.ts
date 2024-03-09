@@ -53,7 +53,7 @@ export default class OpticalObject extends PhetioObject {
   protected constructor(opticalObjectNumber: number,
     opticPositionProperty: TReadOnlyProperty<Vector2>,
     providedOptions: OpticalObjectOptions) {
-    assert && assert(Number.isInteger(opticalObjectNumber) && opticalObjectNumber > 0,
+    window.assert && window.assert(Number.isInteger(opticalObjectNumber) && opticalObjectNumber > 0,
       `opticalObjectNumber must be a positive integer: ${opticalObjectNumber}`);
 
     const options = optionize<OpticalObjectOptions, SelfOptions, PhetioObjectOptions>()({

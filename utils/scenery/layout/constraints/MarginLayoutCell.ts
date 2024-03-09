@@ -98,7 +98,7 @@ export default class MarginLayoutCell extends LayoutCell {
 
     const cellBounds = this.getCellBounds();
 
-    assert && assert(cellBounds.isFinite());
+    window.assert && window.assert(cellBounds.isFinite());
 
     this.lastAvailableBounds[orientation.minCoordinate] = linePosition;
     this.lastAvailableBounds[orientation.maxCoordinate] = linePosition + lineSize;
@@ -228,8 +228,8 @@ export default class MarginLayoutCell extends LayoutCell {
       const minimumSize = this.getMinimumSize(orientation);
       const maximumSize = this.getMaximumSize(orientation);
 
-      assert && assert(isFinite(minimumSize));
-      assert && assert(maximumSize >= minimumSize);
+      window.assert && window.assert(isFinite(minimumSize));
+      window.assert && window.assert(maximumSize >= minimumSize);
 
       value = Utils.clamp(value, minimumSize, maximumSize);
 

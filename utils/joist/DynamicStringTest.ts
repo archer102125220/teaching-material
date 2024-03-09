@@ -77,7 +77,7 @@ export default class DynamicStringTest {
    * Sets a new stringFactor, and applies that stringFactor to all strings.
    */
   private setStringFactor(stringFactor: number): void {
-    assert && assert(stringFactor > 0, `stringFactor must be > 0: ${stringFactor}`);
+    window.assert && window.assert(stringFactor > 0, `stringFactor must be > 0: ${stringFactor}`);
 
     this.stringFactor = stringFactor;
     console.log(`stringFactor = ${this.stringFactor}`);
@@ -88,7 +88,7 @@ export default class DynamicStringTest {
    * Sets a new stride value, and causes strings to be set to values from the WORDS array.
    */
   private setStride(newStride: number): void {
-    assert && assert(Number.isInteger(newStride), `newStride must be an integer: ${newStride}`);
+    window.assert && window.assert(Number.isInteger(newStride), `newStride must be an integer: ${newStride}`);
 
     const words = DynamicStringTest.WORDS;
 
@@ -140,7 +140,7 @@ function applyToAllStrings(stringFactor: number): void {
  * Applies stringFactor to one string.
  */
 function applyToString(stringFactor: number, string: string): string {
-  assert && assert(stringFactor > 0, `stringFactor must be > 0: ${stringFactor}`);
+  window.assert && window.assert(stringFactor > 0, `stringFactor must be > 0: ${stringFactor}`);
 
   if (stringFactor > 1) {
     return doubleString(string, stringFactor);

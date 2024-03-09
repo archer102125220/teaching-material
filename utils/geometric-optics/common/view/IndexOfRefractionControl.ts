@@ -6,15 +6,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import NumberControl, { NumberControlOptions } from '../../../../scenery-phet/js/NumberControl.js';
-import geometricOptics from '../../geometricOptics.js';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings.js';
-import GOConstants from '../GOConstants.js';
-import Utils from '../../../../dot/js/Utils.js';
-import NumberProperty from '../../../../axon/js/NumberProperty.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import optionize, { combineOptions, EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
+import NumberControl, { type NumberControlOptions } from '../../../scenery-phet/NumberControl';
+import geometricOptics from '../../geometricOptics';
+import GeometricOpticsStrings from '../../GeometricOpticsStrings';
+import GOConstants from '../GOConstants';
+import Utils from '../../../dot/Utils';
+import NumberProperty from '../../../axon/NumberProperty';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import optionize, { combineOptions, type EmptySelfOptions } from '../../../phet-core/optionize';
+import type StrictOmit from '../../../phet-core/types/StrictOmit';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -22,16 +22,16 @@ type IndexOfRefractionControlOptions = SelfOptions & PickRequired<NumberControlO
 
 export default class IndexOfRefractionControl extends NumberControl {
 
-  public constructor( indexOfRefractionProperty: NumberProperty, providedOptions: IndexOfRefractionControlOptions ) {
+  public constructor(indexOfRefractionProperty: NumberProperty, providedOptions: IndexOfRefractionControlOptions) {
 
     const range = indexOfRefractionProperty.range;
 
     // Assemble the defaults for NumberControl, because optionize doesn't support defaults in multiple objects.
-    const numberControlDefaults = combineOptions<StrictOmit<NumberControlOptions, 'tandem'>>( {}, GOConstants.NUMBER_CONTROL_OPTIONS, {
+    const numberControlDefaults = combineOptions<StrictOmit<NumberControlOptions, 'tandem'>>({}, GOConstants.NUMBER_CONTROL_OPTIONS, {
       delta: GOConstants.INDEX_OF_REFRACTION_SPINNER_STEP,
       sliderOptions: {
-        constrainValue: ( value: number ) =>
-          Utils.roundToInterval( value, GOConstants.INDEX_OF_REFRACTION_SLIDER_STEP ),
+        constrainValue: (value: number) =>
+          Utils.roundToInterval(value, GOConstants.INDEX_OF_REFRACTION_SLIDER_STEP),
         keyboardStep: GOConstants.INDEX_OF_REFRACTION_KEYBOARD_STEP, // used by all alternative-input devices
         shiftKeyboardStep: GOConstants.INDEX_OF_REFRACTION_SHIFT_KEYBOARD_STEP, // finer grain, used by keyboard only
         pageKeyboardStep: GOConstants.INDEX_OF_REFRACTION_PAGE_KEYBOARD_STEP
@@ -39,16 +39,16 @@ export default class IndexOfRefractionControl extends NumberControl {
       numberDisplayOptions: {
         decimalPlaces: GOConstants.INDEX_OF_REFRACTION_DECIMAL_PLACES
       }
-    } );
+    });
 
     // Now add providedOptions to the defaults.
     const options = optionize<IndexOfRefractionControlOptions, SelfOptions, NumberControlOptions>()(
-      numberControlDefaults, providedOptions );
+      numberControlDefaults, providedOptions);
 
-    super( GeometricOpticsStrings.indexOfRefractionStringProperty, indexOfRefractionProperty, range, options );
+    super(GeometricOpticsStrings.indexOfRefractionStringProperty, indexOfRefractionProperty, range, options);
 
-    this.addLinkedElement( indexOfRefractionProperty );
+    this.addLinkedElement(indexOfRefractionProperty);
   }
 }
 
-geometricOptics.register( 'IndexOfRefractionControl', IndexOfRefractionControl );
+geometricOptics.register('IndexOfRefractionControl', IndexOfRefractionControl);

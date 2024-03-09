@@ -97,7 +97,7 @@ export default class LensNode extends Node {
    * Creates an icon for a lens.
    */
   public static createIconNode(opticSurfaceType: OpticSurfaceType): Node {
-    assert && assert(opticSurfaceType !== 'flat', 'flat lens is not supported');
+    window.assert && window.assert(opticSurfaceType !== 'flat', 'flat lens is not supported');
 
     const radiusOfCurvature = (opticSurfaceType === 'convex') ? ICON_RADIUS_OF_CURVATURE_MAGNITUDE : -ICON_RADIUS_OF_CURVATURE_MAGNITUDE;
 

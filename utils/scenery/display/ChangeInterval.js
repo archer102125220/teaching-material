@@ -111,7 +111,7 @@ class ChangeInterval {
 
       // check for a totally-collapsed state
       if (!this.drawableBefore) {
-        assert && assert(!this.drawableAfter);
+        window.assert && window.assert(!this.drawableAfter);
         this.collapsedEmpty = true;
       }
 
@@ -131,7 +131,7 @@ class ChangeInterval {
 
       // check for a totally-collapsed state
       if (!this.drawableAfter) {
-        assert && assert(!this.drawableBefore);
+        window.assert && window.assert(!this.drawableBefore);
         this.collapsedEmpty = true;
       }
 

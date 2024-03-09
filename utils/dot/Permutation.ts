@@ -86,7 +86,7 @@ class Permutation {
    * Creates an identity permutation of a given size.
    */
   public static identity(size: number): Permutation {
-    assert && assert(size >= 0);
+    window.assert && window.assert(size >= 0);
     const indices = new Array(size);
     for (let i = 0; i < size; i++) {
       indices[i] = i;

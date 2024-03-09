@@ -22,10 +22,10 @@ QUnit.test( 'AncestorNodesProperty', assert => {
   const ancestorNodesProperty = new AncestorNodesProperty( a );
 
   const checkAncestors = ( nodes: Node[], message: string ) => {
-    assert.ok( ancestorNodesProperty.value.size === nodes.length, message );
+    window.assert.ok( ancestorNodesProperty.value.size === nodes.length, message );
 
     nodes.forEach( node => {
-      assert.ok( ancestorNodesProperty.value.has( node ), message );
+      window.assert.ok( ancestorNodesProperty.value.has( node ), message );
     } );
   };
 

@@ -50,7 +50,7 @@ export default function selectScreens(allSimScreens: AnyScreen[],
     QueryStringMachine.addWarning('homeScreen', homeScreenQueryParameter, errorMessage);
 
     // to support expected failures in selectScreensTests.js unit tests
-    assert && assert(false, errorMessage);
+    window.assert && window.assert(false, errorMessage);
   }
 
   // the ordered list of sim screens for this runtime
@@ -62,7 +62,7 @@ export default function selectScreens(allSimScreens: AnyScreen[],
   // truthiness before attempting to use it. For `screens` documentation, see the schema at
   // phet.chipper.queryParameters.screens in initialize-globals.js.
   if (screensQueryParameterProvided && screensQueryParameter) {
-    assert && assert(screensQueryParameter.length > 0, 'Screens query parameter should have at least one value');
+    window.assert && window.assert(screensQueryParameter.length > 0, 'Screens query parameter should have at least one value');
 
     for (let i = 0; i < screensQueryParameter.length; i++) {
 
@@ -80,7 +80,7 @@ export default function selectScreens(allSimScreens: AnyScreen[],
         // see https://github.com/phetsims/joist/issues/599
         const errorMessage = `invalid value in screens query parameter: ${userIndex}`;
         QueryStringMachine.addWarning('screens', screensQueryParameter, errorMessage);
-        assert && assert(false, errorMessage);
+        window.assert && window.assert(false, errorMessage);
         selectedSimScreens = allSimScreens;
         break;
       }
@@ -103,7 +103,7 @@ export default function selectScreens(allSimScreens: AnyScreen[],
     QueryStringMachine.addWarning('homeScreen', homeScreenQueryParameter, errorMessage);
 
     // to support expected failures in selectScreensTests.js unit tests
-    assert && assert(false, errorMessage);
+    window.assert && window.assert(false, errorMessage);
   }
 
   // For a single screen simulation (whether the simulation only declares one screen, or whether the user has specified
@@ -116,7 +116,7 @@ export default function selectScreens(allSimScreens: AnyScreen[],
     QueryStringMachine.addWarning('initialScreen', initialScreenIndex, errorMessage);
 
     // to support expected failures in selectScreensTests.js unit tests
-    assert && assert(false, errorMessage);
+    window.assert && window.assert(false, errorMessage);
   }
 
   const screens = selectedSimScreens.slice();

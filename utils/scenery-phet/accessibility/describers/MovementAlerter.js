@@ -131,8 +131,8 @@ class MovementAlerter extends Alerter {
       options
     );
 
-    assert && assert(options.movementAlerts instanceof Object);
-    assert && assert(!Array.isArray(options.movementAlerts)); // should not be an Array
+    window.assert && window.assert(options.movementAlerts instanceof Object);
+    window.assert && window.assert(!Array.isArray(options.movementAlerts)); // should not be an Array
 
     super(options);
 

@@ -17,8 +17,8 @@ export default class Saturate extends ColorMatrixFilter {
    * @param amount - The amount of the effect, from 0 (no saturation), 1 (normal), or higher to over-saturate
    */
   public constructor(amount: number) {
-    assert && assert(isFinite(amount), 'Saturate amount should be finite');
-    assert && assert(amount >= 0, 'Saturate amount should be non-negative');
+    window.assert && window.assert(isFinite(amount), 'Saturate amount should be finite');
+    window.assert && window.assert(amount >= 0, 'Saturate amount should be non-negative');
 
     // near https://drafts.fxtf.org/filter-effects/#attr-valuedef-type-huerotate
     super(

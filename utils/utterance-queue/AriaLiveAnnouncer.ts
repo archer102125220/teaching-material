@@ -26,16 +26,16 @@
  * @author John Blanco
  */
 
-import stepTimer from '../../axon/js/stepTimer.js';
-import Enumeration from '../../phet-core/js/Enumeration.js';
-import EnumerationValue from '../../phet-core/js/EnumerationValue.js';
-import optionize from '../../phet-core/js/optionize.js';
-import platform from '../../phet-core/js/platform.js';
-import { PDOMUtils } from '../../scenery/js/imports.js';
-import Announcer, { AnnouncerAnnounceOptions, AnnouncerOptions } from './Announcer.js';
-import Utterance from './Utterance.js';
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
-import { ResolvedResponse } from './ResponsePacket.js';
+import stepTimer from '../axon/stepTimer';
+import Enumeration from '../phet-core/Enumeration';
+import EnumerationValue from '../phet-core/EnumerationValue';
+import optionize from '../phet-core/optionize';
+import platform from '../phet-core/platform';
+import { PDOMUtils } from '../scenery/imports';
+import Announcer, { type AnnouncerAnnounceOptions, type AnnouncerOptions } from './Announcer';
+import Utterance from './Utterance';
+import utteranceQueueNamespace from './utteranceQueueNamespace';
+import { type ResolvedResponse } from './ResponsePacket';
 
 // constants
 const NUMBER_OF_ARIA_LIVE_ELEMENTS = 4;
@@ -45,12 +45,12 @@ let ariaLiveAnnouncerIndex = 1;
 
 // Possible supported values for the `aria-live` attributes created in AriaLiveAnnouncer.
 class AriaLive extends EnumerationValue {
-  public constructor( public readonly attributeString: string ) { super();}
+  public constructor(public readonly attributeString: string) { super(); }
 
-  public static readonly POLITE = new AriaLive( 'polite' );
-  public static readonly ASSERTIVE = new AriaLive( 'assertive' );
+  public static readonly POLITE = new AriaLive('polite');
+  public static readonly ASSERTIVE = new AriaLive('assertive');
 
-  public static readonly enumeration = new Enumeration( AriaLive );
+  public static readonly enumeration = new Enumeration(AriaLive);
 }
 
 // Options for the announce method
@@ -62,17 +62,17 @@ type AriaLiveAnnouncerAnnounceOptions = SelfOptions & AnnouncerAnnounceOptions;
 /**
  * @returns - a container holding each aria-live elements created
  */
-function createBatchOfPriorityLiveElements( ariaLivePriority: AriaLive ): HTMLDivElement {
+function createBatchOfPriorityLiveElements(ariaLivePriority: AriaLive): HTMLDivElement {
   const priority = ariaLivePriority.attributeString;
-  const container = document.createElement( 'div' );
-  for ( let i = 1; i <= NUMBER_OF_ARIA_LIVE_ELEMENTS; i++ ) {
-    const newParagraph = document.createElement( 'p' );
-    newParagraph.setAttribute( 'id', `elements-${ariaLiveAnnouncerIndex}-${priority}-${i}` );
+  const container = document.createElement('div');
+  for (let i = 1; i <= NUMBER_OF_ARIA_LIVE_ELEMENTS; i++) {
+    const newParagraph = document.createElement('p');
+    newParagraph.setAttribute('id', `elements-${ariaLiveAnnouncerIndex}-${priority}-${i}`);
 
     // set aria-live on individual paragraph elements to prevent VoiceOver from interrupting alerts, see
     // https://github.com/phetsims/molecules-and-light/issues/235
-    newParagraph.setAttribute( 'aria-live', priority );
-    container.appendChild( newParagraph );
+    newParagraph.setAttribute('aria-live', priority);
+    container.appendChild(newParagraph);
   }
 
   return container;
@@ -103,36 +103,36 @@ class AriaLiveAnnouncer extends Announcer {
   // with the virtual cursor after setting.
   public static readonly ARIA_LIVE_DELAY = 200;
 
-  public constructor( providedOptions?: AriaLiveAnnouncerOptions ) {
-    const options = optionize<AriaLiveAnnouncerOptions, AriaLiveAnnouncerSelfOptions, AnnouncerOptions>()( {
+  public constructor(providedOptions?: AriaLiveAnnouncerOptions) {
+    const options = optionize<AriaLiveAnnouncerOptions, AriaLiveAnnouncerSelfOptions, AnnouncerOptions>()({
 
       // By default, don't care about response collector Properties, as they are designed for Voicing more than
       // aria-live description.
       respectResponseCollectorProperties: false,
       lang: 'en'
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.politeElementIndex = 0;
     this.assertiveElementIndex = 0;
 
-    this.ariaLiveContainer = document.createElement( 'div' ); //container div
-    this.ariaLiveContainer.setAttribute( 'lang', options.lang );
-    this.ariaLiveContainer.setAttribute( 'id', `aria-live-elements-${ariaLiveAnnouncerIndex}` );
-    this.ariaLiveContainer.setAttribute( 'style', 'position: absolute; left: 0px; top: 0px; width: 0px; height: 0px; ' +
-                                                  'clip: rect(0px 0px 0px 0px); pointer-events: none;' );
+    this.ariaLiveContainer = document.createElement('div'); //container div
+    this.ariaLiveContainer.setAttribute('lang', options.lang);
+    this.ariaLiveContainer.setAttribute('id', `aria-live-elements-${ariaLiveAnnouncerIndex}`);
+    this.ariaLiveContainer.setAttribute('style', 'position: absolute; left: 0px; top: 0px; width: 0px; height: 0px; ' +
+      'clip: rect(0px 0px 0px 0px); pointer-events: none;');
 
     // By having four elements and cycling through each one, we can get around a VoiceOver bug where a new
     // alert would interrupt the previous alert if it wasn't finished speaking, see https://github.com/phetsims/scenery-phet/issues/362
-    const politeElementContainer = createBatchOfPriorityLiveElements( AriaLive.POLITE );
-    const assertiveElementContainer = createBatchOfPriorityLiveElements( AriaLive.ASSERTIVE );
+    const politeElementContainer = createBatchOfPriorityLiveElements(AriaLive.POLITE);
+    const assertiveElementContainer = createBatchOfPriorityLiveElements(AriaLive.ASSERTIVE);
 
-    this.ariaLiveContainer.appendChild( politeElementContainer );
-    this.ariaLiveContainer.appendChild( assertiveElementContainer );
+    this.ariaLiveContainer.appendChild(politeElementContainer);
+    this.ariaLiveContainer.appendChild(assertiveElementContainer);
 
-    this.politeElements = Array.from( politeElementContainer.children ) as HTMLElement[];
-    this.assertiveElements = Array.from( assertiveElementContainer.children ) as HTMLElement[];
+    this.politeElements = Array.from(politeElementContainer.children) as HTMLElement[];
+    this.assertiveElements = Array.from(assertiveElementContainer.children) as HTMLElement[];
 
     // increment index so the next AriaLiveAnnouncer instance has different ids for its elements.
     ariaLiveAnnouncerIndex++;
@@ -141,41 +141,41 @@ class AriaLiveAnnouncer extends Announcer {
   /**
    * Announce an alert, setting textContent to an aria-live element.
    */
-  public override announce( announceText: ResolvedResponse, utterance: Utterance, providedOptions?: AriaLiveAnnouncerAnnounceOptions ): void {
+  public override announce(announceText: ResolvedResponse, utterance: Utterance, providedOptions?: AriaLiveAnnouncerAnnounceOptions): void {
 
-    const options = optionize<AriaLiveAnnouncerAnnounceOptions, SelfOptions>()( {
+    const options = optionize<AriaLiveAnnouncerAnnounceOptions, SelfOptions>()({
 
       // By default, alert to a polite aria-live element
       ariaLivePriority: AriaLive.POLITE
-    }, providedOptions );
+    }, providedOptions);
 
     // aria-live and AT has no API to detect successful speech, we can only assume every announce is successful
     this.hasSpoken = true;
 
     // Don't update if null
-    if ( announceText ) {
+    if (announceText) {
 
-      if ( options.ariaLivePriority === AriaLive.POLITE ) {
-        const element = this.politeElements[ this.politeElementIndex ];
-        this.updateLiveElement( element, announceText, utterance );
+      if (options.ariaLivePriority === AriaLive.POLITE) {
+        const element = this.politeElements[this.politeElementIndex];
+        this.updateLiveElement(element, announceText, utterance);
 
         // update index for next time
-        this.politeElementIndex = ( this.politeElementIndex + 1 ) % this.politeElements.length;
+        this.politeElementIndex = (this.politeElementIndex + 1) % this.politeElements.length;
       }
-      else if ( options.ariaLivePriority === AriaLive.ASSERTIVE ) {
-        const element = this.assertiveElements[ this.assertiveElementIndex ];
-        this.updateLiveElement( element, announceText, utterance );
+      else if (options.ariaLivePriority === AriaLive.ASSERTIVE) {
+        const element = this.assertiveElements[this.assertiveElementIndex];
+        this.updateLiveElement(element, announceText, utterance);
         // update index for next time
-        this.assertiveElementIndex = ( this.assertiveElementIndex + 1 ) % this.assertiveElements.length;
+        this.assertiveElementIndex = (this.assertiveElementIndex + 1) % this.assertiveElements.length;
       }
       else {
-        assert && assert( false, 'unsupported aria live prioirity' );
+        window.assert && window.assert(false, 'unsupported aria live prioirity');
       }
     }
 
     // With aria-live we don't have information about when the screen reader is done speaking
     // the content, so we have to emit this right away
-    this.announcementCompleteEmitter.emit( utterance, announceText );
+    this.announcementCompleteEmitter.emit(utterance, announceText);
   }
 
   /**
@@ -190,7 +190,7 @@ class AriaLiveAnnouncer extends Announcer {
    * The implementation of cancelUtterance for AriaLiveAnnouncer. We do not know whether the AT is speaking content so
    * this function is a no-op for aria-live.
    */
-  public override cancelUtterance( utterance: Utterance ): void {
+  public override cancelUtterance(utterance: Utterance): void {
     // See docs
   }
 
@@ -201,7 +201,7 @@ class AriaLiveAnnouncer extends Announcer {
    * @param textContent - the content to be announced
    * @param utterance
    */
-  private updateLiveElement( liveElement: HTMLElement, textContent: string | number, utterance: Utterance ): void {
+  private updateLiveElement(liveElement: HTMLElement, textContent: string | number, utterance: Utterance): void {
 
     // fully clear the old textContent so that sequential alerts with identical text will be announced, which
     // some screen readers might have prevented
@@ -215,19 +215,19 @@ class AriaLiveAnnouncer extends Announcer {
 
     // must be done asynchronously from setting hidden above or else the screen reader
     // will fail to read the content
-    stepTimer.setTimeout( () => {
+    stepTimer.setTimeout(() => {
 
       // make sure that the utterance is not out of date right before it is actually sent to assistive technology
-      if ( utterance.predicate() ) {
+      if (utterance.predicate()) {
 
-        PDOMUtils.setTextContent( liveElement, textContent );
+        PDOMUtils.setTextContent(liveElement, textContent);
 
         // Hide the content so that it cant be read with the virtual cursor. Must be done
         // behind at least 200 ms delay or else alerts may be missed by NVDA and VoiceOver, see
         // https://github.com/phetsims/scenery-phet/issues/491
-        stepTimer.setTimeout( () => {
+        stepTimer.setTimeout(() => {
 
-          if ( platform.safari ) {
+          if (platform.safari) {
 
             // Using `hidden` rather than clearing textContent works better on mobile VO,
             // see https://github.com/phetsims/scenery-phet/issues/490
@@ -241,12 +241,12 @@ class AriaLiveAnnouncer extends Announcer {
           // seems to be necessary to force VoiceOver to speak aria-live alerts in first-in-first-out order.
           // See https://github.com/phetsims/utterance-queue/issues/88
           this.readyToAnnounce = true;
-        }, AriaLiveAnnouncer.ARIA_LIVE_DELAY );
+        }, AriaLiveAnnouncer.ARIA_LIVE_DELAY);
       }
       else {
         this.readyToAnnounce = true; // If the predicate fails, we are ready to announce again.
       }
-    }, 0 );
+    }, 0);
   }
 
   // Possible values for the `aria-live` attribute (priority) that can be alerted (like "polite" and
@@ -254,5 +254,5 @@ class AriaLiveAnnouncer extends Announcer {
   public static readonly AriaLive = AriaLive;
 }
 
-utteranceQueueNamespace.register( 'AriaLiveAnnouncer', AriaLiveAnnouncer );
+utteranceQueueNamespace.register('AriaLiveAnnouncer', AriaLiveAnnouncer);
 export default AriaLiveAnnouncer;

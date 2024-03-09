@@ -63,14 +63,14 @@ class SimInfo extends PhetioObject {
         'data stream event, as well as on demand in the PhET-iO state.'
     });
 
-    assert && assert(Array.isArray(sim.screens), 'screens should be set and an array');
+    window.assert && window.assert(Array.isArray(sim.screens), 'screens should be set and an array');
 
     // globals
     this.putInfo('url', window.location.href);
     this.putInfo('randomSeed', window.phet.chipper.queryParameters.randomSeed);
     this.putInfo('userAgent', window.navigator.userAgent);
     this.putInfo('language', window.navigator.language);
-    this.putInfo('window', `${window.innerWidth}x${window.innerHeight}`); // eslint-disable-line bad-sim-text
+    this.putInfo('window', `${window.innerWidth}x${window.innerHeight}`);
     this.putInfo('referrer', document.referrer);
 
     // from Scenery Utils
@@ -133,7 +133,7 @@ class SimInfo extends PhetioObject {
     if (value === undefined) {
       value = '{{undefined}}';
     }
-    assert && assert(!this.info.hasOwnProperty(key), `key already defined: ${key}`);
+    window.assert && window.assert(!this.info.hasOwnProperty(key), `key already defined: ${key}`);
 
     // @ts-expect-error I don't know how to ensure the correct value, just the key
     this.info[key] = value;

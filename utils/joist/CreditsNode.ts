@@ -126,7 +126,7 @@ export default class CreditsNode extends VBox {
       children.push(thanksText);
     }
 
-    assert && assert(!options.children, 'CreditsNode sets children');
+    window.assert && window.assert(!options.children, 'CreditsNode sets children');
     options.children = children;
 
     super(options);

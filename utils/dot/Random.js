@@ -101,8 +101,8 @@ class Random {
         arguments.length === 2,
         'nextIntBetween must have exactly 2 arguments'
       );
-    assert && assert(Number.isInteger(min), `min must be an integer: ${min}`);
-    assert && assert(Number.isInteger(max), `max must be an integer: ${max}`);
+    window.assert && window.assert(Number.isInteger(min), `min must be an integer: ${min}`);
+    window.assert && window.assert(Number.isInteger(max), `max must be an integer: ${max}`);
 
     const range = max - min;
     return this.nextInt(range + 1) + min;
@@ -116,7 +116,7 @@ class Random {
    * @template T
    */
   sample(array) {
-    assert && assert(array.length > 0, 'Array should have at least 1 item.');
+    window.assert && window.assert(array.length > 0, 'Array should have at least 1 item.');
     const index = this.nextIntBetween(0, array.length - 1);
     return array[index];
   }
@@ -129,7 +129,7 @@ class Random {
    * @returns {Array} a new array with all the same elements in the passed-in array, in randomized order.
    */
   shuffle(array) {
-    assert && assert(array, 'Array should exist');
+    window.assert && window.assert(array, 'Array should exist');
     let index = -1;
     const result = new Array(array.length);
 
@@ -160,7 +160,7 @@ class Random {
    * @returns {number}
    */
   nextDoubleBetween(min, max) {
-    assert && assert(min < max, 'min must be < max');
+    window.assert && window.assert(min < max, 'min must be < max');
     const value = min + this.nextDouble() * (max - min);
     assert &&
       assert(value >= min && value < max, `value out of range: ${value}`);
@@ -186,7 +186,7 @@ class Random {
    * @returns {number}
    */
   nextDoubleInRange(range) {
-    assert && assert(range instanceof Range, 'invalid range');
+    window.assert && window.assert(range instanceof Range, 'invalid range');
     if (range.min < range.max) {
       return this.nextDoubleBetween(range.min, range.max);
     } else {
@@ -202,7 +202,7 @@ class Random {
    * @public
    */
   nextPointInBounds(bounds) {
-    assert && assert(bounds instanceof Bounds2, 'invalid Bounds2');
+    window.assert && window.assert(bounds instanceof Bounds2, 'invalid Bounds2');
     return new Vector2(
       this.nextDoubleBetween(bounds.minX, bounds.maxX),
       this.nextDoubleBetween(bounds.minY, bounds.maxY)
@@ -214,7 +214,7 @@ class Random {
    * @param {number|null} seed - if null, Math.random will be used to create the seed.
    */
   setSeed(seed) {
-    assert && assert(seed === null || typeof seed === 'number');
+    window.assert && window.assert(seed === null || typeof seed === 'number');
 
     if (typeof seed === 'number') {
       assert &&
@@ -223,7 +223,7 @@ class Random {
           'cannot set seed with 3rd party library "Math.seedrandom".'
         );
     } else {
-      seed = Math.random(); // eslint-disable-line bad-sim-text
+      seed = Math.random();
     }
 
     this.seed = seed;
@@ -233,7 +233,7 @@ class Random {
     // @private {function:number|null}
     this.seedrandom = Math.seedrandom
       ? new Math.seedrandom(`${seed}`)
-      : () => Math.random(); // eslint-disable-line bad-sim-text
+      : () => Math.random();
   }
 
   /**
@@ -269,7 +269,7 @@ class Random {
 
 Random.allRandomInstances = new Set();
 Random.isNormalized = (array) => {
-  assert && assert(_.sum(array) === 1);
+  window.assert && window.assert(_.sum(array) === 1);
 };
 
 dot.register('Random', Random);

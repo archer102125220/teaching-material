@@ -110,7 +110,7 @@ const regionAndCultureQueryParameter: RegionAndCultureID = window.phet.chipper.q
 
 // Assert the query parameter before the simFeatures list because it is more contextual (since it was manually provided
 // in this runtime).
-assert && assert(regionAndCultureQueryParameter === null ||
+window.assert && window.assert(regionAndCultureQueryParameter === null ||
   isSupportedRegionAndCulture(regionAndCultureQueryParameter),
   `invalid query parameter value for ?regionAndCulture: ${regionAndCultureQueryParameter}`);
 
@@ -143,7 +143,7 @@ export default class RegionAndCulturePortrayal extends PhetioObject {
   }
 
   public static createRegionAndCulturePortrayalProperty(regionAndCulturePortrayal: RegionAndCulturePortrayal, validValues: RegionAndCulturePortrayal[]): Property<RegionAndCulturePortrayal> {
-    assert && assert(_.every(validValues, value => SUPPORTED_REGIONS_AND_CULTURES.includes(value.regionAndCultureID)),
+    window.assert && window.assert(_.every(validValues, value => SUPPORTED_REGIONS_AND_CULTURES.includes(value.regionAndCultureID)),
       `validValues regionAndCultureIDs must be a subset of RegionAndCulturePortrayal.SUPPORTED_REGIONS_AND_CULTURES, but was ${validValues.map(value => value.regionAndCultureID)}`
     );
 

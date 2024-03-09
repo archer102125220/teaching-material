@@ -57,7 +57,7 @@ export default class Bounds2 implements TPoolable {
    * @param maxY - The initial maximum Y coordinate of the bounds.
    */
   public constructor(minX: number, minY: number, maxX: number, maxY: number) {
-    assert && assert(maxY !== undefined, 'Bounds2 requires 4 parameters');
+    window.assert && window.assert(maxY !== undefined, 'Bounds2 requires 4 parameters');
 
     this.minX = minX;
     this.minY = minY;

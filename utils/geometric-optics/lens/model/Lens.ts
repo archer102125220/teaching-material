@@ -58,10 +58,10 @@ export default class Lens extends Optic {
       }
     }, providedOptions);
 
-    assert && assert(!options.opticSurfaceTypes.includes('flat'), 'flat lens is not supported');
-    assert && assert(options.directFocalLengthModelOptions.focalLengthMagnitudeRange.defaultValue ===
+    window.assert && window.assert(!options.opticSurfaceTypes.includes('flat'), 'flat lens is not supported');
+    window.assert && window.assert(options.directFocalLengthModelOptions.focalLengthMagnitudeRange.defaultValue ===
       options.indirectFocalLengthModelOptions.radiusOfCurvatureMagnitudeRange.defaultValue);
-    assert && assert(options.indirectFocalLengthModelOptions.indexOfRefractionRange.contains(DIRECT_INDEX_OF_REFRACTION));
+    window.assert && window.assert(options.indirectFocalLengthModelOptions.indexOfRefractionRange.contains(DIRECT_INDEX_OF_REFRACTION));
 
     super(options);
 
@@ -140,7 +140,7 @@ export default class Lens extends Optic {
    */
   public getBackShapeTranslated(): Shape {
     const backShape = this.shapesProperty.value.backShape;
-    assert && assert(backShape); // {Shape|null}
+    window.assert && window.assert(backShape); // {Shape|null}
     return this.translatedShape(backShape);
   }
 

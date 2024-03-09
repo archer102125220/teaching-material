@@ -50,12 +50,12 @@ export default class Circle extends Path {
     // Handle new Circle( { radius: ... } )
     if (typeof radius === 'object') {
       options = radius;
-      assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+      window.assert && window.assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
         'Extra prototype on Node options object is a code smell');
     }
     // Handle new Circle( radius, { ... } )
     else {
-      assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+      window.assert && window.assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
         'Extra prototype on Node options object is a code smell');
       options = extendDefined({
         radius
@@ -94,7 +94,7 @@ export default class Circle extends Path {
    * shape.
    */
   private invalidateCircle(): void {
-    assert && assert(this._radius >= 0, 'A circle needs a non-negative radius');
+    window.assert && window.assert(this._radius >= 0, 'A circle needs a non-negative radius');
 
     // sets our 'cache' to null, so we don't always have to recompute our shape
     this._shape = null;
@@ -188,8 +188,8 @@ export default class Circle extends Path {
    * Sets the radius of the circle.
    */
   public setRadius(radius: number): this {
-    assert && assert(radius >= 0, 'A circle needs a non-negative radius');
-    assert && assert(isFinite(radius), 'A circle needs a finite radius');
+    window.assert && window.assert(radius >= 0, 'A circle needs a non-negative radius');
+    window.assert && window.assert(isFinite(radius), 'A circle needs a finite radius');
 
     if (this._radius !== radius) {
       this._radius = radius;

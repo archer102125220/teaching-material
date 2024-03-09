@@ -18,7 +18,7 @@ class UtteranceQueueTestUtils {
    * @param ms
    */
   public static timeout( ms: number ): Promise<unknown> {
-    return new Promise( resolve => setTimeout( resolve, ms ) ); // eslint-disable-line bad-sim-text
+    return new Promise( resolve => setTimeout( resolve, ms ) );
   }
 
   /**

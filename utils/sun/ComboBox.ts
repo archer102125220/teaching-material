@@ -197,15 +197,15 @@ export default class ComboBox<T> extends WidthSizable(Node) {
    */
   public constructor(property: PhetioProperty<T>, items: ComboBoxItem<T>[], listParent: Node, providedOptions?: ComboBoxOptions) {
 
-    assert && assert(_.uniqBy(items, (item: ComboBoxItem<T>) => item.value).length === items.length,
+    window.assert && window.assert(_.uniqBy(items, (item: ComboBoxItem<T>) => item.value).length === items.length,
       'items must have unique values');
     assert && items.forEach(item => {
-      assert && assert(!item.tandemName || item.tandemName.endsWith(ComboBox.ITEM_TANDEM_NAME_SUFFIX),
+      window.assert && window.assert(!item.tandemName || item.tandemName.endsWith(ComboBox.ITEM_TANDEM_NAME_SUFFIX),
         `ComboBoxItem tandemName must end with '${ComboBox.ITEM_TANDEM_NAME_SUFFIX}': ${item.tandemName}`);
     });
 
     // See https://github.com/phetsims/sun/issues/542
-    assert && assert(listParent.maxWidth === null,
+    window.assert && window.assert(listParent.maxWidth === null,
       'ComboBox is responsible for scaling listBox. Setting maxWidth for listParent may result in buggy behavior.');
 
     const options = optionize<ComboBoxOptions, SelfOptions, ParentOptions>()({
@@ -258,17 +258,17 @@ export default class ComboBox<T> extends WidthSizable(Node) {
     const nodes = getGroupItemNodes(items, options.tandem.createTandem('items'));
 
     assert && nodes.forEach(node => {
-      assert && assert(!node.hasPDOMContent, 'Accessibility is provided by ComboBoxItemNode and ' +
+      window.assert && window.assert(!node.hasPDOMContent, 'Accessibility is provided by ComboBoxItemNode and ' +
         'ComboBoxItem.a11yLabel. Additional PDOM content in the provided ' +
         'Node could break accessibility.');
     });
 
     // validate option values
-    assert && assert(options.xMargin > 0 && options.yMargin > 0,
+    window.assert && window.assert(options.xMargin > 0 && options.yMargin > 0,
       `margins must be > 0, xMargin=${options.xMargin}, yMargin=${options.yMargin}`);
-    assert && assert(_.includes(LIST_POSITION_VALUES, options.listPosition),
+    window.assert && window.assert(_.includes(LIST_POSITION_VALUES, options.listPosition),
       `invalid listPosition: ${options.listPosition}`);
-    assert && assert(_.includes(ALIGN_VALUES, options.align),
+    window.assert && window.assert(_.includes(ALIGN_VALUES, options.align),
       `invalid align: ${options.align}`);
 
     super();
@@ -360,7 +360,7 @@ export default class ComboBox<T> extends WidthSizable(Node) {
 
     if (assert && Tandem.VALIDATION && this.isPhetioInstrumented()) {
       items.forEach(item => {
-        assert && assert(item.tandemName !== null, `PhET-iO instrumented ComboBoxes require ComboBoxItems to have tandemName: ${item.value}`);
+        window.assert && window.assert(item.tandemName !== null, `PhET-iO instrumented ComboBoxes require ComboBoxItems to have tandemName: ${item.value}`);
       });
     }
 
@@ -404,7 +404,7 @@ export default class ComboBox<T> extends WidthSizable(Node) {
         this.listBox.moveToFront();
 
         // manage clickToDismissListener
-        assert && assert(!this.display, 'unexpected display');
+        window.assert && window.assert(!this.display, 'unexpected display');
         this.display = this.getUniqueTrail().rootNode().getRootedDisplays()[0];
         this.display.addInputListener(this.clickToDismissListener);
       }

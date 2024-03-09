@@ -160,7 +160,7 @@ class MultiListener implements TInputListener {
         sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
         const press = this.findPress(event.pointer)!;
-        assert && assert(press, 'Press should be found for move event');
+        window.assert && window.assert(press, 'Press should be found for move event');
         this.movePress(press);
 
         sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
@@ -171,7 +171,7 @@ class MultiListener implements TInputListener {
         sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
         const press = this.findPress(event.pointer)!;
-        assert && assert(press, 'Press should be found for up event');
+        window.assert && window.assert(press, 'Press should be found for up event');
         this.removePress(press);
 
         sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
@@ -182,7 +182,7 @@ class MultiListener implements TInputListener {
         sceneryLog && sceneryLog.InputListener && sceneryLog.push();
 
         const press = this.findPress(event.pointer)!;
-        assert && assert(press, 'Press should be found for cancel event');
+        window.assert && window.assert(press, 'Press should be found for cancel event');
         press.interrupted = true;
 
         this.removePress(press);
@@ -208,7 +208,7 @@ class MultiListener implements TInputListener {
 
         if (!this._interrupted) {
           const backgroundPress = this.findBackgroundPress(event.pointer)!;
-          assert && assert(backgroundPress, 'Background press should be found for up event');
+          window.assert && window.assert(backgroundPress, 'Background press should be found for up event');
           this.removeBackgroundPress(backgroundPress);
         }
 
@@ -248,7 +248,7 @@ class MultiListener implements TInputListener {
 
         if (!this._interrupted) {
           const backgroundPress = this.findBackgroundPress(event.pointer)!;
-          assert && assert(backgroundPress, 'Background press should be found for cancel event');
+          window.assert && window.assert(backgroundPress, 'Background press should be found for cancel event');
           this.removeBackgroundPress(backgroundPress);
         }
 
@@ -342,7 +342,7 @@ class MultiListener implements TInputListener {
     else {
       pressTrail = event.trail.subtrailTo(this._targetNode, false);
     }
-    assert && assert(_.includes(pressTrail.nodes, this._targetNode), 'targetNode must be in the Trail for Press');
+    window.assert && window.assert(_.includes(pressTrail.nodes, this._targetNode), 'targetNode must be in the Trail for Press');
 
     sceneryLog && sceneryLog.InputListener && sceneryLog.push();
     const press = new MultiListenerPress(event.pointer, pressTrail);
@@ -527,7 +527,7 @@ class MultiListener implements TInputListener {
   private computeSinglePressMatrix(): Matrix3 {
     const singleTargetPoint = this._presses[0].targetPoint;
     const localPoint = this._presses[0].localPoint!;
-    assert && assert(localPoint, 'localPoint is not defined on the Press?');
+    window.assert && window.assert(localPoint, 'localPoint is not defined on the Press?');
 
     const singleMappedPoint = this._targetNode.localToParentPoint(localPoint);
     const delta = singleTargetPoint.minus(singleMappedPoint);
@@ -545,7 +545,7 @@ class MultiListener implements TInputListener {
       sum.add(this._presses[i].targetPoint);
 
       const localPoint = this._presses[i].localPoint!;
-      assert && assert(localPoint, 'localPoint is not defined on the Press?');
+      window.assert && window.assert(localPoint, 'localPoint is not defined on the Press?');
       sum.subtract(localPoint);
     }
     return Matrix3.translationFromVector(sum.dividedScalar(this._presses.length));
@@ -556,7 +556,7 @@ class MultiListener implements TInputListener {
    */
   private computeTranslationScaleMatrix(): Matrix3 {
     const localPoints = this._presses.map(press => {
-      assert && assert(press.localPoint, 'localPoint is not defined on the Press?');
+      window.assert && window.assert(press.localPoint, 'localPoint is not defined on the Press?');
       return press.localPoint!;
     });
     const targetPoints = this._presses.map(press => press.targetPoint);

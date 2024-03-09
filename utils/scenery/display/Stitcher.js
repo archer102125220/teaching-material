@@ -265,7 +265,7 @@ class Stitcher {
    * @param {Block} block
    */
   notePendingAddition(drawable, block) {
-    assert && assert(drawable.renderer === block.renderer);
+    window.assert && window.assert(drawable.renderer === block.renderer);
 
     sceneryLog &&
       sceneryLog.Stitch &&
@@ -296,7 +296,7 @@ class Stitcher {
    * @param {Block} block
    */
   notePendingMove(drawable, block) {
-    assert && assert(drawable.renderer === block.renderer);
+    window.assert && window.assert(drawable.renderer === block.renderer);
 
     sceneryLog &&
       sceneryLog.Stitch &&

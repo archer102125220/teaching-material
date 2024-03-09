@@ -247,7 +247,7 @@ const StringUtils = {
           index = -1;
         }
       } else {
-        assert && assert(typeof separator === 'string');
+        window.assert && window.assert(typeof separator === 'string');
 
         index = stringToSplit.indexOf(separator);
         length = separator.length;
@@ -283,7 +283,7 @@ const StringUtils = {
 
     // Matching split API
     if (limit !== undefined) {
-      assert && assert(typeof limit === 'number');
+      window.assert && window.assert(typeof limit === 'number');
 
       result = _.first(result, limit);
     }
@@ -336,7 +336,7 @@ const StringUtils = {
    * @returns {string}
    */
   wrapDirection: function (string, direction) {
-    assert && assert(direction === 'ltr' || direction === 'rtl');
+    window.assert && window.assert(direction === 'ltr' || direction === 'rtl');
 
     if (direction === 'ltr') {
       return StringUtils.wrapLTR(string);

@@ -111,18 +111,18 @@ const getStringModule = (requirejsNamespace: string): object => {
   // Our string information is pulled globally, e.g. phet.chipper.strings[ locale ][ stringKey ] = stringValue;
   // Our locale information is from phet.chipper.locale
 
-  assert && assert(typeof phet.chipper.locale === 'string', 'phet.chipper.locale should have been loaded by now');
-  assert && assert(Object.keys(localeInfoModule).includes(phet.chipper.locale), 'phet.chipper.locale should have been loaded by now');
-  assert && assert(phet.chipper.strings, 'phet.chipper.strings should have been loaded by now');
+  window.assert && window.assert(typeof window.phet.chipper.locale === 'string', 'phet.chipper.locale should have been loaded by now');
+  window.assert && window.assert(Object.keys(localeInfoModule).includes(window.phet.chipper.locale), 'phet.chipper.locale should have been loaded by now');
+  window.assert && window.assert(window.phet.chipper.strings, 'phet.chipper.strings should have been loaded by now');
 
   // Construct locales in increasing specificity, e.g. [ 'en', 'zh', 'zh_CN' ], so we get fallbacks in order
   // const locales = [ FALLBACK_LOCALE ];
   const stringKeyPrefix = `${requirejsNamespace}/`;
 
-  console.log(JSON.parse(JSON.stringify(phet.chipper.strings)));
+  console.log(JSON.parse(JSON.stringify(window.phet.chipper.strings)));
   // We may have other older (unused) keys in babel, and we are only doing the search that matters with the English
   // string keys.
-  let allStringKeysInRepo = Object.keys(phet.chipper.strings[FALLBACK_LOCALE]).filter(stringKey => stringKey.startsWith(stringKeyPrefix));
+  let allStringKeysInRepo = Object.keys(window.phet.chipper.strings[FALLBACK_LOCALE]).filter(stringKey => stringKey.startsWith(stringKeyPrefix));
 
   // TODO: https://github.com/phetsims/phet-io/issues/1877 What if this list doesn't exist?  Should that be an error?
   // Or an error if running an api-stable phet-io sim?
@@ -163,7 +163,7 @@ const getStringModule = (requirejsNamespace: string): object => {
 
       // Don't allow e.g. JOIST/a and JOIST/a.b, since localeObject.a would need to be a string AND an object at the
       // same time.
-      assert && assert(typeof reference[keyPart] !== 'string',
+      window.assert && window.assert(typeof reference[keyPart] !== 'string',
         'It is not allowed to have two different string keys where one is extended by adding a period (.) at the end ' +
         `of the other. The string key ${partialKey} is extended by ${stringKey} in this case, and should be changed.`);
 
@@ -175,10 +175,10 @@ const getStringModule = (requirejsNamespace: string): object => {
       reference = reference[keyPart] as TStringModule; // since we are on all but the last key part, it cannot be stringlike
     });
 
-    assert && assert(typeof reference[lastKeyPart] !== 'object',
+    window.assert && window.assert(typeof reference[lastKeyPart] !== 'object',
       'It is not allowed to have two different string keys where one is extended by adding a period (.) at the end ' +
       `of the other. The string key ${stringKey} is extended by another key, something containing ${reference[lastKeyPart] && Object.keys(reference[lastKeyPart])}.`);
-    assert && assert(!reference[lastKeyPart],
+    window.assert && window.assert(!reference[lastKeyPart],
       `We should not have defined this place in the object (${stringKey}), otherwise it means a duplicated string key OR extended string key`);
 
     // In case our assertions are not enabled, we'll need to proceed without failing out (so we allow for the
@@ -218,15 +218,15 @@ const getStringModule = (requirejsNamespace: string): object => {
 
       const localizedString = new LocalizedString(
         stringKey,
-        phet.chipper.mapString(phet.chipper.strings[FALLBACK_LOCALE][stringKey]),
+        phet.chipper.mapString(window.phet.chipper.strings[FALLBACK_LOCALE][stringKey]),
         tandem,
         phet.chipper.stringMetadata[stringKey]
       );
       localizedStringMap[stringKey] = localizedString;
 
       // Push up the translated values
-      (Object.keys(phet.chipper.strings) as Locale[]).forEach((locale: Locale) => {
-        const string: string = phet.chipper.strings[locale][stringKey];
+      (Object.keys(window.phet.chipper.strings) as Locale[]).forEach((locale: Locale) => {
+        const string: string = window.phet.chipper.strings[locale][stringKey];
         // Ignore zero-length strings, see https://github.com/phetsims/chipper/issues/1343
         if (typeof string === 'string' && string !== '') {
           localizedString.setInitialValue(locale, phet.chipper.mapString(string));

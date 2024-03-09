@@ -83,12 +83,12 @@ export default class LayoutJustification extends EnumerationValue {
   // Converts a string union value into the internal Enumeration value
   public static justifyToInternal(orientation: Orientation, key: HorizontalLayoutJustification | VerticalLayoutJustification): LayoutJustification {
     if (orientation === Orientation.HORIZONTAL) {
-      assert && assert(horizontalJustificationMap[key as 'left' | 'right' | 'center' | 'spaceBetween' | 'spaceAround' | 'spaceEvenly']);
+      window.assert && window.assert(horizontalJustificationMap[key as 'left' | 'right' | 'center' | 'spaceBetween' | 'spaceAround' | 'spaceEvenly']);
 
       return horizontalJustificationMap[key as 'left' | 'right' | 'center' | 'spaceBetween' | 'spaceAround' | 'spaceEvenly'];
     }
     else {
-      assert && assert(verticalJustificationMap[key as 'top' | 'bottom' | 'center' | 'spaceBetween' | 'spaceAround' | 'spaceEvenly']);
+      window.assert && window.assert(verticalJustificationMap[key as 'top' | 'bottom' | 'center' | 'spaceBetween' | 'spaceAround' | 'spaceEvenly']);
 
       return verticalJustificationMap[key as 'top' | 'bottom' | 'center' | 'spaceBetween' | 'spaceAround' | 'spaceEvenly'];
     }

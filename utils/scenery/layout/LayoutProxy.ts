@@ -52,8 +52,8 @@ export default class LayoutProxy {
   }
 
   private checkPreconditions(): void {
-    assert && assert(this.trail, 'Should not be disposed');
-    assert && assert(this.trail!.getParentMatrix().isAxisAligned(), 'Transforms with LayoutProxy need to be axis-aligned');
+    window.assert && window.assert(this.trail, 'Should not be disposed');
+    window.assert && window.assert(this.trail!.getParentMatrix().isAxisAligned(), 'Transforms with LayoutProxy need to be axis-aligned');
   }
 
   public get node(): Node {
@@ -426,7 +426,7 @@ export default class LayoutProxy {
 
   public get preferredWidth(): number | null {
     assert && this.checkPreconditions();
-    assert && assert(isWidthSizable(this.node));
+    window.assert && window.assert(isWidthSizable(this.node));
 
     const preferredWidth = (this.node as WidthSizableNode).preferredWidth;
 
@@ -435,14 +435,14 @@ export default class LayoutProxy {
 
   public set preferredWidth(preferredWidth: number | null) {
     assert && this.checkPreconditions();
-    assert && assert(isWidthSizable(this.node));
+    window.assert && window.assert(isWidthSizable(this.node));
 
     (this.node as WidthSizableNode).preferredWidth = preferredWidth === null ? null : Math.abs(this.trail!.getParentTransform().inverseDeltaX(preferredWidth));
   }
 
   public get preferredHeight(): number | null {
     assert && this.checkPreconditions();
-    assert && assert(isHeightSizable(this.node));
+    window.assert && window.assert(isHeightSizable(this.node));
 
     const preferredHeight = (this.node as HeightSizableNode).preferredHeight;
 
@@ -451,7 +451,7 @@ export default class LayoutProxy {
 
   public set preferredHeight(preferredHeight: number | null) {
     assert && this.checkPreconditions();
-    assert && assert(isHeightSizable(this.node));
+    window.assert && window.assert(isHeightSizable(this.node));
 
     (this.node as HeightSizableNode).preferredHeight = preferredHeight === null ? null : Math.abs(this.trail!.getParentTransform().inverseDeltaY(preferredHeight));
   }

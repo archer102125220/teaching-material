@@ -63,7 +63,7 @@ export type ReadingBlockOptions = SelfOptions &
 // Use an assertion signature to narrow the type to ReadingBlockUtterance
 function assertReadingBlockUtterance(utterance: Utterance): asserts utterance is ReadingBlockUtterance {
   if (!(utterance instanceof ReadingBlockUtterance)) {
-    assert && assert(false, 'utterance is not a ReadinBlockUtterance');
+    window.assert && window.assert(false, 'utterance is not a ReadinBlockUtterance');
   }
 }
 
@@ -246,25 +246,25 @@ const ReadingBlock = memoize(<SuperType extends Constructor<Node>>(Type: SuperTy
       return utterance;
     }
 
-    public override setVoicingNameResponse(): void { assert && assert(false, 'ReadingBlocks only support setting the name response via readingBlockNameResponse'); }
+    public override setVoicingNameResponse(): void { window.assert && window.assert(false, 'ReadingBlocks only support setting the name response via readingBlockNameResponse'); }
 
-    public override getVoicingNameResponse(): IntentionalAny { assert && assert(false, 'ReadingBlocks only support getting the name response via readingBlockNameResponse'); }
+    public override getVoicingNameResponse(): IntentionalAny { window.assert && window.assert(false, 'ReadingBlocks only support getting the name response via readingBlockNameResponse'); }
 
-    public override setVoicingObjectResponse(): void { assert && assert(false, 'ReadingBlocks do not support setting object response'); }
+    public override setVoicingObjectResponse(): void { window.assert && window.assert(false, 'ReadingBlocks do not support setting object response'); }
 
-    public override getVoicingObjectResponse(): IntentionalAny { assert && assert(false, 'ReadingBlocks do not support setting object response'); }
+    public override getVoicingObjectResponse(): IntentionalAny { window.assert && window.assert(false, 'ReadingBlocks do not support setting object response'); }
 
-    public override setVoicingContextResponse(): void { assert && assert(false, 'ReadingBlocks do not support setting context response'); }
+    public override setVoicingContextResponse(): void { window.assert && window.assert(false, 'ReadingBlocks do not support setting context response'); }
 
-    public override getVoicingContextResponse(): IntentionalAny { assert && assert(false, 'ReadingBlocks do not support setting context response'); }
+    public override getVoicingContextResponse(): IntentionalAny { window.assert && window.assert(false, 'ReadingBlocks do not support setting context response'); }
 
-    public override setVoicingHintResponse(): void { assert && assert(false, 'ReadingBlocks only support setting the hint response via readingBlockHintResponse.'); }
+    public override setVoicingHintResponse(): void { window.assert && window.assert(false, 'ReadingBlocks only support setting the hint response via readingBlockHintResponse.'); }
 
-    public override getVoicingHintResponse(): IntentionalAny { assert && assert(false, 'ReadingBlocks only support getting the hint response via readingBlockHintResponse.'); }
+    public override getVoicingHintResponse(): IntentionalAny { window.assert && window.assert(false, 'ReadingBlocks only support getting the hint response via readingBlockHintResponse.'); }
 
-    public override setVoicingResponsePatternCollection(): void { assert && assert(false, 'ReadingBlocks only support setting the response patterns via readingBlockResponsePatternCollection.'); }
+    public override setVoicingResponsePatternCollection(): void { window.assert && window.assert(false, 'ReadingBlocks only support setting the response patterns via readingBlockResponsePatternCollection.'); }
 
-    public override getVoicingResponsePatternCollection(): IntentionalAny { assert && assert(false, 'ReadingBlocks only support getting the response patterns via readingBlockResponsePatternCollection.'); }
+    public override getVoicingResponsePatternCollection(): IntentionalAny { window.assert && window.assert(false, 'ReadingBlocks only support getting the response patterns via readingBlockResponsePatternCollection.'); }
 
     /**
      * Sets the highlight used to surround this Node while the Voicing framework is speaking this content.
@@ -418,7 +418,7 @@ const ReadingBlock = memoize(<SuperType extends Constructor<Node>>(Type: SuperTy
    *       cases that may apply.
    */
   ReadingBlockClass.prototype._mutatorKeys = READING_BLOCK_OPTION_KEYS.concat(ReadingBlockClass.prototype._mutatorKeys);
-  assert && assert(ReadingBlockClass.prototype._mutatorKeys.length === _.uniq(ReadingBlockClass.prototype._mutatorKeys).length,
+  window.assert && window.assert(ReadingBlockClass.prototype._mutatorKeys.length === _.uniq(ReadingBlockClass.prototype._mutatorKeys).length,
     'x mutator keys in ReadingBlock');
 
   return ReadingBlockClass;

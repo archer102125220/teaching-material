@@ -74,8 +74,8 @@ const Poolable = {
       useDefaultConstruction: false
     }, providedOptions ) as Required<PoolableOptions<Type>>;
 
-    assert && assert( options.maxSize >= 0 );
-    assert && assert( options.initialSize >= 0 );
+    window.assert && window.assert( options.maxSize >= 0 );
+    window.assert && window.assert( options.initialSize >= 0 );
 
     // The actual array we store things in. Always push/pop.
     const pool: InstanceType<Type>[] = [];
@@ -144,7 +144,7 @@ const Poolable = {
        * Sets the maximum pool size.
        */
       set maxPoolSize( value: number ) {
-        assert && assert( value === Number.POSITIVE_INFINITY || ( Number.isInteger( value ) && value >= 0 ), 'maxPoolSize should be a non-negative integer or infinity' );
+        window.assert && window.assert( value === Number.POSITIVE_INFINITY || ( Number.isInteger( value ) && value >= 0 ), 'maxPoolSize should be a non-negative integer or infinity' );
 
         maxPoolSize = value;
       },

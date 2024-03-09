@@ -23,7 +23,7 @@ const Heartbeat = {
    * Initializes the heartbeat div to begin ticking to prevent Safari from going to sleep.
    */
   start: function (sim: Sim): void {
-    assert && assert(!started, 'Heartbeat can only be started once');
+    window.assert && window.assert(!started, 'Heartbeat can only be started once');
     started = true;
 
     const heartbeatDiv = document.createElement('div');

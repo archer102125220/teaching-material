@@ -144,7 +144,7 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
       image.setAttribute(
         'transform',
         `scale(${Math.pow(2, level).toFixed(20)})`
-      ); // eslint-disable-line bad-sim-text
+      );
       image.setAttributeNS(xlinkns, 'xlink:href', url);
     } else {
       sceneryLog &&

@@ -40,7 +40,7 @@ export default class BatchedDOMEvent implements TPoolable {
 
   public initialize(eventContext: EventContext, type: BatchedDOMEventType, callback: BatchedDOMEventCallback): this {
     // called multiple times due to pooling, this should be re-entrant
-    assert && assert(eventContext.domEvent, 'for some reason, there is no DOM event?');
+    window.assert && window.assert(eventContext.domEvent, 'for some reason, there is no DOM event?');
 
     this.eventContext = eventContext;
     this.type = type;

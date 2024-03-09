@@ -382,7 +382,7 @@ class GreedyStitcher extends Stitcher {
    * @param {Drawable|null} lastStitchDrawable
    */
   processInterval(backbone, interval, firstStitchDrawable, lastStitchDrawable) {
-    assert && assert(interval instanceof ChangeInterval);
+    window.assert && window.assert(interval instanceof ChangeInterval);
     assert &&
       assert(
         firstStitchDrawable instanceof Drawable,
@@ -572,8 +572,8 @@ class GreedyStitcher extends Stitcher {
     const openBefore = isOpenBefore(firstDrawable);
     const openAfter = isOpenAfter(lastDrawable);
 
-    assert && assert(!openBefore || isFirst, 'openBefore implies isFirst');
-    assert && assert(!openAfter || isLast, 'openAfter implies isLast');
+    window.assert && window.assert(!openBefore || isFirst, 'openBefore implies isFirst');
+    window.assert && window.assert(!openAfter || isLast, 'openAfter implies isLast');
 
     assert &&
       assert(
@@ -854,7 +854,7 @@ class GreedyStitcher extends Stitcher {
       // backwards scan, hopefully it's faster?
       for (let i = this.reusableBlocks.length - 1; i >= 0; i--) {
         const tmpBlock = this.reusableBlocks[i];
-        assert && assert(!tmpBlock.used);
+        window.assert && window.assert(!tmpBlock.used);
         if (tmpBlock.renderer === renderer) {
           this.useBlockAtIndex(tmpBlock, i);
           block = tmpBlock;

@@ -14,7 +14,7 @@ class RunningAverage {
    * @param {number} windowSize - number of points to average
    */
   constructor(windowSize) {
-    assert && assert(windowSize > 0, 'window size must be positive');
+    window.assert && window.assert(windowSize > 0, 'window size must be positive');
 
     // @private {number}
     this.windowSize = windowSize;
@@ -76,18 +76,18 @@ class RunningAverage {
    * @returns {number}
    */
   updateRunningAverage(sample) {
-    assert && assert(typeof sample === 'number' && isFinite(sample));
+    window.assert && window.assert(typeof sample === 'number' && isFinite(sample));
 
     // Limit at the window size
     this.numSamples = Math.min(this.windowSize, this.numSamples + 1);
 
     // Remove the old sample (will be 0 if there was no sample yet, due to clear())
     this.total -= this.samples[this.sampleIndex];
-    assert && assert(isFinite(this.total));
+    window.assert && window.assert(isFinite(this.total));
 
     // Add in the new sample
     this.total += sample;
-    assert && assert(isFinite(this.total));
+    window.assert && window.assert(isFinite(this.total));
 
     // Overwrite in the array and move to the next index
     this.samples[this.sampleIndex] = sample;

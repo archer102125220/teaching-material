@@ -93,7 +93,7 @@ export default class LayoutCell {
    * (scenery-internal)
    */
   public get proxy(): LayoutProxy {
-    assert && assert(this._proxy);
+    window.assert && window.assert(this._proxy);
 
     return this._proxy!;
   }

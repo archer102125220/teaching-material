@@ -59,7 +59,7 @@ export default class FramedImage extends OpticalImage {
         const scaleFactor = framedObject.scaleFactor;
         const initialOrigin = framedObject.originOffset.timesScalar(scaleFactor);
 
-        assert && assert(htmlImageElement.width !== 0 && htmlImageElement.height !== 0, 'htmlImageElement is not loaded');
+        window.assert && window.assert(htmlImageElement.width !== 0 && htmlImageElement.height !== 0, 'htmlImageElement is not loaded');
         const initialWidth = htmlImageElement.width * scaleFactor;
         const initialHeight = htmlImageElement.height * scaleFactor;
 

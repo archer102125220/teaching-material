@@ -323,13 +323,13 @@ export default class PreferencesModel extends PhetioObject {
       if (assert) {
         const providedPortrayalIDs = portrayals.map(portrayal => portrayal.regionAndCultureID);
         const supportedRegionsAndCultures = simFeatures.supportedRegionsAndCultures;
-        assert && assert(_.every(providedPortrayalIDs, provided => supportedRegionsAndCultures.includes(provided)),
+        window.assert && window.assert(_.every(providedPortrayalIDs, provided => supportedRegionsAndCultures.includes(provided)),
           'Every provided RegionAndCulturePortrayal must be in the supportedRegionsAndCulture from package.json. Supported:', supportedRegionsAndCultures, 'Provided', providedPortrayalIDs);
-        assert && assert(_.every(supportedRegionsAndCultures, supported => providedPortrayalIDs.includes(supported)),
+        window.assert && window.assert(_.every(supportedRegionsAndCultures, supported => providedPortrayalIDs.includes(supported)),
           'Every supported RegionAndCultureID must be in the provided portrayals in preferences. Supported:', supportedRegionsAndCultures, 'Provided', providedPortrayalIDs);
-        assert && assert(supportedRegionsAndCultures.length === providedPortrayalIDs.length,
+        window.assert && window.assert(supportedRegionsAndCultures.length === providedPortrayalIDs.length,
           'number of supported regions and cultures should match the number of portrayals provided. Supported:', supportedRegionsAndCultures, 'Provided', providedPortrayalIDs);
-        assert && assert(_.uniq(supportedRegionsAndCultures).length === _.uniq(providedPortrayalIDs).length,
+        window.assert && window.assert(_.uniq(supportedRegionsAndCultures).length === _.uniq(providedPortrayalIDs).length,
           'No duplicates allowed in supported or provided regionAndCulture ids. Supported:', supportedRegionsAndCultures, 'Provided', providedPortrayalIDs);
       }
 
@@ -344,7 +344,7 @@ export default class PreferencesModel extends PhetioObject {
 
 
     if (this.audioModel.supportsExtraSound) {
-      assert && assert(this.audioModel.supportsSound, 'supportsSound must be true to also support extraSound');
+      window.assert && window.assert(this.audioModel.supportsSound, 'supportsSound must be true to also support extraSound');
     }
 
     this.addPhetioLinkedElementsForModel(options.tandem, this.simulationModel);

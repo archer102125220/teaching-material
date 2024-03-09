@@ -57,7 +57,7 @@ const NO_PLAYBACK_RATE_CHANGE = () => 1;
 
 // A function for a stubbed sound player, see usage.
 const STUB_SOUND_PLAYER_FUNCTION = (): void => {
-  assert && assert(false, 'Code error: This is a stubbed function and should never be invoked.');
+  window.assert && window.assert(false, 'Code error: This is a stubbed function and should never be invoked.');
 };
 
 type SelfOptions = {
@@ -161,15 +161,15 @@ class ValueChangeSoundPlayer extends Disposable {
     }, providedOptions);
 
     // option validity checks
-    assert && assert(
+    window.assert && window.assert(
       options.minimumInterMiddleSoundTime >= 0 && options.minimumInterMiddleSoundTime < 1,
       `unreasonable value for minimumInterMiddleSoundTime: ${options.minimumInterMiddleSoundTime}`
     );
-    assert && assert(
+    window.assert && window.assert(
       options.numberOfMiddleThresholds === null || options.interThresholdDelta === null,
       'cannot specify both the number of middle thresholds and the inter-threshold delta'
     );
-    assert && assert(
+    window.assert && window.assert(
       options.numberOfMiddleThresholds === null || Number.isInteger(options.numberOfMiddleThresholds),
       'numberOfMiddleThresholds must be an integer if specified'
     );
@@ -178,12 +178,12 @@ class ValueChangeSoundPlayer extends Disposable {
     // setting a different playback rate.  It should NOT be a SoundClipPlayer, since those are designed to be shared, so
     // the playback rate should never be changed.  The following assertions are intended to verify that these options
     // are set in a compatible way.
-    assert && assert(
+    window.assert && window.assert(
       options.middleMovingUpPlaybackRateMapper === NO_PLAYBACK_RATE_CHANGE ||
       options.middleMovingUpSoundPlayer instanceof SoundClip,
       'a sound player that supports playback rate changes is required when a playback rate mapper is used'
     );
-    assert && assert(
+    window.assert && window.assert(
       options.middleMovingDownPlaybackRateMapper === NO_PLAYBACK_RATE_CHANGE ||
       options.middleMovingDownSoundPlayer instanceof SoundClip,
       'a sound player that supports playback rate changes is required when a playback rate mapper is used'
@@ -216,7 +216,7 @@ class ValueChangeSoundPlayer extends Disposable {
         this.interThresholdDistance = options.interThresholdDelta;
       }
       else {
-        assert && assert(false, 'should never get here, it is a logic error if we do');
+        window.assert && window.assert(false, 'should never get here, it is a logic error if we do');
         this.interThresholdDistance = valueRange.getLength() / 2; // avoid uninitialized compile-time error
       }
     };

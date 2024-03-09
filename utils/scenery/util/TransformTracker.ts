@@ -93,7 +93,7 @@ class TransformTracker {
    */
   public removeListener(listener: () => void): void {
     const index = _.indexOf(this._listeners, listener);
-    assert && assert(index >= 0, 'TransformTracker listener not found');
+    window.assert && window.assert(index >= 0, 'TransformTracker listener not found');
 
     this._listeners.splice(index, 1);
   }

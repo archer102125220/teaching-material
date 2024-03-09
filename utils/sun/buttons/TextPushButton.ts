@@ -6,13 +6,13 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import optionize, { combineOptions } from '../../../phet-core/js/optionize.js';
-import { Font, Text, TextOptions, TPaint } from '../../../scenery/js/imports.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import sun from '../sun.js';
-import RectangularPushButton, { RectangularPushButtonOptions } from './RectangularPushButton.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import optionize, { combineOptions } from '../../phet-core/optionize';
+import { Font, Text, type TextOptions, type TPaint } from '../../scenery/imports';
+import Tandem from '../../tandem/Tandem';
+import sun from '../sun';
+import RectangularPushButton, { type RectangularPushButtonOptions } from './RectangularPushButton';
+import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
 
 type SelfOptions = {
   font?: Font;
@@ -27,9 +27,9 @@ export default class TextPushButton extends RectangularPushButton {
 
   private readonly disposeTextPushButton: () => void;
 
-  public constructor( string: string | TReadOnlyProperty<string>, providedOptions?: TextPushButtonOptions ) {
+  public constructor(string: string | TReadOnlyProperty<string>, providedOptions?: TextPushButtonOptions) {
 
-    const options = optionize<TextPushButtonOptions, StrictOmit<SelfOptions, 'textNodeOptions'>, RectangularPushButtonOptions>()( {
+    const options = optionize<TextPushButtonOptions, StrictOmit<SelfOptions, 'textNodeOptions'>, RectangularPushButtonOptions>()({
 
       // TextPushButtonOptions
       font: Font.DEFAULT,
@@ -40,16 +40,16 @@ export default class TextPushButton extends RectangularPushButton {
       tandem: Tandem.REQUIRED,
       tandemNameSuffix: 'Button',
       innerContent: string
-    }, providedOptions );
+    }, providedOptions);
 
-    const text = new Text( string, combineOptions<TextOptions>( {
+    const text = new Text(string, combineOptions<TextOptions>({
       font: options.font,
       fill: options.textFill,
       maxWidth: options.maxTextWidth
-    }, options.textNodeOptions ) );
+    }, options.textNodeOptions));
     options.content = text;
 
-    super( options );
+    super(options);
 
     this.disposeTextPushButton = () => {
       text.dispose();
@@ -62,4 +62,4 @@ export default class TextPushButton extends RectangularPushButton {
   }
 }
 
-sun.register( 'TextPushButton', TextPushButton );
+sun.register('TextPushButton', TextPushButton);

@@ -48,7 +48,7 @@ const HOME_SCREEN_ICON_ASPECT_RATIO = MINIMUM_HOME_SCREEN_ICON_SIZE.width / MINI
 const ICON_ASPECT_RATIO_TOLERANCE = 5E-3; // how close to the ideal aspect ratio an icon must be
 
 // Home screen and navigation bar icons must have the same aspect ratio, see https://github.com/phetsims/joist/issues/76
-assert && assert(Math.abs(HOME_SCREEN_ICON_ASPECT_RATIO - HOME_SCREEN_ICON_ASPECT_RATIO) < ICON_ASPECT_RATIO_TOLERANCE,
+window.assert && window.assert(Math.abs(HOME_SCREEN_ICON_ASPECT_RATIO - HOME_SCREEN_ICON_ASPECT_RATIO) < ICON_ASPECT_RATIO_TOLERANCE,
   'MINIMUM_HOME_SCREEN_ICON_SIZE and MINIMUM_NAVBAR_ICON_SIZE must have the same aspect ratio');
 
 // Documentation is by the defaults
@@ -152,10 +152,10 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
       phetioFeatured: true
     }, providedOptions);
 
-    assert && assert(_.includes(['black', 'white', null], options.showScreenIconFrameForNavigationBarFill),
+    window.assert && window.assert(_.includes(['black', 'white', null], options.showScreenIconFrameForNavigationBarFill),
       `invalid showScreenIconFrameForNavigationBarFill: ${options.showScreenIconFrameForNavigationBarFill}`);
 
-    assert && assert(typeof options.name !== 'string', 'Screen no longer supports a name string, instead it should be a Property<string>');
+    window.assert && window.assert(typeof options.name !== 'string', 'Screen no longer supports a name string, instead it should be a Property<string>');
 
     super(options);
 
@@ -179,7 +179,7 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
     validateIconSize(options.navigationBarIcon, MINIMUM_NAVBAR_ICON_SIZE, NAVBAR_ICON_ASPECT_RATIO, 'navigationBarIcon');
 
     if (assert && this.isPhetioInstrumented()) {
-      assert && assert(_.endsWith(options.tandem.phetioID, Tandem.SCREEN_TANDEM_NAME_SUFFIX), 'Screen tandems should end with Screen suffix');
+      window.assert && window.assert(_.endsWith(options.tandem.phetioID, Tandem.SCREEN_TANDEM_NAME_SUFFIX), 'Screen tandems should end with Screen suffix');
     }
 
     this.backgroundColorProperty = options.backgroundColorProperty;
@@ -250,25 +250,25 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
     }
 
     assert && this.activeProperty.lazyLink(() => {
-      assert && assert(this._view, 'isActive should not change before the Screen view has been initialized');
+      window.assert && window.assert(this._view, 'isActive should not change before the Screen view has been initialized');
 
       // In phet-io mode, the state of a sim can be set without a deterministic order. The activeProperty could be
       // changed before the view's visibility is set.
       if (!Tandem.PHET_IO_ENABLED) {
-        assert && assert(!this._view!.isVisible(), 'isActive should not change while the Screen view is visible');
+        window.assert && window.assert(!this._view!.isVisible(), 'isActive should not change while the Screen view is visible');
       }
     });
   }
 
   // Returns the model (if it has been constructed)
   public get model(): M {
-    assert && assert(this._model, 'Model has not yet been constructed');
+    window.assert && window.assert(this._model, 'Model has not yet been constructed');
     return this._model!;
   }
 
   // Returns the view (if it has been constructed)
   public get view(): V {
-    assert && assert(this._view, 'View has not yet been constructed');
+    window.assert && window.assert(this._view, 'View has not yet been constructed');
     return this._view!;
   }
 
@@ -290,7 +290,7 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
    * (joist-internal)
    */
   public initializeModel(): void {
-    assert && assert(this._model === null, 'there was already a model');
+    window.assert && window.assert(this._model === null, 'there was already a model');
     this._model = this.createModel();
   }
 
@@ -303,7 +303,7 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
    * @param isHomeScreen - if this screen is the home screen.
    */
   public initializeView(simNameProperty: TReadOnlyProperty<string>, displayedSimNameProperty: TReadOnlyProperty<string>, numberOfScreens: number, isHomeScreen: boolean): void {
-    assert && assert(this._view === null, 'there was already a view');
+    window.assert && window.assert(this._view === null, 'there was already a view');
     this._view = this.createView(this.model);
     this._view.setVisible(false); // a Screen is invisible until selected
 
@@ -358,12 +358,12 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
  * @param name - the name of the icon type (for assert messages)
  */
 function validateIconSize(icon: Node, minimumSize: Dimension2, aspectRatio: number, name: string): void {
-  assert && assert(icon.width >= minimumSize.width, `${name} width is too small: ${icon.width} < ${minimumSize.width}`);
-  assert && assert(icon.height >= minimumSize.height, `${name} height is too small: ${icon.height} < ${minimumSize.height}`);
+  window.assert && window.assert(icon.width >= minimumSize.width, `${name} width is too small: ${icon.width} < ${minimumSize.width}`);
+  window.assert && window.assert(icon.height >= minimumSize.height, `${name} height is too small: ${icon.height} < ${minimumSize.height}`);
 
   // Validate home screen aspect ratio
   const actualAspectRatio = icon.width / icon.height;
-  assert && assert(
+  window.assert && window.assert(
     Math.abs(aspectRatio - actualAspectRatio) < ICON_ASPECT_RATIO_TOLERANCE,
     `${name} has invalid aspect ratio: ${actualAspectRatio}`
   );

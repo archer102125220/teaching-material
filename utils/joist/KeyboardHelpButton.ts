@@ -56,7 +56,7 @@ class KeyboardHelpButton extends JoistButton {
 
     let keyboardHelpDialogCapsule: PhetioCapsule<KeyboardHelpDialog> | null = null; // set after calling super
     options.listener = () => {
-      assert && assert(keyboardHelpDialogCapsule);
+      window.assert && window.assert(keyboardHelpDialogCapsule);
 
       const keyboardHelpDialog = keyboardHelpDialogCapsule!.getElement();
 

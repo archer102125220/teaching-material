@@ -23,7 +23,7 @@ export default class PhetFont extends Font {
    */
   public constructor(providedOptions?: number | string | FontOptions) {
 
-    assert && assert(arguments.length === 0 || arguments.length === 1, 'Too many arguments');
+    window.assert && window.assert(arguments.length === 0 || arguments.length === 1, 'Too many arguments');
 
     // convenience constructor: new PhetFont( {number|string} size )
     let options: FontOptions;
@@ -40,7 +40,7 @@ export default class PhetFont extends Font {
     }, options);
 
     // Guarantee a fallback family
-    assert && assert(options.family);
+    window.assert && window.assert(options.family);
 
     options.family = [
       options.family,

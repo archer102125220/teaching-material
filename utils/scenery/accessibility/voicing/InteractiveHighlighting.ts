@@ -37,7 +37,7 @@ export type InteractiveHighlightingOptions = SelfOptions;
 const InteractiveHighlighting = memoize(<SuperType extends Constructor<Node>>(Type: SuperType) => {
 
   // @ts-expect-error
-  assert && assert(!Type._mixesInteractiveHighlighting, 'InteractiveHighlighting is already added to this Type');
+  window.assert && window.assert(!Type._mixesInteractiveHighlighting, 'InteractiveHighlighting is already added to this Type');
 
   const InteractiveHighlightingClass = DelayedMutate('InteractiveHighlightingClass', INTERACTIVE_HIGHLIGHTING_OPTIONS, class InteractiveHighlightingClass extends Type {
 
@@ -145,7 +145,7 @@ const InteractiveHighlighting = memoize(<SuperType extends Constructor<Node>>(Ty
         if (this._interactiveHighlightLayerable) {
 
           // if focus highlight is layerable, it must be a node for the scene graph
-          assert && assert(interactiveHighlight instanceof Node); // eslint-disable-line no-simple-type-checking-assertions
+          window.assert && window.assert(interactiveHighlight instanceof Node); // eslint-disable-line no-simple-type-checking-assertions
 
           // make sure the highlight is invisible, the HighlightOverlay will manage visibility
           (interactiveHighlight as Node).visible = false;
@@ -176,7 +176,7 @@ const InteractiveHighlighting = memoize(<SuperType extends Constructor<Node>>(Ty
         this._interactiveHighlightLayerable = interactiveHighlightLayerable;
 
         if (this._interactiveHighlight) {
-          assert && assert(this._interactiveHighlight instanceof Node);
+          window.assert && window.assert(this._interactiveHighlight instanceof Node);
           (this._interactiveHighlight as Node).visible = false;
 
           this.interactiveHighlightChangedEmitter.emit();
@@ -505,7 +505,7 @@ const InteractiveHighlighting = memoize(<SuperType extends Constructor<Node>>(Ty
      * Save the Pointer and add a listener to it to remove highlights when a pointer is released/cancelled.
      */
     private savePointer(eventPointer: Pointer): void {
-      assert && assert(
+      window.assert && window.assert(
         this._pointer === null,
         'It should be impossible to already have a Pointer before locking from touchSnag'
       );
@@ -527,7 +527,7 @@ const InteractiveHighlighting = memoize(<SuperType extends Constructor<Node>>(Ty
       // If the event Pointer is attached to a PressListener there is some activation input happening, so
       // we should "lock" the highlight to this target until the pointer is released.
       if (eventPointer.attachedListener && eventPointer.attachedListener.listener instanceof PressListener) {
-        assert && assert(this._pointer === null,
+        window.assert && window.assert(this._pointer === null,
           'It should be impossible to already have a Pointer before locking from touchSnag');
 
         // A COPY of the focus is saved to the Property because we need the value of the Trail at this event.
@@ -535,7 +535,7 @@ const InteractiveHighlighting = memoize(<SuperType extends Constructor<Node>>(Ty
 
         // Attach a listener that will clear the pointer and its listener if the lockedPointerFocusProperty is cleared
         // externally (not by InteractiveHighlighting).
-        assert && assert(!focusManager.lockedPointerFocusProperty.hasListener(this._boundPointerFocusClearedListener),
+        window.assert && window.assert(!focusManager.lockedPointerFocusProperty.hasListener(this._boundPointerFocusClearedListener),
           'this listener still on the lockedPointerFocusProperty indicates a memory leak'
         );
         focusManager.lockedPointerFocusProperty.link(this._boundPointerFocusClearedListener);
@@ -582,7 +582,7 @@ const InteractiveHighlighting = memoize(<SuperType extends Constructor<Node>>(Ty
      * Display that turns on highlighting when the feature is enabled.
      */
     public onChangedInstance(instance: Instance, added: boolean): void {
-      assert && assert(instance.trail, 'should have a trail');
+      window.assert && window.assert(instance.trail, 'should have a trail');
 
       if (added) {
         this.displays[instance.trail!.uniqueId] = instance.display;
@@ -590,7 +590,7 @@ const InteractiveHighlighting = memoize(<SuperType extends Constructor<Node>>(Ty
         this.onDisplayAdded(instance.display);
       }
       else {
-        assert && assert(instance.node, 'should have a node');
+        window.assert && window.assert(instance.node, 'should have a node');
         const display = this.displays[instance.trail!.uniqueId];
 
         // If the node was disposed, this display reference has already been cleaned up, but instances are updated
@@ -640,7 +640,7 @@ const InteractiveHighlighting = memoize(<SuperType extends Constructor<Node>>(Ty
    */
   InteractiveHighlightingClass.prototype._mutatorKeys = INTERACTIVE_HIGHLIGHTING_OPTIONS.concat(InteractiveHighlightingClass.prototype._mutatorKeys);
 
-  assert && assert(InteractiveHighlightingClass.prototype._mutatorKeys.length ===
+  window.assert && window.assert(InteractiveHighlightingClass.prototype._mutatorKeys.length ===
     _.uniq(InteractiveHighlightingClass.prototype._mutatorKeys).length,
     'duplicate mutator keys in InteractiveHighlighting');
 

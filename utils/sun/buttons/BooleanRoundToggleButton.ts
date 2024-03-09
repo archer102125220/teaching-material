@@ -6,14 +6,14 @@
  * @author Sam Reid
  */
 
-import Tandem from '../../../tandem/js/Tandem.js';
-import BooleanToggleNode from '../BooleanToggleNode.js';
-import sun from '../sun.js';
-import RoundToggleButton, { RoundToggleButtonOptions } from './RoundToggleButton.js';
-import { Node } from '../../../scenery/js/imports.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import Property from '../../../axon/js/Property.js';
+import Tandem from '../../tandem/Tandem';
+import BooleanToggleNode from '../BooleanToggleNode';
+import sun from '../sun';
+import RoundToggleButton, { type RoundToggleButtonOptions } from './RoundToggleButton';
+import { Node } from '../../scenery/imports';
+import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import Property from '../../axon/Property';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -29,23 +29,23 @@ class BooleanRoundToggleButton extends RoundToggleButton<boolean> {
    * @param falseNode - shown when booleanProperty is false
    * @param providedOptions?
    */
-  public constructor( booleanProperty: Property<boolean>, trueNode: Node, falseNode: Node,
-                      providedOptions?: BooleanRoundToggleButtonOptions ) {
+  public constructor(booleanProperty: Property<boolean>, trueNode: Node, falseNode: Node,
+    providedOptions?: BooleanRoundToggleButtonOptions) {
 
-    const options = optionize<BooleanRoundToggleButtonOptions, SelfOptions, RoundToggleButtonOptions>()( {
+    const options = optionize<BooleanRoundToggleButtonOptions, SelfOptions, RoundToggleButtonOptions>()({
       content: null,
       tandem: Tandem.REQUIRED,
       tandemNameSuffix: 'Button'
-    }, providedOptions );
+    }, providedOptions);
 
-    const toggleNode = new BooleanToggleNode( booleanProperty, trueNode, falseNode, {
-      tandem: options.tandem.createTandem( 'toggleNode' )
-    } );
+    const toggleNode = new BooleanToggleNode(booleanProperty, trueNode, falseNode, {
+      tandem: options.tandem.createTandem('toggleNode')
+    });
     options.content = toggleNode;
 
-    super( booleanProperty, false, true, options );
+    super(booleanProperty, false, true, options);
 
-    this.disposeBooleanRoundToggleButton = function() {
+    this.disposeBooleanRoundToggleButton = function () {
       toggleNode.dispose();
     };
   }
@@ -56,5 +56,5 @@ class BooleanRoundToggleButton extends RoundToggleButton<boolean> {
   }
 }
 
-sun.register( 'BooleanRoundToggleButton', BooleanRoundToggleButton );
+sun.register('BooleanRoundToggleButton', BooleanRoundToggleButton);
 export default BooleanRoundToggleButton;

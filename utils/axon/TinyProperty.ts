@@ -107,9 +107,9 @@ export default class TinyProperty<T> extends TinyEmitter<TinyPropertyEmitterPara
       const bObject = b as unknown as ComparableObject;
 
       if (aObject && bObject && aObject.constructor === bObject.constructor) {
-        assert && assert(!!aObject.equals, 'no equals function for 1st arg');
-        assert && assert(!!bObject.equals, 'no equals function for 2nd arg');
-        assert && assert(aObject.equals(bObject) === bObject.equals(aObject), 'incompatible equality checks');
+        window.assert && window.assert(!!aObject.equals, 'no equals function for 1st arg');
+        window.assert && window.assert(!!bObject.equals, 'no equals function for 2nd arg');
+        window.assert && window.assert(aObject.equals(bObject) === bObject.equals(aObject), 'incompatible equality checks');
         return aObject.equals(bObject);
       }
     }

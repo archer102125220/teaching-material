@@ -80,7 +80,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
                       range: Range,
                       providedOptions?: ContinuousPropertySoundGeneratorOptions ) {
 
-    assert && assert(
+    window.assert && window.assert(
       !providedOptions || !providedOptions.loop,
       'loop option should be supplied by ContinuousPropertySoundGenerator'
     );

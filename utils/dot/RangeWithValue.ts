@@ -24,8 +24,8 @@ class RangeWithValue extends Range {
 
     super(min, max);
 
-    assert && assert(defaultValue !== undefined, 'default value is required');
-    assert && assert(defaultValue >= min && defaultValue <= max, `defaultValue is out of range: ${defaultValue}`);
+    window.assert && window.assert(defaultValue !== undefined, 'default value is required');
+    window.assert && window.assert(defaultValue >= min && defaultValue <= max, `defaultValue is out of range: ${defaultValue}`);
 
     this._defaultValue = defaultValue;
   }
@@ -46,7 +46,7 @@ class RangeWithValue extends Range {
    * Setter for min
    */
   public override setMin(min: number): void {
-    assert && assert(this._defaultValue >= min, `min must be <= defaultValue: ${min}`);
+    window.assert && window.assert(this._defaultValue >= min, `min must be <= defaultValue: ${min}`);
     super.setMin(min);
   }
 
@@ -54,7 +54,7 @@ class RangeWithValue extends Range {
    * Setter for max
    */
   public override setMax(max: number): void {
-    assert && assert(this._defaultValue <= max, `max must be >= defaultValue: ${max}`);
+    window.assert && window.assert(this._defaultValue <= max, `max must be >= defaultValue: ${max}`);
     super.setMax(max);
   }
 
@@ -62,8 +62,8 @@ class RangeWithValue extends Range {
    * Setter for min and max
    */
   public override setMinMax(min: number, max: number): this {
-    assert && assert(this._defaultValue >= min, `min must be <= defaultValue: ${min}`);
-    assert && assert(this._defaultValue <= max, `max must be >= defaultValue: ${max}`);
+    window.assert && window.assert(this._defaultValue >= min, `min must be <= defaultValue: ${min}`);
+    window.assert && window.assert(this._defaultValue <= max, `max must be >= defaultValue: ${max}`);
 
     // REVIEW: Same as setMinMax in Range.ts, returning a value in a setter seems odd...
     return super.setMinMax(min, max);

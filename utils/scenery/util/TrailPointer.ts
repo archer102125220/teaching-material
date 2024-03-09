@@ -40,7 +40,7 @@ export default class TrailPointer {
   }
 
   public copy(): TrailPointer {
-    assert && assert(this.isActive());
+    window.assert && window.assert(this.isActive());
     return new TrailPointer((this as ActiveTrailPointer).trail.copy(), this.isBefore);
   }
 
@@ -53,7 +53,7 @@ export default class TrailPointer {
    * Return the equivalent pointer that swaps before and after (may return null if it doesn't exist)
    */
   public getRenderSwappedPointer(): TrailPointer | null {
-    assert && assert(this.isActive());
+    window.assert && window.assert(this.isActive());
     const activeSelf = this as ActiveTrailPointer;
 
     const newTrail = this.isBefore ? activeSelf.trail.previous() : activeSelf.trail.next();
@@ -79,13 +79,13 @@ export default class TrailPointer {
    * other pointer, and 1 if this pointer is after the other pointer.
    */
   public compareRender(other: TrailPointer): number {
-    assert && assert(other !== null);
+    window.assert && window.assert(other !== null);
 
     const a = this.getRenderBeforePointer();
     const b = other.getRenderBeforePointer();
 
     if (a !== null && b !== null) {
-      assert && assert(a.isActive() && b.isActive());
+      window.assert && window.assert(a.isActive() && b.isActive());
 
       // normal (non-degenerate) case
       return (a as ActiveTrailPointer).trail.compare((b as ActiveTrailPointer).trail);
@@ -108,9 +108,9 @@ export default class TrailPointer {
    * TODO: optimization? https://github.com/phetsims/scenery/issues/1581
    */
   public compareNested(other: TrailPointer): number {
-    assert && assert(other);
+    window.assert && window.assert(other);
 
-    assert && assert(this.isActive() && other.isActive());
+    window.assert && window.assert(this.isActive() && other.isActive());
     const activeSelf = this as ActiveTrailPointer;
     const activeOther = other as ActiveTrailPointer;
 
@@ -163,7 +163,7 @@ export default class TrailPointer {
    * TODO: refactor with "Side"-like handling https://github.com/phetsims/scenery/issues/1581
    */
   public nestedForwards(): this | null {
-    assert && assert(this.isActive());
+    window.assert && window.assert(this.isActive());
     const activeSelf = this as ActiveTrailPointer;
 
     if (this.isBefore) {
@@ -207,7 +207,7 @@ export default class TrailPointer {
    * Moves this pointer backwards one step in the nested order
    */
   public nestedBackwards(): this | null {
-    assert && assert(this.isActive());
+    window.assert && window.assert(this.isActive());
     const activeSelf = this as ActiveTrailPointer;
 
     if (this.isBefore) {
@@ -263,7 +263,7 @@ export default class TrailPointer {
 
     // since we exclude endpoints in the depthFirstUntil call, we need to fire this off first
     if (this.isBefore) {
-      assert && assert(this.isActive());
+      window.assert && window.assert(this.isActive());
       callback((this as ActiveTrailPointer).trail);
     }
 
@@ -284,13 +284,13 @@ export default class TrailPointer {
    * (applies only to before-pointers)
    */
   public depthFirstUntil(other: TrailPointer, callback: ActiveTrailPointerCallback, excludeEndpoints: boolean): void {
-    assert && assert(this.isActive() && other.isActive());
+    window.assert && window.assert(this.isActive() && other.isActive());
     const activeSelf = this as ActiveTrailPointer;
     const activeOther = other as ActiveTrailPointer;
 
     // make sure this pointer is before the other, but allow start === end if we are not excluding endpoints
-    assert && assert(this.compareNested(other) <= (excludeEndpoints ? -1 : 0), 'TrailPointer.depthFirstUntil pointers out of order, possibly in both meanings of the phrase!');
-    assert && assert(activeSelf.trail.rootNode() === activeOther.trail.rootNode(), 'TrailPointer.depthFirstUntil takes pointers with the same root');
+    window.assert && window.assert(this.compareNested(other) <= (excludeEndpoints ? -1 : 0), 'TrailPointer.depthFirstUntil pointers out of order, possibly in both meanings of the phrase!');
+    window.assert && window.assert(activeSelf.trail.rootNode() === activeOther.trail.rootNode(), 'TrailPointer.depthFirstUntil takes pointers with the same root');
 
     // sanity check TODO: remove later https://github.com/phetsims/scenery/issues/1581
     activeSelf.trail.reindex();
@@ -302,7 +302,7 @@ export default class TrailPointer {
     let first = true;
 
     while (!pointer.equalsNested(other)) {
-      assert && assert(pointer.compareNested(other) !== 1, 'skipped in depthFirstUntil');
+      window.assert && window.assert(pointer.compareNested(other) !== 1, 'skipped in depthFirstUntil');
       let skipSubtree: boolean | void = false; // eslint-disable-line @typescript-eslint/no-invalid-void-type
 
       if (first) {
@@ -341,7 +341,7 @@ export default class TrailPointer {
    * Returns a string form of this object
    */
   public toString(): string {
-    assert && assert(this.isActive());
+    window.assert && window.assert(this.isActive());
 
     return `[${this.isBefore ? 'before' : 'after'} ${(this as ActiveTrailPointer).trail.toString().slice(1)}`;
   }

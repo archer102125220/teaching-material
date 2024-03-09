@@ -299,7 +299,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
    * Returns the row index of a child Node (or if it spans multiple rows, the first row)
    */
   public getRowOfNode(node: Node): number {
-    assert && assert(this.children.includes(node));
+    window.assert && window.assert(this.children.includes(node));
 
     return this.constraint.getCellFromNode(node)!.position.vertical;
   }
@@ -308,7 +308,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
    * Returns the column index of a child Node (or if it spans multiple columns, the first row)
    */
   public getColumnOfNode(node: Node): number {
-    assert && assert(this.children.includes(node));
+    window.assert && window.assert(this.children.includes(node));
 
     return this.constraint.getCellFromNode(node)!.position.horizontal;
   }
@@ -388,7 +388,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   }
 
   public set autoRows(value: number | null) {
-    assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 1));
+    window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 1));
 
     if (this._autoRows !== value) {
       this._autoRows = value;
@@ -402,7 +402,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   }
 
   public set autoColumns(value: number | null) {
-    assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 1));
+    window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 1));
 
     if (this._autoColumns !== value) {
       this._autoColumns = value;
@@ -467,7 +467,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
 
   // Updates rows or columns, whichever is active at the moment (if any)
   private updateAllAutoLines(): void {
-    assert && assert(this._autoRows === null || this._autoColumns === null,
+    window.assert && window.assert(this._autoRows === null || this._autoColumns === null,
       'autoRows and autoColumns should not both be set when updating children');
 
     this.updateAutoRows();
@@ -513,7 +513,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
   private onGridBoxChildRemoved(node: Node): void {
 
     const cell = this._cellMap.get(node)!;
-    assert && assert(cell);
+    window.assert && window.assert(cell);
 
     this._cellMap.delete(node);
 
@@ -530,7 +530,7 @@ export default class GridBox extends LayoutNode<GridConstraint> {
     // children can be used with one of autoRows/autoColumns, but otherwise these options are exclusive
     assertMutuallyExclusiveOptions(options, ['rows'], ['columns'], ['children', 'autoRows', 'autoColumns']);
     if (options) {
-      assert && assert(typeof options.autoRows !== 'number' || typeof options.autoColumns !== 'number',
+      window.assert && window.assert(typeof options.autoRows !== 'number' || typeof options.autoColumns !== 'number',
         'autoRows and autoColumns should not be specified both as non-null at the same time');
     }
 

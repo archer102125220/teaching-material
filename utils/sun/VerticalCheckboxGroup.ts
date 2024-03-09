@@ -58,7 +58,7 @@ export default class VerticalCheckboxGroup extends VBox {
       const item = items[i];
       const node = nodes[i];
 
-      assert && assert(!node.hasPDOMContent,
+      window.assert && window.assert(!node.hasPDOMContent,
         'Accessibility is provided by Checkbox and VerticalCheckboxGroupItem.options. ' +
         'Additional PDOM content in the provided Node could break accessibility.');
 
@@ -66,7 +66,7 @@ export default class VerticalCheckboxGroup extends VBox {
       const yDilation = options.spacing / 2;
 
       // @ts-expect-error - runtime check to prevent prior pattern, see https://github.com/phetsims/sun/issues/794
-      assert && assert(!item.tandem, 'Cannot specify tandem on item, use tandemName instead');
+      window.assert && window.assert(!item.tandem, 'Cannot specify tandem on item, use tandemName instead');
 
       const checkbox = new Checkbox(item.property, node,
         combineOptions<CheckboxOptions>({

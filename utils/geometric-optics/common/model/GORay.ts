@@ -32,7 +32,7 @@ export default class GORay extends Ray2 {
    * Sets the length of the ray.
    */
   public setLength(length: number): void {
-    assert && assert(isFinite(length) && length > 0);
+    window.assert && window.assert(isFinite(length) && length > 0);
     this.length = length;
   }
 
@@ -48,7 +48,7 @@ export default class GORay extends Ray2 {
    * The final point must be along the direction of the ray.
    */
   public setFinalPoint(finalPoint: Vector2): void {
-    assert && assert(this.isPointAlongRay(finalPoint), 'final point is not along ray');
+    window.assert && window.assert(this.isPointAlongRay(finalPoint), 'final point is not along ray');
     this.setLength(finalPoint.minus(this.position).magnitude);
   }
 

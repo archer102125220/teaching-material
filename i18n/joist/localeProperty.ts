@@ -21,7 +21,7 @@ const FALLBACK_LOCALE = 'en';
 export type Locale = keyof typeof localeInfoModule;
 
 // All available locales for the runtime
-export const availableRuntimeLocales = _.sortBy(Object.keys(phet.chipper.strings), locale => {
+export const availableRuntimeLocales = _.sortBy(Object.keys(window.phet.chipper.strings), locale => {
   return StringUtils.localeToLocalizedName(locale).toLowerCase();
 }) as Locale[];
 
@@ -53,7 +53,7 @@ class LocaleProperty extends Property<Locale> {
       super.unguardedSet(value);
     }
     else {
-      assert && assert(false, 'Unsupported locale: ' + value);
+      window.assert && window.assert(false, 'Unsupported locale: ' + value);
 
       // Do not try to set if the value was invalid
     }

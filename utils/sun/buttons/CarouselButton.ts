@@ -70,7 +70,7 @@ export default class CarouselButton extends RectangularPushButton {
     }
 
     // validate options
-    assert && assert( ANGLES.hasOwnProperty( options.arrowDirection ), `invalid direction: ${options.arrowDirection}` );
+    window.assert && window.assert( ANGLES.hasOwnProperty( options.arrowDirection ), `invalid direction: ${options.arrowDirection}` );
 
     // Generic arrow shape, points 'up'
     let arrowShape = new Shape()

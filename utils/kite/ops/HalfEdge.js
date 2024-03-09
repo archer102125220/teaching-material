@@ -41,8 +41,8 @@ class HalfEdge {
    * @returns {HalfEdge} - This reference for chaining
    */
   initialize(edge, isReversed) {
-    assert && assert(edge instanceof kite.Edge);
-    assert && assert(typeof isReversed === 'boolean');
+    window.assert && window.assert(edge instanceof kite.Edge);
+    window.assert && window.assert(typeof isReversed === 'boolean');
 
     // @public {Edge|null} - Null if disposed (in pool)
     this.edge = edge;
@@ -125,7 +125,7 @@ class HalfEdge {
       if (filter && !filter(halfEdge.edge)) {
         continue;
       }
-      assert && assert(this.endVertex === halfEdge.startVertex);
+      window.assert && window.assert(this.endVertex === halfEdge.startVertex);
       return halfEdge;
     }
   }
@@ -141,8 +141,8 @@ class HalfEdge {
     this.endVertex = this.isReversed
       ? this.edge.startVertex
       : this.edge.endVertex;
-    assert && assert(this.startVertex);
-    assert && assert(this.endVertex);
+    window.assert && window.assert(this.startVertex);
+    window.assert && window.assert(this.endVertex);
   }
 
   /**

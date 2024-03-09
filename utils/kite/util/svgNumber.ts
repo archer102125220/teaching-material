@@ -12,7 +12,7 @@
 import { kite } from '../imports';
 
 const svgNumber = (n: number): string => {
-  return n.toFixed(20); // eslint-disable-line bad-sim-text
+  return n.toFixed(20);
 };
 
 kite.register('svgNumber', svgNumber);

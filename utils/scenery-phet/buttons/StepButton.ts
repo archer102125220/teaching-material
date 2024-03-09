@@ -51,13 +51,13 @@ export default class StepButton extends RoundPushButton {
       appendDescription: true
     }, providedOptions );
 
-    assert && assert( options.direction === 'forward' || options.direction === 'backward',
+    window.assert && window.assert( options.direction === 'forward' || options.direction === 'backward',
       `unsupported direction: ${options.direction}` );
 
     // shift the content to center align, assumes 3D appearance and specific content
     options.xContentOffset = ( options.direction === 'forward' ) ? ( 0.075 * options.radius ) : ( -0.15 * options.radius );
 
-    assert && assert( options.xMargin === undefined && options.yMargin === undefined, 'StepButton sets margins' );
+    window.assert && window.assert( options.xMargin === undefined && options.yMargin === undefined, 'StepButton sets margins' );
     options.xMargin = options.yMargin = options.radius * MARGIN_COEFFICIENT;
 
     // step icon is sized relative to the radius

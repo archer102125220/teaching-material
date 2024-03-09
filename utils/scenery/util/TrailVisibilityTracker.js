@@ -61,7 +61,7 @@ class TrailVisibilityTracker {
    * @param {Function} listener - Listener will be called with no arguments.
    */
   addListener(listener) {
-    assert && assert(typeof listener === 'function');
+    window.assert && window.assert(typeof listener === 'function');
     this._listeners.push(listener);
   }
 
@@ -72,10 +72,10 @@ class TrailVisibilityTracker {
    * @param {Function} listener
    */
   removeListener(listener) {
-    assert && assert(typeof listener === 'function');
+    window.assert && window.assert(typeof listener === 'function');
 
     const index = _.indexOf(this._listeners, listener);
-    assert && assert(index >= 0, 'TrailVisibilityTracker listener not found');
+    window.assert && window.assert(index >= 0, 'TrailVisibilityTracker listener not found');
 
     this._listeners.splice(index, 1);
   }

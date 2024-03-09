@@ -25,7 +25,7 @@ import { combineOptions } from '../../phet-core/optionize';
 import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
 import phetioElementSelectionProperty from '../../tandem/phetioElementSelectionProperty';
 
-const STRING_PROPERTY_NAME = 'stringProperty'; // eslint-disable-line bad-sim-text
+const STRING_PROPERTY_NAME = 'stringProperty';
 
 // constants
 const TEXT_OPTION_KEYS = [
@@ -90,7 +90,7 @@ export default class Text extends Paintable(Node) {
    *                             along-side options for Node
    */
   public constructor(string: string | number | TReadOnlyProperty<string>, options?: TextOptions) {
-    assert && assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
+    window.assert && window.assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
       'Extra prototype on Node options object is a code smell');
 
     super();
@@ -111,7 +111,7 @@ export default class Text extends Paintable(Node) {
       phetioVisiblePropertyInstrumented: false
     }, options);
 
-    assert && assert(!definedOptions.hasOwnProperty('string') && !definedOptions.hasOwnProperty(Text.STRING_PROPERTY_TANDEM_NAME),
+    window.assert && window.assert(!definedOptions.hasOwnProperty('string') && !definedOptions.hasOwnProperty(Text.STRING_PROPERTY_TANDEM_NAME),
       'provide string and stringProperty through constructor arg please');
 
     if (typeof string === 'string' || typeof string === 'number') {
@@ -129,7 +129,7 @@ export default class Text extends Paintable(Node) {
   public override mutate(options?: TextOptions): this {
 
     if (assert && options && options.hasOwnProperty('string') && options.hasOwnProperty(STRING_PROPERTY_NAME)) {
-      assert && assert(options.stringProperty!.value === options.string, 'If both string and stringProperty are provided, then values should match');
+      window.assert && window.assert(options.stringProperty!.value === options.string, 'If both string and stringProperty are provided, then values should match');
     }
     return super.mutate(options);
   }
@@ -140,7 +140,7 @@ export default class Text extends Paintable(Node) {
    * @param string - The string to display. If it's a number, it will be cast to a string
    */
   public setString(string: string | number): this {
-    assert && assert(string !== null && string !== undefined, 'String should be defined and non-null. Use the empty string if needed.');
+    window.assert && window.assert(string !== null && string !== undefined, 'String should be defined and non-null. Use the empty string if needed.');
 
     // cast it to a string (for numbers, etc., and do it before the change guard so we don't accidentally trigger on non-changed string)
     string = `${string}`;
@@ -279,7 +279,7 @@ export default class Text extends Paintable(Node) {
    *       when the text isn't the empty string.
    */
   public setBoundsMethod(method: TextBoundsMethod): this {
-    assert && assert(method === 'fast' || method === 'fastCanvas' || method === 'accurate' || method === 'hybrid', 'Unknown Text boundsMethod');
+    window.assert && window.assert(method === 'fast' || method === 'fastCanvas' || method === 'accurate' || method === 'hybrid', 'Unknown Text boundsMethod');
     if (method !== this._boundsMethod) {
       this._boundsMethod = method;
       this.invalidateSupportedRenderers();
@@ -375,7 +375,7 @@ export default class Text extends Paintable(Node) {
       selfBounds = TextBounds.accurateCanvasBounds(this);
     }
     else {
-      assert && assert(this._boundsMethod === 'fast' || this._boundsMethod === 'fastCanvas');
+      window.assert && window.assert(this._boundsMethod === 'fast' || this._boundsMethod === 'fastCanvas');
       selfBounds = TextBounds.approximateSVGBounds(this._font, this.renderedText);
     }
 
@@ -747,7 +747,7 @@ export default class Text extends Paintable(Node) {
       }
       // Pop a direction
       else if (chr === POP) {
-        assert && assert(current.parent, `Bad nesting of embedding marks: ${Text.embeddedDebugString(string)}`);
+        window.assert && window.assert(current.parent, `Bad nesting of embedding marks: ${Text.embeddedDebugString(string)}`);
         current = current.parent!;
       }
       // Append characters to the current direction
@@ -755,7 +755,7 @@ export default class Text extends Paintable(Node) {
         current.children.push(chr);
       }
     }
-    assert && assert(current === root, `Bad nesting of embedding marks: ${Text.embeddedDebugString(string)}`);
+    window.assert && window.assert(current === root, `Bad nesting of embedding marks: ${Text.embeddedDebugString(string)}`);
 
     // Remove redundant nesting (e.g. [LTR][LTR]...[POP][POP])
     function collapseNesting(node: EmbedNode): void {

@@ -5,9 +5,9 @@
  * @author John Blanco
  */
 
-import Enumeration from '../../../phet-core/js/Enumeration.js';
-import EnumerationValue from '../../../phet-core/js/EnumerationValue.js';
-import sun from '../sun.js';
+import Enumeration from '../../phet-core/Enumeration';
+import EnumerationValue from '../../phet-core/EnumerationValue';
+import sun from '../sun';
 
 export default class RadioButtonInteractionState extends EnumerationValue {
 
@@ -23,7 +23,7 @@ export default class RadioButtonInteractionState extends EnumerationValue {
   // the button is being pressed by the user
   public static readonly PRESSED = new RadioButtonInteractionState();
 
-  public static readonly enumeration = new Enumeration( RadioButtonInteractionState );
+  public static readonly enumeration = new Enumeration(RadioButtonInteractionState);
 }
 
-sun.register( 'RadioButtonInteractionState', RadioButtonInteractionState );
+sun.register('RadioButtonInteractionState', RadioButtonInteractionState);

@@ -96,7 +96,7 @@ export default class NumberProperty extends Property<number> implements TRangedP
     }, options.rangePropertyOptions);
 
     if (assert && Tandem.VALIDATION && options.rangePropertyOptions.tandem && options.rangePropertyOptions.tandem.supplied) {
-      assert && assert(options.rangePropertyOptions.tandem.name === RANGE_PROPERTY_TANDEM_NAME,
+      window.assert && window.assert(options.rangePropertyOptions.tandem.name === RANGE_PROPERTY_TANDEM_NAME,
         `rangePropertyOptions.tandem.name must be ${RANGE_PROPERTY_TANDEM_NAME}: ${options.rangePropertyOptions.tandem.name}`);
     }
 
@@ -126,7 +126,7 @@ export default class NumberProperty extends Property<number> implements TRangedP
     this.rangeProperty = rangeProperty;
 
     if (assert && Tandem.VALIDATION && this.rangeProperty.isPhetioInstrumented()) {
-      assert && assert(this.isPhetioInstrumented(), 'NumberProperty must be phet-io instrumented if the range is');
+      window.assert && window.assert(this.isPhetioInstrumented(), 'NumberProperty must be phet-io instrumented if the range is');
     }
 
     const rangePropertyObserver = () => {
@@ -188,7 +188,7 @@ export default class NumberProperty extends Property<number> implements TRangedP
    * not fail after one but has been set not the other.
    */
   public setValueAndRange(value: number, range: Range): void {
-    assert && assert(range.contains(value), `value ${value} is not in range [${range.min},${range.max}]`);
+    window.assert && window.assert(range.contains(value), `value ${value} is not in range [${range.min},${range.max}]`);
 
     // defer notification of listeners
     this.setDeferred(true);

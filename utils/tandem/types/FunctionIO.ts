@@ -24,9 +24,9 @@ const cache = new IOTypeCache<string>();
  */
 const FunctionIO = ( returnType: IOType, functionParameterTypes: IOType[] ): IOType => {
   for ( let i = 0; i < functionParameterTypes.length; i++ ) {
-    assert && assert( functionParameterTypes[ i ], 'parameter type was not truthy' );
+    window.assert && window.assert( functionParameterTypes[ i ], 'parameter type was not truthy' );
   }
-  assert && assert( returnType, 'return type was not truthy' );
+  window.assert && window.assert( returnType, 'return type was not truthy' );
 
   // REVIEW https://github.com/phetsims/tandem/issues/169 Why is this different than the typeName later in this file?
   const cacheKey = `${returnType.typeName}.${functionParameterTypes.map( type => type.typeName ).join( ',' )}`;

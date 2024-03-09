@@ -28,8 +28,8 @@ class SVGSelfDrawable extends SelfDrawable {
    * @returns {SVGSelfDrawable}
    */
   initialize(renderer, instance, usesPaint, keepElements) {
-    assert && assert(typeof usesPaint === 'boolean');
-    assert && assert(typeof keepElements === 'boolean');
+    window.assert && window.assert(typeof usesPaint === 'boolean');
+    window.assert && window.assert(typeof keepElements === 'boolean');
 
     super.initialize(renderer, instance);
 

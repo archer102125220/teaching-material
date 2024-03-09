@@ -145,13 +145,13 @@ export default class GridCell extends GridConfigurable(MarginLayoutCell) {
     }, providedOptions);
 
     assert && Object.keys(options).forEach(key => {
-      assert && assert(GRID_CELL_KEYS.includes(key), `Cannot provide key ${key} to a GridCell's layoutOptions. Perhaps this is a Flow-style layout option?`);
+      window.assert && window.assert(GRID_CELL_KEYS.includes(key), `Cannot provide key ${key} to a GridCell's layoutOptions. Perhaps this is a Flow-style layout option?`);
     });
 
-    assert && assert(typeof options.column === 'number' && Number.isInteger(options.column) && isFinite(options.column) && options.column >= 0);
-    assert && assert(typeof options.row === 'number' && Number.isInteger(options.row) && isFinite(options.row) && options.row >= 0);
-    assert && assert(typeof options.horizontalSpan === 'number' && Number.isInteger(options.horizontalSpan) && isFinite(options.horizontalSpan) && options.horizontalSpan >= 1);
-    assert && assert(typeof options.verticalSpan === 'number' && Number.isInteger(options.verticalSpan) && isFinite(options.verticalSpan) && options.verticalSpan >= 1);
+    window.assert && window.assert(typeof options.column === 'number' && Number.isInteger(options.column) && isFinite(options.column) && options.column >= 0);
+    window.assert && window.assert(typeof options.row === 'number' && Number.isInteger(options.row) && isFinite(options.row) && options.row >= 0);
+    window.assert && window.assert(typeof options.horizontalSpan === 'number' && Number.isInteger(options.horizontalSpan) && isFinite(options.horizontalSpan) && options.horizontalSpan >= 1);
+    window.assert && window.assert(typeof options.verticalSpan === 'number' && Number.isInteger(options.verticalSpan) && isFinite(options.verticalSpan) && options.verticalSpan >= 1);
 
     this.setConfigToInherit();
 

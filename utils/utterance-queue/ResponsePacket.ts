@@ -99,7 +99,7 @@ class ResponsePacket {
   public constructor(providedOptions?: ResponsePacketOptions) {
     const options = optionize3<ResponsePacketOptions>()({}, DEFAULT_OPTIONS, providedOptions);
 
-    assert && assert(options.responsePatternCollection instanceof ResponsePatternCollection);
+    window.assert && window.assert(options.responsePatternCollection instanceof ResponsePatternCollection);
 
     // The response to be spoken for this packet when speaking names. This is usually
     // the same as the description accessible name, typically spoken on focus and on interaction, labelling what the

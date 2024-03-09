@@ -15,7 +15,7 @@ export type HBoxOptions = StrictOmit<FlowBoxOptions, 'orientation'>;
 
 export default class HBox extends FlowBox {
   public constructor(providedOptions?: HBoxOptions) {
-    assert && assert(!providedOptions || !(providedOptions as FlowBoxOptions).orientation, 'HBox sets orientation');
+    window.assert && window.assert(!providedOptions || !(providedOptions as FlowBoxOptions).orientation, 'HBox sets orientation');
 
     super(optionize<HBoxOptions, SelfOptions, FlowBoxOptions>()({
       orientation: 'horizontal'
@@ -23,7 +23,7 @@ export default class HBox extends FlowBox {
   }
 
   protected override onFlowBoxChildInserted(node: Node, index: number): void {
-    assert && assert(!(node instanceof HSeparator), 'HSeparator should not be used in an HBox. Use VSeparator instead');
+    window.assert && window.assert(!(node instanceof HSeparator), 'HSeparator should not be used in an HBox. Use VSeparator instead');
 
     super.onFlowBoxChildInserted(node, index);
   }

@@ -43,7 +43,7 @@ class Face {
    * @returns {Face} - This reference for chaining
    */
   initialize(boundary) {
-    assert && assert(boundary === null || boundary.isInner());
+    window.assert && window.assert(boundary === null || boundary.isInner());
 
     // @public {Boundary|null} - "inner" types, null when disposed (in pool)
     this.boundary = boundary;
@@ -102,7 +102,7 @@ class Face {
    */
   addBoundaryFaceReferences(boundary) {
     for (let i = 0; i < boundary.halfEdges.length; i++) {
-      assert && assert(boundary.halfEdges[i].face === null);
+      window.assert && window.assert(boundary.halfEdges[i].face === null);
 
       boundary.halfEdges[i].face = this;
     }
@@ -119,7 +119,7 @@ class Face {
    * @param {Boundary} outerBoundary
    */
   recursivelyAddHoles(outerBoundary) {
-    assert && assert(!outerBoundary.isInner());
+    window.assert && window.assert(!outerBoundary.isInner());
 
     this.holes.push(outerBoundary);
     this.addBoundaryFaceReferences(outerBoundary);

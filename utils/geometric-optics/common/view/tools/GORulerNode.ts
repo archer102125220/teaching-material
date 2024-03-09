@@ -85,7 +85,7 @@ export default class GORulerNode extends GOToolNode {
 
       // zoomTransformProperty is derived from zoomScaleProperty, so zoomScaleProperty does not need to be
       // a dependency of this listener, and it's safe to use its value.
-      assert && assert(zoomTransformProperty.hasDependency(zoomScaleProperty));
+      window.assert && window.assert(zoomTransformProperty.hasDependency(zoomScaleProperty));
       const zoomScale = zoomScaleProperty.value;
 
       // update ruler size, so that view size remains the same

@@ -63,7 +63,7 @@ class PropertyStateHandler {
   }
 
   public initialize(phetioStateEngine: TPhetioStateEngine): void {
-    assert && assert(!this.initialized, 'cannot initialize twice');
+    window.assert && window.assert(!this.initialized, 'cannot initialize twice');
 
     phetioStateEngine.onBeforeApplyStateEmitter.addListener(phetioObject => {
 
@@ -110,7 +110,7 @@ class PropertyStateHandler {
    */
   private getMapPairFromPhases(beforePhase: PropertyStatePhase, afterPhase: PropertyStatePhase): OrderDependencyMapPair {
     const matchedPairs = this.mapPairs.filter(mapPair => beforePhase === mapPair.beforePhase && afterPhase === mapPair.afterPhase);
-    assert && assert(matchedPairs.length === 1, 'one and only one map should match the provided phases');
+    window.assert && window.assert(matchedPairs.length === 1, 'one and only one map should match the provided phases');
     return matchedPairs[0];
   }
 
@@ -159,7 +159,7 @@ class PropertyStateHandler {
 
       // Be graceful if given a Property that is not registered in an order dependency.
       if (this.propertyInAnOrderDependency(property)) {
-        assert && assert(this.propertyInAnOrderDependency(property), 'Property must be registered in an order dependency to be unregistered');
+        window.assert && window.assert(this.propertyInAnOrderDependency(property), 'Property must be registered in an order dependency to be unregistered');
 
         this.mapPairs.forEach(mapPair => mapPair.unregisterOrderDependenciesForProperty(property));
       }
@@ -172,7 +172,7 @@ class PropertyStateHandler {
    * {Set.<string>} phetioIDsInState - set of phetioIDs that were set in state
    */
   private undeferAndNotifyProperties(phetioIDsInState: Set<string>): void {
-    assert && assert(this.initialized, 'must be initialized before getting called');
+    window.assert && window.assert(this.initialized, 'must be initialized before getting called');
 
     // {Object.<string,boolean>} - true if a phetioID + phase pair has been applied, keys are the combination of
     // phetioIDs and phase, see PhaseCallback.getTerm()
@@ -231,7 +231,7 @@ class PropertyStateHandler {
     console.log('\n\nin graphable form:\n\n', string);
 
     const assertMessage = 'Impossible set state: from undeferAndNotifyProperties; ordering constraints cannot be satisfied';
-    assert && assert(false, assertMessage);
+    window.assert && window.assert(false, assertMessage);
 
     // We must exit here even if assertions are disabled so it wouldn't lock up the browser.
     if (!assert) {
@@ -266,7 +266,7 @@ class PropertyStateHandler {
 
     for (const phaseCallbackToPotentiallyApply of phaseCallbackSet) {
 
-      assert && assert(phaseCallbackToPotentiallyApply.phase === phase, 'phaseCallbackSet should only include callbacks for provided phase');
+      window.assert && window.assert(phaseCallbackToPotentiallyApply.phase === phase, 'phaseCallbackSet should only include callbacks for provided phase');
 
       // only try to check the order dependencies to see if this has to be after something that is incomplete.
       if (this.phetioIDCanApplyPhase(phaseCallbackToPotentiallyApply.phetioID, phase, completedPhases, phetioIDsInState)) {
@@ -314,7 +314,7 @@ class PropertyStateHandler {
         return true;
       }
       const setOfThingsThatShouldComeFirst = mapToCheck.get(phetioID);
-      assert && assert(setOfThingsThatShouldComeFirst, 'must have this set');
+      window.assert && window.assert(setOfThingsThatShouldComeFirst, 'must have this set');
 
       // O(K) where K is the number of elements that should come before Property X
       for (const beforePhetioID of setOfThingsThatShouldComeFirst!) {

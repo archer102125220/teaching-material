@@ -41,8 +41,8 @@ export default class ScreenIcon extends Node {
       stroke: null
     }, providedOptions);
 
-    assert && assert(options.maxIconWidthProportion > 0 && options.maxIconWidthProportion <= 1);
-    assert && assert(options.maxIconHeightProportion > 0 && options.maxIconHeightProportion <= 1);
+    window.assert && window.assert(options.maxIconWidthProportion > 0 && options.maxIconWidthProportion <= 1);
+    window.assert && window.assert(options.maxIconHeightProportion > 0 && options.maxIconHeightProportion <= 1);
 
     const background = new Rectangle(0, 0, options.size.width, options.size.height, {
       fill: options.fill,

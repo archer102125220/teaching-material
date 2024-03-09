@@ -176,7 +176,7 @@ class Shape implements CanApplyParsedSVG {
     if (subpaths && typeof subpaths !== 'object') {
       // parse the SVG path
       _.each(svgPath.parse(subpaths), (item: ParsedSVGItem) => {
-        assert && assert(Shape.prototype[item.cmd] !== undefined, `method ${item.cmd} from parsed SVG does not exist`);
+        window.assert && window.assert(Shape.prototype[item.cmd] !== undefined, `method ${item.cmd} from parsed SVG does not exist`);
 
         // @ts-expect-error - This is a valid call, but TypeScript isn't figuring it out based on the union type right now
         this[item.cmd].apply(this, item.args); // eslint-disable-line prefer-spread
@@ -219,8 +219,8 @@ class Shape implements CanApplyParsedSVG {
    * Moves to a point given by the coordinates x and y
    */
   public moveTo(x: number, y: number): this {
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.moveToPoint(v(x, y));
   }
 
@@ -228,8 +228,8 @@ class Shape implements CanApplyParsedSVG {
    * Moves a relative displacement (x,y) from last point
    */
   public moveToRelative(x: number, y: number): this {
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.moveToPointRelative(v(x, y));
   }
 
@@ -254,8 +254,8 @@ class Shape implements CanApplyParsedSVG {
    * Adds to this shape a straight line from last point to the coordinate (x,y)
    */
   public lineTo(x: number, y: number): this {
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.lineToPoint(v(x, y));
   }
 
@@ -266,8 +266,8 @@ class Shape implements CanApplyParsedSVG {
    * @param y - vertical displacement
    */
   public lineToRelative(x: number, y: number): this {
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.lineToPointRelative(v(x, y));
   }
 
@@ -350,7 +350,7 @@ class Shape implements CanApplyParsedSVG {
    */
   public zigZagToPoint(endPoint: Vector2, amplitude: number, numberZigZags: number, symmetrical: boolean): this {
 
-    assert && assert(Number.isInteger(numberZigZags), `numberZigZags must be an integer: ${numberZigZags}`);
+    window.assert && window.assert(Number.isInteger(numberZigZags), `numberZigZags must be an integer: ${numberZigZags}`);
 
     this.ensure(endPoint);
     const startPoint = this.getLastPoint();
@@ -396,10 +396,10 @@ class Shape implements CanApplyParsedSVG {
    * @param y
    */
   public quadraticCurveTo(cpx: number, cpy: number, x: number, y: number): this {
-    assert && assert(isFinite(cpx), `cpx must be a finite number: ${cpx}`);
-    assert && assert(isFinite(cpy), `cpy must be a finite number: ${cpy}`);
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(cpx), `cpx must be a finite number: ${cpx}`);
+    window.assert && window.assert(isFinite(cpy), `cpy must be a finite number: ${cpy}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.quadraticCurveToPoint(v(cpx, cpy), v(x, y));
   }
 
@@ -413,10 +413,10 @@ class Shape implements CanApplyParsedSVG {
    * @param y - final y position of the quadratic curve
    */
   public quadraticCurveToRelative(cpx: number, cpy: number, x: number, y: number): this {
-    assert && assert(isFinite(cpx), `cpx must be a finite number: ${cpx}`);
-    assert && assert(isFinite(cpy), `cpy must be a finite number: ${cpy}`);
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(cpx), `cpx must be a finite number: ${cpx}`);
+    window.assert && window.assert(isFinite(cpy), `cpy must be a finite number: ${cpy}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.quadraticCurveToPointRelative(v(cpx, cpy), v(x, y));
   }
 
@@ -442,8 +442,8 @@ class Shape implements CanApplyParsedSVG {
    * @param y - final y position of the quadratic curve
    */
   public smoothQuadraticCurveTo(x: number, y: number): this {
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.quadraticCurveToPoint(this.getSmoothQuadraticControlPoint(), v(x, y));
   }
 
@@ -455,8 +455,8 @@ class Shape implements CanApplyParsedSVG {
    * @param y - final y position of the quadratic curve
    */
   public smoothQuadraticCurveToRelative(x: number, y: number): this {
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.quadraticCurveToPoint(this.getSmoothQuadraticControlPoint(), v(x, y).plus(this.getRelativePoint()));
   }
 
@@ -493,12 +493,12 @@ class Shape implements CanApplyParsedSVG {
    * @param y - final y position of the cubic curve
    */
   public cubicCurveTo(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): this {
-    assert && assert(isFinite(cp1x), `cp1x must be a finite number: ${cp1x}`);
-    assert && assert(isFinite(cp1y), `cp1y must be a finite number: ${cp1y}`);
-    assert && assert(isFinite(cp2x), `cp2x must be a finite number: ${cp2x}`);
-    assert && assert(isFinite(cp2y), `cp2y must be a finite number: ${cp2y}`);
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(cp1x), `cp1x must be a finite number: ${cp1x}`);
+    window.assert && window.assert(isFinite(cp1y), `cp1y must be a finite number: ${cp1y}`);
+    window.assert && window.assert(isFinite(cp2x), `cp2x must be a finite number: ${cp2x}`);
+    window.assert && window.assert(isFinite(cp2y), `cp2y must be a finite number: ${cp2y}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.cubicCurveToPoint(v(cp1x, cp1y), v(cp2x, cp2y), v(x, y));
   }
 
@@ -511,12 +511,12 @@ class Shape implements CanApplyParsedSVG {
    * @param y - final vertical displacment
    */
   public cubicCurveToRelative(cp1x: number, cp1y: number, cp2x: number, cp2y: number, x: number, y: number): this {
-    assert && assert(isFinite(cp1x), `cp1x must be a finite number: ${cp1x}`);
-    assert && assert(isFinite(cp1y), `cp1y must be a finite number: ${cp1y}`);
-    assert && assert(isFinite(cp2x), `cp2x must be a finite number: ${cp2x}`);
-    assert && assert(isFinite(cp2y), `cp2y must be a finite number: ${cp2y}`);
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(cp1x), `cp1x must be a finite number: ${cp1x}`);
+    window.assert && window.assert(isFinite(cp1y), `cp1y must be a finite number: ${cp1y}`);
+    window.assert && window.assert(isFinite(cp2x), `cp2x must be a finite number: ${cp2x}`);
+    window.assert && window.assert(isFinite(cp2y), `cp2y must be a finite number: ${cp2y}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.cubicCurveToPointRelative(v(cp1x, cp1y), v(cp2x, cp2y), v(x, y));
   }
 
@@ -537,10 +537,10 @@ class Shape implements CanApplyParsedSVG {
    * @param y
    */
   public smoothCubicCurveTo(cp2x: number, cp2y: number, x: number, y: number): this {
-    assert && assert(isFinite(cp2x), `cp2x must be a finite number: ${cp2x}`);
-    assert && assert(isFinite(cp2y), `cp2y must be a finite number: ${cp2y}`);
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(cp2x), `cp2x must be a finite number: ${cp2x}`);
+    window.assert && window.assert(isFinite(cp2y), `cp2y must be a finite number: ${cp2y}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.cubicCurveToPoint(this.getSmoothCubicControlPoint(), v(cp2x, cp2y), v(x, y));
   }
 
@@ -551,10 +551,10 @@ class Shape implements CanApplyParsedSVG {
    * @param y
    */
   public smoothCubicCurveToRelative(cp2x: number, cp2y: number, x: number, y: number): this {
-    assert && assert(isFinite(cp2x), `cp2x must be a finite number: ${cp2x}`);
-    assert && assert(isFinite(cp2y), `cp2y must be a finite number: ${cp2y}`);
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(cp2x), `cp2x must be a finite number: ${cp2x}`);
+    window.assert && window.assert(isFinite(cp2y), `cp2y must be a finite number: ${cp2y}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
     return this.cubicCurveToPoint(this.getSmoothCubicControlPoint(), v(cp2x, cp2y).plus(this.getRelativePoint()), v(x, y).plus(this.getRelativePoint()));
   }
 
@@ -584,8 +584,8 @@ class Shape implements CanApplyParsedSVG {
    * @param [anticlockwise] - Decides which direction the arc takes around the center
    */
   public arc(centerX: number, centerY: number, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this {
-    assert && assert(isFinite(centerX), `centerX must be a finite number: ${centerX}`);
-    assert && assert(isFinite(centerY), `centerY must be a finite number: ${centerY}`);
+    window.assert && window.assert(isFinite(centerX), `centerX must be a finite number: ${centerX}`);
+    window.assert && window.assert(isFinite(centerY), `centerY must be a finite number: ${centerY}`);
     return this.arcPoint(v(centerX, centerY), radius, startAngle, endAngle, anticlockwise);
   }
 
@@ -640,8 +640,8 @@ class Shape implements CanApplyParsedSVG {
    * @param [anticlockwise]
    */
   public ellipticalArc(centerX: number, centerY: number, radiusX: number, radiusY: number, rotation: number, startAngle: number, endAngle: number, anticlockwise?: boolean): this {
-    assert && assert(isFinite(centerX), `centerX must be a finite number: ${centerX}`);
-    assert && assert(isFinite(centerY), `centerY must be a finite number: ${centerY}`);
+    window.assert && window.assert(isFinite(centerX), `centerX must be a finite number: ${centerX}`);
+    window.assert && window.assert(isFinite(centerY), `centerY must be a finite number: ${centerY}`);
     return this.ellipticalArcPoint(v(centerX, centerY), radiusX, radiusY, rotation, startAngle, endAngle, anticlockwise);
   }
 
@@ -856,8 +856,8 @@ class Shape implements CanApplyParsedSVG {
       return this.arcPoint(center, radius, 0, Math.PI * 2, false).close();
     }
     else {
-      assert && assert(isFinite(centerX), `centerX must be a finite number: ${centerX}`);
-      assert && assert(isFinite(centerY), `centerY must be a finite number: ${centerY}`);
+      window.assert && window.assert(isFinite(centerX), `centerX must be a finite number: ${centerX}`);
+      window.assert && window.assert(isFinite(centerY), `centerY must be a finite number: ${centerY}`);
 
       // circle( centerX, centerY, radius )
       return this.arcPoint(v(centerX, centerY), radius!, 0, Math.PI * 2, false).close();
@@ -883,8 +883,8 @@ class Shape implements CanApplyParsedSVG {
       return this.ellipticalArcPoint(center, radiusX, radiusY, rotation || 0, 0, Math.PI * 2, false).close();
     }
     else {
-      assert && assert(isFinite(centerX), `centerX must be a finite number: ${centerX}`);
-      assert && assert(isFinite(centerY), `centerY must be a finite number: ${centerY}`);
+      window.assert && window.assert(isFinite(centerX), `centerX must be a finite number: ${centerX}`);
+      window.assert && window.assert(isFinite(centerY), `centerY must be a finite number: ${centerY}`);
 
       // ellipse( centerX, centerY, radiusX, radiusY, rotation )
       return this.ellipticalArcPoint(v(centerX, centerY), radiusX, radiusY, rotation || 0, 0, Math.PI * 2, false).close();
@@ -900,10 +900,10 @@ class Shape implements CanApplyParsedSVG {
    * @param height
    */
   public rect(x: number, y: number, width: number, height: number): this {
-    assert && assert(isFinite(x), `x must be a finite number: ${x}`);
-    assert && assert(isFinite(y), `y must be a finite number: ${y}`);
-    assert && assert(isFinite(width), `width must be a finite number: ${width}`);
-    assert && assert(isFinite(height), `height must be a finite number: ${height}`);
+    window.assert && window.assert(isFinite(x), `x must be a finite number: ${x}`);
+    window.assert && window.assert(isFinite(y), `y must be a finite number: ${y}`);
+    window.assert && window.assert(isFinite(width), `width must be a finite number: ${width}`);
+    window.assert && window.assert(isFinite(height), `height must be a finite number: ${height}`);
 
     const subpath = new Subpath();
     this.addSubpath(subpath);
@@ -917,7 +917,7 @@ class Shape implements CanApplyParsedSVG {
     subpath.close();
     this.addSubpath(new Subpath());
     this.getLastSubpath().addPoint(v(x, y));
-    assert && assert(!isNaN(this.bounds.getX()));
+    window.assert && window.assert(!isNaN(this.bounds.getX()));
     this.resetControlPoints();
 
     return this;
@@ -991,7 +991,7 @@ class Shape implements CanApplyParsedSVG {
       isClosedLineSegments: false
     }, providedOptions);
 
-    assert && assert(options.tension < 1 && options.tension > -1, ' the tension goes from -1 to 1 ');
+    window.assert && window.assert(options.tension < 1 && options.tension > -1, ' the tension goes from -1 to 1 ');
 
     const pointNumber = positions.length; // number of points in the array
 
@@ -1143,8 +1143,8 @@ class Shape implements CanApplyParsedSVG {
    * See nonlinearTransformed for documentation of options
    */
   public toPiecewiseLinear(options?: NonlinearTransformedOptions): Shape {
-    assert && assert(!options || !options.pointMap, 'No pointMap for toPiecewiseLinear allowed, since it could create non-linear segments');
-    assert && assert(!options || !options.methodName, 'No methodName for toPiecewiseLinear allowed, since it could create non-linear segments');
+    window.assert && window.assert(!options || !options.pointMap, 'No pointMap for toPiecewiseLinear allowed, since it could create non-linear segments');
+    window.assert && window.assert(!options || !options.methodName, 'No methodName for toPiecewiseLinear allowed, since it could create non-linear segments');
     return this.nonlinearTransformed(options);
   }
 
@@ -1583,7 +1583,7 @@ class Shape implements CanApplyParsedSVG {
    * ---------------------------------------------------------------------------- */
 
   private invalidate(): void {
-    assert && assert(!this._immutable, 'Attempt to modify an immutable Shape');
+    window.assert && window.assert(!this._immutable, 'Attempt to modify an immutable Shape');
 
     if (!this._invalidatingPoints) {
       this._bounds = null;
@@ -1639,7 +1639,7 @@ class Shape implements CanApplyParsedSVG {
    * Gets the last subpath
    */
   private getLastSubpath(): Subpath {
-    assert && assert(this.hasSubpaths(), 'We should have a subpath if this is called');
+    window.assert && window.assert(this.hasSubpaths(), 'We should have a subpath if this is called');
 
     return _.last(this.subpaths)!;
   }
@@ -1648,8 +1648,8 @@ class Shape implements CanApplyParsedSVG {
    * Gets the last point in the last subpath, or null if it doesn't exist
    */
   public getLastPoint(): Vector2 {
-    assert && assert(this.hasSubpaths(), 'We should have a subpath if this is called');
-    assert && assert(this.getLastSubpath().getLastPoint(), 'We should have a last point');
+    window.assert && window.assert(this.hasSubpaths(), 'We should have a subpath if this is called');
+    window.assert && window.assert(this.getLastSubpath().getLastPoint(), 'We should have a last point');
     return this.getLastSubpath().getLastPoint();
   }
 
@@ -1774,7 +1774,7 @@ class Shape implements CanApplyParsedSVG {
    * Returns a Shape from the serialized representation.
    */
   public static deserialize(obj: SerializedShape): Shape {
-    assert && assert(obj.type === 'Shape');
+    window.assert && window.assert(obj.type === 'Shape');
 
     return new Shape(obj.subpaths.map(Subpath.deserialize));
   }
@@ -1823,17 +1823,17 @@ class Shape implements CanApplyParsedSVG {
     let bottomRightRadius = cornerRadii && cornerRadii.bottomRight || 0;
 
     // type and constraint assertions
-    assert && assert(isFinite(x), 'Non-finite x');
-    assert && assert(isFinite(y), 'Non-finite y');
-    assert && assert(width >= 0 && isFinite(width), 'Negative or non-finite width');
-    assert && assert(height >= 0 && isFinite(height), 'Negative or non-finite height');
-    assert && assert(topLeftRadius >= 0 && isFinite(topLeftRadius),
+    window.assert && window.assert(isFinite(x), 'Non-finite x');
+    window.assert && window.assert(isFinite(y), 'Non-finite y');
+    window.assert && window.assert(width >= 0 && isFinite(width), 'Negative or non-finite width');
+    window.assert && window.assert(height >= 0 && isFinite(height), 'Negative or non-finite height');
+    window.assert && window.assert(topLeftRadius >= 0 && isFinite(topLeftRadius),
       'Invalid topLeft');
-    assert && assert(topRightRadius >= 0 && isFinite(topRightRadius),
+    window.assert && window.assert(topRightRadius >= 0 && isFinite(topRightRadius),
       'Invalid topRight');
-    assert && assert(bottomLeftRadius >= 0 && isFinite(bottomLeftRadius),
+    window.assert && window.assert(bottomLeftRadius >= 0 && isFinite(bottomLeftRadius),
       'Invalid bottomLeft');
-    assert && assert(bottomRightRadius >= 0 && isFinite(bottomRightRadius),
+    window.assert && window.assert(bottomRightRadius >= 0 && isFinite(bottomRightRadius),
       'Invalid bottomRight');
 
     // The width and height take precedence over the corner radii. If the sum of the corner radii exceed
@@ -1863,10 +1863,10 @@ class Shape implements CanApplyParsedSVG {
     }
 
     // verify there is no overlap between corners
-    assert && assert(topLeftRadius + topRightRadius <= width, 'Corner overlap on top edge');
-    assert && assert(bottomLeftRadius + bottomRightRadius <= width, 'Corner overlap on bottom edge');
-    assert && assert(topLeftRadius + bottomLeftRadius <= height, 'Corner overlap on left edge');
-    assert && assert(topRightRadius + bottomRightRadius <= height, 'Corner overlap on right edge');
+    window.assert && window.assert(topLeftRadius + topRightRadius <= width, 'Corner overlap on top edge');
+    window.assert && window.assert(bottomLeftRadius + bottomRightRadius <= width, 'Corner overlap on bottom edge');
+    window.assert && window.assert(topLeftRadius + bottomLeftRadius <= height, 'Corner overlap on left edge');
+    window.assert && window.assert(topRightRadius + bottomRightRadius <= height, 'Corner overlap on right edge');
 
     const shape = new Shape();
     const right = x + width;

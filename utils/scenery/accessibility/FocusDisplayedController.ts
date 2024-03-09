@@ -47,7 +47,7 @@ class FocusDisplayedController {
     const options = optionize<FocusDisplayedControllerOptions>()({
       onRemoveFocus: _.noop
     }, providedOptions);
-    assert && assert(typeof options.onRemoveFocus === 'function', 'invalid type for onRemoveFocus');
+    window.assert && window.assert(typeof options.onRemoveFocus === 'function', 'invalid type for onRemoveFocus');
 
     this.focusProperty = focusProperty;
     this.onRemoveFocus = options.onRemoveFocus;
@@ -97,8 +97,8 @@ class FocusDisplayedController {
    * including visibility of the trail and attachment to a scene graph.
    */
   private addDisplayedListeners(focus: Focus): void {
-    assert && assert(this.visibilityTracker === null, 'creating a new TrailVisibilityTracker but the last one was not disposed');
-    assert && assert(this.node === null, 'Still a reference to the previously focused Node, possible memory leak');
+    window.assert && window.assert(this.visibilityTracker === null, 'creating a new TrailVisibilityTracker but the last one was not disposed');
+    window.assert && window.assert(this.node === null, 'Still a reference to the previously focused Node, possible memory leak');
 
     this.visibilityTracker = new TrailVisibilityTracker(focus.trail);
     this.visibilityTracker.addListener(this.boundVisibilityListener);

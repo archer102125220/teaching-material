@@ -86,8 +86,8 @@ class PhetioCapsule<T extends PhetioObject, P extends IntentionalAny[] = []> ext
    * correct state.
    */
   public override disposeElement(): void {
-    assert && assert(this.element, 'cannot dispose if element is not defined');
-    assert && assert(this.disposeOnClear, 'cannot dispose if element is not disposable');
+    window.assert && window.assert(this.element, 'cannot dispose if element is not defined');
+    window.assert && window.assert(this.disposeOnClear, 'cannot dispose if element is not disposable');
     super.disposeElement(this.element!);
     this.element = null;
   }
@@ -103,7 +103,7 @@ class PhetioCapsule<T extends PhetioObject, P extends IntentionalAny[] = []> ext
     if (!this.element) {
       this.create(argsForCreateFunction);
     }
-    assert && assert(this.element !== null);
+    window.assert && window.assert(this.element !== null);
     return this.element!;
   }
 
@@ -135,7 +135,7 @@ class PhetioCapsule<T extends PhetioObject, P extends IntentionalAny[] = []> ext
    * (phet-io)
    */
   public create(argsForCreateFunction: P, fromStateSetting = false): T {
-    assert && assert(this.isPhetioInstrumented(), 'TODO: support uninstrumented PhetioCapsules? see https://github.com/phetsims/tandem/issues/184');
+    window.assert && window.assert(this.isPhetioInstrumented(), 'TODO: support uninstrumented PhetioCapsules? see https://github.com/phetsims/tandem/issues/184');
 
     assert && this.supportsDynamicState && _.hasIn(window, 'phet.joist.sim.') &&
       isSettingPhetioStateProperty.value && assert(fromStateSetting,

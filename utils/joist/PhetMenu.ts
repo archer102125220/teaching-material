@@ -155,7 +155,7 @@ class PhetMenu extends Popupable(Node, 0) {
 
             // construct a blob out of it
             const requiredPrefix = 'data:image/png;base64,';
-            assert && assert(dataURL.startsWith(requiredPrefix));
+            window.assert && window.assert(dataURL.startsWith(requiredPrefix));
             const dataBase64 = dataURL.slice(requiredPrefix.length);
             const byteChars = window.atob(dataBase64);
             const byteArray = new window.Uint8Array(byteChars.length);

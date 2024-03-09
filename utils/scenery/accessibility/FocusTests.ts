@@ -22,14 +22,14 @@ type NestedEqualityItem = {
 
 // Arrays of items of the type { trail: {Trail}, children: {Array.<Item>} }
 function nestedEquality( assert: Assert, a: EqualityItem[], b: NestedEqualityItem[] ): void {
-  assert.equal( a.length, b.length );
+  window.assert.equal( a.length, b.length );
 
   for ( let i = 0; i < a.length; i++ ) {
     const aItem = a[ i ];
     const bItem = b[ i ];
 
     if ( aItem.trail && bItem.trail ) {
-      assert.ok( aItem.trail.equals( bItem.trail ) );
+      window.assert.ok( aItem.trail.equals( bItem.trail ) );
     }
 
     nestedEquality( assert, aItem.children, bItem.children );
@@ -274,7 +274,7 @@ QUnit.test( 'setting pdomOrder', assert => {
   // reverse accessible order
   rootNode.pdomOrder = [ d, c, b, a ];
 
-  assert.ok( display._rootPDOMInstance, 'should exist' );
+  window.assert.ok( display._rootPDOMInstance, 'should exist' );
 
   const divRoot = display._rootPDOMInstance!.peer!.primarySibling!;
   const divA = a.pdomInstances[ 0 ].peer!.primarySibling;
@@ -282,10 +282,10 @@ QUnit.test( 'setting pdomOrder', assert => {
   const divC = c.pdomInstances[ 0 ].peer!.primarySibling;
   const divD = d.pdomInstances[ 0 ].peer!.primarySibling;
 
-  assert.ok( divRoot.children[ 0 ] === divD, 'divD should be first child' );
-  assert.ok( divRoot.children[ 1 ] === divC, 'divC should be second child' );
-  assert.ok( divRoot.children[ 2 ] === divB, 'divB should be third child' );
-  assert.ok( divRoot.children[ 3 ] === divA, 'divA should be fourth child' );
+  window.assert.ok( divRoot.children[ 0 ] === divD, 'divD should be first child' );
+  window.assert.ok( divRoot.children[ 1 ] === divC, 'divC should be second child' );
+  window.assert.ok( divRoot.children[ 2 ] === divB, 'divB should be third child' );
+  window.assert.ok( divRoot.children[ 3 ] === divA, 'divA should be fourth child' );
   display.dispose();
   display.domElement.parentElement!.removeChild( display.domElement );
 } );
@@ -315,10 +315,10 @@ QUnit.test( 'setting pdomOrder before setting accessible content', assert => {
   const divC = c.pdomInstances[ 0 ].peer!.primarySibling;
   const divD = d.pdomInstances[ 0 ].peer!.primarySibling;
 
-  assert.ok( divRoot.children[ 0 ] === divD, 'divD should be first child' );
-  assert.ok( divRoot.children[ 1 ] === divC, 'divC should be second child' );
-  assert.ok( divRoot.children[ 2 ] === divB, 'divB should be third child' );
-  assert.ok( divRoot.children[ 3 ] === divA, 'divA should be fourth child' );
+  window.assert.ok( divRoot.children[ 0 ] === divD, 'divD should be first child' );
+  window.assert.ok( divRoot.children[ 1 ] === divC, 'divC should be second child' );
+  window.assert.ok( divRoot.children[ 2 ] === divB, 'divB should be third child' );
+  window.assert.ok( divRoot.children[ 3 ] === divA, 'divA should be fourth child' );
   display.dispose();
   display.domElement.parentElement!.removeChild( display.domElement );
 
@@ -353,8 +353,8 @@ QUnit.test( 'setting accessible order on nodes with no accessible content', asse
   const divC = c.pdomInstances[ 0 ].peer!.primarySibling!;
   const divE = e.pdomInstances[ 0 ].peer!.primarySibling!;
 
-  assert.ok( divB.children[ 0 ] === divE, 'div E should be first child of div B' );
-  assert.ok( divB.children[ 1 ] === divC, 'div C should be second child of div B' );
+  window.assert.ok( divB.children[ 0 ] === divE, 'div E should be first child of div B' );
+  window.assert.ok( divB.children[ 1 ] === divC, 'div C should be second child of div B' );
   display.dispose();
   display.domElement.parentElement!.removeChild( display.domElement );
 
@@ -383,15 +383,15 @@ QUnit.test( 'setting accessible order on nodes with no accessible content', asse
   const divC = c.pdomInstances[ 0 ].peer!.primarySibling!;
   const divE = e.pdomInstances[ 0 ].peer!.primarySibling!;
 
-  assert.ok( divA.children[ 0 ] === divE, 'div E should be first child of div B' );
-  assert.ok( divA.children[ 1 ] === divC, 'div C should be second child of div B' );
+  window.assert.ok( divA.children[ 0 ] === divE, 'div E should be first child of div B' );
+  window.assert.ok( divA.children[ 1 ] === divC, 'div C should be second child of div B' );
   display.dispose();
   display.domElement.parentElement!.removeChild( display.domElement );
 } );
 
 QUnit.test( 'setting accessible order on a Node with focus', assert => {
   if ( !document.hasFocus() ) {
-    assert.ok( true, 'Opting out of test because document does not have focus' );
+    window.assert.ok( true, 'Opting out of test because document does not have focus' );
     return;
   }
 
@@ -414,25 +414,25 @@ QUnit.test( 'setting accessible order on a Node with focus', assert => {
   b1.children = [ d1, d2, d3, d4 ];
 
   d1.focus();
-  assert.ok( d1.focused, 'd1 should be focused' );
+  window.assert.ok( d1.focused, 'd1 should be focused' );
 
   b1.pdomOrder = [ d3, d4 ];
-  assert.ok( d1.focused, 'd1 should still have focus after order change' );
+  window.assert.ok( d1.focused, 'd1 should still have focus after order change' );
   b1.pdomOrder = null;
 
   c1.pdomOrder = [ d4, d3, d2, d1 ];
-  assert.ok( d1.focused, 'd1 should still have focus after order change' );
+  window.assert.ok( d1.focused, 'd1 should still have focus after order change' );
   c1.pdomOrder = null;
 
   a1.pdomOrder = [ d1, d2, d3 ];
-  assert.ok( d1.focused, 'd1 should still have focus after order change' );
+  window.assert.ok( d1.focused, 'd1 should still have focus after order change' );
 
   display.detachEvents();
 } );
 
 QUnit.test( 'pdomOrder with reentrant events', assert => {
   if ( !document.hasFocus() ) {
-    assert.ok( true, 'Opting out of test because document does not have focus' );
+    window.assert.ok( true, 'Opting out of test because document does not have focus' );
     return;
   }
 
@@ -459,22 +459,22 @@ QUnit.test( 'pdomOrder with reentrant events', assert => {
       // focus another thing, inside of the click listener - generates reentrant events
       d1.focus();
 
-      assert.ok( d1.focused, 'd1 should have focus even though focus was set in a reentrant event' );
-      assert.ok( FocusManager.pdomFocusedNode === d1, 'pdomFocusedNode should be correct during reentrant events' );
-      assert.ok( document.activeElement === getDOMElement( d1 ), 'activeElement should be correct during reentrant events' );
+      window.assert.ok( d1.focused, 'd1 should have focus even though focus was set in a reentrant event' );
+      window.assert.ok( FocusManager.pdomFocusedNode === d1, 'pdomFocusedNode should be correct during reentrant events' );
+      window.assert.ok( document.activeElement === getDOMElement( d1 ), 'activeElement should be correct during reentrant events' );
 
       // change the trail to the Node
       a1.pdomOrder = [ d1, d2, null ];
 
       // verify that focus is still correct after PDOM rearrangement
-      assert.ok( d1.focused, 'd1 should still trail change operations in reentrant events' );
+      window.assert.ok( d1.focused, 'd1 should still trail change operations in reentrant events' );
     }
   } );
 
   // Focus the button and trigger a click
   b1.focus();
   getDOMElement( b1 ).click();
-  assert.ok( true, 'dummy test that should run after click events' );
+  window.assert.ok( true, 'dummy test that should run after click events' );
 
   b1.blur();
 
@@ -493,26 +493,26 @@ QUnit.test( 'Testing FocusManager.windowHasFocusProperty', assert => {
   const focusableNode = new Node( { tagName: 'button' } );
   rootNode.addChild( focusableNode );
 
-  assert.ok( !FocusManager.windowHasFocusProperty.value, 'should not have focus at start' );
+  window.assert.ok( !FocusManager.windowHasFocusProperty.value, 'should not have focus at start' );
 
   // First, test detachFromWindow, once focus is in the window it is impossible to remove it from
   // the window with JavaScript.
   FocusManager.attachToWindow();
   FocusManager.detachFromWindow();
 
-  assert.ok( !FocusManager.windowHasFocusProperty.value, 'should not have focus after detaching' );
+  window.assert.ok( !FocusManager.windowHasFocusProperty.value, 'should not have focus after detaching' );
   focusableNode.focus();
-  assert.ok( !FocusManager.windowHasFocusProperty.value, 'Should not be watching window focus changes after detaching' );
+  window.assert.ok( !FocusManager.windowHasFocusProperty.value, 'Should not be watching window focus changes after detaching' );
 
   // now test changes to windowHasFocusProperty - window focus listeners will only work if tests are being run
   // in the foreground (dev cannot be using dev tools, running in puppeteer, minimized, etc...)
   if ( document.hasFocus() ) {
     FocusManager.attachToWindow();
-    assert.ok( FocusManager.windowHasFocusProperty.value, 'Focus was moved into window from previous tests, this attach should reflect window already has focus.' );
+    window.assert.ok( FocusManager.windowHasFocusProperty.value, 'Focus was moved into window from previous tests, this attach should reflect window already has focus.' );
     focusableNode.focus();
-    assert.ok( FocusManager.windowHasFocusProperty.value, 'Window has focus, is now in the foreground' );
+    window.assert.ok( FocusManager.windowHasFocusProperty.value, 'Window has focus, is now in the foreground' );
     focusableNode.blur();
-    assert.ok( FocusManager.windowHasFocusProperty.value, 'window still has focus after a blur (focus on body)' );
+    window.assert.ok( FocusManager.windowHasFocusProperty.value, 'window still has focus after a blur (focus on body)' );
 
     // NOTE - don't detach the FocusManager here, it is globally attached and it needs to beused
     // for other tests

@@ -147,7 +147,7 @@ class Fittability {
    */
   updateSelfFittable() {
     const newSelfFittable = this.isSelfFitSupported();
-    assert && assert(this.selfFittable !== newSelfFittable);
+    window.assert && window.assert(this.selfFittable !== newSelfFittable);
 
     this.selfFittable = newSelfFittable;
 

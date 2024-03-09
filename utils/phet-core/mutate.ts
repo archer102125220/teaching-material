@@ -23,21 +23,21 @@ import phetCore from './phetCore';
  * First param will be mutated
  */
 function mutate(target: object, orderedKeys: string[], options?: object): void {
-  assert && assert(target);
-  assert && assert(Array.isArray(orderedKeys));
+  window.assert && window.assert(target);
+  window.assert && window.assert(Array.isArray(orderedKeys));
 
   if (!options) {
     return;
   }
 
-  assert && assert(Object.getPrototypeOf(options) === Object.prototype,
+  window.assert && window.assert(Object.getPrototypeOf(options) === Object.prototype,
     'Extra prototype on options object is a code smell');
 
   _.each(orderedKeys, key => {
 
     // See https://github.com/phetsims/scenery/issues/580 for more about passing undefined.
     // @ts-expect-error
-    assert && assert(!options.hasOwnProperty(key) || options[key] !== undefined,
+    window.assert && window.assert(!options.hasOwnProperty(key) || options[key] !== undefined,
       `Undefined not allowed for key: ${key}`);
 
     // @ts-expect-error

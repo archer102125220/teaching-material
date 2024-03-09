@@ -47,7 +47,7 @@ export default class BarrierRectangle extends Plane {
       tandem: Tandem.OPT_OUT,
       phetioReadOnly: options.phetioReadOnly,
       fire() {
-        assert && assert(modalNodeStack.length > 0, 'There must be a Node in the stack to hide.');
+        window.assert && window.assert(modalNodeStack.length > 0, 'There must be a Node in the stack to hide.');
 
         // If fuzzing is enabled, close popups with a reduced probability, to improve testing coverage.
         // As of this writing, this addresses Dialogs and the PhET menu.

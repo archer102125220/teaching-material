@@ -76,10 +76,10 @@ class KeyboardFuzzer {
 
   private clearListeners(): void {
     this.keyupListeners.forEach(listener => {
-      assert && assert(typeof listener.timeout === 'function', 'should have an attached timeout');
+      window.assert && window.assert(typeof listener.timeout === 'function', 'should have an attached timeout');
       stepTimer.clearTimeout(listener.timeout);
       listener();
-      assert && assert(!this.keyupListeners.includes(listener), 'calling listener should remove itself from the keyupListeners.');
+      window.assert && window.assert(!this.keyupListeners.includes(listener), 'calling listener should remove itself from the keyupListeners.');
     });
   }
 

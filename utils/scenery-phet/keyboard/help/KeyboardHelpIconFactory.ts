@@ -40,7 +40,7 @@ export default class KeyboardHelpIconFactory {
   public static readonly DEFAULT_ICON_SPACING = 6.5;
 
   public constructor() {
-    assert && assert(false, 'do not construct this, instead use its helper static methods for icon creation');
+    window.assert && window.assert(false, 'do not construct this, instead use its helper static methods for icon creation');
   }
 
   /**
@@ -252,7 +252,7 @@ export default class KeyboardHelpIconFactory {
   }
 }
 
-assert && assert(Object.keys(KeyboardHelpIconFactory.prototype).length === 0,
+window.assert && window.assert(Object.keys(KeyboardHelpIconFactory.prototype).length === 0,
   'KeyboardHelpIconFactory only has static functions');
 
 sceneryPhet.register('KeyboardHelpIconFactory', KeyboardHelpIconFactory);

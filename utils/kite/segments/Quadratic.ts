@@ -69,7 +69,7 @@ export default class Quadratic extends Segment {
    * Sets the start point of the Quadratic.
    */
   public setStart(start: Vector2): this {
-    assert && assert(start.isFinite(), `Quadratic start should be finite: ${start.toString()}`);
+    window.assert && window.assert(start.isFinite(), `Quadratic start should be finite: ${start.toString()}`);
 
     if (!this._start.equals(start)) {
       this._start = start;
@@ -94,7 +94,7 @@ export default class Quadratic extends Segment {
    * Sets the control point of the Quadratic.
    */
   public setControl(control: Vector2): this {
-    assert && assert(control.isFinite(), `Quadratic control should be finite: ${control.toString()}`);
+    window.assert && window.assert(control.isFinite(), `Quadratic control should be finite: ${control.toString()}`);
 
     if (!this._control.equals(control)) {
       this._control = control;
@@ -119,7 +119,7 @@ export default class Quadratic extends Segment {
    * Sets the end point of the Quadratic.
    */
   public setEnd(end: Vector2): this {
-    assert && assert(end.isFinite(), `Quadratic end should be finite: ${end.toString()}`);
+    window.assert && window.assert(end.isFinite(), `Quadratic end should be finite: ${end.toString()}`);
 
     if (!this._end.equals(end)) {
       this._end = end;
@@ -149,8 +149,8 @@ export default class Quadratic extends Segment {
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
   public positionAt(t: number): Vector2 {
-    assert && assert(t >= 0, 'positionAt t should be non-negative');
-    assert && assert(t <= 1, 'positionAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'positionAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'positionAt t should be no greater than 1');
 
     const mt = 1 - t;
     // described from t=[0,1] as: (1-t)^2 start + 2(1-t)t control + t^2 end
@@ -167,8 +167,8 @@ export default class Quadratic extends Segment {
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
   public tangentAt(t: number): Vector2 {
-    assert && assert(t >= 0, 'tangentAt t should be non-negative');
-    assert && assert(t <= 1, 'tangentAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'tangentAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'tangentAt t should be no greater than 1');
 
     // For a quadratic curve, the derivative is given by : 2(1-t)( control - start ) + 2t( end - control )
     // TODO: allocation reduction https://github.com/phetsims/kite/issues/76
@@ -187,8 +187,8 @@ export default class Quadratic extends Segment {
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
   public curvatureAt(t: number): number {
-    assert && assert(t >= 0, 'curvatureAt t should be non-negative');
-    assert && assert(t <= 1, 'curvatureAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'curvatureAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'curvatureAt t should be no greater than 1');
 
     // see http://cagd.cs.byu.edu/~557/text/ch2.pdf p31
     // TODO: remove code duplication with Cubic https://github.com/phetsims/kite/issues/76
@@ -215,8 +215,8 @@ export default class Quadratic extends Segment {
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
   public subdivided(t: number): Quadratic[] {
-    assert && assert(t >= 0, 'subdivided t should be non-negative');
-    assert && assert(t <= 1, 'subdivided t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'subdivided t should be non-negative');
+    window.assert && window.assert(t <= 1, 'subdivided t should be no greater than 1');
 
     // If t is 0 or 1, we only need to return 1 segment
     if (t === 0 || t === 1) {
@@ -237,12 +237,12 @@ export default class Quadratic extends Segment {
    * Clears cached information, should be called when any of the 'constructor arguments' are mutated.
    */
   public invalidate(): void {
-    assert && assert(this._start instanceof Vector2, `Quadratic start should be a Vector2: ${this._start}`);
-    assert && assert(this._start.isFinite(), `Quadratic start should be finite: ${this._start.toString()}`);
-    assert && assert(this._control instanceof Vector2, `Quadratic control should be a Vector2: ${this._control}`);
-    assert && assert(this._control.isFinite(), `Quadratic control should be finite: ${this._control.toString()}`);
-    assert && assert(this._end instanceof Vector2, `Quadratic end should be a Vector2: ${this._end}`);
-    assert && assert(this._end.isFinite(), `Quadratic end should be finite: ${this._end.toString()}`);
+    window.assert && window.assert(this._start instanceof Vector2, `Quadratic start should be a Vector2: ${this._start}`);
+    window.assert && window.assert(this._start.isFinite(), `Quadratic start should be finite: ${this._start.toString()}`);
+    window.assert && window.assert(this._control instanceof Vector2, `Quadratic control should be a Vector2: ${this._control}`);
+    window.assert && window.assert(this._control.isFinite(), `Quadratic control should be finite: ${this._control.toString()}`);
+    window.assert && window.assert(this._end instanceof Vector2, `Quadratic end should be a Vector2: ${this._end}`);
+    window.assert && window.assert(this._end.isFinite(), `Quadratic end should be finite: ${this._end.toString()}`);
 
     // Lazily-computed derived information
     this._startTangent = null;
@@ -630,7 +630,7 @@ export default class Quadratic extends Segment {
    * Returns a Quadratic from the serialized representation.
    */
   public static override deserialize(obj: SerializedQuadratic): Quadratic {
-    assert && assert(obj.type === 'Quadratic');
+    window.assert && window.assert(obj.type === 'Quadratic');
 
     return new Quadratic(new Vector2(obj.startX, obj.startY), new Vector2(obj.controlX, obj.controlY), new Vector2(obj.endX, obj.endY));
   }

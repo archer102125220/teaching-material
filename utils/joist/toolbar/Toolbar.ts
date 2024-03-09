@@ -212,7 +212,7 @@ class Toolbar extends Node {
   }
 
   private getHiddenPosition(): number {
-    assert && assert(typeof this.contentMargin === 'number');
+    window.assert && window.assert(typeof this.contentMargin === 'number');
     return -this.contentMargin / 2;
   }
 

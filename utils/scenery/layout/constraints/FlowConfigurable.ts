@@ -141,7 +141,7 @@ const FlowConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set orientation(value: LayoutOrientation) {
-      assert && assert(value === 'horizontal' || value === 'vertical');
+      window.assert && window.assert(value === 'horizontal' || value === 'vertical');
 
       const enumOrientation = value === 'horizontal' ? Orientation.HORIZONTAL : Orientation.VERTICAL;
 
@@ -159,7 +159,7 @@ const FlowConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
     public get align(): HorizontalLayoutAlign | VerticalLayoutAlign | null {
       const result = LayoutAlign.internalToAlign(this._orientation, this._align);
 
-      assert && assert(result === null || typeof result === 'string');
+      window.assert && window.assert(result === null || typeof result === 'string');
 
       return result;
     }
@@ -168,13 +168,13 @@ const FlowConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set align(value: HorizontalLayoutAlign | VerticalLayoutAlign | null) {
-      assert && assert(LayoutAlign.getAllowedAligns(this._orientation.opposite).includes(value),
+      window.assert && window.assert(LayoutAlign.getAllowedAligns(this._orientation.opposite).includes(value),
         `align ${value} not supported, with the orientation ${this._orientation}, the valid values are ${LayoutAlign.getAllowedAligns(this._orientation.opposite)}`);
 
       // remapping align values to an independent set, so they aren't orientation-dependent
       const mappedValue = LayoutAlign.alignToInternal(this._orientation.opposite, value);
 
-      assert && assert(mappedValue === null || mappedValue instanceof LayoutAlign);
+      window.assert && window.assert(mappedValue === null || mappedValue instanceof LayoutAlign);
 
       if (this._align !== mappedValue) {
         this._align = mappedValue;
@@ -212,7 +212,7 @@ const FlowConfigurable = memoize(<SuperType extends Constructor>(type: SuperType
      * (scenery-internal)
      */
     public set grow(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0));
 
       if (this._grow !== value) {
         this._grow = value;

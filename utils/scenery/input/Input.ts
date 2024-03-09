@@ -516,7 +516,7 @@ export default class Input extends PhetioObject {
     this.touchEndAction = new PhetioAction((id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>) => {
       const touch = this.findPointerById(id) as Touch | null;
       if (touch) {
-        assert && assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
+        window.assert && window.assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
         this.upEvent<TouchEvent | PointerEvent>(touch, context, point);
         this.removePointer(touch);
       }
@@ -535,7 +535,7 @@ export default class Input extends PhetioObject {
     this.touchMoveAction = new PhetioAction((id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>) => {
       const touch = this.findPointerById(id) as Touch | null;
       if (touch) {
-        assert && assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
+        window.assert && window.assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
         touch.move(point);
         this.moveEvent<TouchEvent | PointerEvent>(touch, context);
       }
@@ -555,7 +555,7 @@ export default class Input extends PhetioObject {
     this.touchCancelAction = new PhetioAction((id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>) => {
       const touch = this.findPointerById(id) as Touch | null;
       if (touch) {
-        assert && assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
+        window.assert && window.assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
         this.cancelEvent<TouchEvent | PointerEvent>(touch, context, point);
         this.removePointer(touch);
       }
@@ -1121,14 +1121,14 @@ export default class Input extends PhetioObject {
       if (!canFireListeners) {
         trail = new Trail([]);
       }
-      assert && assert(this.pdomPointer);
+      window.assert && window.assert(this.pdomPointer);
       this.dispatchEvent<DOMEvent>(trail, eventType, this.pdomPointer!, context, bubbles);
     }
   }
 
   private dispatchGlobalEvent<DOMEvent extends Event>(eventType: SupportedEventTypes, context: EventContext<DOMEvent>, capture: boolean): void {
     this.ensurePDOMPointer();
-    assert && assert(this.pdomPointer);
+    window.assert && window.assert(this.pdomPointer);
     const pointer = this.pdomPointer!;
     const inputEvent = new SceneryEvent<DOMEvent>(new Trail(), eventType, pointer, context);
 
@@ -1163,9 +1163,9 @@ export default class Input extends PhetioObject {
     if (relatedTargetElement && this.display.isElementUnderPDOM(relatedTargetElement as HTMLElement)) {
 
       const relatedTarget = (domEvent.relatedTarget as unknown as Element);
-      assert && assert(relatedTarget instanceof window.Element);
+      window.assert && window.assert(relatedTarget instanceof window.Element);
       const trailIndices = relatedTarget.getAttribute(PDOMUtils.DATA_PDOM_UNIQUE_ID);
-      assert && assert(trailIndices, 'should not be null');
+      window.assert && window.assert(trailIndices, 'should not be null');
 
       return PDOMInstance.uniqueIdToTrail(this.display, trailIndices!);
     }
@@ -1177,7 +1177,7 @@ export default class Input extends PhetioObject {
    * This is a bit of a misnomer, because the domEvent doesn't have to be under the PDOM. Returns null if not in the PDOM.
    */
   private getTrailFromPDOMEvent(domEvent: TargetSubstitudeAugmentedEvent): Trail | null {
-    assert && assert(domEvent.target || domEvent[TARGET_SUBSTITUTE_KEY], 'need a way to get the target');
+    window.assert && window.assert(domEvent.target || domEvent[TARGET_SUBSTITUTE_KEY], 'need a way to get the target');
 
     if (!this.display._accessible) {
       return null;
@@ -1190,10 +1190,10 @@ export default class Input extends PhetioObject {
     }
     else {
       const target = (domEvent.target as unknown as Element);
-      assert && assert(target instanceof window.Element, 'target is not an Element', target);
+      window.assert && window.assert(target instanceof window.Element, 'target is not an Element', target);
       if (target && this.display.isElementUnderPDOM(target as HTMLElement)) {
         const trailIndices = target.getAttribute(PDOMUtils.DATA_PDOM_UNIQUE_ID);
-        assert && assert(trailIndices, 'should not be null');
+        window.assert && window.assert(trailIndices, 'should not be null');
         return PDOMInstance.uniqueIdToTrail(this.display, trailIndices!);
       }
     }
@@ -1842,7 +1842,7 @@ export default class Input extends PhetioObject {
       `${type} trail:${trail.toString()} pointer:${pointer.toString()} at ${pointer.point ? pointer.point.toString() : 'null'}`);
     sceneryLog && sceneryLog.EventDispatch && sceneryLog.push();
 
-    assert && assert(trail, 'Falsy trail for dispatchEvent');
+    window.assert && window.assert(trail, 'Falsy trail for dispatchEvent');
 
     sceneryLog && sceneryLog.EventPath && sceneryLog.EventPath(`${type} ${trail.toPathString()}`);
 
@@ -2012,7 +2012,7 @@ export default class Input extends PhetioObject {
     if (configForConstructor.relatedTarget) {
       // @ts-expect-error
       const htmlElement = document.getElementById(configForConstructor.relatedTarget.id);
-      assert && assert(htmlElement, 'cannot deserialize event when related target is not in the DOM.');
+      window.assert && window.assert(htmlElement, 'cannot deserialize event when related target is not in the DOM.');
       configForConstructor.relatedTarget = htmlElement;
     }
 

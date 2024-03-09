@@ -59,7 +59,7 @@ QUnit.test( 'Drawables (Rectangle)', assert => {
   const r1ds = r1.createSVGDrawable( Renderer.bitmaskSVG, r1i );
   const r1dc = r1.createCanvasDrawable( Renderer.bitmaskCanvas, r1i );
 
-  assert.ok( r1._drawables.length === 3, 'After init, should have drawable refs' );
+  window.assert.ok( r1._drawables.length === 3, 'After init, should have drawable refs' );
 
   r1dd.updateDOM();
   r1ds.updateSVG();
@@ -82,11 +82,11 @@ QUnit.test( 'Drawables (Rectangle)', assert => {
   r1ds.dispose();
   r1dc.dispose();
 
-  assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
+  window.assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
 
-  assert.ok( RectangleDOMDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
-  assert.ok( RectangleSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
-  assert.ok( RectangleCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( RectangleDOMDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( RectangleSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( RectangleCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
 } );
 
 QUnit.test( 'Drawables (Circle)', assert => {
@@ -105,7 +105,7 @@ QUnit.test( 'Drawables (Circle)', assert => {
   const r1ds = r1.createSVGDrawable( Renderer.bitmaskSVG, r1i );
   const r1dc = r1.createCanvasDrawable( Renderer.bitmaskCanvas, r1i );
 
-  assert.ok( r1._drawables.length === 3, 'After init, should have drawable refs' );
+  window.assert.ok( r1._drawables.length === 3, 'After init, should have drawable refs' );
 
   r1dd.updateDOM();
   r1ds.updateSVG();
@@ -128,11 +128,11 @@ QUnit.test( 'Drawables (Circle)', assert => {
   r1ds.dispose();
   r1dc.dispose();
 
-  assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
+  window.assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
 
-  assert.ok( CircleDOMDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
-  assert.ok( CircleSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
-  assert.ok( CircleCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( CircleDOMDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( CircleSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( CircleCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
 } );
 
 QUnit.test( 'Drawables (Line)', assert => {
@@ -149,7 +149,7 @@ QUnit.test( 'Drawables (Line)', assert => {
   const r1ds = r1.createSVGDrawable( Renderer.bitmaskSVG, r1i );
   const r1dc = r1.createCanvasDrawable( Renderer.bitmaskCanvas, r1i );
 
-  assert.ok( r1._drawables.length === 2, 'After init, should have drawable refs' );
+  window.assert.ok( r1._drawables.length === 2, 'After init, should have drawable refs' );
 
   r1ds.updateSVG();
   r1dc.paintCanvas( wrapper, r1 );
@@ -169,10 +169,10 @@ QUnit.test( 'Drawables (Line)', assert => {
   r1ds.dispose();
   r1dc.dispose();
 
-  assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
+  window.assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
 
-  assert.ok( LineSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
-  assert.ok( LineCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( LineSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( LineCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
 } );
 
 QUnit.test( 'Drawables (Path)', assert => {
@@ -190,7 +190,7 @@ QUnit.test( 'Drawables (Path)', assert => {
   const r1ds = r1.createSVGDrawable( Renderer.bitmaskSVG, r1i );
   const r1dc = r1.createCanvasDrawable( Renderer.bitmaskCanvas, r1i );
 
-  assert.ok( r1._drawables.length === 2, 'After init, should have drawable refs' );
+  window.assert.ok( r1._drawables.length === 2, 'After init, should have drawable refs' );
 
   r1ds.updateSVG();
   r1dc.paintCanvas( wrapper, r1 );
@@ -214,10 +214,10 @@ QUnit.test( 'Drawables (Path)', assert => {
   r1ds.dispose();
   r1dc.dispose();
 
-  assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
+  window.assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
 
-  assert.ok( PathSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
-  assert.ok( PathCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( PathSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( PathCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
 } );
 
 QUnit.test( 'Drawables (Text)', assert => {
@@ -236,7 +236,7 @@ QUnit.test( 'Drawables (Text)', assert => {
   const r1ds = r1.createSVGDrawable( Renderer.bitmaskSVG, r1i );
   const r1dc = r1.createCanvasDrawable( Renderer.bitmaskCanvas, r1i );
 
-  assert.ok( r1._drawables.length === 3, 'After init, should have drawable refs' );
+  window.assert.ok( r1._drawables.length === 3, 'After init, should have drawable refs' );
 
   r1dd.updateDOM();
   r1ds.updateSVG();
@@ -265,11 +265,11 @@ QUnit.test( 'Drawables (Text)', assert => {
   r1ds.dispose();
   r1dc.dispose();
 
-  assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
+  window.assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
 
-  assert.ok( TextDOMDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
-  assert.ok( TextSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
-  assert.ok( TextCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( TextDOMDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( TextSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( TextCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
 } );
 
 QUnit.test( 'Drawables (Image)', assert => {
@@ -288,7 +288,7 @@ QUnit.test( 'Drawables (Image)', assert => {
   const r1ds = r1.createSVGDrawable( Renderer.bitmaskSVG, r1i );
   const r1dc = r1.createCanvasDrawable( Renderer.bitmaskCanvas, r1i );
 
-  assert.ok( r1._drawables.length === 3, 'After init, should have drawable refs' );
+  window.assert.ok( r1._drawables.length === 3, 'After init, should have drawable refs' );
 
   r1dd.updateDOM();
   r1ds.updateSVG();
@@ -305,11 +305,11 @@ QUnit.test( 'Drawables (Image)', assert => {
   r1ds.dispose();
   r1dc.dispose();
 
-  assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
+  window.assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
 
-  assert.ok( ImageDOMDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
-  assert.ok( ImageSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
-  assert.ok( ImageCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( ImageDOMDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( ImageSVGDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( ImageCanvasDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
 } );
 
 QUnit.test( 'Drawables (DOM)', assert => {
@@ -319,96 +319,96 @@ QUnit.test( 'Drawables (DOM)', assert => {
   const r1i = new Instance( stubDisplay, r1.getUniqueTrail() );
   const r1dd = r1.createDOMDrawable( Renderer.bitmaskDOM, r1i );
 
-  assert.ok( r1._drawables.length === 1, 'After init, should have drawable refs' );
+  window.assert.ok( r1._drawables.length === 1, 'After init, should have drawable refs' );
 
   r1dd.updateDOM();
 
   r1dd.dispose();
 
-  assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
+  window.assert.ok( r1._drawables.length === 0, 'After dispose, should not have drawable refs' );
 
-  assert.ok( DOMDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
+  window.assert.ok( DOMDrawable.pool.length > 0, 'Disposed drawable returned to pool' );
 } );
 
 QUnit.test( 'Renderer order bitmask', assert => {
 
   // init test
   let mask = Renderer.createOrderBitmask( Renderer.bitmaskCanvas, Renderer.bitmaskSVG, Renderer.bitmaskDOM, Renderer.bitmaskWebGL );
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskCanvas );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskDOM );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), Renderer.bitmaskWebGL );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskCanvas );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskSVG );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskDOM );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), Renderer.bitmaskWebGL );
 
   // empty test
   mask = Renderer.createOrderBitmask();
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), 0 );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), 0 );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), 0 );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
 
   // pushing single renderer should work
   mask = Renderer.pushOrderBitmask( mask, Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), 0 );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), 0 );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskSVG );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
 
   // pushing again should have no change
   mask = Renderer.pushOrderBitmask( mask, Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), 0 );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), 0 );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskSVG );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
 
   // pushing Canvas will put it first, SVG second
   mask = Renderer.pushOrderBitmask( mask, Renderer.bitmaskCanvas );
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskCanvas );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), 0 );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskCanvas );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskSVG );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
 
   // pushing SVG will reverse the two
   mask = Renderer.pushOrderBitmask( mask, Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskCanvas );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), 0 );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
-  assert.equal( Renderer.bitmaskOrder( mask, 4 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskSVG );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskCanvas );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 4 ), 0 );
 
   // pushing DOM shifts the other two down
   mask = Renderer.pushOrderBitmask( mask, Renderer.bitmaskDOM );
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskDOM );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskCanvas );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskDOM );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskSVG );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskCanvas );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
 
   // pushing DOM results in no change
   mask = Renderer.pushOrderBitmask( mask, Renderer.bitmaskDOM );
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskDOM );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskCanvas );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskDOM );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskSVG );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskCanvas );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
 
   // pushing Canvas moves it to the front
   mask = Renderer.pushOrderBitmask( mask, Renderer.bitmaskCanvas );
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskCanvas );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskDOM );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskCanvas );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskDOM );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskSVG );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
 
   // pushing DOM again swaps it with the Canvas
   mask = Renderer.pushOrderBitmask( mask, Renderer.bitmaskDOM );
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskDOM );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskCanvas );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskSVG );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskDOM );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskCanvas );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskSVG );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), 0 );
   // console.log( mask.toString( 16 ) );
   // pushing WebGL shifts everything
   mask = Renderer.pushOrderBitmask( mask, Renderer.bitmaskWebGL );
-  assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskWebGL );
-  assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskDOM );
-  assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskCanvas );
-  assert.equal( Renderer.bitmaskOrder( mask, 3 ), Renderer.bitmaskSVG );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 0 ), Renderer.bitmaskWebGL );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 1 ), Renderer.bitmaskDOM );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 2 ), Renderer.bitmaskCanvas );
+  window.assert.equal( Renderer.bitmaskOrder( mask, 3 ), Renderer.bitmaskSVG );
   // console.log( mask.toString( 16 ) );
 } );
  
@@ -419,7 +419,7 @@ QUnit.test( 'Empty Display usage', assert => {
   d.updateDisplay();
   d.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   d.dispose();
 } );
 
@@ -430,7 +430,7 @@ QUnit.test( 'Simple Display usage', assert => {
   r.rectWidth = 100;
   d.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   d.dispose();
 } );
 
@@ -463,7 +463,7 @@ QUnit.test( 'Stitch patterns #1', assert => {
   n.removeChild( n.children[ 0 ] );
   d.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   d.dispose();
 } );
 
@@ -480,7 +480,7 @@ QUnit.test( 'Invisible append', assert => {
   scene.addChild( b );
   display.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   display.dispose();
 
 } );
@@ -510,7 +510,7 @@ QUnit.test( 'Stitching problem A (GitHub Issue #339)', assert => {
   scene.insertChild( 4, g );
   display.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   display.dispose();
 
 } );
@@ -532,7 +532,7 @@ QUnit.test( 'SVG group disposal issue (GitHub Issue #354) A', assert => {
   scene.removeChild( node );
   display.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   display.dispose();
 
 } );
@@ -555,7 +555,7 @@ QUnit.test( 'SVG group disposal issue (GitHub Issue #354) B', assert => {
   scene.removeChild( node );
   display.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   display.dispose();
 } );
 
@@ -566,7 +566,7 @@ QUnit.test( 'Empty path display test', assert => {
   scene.addChild( new Path( null ) );
   display.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   display.dispose();
 } );
 
@@ -589,6 +589,6 @@ QUnit.test( 'Double remove related to #392', assert => {
 
   display.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   display.dispose();
 } );

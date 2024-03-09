@@ -550,7 +550,7 @@ class Instance {
           supportedNodeBitmask & Renderer.bitmaskWebGL ||
           0;
 
-        assert && assert(this.selfRenderer, 'setSelfRenderer failure?');
+        window.assert && window.assert(this.selfRenderer, 'setSelfRenderer failure?');
       }
     }
 
@@ -1112,7 +1112,7 @@ class Instance {
           selfRenderer,
           this.fittability.ancestorsFittable
         );
-        assert && assert(this.selfDrawable);
+        window.assert && window.assert(this.selfDrawable);
 
         return true;
       }
@@ -1466,7 +1466,7 @@ class Instance {
    * @param {number} index
    */
   insertInstance(instance, index) {
-    assert && assert(instance instanceof Instance);
+    window.assert && window.assert(instance instanceof Instance);
     assert &&
       assert(
         index >= 0 && index <= this.children.length,
@@ -1524,7 +1524,7 @@ class Instance {
    * @param {number} index
    */
   removeInstanceWithIndex(instance, index) {
-    assert && assert(instance instanceof Instance);
+    window.assert && window.assert(instance instanceof Instance);
     assert &&
       assert(
         index >= 0 && index < this.children.length,
@@ -1595,9 +1595,9 @@ class Instance {
    * @param {number} maxChangeIndex
    */
   reorderInstances(minChangeIndex, maxChangeIndex) {
-    assert && assert(typeof minChangeIndex === 'number');
-    assert && assert(typeof maxChangeIndex === 'number');
-    assert && assert(minChangeIndex <= maxChangeIndex);
+    window.assert && window.assert(typeof minChangeIndex === 'number');
+    window.assert && window.assert(typeof maxChangeIndex === 'number');
+    window.assert && window.assert(minChangeIndex <= maxChangeIndex);
 
     sceneryLog &&
       sceneryLog.InstanceTree &&
@@ -1684,7 +1684,7 @@ class Instance {
         sceneryLog.Instance('instance already exists');
       // it must have been added back. increment its counter
       instance.addRemoveCounter += 1;
-      assert && assert(instance.addRemoveCounter === 0);
+      window.assert && window.assert(instance.addRemoveCounter === 0);
     } else {
       sceneryLog &&
         sceneryLog.Instance &&
@@ -1741,7 +1741,7 @@ class Instance {
       );
 
     instance.addRemoveCounter -= 1;
-    assert && assert(instance.addRemoveCounter === -1);
+    window.assert && window.assert(instance.addRemoveCounter === -1);
 
     // track the removed instance here. if it doesn't get added back, this will be the only reference we have (we'll
     // need to dispose it)

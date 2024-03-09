@@ -185,7 +185,7 @@ class MeasuringTapeNode extends Node {
 
     super();
 
-    assert && assert(Math.abs(options.modelViewTransform.modelToViewDeltaX(1)) ===
+    window.assert && window.assert(Math.abs(options.modelViewTransform.modelToViewDeltaX(1)) ===
       Math.abs(options.modelViewTransform.modelToViewDeltaY(1)), 'The y and x scale factor are not identical');
 
     this.unitsProperty = unitsProperty;
@@ -206,7 +206,7 @@ class MeasuringTapeNode extends Node {
     this._isBaseUserControlledProperty = new Property<boolean>(false);
     this.isBaseUserControlledProperty = this._isBaseUserControlledProperty;
 
-    assert && assert(this.basePositionProperty.units === this.tipPositionProperty.units, 'units should match');
+    window.assert && window.assert(this.basePositionProperty.units === this.tipPositionProperty.units, 'units should match');
 
     this.measuredDistanceProperty = new DerivedProperty(
       [this.basePositionProperty, this.tipPositionProperty],

@@ -143,7 +143,7 @@ class Boundary {
    * @returns {Vector2}
    */
   computeExtremePoint( transform ) {
-    assert && assert( this.halfEdges.length > 0, 'There is no extreme point if we have no edges' );
+    window.assert && window.assert( this.halfEdges.length > 0, 'There is no extreme point if we have no edges' );
 
     // Transform all of the segments into the new transformed coordinate space.
     const transformedSegments = [];

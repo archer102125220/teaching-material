@@ -53,7 +53,7 @@ class RendererSummary {
    * @param {Node} node
    */
   constructor(node) {
-    assert && assert(node instanceof Node);
+    window.assert && window.assert(node instanceof Node);
 
     // NOTE: assumes that we are created in the Node constructor
     assert &&
@@ -128,7 +128,7 @@ class RendererSummary {
 
     if (ancestorOldMask || ancestorNewMask) {
       const oldSubtreeBitmask = this.bitmask;
-      assert && assert(oldSubtreeBitmask !== undefined);
+      window.assert && window.assert(oldSubtreeBitmask !== undefined);
 
       for (let j = 0; j < numSummaryBits; j++) {
         const ancestorBit = summaryBits[j];
@@ -159,7 +159,7 @@ class RendererSummary {
         );
       }
 
-      assert && assert(this.bitmask === this.computeBitmask(), 'Sanity check');
+      window.assert && window.assert(this.bitmask === this.computeBitmask(), 'Sanity check');
     }
 
     assert && this.audit();

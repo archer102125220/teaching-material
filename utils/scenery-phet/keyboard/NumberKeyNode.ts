@@ -17,7 +17,7 @@ export type NumberKeyNodeOptions = SelfOptions & LetterKeyNodeOptions;
 
 export default class NumberKeyNode extends LetterKeyNode {
   public constructor( value: number, providedOptions?: NumberKeyNodeOptions ) {
-    assert && assert( value >= 0 && Number.isInteger( value ) );
+    window.assert && window.assert( value >= 0 && Number.isInteger( value ) );
     super( value.toString(), providedOptions );
   }
 }

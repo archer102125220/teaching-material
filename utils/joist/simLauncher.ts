@@ -17,7 +17,11 @@ import joist from './joist';
 // let phetioEngine: null = null;
 
 const unlockBrand = asyncLoader.createLock({ name: 'brand' });
-import( /* webpackMode: "eager" */ `../../brand/${window.phet.chipper.brand}/js/Brand.js`) // 
+// import( /* webpackMode: "eager" */ `../../brand/${window.phet.chipper.brand}/js/Brand.js`)
+//   // eslint-disable-next-line @typescript-eslint/no-unused-vars
+//   .then(module => unlockBrand())
+//   .catch(err => console.log(err));
+import( /* webpackMode: "eager" */ '@/utils/brand/adapted-from-phet/Brand')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   .then(module => unlockBrand())
   .catch(err => console.log(err));
@@ -50,13 +54,13 @@ class SimLauncher {
    *                              content is loaded
    */
   public launch(callback: () => void): void {
-    assert && assert(!window.phet.joist.launchCalled, 'Tried to launch twice');
+    window.assert && window.assert(!window.phet.joist.launchCalled, 'Tried to launch twice');
 
     // Add listener before unlocking the launch lock
     asyncLoader.addListener(() => {
 
       window.phet.joist.launchSimulation = () => {
-        assert && assert(!this.launchComplete, 'should not have completed launching the sim yet');
+        window.assert && window.assert(!this.launchComplete, 'should not have completed launching the sim yet');
         this.launchComplete = true;
 
         // once launchSimulation has been called, the wrapper is ready to receive messages because any listeners it

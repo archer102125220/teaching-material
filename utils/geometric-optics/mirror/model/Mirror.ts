@@ -62,7 +62,7 @@ export default class Mirror extends Optic {
       }
     }, providedOptions);
 
-    assert && assert(2 * options.directFocalLengthModelOptions.focalLengthMagnitudeRange.defaultValue ===
+    window.assert && window.assert(2 * options.directFocalLengthModelOptions.focalLengthMagnitudeRange.defaultValue ===
       options.indirectFocalLengthModelOptions.radiusOfCurvatureMagnitudeRange.defaultValue);
 
     super(options);

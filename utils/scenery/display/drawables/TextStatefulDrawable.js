@@ -22,7 +22,7 @@ import {
 } from '../../imports';
 
 const TextStatefulDrawable = memoize((type) => {
-  assert && assert(_.includes(inheritance(type), SelfDrawable));
+  window.assert && window.assert(_.includes(inheritance(type), SelfDrawable));
 
   return class extends PaintableStatefulDrawable(type) {
     /**

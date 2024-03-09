@@ -49,7 +49,7 @@ export default class PDOMPointer extends Pointer {
 
     this.addInputListener({
       focus: event => {
-        assert && assert(this.trail, 'trail should have been calculated for the focused node');
+        window.assert && window.assert(this.trail, 'trail should have been calculated for the focused node');
 
         const lastNode = this.trail!.lastNode();
 
@@ -61,7 +61,7 @@ export default class PDOMPointer extends Pointer {
           // TODO: it would be better if we could use this assertion instead, but guessVisualTrail seems to not be working here, https://github.com/phetsims/phet-io/issues/1847
           if (isNaN(this.point.x)) {
             this.point.setXY(0, 0);
-            // assert && assert( !isNaN( this.point.x ), 'Guess visual trail should be able to get the right point' );
+            // window.assert && window.assert( !isNaN( this.point.x ), 'Guess visual trail should be able to get the right point' );
           }
         }
       },

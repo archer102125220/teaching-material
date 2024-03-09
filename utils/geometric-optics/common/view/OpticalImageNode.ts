@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Node, NodeOptions } from '../../../../scenery/js/imports.js';
-import geometricOptics from '../../geometricOptics.js';
-import PickRequired from '../../../../phet-core/js/types/PickRequired.js';
-import OpticalImage from '../model/OpticalImage.js';
-import DerivedProperty from '../../../../axon/js/DerivedProperty.js';
-import optionize, { EmptySelfOptions } from '../../../../phet-core/js/optionize.js';
-import BooleanIO from '../../../../tandem/js/types/BooleanIO.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
+import { Node, type NodeOptions } from '../../../scenery/imports';
+import geometricOptics from '../../geometricOptics';
+import type PickRequired from '../../../phet-core/types/PickRequired';
+import OpticalImage from '../model/OpticalImage';
+import DerivedProperty from '../../../axon/DerivedProperty';
+import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import BooleanIO from '../../../tandem/types/BooleanIO';
+import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -28,33 +28,33 @@ export default class OpticalImageNode extends Node {
    * @param objectVisibleProperty - is the optical object visible?
    * @param providedOptions
    */
-  protected constructor( opticalImage: OpticalImage,
-                         virtualImageVisibleProperty: TReadOnlyProperty<boolean>,
-                         lightPropagationEnabledProperty: TReadOnlyProperty<boolean>,
-                         objectVisibleProperty: TReadOnlyProperty<boolean>,
-                         providedOptions: OpticalImageNodeOptions ) {
+  protected constructor(opticalImage: OpticalImage,
+    virtualImageVisibleProperty: TReadOnlyProperty<boolean>,
+    lightPropagationEnabledProperty: TReadOnlyProperty<boolean>,
+    objectVisibleProperty: TReadOnlyProperty<boolean>,
+    providedOptions: OpticalImageNodeOptions) {
 
-    const options = optionize<OpticalImageNodeOptions, SelfOptions, NodeOptions>()( {
+    const options = optionize<OpticalImageNodeOptions, SelfOptions, NodeOptions>()({
 
       // NodeOptions
       isDisposable: false,
       visibleProperty: new DerivedProperty(
-        [ opticalImage.visibleProperty, opticalImage.opticalImageTypeProperty, virtualImageVisibleProperty,
-          lightPropagationEnabledProperty, objectVisibleProperty ],
-        ( imageVisible, opticalImageType, virtualImageVisible,
-          lightPropagationEnabled, objectVisible ) => {
-          return ( imageVisible && ( opticalImageType === 'real' || virtualImageVisible ) &&
-                   lightPropagationEnabled && objectVisible );
+        [opticalImage.visibleProperty, opticalImage.opticalImageTypeProperty, virtualImageVisibleProperty,
+          lightPropagationEnabledProperty, objectVisibleProperty],
+        (imageVisible, opticalImageType, virtualImageVisible,
+          lightPropagationEnabled, objectVisible) => {
+          return (imageVisible && (opticalImageType === 'real' || virtualImageVisible) &&
+            lightPropagationEnabled && objectVisible);
         }, {
-          tandem: providedOptions.tandem.createTandem( 'visibleProperty' ),
-          phetioValueType: BooleanIO
-        } )
-    }, providedOptions );
+        tandem: providedOptions.tandem.createTandem('visibleProperty'),
+        phetioValueType: BooleanIO
+      })
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
-    this.addLinkedElement( opticalImage );
+    this.addLinkedElement(opticalImage);
   }
 }
 
-geometricOptics.register( 'OpticalImageNode', OpticalImageNode );
+geometricOptics.register('OpticalImageNode', OpticalImageNode);

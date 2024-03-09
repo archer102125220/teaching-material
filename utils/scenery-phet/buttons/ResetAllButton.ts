@@ -64,7 +64,7 @@ export default class ResetAllButton extends ResetButton {
       voicingContextResponse: SceneryPhetStrings.a11y.voicing.resetAll.contextResponseStringProperty
     }, providedOptions);
 
-    assert && assert(options.xMargin === undefined && options.yMargin === undefined, 'resetAllButton sets margins');
+    window.assert && window.assert(options.xMargin === undefined && options.yMargin === undefined, 'resetAllButton sets margins');
     options.xMargin = options.yMargin = options.radius * MARGIN_COEFFICIENT;
 
     super(options);

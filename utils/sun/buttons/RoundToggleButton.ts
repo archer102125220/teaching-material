@@ -8,16 +8,16 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Property from '../../../axon/js/Property.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import TSoundPlayer from '../../../tambo/js/TSoundPlayer.js';
-import toggleOffSoundPlayer from '../../../tambo/js/shared-sound-players/toggleOffSoundPlayer.js';
-import toggleOnSoundPlayer from '../../../tambo/js/shared-sound-players/toggleOnSoundPlayer.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import sun from '../sun.js';
-import RoundButton, { RoundButtonOptions } from './RoundButton.js';
-import ToggleButtonInteractionStateProperty from './ToggleButtonInteractionStateProperty.js';
-import ToggleButtonModel from './ToggleButtonModel.js';
+import Property from '../../axon/Property';
+import optionize from '../../phet-core/optionize';
+import type TSoundPlayer from '../../tambo/TSoundPlayer';
+import toggleOffSoundPlayer from '../../tambo/shared-sound-players/toggleOffSoundPlayer';
+import toggleOnSoundPlayer from '../../tambo/shared-sound-players/toggleOnSoundPlayer';
+import Tandem from '../../tandem/Tandem';
+import sun from '../sun';
+import RoundButton, { type RoundButtonOptions } from './RoundButton';
+import ToggleButtonInteractionStateProperty from './ToggleButtonInteractionStateProperty';
+import ToggleButtonModel from './ToggleButtonModel';
 
 type SelfOptions = {
 
@@ -38,9 +38,9 @@ export default class RoundToggleButton<T> extends RoundButton {
    * @param valueOn - value when the button is in the on state
    * @param providedOptions?
    */
-  public constructor( property: Property<T>, valueOff: T, valueOn: T, providedOptions?: RoundToggleButtonOptions ) {
+  public constructor(property: Property<T>, valueOff: T, valueOn: T, providedOptions?: RoundToggleButtonOptions) {
 
-    const options = optionize<RoundToggleButtonOptions, SelfOptions, RoundButtonOptions>()( {
+    const options = optionize<RoundToggleButtonOptions, SelfOptions, RoundButtonOptions>()({
 
       // SelfOptions
       valueOffSoundPlayer: toggleOffSoundPlayer,
@@ -50,31 +50,31 @@ export default class RoundToggleButton<T> extends RoundButton {
       tandem: Tandem.REQUIRED,
       phetioFeatured: true,
       tandemNameSuffix: 'Button'
-    }, providedOptions );
+    }, providedOptions);
 
     // Note it shares a tandem with this, so the emitter will be instrumented as a child of the button
-    const toggleButtonModel = new ToggleButtonModel( valueOff, valueOn, property, options );
-    const toggleButtonInteractionStateProperty = new ToggleButtonInteractionStateProperty( toggleButtonModel );
+    const toggleButtonModel = new ToggleButtonModel(valueOff, valueOn, property, options);
+    const toggleButtonInteractionStateProperty = new ToggleButtonInteractionStateProperty(toggleButtonModel);
 
-    super( toggleButtonModel, toggleButtonInteractionStateProperty, options );
+    super(toggleButtonModel, toggleButtonInteractionStateProperty, options);
 
-    this.addLinkedElement( property, {
+    this.addLinkedElement(property, {
       tandemName: 'property'
-    } );
+    });
 
     // sound generation
     const playSounds = () => {
-      if ( property.value === valueOff ) {
+      if (property.value === valueOff) {
         options.valueOffSoundPlayer.play();
       }
-      else if ( property.value === valueOn ) {
+      else if (property.value === valueOn) {
         options.valueOnSoundPlayer.play();
       }
     };
-    this.buttonModel.produceSoundEmitter.addListener( playSounds );
+    this.buttonModel.produceSoundEmitter.addListener(playSounds);
 
     this.disposeRoundToggleButton = () => {
-      this.buttonModel.produceSoundEmitter.removeListener( playSounds );
+      this.buttonModel.produceSoundEmitter.removeListener(playSounds);
       toggleButtonModel.dispose();
     };
   }
@@ -85,4 +85,4 @@ export default class RoundToggleButton<T> extends RoundButton {
   }
 }
 
-sun.register( 'RoundToggleButton', RoundToggleButton );
+sun.register('RoundToggleButton', RoundToggleButton);

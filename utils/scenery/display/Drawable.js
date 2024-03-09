@@ -234,7 +234,7 @@ class Drawable {
       );
 
     // if this is being called, Block will be guaranteed to be loaded
-    assert && assert(this instanceof Block);
+    window.assert && window.assert(this instanceof Block);
 
     this.parentDrawable = backboneInstance;
     this.backbone = backboneInstance;
@@ -266,7 +266,7 @@ class Drawable {
         backbone !== undefined,
         'backbone can be either null or a backbone'
       );
-    assert && assert(block instanceof Block);
+    window.assert && window.assert(block instanceof Block);
 
     this.pendingParentDrawable = block;
     this.pendingBackbone = backbone;
@@ -316,7 +316,7 @@ class Drawable {
         `[${this.constructor.name}*] notePendingMove ${this.toString()} with ${block.toString()}`
       );
 
-    assert && assert(block instanceof Block);
+    window.assert && window.assert(block instanceof Block);
 
     this.pendingParentDrawable = block;
 
@@ -477,7 +477,7 @@ class Drawable {
    * @param {*} 'We should not re-dispose drawables'
    */
   dispose() {
-    assert && assert(!this.isDisposed, 'We should not re-dispose drawables');
+    window.assert && window.assert(!this.isDisposed, 'We should not re-dispose drawables');
 
     sceneryLog &&
       sceneryLog.Drawable &&

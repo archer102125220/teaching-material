@@ -126,7 +126,7 @@ class Reader {
             if (this.speaking) {
               setTimeout(() => {
                 readPolite();
-              }, 2000); // eslint-disable-line bad-sim-text
+              }, 2000);
             } else {
               this.synth.speak(utterThis);
               // remove from queue

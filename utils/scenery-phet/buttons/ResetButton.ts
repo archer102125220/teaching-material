@@ -8,15 +8,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import InstanceRegistry from '../../../phet-core/js/documentation/InstanceRegistry.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import { TColor, Path } from '../../../scenery/js/imports.js';
-import RoundPushButton, { RoundPushButtonOptions } from '../../../sun/js/buttons/RoundPushButton.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import ResetShape from '../ResetShape.js';
-import sceneryPhet from '../sceneryPhet.js';
+import Matrix3 from '../../dot/Matrix3';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import InstanceRegistry from '../../phet-core/documentation/InstanceRegistry';
+import optionize from '../../phet-core/optionize';
+import { type TColor, Path } from '../../scenery/imports';
+import RoundPushButton, { type RoundPushButtonOptions } from '../../sun/buttons/RoundPushButton';
+import Tandem from '../../tandem/Tandem';
+import ResetShape from '../ResetShape';
+import sceneryPhet from '../sceneryPhet';
 
 type SelfOptions = {
   radius?: number;
@@ -27,12 +27,12 @@ export type ResetButtonOptions = SelfOptions & StrictOmit<RoundPushButtonOptions
 
 export default class ResetButton extends RoundPushButton {
 
-  public constructor( providedOptions?: ResetButtonOptions ) {
+  public constructor(providedOptions?: ResetButtonOptions) {
 
     // radius is used in computation of defaults for other options
-    const BUTTON_RADIUS = ( providedOptions && providedOptions.radius ) ? providedOptions.radius : 24;
+    const BUTTON_RADIUS = (providedOptions && providedOptions.radius) ? providedOptions.radius : 24;
 
-    const options = optionize<ResetButtonOptions, SelfOptions, RoundPushButtonOptions>()( {
+    const options = optionize<ResetButtonOptions, SelfOptions, RoundPushButtonOptions>()({
 
       // SelfOptions
       radius: BUTTON_RADIUS,
@@ -51,21 +51,21 @@ export default class ResetButton extends RoundPushButton {
 
       tandem: Tandem.REQUIRED,
       tandemNameSuffix: 'ResetButton'
-    }, providedOptions );
+    }, providedOptions);
 
     // icon, with bounds adjusted so that center of circle appears to be centered on button, see sun#235
-    const resetShape = new ResetShape( options.radius );
-    const resetIcon = new Path( resetShape, { fill: options.arrowColor } );
-    const reflectedIcon = new Path( resetShape.transformed( Matrix3.scaling( -1, -1 ) ) );
-    resetIcon.localBounds = resetIcon.localBounds.union( reflectedIcon.localBounds );
+    const resetShape = new ResetShape(options.radius);
+    const resetIcon = new Path(resetShape, { fill: options.arrowColor });
+    const reflectedIcon = new Path(resetShape.transformed(Matrix3.scaling(-1, -1)));
+    resetIcon.localBounds = resetIcon.localBounds.union(reflectedIcon.localBounds);
 
     options.content = resetIcon;
 
-    super( options );
+    super(options);
 
     // support for binder documentation, stripped out in builds and only runs when ?binder is specified
-    assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL( 'scenery-phet', 'ResetButton', this );
+    assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL('scenery-phet', 'ResetButton', this);
   }
 }
 
-sceneryPhet.register( 'ResetButton', ResetButton );
+sceneryPhet.register('ResetButton', ResetButton);

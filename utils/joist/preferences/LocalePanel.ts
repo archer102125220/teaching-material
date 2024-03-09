@@ -10,19 +10,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import joist from '../joist.js';
-import Panel from '../../../sun/js/Panel.js';
-import { GridBox } from '../../../scenery/js/imports.js';
-import Property from '../../../axon/js/Property.js';
-import LanguageSelectionNode from './LanguageSelectionNode.js';
-import { Locale } from '../i18n/localeProperty.js';
-import JoistStrings from '../JoistStrings.js';
+import joist from '../joist';
+import Panel from '../../sun/Panel';
+import { GridBox } from '../../scenery/imports';
+import Property from '../../axon/Property';
+import LanguageSelectionNode from './LanguageSelectionNode';
+import { type Locale } from '@/i18n/joist/localeProperty';
+import JoistStrings from '../JoistStrings';
 
 class LocalePanel extends Panel {
-  public constructor( localeProperty: Property<Locale> ) {
+  public constructor(localeProperty: Property<Locale>) {
 
     // All available locales aligned into a grid
-    const content = new GridBox( {
+    const content = new GridBox({
       xMargin: 5,
       xAlign: 'left',
       autoRows: 15,
@@ -33,12 +33,12 @@ class LocalePanel extends Panel {
 
       // We don't want the GridBox to resize as selection highlights update with input
       resize: false,
-      children: localeProperty.validValues!.map( locale => {
-        return new LanguageSelectionNode( localeProperty, locale );
-      } )
-    } );
+      children: localeProperty.validValues!.map(locale => {
+        return new LanguageSelectionNode(localeProperty, locale);
+      })
+    });
 
-    super( content, {
+    super(content, {
 
       // pdom
       tagName: 'div',
@@ -46,9 +46,9 @@ class LocalePanel extends Panel {
       labelContent: JoistStrings.a11y.preferences.tabs.localization.languageSelection.labelStringProperty,
       descriptionTagName: 'p',
       descriptionContent: JoistStrings.a11y.preferences.tabs.localization.languageSelection.descriptionStringProperty
-    } );
+    });
   }
 }
 
-joist.register( 'LocalePanel', LocalePanel );
+joist.register('LocalePanel', LocalePanel);
 export default LocalePanel;

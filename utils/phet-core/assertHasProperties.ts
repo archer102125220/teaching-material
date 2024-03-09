@@ -26,7 +26,7 @@ const assertHasProperties = (object: IntentionalAny, properties: string[]): void
 
     properties.forEach(property => {
 
-      assert && assert(Object.getOwnPropertyDescriptor(object, property) || // support fields directly on the object
+      window.assert && window.assert(Object.getOwnPropertyDescriptor(object, property) || // support fields directly on the object
 
         // test up the class hierarchy for if the property is defined on a prototype.
         _.some(inheritance(object.constructor).map(type => Object.getOwnPropertyDescriptor(type.prototype, property))),

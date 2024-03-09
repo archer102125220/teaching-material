@@ -123,7 +123,7 @@ class PreferencesTabs extends HBox {
     const keyboardListener = new KeyboardListener({
       keys: ['arrowRight', 'arrowLeft', 'arrowUp', 'arrowDown'],
       callback: (event, keysPressed, listener) => {
-        assert && assert(event, 'event is required for this listener');
+        window.assert && window.assert(event, 'event is required for this listener');
         const sceneryEvent = event!;
 
         if (listener.keysDown) {
@@ -135,7 +135,7 @@ class PreferencesTabs extends HBox {
         else if (keysPressed === 'arrowRight' || keysPressed === 'arrowLeft') {
 
           // prevent "native" behavior so that Safari doesn't make an error sound with arrow keys in full screen mode
-          assert && assert(sceneryEvent.domEvent, 'domEvent is required for this listener');
+          window.assert && window.assert(sceneryEvent.domEvent, 'domEvent is required for this listener');
           sceneryEvent.domEvent!.preventDefault();
 
           const direction = keysPressed === 'arrowRight' ? 1 : -1;
@@ -183,7 +183,7 @@ class PreferencesTabs extends HBox {
    */
   public getTabVisibleProperty(preferencesType: PreferencesType): TReadOnlyProperty<boolean> {
     const tab = _.find(this.content, content => content.value === preferencesType);
-    assert && assert(tab, `tab not found for PreferencesType, ${preferencesType.name}`);
+    window.assert && window.assert(tab, `tab not found for PreferencesType, ${preferencesType.name}`);
     return tab!.visibleProperty;
   }
 

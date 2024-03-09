@@ -29,8 +29,8 @@ const cache = new IOTypeCache<string>();
  * @param parameterTypes - a list of IOType to combine into a single composite
  */
 const OrIO = (parameterTypes: IOType[]): IOType => {
-  assert && assert(Array.isArray(parameterTypes), 'OrIO needs to be an array');
-  assert && assert(parameterTypes.length > 1, 'OrIO needs parameterTypes');
+  window.assert && window.assert(Array.isArray(parameterTypes), 'OrIO needs to be an array');
+  window.assert && window.assert(parameterTypes.length > 1, 'OrIO needs parameterTypes');
   const typeNames = parameterTypes.map(parameterType => parameterType.typeName);
   const key = typeNames.join(',');
 
@@ -64,9 +64,9 @@ const OrIO = (parameterTypes: IOType[]): IOType => {
 
       fromStateObject: (stateObject: IntentionalAny) => {
         // eslint-disable-next-line no-prototype-builtins
-        assert && assert(stateObject.hasOwnProperty('index'), 'index required for deserialization');
+        window.assert && window.assert(stateObject.hasOwnProperty('index'), 'index required for deserialization');
         // eslint-disable-next-line no-prototype-builtins
-        assert && assert(stateObject.hasOwnProperty('state'), 'state required for deserialization');
+        window.assert && window.assert(stateObject.hasOwnProperty('state'), 'state required for deserialization');
         return parameterTypes[stateObject.index].fromStateObject(stateObject.state);
       },
       stateSchema: StateSchema.asValue(`${typeNames.join('|')}`, {

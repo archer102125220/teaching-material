@@ -122,7 +122,7 @@ export default class SliderControlsKeyboardHelpSection extends KeyboardHelpSecti
               leftRight: SceneryPhetStrings.a11y.keyboardHelpDialog.slider.leftRightArrowKeysStringProperty,
               upDown: SceneryPhetStrings.a11y.keyboardHelpDialog.slider.upDownArrowKeysStringProperty
             }, { tandem: Tandem.OPT_OUT }) : null;
-    assert && assert(keysStringProperty);
+    window.assert && window.assert(keysStringProperty);
     const keyboardHelpDialogDefaultStepsStringProperty = new PatternStringProperty(SceneryPhetStrings.a11y.keyboardHelpDialog.slider.defaultStepsDescriptionPatternStringProperty, {
       verb: options.verbStringProperty,
       slider: options.sliderStringProperty,
@@ -136,7 +136,7 @@ export default class SliderControlsKeyboardHelpSection extends KeyboardHelpSecti
             leftRight: SceneryPhetStrings.a11y.keyboardHelpDialog.slider.shiftLeftRightArrowKeysStringProperty,
             upDown: SceneryPhetStrings.a11y.keyboardHelpDialog.slider.shiftUpDownArrowKeysStringProperty
           }, { tandem: Tandem.OPT_OUT }) : null;
-    assert && assert(shiftKeysStringProperty);
+    window.assert && window.assert(shiftKeysStringProperty);
     const keyboardHelpDialogSmallerStepsStringProperty = new PatternStringProperty(SceneryPhetStrings.a11y.keyboardHelpDialog.slider.smallerStepsDescriptionPatternStringProperty, {
       verb: options.verbStringProperty,
       keys: shiftKeysStringProperty!
@@ -179,7 +179,7 @@ export default class SliderControlsKeyboardHelpSection extends KeyboardHelpSecti
         adjustSliderSmallerStepsIcons = [shiftPlusUpDownIcon];
         break;
       default:
-        assert && assert(options.arrowKeyIconDisplay === ArrowKeyIconDisplay.BOTH, 'unsupported arrowKeyIconDisplay');
+        window.assert && window.assert(options.arrowKeyIconDisplay === ArrowKeyIconDisplay.BOTH, 'unsupported arrowKeyIconDisplay');
         adjustSliderIcon = leftRightOrUpDownIcon;
         adjustSliderSmallerStepsIcons = [shiftPlusLeftRightIcon, shiftPlusUpDownIcon];
     }

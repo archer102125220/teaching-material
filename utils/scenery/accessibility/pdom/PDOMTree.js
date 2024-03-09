@@ -33,9 +33,9 @@ const PDOMTree = {
       );
     sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
 
-    assert && assert(parent instanceof Node);
-    assert && assert(child instanceof Node);
-    assert && assert(!child._rendererSummary.hasNoPDOM());
+    window.assert && window.assert(parent instanceof Node);
+    window.assert && window.assert(child instanceof Node);
+    window.assert && window.assert(!child._rendererSummary.hasNoPDOM());
 
     const focusedNode = PDOMTree.beforeOp();
 
@@ -63,9 +63,9 @@ const PDOMTree = {
       );
     sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
 
-    assert && assert(parent instanceof Node);
-    assert && assert(child instanceof Node);
-    assert && assert(!child._rendererSummary.hasNoPDOM());
+    window.assert && window.assert(parent instanceof Node);
+    window.assert && window.assert(child instanceof Node);
+    window.assert && window.assert(!child._rendererSummary.hasNoPDOM());
 
     const focusedNode = PDOMTree.beforeOp();
 
@@ -90,8 +90,8 @@ const PDOMTree = {
       sceneryLog.PDOMTree(`childrenOrderChange node:n#${node._id}`);
     sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
 
-    assert && assert(node instanceof Node);
-    assert && assert(!node._rendererSummary.hasNoPDOM());
+    window.assert && window.assert(node instanceof Node);
+    window.assert && window.assert(!node._rendererSummary.hasNoPDOM());
 
     const focusedNode = PDOMTree.beforeOp();
 
@@ -118,7 +118,7 @@ const PDOMTree = {
       );
     sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
 
-    assert && assert(node instanceof Node);
+    window.assert && window.assert(node instanceof Node);
 
     const focusedNode = PDOMTree.beforeOp();
 
@@ -217,7 +217,7 @@ const PDOMTree = {
       sceneryLog.PDOMTree(`pdomContentChange n#${node._id}`);
     sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
 
-    assert && assert(node instanceof Node);
+    window.assert && window.assert(node instanceof Node);
 
     const focusedNode = PDOMTree.beforeOp();
 
@@ -262,7 +262,7 @@ const PDOMTree = {
    */
   rebuildInstanceTree(rootInstance) {
     const rootNode = rootInstance.display.rootNode;
-    assert && assert(rootNode);
+    window.assert && window.assert(rootNode);
 
     rootInstance.removeAllChildren();
 

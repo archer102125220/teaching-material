@@ -72,7 +72,7 @@ export default class GuideNode extends Node {
    * @param angle - incident or transmitted angle
    */
   public updateArm(armNode: Node, angle: number): void {
-    assert && assert(isFinite(angle));
+    window.assert && window.assert(isFinite(angle));
 
     const viewFulcrumPosition = this.modelViewTransform.modelToViewPosition(this.guide.fulcrumPositionProperty.value);
 
@@ -135,7 +135,7 @@ function createArmNode(armColor: TColor): Rectangle {
  * Sets the position of an arm such that its left center is on the fulcrum point.
  */
 function setArmPosition(armNode: Node, viewFulcrumPosition: Vector2, angle: number): void {
-  assert && assert(isFinite(angle));
+  window.assert && window.assert(isFinite(angle));
 
   // Center of the arm is offset from the fulcrum point.
   // The model-view transform is Y-inverted, so a positive rotation in the model is counterclockwise (negative) in the view.

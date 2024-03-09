@@ -31,7 +31,7 @@ class CircleCanvasDrawable extends PaintableStatelessDrawable(
    * @param {Matrix3} matrix - The transformation matrix applied for this node's coordinate system.
    */
   paintCanvas(wrapper, node, matrix) {
-    assert && assert(node instanceof Node);
+    window.assert && window.assert(node instanceof Node);
     const context = wrapper.context;
 
     context.beginPath();

@@ -33,7 +33,7 @@ export default abstract class Gradient extends Paint {
   public constructor() {
     super();
 
-    assert && assert(this.constructor.name !== 'Gradient',
+    window.assert && window.assert(this.constructor.name !== 'Gradient',
       'Please create a LinearGradient or RadialGradient. Do not directly use the supertype Gradient.');
 
     this.stops = [];
@@ -58,8 +58,8 @@ export default abstract class Gradient extends Paint {
    * @returns - for chaining
    */
   public addColorStop(ratio: number, color: TColor): this {
-    assert && assert(ratio >= 0 && ratio <= 1, 'Ratio needs to be between 0,1 inclusively');
-    assert && assert(color === null ||
+    window.assert && window.assert(ratio >= 0 && ratio <= 1, 'Ratio needs to be between 0,1 inclusively');
+    window.assert && window.assert(color === null ||
       typeof color === 'string' ||
       color instanceof Color ||
       (color instanceof ReadOnlyProperty && (color.value === null ||

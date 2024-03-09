@@ -28,7 +28,7 @@ class QueryParametersWarningDialog extends OopsDialog {
     warnings: Warning[], // eslint-disable-line no-undef
     providedOptions?: QueryParametersWarningDialogOptions) {
 
-    assert && assert(warnings.length > 0, `expected 1 or more warnings: ${warnings.length}`);
+    window.assert && window.assert(warnings.length > 0, `expected 1 or more warnings: ${warnings.length}`);
 
     const options = optionize<QueryParametersWarningDialogOptions, SelfOptions, OopsDialogOptions>()({
 

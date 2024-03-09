@@ -24,7 +24,7 @@ import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
 const SCREEN_WIDTH = 42;
 const SCREEN_NEAR_HEIGHT = 134;
 const SCREEN_FAR_HEIGHT = 112;
-assert && assert(SCREEN_NEAR_HEIGHT > SCREEN_FAR_HEIGHT);
+window.assert && window.assert(SCREEN_NEAR_HEIGHT > SCREEN_FAR_HEIGHT);
 
 type SelfOptions = EmptySelfOptions;
 

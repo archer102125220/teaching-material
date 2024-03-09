@@ -68,7 +68,7 @@ export default class OpticLabelNode extends LabelNode {
       }
       else {
         // mirror
-        assert && assert(optic instanceof Mirror); // eslint-disable-line no-simple-type-checking-assertions
+        window.assert && window.assert(optic instanceof Mirror); // eslint-disable-line no-simple-type-checking-assertions
         if (opticSurfaceType === 'convex') {
           text = convexMirrorString;
         }

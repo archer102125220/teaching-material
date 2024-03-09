@@ -58,29 +58,29 @@ export default class ColorMatrixFilter extends Filter {
     m20: number, m21: number, m22: number, m23: number, m24: number,
     m30: number, m31: number, m32: number, m33: number, m34: number) {
 
-    assert && assert(isFinite(m00), 'm00 should be a finite number');
-    assert && assert(isFinite(m01), 'm01 should be a finite number');
-    assert && assert(isFinite(m02), 'm02 should be a finite number');
-    assert && assert(isFinite(m03), 'm03 should be a finite number');
-    assert && assert(isFinite(m04), 'm04 should be a finite number');
+    window.assert && window.assert(isFinite(m00), 'm00 should be a finite number');
+    window.assert && window.assert(isFinite(m01), 'm01 should be a finite number');
+    window.assert && window.assert(isFinite(m02), 'm02 should be a finite number');
+    window.assert && window.assert(isFinite(m03), 'm03 should be a finite number');
+    window.assert && window.assert(isFinite(m04), 'm04 should be a finite number');
 
-    assert && assert(isFinite(m10), 'm10 should be a finite number');
-    assert && assert(isFinite(m11), 'm11 should be a finite number');
-    assert && assert(isFinite(m12), 'm12 should be a finite number');
-    assert && assert(isFinite(m13), 'm13 should be a finite number');
-    assert && assert(isFinite(m14), 'm14 should be a finite number');
+    window.assert && window.assert(isFinite(m10), 'm10 should be a finite number');
+    window.assert && window.assert(isFinite(m11), 'm11 should be a finite number');
+    window.assert && window.assert(isFinite(m12), 'm12 should be a finite number');
+    window.assert && window.assert(isFinite(m13), 'm13 should be a finite number');
+    window.assert && window.assert(isFinite(m14), 'm14 should be a finite number');
 
-    assert && assert(isFinite(m20), 'm20 should be a finite number');
-    assert && assert(isFinite(m21), 'm21 should be a finite number');
-    assert && assert(isFinite(m22), 'm22 should be a finite number');
-    assert && assert(isFinite(m23), 'm23 should be a finite number');
-    assert && assert(isFinite(m24), 'm24 should be a finite number');
+    window.assert && window.assert(isFinite(m20), 'm20 should be a finite number');
+    window.assert && window.assert(isFinite(m21), 'm21 should be a finite number');
+    window.assert && window.assert(isFinite(m22), 'm22 should be a finite number');
+    window.assert && window.assert(isFinite(m23), 'm23 should be a finite number');
+    window.assert && window.assert(isFinite(m24), 'm24 should be a finite number');
 
-    assert && assert(isFinite(m30), 'm30 should be a finite number');
-    assert && assert(isFinite(m31), 'm31 should be a finite number');
-    assert && assert(isFinite(m32), 'm32 should be a finite number');
-    assert && assert(isFinite(m33), 'm33 should be a finite number');
-    assert && assert(isFinite(m34), 'm34 should be a finite number');
+    window.assert && window.assert(isFinite(m30), 'm30 should be a finite number');
+    window.assert && window.assert(isFinite(m31), 'm31 should be a finite number');
+    window.assert && window.assert(isFinite(m32), 'm32 should be a finite number');
+    window.assert && window.assert(isFinite(m33), 'm33 should be a finite number');
+    window.assert && window.assert(isFinite(m34), 'm34 should be a finite number');
 
     super();
 

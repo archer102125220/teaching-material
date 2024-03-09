@@ -168,7 +168,7 @@ export default class ButtonNode extends Sizable(Voicing(Node)) {
       'if options.enabledProperty is provided, it must === buttonModel.enabledProperty');
     options.enabledProperty = buttonModel.enabledProperty;
 
-    assert && assert(options.aspectRatio === null || (isFinite(options.aspectRatio) && options.aspectRatio > 0),
+    window.assert && window.assert(options.aspectRatio === null || (isFinite(options.aspectRatio) && options.aspectRatio > 0),
       `ButtonNode aspectRatio should be a positive finite value if non-null. Instead received ${options.aspectRatio}.`);
 
     super();
@@ -190,7 +190,7 @@ export default class ButtonNode extends Sizable(Voicing(Node)) {
     this._pressListener = buttonModel.createPressListener(options.listenerOptions);
     this.addInputListener(this._pressListener);
 
-    assert && assert(buttonBackground.fill === null, 'ButtonNode controls the fill for the buttonBackground');
+    window.assert && window.assert(buttonBackground.fill === null, 'ButtonNode controls the fill for the buttonBackground');
     buttonBackground.fill = this.baseColorProperty;
     this.addChild(buttonBackground);
 
@@ -259,8 +259,8 @@ export default class ButtonNode extends Sizable(Voicing(Node)) {
       this.addChild(alignBox);
     }
     else {
-      assert && assert(options.minUnstrokedWidth !== null);
-      assert && assert(options.minUnstrokedHeight !== null);
+      window.assert && window.assert(options.minUnstrokedWidth !== null);
+      window.assert && window.assert(options.minUnstrokedHeight !== null);
 
       this.layoutSizeProperty = new TinyProperty(new Dimension2(
         options.minUnstrokedWidth! + this.maxLineWidth,

@@ -500,7 +500,7 @@ QUnit.test( 'Instance.addRemoveCounter === -2 failure (#392)', assert => {
   node4.removeChild( path2 );
   node0.removeChild( node6 );
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   display.dispose();
 } );
 
@@ -521,7 +521,7 @@ QUnit.test( 'RelativeTransform matrix mismatch #393', assert => {
   node0.renderer = 'canvas';
   display.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   display.dispose();
 } );
 
@@ -1312,6 +1312,6 @@ QUnit.test( 'computeShapeBounds in requiresSVGBoundsWorkaround', assert => {
   path3.transform.prepend( Matrix3.scaling( 0.6607098999660652 ) );
   display.updateDisplay();
 
-  assert.ok( true, 'so we have at least 1 test in this set' );
+  window.assert.ok( true, 'so we have at least 1 test in this set' );
   display.dispose();
 } );

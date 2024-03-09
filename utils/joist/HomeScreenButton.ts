@@ -71,7 +71,7 @@ class HomeScreenButton extends Voicing(VBox) {
     }
     const smallIconHeight = smallIconScale * LARGE_ICON_HEIGHT;
 
-    assert && assert(screen.homeScreenIcon, `homeScreenIcon is required for screen ${screen.nameProperty.value}`);
+    window.assert && window.assert(screen.homeScreenIcon, `homeScreenIcon is required for screen ${screen.nameProperty.value}`);
     const homeScreenIcon = screen.homeScreenIcon!;
 
     // create an icon for each size

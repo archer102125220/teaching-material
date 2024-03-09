@@ -24,12 +24,12 @@ QUnit.test( 'Identity', assert => {
   } );
 
   root.validateBounds();
-  assert.equal( b.x, 100, 'x' );
+  window.assert.equal( b.x, 100, 'x' );
 
   a.x = 100;
 
   root.validateBounds();
-  assert.equal( b.x, 200, 'x after 100' );
+  window.assert.equal( b.x, 200, 'x after 100' );
 } );
 
 QUnit.test( 'Translation', assert => {
@@ -44,12 +44,12 @@ QUnit.test( 'Translation', assert => {
   } );
 
   root.validateBounds();
-  assert.equal( b.x, 50, 'x' );
+  window.assert.equal( b.x, 50, 'x' );
 
   a.x = 100;
 
   root.validateBounds();
-  assert.equal( b.x, 150, 'x after 100' );
+  window.assert.equal( b.x, 150, 'x after 100' );
 } );
 
 QUnit.test( 'Scale', assert => {
@@ -64,10 +64,10 @@ QUnit.test( 'Scale', assert => {
   } );
 
   root.validateBounds();
-  assert.equal( b.x, 200, 'x' );
+  window.assert.equal( b.x, 200, 'x' );
 
   a.x = 100;
 
   root.validateBounds();
-  assert.equal( b.x, 400, 'x after 100' );
+  window.assert.equal( b.x, 400, 'x after 100' );
 } );

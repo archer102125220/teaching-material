@@ -139,7 +139,7 @@ export default class NumberDisplay extends Node {
       const valuePatternProvided = options.valuePattern !== SunConstants.VALUE_NAMED_PLACEHOLDER;
       const decimalOrValueProvided = decimalPlacesProvided || valuePatternProvided;
       if (numberFormatterProvided || decimalOrValueProvided) {
-        assert && assert(numberFormatterProvided !== decimalOrValueProvided,
+        window.assert && window.assert(numberFormatterProvided !== decimalOrValueProvided,
           'options.numberFormatter is mutually exclusive with options.valuePattern and options.decimalPlaces');
       }
     }
@@ -153,15 +153,15 @@ export default class NumberDisplay extends Node {
       }
     });
 
-    assert && assert(!options.hasOwnProperty('unitsNode'), 'unitsNode is not a supported option');
+    window.assert && window.assert(!options.hasOwnProperty('unitsNode'), 'unitsNode is not a supported option');
 
     // Set default alignments and validate
-    assert && assert(_.includes(ALIGN_VALUES, options.align), `invalid align: ${options.align}`);
+    window.assert && window.assert(_.includes(ALIGN_VALUES, options.align), `invalid align: ${options.align}`);
     if (!options.noValueAlign) {
       options.noValueAlign = options.align;
     }
-    assert && assert(_.includes(ALIGN_VALUES, options.noValueAlign), `invalid noValueAlign: ${options.noValueAlign}`);
-    assert && assert(options.textOptions, 'did you accidentally set textOptions to null?');
+    window.assert && window.assert(_.includes(ALIGN_VALUES, options.noValueAlign), `invalid noValueAlign: ${options.noValueAlign}`);
+    window.assert && window.assert(options.textOptions, 'did you accidentally set textOptions to null?');
 
     // Support numbered (old-style) placeholder by replacing it with the corresponding named placeholder.
     // See https://github.com/phetsims/scenery-phet/issues/446
@@ -178,7 +178,7 @@ export default class NumberDisplay extends Node {
       ? new TinyProperty(replaceValuePatternValue(options.valuePattern))
       : new DerivedProperty([options.valuePattern], replaceValuePatternValue);
 
-    assert && assert(!!phet.chipper.queryParameters.stringTest ||
+    window.assert && window.assert(!!phet.chipper.queryParameters.stringTest ||
       valuePatternProperty.value.includes(SunConstants.VALUE_NAMED_PLACEHOLDER),
       `missing value placeholder in options.valuePattern: ${valuePatternProperty.value}`);
 
@@ -189,7 +189,7 @@ export default class NumberDisplay extends Node {
     }
     const noValuePatternProperty = typeof options.noValuePattern === 'string' ? new TinyProperty(options.noValuePattern) : options.noValuePattern;
 
-    assert && assert(!!phet.chipper.queryParameters.stringTest ||
+    window.assert && window.assert(!!phet.chipper.queryParameters.stringTest ||
       noValuePatternProperty.value.includes(SunConstants.VALUE_NAMED_PLACEHOLDER),
       `missing value placeholder in options.noValuePattern: ${noValuePatternProperty.value}`);
 

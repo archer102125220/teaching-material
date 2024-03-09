@@ -102,7 +102,7 @@ export type SpeakingOptions = {
 
 const Voicing = <SuperType extends Constructor<Node>>(Type: SuperType) => { // eslint-disable-line @typescript-eslint/explicit-module-boundary-types
 
-  assert && assert(_.includes(inheritance(Type), Node), 'Only Node subtypes should compose Voicing');
+  window.assert && window.assert(_.includes(inheritance(Type), Node), 'Only Node subtypes should compose Voicing');
 
   const VoicingClass = DelayedMutate('Voicing', VOICING_OPTION_KEYS, class VoicingClass extends InteractiveHighlighting(Type) {
 
@@ -337,7 +337,7 @@ const Voicing = <SuperType extends Constructor<Node>>(Type: SuperType) => { // e
       // don't send to utteranceQueue if response is empty
       // don't send to utteranceQueue for PhET-iO dynamic element archetypes, https://github.com/phetsims/joist/issues/817
       if (content && notPhetioArchetype) {
-        voicingUtteranceQueue.addToBack(content); // eslint-disable-line bad-sim-text
+        voicingUtteranceQueue.addToBack(content);
       }
     }
 
@@ -580,8 +580,8 @@ const Voicing = <SuperType extends Constructor<Node>>(Type: SuperType) => { // e
         this._voicingCanSpeakCount--;
       }
 
-      assert && assert(this._voicingCanSpeakCount >= 0, 'the voicingCanSpeakCount should not go below zero');
-      assert && assert(this._voicingCanSpeakCount <= this.instances.length,
+      window.assert && window.assert(this._voicingCanSpeakCount >= 0, 'the voicingCanSpeakCount should not go below zero');
+      window.assert && window.assert(this._voicingCanSpeakCount <= this.instances.length,
         'The voicingCanSpeakCount cannot be greater than the number of Instances.');
 
       this._voicingCanSpeakProperty.value = this._voicingCanSpeakCount > 0;
@@ -610,7 +610,7 @@ const Voicing = <SuperType extends Constructor<Node>>(Type: SuperType) => { // e
      * voicingCanSpeakProperty.
      */
     private addOrRemoveInstanceListeners(instance: Instance, added: boolean): void {
-      assert && assert(instance.canVoiceEmitter, 'Instance must be initialized.');
+      window.assert && window.assert(instance.canVoiceEmitter, 'Instance must be initialized.');
 
       if (added) {
         // @ts-expect-error - Emitters in Instance need typing
@@ -629,7 +629,7 @@ const Voicing = <SuperType extends Constructor<Node>>(Type: SuperType) => { // e
      * Clean this._voicingUtterance, disposing if we own it or unregistering it if we do not.
      */
     protected cleanVoicingUtterance(): void {
-      assert && assert(this._voicingUtterance, 'A voicingUtterance must be available to clean.');
+      window.assert && window.assert(this._voicingUtterance, 'A voicingUtterance must be available to clean.');
       if (this._voicingUtterance instanceof OwnedVoicingUtterance) {
         this._voicingUtterance.dispose();
       }
@@ -652,7 +652,7 @@ const Voicing = <SuperType extends Constructor<Node>>(Type: SuperType) => { // e
    */
   VoicingClass.prototype._mutatorKeys = VOICING_OPTION_KEYS.concat(VoicingClass.prototype._mutatorKeys);
 
-  assert && assert(VoicingClass.prototype._mutatorKeys.length === _.uniq(VoicingClass.prototype._mutatorKeys).length, 'duplicate mutator keys in Voicing');
+  window.assert && window.assert(VoicingClass.prototype._mutatorKeys.length === _.uniq(VoicingClass.prototype._mutatorKeys).length, 'duplicate mutator keys in Voicing');
 
   return VoicingClass;
 };
@@ -666,8 +666,8 @@ Voicing.VOICING_OPTION_KEYS = VOICING_OPTION_KEYS;
  * @static
  */
 Voicing.alertUtterance = (utterance: Utterance) => {
-  assert && assert(utterance.voicingCanAnnounceProperties.length > 0, 'voicingCanAnnounceProperties required, this Utterance might not be connected to Node in the scene graph.');
-  voicingUtteranceQueue.addToBack(utterance); // eslint-disable-line bad-sim-text
+  window.assert && window.assert(utterance.voicingCanAnnounceProperties.length > 0, 'voicingCanAnnounceProperties required, this Utterance might not be connected to Node in the scene graph.');
+  voicingUtteranceQueue.addToBack(utterance);
 };
 
 /**
@@ -689,7 +689,7 @@ Voicing.registerUtteranceToVoicingNode = (utterance: Utterance, voicingNode: Voi
 Voicing.unregisterUtteranceToVoicingNode = (utterance: Utterance, voicingNode: VoicingNode) => {
   const existingCanAnnounceProperties = utterance.voicingCanAnnounceProperties;
   const index = existingCanAnnounceProperties.indexOf(voicingNode.voicingCanSpeakProperty);
-  assert && assert(index > -1, 'voicingNode.voicingCanSpeakProperty is not on the Utterance, was it not registered?');
+  window.assert && window.assert(index > -1, 'voicingNode.voicingCanSpeakProperty is not on the Utterance, was it not registered?');
   utterance.voicingCanAnnounceProperties = existingCanAnnounceProperties.splice(index, 1);
 };
 
@@ -716,7 +716,7 @@ Voicing.registerUtteranceToNode = (utterance: Utterance, node: Node) => {
  */
 Voicing.unregisterUtteranceToNode = (utterance: Utterance, node: Node) => {
   const existingCanAnnounceProperties = utterance.voicingCanAnnounceProperties;
-  assert && assert(existingCanAnnounceProperties.includes(node.visibleProperty) && existingCanAnnounceProperties.includes(node.voicingVisibleProperty),
+  window.assert && window.assert(existingCanAnnounceProperties.includes(node.visibleProperty) && existingCanAnnounceProperties.includes(node.voicingVisibleProperty),
     'visibleProperty and voicingVisibleProperty were not on the Utterance, was it not registered to the node?');
 
   const visiblePropertyIndex = existingCanAnnounceProperties.indexOf(node.visibleProperty);

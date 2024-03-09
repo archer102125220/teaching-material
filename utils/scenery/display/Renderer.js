@@ -124,8 +124,8 @@ Renderer.bitmaskOrderFourth = function (bitmask) {
   return (bitmask >> 15) & Renderer.bitmaskCurrentRendererArea;
 };
 Renderer.pushOrderBitmask = function (bitmask, renderer) {
-  assert && assert(typeof bitmask === 'number');
-  assert && assert(typeof renderer === 'number');
+  window.assert && window.assert(typeof bitmask === 'number');
+  window.assert && window.assert(typeof renderer === 'number');
   let rendererToInsert = renderer;
   const totalBits = Renderer.bitsPerRenderer * Renderer.numActiveRenderers;
   for (let i = 0; i <= totalBits; i += Renderer.bitsPerRenderer) {

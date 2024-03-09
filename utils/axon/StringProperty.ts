@@ -24,9 +24,9 @@ export default class StringProperty extends Property<string> {
     // client cannot specify superclass options that are controlled by StringProperty
     if (providedOptions) {
       // eslint-disable-next-line no-prototype-builtins
-      assert && assert(!providedOptions.hasOwnProperty('valueType'), 'StringProperty sets valueType');
+      window.assert && window.assert(!providedOptions.hasOwnProperty('valueType'), 'StringProperty sets valueType');
       // eslint-disable-next-line no-prototype-builtins
-      assert && assert(!providedOptions.hasOwnProperty('phetioType'), 'StringProperty sets phetioType');
+      window.assert && window.assert(!providedOptions.hasOwnProperty('phetioType'), 'StringProperty sets phetioType');
     }
 
     // Fill in superclass options that are controlled by StringProperty.

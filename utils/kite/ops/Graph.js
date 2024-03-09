@@ -250,8 +250,8 @@ class Graph {
    * @param {Object} [options]
    */
   addSubpath(shapeId, subpath, options) {
-    assert && assert(typeof shapeId === 'number');
-    assert && assert(subpath instanceof Subpath);
+    window.assert && window.assert(typeof shapeId === 'number');
+    window.assert && window.assert(subpath instanceof Subpath);
 
     options = merge(
       {
@@ -520,7 +520,7 @@ class Graph {
    * @param {Edge} edge
    */
   addEdge(edge) {
-    assert && assert(edge instanceof Edge);
+    window.assert && window.assert(edge instanceof Edge);
     assert &&
       assert(
         !_.includes(edge.startVertex.incidentHalfEdges, edge.reversedHalf),
@@ -544,7 +544,7 @@ class Graph {
    * @param {Edge} edge
    */
   removeEdge(edge) {
-    assert && assert(edge instanceof Edge);
+    window.assert && window.assert(edge instanceof Edge);
 
     arrayRemove(this.edges, edge);
     arrayRemove(edge.startVertex.incidentHalfEdges, edge.reversedHalf);
@@ -608,7 +608,7 @@ class Graph {
           const aVertex = aEdge.getOtherVertex(vertex);
           const bVertex = bEdge.getOtherVertex(vertex);
 
-          assert && assert(this.loops.length === 0);
+          window.assert && window.assert(this.loops.length === 0);
 
           // TODO: Can we avoid this in the inner loop? https://github.com/phetsims/kite/issues/76
           if (aEdge.startVertex === vertex) {
@@ -922,7 +922,7 @@ class Graph {
         const selfIntersection = segment.getSelfIntersection();
 
         if (selfIntersection) {
-          assert && assert(selfIntersection.aT < selfIntersection.bT);
+          window.assert && window.assert(selfIntersection.aT < selfIntersection.bT);
 
           const segments = segment.subdivisions([
             selfIntersection.aT,
@@ -1188,11 +1188,11 @@ class Graph {
         this.boundaries.length === 0,
         'Only handles simpler level primitive splitting right now'
       );
-    assert && assert(edge.startVertex !== vertex);
-    assert && assert(edge.endVertex !== vertex);
+    window.assert && window.assert(edge.startVertex !== vertex);
+    window.assert && window.assert(edge.endVertex !== vertex);
 
     const segments = edge.segment.subdivided(t);
-    assert && assert(segments.length === 2);
+    window.assert && window.assert(segments.length === 2);
 
     const firstEdge = Edge.pool.create(segments[0], edge.startVertex, vertex);
     const secondEdge = Edge.pool.create(segments[1], vertex, edge.endVertex);
@@ -1640,7 +1640,7 @@ class Graph {
 
         const forwardFace = forwardHalf.face;
         const reversedFace = reversedHalf.face;
-        assert && assert(forwardFace !== reversedFace);
+        window.assert && window.assert(forwardFace !== reversedFace);
 
         const solvedForward = forwardFace.windingMap !== null;
         const solvedReversed = reversedFace.windingMap !== null;

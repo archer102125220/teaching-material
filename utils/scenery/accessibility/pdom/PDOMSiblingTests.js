@@ -66,9 +66,9 @@ QUnit.test( 'sibling positioning', assert => {
   // udpdate so the display to position elements
   display.updateDisplay();
 
-  assert.ok( siblingBoundsCorrect( buttonElement ), 'button element child of root correctly positioned' );
-  assert.ok( siblingBoundsCorrect( divElement ), 'div element child of root correctly positioned' );
-  assert.ok( siblingBoundsCorrect( inputElement ), 'input element child of root correctly positioned' );
+  window.assert.ok( siblingBoundsCorrect( buttonElement ), 'button element child of root correctly positioned' );
+  window.assert.ok( siblingBoundsCorrect( divElement ), 'div element child of root correctly positioned' );
+  window.assert.ok( siblingBoundsCorrect( inputElement ), 'input element child of root correctly positioned' );
 
   // test that bounds are set correctly once we have a hierarchy and add transformations
   rootNode.removeChild( buttonElement );
@@ -86,14 +86,14 @@ QUnit.test( 'sibling positioning', assert => {
 
   // udpdate so the display to position elements
   display.updateDisplay();
-  assert.ok( siblingBoundsCorrect( buttonElement ), 'button element descendant correctly positioned' );
-  assert.ok( siblingBoundsCorrect( inputElement ), 'input element descendant correctly positioned' );
+  window.assert.ok( siblingBoundsCorrect( buttonElement ), 'button element descendant correctly positioned' );
+  window.assert.ok( siblingBoundsCorrect( inputElement ), 'input element descendant correctly positioned' );
 
   // when inner content of an element changes, its client bounds change - make sure that the element still matches
   // the Node
   buttonElement.innerHTML = 'Some Test';
   display.updateDisplay();
-  assert.ok( siblingBoundsCorrect( buttonElement ), 'button element descendant correclty positioned after inner content changed' );
+  window.assert.ok( siblingBoundsCorrect( buttonElement ), 'button element descendant correclty positioned after inner content changed' );
 
   // remove the display element so it doesn't interfere with qunit API
   document.body.removeChild( display.domElement );
@@ -114,7 +114,7 @@ QUnit.test( 'PDOM transform source Node', assert => {
 
   // update the display to position elements
   display.updateDisplay();
-  assert.ok( siblingBoundsCorrect( buttonNode ), 'button element child of root correctly positioned' );
+  window.assert.ok( siblingBoundsCorrect( buttonNode ), 'button element child of root correctly positioned' );
 
   const siblingBoundsBefore = getSiblingBounds( buttonNode );
 
@@ -124,24 +124,24 @@ QUnit.test( 'PDOM transform source Node', assert => {
   // update the display to position elements
   display.updateDisplay();
 
-  assert.ok( siblingBoundsCorrect( buttonNode ), 'button element transformed with transform source Node' );
-  assert.ok( !siblingBoundsBefore.equals( getSiblingBounds( buttonNode ) ), 'sibling bounds should have changed after setting transform source' );
+  window.assert.ok( siblingBoundsCorrect( buttonNode ), 'button element transformed with transform source Node' );
+  window.assert.ok( !siblingBoundsBefore.equals( getSiblingBounds( buttonNode ) ), 'sibling bounds should have changed after setting transform source' );
 
   // reposition the buttonNode - pdom sibling should NOT reposition
   const siblingBoundsBeforeNodeReposition = getSiblingBounds( buttonNode );
   buttonNode.setX( 100 );
   buttonNode.setY( 100 );
   display.updateDisplay();
-  assert.ok( siblingBoundsCorrect( buttonNode ), 'sibling bounds correct after node repositioned' );
-  assert.ok( siblingBoundsBeforeNodeReposition.equals( getSiblingBounds( buttonNode ) ), 'transform source didnt change, primary sibling should not reposition' );
+  window.assert.ok( siblingBoundsCorrect( buttonNode ), 'sibling bounds correct after node repositioned' );
+  window.assert.ok( siblingBoundsBeforeNodeReposition.equals( getSiblingBounds( buttonNode ) ), 'transform source didnt change, primary sibling should not reposition' );
 
   // reposition the transform source - pdom sibling SHOULD reposition
   const siblingBoundsBeforeSourceReposition = getSiblingBounds( buttonNode );
   transformSourceNode.setX( 50 );
   transformSourceNode.setX( 50 );
   display.updateDisplay();
-  assert.ok( siblingBoundsCorrect( buttonNode ), 'sibling bounds correct after source node repositioned' );
-  assert.ok( !siblingBoundsBeforeSourceReposition.equals( getSiblingBounds( buttonNode ) ), 'transform source didnt change, primary sibling should not reposition' );
+  window.assert.ok( siblingBoundsCorrect( buttonNode ), 'sibling bounds correct after source node repositioned' );
+  window.assert.ok( !siblingBoundsBeforeSourceReposition.equals( getSiblingBounds( buttonNode ) ), 'transform source didnt change, primary sibling should not reposition' );
 
   // remove the display element so it doesn't interfere with qunit API
   document.body.removeChild( display.domElement );
@@ -158,15 +158,15 @@ QUnit.test( 'setPositionElements test', assert => {
   rootNode.addChild( buttonNode );
 
   display.updateDisplay();
-  assert.ok( siblingBoundsCorrect( buttonNode ), 'sibling bounds initially correct' );
+  window.assert.ok( siblingBoundsCorrect( buttonNode ), 'sibling bounds initially correct' );
 
   buttonNode.setPositionInPDOM( false );
   display.updateDisplay();
-  assert.ok( siblingBoundsCorrect( buttonNode ), 'sibling bounds correct after positionInPDOM false' );
+  window.assert.ok( siblingBoundsCorrect( buttonNode ), 'sibling bounds correct after positionInPDOM false' );
 
   buttonNode.setPositionInPDOM( true );
   display.updateDisplay();
-  assert.ok( siblingBoundsCorrect( buttonNode ), 'sibling bounds repositioned after positionInPDOM true' );
+  window.assert.ok( siblingBoundsCorrect( buttonNode ), 'sibling bounds repositioned after positionInPDOM true' );
 
   // remove the display element so it doesn't interfere with qunit API
   document.body.removeChild( display.domElement );

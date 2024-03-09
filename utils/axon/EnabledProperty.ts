@@ -34,7 +34,7 @@ export default class EnabledProperty extends BooleanProperty {
     }, providedOptions);
 
     if (assert && options && options.tandem && options.tandem.supplied && options.checkTandemName) {
-      assert && assert(options.tandem.name === TANDEM_NAME, `EnabledProperty tandems should be named ${TANDEM_NAME}`);
+      window.assert && window.assert(options.tandem.name === TANDEM_NAME, `EnabledProperty tandems should be named ${TANDEM_NAME}`);
     }
 
     super(initialEnabled, options);

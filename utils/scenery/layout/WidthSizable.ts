@@ -119,72 +119,72 @@ const WidthSizable = memoize(<SuperType extends Constructor<Node>>(type: SuperTy
     }
 
     public get preferredWidth(): number | null {
-      assert && assert(this.preferredWidthProperty,
+      window.assert && window.assert(this.preferredWidthProperty,
         'WidthSizable options should be set from a later mutate() call instead of the super constructor');
 
       return this.preferredWidthProperty.value;
     }
 
     public set preferredWidth(value: number | null) {
-      assert && assert(this.preferredWidthProperty,
+      window.assert && window.assert(this.preferredWidthProperty,
         'WidthSizable options should be set from a later mutate() call instead of the super constructor');
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0),
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0),
         'preferredWidth should be null or a non-negative finite number');
 
       this.preferredWidthProperty.value = value;
     }
 
     public get localPreferredWidth(): number | null {
-      assert && assert(this.localPreferredWidthProperty,
+      window.assert && window.assert(this.localPreferredWidthProperty,
         'WidthSizable options should be set from a later mutate() call instead of the super constructor');
       return this.localPreferredWidthProperty.value;
     }
 
     public set localPreferredWidth(value: number | null) {
-      assert && assert(this.localPreferredWidthProperty,
+      window.assert && window.assert(this.localPreferredWidthProperty,
         'WidthSizable options should be set from a later mutate() call instead of the super constructor');
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0),
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value) && value >= 0),
         'localPreferredWidth should be null or a non-negative finite number');
 
       this.localPreferredWidthProperty.value = value;
     }
 
     public get minimumWidth(): number | null {
-      assert && assert(this.minimumWidthProperty,
+      window.assert && window.assert(this.minimumWidthProperty,
         'WidthSizable options should be set from a later mutate() call instead of the super constructor');
       return this.minimumWidthProperty.value;
     }
 
     public set minimumWidth(value: number | null) {
-      assert && assert(this.minimumWidthProperty,
+      window.assert && window.assert(this.minimumWidthProperty,
         'WidthSizable options should be set from a later mutate() call instead of the super constructor');
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       this.minimumWidthProperty.value = value;
     }
 
     public get localMinimumWidth(): number | null {
-      assert && assert(this.localMinimumWidthProperty,
+      window.assert && window.assert(this.localMinimumWidthProperty,
         'WidthSizable options should be set from a later mutate() call instead of the super constructor');
       return this.localMinimumWidthProperty.value;
     }
 
     public set localMinimumWidth(value: number | null) {
-      assert && assert(this.localMinimumWidthProperty,
+      window.assert && window.assert(this.localMinimumWidthProperty,
         'WidthSizable options should be set from a later mutate() call instead of the super constructor');
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       this.localMinimumWidthProperty.value = value;
     }
 
     public override get widthSizable(): boolean {
-      assert && assert(this.isWidthResizableProperty,
+      window.assert && window.assert(this.isWidthResizableProperty,
         'WidthSizable options should be set from a later mutate() call instead of the super constructor');
       return this.isWidthResizableProperty.value;
     }
 
     public override set widthSizable(value: boolean) {
-      assert && assert(this.isWidthResizableProperty,
+      window.assert && window.assert(this.isWidthResizableProperty,
         'WidthSizable options should be set from a later mutate() call instead of the super constructor');
       this.isWidthResizableProperty.value = value;
     }

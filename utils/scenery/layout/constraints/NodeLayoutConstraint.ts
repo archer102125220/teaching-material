@@ -97,7 +97,7 @@ export default class NodeLayoutConstraint extends LayoutConstraint {
    */
   protected filterLayoutCells<Cell extends MarginLayoutCell>(cells: Cell[]): Cell[] {
     // We'll check to make sure cells are disposed in a common place, so it's not duplicated
-    assert && assert(_.every(cells, cell => !cell.node.isDisposed), 'A cell\'s node should not be disposed when layout happens');
+    window.assert && window.assert(_.every(cells, cell => !cell.node.isDisposed), 'A cell\'s node should not be disposed when layout happens');
 
     return cells.filter(cell => {
       return cell.isConnected() && cell.proxy.bounds.isValid() && (!this.excludeInvisible || cell.node.visible);

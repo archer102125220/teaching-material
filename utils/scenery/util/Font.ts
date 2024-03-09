@@ -111,7 +111,7 @@ export default class Font extends PhetioObject {
   private readonly _font: string;
 
   public constructor( providedOptions?: FontOptions ) {
-    assert && assert( providedOptions === undefined || ( typeof providedOptions === 'object' && Object.getPrototypeOf( providedOptions ) === Object.prototype ),
+    window.assert && window.assert( providedOptions === undefined || ( typeof providedOptions === 'object' && Object.getPrototypeOf( providedOptions ) === Object.prototype ),
       'options, if provided, should be a raw object' );
 
     const options = optionize<FontOptions, SelfOptions, PhetioObjectOptions>()( {
@@ -144,8 +144,8 @@ export default class Font extends PhetioObject {
       phetioType: Font.FontIO
     }, providedOptions );
 
-    assert && assert( typeof options.weight === 'string' || typeof options.weight === 'number', 'Font weight should be specified as a string or number' );
-    assert && assert( typeof options.size === 'string' || typeof options.size === 'number', 'Font size should be specified as a string or number' );
+    window.assert && window.assert( typeof options.weight === 'string' || typeof options.weight === 'number', 'Font weight should be specified as a string or number' );
+    window.assert && window.assert( typeof options.size === 'string' || typeof options.size === 'number', 'Font size should be specified as a string or number' );
 
     super( options );
 
@@ -158,18 +158,18 @@ export default class Font extends PhetioObject {
     this._family = options.family;
 
     // sanity checks to prevent errors in interpretation or in the font shorthand usage
-    assert && assert( typeof this._style === 'string' && _.includes( VALID_STYLES, this._style ),
+    window.assert && window.assert( typeof this._style === 'string' && _.includes( VALID_STYLES, this._style ),
       'Font style must be one of "normal", "italic", or "oblique"' );
-    assert && assert( typeof this._variant === 'string' && _.includes( VALID_VARIANTS, this._variant ),
+    window.assert && window.assert( typeof this._variant === 'string' && _.includes( VALID_VARIANTS, this._variant ),
       'Font variant must be "normal" or "small-caps"' );
-    assert && assert( typeof this._weight === 'string' && _.includes( VALID_WEIGHTS, this._weight ),
+    window.assert && window.assert( typeof this._weight === 'string' && _.includes( VALID_WEIGHTS, this._weight ),
       'Font weight must be one of "normal", "bold", "bolder", "lighter", "100", "200", "300", "400", "500", "600", "700", "800", or "900"' );
-    assert && assert( typeof this._stretch === 'string' && _.includes( VALID_STRETCHES, this._stretch ),
+    window.assert && window.assert( typeof this._stretch === 'string' && _.includes( VALID_STRETCHES, this._stretch ),
       'Font stretch must be one of "normal", "ultra-condensed", "extra-condensed", "condensed", "semi-condensed", "semi-expanded", "expanded", "extra-expanded", or "ultra-expanded"' );
-    assert && assert( typeof this._size === 'string' && !_.includes( [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' ], this._size[ this._size.length - 1 ] ),
+    window.assert && window.assert( typeof this._size === 'string' && !_.includes( [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' ], this._size[ this._size.length - 1 ] ),
       'Font size must be either passed as a number (not a string, interpreted as px), or must contain a suffix for percentage, absolute or relative units, or an explicit size constant' );
-    assert && assert( typeof this._lineHeight === 'string' );
-    assert && assert( typeof this._family === 'string' );
+    window.assert && window.assert( typeof this._lineHeight === 'string' );
+    window.assert && window.assert( typeof this._family === 'string' );
 
     // Initialize the shorthand font property
     this._font = this.computeShorthand();
@@ -379,19 +379,19 @@ export default class Font extends PhetioObject {
         // nothing has to be done, everything already normal as default
       }
       else if ( Font.isFontStyle( token ) ) {
-        assert && assert( options.style === undefined, `Style cannot be applied twice. Already set to "${options.style}", attempt to replace with "${token}"` );
+        window.assert && window.assert( options.style === undefined, `Style cannot be applied twice. Already set to "${options.style}", attempt to replace with "${token}"` );
         options.style = token;
       }
       else if ( Font.isFontVariant( token ) ) {
-        assert && assert( options.variant === undefined, `Variant cannot be applied twice. Already set to "${options.variant}", attempt to replace with "${token}"` );
+        window.assert && window.assert( options.variant === undefined, `Variant cannot be applied twice. Already set to "${options.variant}", attempt to replace with "${token}"` );
         options.variant = token;
       }
       else if ( Font.isFontWeight( token ) ) {
-        assert && assert( options.weight === undefined, `Weight cannot be applied twice. Already set to "${options.weight}", attempt to replace with "${token}"` );
+        window.assert && window.assert( options.weight === undefined, `Weight cannot be applied twice. Already set to "${options.weight}", attempt to replace with "${token}"` );
         options.weight = token;
       }
       else if ( Font.isFontStretch( token ) ) {
-        assert && assert( options.stretch === undefined, `Stretch cannot be applied twice. Already set to "${options.stretch}", attempt to replace with "${token}"` );
+        window.assert && window.assert( options.stretch === undefined, `Stretch cannot be applied twice. Already set to "${options.stretch}", attempt to replace with "${token}"` );
         options.stretch = token;
       }
       else {

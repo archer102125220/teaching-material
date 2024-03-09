@@ -14,7 +14,7 @@ styleElement.type = 'text/css';
 document.head.appendChild( styleElement );
 
 const stylesheet = document.styleSheets[ document.styleSheets.length - 1 ];
-assert && assert( stylesheet.disabled === false );
+window.assert && window.assert( stylesheet.disabled === false );
 
 const SceneryStyle = {
   stylesheet: stylesheet,

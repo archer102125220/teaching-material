@@ -82,7 +82,7 @@ class NavigationBarAudioToggleButton extends JoistButton {
       voicingNameResponse: JoistStrings.a11y.soundToggle.labelStringProperty
     }, providedOptions);
 
-    assert && assert(options.listener === undefined, 'NavigationBarAudioToggleButton sets listener');
+    window.assert && window.assert(options.listener === undefined, 'NavigationBarAudioToggleButton sets listener');
     options.listener = () => soundEnabledProperty.set(!soundEnabledProperty.get());
 
     const soundOnNode = new Node();

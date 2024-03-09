@@ -87,7 +87,7 @@ const Utils = {
           const timeAtStart = Date.now();
 
           // NOTE: We don't want to rely on a common timer, so we're using the built-in form on purpose.
-          return window.setTimeout( () => { // eslint-disable-line bad-sim-text
+          return window.setTimeout( () => {
             callback( Date.now() - timeAtStart );
           }, 16 );
         };
@@ -551,7 +551,7 @@ const Utils = {
       extension.loseContext();
 
       // NOTE: We don't want to rely on a common timer, so we're using the built-in form on purpose.
-      setTimeout( () => { // eslint-disable-line bad-sim-text
+      setTimeout( () => {
         extension.restoreContext();
       }, 1000 );
     }

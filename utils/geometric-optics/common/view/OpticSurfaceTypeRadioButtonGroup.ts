@@ -55,7 +55,7 @@ export default class OpticSurfaceTypeRadioButtonGroup extends RectangularRadioBu
     }, providedOptions);
 
     // A radio button for each shape supported by the optic
-    assert && assert(optic.opticSurfaceTypeProperty.validValues); // {OpticSurfaceType[]|undefined}
+    window.assert && window.assert(optic.opticSurfaceTypeProperty.validValues); // {OpticSurfaceType[]|undefined}
     const validValues = optic.opticSurfaceTypeProperty.validValues!;
 
     const items = validValues.map(

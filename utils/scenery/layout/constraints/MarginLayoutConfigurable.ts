@@ -159,7 +159,7 @@ const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: S
      * (scenery-internal)
      */
     public set leftMargin(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       if (this._leftMargin !== value) {
         this._leftMargin = value;
@@ -179,7 +179,7 @@ const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: S
      * (scenery-internal)
      */
     public set rightMargin(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       if (this._rightMargin !== value) {
         this._rightMargin = value;
@@ -199,7 +199,7 @@ const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: S
      * (scenery-internal)
      */
     public set topMargin(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       if (this._topMargin !== value) {
         this._topMargin = value;
@@ -219,7 +219,7 @@ const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: S
      * (scenery-internal)
      */
     public set bottomMargin(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       if (this._bottomMargin !== value) {
         this._bottomMargin = value;
@@ -232,7 +232,7 @@ const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: S
      * (scenery-internal)
      */
     public get xMargin(): number | null {
-      assert && assert(this._leftMargin === this._rightMargin);
+      window.assert && window.assert(this._leftMargin === this._rightMargin);
 
       return this._leftMargin;
     }
@@ -241,7 +241,7 @@ const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: S
      * (scenery-internal)
      */
     public set xMargin(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       if (this._leftMargin !== value || this._rightMargin !== value) {
         this._leftMargin = value;
@@ -255,7 +255,7 @@ const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: S
      * (scenery-internal)
      */
     public get yMargin(): number | null {
-      assert && assert(this._topMargin === this._bottomMargin);
+      window.assert && window.assert(this._topMargin === this._bottomMargin);
 
       return this._topMargin;
     }
@@ -264,7 +264,7 @@ const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: S
      * (scenery-internal)
      */
     public set yMargin(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       if (this._topMargin !== value || this._bottomMargin !== value) {
         this._topMargin = value;
@@ -278,7 +278,7 @@ const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: S
      * (scenery-internal)
      */
     public get margin(): number | null {
-      assert && assert(
+      window.assert && window.assert(
         this._leftMargin === this._rightMargin &&
         this._leftMargin === this._topMargin &&
         this._leftMargin === this._bottomMargin
@@ -291,7 +291,7 @@ const MarginLayoutConfigurable = memoize(<SuperType extends Constructor>(type: S
      * (scenery-internal)
      */
     public set margin(value: number | null) {
-      assert && assert(value === null || (typeof value === 'number' && isFinite(value)));
+      window.assert && window.assert(value === null || (typeof value === 'number' && isFinite(value)));
 
       if (this._leftMargin !== value || this._rightMargin !== value || this._topMargin !== value || this._bottomMargin !== value) {
         this._leftMargin = value;

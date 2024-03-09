@@ -40,8 +40,8 @@ const TextBounds = {
    * @returns {Bounds2}
    */
   approximateSVGBounds(font, renderedText) {
-    assert && assert(font instanceof Font, 'Font required');
-    assert && assert(typeof renderedText === 'string', 'renderedText required');
+    window.assert && window.assert(font instanceof Font, 'Font required');
+    window.assert && window.assert(typeof renderedText === 'string', 'renderedText required');
 
     if (!svgTextSizeContainer.parentNode) {
       if (document.body) {
@@ -182,7 +182,7 @@ const TextBounds = {
    * @returns {Bounds2}
    */
   getVerticalBounds(font) {
-    assert && assert(font instanceof Font, 'Font required');
+    window.assert && window.assert(font instanceof Font, 'Font required');
 
     const css = font.toCSS();
 
@@ -205,8 +205,8 @@ const TextBounds = {
    * @returns {number}
    */
   approximateCanvasWidth(font, renderedText) {
-    assert && assert(font instanceof Font, 'Font required');
-    assert && assert(typeof renderedText === 'string', 'renderedText required');
+    window.assert && window.assert(font instanceof Font, 'Font required');
+    window.assert && window.assert(typeof renderedText === 'string', 'renderedText required');
 
     const context = scenery.scratchContext;
     context.font = font.toCSS();
@@ -227,8 +227,8 @@ const TextBounds = {
    * @returns {Bounds2}
    */
   approximateHybridBounds(font, renderedText) {
-    assert && assert(font instanceof Font, 'Font required');
-    assert && assert(typeof renderedText === 'string', 'renderedText required');
+    window.assert && window.assert(font instanceof Font, 'Font required');
+    window.assert && window.assert(typeof renderedText === 'string', 'renderedText required');
 
     const verticalBounds = TextBounds.getVerticalBounds(font);
 
@@ -254,7 +254,7 @@ const TextBounds = {
    * @returns {Bounds2}
    */
   approximateDOMBounds(font, element) {
-    assert && assert(font instanceof Font, 'Font required');
+    window.assert && window.assert(font instanceof Font, 'Font required');
 
     const maxHeight = 1024; // technically this will fail if the font is taller than this!
 
@@ -316,7 +316,7 @@ const TextBounds = {
    * @returns {Bounds2}
    */
   approximateImprovedDOMBounds(font, element) {
-    assert && assert(font instanceof Font, 'Font required');
+    window.assert && window.assert(font instanceof Font, 'Font required');
 
     // TODO: reuse this div? https://github.com/phetsims/scenery/issues/1581
     const div = document.createElement('div');
@@ -354,8 +354,8 @@ const TextBounds = {
    * @param {string} renderedText - Text to display (with any special characters replaced)
    */
   setSVGTextAttributes(textElement, font, renderedText) {
-    assert && assert(font instanceof Font, 'Font required');
-    assert && assert(typeof renderedText === 'string', 'renderedText required');
+    window.assert && window.assert(font instanceof Font, 'Font required');
+    window.assert && window.assert(typeof renderedText === 'string', 'renderedText required');
 
     textElement.setAttribute('direction', 'ltr');
     textElement.setAttribute('font-family', font.getFamily());

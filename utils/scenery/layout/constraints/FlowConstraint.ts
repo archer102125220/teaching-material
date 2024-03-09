@@ -258,7 +258,7 @@ export default class FlowConstraint extends FlowConfigurable(NodeLayoutConstrain
           spaceRemaining / totalGrow
         );
 
-        assert && assert(amountToGrow > 1e-11);
+        window.assert && window.assert(amountToGrow > 1e-11);
 
         growableCells.forEach(cell => {
           cell.size += amountToGrow * cell.effectiveGrow;
@@ -288,7 +288,7 @@ export default class FlowConstraint extends FlowConfigurable(NodeLayoutConstrain
         cell.lastAvailableBounds[orientation.maxCoordinate] = position + cell.size;
 
         position += cell.size;
-        assert && assert(this.spacing >= 0 || cell.size >= -this.spacing - 1e-7,
+        window.assert && window.assert(this.spacing >= 0 || cell.size >= -this.spacing - 1e-7,
           'Negative spacing more than a cell\'s size causes issues with layout');
       });
     });
@@ -352,13 +352,13 @@ export default class FlowConstraint extends FlowConfigurable(NodeLayoutConstrain
   public get justify(): HorizontalLayoutJustification | VerticalLayoutJustification {
     const result = LayoutJustification.internalToJustify(this._orientation, this._justify);
 
-    assert && assert(LayoutJustification.getAllowedJustificationValues(this._orientation).includes(result));
+    window.assert && window.assert(LayoutJustification.getAllowedJustificationValues(this._orientation).includes(result));
 
     return result;
   }
 
   public set justify(value: HorizontalLayoutJustification | VerticalLayoutJustification) {
-    assert && assert(LayoutJustification.getAllowedJustificationValues(this._orientation).includes(value),
+    window.assert && window.assert(LayoutJustification.getAllowedJustificationValues(this._orientation).includes(value),
       `justify ${value} not supported, with the orientation ${this._orientation}, the valid values are ${LayoutJustification.getAllowedJustificationValues(this._orientation)}`);
 
     // remapping align values to an independent set, so they aren't orientation-dependent
@@ -378,20 +378,20 @@ export default class FlowConstraint extends FlowConfigurable(NodeLayoutConstrain
     else {
       const result = LayoutJustification.internalToJustify(this._orientation, this._justifyLines);
 
-      assert && assert(LayoutJustification.getAllowedJustificationValues(this._orientation).includes(result));
+      window.assert && window.assert(LayoutJustification.getAllowedJustificationValues(this._orientation).includes(result));
 
       return result;
     }
   }
 
   public set justifyLines(value: HorizontalLayoutJustification | VerticalLayoutJustification | null) {
-    assert && assert(value === null || LayoutJustification.getAllowedJustificationValues(this._orientation.opposite).includes(value),
+    window.assert && window.assert(value === null || LayoutJustification.getAllowedJustificationValues(this._orientation.opposite).includes(value),
       `justify ${value} not supported, with the orientation ${this._orientation.opposite}, the valid values are ${LayoutJustification.getAllowedJustificationValues(this._orientation.opposite)} or null`);
 
     // remapping align values to an independent set, so they aren't orientation-dependent
     const mappedValue = value === null ? null : LayoutJustification.justifyToInternal(this._orientation.opposite, value);
 
-    assert && assert(mappedValue === null || mappedValue instanceof LayoutJustification);
+    window.assert && window.assert(mappedValue === null || mappedValue instanceof LayoutJustification);
 
     if (this._justifyLines !== mappedValue) {
       this._justifyLines = mappedValue;
@@ -417,7 +417,7 @@ export default class FlowConstraint extends FlowConfigurable(NodeLayoutConstrain
   }
 
   public set spacing(value: number) {
-    assert && assert(isFinite(value));
+    window.assert && window.assert(isFinite(value));
 
     if (this._spacing !== value) {
       this._spacing = value;
@@ -431,7 +431,7 @@ export default class FlowConstraint extends FlowConfigurable(NodeLayoutConstrain
   }
 
   public set lineSpacing(value: number) {
-    assert && assert(isFinite(value));
+    window.assert && window.assert(isFinite(value));
 
     if (this._lineSpacing !== value) {
       this._lineSpacing = value;
@@ -441,9 +441,9 @@ export default class FlowConstraint extends FlowConfigurable(NodeLayoutConstrain
   }
 
   public insertCell(index: number, cell: FlowCell): void {
-    assert && assert(index >= 0);
-    assert && assert(index <= this.cells.length);
-    assert && assert(!_.includes(this.cells, cell));
+    window.assert && window.assert(index >= 0);
+    window.assert && window.assert(index <= this.cells.length);
+    window.assert && window.assert(!_.includes(this.cells, cell));
 
     cell.orientation = this.orientation;
 
@@ -455,7 +455,7 @@ export default class FlowConstraint extends FlowConfigurable(NodeLayoutConstrain
   }
 
   public removeCell(cell: FlowCell): void {
-    assert && assert(_.includes(this.cells, cell));
+    window.assert && window.assert(_.includes(this.cells, cell));
 
     arrayRemove(this.cells, cell);
     this.removeNode(cell.node);

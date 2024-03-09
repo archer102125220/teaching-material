@@ -78,7 +78,7 @@ export default abstract class SVGGradient {
    */
   public markDirty(): void {
     if (!this.dirty) {
-      assert && assert(this.isActiveSVGGradient());
+      window.assert && window.assert(this.isActiveSVGGradient());
       const activeGradient = this as ActiveSVGGradient;
 
       sceneryLog && sceneryLog.Paints && sceneryLog.Paints(`[SVGGradient] switched to dirty: ${this.gradient!.id}`);

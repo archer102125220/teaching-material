@@ -20,7 +20,7 @@ class PDOMFuzzer {
    * @param {number} [seed]
    */
   constructor(nodeCount, logToConsole, seed) {
-    assert && assert(nodeCount >= 2);
+    window.assert && window.assert(nodeCount >= 2);
 
     seed = seed || null;
 

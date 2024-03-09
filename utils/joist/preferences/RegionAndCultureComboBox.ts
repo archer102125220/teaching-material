@@ -6,15 +6,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import ComboBox, { ComboBoxOptions } from '../../../sun/js/ComboBox.js';
-import joist from '../joist.js';
-import { Text } from '../../../scenery/js/imports.js';
-import PreferencesDialog from './PreferencesDialog.js';
-import Property from '../../../axon/js/Property.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import RegionAndCulturePortrayal from './RegionAndCulturePortrayal.js';
+import ComboBox, { type ComboBoxOptions } from '../../sun/ComboBox';
+import joist from '../joist';
+import { Text } from '../../scenery/imports';
+import PreferencesDialog from './PreferencesDialog';
+import Property from '../../axon/Property';
+import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import Tandem from '../../tandem/Tandem';
+import RegionAndCulturePortrayal from './RegionAndCulturePortrayal';
 
 type SelfOptions = EmptySelfOptions;
 type RegionAndCultureComboBoxOptions = SelfOptions & StrictOmit<ComboBoxOptions, 'tandem'>;
@@ -26,29 +26,29 @@ class RegionAndCultureComboBox extends ComboBox<RegionAndCulturePortrayal | null
    * @param portrayals - The RegionAndCulturePortrayal list, one for each region/culture.
    * @param [providedOptions]
    */
-  public constructor( regionAndCultureProperty: Property<RegionAndCulturePortrayal>, portrayals: RegionAndCulturePortrayal[], providedOptions?: RegionAndCultureComboBoxOptions ) {
+  public constructor(regionAndCultureProperty: Property<RegionAndCulturePortrayal>, portrayals: RegionAndCulturePortrayal[], providedOptions?: RegionAndCultureComboBoxOptions) {
 
-    const options = optionize<RegionAndCultureComboBoxOptions, SelfOptions, ComboBoxOptions>()( {
+    const options = optionize<RegionAndCultureComboBoxOptions, SelfOptions, ComboBoxOptions>()({
 
       // default yMargin is a bit smaller so that there is less white space around the portrayal icon
       yMargin: 3,
 
       // phet-io
       tandem: Tandem.OPT_OUT // We don't want to instrument components for preferences, https://github.com/phetsims/joist/issues/744#issuecomment-1196028362
-    }, providedOptions );
+    }, providedOptions);
 
-    const comboBoxItems = portrayals.map( portrayal => {
+    const comboBoxItems = portrayals.map(portrayal => {
 
       return {
         value: portrayal,
-        createNode: () => new Text( portrayal.labelProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS )
+        createNode: () => new Text(portrayal.labelProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS)
       };
-    } );
+    });
 
     // TODO: Need a different top layer node for ComboBox here. See https://github.com/phetsims/joist/issues/841
-    super( regionAndCultureProperty, comboBoxItems, phet.joist.sim.topLayer, options );
+    super(regionAndCultureProperty, comboBoxItems, phet.joist.sim.topLayer, options);
   }
 }
 
-joist.register( 'RegionAndCultureComboBox', RegionAndCultureComboBox );
+joist.register('RegionAndCultureComboBox', RegionAndCultureComboBox);
 export default RegionAndCultureComboBox;

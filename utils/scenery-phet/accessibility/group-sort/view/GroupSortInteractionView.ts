@@ -294,7 +294,7 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
 
           const groupItem = selectedGroupItemProperty.value;
           const oldValue = this.model.getGroupItemValue( groupItem )!;
-          assert && assert( oldValue !== null, 'We should have a group item when responding to input?' );
+          window.assert && window.assert( oldValue !== null, 'We should have a group item when responding to input?' );
 
           // Sorting an item
           if ( isGroupItemKeyboardGrabbedProperty.value ) {
@@ -303,7 +303,7 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
             // For these keys, the item will move by a particular delta
             if ( this.model.enabled && sortingKeys.includes( keysPressed ) ) {
               const delta = this.getDeltaForKey( keysPressed )!;
-              assert && assert( delta !== null, 'should be a supported key' );
+              window.assert && window.assert( delta !== null, 'should be a supported key' );
               const newValue = oldValue + delta;
               this.onSortedValue( groupItem, newValue, oldValue );
             }
@@ -333,8 +333,8 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
 
             const groupItem = selectedGroupItemProperty.value;
             const oldValue = this.model.getGroupItemValue( groupItem )!;
-            assert && assert( oldValue !== null, 'We should have a group item when responding to input?' );
-            assert && assert( isSingleDigit( keysPressed ), 'sanity check on numbers for keyboard listener' );
+            window.assert && window.assert( oldValue !== null, 'We should have a group item when responding to input?' );
+            window.assert && window.assert( isSingleDigit( keysPressed ), 'sanity check on numbers for keyboard listener' );
 
             const mappedValue = options.numberKeyMapper!( keysPressed );
             if ( mappedValue ) {
@@ -396,7 +396,7 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
 
   // Conduct the sorting of a value
   private onSortedValue( groupItem: ItemModel, value: number, oldValue: number ): void {
-    assert && assert( value !== null, 'We should have a value for the group item by the end of the listener.' );
+    window.assert && window.assert( value !== null, 'We should have a value for the group item by the end of the listener.' );
 
     this.sortGroupItem( groupItem, this.sortingRangeProperty.value.constrainValue( value ) );
     this.onSort( groupItem, oldValue );

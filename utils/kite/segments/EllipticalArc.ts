@@ -98,7 +98,7 @@ export default class EllipticalArc extends Segment {
    * Sets the center of the EllipticalArc.
    */
   public setCenter(center: Vector2): this {
-    assert && assert(center.isFinite(), `EllipticalArc center should be finite: ${center.toString()}`);
+    window.assert && window.assert(center.isFinite(), `EllipticalArc center should be finite: ${center.toString()}`);
 
     if (!this._center.equals(center)) {
       this._center = center;
@@ -124,7 +124,7 @@ export default class EllipticalArc extends Segment {
    * Sets the semi-major radius of the EllipticalArc.
    */
   public setRadiusX(radiusX: number): this {
-    assert && assert(isFinite(radiusX), `EllipticalArc radiusX should be a finite number: ${radiusX}`);
+    window.assert && window.assert(isFinite(radiusX), `EllipticalArc radiusX should be a finite number: ${radiusX}`);
 
     if (this._radiusX !== radiusX) {
       this._radiusX = radiusX;
@@ -150,7 +150,7 @@ export default class EllipticalArc extends Segment {
    * Sets the semi-minor radius of the EllipticalArc.
    */
   public setRadiusY(radiusY: number): this {
-    assert && assert(isFinite(radiusY), `EllipticalArc radiusY should be a finite number: ${radiusY}`);
+    window.assert && window.assert(isFinite(radiusY), `EllipticalArc radiusY should be a finite number: ${radiusY}`);
 
     if (this._radiusY !== radiusY) {
       this._radiusY = radiusY;
@@ -175,7 +175,7 @@ export default class EllipticalArc extends Segment {
    * Sets the rotation of the EllipticalArc.
    */
   public setRotation(rotation: number): this {
-    assert && assert(isFinite(rotation), `EllipticalArc rotation should be a finite number: ${rotation}`);
+    window.assert && window.assert(isFinite(rotation), `EllipticalArc rotation should be a finite number: ${rotation}`);
 
     if (this._rotation !== rotation) {
       this._rotation = rotation;
@@ -200,7 +200,7 @@ export default class EllipticalArc extends Segment {
    * Sets the startAngle of the EllipticalArc.
    */
   public setStartAngle(startAngle: number): this {
-    assert && assert(isFinite(startAngle), `EllipticalArc startAngle should be a finite number: ${startAngle}`);
+    window.assert && window.assert(isFinite(startAngle), `EllipticalArc startAngle should be a finite number: ${startAngle}`);
 
     if (this._startAngle !== startAngle) {
       this._startAngle = startAngle;
@@ -225,7 +225,7 @@ export default class EllipticalArc extends Segment {
    * Sets the endAngle of the EllipticalArc.
    */
   public setEndAngle(endAngle: number): this {
-    assert && assert(isFinite(endAngle), `EllipticalArc endAngle should be a finite number: ${endAngle}`);
+    window.assert && window.assert(isFinite(endAngle), `EllipticalArc endAngle should be a finite number: ${endAngle}`);
 
     if (this._endAngle !== endAngle) {
       this._endAngle = endAngle;
@@ -278,8 +278,8 @@ export default class EllipticalArc extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public positionAt(t: number): Vector2 {
-    assert && assert(t >= 0, 'positionAt t should be non-negative');
-    assert && assert(t <= 1, 'positionAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'positionAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'positionAt t should be no greater than 1');
 
     return this.positionAtAngle(this.angleAt(t));
   }
@@ -293,8 +293,8 @@ export default class EllipticalArc extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public tangentAt(t: number): Vector2 {
-    assert && assert(t >= 0, 'tangentAt t should be non-negative');
-    assert && assert(t <= 1, 'tangentAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'tangentAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'tangentAt t should be no greater than 1');
 
     return this.tangentAtAngle(this.angleAt(t));
   }
@@ -311,8 +311,8 @@ export default class EllipticalArc extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public curvatureAt(t: number): number {
-    assert && assert(t >= 0, 'curvatureAt t should be non-negative');
-    assert && assert(t <= 1, 'curvatureAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'curvatureAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'curvatureAt t should be no greater than 1');
 
     // see http://mathworld.wolfram.com/Ellipse.html (59)
     const angle = this.angleAt(t);
@@ -329,8 +329,8 @@ export default class EllipticalArc extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public subdivided(t: number): EllipticalArc[] {
-    assert && assert(t >= 0, 'subdivided t should be non-negative');
-    assert && assert(t <= 1, 'subdivided t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'subdivided t should be non-negative');
+    window.assert && window.assert(t <= 1, 'subdivided t should be no greater than 1');
 
     // If t is 0 or 1, we only need to return 1 segment
     if (t === 0 || t === 1) {
@@ -352,19 +352,19 @@ export default class EllipticalArc extends Segment {
    */
   public invalidate(): void {
 
-    assert && assert(this._center instanceof Vector2, 'Arc center should be a Vector2');
-    assert && assert(this._center.isFinite(), 'Arc center should be finite (not NaN or infinite)');
-    assert && assert(typeof this._radiusX === 'number', `Arc radiusX should be a number: ${this._radiusX}`);
-    assert && assert(isFinite(this._radiusX), `Arc radiusX should be a finite number: ${this._radiusX}`);
-    assert && assert(typeof this._radiusY === 'number', `Arc radiusY should be a number: ${this._radiusY}`);
-    assert && assert(isFinite(this._radiusY), `Arc radiusY should be a finite number: ${this._radiusY}`);
-    assert && assert(typeof this._rotation === 'number', `Arc rotation should be a number: ${this._rotation}`);
-    assert && assert(isFinite(this._rotation), `Arc rotation should be a finite number: ${this._rotation}`);
-    assert && assert(typeof this._startAngle === 'number', `Arc startAngle should be a number: ${this._startAngle}`);
-    assert && assert(isFinite(this._startAngle), `Arc startAngle should be a finite number: ${this._startAngle}`);
-    assert && assert(typeof this._endAngle === 'number', `Arc endAngle should be a number: ${this._endAngle}`);
-    assert && assert(isFinite(this._endAngle), `Arc endAngle should be a finite number: ${this._endAngle}`);
-    assert && assert(typeof this._anticlockwise === 'boolean', `Arc anticlockwise should be a boolean: ${this._anticlockwise}`);
+    window.assert && window.assert(this._center instanceof Vector2, 'Arc center should be a Vector2');
+    window.assert && window.assert(this._center.isFinite(), 'Arc center should be finite (not NaN or infinite)');
+    window.assert && window.assert(typeof this._radiusX === 'number', `Arc radiusX should be a number: ${this._radiusX}`);
+    window.assert && window.assert(isFinite(this._radiusX), `Arc radiusX should be a finite number: ${this._radiusX}`);
+    window.assert && window.assert(typeof this._radiusY === 'number', `Arc radiusY should be a number: ${this._radiusY}`);
+    window.assert && window.assert(isFinite(this._radiusY), `Arc radiusY should be a finite number: ${this._radiusY}`);
+    window.assert && window.assert(typeof this._rotation === 'number', `Arc rotation should be a number: ${this._rotation}`);
+    window.assert && window.assert(isFinite(this._rotation), `Arc rotation should be a finite number: ${this._rotation}`);
+    window.assert && window.assert(typeof this._startAngle === 'number', `Arc startAngle should be a number: ${this._startAngle}`);
+    window.assert && window.assert(isFinite(this._startAngle), `Arc startAngle should be a finite number: ${this._startAngle}`);
+    window.assert && window.assert(typeof this._endAngle === 'number', `Arc endAngle should be a number: ${this._endAngle}`);
+    window.assert && window.assert(isFinite(this._endAngle), `Arc endAngle should be a finite number: ${this._endAngle}`);
+    window.assert && window.assert(typeof this._anticlockwise === 'boolean', `Arc anticlockwise should be a boolean: ${this._anticlockwise}`);
 
     this._unitTransform = null;
     this._start = null;
@@ -411,10 +411,10 @@ export default class EllipticalArc extends Segment {
     }
 
     // constraints shared with Arc
-    assert && assert(!((!this._anticlockwise && this._endAngle - this._startAngle <= -Math.PI * 2) ||
+    window.assert && window.assert(!((!this._anticlockwise && this._endAngle - this._startAngle <= -Math.PI * 2) ||
       (this._anticlockwise && this._startAngle - this._endAngle <= -Math.PI * 2)),
       'Not handling elliptical arcs with start/end angles that show differences in-between browser handling');
-    assert && assert(!((!this._anticlockwise && this._endAngle - this._startAngle > Math.PI * 2) ||
+    window.assert && window.assert(!((!this._anticlockwise && this._endAngle - this._startAngle > Math.PI * 2) ||
       (this._anticlockwise && this._startAngle - this._endAngle > Math.PI * 2)),
       'Not handling elliptical arcs with start/end angles that show differences in-between browser handling');
 
@@ -521,7 +521,7 @@ export default class EllipticalArc extends Segment {
       if (this._angleDifference < 0) {
         this._angleDifference += Math.PI * 2;
       }
-      assert && assert(this._angleDifference >= 0); // now it should always be zero or positive
+      window.assert && window.assert(this._angleDifference >= 0); // now it should always be zero or positive
     }
     return this._angleDifference;
   }
@@ -920,7 +920,7 @@ export default class EllipticalArc extends Segment {
    * Returns an EllipticalArc from the serialized representation.
    */
   public static override deserialize(obj: SerializedEllipticalArc): EllipticalArc {
-    assert && assert(obj.type === 'EllipticalArc');
+    window.assert && window.assert(obj.type === 'EllipticalArc');
 
     return new EllipticalArc(new Vector2(obj.centerX, obj.centerY), obj.radiusX, obj.radiusY, obj.rotation, obj.startAngle, obj.endAngle, obj.anticlockwise);
   }

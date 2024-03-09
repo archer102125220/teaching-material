@@ -6,15 +6,15 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import switchToRight_mp3 from '../../sounds/switchToRight_mp3.js';
-import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
-import tambo from '../tambo.js';
+import switchToRight_mp3 from '@/assets/sounds/tambo/switchToRight_mp3';
+import SoundClipPlayer from '../sound-generators/SoundClipPlayer';
+import tambo from '../tambo';
 
 // create the shared sound instance
-const switchToRightSoundPlayer = new SoundClipPlayer( switchToRight_mp3, {
+const switchToRightSoundPlayer = new SoundClipPlayer(switchToRight_mp3, {
   soundClipOptions: { initialOutputLevel: 0.2 },
   soundManagerOptions: { categoryName: 'user-interface' }
-} );
+});
 
-tambo.register( 'switchToRightSoundPlayer', switchToRightSoundPlayer );
+tambo.register('switchToRightSoundPlayer', switchToRightSoundPlayer);
 export default switchToRightSoundPlayer;

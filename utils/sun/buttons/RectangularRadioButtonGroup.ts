@@ -8,21 +8,24 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Shape } from '../../../kite/js/imports.js';
-import InstanceRegistry from '../../../phet-core/js/documentation/InstanceRegistry.js';
-import { Color, FlowBox, FlowBoxOptions, HighlightPath, Node, PDOMPeer, PDOMValueType, Rectangle, SceneryConstants, TInputListener } from '../../../scenery/js/imports.js';
-import multiSelectionSoundPlayerFactory from '../../../tambo/js/multiSelectionSoundPlayerFactory.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import ColorConstants from '../ColorConstants.js';
-import sun from '../sun.js';
-import RectangularRadioButton, { RectangularRadioButtonOptions } from './RectangularRadioButton.js';
-import { VoicingResponse } from '../../../utterance-queue/js/ResponsePacket.js';
-import TSoundPlayer from '../../../tambo/js/TSoundPlayer.js';
-import TContentAppearanceStrategy from './TContentAppearanceStrategy.js';
-import optionize, { combineOptions } from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import GroupItemOptions, { getGroupItemNodes } from '../GroupItemOptions.js';
-import PhetioProperty from '../../../axon/js/PhetioProperty.js';
+import _ from 'lodash';
+
+import { Shape } from '../../kite/imports';
+import InstanceRegistry from '../../phet-core/documentation/InstanceRegistry';
+import { Color, FlowBox, type FlowBoxOptions, HighlightPath, Node, PDOMPeer, type PDOMValueType, Rectangle, SceneryConstants, type TInputListener } from '../../scenery/imports';
+import multiSelectionSoundPlayerFactory from '../../tambo/multiSelectionSoundPlayerFactory';
+import Tandem from '../../tandem/Tandem';
+import ColorConstants from '../ColorConstants';
+import sun from '../sun';
+import RectangularRadioButton, { type RectangularRadioButtonOptions } from './RectangularRadioButton';
+import { type VoicingResponse } from '../../utterance-queue/ResponsePacket';
+import type TSoundPlayer from '../../tambo/TSoundPlayer';
+import type TContentAppearanceStrategy from './TContentAppearanceStrategy';
+import optionize, { combineOptions } from '../../phet-core/optionize';
+import type StrictOmit from '../../phet-core/types/StrictOmit';
+import type GroupItemOptions from '../GroupItemOptions';
+import { getGroupItemNodes } from '../GroupItemOptions';
+import type PhetioProperty from '../../axon/PhetioProperty';
 
 // pdom - Unique ID for each instance of RectangularRadioButtonGroup. Used to create the 'name' option that is passed
 // to each RectangularRadioButton in the group. All buttons in the group must have the same 'name', and that name
@@ -98,14 +101,14 @@ export default class RectangularRadioButtonGroup<T> extends FlowBox {
   private readonly disposeRadioButtonGroup: () => void;
   private readonly radioButtonMap: Map<T, RectangularRadioButton<T>>;
 
-  public constructor( property: PhetioProperty<T>, items: RectangularRadioButtonGroupItem<T>[], providedOptions?: RectangularRadioButtonGroupOptions ) {
+  public constructor(property: PhetioProperty<T>, items: RectangularRadioButtonGroupItem<T>[], providedOptions?: RectangularRadioButtonGroupOptions) {
 
-    assert && assert( _.uniqBy( items, item => item.value ).length === items.length,
-      'items must have unique values' );
-    assert && assert( _.find( items, item => ( item.value === property.value ) ),
-      'one radio button must be associated with property.value' );
+    window.assert && window.assert(_.uniqBy(items, item => item.value).length === items.length,
+      'items must have unique values');
+    window.assert && window.assert(_.find(items, item => (item.value === property.value)),
+      'one radio button must be associated with property.value');
 
-    const options = optionize<RectangularRadioButtonGroupOptions, SelfOptions, FlowBoxOptions>()( {
+    const options = optionize<RectangularRadioButtonGroupOptions, SelfOptions, FlowBoxOptions>()({
 
       // SelfOptions
       soundPlayers: null,
@@ -128,7 +131,7 @@ export default class RectangularRadioButtonGroup<T> extends FlowBox {
           selectedStroke: 'black',
           selectedLineWidth: 1.5,
           selectedButtonOpacity: 1,
-          deselectedStroke: new Color( 50, 50, 50 ),
+          deselectedStroke: new Color(50, 50, 50),
           deselectedLineWidth: 1,
           deselectedButtonOpacity: 0.6,
           overButtonOpacity: 0.8
@@ -158,10 +161,10 @@ export default class RectangularRadioButtonGroup<T> extends FlowBox {
       labelTagName: 'h3',
       ariaRole: 'radiogroup',
       groupFocusHighlight: true
-    }, providedOptions );
+    }, providedOptions);
 
-    assert && assert( options.soundPlayers === null || options.soundPlayers.length === items.length,
-      'If soundPlayers is provided, there must be one per radio button.' );
+    window.assert && window.assert(options.soundPlayers === null || options.soundPlayers.length === items.length,
+      'If soundPlayers is provided, there must be one per radio button.');
 
     instanceCount++;
 
@@ -173,14 +176,14 @@ export default class RectangularRadioButtonGroup<T> extends FlowBox {
       options.radioButtonOptions.buttonAppearanceStrategyOptions!.deselectedLineWidth!
     );
 
-    const nodes = getGroupItemNodes( items, options.tandem );
-    assert && assert( _.every( nodes, node => !node.hasPDOMContent ),
+    const nodes = getGroupItemNodes(items, options.tandem);
+    window.assert && window.assert(_.every(nodes, node => !node.hasPDOMContent),
       'Accessibility is provided by RectangularRadioButton and RectangularRadioButtonGroupItem.labelContent. ' +
-      'Additional PDOM content in the provided Node could break accessibility.' );
+      'Additional PDOM content in the provided Node could break accessibility.');
 
     // Calculate the maximum width and height of the content, so we can make all radio buttons the same size.
-    const widestContentWidth = _.maxBy( nodes, node => node.width )!.width;
-    const tallestContentHeight = _.maxBy( nodes, node => node.height )!.height;
+    const widestContentWidth = _.maxBy(nodes, node => node.width)!.width;
+    const tallestContentHeight = _.maxBy(nodes, node => node.height)!.height;
 
     // Populated for each radio button in for loop
     const buttons: Array<RectangularRadioButton<T> | FlowBox> = [];
@@ -190,78 +193,78 @@ export default class RectangularRadioButtonGroup<T> extends FlowBox {
     const xMargin: number = options.radioButtonOptions.xMargin!;
     const yMargin: number = options.radioButtonOptions.yMargin!;
 
-    for ( let i = 0; i < items.length; i++ ) {
-      const item = items[ i ];
-      const node = nodes[ i ];
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      const node = nodes[i];
 
-      const radioButtonOptions = combineOptions<RectangularRadioButtonOptions>( {
+      const radioButtonOptions = combineOptions<RectangularRadioButtonOptions>({
         content: node,
         minWidth: widestContentWidth + 2 * xMargin,
         minHeight: tallestContentHeight + 2 * yMargin,
-        soundPlayer: options.soundPlayers ? options.soundPlayers[ i ] :
-                     multiSelectionSoundPlayerFactory.getSelectionSoundPlayer( i ),
-        tandem: item.tandemName ? options.tandem.createTandem( item.tandemName ) :
-                options.tandem === Tandem.OPT_OUT ? Tandem.OPT_OUT :
-                Tandem.REQUIRED,
+        soundPlayer: options.soundPlayers ? options.soundPlayers[i] :
+          multiSelectionSoundPlayerFactory.getSelectionSoundPlayer(i),
+        tandem: item.tandemName ? options.tandem.createTandem(item.tandemName) :
+          options.tandem === Tandem.OPT_OUT ? Tandem.OPT_OUT :
+            Tandem.REQUIRED,
         phetioDocumentation: item.phetioDocumentation || ''
-      }, options.radioButtonOptions, item.options );
+      }, options.radioButtonOptions, item.options);
 
       // Create the label and voicing response for the radio button.
-      if ( item.labelContent ) {
+      if (item.labelContent) {
         radioButtonOptions.labelContent = item.labelContent;
         radioButtonOptions.voicingNameResponse = item.labelContent;
       }
 
       // pdom create description for radio button
       // use if block to prevent empty 'p' tag being added when no option is present
-      if ( item.descriptionContent ) {
+      if (item.descriptionContent) {
         radioButtonOptions.descriptionContent = item.descriptionContent;
       }
 
-      if ( item.voicingContextResponse ) {
+      if (item.voicingContextResponse) {
         radioButtonOptions.voicingContextResponse = item.voicingContextResponse;
       }
 
-      const radioButton = new RectangularRadioButton( property, item.value, radioButtonOptions );
+      const radioButton = new RectangularRadioButton(property, item.value, radioButtonOptions);
 
-      radioButtonMap.set( item.value, radioButton );
+      radioButtonMap.set(item.value, radioButton);
 
       // pdom - so the browser recognizes these buttons are in the same group. See instanceCount for more info.
-      radioButton.setPDOMAttribute( 'name', CLASS_NAME + instanceCount );
+      radioButton.setPDOMAttribute('name', CLASS_NAME + instanceCount);
 
       // Ensure the buttons don't resize when selected vs unselected, by adding a rectangle with the max size.
       const maxButtonWidth = maxLineWidth + widestContentWidth + 2 * xMargin;
       const maxButtonHeight = maxLineWidth + tallestContentHeight + 2 * yMargin;
-      const boundingRect = new Rectangle( 0, 0, maxButtonWidth, maxButtonHeight, {
+      const boundingRect = new Rectangle(0, 0, maxButtonWidth, maxButtonHeight, {
         fill: 'rgba(0,0,0,0)',
         center: radioButton.center
-      } );
-      radioButton.addChild( boundingRect );
+      });
+      radioButton.addChild(boundingRect);
 
       let button;
-      if ( item.label ) {
+      if (item.label) {
 
         // If a label is provided, the button becomes a FlowBox that manages layout of the button and label.
         const label = item.label;
-        const labelOrientation = ( options.labelAlign === 'bottom' || options.labelAlign === 'top' ) ? 'vertical' : 'horizontal';
-        const labelChildren = ( options.labelAlign === 'left' || options.labelAlign === 'top' ) ? [ label, radioButton ] : [ radioButton, label ];
-        button = new FlowBox( {
+        const labelOrientation = (options.labelAlign === 'bottom' || options.labelAlign === 'top') ? 'vertical' : 'horizontal';
+        const labelChildren = (options.labelAlign === 'left' || options.labelAlign === 'top') ? [label, radioButton] : [radioButton, label];
+        button = new FlowBox({
           children: labelChildren,
           spacing: options.labelSpacing,
           orientation: labelOrientation
-        } );
+        });
 
         // Make sure the label pointer areas don't block the expanded button pointer areas.
         label.pickable = false;
 
         // Use the same content appearance strategy for the labels that is used for the button content.
         // By default, this reduces opacity of the labels for the deselected radio buttons.
-        if ( options.radioButtonOptions.contentAppearanceStrategy ) {
-          labelAppearanceStrategies.push( new options.radioButtonOptions.contentAppearanceStrategy(
+        if (options.radioButtonOptions.contentAppearanceStrategy) {
+          labelAppearanceStrategies.push(new options.radioButtonOptions.contentAppearanceStrategy(
             label,
             radioButton.interactionStateProperty,
             options.radioButtonOptions.contentAppearanceStrategyOptions
-          ) );
+          ));
         }
       }
       else {
@@ -269,16 +272,16 @@ export default class RectangularRadioButtonGroup<T> extends FlowBox {
         // The button has no label.
         button = radioButton;
       }
-      buttons.push( button );
-      buttonsWithLayoutNodes.push( { radioButton: radioButton, layoutNode: button } );
+      buttons.push(button);
+      buttonsWithLayoutNodes.push({ radioButton, layoutNode: button });
     }
 
     options.children = buttons;
 
     // Pointer areas and focus highlight, sized to fit the largest button. See https://github.com/phetsims/sun/issues/708.
-    const maxButtonWidth = _.maxBy( buttonsWithLayoutNodes, ( buttonWithLayoutParent: ButtonWithLayoutNode<T> ) => buttonWithLayoutParent.layoutNode.width )!.layoutNode.width;
-    const maxButtonHeight = _.maxBy( buttonsWithLayoutNodes, ( buttonWithLayoutParent: ButtonWithLayoutNode<T> ) => buttonWithLayoutParent.layoutNode.height )!.layoutNode.height;
-    buttonsWithLayoutNodes.forEach( ( buttonWithLayoutParent: ButtonWithLayoutNode<T> ) => {
+    const maxButtonWidth = _.maxBy(buttonsWithLayoutNodes, (buttonWithLayoutParent: ButtonWithLayoutNode<T>) => buttonWithLayoutParent.layoutNode.width)!.layoutNode.width;
+    const maxButtonHeight = _.maxBy(buttonsWithLayoutNodes, (buttonWithLayoutParent: ButtonWithLayoutNode<T>) => buttonWithLayoutParent.layoutNode.height)!.layoutNode.height;
+    buttonsWithLayoutNodes.forEach((buttonWithLayoutParent: ButtonWithLayoutNode<T>) => {
 
       buttonWithLayoutParent.radioButton.touchArea = Shape.rectangle(
         -options.touchAreaXDilation - maxLineWidth / 2,
@@ -294,45 +297,45 @@ export default class RectangularRadioButtonGroup<T> extends FlowBox {
         maxButtonHeight + 2 * options.mouseAreaYDilation
       );
 
-      const defaultDilationCoefficient = HighlightPath.getDilationCoefficient( buttonWithLayoutParent.layoutNode );
+      const defaultDilationCoefficient = HighlightPath.getDilationCoefficient(buttonWithLayoutParent.layoutNode);
       buttonWithLayoutParent.radioButton.focusHighlight = Shape.rectangle(
         -options.a11yHighlightXDilation - maxLineWidth / 2 - defaultDilationCoefficient,
         -options.a11yHighlightYDilation - maxLineWidth / 2 - defaultDilationCoefficient,
-        maxButtonWidth + 2 * ( options.a11yHighlightXDilation + defaultDilationCoefficient ),
-        maxButtonHeight + 2 * ( options.a11yHighlightYDilation + defaultDilationCoefficient )
+        maxButtonWidth + 2 * (options.a11yHighlightXDilation + defaultDilationCoefficient),
+        maxButtonHeight + 2 * (options.a11yHighlightYDilation + defaultDilationCoefficient)
       );
-    } );
+    });
 
-    super( options );
+    super(options);
 
     this.radioButtonMap = radioButtonMap;
 
     // pdom - This node's primary sibling is aria-labelledby its own label, so the label content is read whenever
     // a member of the group receives focus.
-    this.addAriaLabelledbyAssociation( {
+    this.addAriaLabelledbyAssociation({
       thisElementName: PDOMPeer.PRIMARY_SIBLING,
       otherNode: this,
       otherElementName: PDOMPeer.LABEL_SIBLING
-    } );
+    });
 
     // pan and zoom - Signify that key input is reserved, and we should not pan when user presses arrow keys.
     const intentListener: TInputListener = { keydown: event => event.pointer.reserveForKeyboardDrag() };
-    this.addInputListener( intentListener );
+    this.addInputListener(intentListener);
 
     // must be done after this instance is instrumented
-    this.addLinkedElement( property, {
+    this.addLinkedElement(property, {
       tandemName: 'property'
-    } );
+    });
 
     this.disposeRadioButtonGroup = () => {
-      this.removeInputListener( intentListener );
-      buttons.forEach( button => button.dispose() );
-      labelAppearanceStrategies.forEach( strategy => ( strategy.dispose && strategy.dispose() ) );
-      nodes.forEach( node => node.dispose() );
+      this.removeInputListener(intentListener);
+      buttons.forEach(button => button.dispose());
+      labelAppearanceStrategies.forEach(strategy => (strategy.dispose && strategy.dispose()));
+      nodes.forEach(node => node.dispose());
     };
 
     // pdom - register component for binder docs
-    assert && phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL( 'sun', 'RectangularRadioButtonGroup', this );
+    assert && phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL('sun', 'RectangularRadioButtonGroup', this);
   }
 
   /**
@@ -341,9 +344,9 @@ export default class RectangularRadioButtonGroup<T> extends FlowBox {
    * @param value
    * @returns the corresponding button
    */
-  public getButtonForValue( value: T ): RectangularRadioButton<T> {
-    const result = this.radioButtonMap.get( value )!;
-    assert && assert( result, 'No button found for value: ' + value );
+  public getButtonForValue(value: T): RectangularRadioButton<T> {
+    const result = this.radioButtonMap.get(value)!;
+    window.assert && window.assert(result, 'No button found for value: ' + value);
     return result;
   }
 
@@ -354,4 +357,4 @@ export default class RectangularRadioButtonGroup<T> extends FlowBox {
   }
 }
 
-sun.register( 'RectangularRadioButtonGroup', RectangularRadioButtonGroup );
+sun.register('RectangularRadioButtonGroup', RectangularRadioButtonGroup);

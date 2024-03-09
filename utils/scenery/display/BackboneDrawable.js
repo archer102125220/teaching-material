@@ -493,8 +493,8 @@ class BackboneDrawable extends Drawable {
   stitch(firstDrawable, lastDrawable, firstChangeInterval, lastChangeInterval) {
     // no stitch necessary if there are no change intervals
     if (firstChangeInterval === null || lastChangeInterval === null) {
-      assert && assert(firstChangeInterval === null);
-      assert && assert(lastChangeInterval === null);
+      window.assert && window.assert(firstChangeInterval === null);
+      window.assert && window.assert(lastChangeInterval === null);
       return;
     }
 
@@ -522,7 +522,7 @@ class BackboneDrawable extends Drawable {
       intervalsChanged = interval.constrict() || intervalsChanged;
 
       if (interval.isEmpty()) {
-        assert && assert(intervalsChanged);
+        window.assert && window.assert(intervalsChanged);
 
         if (lastNonemptyInterval) {
           // skip it, hook the correct reference

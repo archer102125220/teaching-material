@@ -74,7 +74,7 @@ export default class Arc extends Segment {
    * Sets the center of the Arc.
    */
   public setCenter(center: Vector2): this {
-    assert && assert(center.isFinite(), `Arc center should be finite: ${center.toString()}`);
+    window.assert && window.assert(center.isFinite(), `Arc center should be finite: ${center.toString()}`);
 
     if (!this._center.equals(center)) {
       this._center = center;
@@ -100,7 +100,7 @@ export default class Arc extends Segment {
    * Sets the radius of the Arc.
    */
   public setRadius(radius: number): this {
-    assert && assert(isFinite(radius), `Arc radius should be a finite number: ${radius}`);
+    window.assert && window.assert(isFinite(radius), `Arc radius should be a finite number: ${radius}`);
 
     if (this._radius !== radius) {
       this._radius = radius;
@@ -126,7 +126,7 @@ export default class Arc extends Segment {
    * Sets the startAngle of the Arc.
    */
   public setStartAngle(startAngle: number): this {
-    assert && assert(isFinite(startAngle), `Arc startAngle should be a finite number: ${startAngle}`);
+    window.assert && window.assert(isFinite(startAngle), `Arc startAngle should be a finite number: ${startAngle}`);
 
     if (this._startAngle !== startAngle) {
       this._startAngle = startAngle;
@@ -152,7 +152,7 @@ export default class Arc extends Segment {
    * Sets the endAngle of the Arc.
    */
   public setEndAngle(endAngle: number): this {
-    assert && assert(isFinite(endAngle), `Arc endAngle should be a finite number: ${endAngle}`);
+    window.assert && window.assert(isFinite(endAngle), `Arc endAngle should be a finite number: ${endAngle}`);
 
     if (this._endAngle !== endAngle) {
       this._endAngle = endAngle;
@@ -207,8 +207,8 @@ export default class Arc extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public positionAt(t: number): Vector2 {
-    assert && assert(t >= 0, 'positionAt t should be non-negative');
-    assert && assert(t <= 1, 'positionAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'positionAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'positionAt t should be no greater than 1');
 
     return this.positionAtAngle(this.angleAt(t));
   }
@@ -222,8 +222,8 @@ export default class Arc extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public tangentAt(t: number): Vector2 {
-    assert && assert(t >= 0, 'tangentAt t should be non-negative');
-    assert && assert(t <= 1, 'tangentAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'tangentAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'tangentAt t should be no greater than 1');
 
     return this.tangentAtAngle(this.angleAt(t));
   }
@@ -240,8 +240,8 @@ export default class Arc extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public curvatureAt(t: number): number {
-    assert && assert(t >= 0, 'curvatureAt t should be non-negative');
-    assert && assert(t <= 1, 'curvatureAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'curvatureAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'curvatureAt t should be no greater than 1');
 
     // Since it is an arc of as circle, the curvature is independent of t
     return (this._anticlockwise ? -1 : 1) / this._radius;
@@ -254,8 +254,8 @@ export default class Arc extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public subdivided(t: number): Arc[] {
-    assert && assert(t >= 0, 'subdivided t should be non-negative');
-    assert && assert(t <= 1, 'subdivided t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'subdivided t should be non-negative');
+    window.assert && window.assert(t <= 1, 'subdivided t should be no greater than 1');
 
     // If t is 0 or 1, we only need to return 1 segment
     if (t === 0 || t === 1) {
@@ -286,15 +286,15 @@ export default class Arc extends Segment {
     this._bounds = null;
     this._svgPathFragment = null;
 
-    assert && assert(this._center instanceof Vector2, 'Arc center should be a Vector2');
-    assert && assert(this._center.isFinite(), 'Arc center should be finite (not NaN or infinite)');
-    assert && assert(typeof this._radius === 'number', `Arc radius should be a number: ${this._radius}`);
-    assert && assert(isFinite(this._radius), `Arc radius should be a finite number: ${this._radius}`);
-    assert && assert(typeof this._startAngle === 'number', `Arc startAngle should be a number: ${this._startAngle}`);
-    assert && assert(isFinite(this._startAngle), `Arc startAngle should be a finite number: ${this._startAngle}`);
-    assert && assert(typeof this._endAngle === 'number', `Arc endAngle should be a number: ${this._endAngle}`);
-    assert && assert(isFinite(this._endAngle), `Arc endAngle should be a finite number: ${this._endAngle}`);
-    assert && assert(typeof this._anticlockwise === 'boolean', `Arc anticlockwise should be a boolean: ${this._anticlockwise}`);
+    window.assert && window.assert(this._center instanceof Vector2, 'Arc center should be a Vector2');
+    window.assert && window.assert(this._center.isFinite(), 'Arc center should be finite (not NaN or infinite)');
+    window.assert && window.assert(typeof this._radius === 'number', `Arc radius should be a number: ${this._radius}`);
+    window.assert && window.assert(isFinite(this._radius), `Arc radius should be a finite number: ${this._radius}`);
+    window.assert && window.assert(typeof this._startAngle === 'number', `Arc startAngle should be a number: ${this._startAngle}`);
+    window.assert && window.assert(isFinite(this._startAngle), `Arc startAngle should be a finite number: ${this._startAngle}`);
+    window.assert && window.assert(typeof this._endAngle === 'number', `Arc endAngle should be a number: ${this._endAngle}`);
+    window.assert && window.assert(isFinite(this._endAngle), `Arc endAngle should be a finite number: ${this._endAngle}`);
+    window.assert && window.assert(typeof this._anticlockwise === 'boolean', `Arc anticlockwise should be a boolean: ${this._anticlockwise}`);
 
     // Remap negative radius to a positive radius
     if (this._radius < 0) {
@@ -305,10 +305,10 @@ export default class Arc extends Segment {
     }
 
     // Constraints that should always be satisfied
-    assert && assert(!((!this.anticlockwise && this._endAngle - this._startAngle <= -Math.PI * 2) ||
+    window.assert && window.assert(!((!this.anticlockwise && this._endAngle - this._startAngle <= -Math.PI * 2) ||
       (this.anticlockwise && this._startAngle - this._endAngle <= -Math.PI * 2)),
       'Not handling arcs with start/end angles that show differences in-between browser handling');
-    assert && assert(!((!this.anticlockwise && this._endAngle - this._startAngle > Math.PI * 2) ||
+    window.assert && window.assert(!((!this.anticlockwise && this._endAngle - this._startAngle > Math.PI * 2) ||
       (this.anticlockwise && this._startAngle - this._endAngle > Math.PI * 2)),
       'Not handling arcs with start/end angles that show differences in-between browser handling');
 
@@ -400,7 +400,7 @@ export default class Arc extends Segment {
       if (this._angleDifference < 0) {
         this._angleDifference += Math.PI * 2;
       }
-      assert && assert(this._angleDifference >= 0); // now it should always be zero or positive
+      window.assert && window.assert(this._angleDifference >= 0); // now it should always be zero or positive
     }
     return this._angleDifference;
   }
@@ -477,7 +477,7 @@ export default class Arc extends Segment {
   public tAtAngle(angle: number): number {
     const t = (this.mapAngle(angle) - this._startAngle) / (this.getActualEndAngle() - this._startAngle);
 
-    assert && assert(t >= 0 && t <= 1, `tAtAngle out of range: ${t}`);
+    window.assert && window.assert(t >= 0 && t <= 1, `tAtAngle out of range: ${t}`);
 
     return t;
   }
@@ -807,7 +807,7 @@ export default class Arc extends Segment {
    * Returns an Arc from the serialized representation.
    */
   public static override deserialize(obj: SerializedArc): Arc {
-    assert && assert(obj.type === 'Arc');
+    window.assert && window.assert(obj.type === 'Arc');
 
     return new Arc(new Vector2(obj.centerX, obj.centerY), obj.radius, obj.startAngle, obj.endAngle, obj.anticlockwise);
   }
@@ -860,11 +860,11 @@ export default class Arc extends Segment {
    * @param tEnd2 - The parametric value of the second segment's end
    */
   private static getPartialOverlap(end1: number, start2: number, end2: number, tStart2: number, tEnd2: number): Overlap[] {
-    assert && assert(end1 > 0 && end1 <= TWO_PI + 1e-10);
-    assert && assert(start2 >= 0 && start2 < TWO_PI + 1e-10);
-    assert && assert(end2 >= 0 && end2 <= TWO_PI + 1e-10);
-    assert && assert(tStart2 >= 0 && tStart2 <= 1);
-    assert && assert(tEnd2 >= 0 && tEnd2 <= 1);
+    window.assert && window.assert(end1 > 0 && end1 <= TWO_PI + 1e-10);
+    window.assert && window.assert(start2 >= 0 && start2 < TWO_PI + 1e-10);
+    window.assert && window.assert(end2 >= 0 && end2 <= TWO_PI + 1e-10);
+    window.assert && window.assert(tStart2 >= 0 && tStart2 <= 1);
+    window.assert && window.assert(tEnd2 >= 0 && tEnd2 <= 1);
 
     const reversed2 = end2 < start2;
     const min2 = reversed2 ? end2 : start2;
@@ -900,10 +900,10 @@ export default class Arc extends Segment {
    * @returns - Any overlaps (from 0 to 2)
    */
   public static getAngularOverlaps(startAngle1: number, endAngle1: number, startAngle2: number, endAngle2: number): Overlap[] {
-    assert && assert(isFinite(startAngle1));
-    assert && assert(isFinite(endAngle1));
-    assert && assert(isFinite(startAngle2));
-    assert && assert(isFinite(endAngle2));
+    window.assert && window.assert(isFinite(startAngle1));
+    window.assert && window.assert(isFinite(endAngle1));
+    window.assert && window.assert(isFinite(startAngle2));
+    window.assert && window.assert(isFinite(endAngle2));
 
     // Remap start of arc 1 to 0, and the end to be positive (sign1 )
     let end1 = endAngle1 - startAngle1;
@@ -952,8 +952,8 @@ export default class Arc extends Segment {
    * @param radius2 - Radius of the second circle
    */
   public static getCircleIntersectionPoint(center1: Vector2, radius1: number, center2: Vector2, radius2: number): Vector2[] {
-    assert && assert(isFinite(radius1) && radius1 >= 0);
-    assert && assert(isFinite(radius2) && radius2 >= 0);
+    window.assert && window.assert(isFinite(radius1) && radius1 >= 0);
+    window.assert && window.assert(isFinite(radius2) && radius2 >= 0);
 
     const delta = center2.minus(center1);
     const d = delta.magnitude;

@@ -186,7 +186,7 @@ export default class Vector4 implements TPoolable {
    */
   public normalized(): Vector4 {
     const magnitude = this.magnitude;
-    assert && assert( magnitude !== 0, 'Cannot normalize a zero-magnitude vector' );
+    window.assert && window.assert( magnitude !== 0, 'Cannot normalize a zero-magnitude vector' );
     return this.dividedScalar( magnitude );
   }
 

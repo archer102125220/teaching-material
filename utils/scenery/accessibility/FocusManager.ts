@@ -130,7 +130,7 @@ export default class FocusManager {
     this.endSpeakingListener = (text, utterance) => {
       if (utterance instanceof ReadingBlockUtterance && this.readingBlockFocusProperty.value) {
 
-        assert && assert(utterance.readingBlockFocus, 'should be non null focus');
+        window.assert && window.assert(utterance.readingBlockFocus, 'should be non null focus');
 
         // only clear the readingBlockFocusProperty if the ReadingBlockUtterance has a Focus that matches the
         // current value for readingBlockFocusProperty so that the highlight doesn't disappear every time
@@ -203,7 +203,7 @@ export default class FocusManager {
    * @param focus - True for focusin event, false for focusout event.
    */
   public static updatePDOMFocusFromEvent(displays: Display[], event: FocusEvent, focus: boolean): void {
-    assert && assert(document.activeElement, 'Must be called from focusin, therefore active elemetn expected');
+    window.assert && window.assert(document.activeElement, 'Must be called from focusin, therefore active elemetn expected');
 
     if (focus) {
 
@@ -214,10 +214,10 @@ export default class FocusManager {
         const activeElement = document.activeElement as HTMLElement;
         if (display.isElementUnderPDOM(activeElement)) {
           const uniqueId = activeElement.getAttribute(PDOMUtils.DATA_PDOM_UNIQUE_ID)!;
-          assert && assert(uniqueId, 'Event target must have a unique ID on its data if it is in the PDOM.');
+          window.assert && window.assert(uniqueId, 'Event target must have a unique ID on its data if it is in the PDOM.');
 
           const trail = PDOMInstance.uniqueIdToTrail(display, uniqueId)!;
-          assert && assert(trail, 'We must have a trail since the target was under the PDOM.');
+          window.assert && window.assert(trail, 'We must have a trail since the target was under the PDOM.');
 
           const visualTrail = PDOMInstance.guessVisualTrail(trail, display.rootNode);
           if (visualTrail.lastNode().focusable) {
@@ -343,7 +343,7 @@ export default class FocusManager {
    * This will be called by scenery for you when you use Display.initializeEvents().
    */
   public static attachToWindow(): void {
-    assert && assert(!FocusManager.globallyAttached, 'Can only be attached statically once.');
+    window.assert && window.assert(!FocusManager.globallyAttached, 'Can only be attached statically once.');
     FocusManager.attachedWindowFocusListener = () => {
       FocusManager._windowHasFocusProperty.value = true;
     };

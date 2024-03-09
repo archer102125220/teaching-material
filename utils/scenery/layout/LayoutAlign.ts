@@ -63,7 +63,7 @@ export default class LayoutAlign extends EnumerationValue {
       return null;
     }
 
-    assert && assert(horizontalAlignMap[key]);
+    window.assert && window.assert(horizontalAlignMap[key]);
 
     return horizontalAlignMap[key];
   }
@@ -73,7 +73,7 @@ export default class LayoutAlign extends EnumerationValue {
       return null;
     }
 
-    assert && assert(verticalAlignMap[key]);
+    window.assert && window.assert(verticalAlignMap[key]);
 
     return verticalAlignMap[key];
   }

@@ -13,6 +13,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+import _ from 'lodash';
+
 import animationFrameTimer from '../axon/animationFrameTimer';
 import BooleanProperty from '../axon/BooleanProperty';
 import createObservableArray from '../axon/createObservableArray';
@@ -87,7 +89,7 @@ phet.joist.elapsedTime = 0; // in milliseconds, use this in Tween.start for repl
 // (phet-io)
 phet.joist.playbackModeEnabledProperty = new BooleanProperty(phet.chipper.queryParameters.playbackMode);
 
-assert && assert(typeof phet.chipper.brand === 'string', 'phet.chipper.brand is required to run a sim');
+window.assert && window.assert(typeof phet.chipper.brand === 'string', 'phet.chipper.brand is required to run a sim');
 
 type SelfOptions = {
 
@@ -255,7 +257,7 @@ export default class Sim extends PhetioObject {
 
     window.phetSplashScreenDownloadComplete();
 
-    assert && assert(allSimScreens.length >= 1, 'at least one screen is required');
+    window.assert && window.assert(allSimScreens.length >= 1, 'at least one screen is required');
 
     const options = optionize<SimOptions, SelfOptions, PhetioObjectOptions>()({
 
@@ -307,7 +309,7 @@ export default class Sim extends PhetioObject {
     });
 
     assert && this.isConstructionCompleteProperty.lazyLink(isConstructionComplete => {
-      assert && assert(isConstructionComplete, 'Sim construction should never uncomplete');
+      window.assert && window.assert(isConstructionComplete, 'Sim construction should never uncomplete');
     });
 
     const dimensionProperty = new Property(new Dimension2(0, 0), {
@@ -318,7 +320,7 @@ export default class Sim extends PhetioObject {
     this.dimensionProperty = dimensionProperty;
 
     this.resizeAction = new PhetioAction<[number, number]>((width, height) => {
-      assert && assert(width > 0 && height > 0, 'sim should have a nonzero area');
+      window.assert && window.assert(width > 0 && height > 0, 'sim should have a nonzero area');
 
       dimensionProperty.value = new Dimension2(width, height);
 
@@ -587,13 +589,13 @@ export default class Sim extends PhetioObject {
       browserTabVisibleProperty.set(document.visibilityState === 'visible');
     }, false);
 
-    assert && assert(window.phet.joist.launchCalled, 'Sim must be launched using simLauncher, ' +
+    window.assert && window.assert(window.phet.joist.launchCalled, 'Sim must be launched using simLauncher, ' +
       'see https://github.com/phetsims/joist/issues/142');
 
     this.supportsGestureDescription = phet.chipper.queryParameters.supportsInteractiveDescription && SUPPORTS_GESTURE_DESCRIPTION;
     this.hasKeyboardHelpContent = _.some(this.simScreens, simScreen => !!simScreen.createKeyboardHelpNode);
 
-    assert && assert(!window.phet.joist.sim, 'Only supports one sim at a time');
+    window.assert && window.assert(!window.phet.joist.sim, 'Only supports one sim at a time');
     window.phet.joist.sim = this;
 
     // commented out because https://github.com/phetsims/joist/issues/553 is deferred for after GQIO-oneone
@@ -734,7 +736,7 @@ export default class Sim extends PhetioObject {
     this.display.simulationRoot.addChild(this.navigationBar);
 
     if (this.preferencesModel.audioModel.supportsVoicing) {
-      assert && assert(this.toolbar, 'toolbar should exist for voicing');
+      window.assert && window.assert(this.toolbar, 'toolbar should exist for voicing');
       this.display.simulationRoot.addChild(this.toolbar!);
       this.display.simulationRoot.pdomOrder = [this.toolbar!];
 
@@ -820,9 +822,9 @@ export default class Sim extends PhetioObject {
    * @param isModal - whether popup is modal
    */
   public showPopup(popup: PopupableNode, isModal: boolean): void {
-    assert && assert(popup);
-    assert && assert(!!popup.hide, 'Missing popup.hide() for showPopup');
-    assert && assert(!this.topLayer.hasChild(popup), 'popup already shown');
+    window.assert && window.assert(popup);
+    window.assert && window.assert(!!popup.hide, 'Missing popup.hide() for showPopup');
+    window.assert && window.assert(!this.topLayer.hasChild(popup), 'popup already shown');
     if (isModal) {
       this.rootNode.interruptSubtreeInput();
       this.modalNodeStack.push(popup);
@@ -845,8 +847,8 @@ export default class Sim extends PhetioObject {
    * @param isModal - whether popup is modal
    */
   public hidePopup(popup: PopupableNode, isModal: boolean): void {
-    assert && assert(popup && this.modalNodeStack.includes(popup));
-    assert && assert(this.topLayer.hasChild(popup), 'popup was not shown');
+    window.assert && window.assert(popup && this.modalNodeStack.includes(popup));
+    window.assert && window.assert(this.topLayer.hasChild(popup), 'popup was not shown');
     if (isModal) {
       this.modalNodeStack.remove(popup);
       if (this.modalNodeStack.length === 0) {
@@ -902,7 +904,7 @@ export default class Sim extends PhetioObject {
 
     // loop to run startup items asynchronously so the DOM can be updated to show animation on the progress bar
     const runItem = (i: number) => {
-      setTimeout( // eslint-disable-line bad-sim-text
+      setTimeout(
         () => {
           workItems[i]();
 
@@ -921,7 +923,7 @@ export default class Sim extends PhetioObject {
             runItem(i + 1);
           }
           else {
-            setTimeout(() => { // eslint-disable-line bad-sim-text
+            setTimeout(() => {
               this.finishInit(this.screens);
 
               // Make sure requestAnimationFrame is defined
@@ -958,7 +960,7 @@ export default class Sim extends PhetioObject {
 
                 if (assert) {
                   const afterCounts = Array.from(Random.allRandomInstances).map(n => n.numberOfCalls);
-                  assert && assert(_.isEqual(beforeCounts, afterCounts),
+                  window.assert && window.assert(_.isEqual(beforeCounts, afterCounts),
                     `Random was called more times in the playback sim on startup, before: ${beforeCounts}, after: ${afterCounts}`);
                 }
               }
@@ -970,7 +972,7 @@ export default class Sim extends PhetioObject {
                 window.phetSplashScreen.dispose();
               }
               // Sanity check that there is no phetio object in phet brand, see https://github.com/phetsims/phet-io/issues/1229
-              phet.chipper.brand === 'phet' && assert && assert(!Tandem.PHET_IO_ENABLED, 'window.phet.preloads.phetio should not exist for phet brand');
+              phet.chipper.brand === 'phet' && window.assert && window.assert(!Tandem.PHET_IO_ENABLED, 'window.phet.preloads.phetio should not exist for phet brand');
 
               // Communicate sim load (successfully) to CT or other listening parent frames
               if (phet.chipper.queryParameters.continuousTest) {
@@ -1096,7 +1098,7 @@ export default class Sim extends PhetioObject {
       this.screens.forEach(screen => {
         if (!(screen instanceof HomeScreen) && screen.nameProperty instanceof LocalizedStringProperty) {
           const stringKey = screen.nameProperty.stringKey;
-          assert && assert(packageJSON.phet.screenNameKeys.includes(stringKey),
+          window.assert && window.assert(packageJSON.phet.screenNameKeys.includes(stringKey),
             `For a multi-screen sim, the string key (${JSON.stringify(stringKey)}) should be in phet.screenNameKeys within package.json`);
         }
       });

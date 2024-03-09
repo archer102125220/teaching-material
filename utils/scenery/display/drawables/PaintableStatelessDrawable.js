@@ -16,7 +16,7 @@ import memoize from '../../../phet-core/memoize';
 import { Color, PaintObserver, scenery, SelfDrawable } from '../../imports';
 
 const PaintableStatelessDrawable = memoize((type) => {
-  assert && assert(_.includes(inheritance(type), SelfDrawable));
+  window.assert && window.assert(_.includes(inheritance(type), SelfDrawable));
 
   return class extends type {
     /**

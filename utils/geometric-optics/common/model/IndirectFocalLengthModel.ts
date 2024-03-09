@@ -99,7 +99,7 @@ export default class IndirectFocalLengthModel extends PhetioObject implements Fo
    * Constrain values so that floating-point error doesn't cause range exceptions.
    */
   public syncToModel(model: FocalLengthModel): void {
-    assert && assert(model !== this);
+    window.assert && window.assert(model !== this);
 
     this.radiusOfCurvatureMagnitudeProperty.value =
       this.radiusOfCurvatureMagnitudeProperty.range.constrainValue(model.radiusOfCurvatureMagnitudeProperty.value);

@@ -33,7 +33,7 @@ const validate = <T>( value: IntentionalAny, validator: Validator<T>, providedOp
         validatorKeys.phetioType = _.pick( validator.phetioType, [ 'validator', 'typeName' ] );
       }
       const prunedValidator = JSON.stringify( validatorKeys, null, 2 );
-      assert && assert( false, 'validation failed for value:', value, result, 'prunedValidator:', prunedValidator );
+      window.assert && window.assert( false, 'validation failed for value:', value, result, 'prunedValidator:', prunedValidator );
     }
   }
 };

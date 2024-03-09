@@ -8,15 +8,13 @@
 
 import _ from 'lodash';
 
-// @ts-expect-error
-import Pool, { TPoolable } from '../phet-core/Pool';
+import Pool, { type TPoolable } from '../phet-core/Pool';
 import IOType from '../tandem/types/IOType';
 import NumberIO from '../tandem/types/NumberIO';
 import dot from './dot';
 import Utils from './Utils';
 import Vector3 from './Vector3';
-// @ts-expect-error
-import { StateObject } from '../tandem/types/StateSchema';
+import { type StateObject } from '../tandem/types/StateSchema';
 
 const ADDING_ACCUMULATOR = (vector: Vector2, nextVector: Vector2) => {
   return vector.add(nextVector);

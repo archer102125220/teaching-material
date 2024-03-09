@@ -6,15 +6,15 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import stepBack_mp3 from '../../sounds/stepBack_mp3.js';
-import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
-import tambo from '../tambo.js';
+import stepBack_mp3 from '@/assets/sounds/tambo/stepBack_mp3';
+import SoundClipPlayer from '../sound-generators/SoundClipPlayer';
+import tambo from '../tambo';
 
 // create the shared sound instance
-const toggleOffSoundPlayer = new SoundClipPlayer( stepBack_mp3, {
+const toggleOffSoundPlayer = new SoundClipPlayer(stepBack_mp3, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
-} );
+});
 
-tambo.register( 'toggleOffSoundPlayer', toggleOffSoundPlayer );
+tambo.register('toggleOffSoundPlayer', toggleOffSoundPlayer);
 export default toggleOffSoundPlayer;

@@ -85,7 +85,7 @@ export default class LightSpotNode extends Node {
     lightSpot.intensityProperty.link(intensity => {
 
       // Opacity is equivalent to opacity.
-      assert && assert(GOConstants.OPACITY_RANGE.equals(GOConstants.INTENSITY_RANGE));
+      window.assert && window.assert(GOConstants.OPACITY_RANGE.equals(GOConstants.INTENSITY_RANGE));
       const opacity = intensity;
 
       // Intensity of light is the opacity of the spot color.

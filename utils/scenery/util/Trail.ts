@@ -268,8 +268,8 @@ export default class Trail {
   }
 
   public addAncestor(node: Node, index?: number): this {
-    assert && assert(!this.immutable, 'cannot modify an immutable Trail with addAncestor');
-    assert && assert(node, 'cannot add falsy value to a Trail');
+    window.assert && window.assert(!this.immutable, 'cannot modify an immutable Trail with addAncestor');
+    window.assert && window.assert(node, 'cannot add falsy value to a Trail');
 
 
     if (this.nodes.length) {
@@ -286,8 +286,8 @@ export default class Trail {
   }
 
   public removeAncestor(): this {
-    assert && assert(!this.immutable, 'cannot modify an immutable Trail with removeAncestor');
-    assert && assert(this.length > 0, 'cannot remove a Node from an empty trail');
+    window.assert && window.assert(!this.immutable, 'cannot modify an immutable Trail with removeAncestor');
+    window.assert && window.assert(this.length > 0, 'cannot remove a Node from an empty trail');
 
     this.nodes.shift();
     if (this.indices.length) {
@@ -301,8 +301,8 @@ export default class Trail {
   }
 
   public addDescendant(node: Node, index?: number): this {
-    assert && assert(!this.immutable, 'cannot modify an immutable Trail with addDescendant');
-    assert && assert(node, 'cannot add falsy value to a Trail');
+    window.assert && window.assert(!this.immutable, 'cannot modify an immutable Trail with addDescendant');
+    window.assert && window.assert(node, 'cannot add falsy value to a Trail');
 
 
     if (this.nodes.length) {
@@ -319,8 +319,8 @@ export default class Trail {
   }
 
   public removeDescendant(): this {
-    assert && assert(!this.immutable, 'cannot modify an immutable Trail with removeDescendant');
-    assert && assert(this.length > 0, 'cannot remove a Node from an empty trail');
+    window.assert && window.assert(!this.immutable, 'cannot modify an immutable Trail with removeDescendant');
+    window.assert && window.assert(this.length > 0, 'cannot remove a Node from an empty trail');
 
     this.nodes.pop();
     if (this.indices.length) {
@@ -346,7 +346,7 @@ export default class Trail {
   public removeDescendantTrail(trail: Trail): void {
     const length = trail.length;
     for (let i = length - 1; i >= 0; i--) {
-      assert && assert(this.lastNode() === trail.nodes[i]);
+      window.assert && window.assert(this.lastNode() === trail.nodes[i]);
 
       this.removeDescendant();
     }
@@ -419,7 +419,7 @@ export default class Trail {
    */
   public upToNode(node: Node): Trail {
     const nodeIndex = _.indexOf(this.nodes, node);
-    assert && assert(nodeIndex >= 0, 'Trail does not contain the node');
+    window.assert && window.assert(nodeIndex >= 0, 'Trail does not contain the node');
     return this.slice(0, _.indexOf(this.nodes, node) + 1);
   }
 
@@ -489,7 +489,7 @@ export default class Trail {
    * If the trails are identical, the index should be equal to the trail's length.
    */
   public getBranchIndexTo(otherTrail: Trail): number {
-    assert && assert(this.nodes[0] === otherTrail.nodes[0], 'To get a branch index, the trails must have the same root');
+    window.assert && window.assert(this.nodes[0] === otherTrail.nodes[0], 'To get a branch index, the trails must have the same root');
 
     let branchIndex;
 
@@ -556,7 +556,7 @@ export default class Trail {
     const parent = this.nodeFromTop(1);
 
     const parentIndex = _.indexOf(parent._children, top);
-    assert && assert(parentIndex !== -1);
+    window.assert && window.assert(parentIndex !== -1);
     const arr = this.nodes.slice(0, this.nodes.length - 1);
     if (parentIndex === 0) {
       // we were the first child, so give it the trail to the parent
@@ -654,9 +654,9 @@ export default class Trail {
    * Comparison is for the rendering order, so an ancestor is 'before' a descendant
    */
   public compare(other: Trail): number {
-    assert && assert(!this.isEmpty(), 'cannot compare with an empty trail');
-    assert && assert(!other.isEmpty(), 'cannot compare with an empty trail');
-    assert && assert(this.nodes[0] === other.nodes[0], 'for Trail comparison, trails must have the same root node');
+    window.assert && window.assert(!this.isEmpty(), 'cannot compare with an empty trail');
+    window.assert && window.assert(!other.isEmpty(), 'cannot compare with an empty trail');
+    window.assert && window.assert(this.nodes[0] === other.nodes[0], 'for Trail comparison, trails must have the same root node');
     assertSlow && assertSlow(this.areIndicesValid(), `Trail.compare this.areIndicesValid() failed on ${this.toString()}`);
     assertSlow && assertSlow(other.areIndicesValid(), `Trail.compare other.areIndicesValid() failed on ${other.toString()}`);
 
@@ -826,7 +826,7 @@ export default class Trail {
    * The index at which the two trails diverge. If a.length === b.length === branchIndex, the trails are identical
    */
   public static branchIndex(a: Trail, b: Trail): number {
-    assert && assert(a.nodes[0] === b.nodes[0], 'Branch changes require roots to be the same');
+    window.assert && window.assert(a.nodes[0] === b.nodes[0], 'Branch changes require roots to be the same');
 
     let branchIndex;
     const shortestLength = Math.min(a.length, b.length);
@@ -919,7 +919,7 @@ export default class Trail {
    * spannedSubtrees( c, i ) -> [b,f] --- wait, include e self?
    */
   public static spannedSubtrees(a: Trail, b: Trail): void {
-    // assert && assert( a.nodes[0] === b.nodes[0], 'Spanned subtrees for a and b requires that a and b have the same root' );
+    // window.assert && window.assert( a.nodes[0] === b.nodes[0], 'Spanned subtrees for a and b requires that a and b have the same root' );
 
     // a.reindex();
     // b.reindex();
@@ -927,7 +927,7 @@ export default class Trail {
     // var subtrees = [];
 
     // var branchIndex = Trail.branchIndex( a, b );
-    // assert && assert( branchIndex > 0, 'Branch index should always be > 0' );
+    // window.assert && window.assert( branchIndex > 0, 'Branch index should always be > 0' );
 
     // if ( a.length === branchIndex && b.length === branchIndex ) {
     //   // the two trails are equal
@@ -991,7 +991,7 @@ export default class Trail {
     const rootId = trailIdNumbers.shift();
     const nodes = [currentNode];
 
-    assert && assert(rootId === rootNode.id);
+    window.assert && window.assert(rootId === rootNode.id);
 
     while (trailIdNumbers.length > 0) {
       const trailId = trailIdNumbers.shift();
@@ -1011,7 +1011,7 @@ export default class Trail {
           break;
         }
 
-        assert && assert(j !== children.length - 1, 'unable to find node from unique Trail id');
+        window.assert && window.assert(j !== children.length - 1, 'unable to find node from unique Trail id');
       }
     }
 

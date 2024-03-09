@@ -316,7 +316,7 @@ export default class HighlightOverlay implements TOverlay {
       // if using a focus highlight from another node, we will track that node's transform instead of the focused node
       if (highlight instanceof HighlightPath) {
         const highlightPath = highlight;
-        assert && assert(highlight.shape !== null, 'The shape of the Node highlight should be set by now. Does it have bounds?');
+        window.assert && window.assert(highlight.shape !== null, 'The shape of the Node highlight should be set by now. Does it have bounds?');
 
         if (highlightPath.transformSourceNode) {
           trailToTrack = highlight.getUniqueHighlightTrail(this.trail);
@@ -398,7 +398,7 @@ export default class HighlightOverlay implements TOverlay {
     );
 
     // sanity check that our Node actually uses InteractiveHighlighting
-    assert && assert(node.isInteractiveHighlighting, 'Node does not support any kind of interactive highlighting.');
+    window.assert && window.assert(node.isInteractiveHighlighting, 'Node does not support any kind of interactive highlighting.');
     node.interactiveHighlightChangedEmitter.addListener(this.interactiveHighlightListener);
 
     // handle changes to the highlight while it is active - Since the highlight can fall back to the focus highlight
@@ -418,7 +418,7 @@ export default class HighlightOverlay implements TOverlay {
     this.readingBlockTrail = trail;
 
     const readingBlockNode = trail.lastNode() as ReadingBlockNode;
-    assert && assert(readingBlockNode.isReadingBlock,
+    window.assert && window.assert(readingBlockNode.isReadingBlock,
       'should not activate a reading block highlight for a Node that is not a ReadingBlock');
     this.activeReadingBlockNode = readingBlockNode;
 
@@ -467,13 +467,13 @@ export default class HighlightOverlay implements TOverlay {
       this.readingBlockHighlightNode.removeChild(this.addedReadingBlockHighlight);
     }
 
-    assert && assert(this.readingBlockTransformTracker, 'How can we deactivate the TransformTracker if it wasnt assigned.');
+    window.assert && window.assert(this.readingBlockTransformTracker, 'How can we deactivate the TransformTracker if it wasnt assigned.');
     const transformTracker = this.readingBlockTransformTracker!;
     transformTracker.removeListener(this.readingBlockTransformListener);
     transformTracker.dispose();
     this.readingBlockTransformTracker = null;
 
-    assert && assert(this.activeReadingBlockNode, 'How can we deactivate the activeReadingBlockNode if it wasnt assigned.');
+    window.assert && window.assert(this.activeReadingBlockNode, 'How can we deactivate the activeReadingBlockNode if it wasnt assigned.');
     this.activeReadingBlockNode!.readingBlockActiveHighlightChangedEmitter.removeListener(this.readingBlockHighlightChangeListener);
 
     this.activeReadingBlockNode = null;
@@ -485,14 +485,14 @@ export default class HighlightOverlay implements TOverlay {
    * Deactivates the all active highlights, disposing and removing listeners as necessary.
    */
   private deactivateHighlight(): void {
-    assert && assert(this.node, 'Need an active Node to deactivate highlights');
+    window.assert && window.assert(this.node, 'Need an active Node to deactivate highlights');
     const activeNode = this.node!;
 
     if (this.mode === 'shape') {
       this.shapeFocusHighlightPath.visible = false;
     }
     else if (this.mode === 'node') {
-      assert && assert(this.nodeModeHighlight, 'How can we deactivate if nodeModeHighlight is not assigned');
+      window.assert && window.assert(this.nodeModeHighlight, 'How can we deactivate if nodeModeHighlight is not assigned');
       const nodeModeHighlight = this.nodeModeHighlight!;
 
       // If layered, client has put the Node where they want in the scene graph and we cannot remove it
@@ -546,7 +546,7 @@ export default class HighlightOverlay implements TOverlay {
    */
   private activateGroupHighlights(): void {
 
-    assert && assert(this.trail, 'must have an active trail to activate group highlights');
+    window.assert && window.assert(this.trail, 'must have an active trail to activate group highlights');
     const trail = this.trail!;
     for (let i = 0; i < trail.length; i++) {
       const node = trail.nodes[i];
@@ -626,14 +626,14 @@ export default class HighlightOverlay implements TOverlay {
         this.groupFocusHighlightPath.visible = false;
       }
       else if (this.groupMode === 'node') {
-        assert && assert(this.groupHighlightNode, 'Need a groupHighlightNode to deactivate this mode');
+        window.assert && window.assert(this.groupHighlightNode, 'Need a groupHighlightNode to deactivate this mode');
         this.groupFocusHighlightParent.removeChild(this.groupHighlightNode!);
       }
 
       this.groupMode = null;
       this.groupHighlightNode = null;
 
-      assert && assert(this.groupTransformTracker, 'Need a groupTransformTracker to dispose');
+      window.assert && window.assert(this.groupTransformTracker, 'Need a groupTransformTracker to dispose');
       this.groupTransformTracker!.removeListener(this.transformListener);
       this.groupTransformTracker!.dispose();
       this.groupTransformTracker = null;
@@ -653,7 +653,7 @@ export default class HighlightOverlay implements TOverlay {
     else if (this.mode === 'node' && this.activeHighlight instanceof HighlightPath && this.activeHighlight.updateLineWidth) {
 
       // Update the transform based on the transform of the node that the focusHighlight is highlighting.
-      assert && assert(this.node, 'Need an active Node to update line width');
+      window.assert && window.assert(this.node, 'Need an active Node to update line width');
       this.activeHighlight.updateLineWidth(this.node!);
     }
   }
@@ -677,7 +677,7 @@ export default class HighlightOverlay implements TOverlay {
    * Called when bounds change on our node when we are in "Bounds" mode
    */
   private onBoundsChange(): void {
-    assert && assert(this.node, 'Must have an active node when bounds are changing');
+    window.assert && window.assert(this.node, 'Must have an active node when bounds are changing');
     this.boundsFocusHighlightPath.setShapeFromNode(this.node!);
   }
 
@@ -782,7 +782,7 @@ export default class HighlightOverlay implements TOverlay {
    * necessary when the node has focus.
    */
   private onFocusHighlightChange(): void {
-    assert && assert(this.node && this.node.focused, 'update should only be necessary if node already has focus');
+    window.assert && window.assert(this.node && this.node.focused, 'update should only be necessary if node already has focus');
     this.onFocusChange(FocusManager.pdomFocus);
   }
 
@@ -811,8 +811,8 @@ export default class HighlightOverlay implements TOverlay {
    * active for a Node.
    */
   private onReadingBlockHighlightChange(): void {
-    assert && assert(this.activeReadingBlockNode, 'Update should only be necessary when there is an active ReadingBlock Node');
-    assert && assert(this.activeReadingBlockNode!.readingBlockActivated, 'Update should only be necessary while the ReadingBlock is activated');
+    window.assert && window.assert(this.activeReadingBlockNode, 'Update should only be necessary when there is an active ReadingBlock Node');
+    window.assert && window.assert(this.activeReadingBlockNode!.readingBlockActivated, 'Update should only be necessary while the ReadingBlock is activated');
     this.onReadingBlockFocusChange(this.display.focusManager.readingBlockFocusProperty.value);
   }
 
@@ -842,11 +842,11 @@ export default class HighlightOverlay implements TOverlay {
     if (this.hasHighlight() && this.transformDirty) {
       this.transformDirty = false;
 
-      assert && assert(this.transformTracker, 'The transformTracker must be available on update if transform is dirty');
+      window.assert && window.assert(this.transformTracker, 'The transformTracker must be available on update if transform is dirty');
       this.highlightNode.setMatrix(this.transformTracker!.matrix);
 
       if (this.groupHighlightNode) {
-        assert && assert(this.groupTransformTracker, 'The groupTransformTracker must be available on update if transform is dirty');
+        window.assert && window.assert(this.groupTransformTracker, 'The groupTransformTracker must be available on update if transform is dirty');
         this.groupHighlightNode.setMatrix(this.groupTransformTracker!.matrix);
       }
 
@@ -855,7 +855,7 @@ export default class HighlightOverlay implements TOverlay {
     if (this.hasReadingBlockHighlight() && this.readingBlockTransformDirty) {
       this.readingBlockTransformDirty = false;
 
-      assert && assert(this.readingBlockTransformTracker, 'The groupTransformTracker must be available on update if transform is dirty');
+      window.assert && window.assert(this.readingBlockTransformTracker, 'The groupTransformTracker must be available on update if transform is dirty');
       this.readingBlockHighlightNode.setMatrix(this.readingBlockTransformTracker!.matrix);
     }
 

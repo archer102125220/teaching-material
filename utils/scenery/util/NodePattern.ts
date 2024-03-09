@@ -11,9 +11,9 @@ import { Node, Pattern, scenery } from '../imports';
 
 export default class NodePattern extends Pattern {
   public constructor(node: Node, resolution: number, x: number, y: number, width: number, height: number, matrix = Matrix3.IDENTITY) {
-    assert && assert(resolution > 0 && Number.isInteger(resolution), 'Resolution should be a positive integer');
-    assert && assert(Number.isInteger(width));
-    assert && assert(Number.isInteger(height));
+    window.assert && window.assert(resolution > 0 && Number.isInteger(resolution), 'Resolution should be a positive integer');
+    window.assert && window.assert(Number.isInteger(width));
+    window.assert && window.assert(Number.isInteger(height));
 
     const imageElement = document.createElement('img');
 

@@ -104,8 +104,8 @@ export default class DerivedProperty<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
       strictAxonDependencies: true
     }, providedOptions);
 
-    assert && assert(dependencies.every(_.identity), 'dependencies should all be truthy');
-    assert && assert(dependencies.length === _.uniq(dependencies).length, 'duplicate dependencies');
+    window.assert && window.assert(dependencies.every(_.identity), 'dependencies should all be truthy');
+    window.assert && window.assert(dependencies.length === _.uniq(dependencies).length, 'duplicate dependencies');
 
     const initialValue = getDerivedValue(options.strictAxonDependencies, derivation, dependencies);
 
@@ -115,7 +115,7 @@ export default class DerivedProperty<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
     if (Tandem.VALIDATION && this.isPhetioInstrumented()) {
 
       // The phetioType should be a concrete (instantiated) DerivedPropertyIO, hence we must check its outer type
-      assert && assert(this.phetioType.typeName.startsWith('DerivedPropertyIO'), 'phetioType should be DerivedPropertyIO');
+      window.assert && window.assert(this.phetioType.typeName.startsWith('DerivedPropertyIO'), 'phetioType should be DerivedPropertyIO');
     }
 
     this.dependencies = dependencies;
@@ -158,7 +158,7 @@ export default class DerivedProperty<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
    * Returns dependencies that are guaranteed to be defined internally.
    */
   private get definedDependencies(): Dependencies<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> {
-    assert && assert(this.dependencies !== null, 'Dependencies should be defined, has this Property been disposed?');
+    window.assert && window.assert(this.dependencies !== null, 'Dependencies should be defined, has this Property been disposed?');
     return this.dependencies!;
   }
 
@@ -230,7 +230,7 @@ export default class DerivedProperty<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
    * Creates a derived boolean Property whose value is true iff every input Property value is true.
    */
   public static and(properties: TReadOnlyProperty<boolean>[], options?: PropertyOptions<boolean>): UnknownDerivedProperty<boolean> {
-    assert && assert(properties.length > 0, 'must provide a dependency');
+    window.assert && window.assert(properties.length > 0, 'must provide a dependency');
 
     return DerivedProperty.deriveAny(properties, () => _.reduce(properties, andFunction, true), options);
   }
@@ -239,7 +239,7 @@ export default class DerivedProperty<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10,
    * Creates a derived boolean Property whose value is true iff any input Property value is true.
    */
   public static or(properties: TReadOnlyProperty<boolean>[], options?: PropertyOptions<boolean>): UnknownDerivedProperty<boolean> {
-    assert && assert(properties.length > 0, 'must provide a dependency');
+    window.assert && window.assert(properties.length > 0, 'must provide a dependency');
 
     return DerivedProperty.deriveAny(properties, () => _.reduce(properties, orFunction, false), options);
   }
@@ -272,7 +272,7 @@ const andFunction = (value: boolean, property: TReadOnlyProperty<boolean>) => {
 };
 
 const orFunction = (value: boolean, property: TReadOnlyProperty<boolean>) => {
-  assert && assert(typeof property.value === 'boolean', 'boolean value required');
+  window.assert && window.assert(typeof property.value === 'boolean', 'boolean value required');
   return value || property.value;
 };
 
@@ -285,7 +285,7 @@ const cache = new IOTypeCache();
  * This caching implementation should be kept in sync with the other parametric IOType caching implementations.
  */
 DerivedProperty.DerivedPropertyIO = parameterType => {
-  assert && assert(parameterType, 'DerivedPropertyIO needs parameterType');
+  window.assert && window.assert(parameterType, 'DerivedPropertyIO needs parameterType');
 
   if (!cache.has(parameterType)) {
     cache.set(parameterType, new IOType(`${DERIVED_PROPERTY_IO_PREFIX}<${parameterType.typeName}>`, {

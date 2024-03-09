@@ -50,7 +50,7 @@ export default class Line extends Segment {
    * Sets the start point of the Line.
    */
   public setStart( start: Vector2 ): this {
-    assert && assert( start.isFinite(), `Line start should be finite: ${start.toString()}` );
+    window.assert && window.assert( start.isFinite(), `Line start should be finite: ${start.toString()}` );
 
     if ( !this._start.equals( start ) ) {
       this._start = start;
@@ -75,7 +75,7 @@ export default class Line extends Segment {
    * Sets the end point of the Line.
    */
   public setEnd( end: Vector2 ): this {
-    assert && assert( end.isFinite(), `Line end should be finite: ${end.toString()}` );
+    window.assert && window.assert( end.isFinite(), `Line end should be finite: ${end.toString()}` );
 
     if ( !this._end.equals( end ) ) {
       this._end = end;
@@ -105,8 +105,8 @@ export default class Line extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public positionAt( t: number ): Vector2 {
-    assert && assert( t >= 0, 'positionAt t should be non-negative' );
-    assert && assert( t <= 1, 'positionAt t should be no greater than 1' );
+    window.assert && window.assert( t >= 0, 'positionAt t should be non-negative' );
+    window.assert && window.assert( t <= 1, 'positionAt t should be no greater than 1' );
 
     return this._start.plus( this._end.minus( this._start ).times( t ) );
   }
@@ -120,8 +120,8 @@ export default class Line extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public tangentAt( t: number ): Vector2 {
-    assert && assert( t >= 0, 'tangentAt t should be non-negative' );
-    assert && assert( t <= 1, 'tangentAt t should be no greater than 1' );
+    window.assert && window.assert( t >= 0, 'tangentAt t should be non-negative' );
+    window.assert && window.assert( t <= 1, 'tangentAt t should be no greater than 1' );
 
     // tangent always the same, just use the start tangent
     return this.getStartTangent();
@@ -139,8 +139,8 @@ export default class Line extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public curvatureAt( t: number ): number {
-    assert && assert( t >= 0, 'curvatureAt t should be non-negative' );
-    assert && assert( t <= 1, 'curvatureAt t should be no greater than 1' );
+    window.assert && window.assert( t >= 0, 'curvatureAt t should be non-negative' );
+    window.assert && window.assert( t <= 1, 'curvatureAt t should be no greater than 1' );
 
     return 0; // no curvature on a straight line segment
   }
@@ -152,8 +152,8 @@ export default class Line extends Segment {
    * This method is part of the Segment API. See Segment.js's constructor for more API documentation.
    */
   public subdivided( t: number ): Segment[] {
-    assert && assert( t >= 0, 'subdivided t should be non-negative' );
-    assert && assert( t <= 1, 'subdivided t should be no greater than 1' );
+    window.assert && window.assert( t >= 0, 'subdivided t should be non-negative' );
+    window.assert && window.assert( t <= 1, 'subdivided t should be no greater than 1' );
 
     // If t is 0 or 1, we only need to return 1 segment
     if ( t === 0 || t === 1 ) {
@@ -171,10 +171,10 @@ export default class Line extends Segment {
    * Clears cached information, should be called when any of the 'constructor arguments' are mutated.
    */
   public invalidate(): void {
-    assert && assert( this._start instanceof Vector2, `Line start should be a Vector2: ${this._start}` );
-    assert && assert( this._start.isFinite(), `Line start should be finite: ${this._start.toString()}` );
-    assert && assert( this._end instanceof Vector2, `Line end should be a Vector2: ${this._end}` );
-    assert && assert( this._end.isFinite(), `Line end should be finite: ${this._end.toString()}` );
+    window.assert && window.assert( this._start instanceof Vector2, `Line start should be a Vector2: ${this._start}` );
+    window.assert && window.assert( this._start.isFinite(), `Line start should be finite: ${this._start.toString()}` );
+    window.assert && window.assert( this._end instanceof Vector2, `Line end should be a Vector2: ${this._end}` );
+    window.assert && window.assert( this._end.isFinite(), `Line end should be finite: ${this._end.toString()}` );
 
     // Lazily-computed derived information
     this._tangent = null;
@@ -503,7 +503,7 @@ export default class Line extends Segment {
    * Returns a Line from the serialized representation.
    */
   public static override deserialize( obj: SerializedLine ): Line {
-    assert && assert( obj.type === 'Line' );
+    window.assert && window.assert( obj.type === 'Line' );
 
     return new Line( new Vector2( obj.startX, obj.startY ), new Vector2( obj.endX, obj.endY ) );
   }

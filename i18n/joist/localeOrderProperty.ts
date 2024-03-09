@@ -40,7 +40,7 @@ const localeOrderProperty = new DerivedProperty([localeProperty, fallbackLocales
     }
 
     const fallbackIndex = localeOrder.indexOf(FALLBACK_LOCALE);
-    assert && assert(fallbackIndex >= 0, `Required local in localeOrderProperty: ${FALLBACK_LOCALE}`);
+    window.assert && window.assert(fallbackIndex >= 0, `Required local in localeOrderProperty: ${FALLBACK_LOCALE}`);
 
     // Optimization: Ignore locales past our fallback, because it will include a value for every single key.
     return localeOrder.slice(0, fallbackIndex + 1);

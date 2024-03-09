@@ -52,7 +52,7 @@ export default class Matrix3 implements TPoolable {
    */
   public constructor() {
     // Make sure no clients are expecting to create a matrix with non-identity values
-    assert && assert(arguments.length === 0, 'Matrix3 constructor should not be called with any arguments.  Use m3()/Matrix3.identity()/etc.');
+    window.assert && window.assert(arguments.length === 0, 'Matrix3 constructor should not be called with any arguments.  Use m3()/Matrix3.identity()/etc.');
 
     this.entries = [1, 0, 0, 0, 1, 0, 0, 0, 1];
     this.type = Matrix3Type.IDENTITY;
@@ -298,7 +298,7 @@ export default class Matrix3 implements TPoolable {
 
     // the inner part of a CSS3 transform, but remember to add the browser-specific parts!
     // NOTE: the toFixed calls are inlined for performance reasons
-    return `matrix(${this.entries[0].toFixed(20)},${this.entries[1].toFixed(20)},${this.entries[3].toFixed(20)},${this.entries[4].toFixed(20)},${this.entries[6].toFixed(20)},${this.entries[7].toFixed(20)})`; // eslint-disable-line bad-sim-text
+    return `matrix(${this.entries[0].toFixed(20)},${this.entries[1].toFixed(20)},${this.entries[3].toFixed(20)},${this.entries[4].toFixed(20)},${this.entries[6].toFixed(20)},${this.entries[7].toFixed(20)})`;
   }
 
   public get cssTransform(): string { return this.getCSSTransform(); }

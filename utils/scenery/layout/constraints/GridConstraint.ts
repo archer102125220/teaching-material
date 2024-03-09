@@ -151,7 +151,7 @@ export default class GridConstraint extends GridConfigurable(NodeLayoutConstrain
       // Then increase for spanning cells as necessary
       cells.forEach(cell => {
         if (cell.size.get(orientation) > 1) {
-          assert && assert(cell.getEffectiveAlign(orientation) !== LayoutAlign.ORIGIN, 'origin alignment cannot be specified for cells that span >1 width or height');
+          window.assert && window.assert(cell.getEffectiveAlign(orientation) !== LayoutAlign.ORIGIN, 'origin alignment cannot be specified for cells that span >1 width or height');
           // TODO: don't bump mins over maxes here (if lines have maxes, redistribute otherwise) https://github.com/phetsims/scenery/issues/1581
           // TODO: also handle maxes https://github.com/phetsims/scenery/issues/1581
           const lines = cell.getIndices(orientation).map(index => lineMap.get(index)!);
@@ -196,7 +196,7 @@ export default class GridConstraint extends GridConfigurable(NodeLayoutConstrain
           sizeRemaining / totalGrow
         );
 
-        assert && assert(amountToGrow > 1e-11);
+        window.assert && window.assert(amountToGrow > 1e-11);
 
         // Grow proportionally to their grow values
         growableLines.forEach(line => {
@@ -270,13 +270,13 @@ export default class GridConstraint extends GridConfigurable(NodeLayoutConstrain
   }
 
   public get spacing(): number | number[] {
-    assert && assert(this.xSpacing === this.ySpacing);
+    window.assert && window.assert(this.xSpacing === this.ySpacing);
 
     return this.xSpacing;
   }
 
   public set spacing(value: number | number[]) {
-    assert && assert((typeof value === 'number' && isFinite(value) && value >= 0) ||
+    window.assert && window.assert((typeof value === 'number' && isFinite(value) && value >= 0) ||
       (Array.isArray(value) && _.every(value, item => (typeof item === 'number' && isFinite(item) && item >= 0))));
 
     if (this._spacing.get(Orientation.HORIZONTAL) !== value || this._spacing.get(Orientation.VERTICAL) !== value) {
@@ -292,7 +292,7 @@ export default class GridConstraint extends GridConfigurable(NodeLayoutConstrain
   }
 
   public set xSpacing(value: number | number[]) {
-    assert && assert((typeof value === 'number' && isFinite(value) && value >= 0) ||
+    window.assert && window.assert((typeof value === 'number' && isFinite(value) && value >= 0) ||
       (Array.isArray(value) && _.every(value, item => (typeof item === 'number' && isFinite(item) && item >= 0))));
 
     if (this._spacing.get(Orientation.HORIZONTAL) !== value) {
@@ -307,7 +307,7 @@ export default class GridConstraint extends GridConfigurable(NodeLayoutConstrain
   }
 
   public set ySpacing(value: number | number[]) {
-    assert && assert((typeof value === 'number' && isFinite(value) && value >= 0) ||
+    window.assert && window.assert((typeof value === 'number' && isFinite(value) && value >= 0) ||
       (Array.isArray(value) && _.every(value, item => (typeof item === 'number' && isFinite(item) && item >= 0))));
 
     if (this._spacing.get(Orientation.VERTICAL) !== value) {
@@ -318,7 +318,7 @@ export default class GridConstraint extends GridConfigurable(NodeLayoutConstrain
   }
 
   public addCell(cell: GridCell): void {
-    assert && assert(!this.cells.has(cell));
+    window.assert && window.assert(!this.cells.has(cell));
 
     this.cells.add(cell);
     this.addNode(cell.node);
@@ -328,7 +328,7 @@ export default class GridConstraint extends GridConfigurable(NodeLayoutConstrain
   }
 
   public removeCell(cell: GridCell): void {
-    assert && assert(this.cells.has(cell));
+    window.assert && window.assert(this.cells.has(cell));
 
     this.cells.delete(cell);
     this.removeNode(cell.node);

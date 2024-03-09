@@ -28,7 +28,7 @@ export default class UpdateDialog extends Dialog {
   private readonly updateVisibilityListener: (state: UpdateState) => void;
 
   public constructor(providedOptions?: UpdateDialogOptions) {
-    assert && assert(updateCheck.areUpdatesChecked,
+    window.assert && window.assert(updateCheck.areUpdatesChecked,
       'Updates need to be checked for UpdateDialog to be created');
 
     const positionOptions = { centerX: 0, centerY: 0, big: true };

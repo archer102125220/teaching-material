@@ -155,7 +155,7 @@ class CanvasContextWrapper {
    * @param {number} miterLimit
    */
   setMiterLimit( miterLimit ) {
-    assert && assert( typeof miterLimit === 'number' );
+    window.assert && window.assert( typeof miterLimit === 'number' );
     if ( this.miterLimit !== miterLimit ) {
       this.miterLimit = miterLimit;
       this.context.miterLimit = miterLimit;
@@ -168,7 +168,7 @@ class CanvasContextWrapper {
    * @param {Array.<number>|null} dash
    */
   setLineDash( dash ) {
-    assert && assert( dash !== undefined, 'undefined line dash would cause hard-to-trace errors' );
+    window.assert && window.assert( dash !== undefined, 'undefined line dash would cause hard-to-trace errors' );
     if ( this.lineDash !== dash ) {
       this.lineDash = dash;
       if ( this.context.setLineDash ) {

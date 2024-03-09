@@ -107,11 +107,11 @@ class PhetioAPIValidation {
         while ( phetioObject instanceof LinkedElement ) {
           phetioObject = phetioObject.element;
         }
-        assert && assert( !phetioObject.phetioReadOnly, 'preferences model and its descendants should be phetioReadOnly: false, key=' + preferencesKey );
+        window.assert && window.assert( !phetioObject.phetioReadOnly, 'preferences model and its descendants should be phetioReadOnly: false, key=' + preferencesKey );
 
         // Audio manager, color profile property and localeProperty are supposed to be stateful. All other preferences
         // should be phetioState: false so they are not captured in the state
-        assert && assert( phetioObject.phetioState ===
+        window.assert && window.assert( phetioObject.phetioState ===
                           ( phetioObject.phetioID.endsWith( '.colorProfileProperty' ) ||
                             phetioObject.phetioID.endsWith( '.audioEnabledProperty' ) ||
                             phetioObject.phetioID.endsWith( '.localeProperty' ) ||
@@ -193,7 +193,7 @@ class PhetioAPIValidation {
     for ( const phetioID in window.phet.preloads.phetio.phetioElementsOverrides ) {
       const isArchetype = phetioID.includes( DYNAMIC_ARCHETYPE_NAME );
       if ( !phet.preloads.phetio.createArchetypes && !entireBaseline.hasOwnProperty( phetioID ) ) {
-        assert && assert( isArchetype, `phetioID missing from the baseline that was not an archetype: ${phetioID}` );
+        window.assert && window.assert( isArchetype, `phetioID missing from the baseline that was not an archetype: ${phetioID}` );
       }
       else {
         if ( !entireBaseline.hasOwnProperty( phetioID ) ) {
@@ -250,7 +250,7 @@ class PhetioAPIValidation {
 
     // If ?phetioPrintAPIProblems is present, then ignore assertions until the sim has started up.
     if ( this.simHasStarted || !phet.preloads.phetio.queryParameters.phetioPrintAPIProblems ) {
-      assert && assert( false, `PhET-iO API error:\n${mismatchMessage}` );
+      window.assert && window.assert( false, `PhET-iO API error:\n${mismatchMessage}` );
     }
   }
 

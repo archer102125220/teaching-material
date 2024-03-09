@@ -110,8 +110,8 @@ class Tandem {
    * @param [providedOptions]
    */
   public constructor(parentTandem: Tandem | null, name: string, providedOptions?: TandemOptions) {
-    assert && assert(parentTandem === null || parentTandem instanceof Tandem, 'parentTandem should be null or Tandem');
-    assert && assert(name !== Tandem.METADATA_KEY, 'name cannot match Tandem.METADATA_KEY');
+    window.assert && window.assert(parentTandem === null || parentTandem instanceof Tandem, 'parentTandem should be null or Tandem');
+    window.assert && window.assert(name !== Tandem.METADATA_KEY, 'name cannot match Tandem.METADATA_KEY');
 
     this.parentTandem = parentTandem;
     this.name = name;
@@ -133,15 +133,15 @@ class Tandem {
       isValidTandemName: (name: string) => Tandem.getRegexFromCharacterClass().test(name)
     }, providedOptions);
 
-    assert && assert(options.isValidTandemName(name), `invalid tandem name: ${name}`);
+    window.assert && window.assert(options.isValidTandemName(name), `invalid tandem name: ${name}`);
 
-    assert && assert(!options.supplied || FORBIDDEN_SUPPLIED_TANDEM_NAMES.every(forbiddenName => !name.includes(forbiddenName)),
+    window.assert && window.assert(!options.supplied || FORBIDDEN_SUPPLIED_TANDEM_NAMES.every(forbiddenName => !name.includes(forbiddenName)),
       `forbidden supplied tandem name: ${name}. If a tandem is not supplied, its name should not be used to create a supplied tandem.`);
 
     this.children = {};
 
     if (this.parentTandem) {
-      assert && assert(!this.parentTandem.hasChild(name), `parent should not have child: ${name}`);
+      window.assert && window.assert(!this.parentTandem.hasChild(name), `parent should not have child: ${name}`);
       this.parentTandem.addChild(name, this);
     }
 
@@ -267,7 +267,7 @@ class Tandem {
     // Only active when running as phet-io
     if (PHET_IO_ENABLED) {
       if (!Tandem.launched) {
-        assert && assert(Tandem.bufferedPhetioObjects.includes(phetioObject), 'should contain item');
+        window.assert && window.assert(Tandem.bufferedPhetioObjects.includes(phetioObject), 'should contain item');
         arrayRemove(Tandem.bufferedPhetioObjects, phetioObject);
       }
       else {
@@ -304,12 +304,12 @@ class Tandem {
     // re-use the child if it already exists, but make sure it behaves the same.
     if (this.hasChild(name)) {
       const currentChild = this.children[name];
-      assert && assert(currentChild.required === options.required);
-      assert && assert(currentChild.supplied === options.supplied);
+      window.assert && window.assert(currentChild.required === options.required);
+      window.assert && window.assert(currentChild.supplied === options.supplied);
       return currentChild;
     }
     else {
-      return new Tandem(this, name, options); // eslint-disable-line bad-sim-text
+      return new Tandem(this, name, options);
     }
   }
 
@@ -328,7 +328,7 @@ class Tandem {
   }
 
   public addChild(name: string, tandem: Tandem): void {
-    assert && assert(!this.hasChild(name));
+    window.assert && window.assert(!this.hasChild(name));
     this.children[name] = tandem;
   }
 
@@ -345,12 +345,12 @@ class Tandem {
   }
 
   private removeChild(childName: string): void {
-    assert && assert(this.hasChild(childName));
+    window.assert && window.assert(this.hasChild(childName));
     delete this.children[childName];
   }
 
   private dispose(): void {
-    assert && assert(!this.isDisposed, 'already disposed');
+    window.assert && window.assert(!this.isDisposed, 'already disposed');
 
     this.parentTandem!.removeChild(this.name);
     this.parentTandem = null;
@@ -399,13 +399,13 @@ class Tandem {
    * and subsequent PhetioObjects will be registered directly.
    */
   public static launch(): void {
-    assert && assert(!Tandem.launched, 'Tandem cannot be launched twice');
+    window.assert && window.assert(!Tandem.launched, 'Tandem cannot be launched twice');
     Tandem.launched = true;
 
     while (launchListeners.length > 0) {
       launchListeners.shift()!();
     }
-    assert && assert(launchListeners.length === 0);
+    window.assert && window.assert(launchListeners.length === 0);
   }
 
   /**
@@ -422,7 +422,7 @@ class Tandem {
    * Add a listener that will fire when Tandem is launched
    */
   public static addLaunchListener(listener: () => void): void {
-    assert && assert(!Tandem.launched, 'tandem has already been launched, cannot add listener for that hook.');
+    window.assert && window.assert(!Tandem.launched, 'tandem has already been launched, cannot add listener for that hook.');
     launchListeners.push(listener);
   }
 
@@ -484,7 +484,7 @@ class Tandem {
           name === TEST_TANDEM_NAME ||
           name === window.phetio.PhetioIDUtils.GENERAL_COMPONENT_NAME ||
           _.endsWith(name, Tandem.SCREEN_TANDEM_NAME_SUFFIX);
-        assert && assert(allowedOnRoot, `tandem name not allowed on root: "${name}"; perhaps try putting it under general or global`);
+        window.assert && window.assert(allowedOnRoot, `tandem name not allowed on root: "${name}"; perhaps try putting it under general or global`);
       }
 
       return super.createTandem(name, options);
@@ -616,7 +616,7 @@ Tandem.addLaunchListener(() => {
     const phetioObject = Tandem.bufferedPhetioObjects.shift();
     phetioObject!.tandem.addPhetioObject(phetioObject!);
   }
-  assert && assert(Tandem.bufferedPhetioObjects.length === 0, 'bufferedPhetioObjects should be empty');
+  window.assert && window.assert(Tandem.bufferedPhetioObjects.length === 0, 'bufferedPhetioObjects should be empty');
 });
 
 /**

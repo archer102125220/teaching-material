@@ -103,7 +103,7 @@ export default class RectangularRadioButton<T> extends RectangularButton {
       phetioReadOnly: PhetioObject.DEFAULT_OPTIONS.phetioReadOnly // to support properly passing this to children, see https://github.com/phetsims/tandem/issues/60
     }, providedOptions);
 
-    assert && assert(!options.tandem.supplied || options.tandem.name.endsWith(RectangularRadioButton.TANDEM_NAME_SUFFIX),
+    window.assert && window.assert(!options.tandem.supplied || options.tandem.name.endsWith(RectangularRadioButton.TANDEM_NAME_SUFFIX),
       `RectangularRadioButton tandem.name must end with ${RectangularRadioButton.TANDEM_NAME_SUFFIX}: ${options.tandem.phetioID}`);
 
     // ButtonModel is responsible for enabledProperty, so propagate enabledPropertyOptions.

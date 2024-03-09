@@ -93,7 +93,7 @@ export default class Cubic extends Segment {
    * Sets the start point of the Cubic.
    */
   public setStart(start: Vector2): this {
-    assert && assert(start.isFinite(), `Cubic start should be finite: ${start.toString()}`);
+    window.assert && window.assert(start.isFinite(), `Cubic start should be finite: ${start.toString()}`);
 
     if (!this._start.equals(start)) {
       this._start = start;
@@ -119,7 +119,7 @@ export default class Cubic extends Segment {
    * Sets the first control point of the Cubic.
    */
   public setControl1(control1: Vector2): this {
-    assert && assert(control1.isFinite(), `Cubic control1 should be finite: ${control1.toString()}`);
+    window.assert && window.assert(control1.isFinite(), `Cubic control1 should be finite: ${control1.toString()}`);
 
     if (!this._control1.equals(control1)) {
       this._control1 = control1;
@@ -145,7 +145,7 @@ export default class Cubic extends Segment {
    * Sets the second control point of the Cubic.
    */
   public setControl2(control2: Vector2): this {
-    assert && assert(control2.isFinite(), `Cubic control2 should be finite: ${control2.toString()}`);
+    window.assert && window.assert(control2.isFinite(), `Cubic control2 should be finite: ${control2.toString()}`);
 
     if (!this._control2.equals(control2)) {
       this._control2 = control2;
@@ -171,7 +171,7 @@ export default class Cubic extends Segment {
    * Sets the end point of the Cubic.
    */
   public setEnd(end: Vector2): this {
-    assert && assert(end.isFinite(), `Cubic end should be finite: ${end.toString()}`);
+    window.assert && window.assert(end.isFinite(), `Cubic end should be finite: ${end.toString()}`);
 
     if (!this._end.equals(end)) {
       this._end = end;
@@ -202,8 +202,8 @@ export default class Cubic extends Segment {
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
   public positionAt(t: number): Vector2 {
-    assert && assert(t >= 0, 'positionAt t should be non-negative');
-    assert && assert(t <= 1, 'positionAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'positionAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'positionAt t should be no greater than 1');
 
     // Equivalent position: (1 - t)^3*start + 3*(1 - t)^2*t*control1 + 3*(1 - t) t^2*control2 + t^3*end
     const mt = 1 - t;
@@ -227,8 +227,8 @@ export default class Cubic extends Segment {
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
   public tangentAt(t: number): Vector2 {
-    assert && assert(t >= 0, 'tangentAt t should be non-negative');
-    assert && assert(t <= 1, 'tangentAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'tangentAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'tangentAt t should be no greater than 1');
 
     // derivative: -3 p0 (1 - t)^2 + 3 p1 (1 - t)^2 - 6 p1 (1 - t) t + 6 p2 (1 - t) t - 3 p2 t^2 + 3 p3 t^2
     const mt = 1 - t;
@@ -251,8 +251,8 @@ export default class Cubic extends Segment {
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
   public curvatureAt(t: number): number {
-    assert && assert(t >= 0, 'curvatureAt t should be non-negative');
-    assert && assert(t <= 1, 'curvatureAt t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'curvatureAt t should be non-negative');
+    window.assert && window.assert(t <= 1, 'curvatureAt t should be no greater than 1');
 
     // see http://cagd.cs.byu.edu/~557/text/ch2.pdf p31
     // TODO: remove code duplication with Quadratic https://github.com/phetsims/kite/issues/76
@@ -279,8 +279,8 @@ export default class Cubic extends Segment {
    * This method is part of the Segment API. See Segment's constructor for more API documentation.
    */
   public subdivided(t: number): Cubic[] {
-    assert && assert(t >= 0, 'subdivided t should be non-negative');
-    assert && assert(t <= 1, 'subdivided t should be no greater than 1');
+    window.assert && window.assert(t >= 0, 'subdivided t should be non-negative');
+    window.assert && window.assert(t <= 1, 'subdivided t should be no greater than 1');
 
     // If t is 0 or 1, we only need to return 1 segment
     if (t === 0 || t === 1) {
@@ -305,14 +305,14 @@ export default class Cubic extends Segment {
    * Clears cached information, should be called when any of the 'constructor arguments' are mutated.
    */
   public invalidate(): void {
-    assert && assert(this._start instanceof Vector2, `Cubic start should be a Vector2: ${this._start}`);
-    assert && assert(this._start.isFinite(), `Cubic start should be finite: ${this._start.toString()}`);
-    assert && assert(this._control1 instanceof Vector2, `Cubic control1 should be a Vector2: ${this._control1}`);
-    assert && assert(this._control1.isFinite(), `Cubic control1 should be finite: ${this._control1.toString()}`);
-    assert && assert(this._control2 instanceof Vector2, `Cubic control2 should be a Vector2: ${this._control2}`);
-    assert && assert(this._control2.isFinite(), `Cubic control2 should be finite: ${this._control2.toString()}`);
-    assert && assert(this._end instanceof Vector2, `Cubic end should be a Vector2: ${this._end}`);
-    assert && assert(this._end.isFinite(), `Cubic end should be finite: ${this._end.toString()}`);
+    window.assert && window.assert(this._start instanceof Vector2, `Cubic start should be a Vector2: ${this._start}`);
+    window.assert && window.assert(this._start.isFinite(), `Cubic start should be finite: ${this._start.toString()}`);
+    window.assert && window.assert(this._control1 instanceof Vector2, `Cubic control1 should be a Vector2: ${this._control1}`);
+    window.assert && window.assert(this._control1.isFinite(), `Cubic control1 should be finite: ${this._control1.toString()}`);
+    window.assert && window.assert(this._control2 instanceof Vector2, `Cubic control2 should be a Vector2: ${this._control2}`);
+    window.assert && window.assert(this._control2.isFinite(), `Cubic control2 should be finite: ${this._control2.toString()}`);
+    window.assert && window.assert(this._end instanceof Vector2, `Cubic end should be a Vector2: ${this._end}`);
+    window.assert && window.assert(this._end.isFinite(), `Cubic end should be finite: ${this._end.toString()}`);
 
     // Lazily-computed derived information
     this._startTangent = null;
@@ -394,7 +394,7 @@ export default class Cubic extends Segment {
     if (this._tCusp === null) {
       this.computeCuspInfo();
     }
-    assert && assert(this._tCusp !== null);
+    window.assert && window.assert(this._tCusp !== null);
     return this._tCusp!;
   }
 
@@ -407,7 +407,7 @@ export default class Cubic extends Segment {
     if (this._tDeterminant === null) {
       this.computeCuspInfo();
     }
-    assert && assert(this._tDeterminant !== null);
+    window.assert && window.assert(this._tDeterminant !== null);
     return this._tDeterminant!;
   }
 
@@ -420,7 +420,7 @@ export default class Cubic extends Segment {
     if (this._tInflection1 === null) {
       this.computeCuspInfo();
     }
-    assert && assert(this._tInflection1 !== null);
+    window.assert && window.assert(this._tInflection1 !== null);
     return this._tInflection1!;
   }
 
@@ -433,7 +433,7 @@ export default class Cubic extends Segment {
     if (this._tInflection2 === null) {
       this.computeCuspInfo();
     }
-    assert && assert(this._tInflection2 !== null);
+    window.assert && window.assert(this._tInflection2 !== null);
     return this._tInflection2!;
   }
 
@@ -447,7 +447,7 @@ export default class Cubic extends Segment {
     if (this._quadratics === null) {
       this.computeCuspSegments();
     }
-    assert && assert(this._quadratics !== null);
+    window.assert && window.assert(this._quadratics !== null);
     return this._quadratics;
   }
 
@@ -829,7 +829,7 @@ export default class Cubic extends Segment {
         const bSegment = segments[j];
 
         const intersections = BoundsIntersection.intersect(aSegment, bSegment);
-        assert && assert(intersections.length < 2);
+        window.assert && window.assert(intersections.length < 2);
 
         if (intersections.length) {
           const intersection = intersections[0];
@@ -887,7 +887,7 @@ export default class Cubic extends Segment {
    * Returns a Cubic from the serialized representation.
    */
   public static override deserialize(obj: SerializedCubic): Cubic {
-    assert && assert(obj.type === 'Cubic');
+    window.assert && window.assert(obj.type === 'Cubic');
 
     return new Cubic(new Vector2(obj.startX, obj.startY), new Vector2(obj.control1X, obj.control1Y), new Vector2(obj.control2X, obj.control2Y), new Vector2(obj.endX, obj.endY));
   }

@@ -41,7 +41,7 @@ export default class ArrowKeyNode extends KeyNode {
 
   public constructor(direction: Direction, providedOptions?: ArrowKeyNodeOptions) {
 
-    assert && assert(DIRECTION_ANGLES[direction] !== undefined, 'Arrow direction must be one of DIRECTION_ANGLES');
+    window.assert && window.assert(DIRECTION_ANGLES[direction] !== undefined, 'Arrow direction must be one of DIRECTION_ANGLES');
 
     const options = optionize<ArrowKeyNodeOptions, SelfOptions, KeyNodeOptions>()({
 
