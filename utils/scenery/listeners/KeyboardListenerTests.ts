@@ -8,7 +8,7 @@
  * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
-import { Display, globalKeyStateTracker, KeyboardListener, KeyboardUtils, Node, SceneryEvent } from '../imports.js';
+import { Display, globalKeyStateTracker, KeyboardListener, KeyboardUtils, Node, SceneryEvent } from '@/utils/scenery/imports.js';
 
 QUnit.module('KeyboardListener', {
   before() {
@@ -20,17 +20,17 @@ QUnit.module('KeyboardListener', {
 
 const triggerKeydownEvent = (target: HTMLElement, code: string, ctrlKey = false) => {
   target.dispatchEvent(new KeyboardEvent('keydown', {
-    code: code,
+    code,
     bubbles: true,
-    ctrlKey: ctrlKey
+    ctrlKey
   }));
 };
 
 const triggerKeyupEvent = (target: HTMLElement, code: string, ctrlKey = false) => {
   target.dispatchEvent(new KeyboardEvent('keyup', {
-    code: code,
+    code,
     bubbles: true,
-    ctrlKey: ctrlKey
+    ctrlKey
   }));
 };
 
@@ -47,13 +47,13 @@ QUnit.test('KeyboardListener Tests', assert => {
   const listener = new KeyboardListener({
     keys: ['enter'],
     callback: () => {
-      window.assert.ok(!callbackFired, 'callback cannot be fired');
+      assert.ok(!callbackFired, 'callback cannot be fired');
       callbackFired = true;
     }
   });
 
   // Test putting a key in keys that is not supported (error only thrown with assertions enabled)
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     const bogusListener = new KeyboardListener({
 
       // @ts-expect-error - Typescript should catch bad keys too
@@ -71,17 +71,17 @@ QUnit.test('KeyboardListener Tests', assert => {
   a.addInputListener(listener);
 
   const domElementA = a.pdomInstances[0].peer!.primarySibling!;
-  window.assert.ok(domElementA, 'pdom element needed');
+  assert.ok(domElementA, 'pdom element needed');
 
   triggerKeydownEvent(domElementA, KeyboardUtils.KEY_TAB);
-  window.assert.ok(!callbackFired, 'should not fire on tab');
+  assert.ok(!callbackFired, 'should not fire on tab');
   triggerKeyupEvent(domElementA, KeyboardUtils.KEY_TAB);
 
   triggerKeydownEvent(domElementA, KeyboardUtils.KEY_ENTER);
-  window.assert.ok(callbackFired, 'should fire on enter');
+  assert.ok(callbackFired, 'should fire on enter');
   triggerKeyupEvent(domElementA, KeyboardUtils.KEY_ENTER);
 
-  //////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////
   // Test an overlap of keys in two keygroups. The callback should fire for only the keygroup where every key
   // is down and only every key is down.
   a.removeInputListener(listener);
@@ -99,18 +99,18 @@ QUnit.test('KeyboardListener Tests', assert => {
         ctrlPFired = true;
       }
       else {
-        window.assert.ok(false, 'never again');
+        assert.ok(false, 'never again');
       }
     }
   });
   a.addInputListener(listenerWithOverlappingKeys);
   triggerKeydownEvent(domElementA, KeyboardUtils.KEY_P, true);
-  window.assert.ok(!pFired, 'p should not fire because control key is down');
-  window.assert.ok(ctrlPFired, 'ctrl P should have fired');
-  //////////////////////////////////////////////////////
+  assert.ok(!pFired, 'p should not fire because control key is down');
+  assert.ok(ctrlPFired, 'ctrl P should have fired');
+  // ////////////////////////////////////////////////////
 
 
-  //////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////
   // test handle/abort
   a.removeInputListener(listenerWithOverlappingKeys);
   const b = new Node({ tagName: 'div' });
@@ -137,7 +137,7 @@ QUnit.test('KeyboardListener Tests', assert => {
       if (keysPressed === 'p') {
         pFiredFromB = true;
 
-        window.assert.ok(!!event, 'An event should be provided to the callback in this case.');
+        assert.ok(!!event, 'An event should be provided to the callback in this case.');
         event!.handle();
       }
     }
@@ -145,8 +145,8 @@ QUnit.test('KeyboardListener Tests', assert => {
   b.addInputListener(handlingListener);
 
   triggerKeydownEvent(domElementB, KeyboardUtils.KEY_P);
-  window.assert.ok(!pFiredFromA, 'A should not have received the event because of event handling');
-  window.assert.ok(pFiredFromB, 'B received the event and handled it (stopping bubbling)');
+  assert.ok(!pFiredFromA, 'A should not have received the event because of event handling');
+  assert.ok(pFiredFromB, 'B received the event and handled it (stopping bubbling)');
   triggerKeyupEvent(domElementB, KeyboardUtils.KEY_P);
 
   a.removeInputListener(listenerPreventedByHandle);
@@ -171,7 +171,7 @@ QUnit.test('KeyboardListener Tests', assert => {
       if (keysPressed === 'p') {
         pFiredFromB = true;
 
-        window.assert.ok(!!event, 'An event should be provided to the callback in this case.');
+        assert.ok(!!event, 'An event should be provided to the callback in this case.');
         event!.abort();
       }
     }
@@ -187,9 +187,9 @@ QUnit.test('KeyboardListener Tests', assert => {
   b.addInputListener(otherListenerPreventedByAbort);
 
   triggerKeydownEvent(domElementB, KeyboardUtils.KEY_P);
-  window.assert.ok(!pFiredFromA, 'A should not have received the event because of abort');
-  window.assert.ok(pFiredFromB, 'B received the event and handled it (stopping bubbling)');
-  window.assert.ok(!pFiredFromExtraListener, 'Other listener on B did not fire because of abort (stopping all listeners)');
+  assert.ok(!pFiredFromA, 'A should not have received the event because of abort');
+  assert.ok(pFiredFromB, 'B received the event and handled it (stopping bubbling)');
+  assert.ok(!pFiredFromExtraListener, 'Other listener on B did not fire because of abort (stopping all listeners)');
   triggerKeyupEvent(domElementB, KeyboardUtils.KEY_P);
 
   a.removeInputListener(listenerPreventedByAbort);
@@ -198,7 +198,7 @@ QUnit.test('KeyboardListener Tests', assert => {
   pFiredFromA = false;
   pFiredFromB = false;
 
-  //////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////
 
   // test interrupt/cancel
   // TODO: This test fails but that is working as expected. interrupt/cancel are only relevant for the https://github.com/phetsims/scenery/issues/1581
@@ -234,10 +234,10 @@ QUnit.test('KeyboardListener Tests', assert => {
   //   bubbles: true
   // } ) );
   //
-  // window.assert.ok( pbFiredFromA, 'p+b receives the event and interrupts the listener' );
-  // window.assert.ok( !pbjFiredFromA, 'interruption clears the keystate so p+b+j does not fire' );
+  // assert.ok( pbFiredFromA, 'p+b receives the event and interrupts the listener' );
+  // assert.ok( !pbjFiredFromA, 'interruption clears the keystate so p+b+j does not fire' );
 
-  //////////////////////////////////////////////////////
+  // ////////////////////////////////////////////////////
 
   document.body.removeChild(display.domElement);
   display.dispose();

@@ -9,7 +9,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Paint, scenery, SVGBlock, SVGPattern } from '../imports';
+import { Paint, scenery, SVGBlock, SVGPattern } from '@/utils/scenery/imports';
 
 export default class Pattern extends Paint {
 

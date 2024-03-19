@@ -15,11 +15,11 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import phetCore from './phetCore';
-import merge from './merge';
-import type IntentionalAny from './types/IntentionalAny';
-import type RequiredKeys from './types/RequiredKeys';
-import type OptionalKeys from './types/OptionalKeys';
+import phetCore from '@/utils/phet-core/phetCore';
+import merge from '@/utils/phet-core/merge';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type RequiredKeys from '@/utils/phet-core/types/RequiredKeys';
+import type OptionalKeys from '@/utils/phet-core/types/OptionalKeys';
 
 // Gets the parts of an object that are optional
 type Options<T> = Pick<T, OptionalKeys<T>>;

@@ -7,19 +7,19 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import RectangularRadioButtonGroup, { type RectangularRadioButtonGroupOptions } from '../../../sun/buttons/RectangularRadioButtonGroup';
-import geometricOptics from '../../geometricOptics';
-import GOColors from '../GOColors';
-import Optic from '../model/Optic';
-import { type OpticSurfaceType } from '../model/OpticSurfaceType';
-import Lens from '../../lens/model/Lens';
-import MirrorNode from '../../mirror/view/MirrorNode';
-import LensNode from '../../lens/view/LensNode';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import { type NodeTranslationOptions } from '../../../scenery/imports';
-import Tandem from '../../../tandem/Tandem';
-import { type GOSimOptions } from '../../GOSim';
+import RectangularRadioButtonGroup, { type RectangularRadioButtonGroupOptions } from '@/utils/sun/buttons/RectangularRadioButtonGroup';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import { type OpticSurfaceType } from '@/utils/geometric-optics/common/model/OpticSurfaceType';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
+import MirrorNode from '@/utils/geometric-optics/mirror/view/MirrorNode';
+import LensNode from '@/utils/geometric-optics/lens/view/LensNode';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { type NodeTranslationOptions } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import { type GOSimOptions } from '@/utils/geometric-optics/GOSim';
 
 type SelfOptions = EmptySelfOptions;
 

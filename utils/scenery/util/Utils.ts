@@ -8,16 +8,21 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Transform3 from '../../dot/Transform3';
-import Vector2 from '../../dot/Vector2';
-import platform from '../../phet-core/platform';
-import { Features, scenery } from '../imports';
+import $ from '@/utils/sherpa/lib/jquery-2.1.0';
+
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Transform3 from '@/utils/dot/Transform3';
+import Vector2 from '@/utils/dot/Vector2';
+import platform from '@/utils/phet-core/platform';
+import { Features, scenery } from '@/utils/scenery/imports';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+// const $ = require('@/utils/sherpa/lib/jquery-2.1.0');
 
 // convenience function
-function p( x: number, y: number ): Vector2 {
-  return new Vector2( x, y );
+function p(x: number, y: number): Vector2 {
+  return new Vector2(x, y);
 }
 
 // TODO: remove flag and tests after we're done https://github.com/phetsims/scenery/issues/1581
@@ -43,36 +48,40 @@ const Utils = {
    * Prepares a DOM element for use with applyPreparedTransform(). Applies some CSS styles that are required, but
    * that we don't want to set while animating.
    */
-  prepareForTransform( element: HTMLElement | SVGElement ): void {
+  prepareForTransform(element: HTMLElement | SVGElement): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    element.style[ transformOriginProperty ] = 'top left';
+    element.style[transformOriginProperty] = 'top left';
   },
 
   /**
    * Applies the CSS transform of the matrix to the element, with optional forcing of acceleration.
    * NOTE: prepareForTransform should be called at least once on the element before this method is used.
    */
-  applyPreparedTransform( matrix: Matrix3, element: HTMLElement | SVGElement ): void {
+  applyPreparedTransform(matrix: Matrix3, element: HTMLElement | SVGElement): void {
     // NOTE: not applying translateZ, see http://stackoverflow.com/questions/10014461/why-does-enabling-hardware-acceleration-in-css3-slow-down-performance
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    element.style[ transformProperty ] = matrix.getCSSTransform();
+    element.style[transformProperty] = matrix.getCSSTransform();
   },
 
   /**
    * Applies a CSS transform value string to a DOM element.
    * NOTE: prepareForTransform should be called at least once on the element before this method is used.
    */
-  setTransform( transformString: string, element: HTMLElement | SVGElement ): void {
+  setTransform(transformString: string, element: HTMLElement | SVGElement): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    element.style[ transformProperty ] = transformString;
+    element.style[transformProperty] = transformString;
   },
 
   /**
    * Removes a CSS transform from a DOM element.
    */
-  unsetTransform( element: HTMLElement | SVGElement ): void {
+  unsetTransform(element: HTMLElement | SVGElement): void {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    element.style[ transformProperty ] = '';
+    element.style[transformProperty] = '';
   },
 
   /**
@@ -80,25 +89,27 @@ const Utils = {
    * otherwise using a simple setTimeout internally. See https://github.com/phetsims/scenery/issues/426
    */
   polyfillRequestAnimationFrame(): void {
-    if ( !window.requestAnimationFrame || !window.cancelAnimationFrame ) {
+    if (!window.requestAnimationFrame || !window.cancelAnimationFrame) {
       // Fallback implementation if no prefixed version is available
-      if ( !Features.requestAnimationFrame || !Features.cancelAnimationFrame ) {
+      if (!Features.requestAnimationFrame || !Features.cancelAnimationFrame) {
         window.requestAnimationFrame = callback => {
           const timeAtStart = Date.now();
 
           // NOTE: We don't want to rely on a common timer, so we're using the built-in form on purpose.
-          return window.setTimeout( () => {
-            callback( Date.now() - timeAtStart );
-          }, 16 );
+          return window.setTimeout(() => {
+            callback(Date.now() - timeAtStart);
+          }, 16);
         };
         window.cancelAnimationFrame = clearTimeout;
       }
       // Fill in the non-prefixed names with the prefixed versions
       else {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        window.requestAnimationFrame = window[ Features.requestAnimationFrame ];
+        window.requestAnimationFrame = window[Features.requestAnimationFrame];
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        window.cancelAnimationFrame = window[ Features.cancelAnimationFrame ];
+        window.cancelAnimationFrame = window[Features.cancelAnimationFrame];
       }
     }
   },
@@ -109,17 +120,22 @@ const Utils = {
    *
    * @returns The backing store pixel ratio.
    */
-  backingStorePixelRatio( context: CanvasRenderingContext2D | WebGLRenderingContext ): number {
+  backingStorePixelRatio(context: CanvasRenderingContext2D | WebGLRenderingContext): number {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     return context.webkitBackingStorePixelRatio ||
-           // @ts-expect-error
-           context.mozBackingStorePixelRatio ||
-           // @ts-expect-error
-           context.msBackingStorePixelRatio ||
-           // @ts-expect-error
-           context.oBackingStorePixelRatio ||
-           // @ts-expect-error
-           context.backingStorePixelRatio || 1;
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      context.mozBackingStorePixelRatio ||
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      context.msBackingStorePixelRatio ||
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      context.oBackingStorePixelRatio ||
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      context.backingStorePixelRatio || 1;
   },
 
   /**
@@ -127,9 +143,9 @@ const Utils = {
    * See see http://developer.apple.com/library/safari/#documentation/AudioVideo/Conceptual/HTML-canvas-guide/SettingUptheCanvas/SettingUptheCanvas.html#//apple_ref/doc/uid/TP40010542-CH2-SW5
    * And it's updated based on http://www.html5rocks.com/en/tutorials/canvas/hidpi/
    */
-  backingScale( context: CanvasRenderingContext2D | WebGLRenderingContext ): number {
-    if ( 'devicePixelRatio' in window ) {
-      const backingStoreRatio = Utils.backingStorePixelRatio( context );
+  backingScale(context: CanvasRenderingContext2D | WebGLRenderingContext): number {
+    if ('devicePixelRatio' in window) {
+      const backingStoreRatio = Utils.backingStorePixelRatio(context);
 
       return window.devicePixelRatio / backingStoreRatio;
     }
@@ -149,7 +165,7 @@ const Utils = {
    */
   supportsImageDataCanvasFilter(): boolean {
     // @ts-expect-error TODO: scenery and typing https://github.com/phetsims/scenery/issues/1581
-    return Utils.backingStorePixelRatio( scenery.scratchContext ) === 1;
+    return Utils.backingStorePixelRatio(scenery.scratchContext) === 1;
   },
 
   /* ---------------------------------------------------------------------------*
@@ -161,42 +177,42 @@ const Utils = {
    * very conservative, with an effective 1px extra range to allow for differences in anti-aliasing
    * for performance concerns, this does not support skews / rotations / anything but translation and scaling
    */
-  scanBounds( imageData: ImageData, resolution: number, transform: Transform3 ): { minBounds: Bounds2; maxBounds: Bounds2 } {
+  scanBounds(imageData: ImageData, resolution: number, transform: Transform3): { minBounds: Bounds2; maxBounds: Bounds2 } {
 
     // entry will be true if any pixel with the given x or y value is non-rgba(0,0,0,0)
-    const dirtyX = _.map( _.range( resolution ), () => false );
-    const dirtyY = _.map( _.range( resolution ), () => false );
+    const dirtyX = _.map(_.range(resolution), () => false);
+    const dirtyY = _.map(_.range(resolution), () => false);
 
-    for ( let x = 0; x < resolution; x++ ) {
-      for ( let y = 0; y < resolution; y++ ) {
-        const offset = 4 * ( y * resolution + x );
-        if ( imageData.data[ offset ] !== 0 || imageData.data[ offset + 1 ] !== 0 || imageData.data[ offset + 2 ] !== 0 || imageData.data[ offset + 3 ] !== 0 ) {
-          dirtyX[ x ] = true;
-          dirtyY[ y ] = true;
+    for (let x = 0; x < resolution; x++) {
+      for (let y = 0; y < resolution; y++) {
+        const offset = 4 * (y * resolution + x);
+        if (imageData.data[offset] !== 0 || imageData.data[offset + 1] !== 0 || imageData.data[offset + 2] !== 0 || imageData.data[offset + 3] !== 0) {
+          dirtyX[x] = true;
+          dirtyY[y] = true;
         }
       }
     }
 
-    const minX = _.indexOf( dirtyX, true );
-    const maxX = _.lastIndexOf( dirtyX, true );
-    const minY = _.indexOf( dirtyY, true );
-    const maxY = _.lastIndexOf( dirtyY, true );
+    const minX = _.indexOf(dirtyX, true);
+    const maxX = _.lastIndexOf(dirtyX, true);
+    const minY = _.indexOf(dirtyY, true);
+    const maxY = _.lastIndexOf(dirtyY, true);
 
     // based on pixel boundaries. for minBounds, the inner edge of the dirty pixel. for maxBounds, the outer edge of the adjacent non-dirty pixel
     // results in a spread of 2 for the identity transform (or any translated form)
     const extraSpread = resolution / 16; // is Chrome antialiasing really like this? dear god... TODO!!! https://github.com/phetsims/scenery/issues/1581
     return {
       minBounds: new Bounds2(
-        ( minX < 1 || minX >= resolution - 1 ) ? Number.POSITIVE_INFINITY : transform.inversePosition2( p( minX + 1 + extraSpread, 0 ) ).x,
-        ( minY < 1 || minY >= resolution - 1 ) ? Number.POSITIVE_INFINITY : transform.inversePosition2( p( 0, minY + 1 + extraSpread ) ).y,
-        ( maxX < 1 || maxX >= resolution - 1 ) ? Number.NEGATIVE_INFINITY : transform.inversePosition2( p( maxX - extraSpread, 0 ) ).x,
-        ( maxY < 1 || maxY >= resolution - 1 ) ? Number.NEGATIVE_INFINITY : transform.inversePosition2( p( 0, maxY - extraSpread ) ).y
+        (minX < 1 || minX >= resolution - 1) ? Number.POSITIVE_INFINITY : transform.inversePosition2(p(minX + 1 + extraSpread, 0)).x,
+        (minY < 1 || minY >= resolution - 1) ? Number.POSITIVE_INFINITY : transform.inversePosition2(p(0, minY + 1 + extraSpread)).y,
+        (maxX < 1 || maxX >= resolution - 1) ? Number.NEGATIVE_INFINITY : transform.inversePosition2(p(maxX - extraSpread, 0)).x,
+        (maxY < 1 || maxY >= resolution - 1) ? Number.NEGATIVE_INFINITY : transform.inversePosition2(p(0, maxY - extraSpread)).y
       ),
       maxBounds: new Bounds2(
-        ( minX < 1 || minX >= resolution - 1 ) ? Number.NEGATIVE_INFINITY : transform.inversePosition2( p( minX - 1 - extraSpread, 0 ) ).x,
-        ( minY < 1 || minY >= resolution - 1 ) ? Number.NEGATIVE_INFINITY : transform.inversePosition2( p( 0, minY - 1 - extraSpread ) ).y,
-        ( maxX < 1 || maxX >= resolution - 1 ) ? Number.POSITIVE_INFINITY : transform.inversePosition2( p( maxX + 2 + extraSpread, 0 ) ).x,
-        ( maxY < 1 || maxY >= resolution - 1 ) ? Number.POSITIVE_INFINITY : transform.inversePosition2( p( 0, maxY + 2 + extraSpread ) ).y
+        (minX < 1 || minX >= resolution - 1) ? Number.NEGATIVE_INFINITY : transform.inversePosition2(p(minX - 1 - extraSpread, 0)).x,
+        (minY < 1 || minY >= resolution - 1) ? Number.NEGATIVE_INFINITY : transform.inversePosition2(p(0, minY - 1 - extraSpread)).y,
+        (maxX < 1 || maxX >= resolution - 1) ? Number.POSITIVE_INFINITY : transform.inversePosition2(p(maxX + 2 + extraSpread, 0)).x,
+        (maxY < 1 || maxY >= resolution - 1) ? Number.POSITIVE_INFINITY : transform.inversePosition2(p(0, maxY + 2 + extraSpread)).y
       )
     };
   },
@@ -204,89 +220,89 @@ const Utils = {
   /**
    * Measures accurate bounds of a function that draws things to a Canvas.
    */
-  canvasAccurateBounds( renderToContext: ( context: CanvasRenderingContext2D ) => void, options?: { precision?: number; resolution?: number; initialScale?: number } ): Bounds2 & { minBounds: Bounds2; maxBounds: Bounds2; isConsistent: boolean; precision: number } {
+  canvasAccurateBounds(renderToContext: (context: CanvasRenderingContext2D) => void, options?: { precision?: number; resolution?: number; initialScale?: number }): Bounds2 & { minBounds: Bounds2; maxBounds: Bounds2; isConsistent: boolean; precision: number } {
     // how close to the actual bounds do we need to be?
-    const precision = ( options && options.precision ) ? options.precision : 0.001;
+    const precision = (options && options.precision) ? options.precision : 0.001;
 
     // 512x512 default square resolution
-    const resolution = ( options && options.resolution ) ? options.resolution : 128;
+    const resolution = (options && options.resolution) ? options.resolution : 128;
 
     // at 1/16x default, we want to be able to get the bounds accurately for something as large as 16x our initial resolution
     // divisible by 2 so hopefully we avoid more quirks from Canvas rendering engines
-    const initialScale = ( options && options.initialScale ) ? options.initialScale : ( 1 / 16 );
+    const initialScale = (options && options.initialScale) ? options.initialScale : (1 / 16);
 
     let minBounds = Bounds2.NOTHING;
     let maxBounds = Bounds2.EVERYTHING;
 
-    const canvas = document.createElement( 'canvas' );
+    const canvas = document.createElement('canvas');
     canvas.width = resolution;
     canvas.height = resolution;
-    const context = canvas.getContext( '2d' )!;
+    const context = canvas.getContext('2d')!;
 
-    if ( debugChromeBoundsScanning ) {
-      $( window ).ready( () => {
-        const header = document.createElement( 'h2' );
-        $( header ).text( 'Bounds Scan' );
-        $( '#display' ).append( header );
-      } );
+    if (debugChromeBoundsScanning) {
+      $(window).ready(() => {
+        const header = document.createElement('h2');
+        $(header).text('Bounds Scan');
+        $('#display').append(header);
+      });
     }
 
     // TODO: Don't use Transform3 unless it is necessary https://github.com/phetsims/scenery/issues/1581
-    function scan( transform: Transform3 ): { minBounds: Bounds2; maxBounds: Bounds2 } {
+    function scan(transform: Transform3): { minBounds: Bounds2; maxBounds: Bounds2 } {
       // save/restore, in case the render tries to do any funny stuff like clipping, etc.
       context.save();
-      transform.matrix.canvasSetTransform( context );
-      renderToContext( context );
+      transform.matrix.canvasSetTransform(context);
+      renderToContext(context);
       context.restore();
 
-      const data = context.getImageData( 0, 0, resolution, resolution );
-      const minMaxBounds = Utils.scanBounds( data, resolution, transform );
+      const data = context.getImageData(0, 0, resolution, resolution);
+      const minMaxBounds = Utils.scanBounds(data, resolution, transform);
 
-      function snapshotToCanvas( snapshot: ImageData ): void {
-        const canvas = document.createElement( 'canvas' );
+      function snapshotToCanvas(snapshot: ImageData): void {
+        const canvas = document.createElement('canvas');
         canvas.width = resolution;
         canvas.height = resolution;
-        const context = canvas.getContext( '2d' )!;
-        context.putImageData( snapshot, 0, 0 );
-        $( canvas ).css( 'border', '1px solid black' );
-        $( window ).ready( () => {
+        const context = canvas.getContext('2d')!;
+        context.putImageData(snapshot, 0, 0);
+        $(canvas).css('border', '1px solid black');
+        $(window).ready(() => {
           // $( '#display' ).append( $( document.createElement( 'div' ) ).text( 'Bounds: ' +  ) );
-          $( '#display' ).append( canvas );
-        } );
+          $('#display').append(canvas);
+        });
       }
 
       // TODO: remove after debug https://github.com/phetsims/scenery/issues/1581
-      if ( debugChromeBoundsScanning ) {
-        snapshotToCanvas( data );
+      if (debugChromeBoundsScanning) {
+        snapshotToCanvas(data);
       }
 
-      context.clearRect( 0, 0, resolution, resolution );
+      context.clearRect(0, 0, resolution, resolution);
 
       return minMaxBounds;
     }
 
     // attempts to map the bounds specified to the entire testing canvas (minus a fine border), so we can nail down the location quickly
-    function idealTransform( bounds: Bounds2 ): Transform3 {
+    function idealTransform(bounds: Bounds2): Transform3 {
       // so that the bounds-edge doesn't land squarely on the boundary
       const borderSize = 2;
 
-      const scaleX = ( resolution - borderSize * 2 ) / ( bounds.maxX - bounds.minX );
-      const scaleY = ( resolution - borderSize * 2 ) / ( bounds.maxY - bounds.minY );
+      const scaleX = (resolution - borderSize * 2) / (bounds.maxX - bounds.minX);
+      const scaleY = (resolution - borderSize * 2) / (bounds.maxY - bounds.minY);
       const translationX = -scaleX * bounds.minX + borderSize;
       const translationY = -scaleY * bounds.minY + borderSize;
 
-      return new Transform3( Matrix3.translation( translationX, translationY ).timesMatrix( Matrix3.scaling( scaleX, scaleY ) ) );
+      return new Transform3(Matrix3.translation(translationX, translationY).timesMatrix(Matrix3.scaling(scaleX, scaleY)));
     }
 
     const initialTransform = new Transform3();
     // make sure to initially center our object, so we don't miss the bounds
-    initialTransform.append( Matrix3.translation( resolution / 2, resolution / 2 ) );
-    initialTransform.append( Matrix3.scaling( initialScale ) );
+    initialTransform.append(Matrix3.translation(resolution / 2, resolution / 2));
+    initialTransform.append(Matrix3.scaling(initialScale));
 
-    const coarseBounds = scan( initialTransform );
+    const coarseBounds = scan(initialTransform);
 
-    minBounds = minBounds.union( coarseBounds.minBounds );
-    maxBounds = maxBounds.intersection( coarseBounds.maxBounds );
+    minBounds = minBounds.union(coarseBounds.minBounds);
+    maxBounds = maxBounds.intersection(coarseBounds.maxBounds);
 
     let tempMin;
     let tempMax;
@@ -295,112 +311,113 @@ const Utils = {
     // minX
     tempMin = maxBounds.minY;
     tempMax = maxBounds.maxY;
-    while ( isFinite( minBounds.minX ) && isFinite( maxBounds.minX ) && Math.abs( minBounds.minX - maxBounds.minX ) > precision ) {
+    while (isFinite(minBounds.minX) && isFinite(maxBounds.minX) && Math.abs(minBounds.minX - maxBounds.minX) > precision) {
       // use maximum bounds except for the x direction, so we don't miss things that we are looking for
-      refinedBounds = scan( idealTransform( new Bounds2( maxBounds.minX, tempMin, minBounds.minX, tempMax ) ) );
+      refinedBounds = scan(idealTransform(new Bounds2(maxBounds.minX, tempMin, minBounds.minX, tempMax)));
 
-      if ( minBounds.minX <= refinedBounds.minBounds.minX && maxBounds.minX >= refinedBounds.maxBounds.minX ) {
+      if (minBounds.minX <= refinedBounds.minBounds.minX && maxBounds.minX >= refinedBounds.maxBounds.minX) {
         // sanity check - break out of an infinite loop!
-        if ( debugChromeBoundsScanning ) {
-          console.log( 'warning, exiting infinite loop!' );
-          console.log( `transformed "min" minX: ${idealTransform( new Bounds2( maxBounds.minX, maxBounds.minY, minBounds.minX, maxBounds.maxY ) ).transformPosition2( p( minBounds.minX, 0 ) )}` );
-          console.log( `transformed "max" minX: ${idealTransform( new Bounds2( maxBounds.minX, maxBounds.minY, minBounds.minX, maxBounds.maxY ) ).transformPosition2( p( maxBounds.minX, 0 ) )}` );
+        if (debugChromeBoundsScanning) {
+          console.log('warning, exiting infinite loop!');
+          console.log(`transformed "min" minX: ${idealTransform(new Bounds2(maxBounds.minX, maxBounds.minY, minBounds.minX, maxBounds.maxY)).transformPosition2(p(minBounds.minX, 0))}`);
+          console.log(`transformed "max" minX: ${idealTransform(new Bounds2(maxBounds.minX, maxBounds.minY, minBounds.minX, maxBounds.maxY)).transformPosition2(p(maxBounds.minX, 0))}`);
         }
         break;
       }
 
-      minBounds = minBounds.withMinX( Math.min( minBounds.minX, refinedBounds.minBounds.minX ) );
-      maxBounds = maxBounds.withMinX( Math.max( maxBounds.minX, refinedBounds.maxBounds.minX ) );
-      tempMin = Math.max( tempMin, refinedBounds.maxBounds.minY );
-      tempMax = Math.min( tempMax, refinedBounds.maxBounds.maxY );
+      minBounds = minBounds.withMinX(Math.min(minBounds.minX, refinedBounds.minBounds.minX));
+      maxBounds = maxBounds.withMinX(Math.max(maxBounds.minX, refinedBounds.maxBounds.minX));
+      tempMin = Math.max(tempMin, refinedBounds.maxBounds.minY);
+      tempMax = Math.min(tempMax, refinedBounds.maxBounds.maxY);
     }
 
     // maxX
     tempMin = maxBounds.minY;
     tempMax = maxBounds.maxY;
-    while ( isFinite( minBounds.maxX ) && isFinite( maxBounds.maxX ) && Math.abs( minBounds.maxX - maxBounds.maxX ) > precision ) {
+    while (isFinite(minBounds.maxX) && isFinite(maxBounds.maxX) && Math.abs(minBounds.maxX - maxBounds.maxX) > precision) {
       // use maximum bounds except for the x direction, so we don't miss things that we are looking for
-      refinedBounds = scan( idealTransform( new Bounds2( minBounds.maxX, tempMin, maxBounds.maxX, tempMax ) ) );
+      refinedBounds = scan(idealTransform(new Bounds2(minBounds.maxX, tempMin, maxBounds.maxX, tempMax)));
 
-      if ( minBounds.maxX >= refinedBounds.minBounds.maxX && maxBounds.maxX <= refinedBounds.maxBounds.maxX ) {
+      if (minBounds.maxX >= refinedBounds.minBounds.maxX && maxBounds.maxX <= refinedBounds.maxBounds.maxX) {
         // sanity check - break out of an infinite loop!
-        if ( debugChromeBoundsScanning ) {
-          console.log( 'warning, exiting infinite loop!' );
+        if (debugChromeBoundsScanning) {
+          console.log('warning, exiting infinite loop!');
         }
         break;
       }
 
-      minBounds = minBounds.withMaxX( Math.max( minBounds.maxX, refinedBounds.minBounds.maxX ) );
-      maxBounds = maxBounds.withMaxX( Math.min( maxBounds.maxX, refinedBounds.maxBounds.maxX ) );
-      tempMin = Math.max( tempMin, refinedBounds.maxBounds.minY );
-      tempMax = Math.min( tempMax, refinedBounds.maxBounds.maxY );
+      minBounds = minBounds.withMaxX(Math.max(minBounds.maxX, refinedBounds.minBounds.maxX));
+      maxBounds = maxBounds.withMaxX(Math.min(maxBounds.maxX, refinedBounds.maxBounds.maxX));
+      tempMin = Math.max(tempMin, refinedBounds.maxBounds.minY);
+      tempMax = Math.min(tempMax, refinedBounds.maxBounds.maxY);
     }
 
     // minY
     tempMin = maxBounds.minX;
     tempMax = maxBounds.maxX;
-    while ( isFinite( minBounds.minY ) && isFinite( maxBounds.minY ) && Math.abs( minBounds.minY - maxBounds.minY ) > precision ) {
+    while (isFinite(minBounds.minY) && isFinite(maxBounds.minY) && Math.abs(minBounds.minY - maxBounds.minY) > precision) {
       // use maximum bounds except for the y direction, so we don't miss things that we are looking for
-      refinedBounds = scan( idealTransform( new Bounds2( tempMin, maxBounds.minY, tempMax, minBounds.minY ) ) );
+      refinedBounds = scan(idealTransform(new Bounds2(tempMin, maxBounds.minY, tempMax, minBounds.minY)));
 
-      if ( minBounds.minY <= refinedBounds.minBounds.minY && maxBounds.minY >= refinedBounds.maxBounds.minY ) {
+      if (minBounds.minY <= refinedBounds.minBounds.minY && maxBounds.minY >= refinedBounds.maxBounds.minY) {
         // sanity check - break out of an infinite loop!
-        if ( debugChromeBoundsScanning ) {
-          console.log( 'warning, exiting infinite loop!' );
+        if (debugChromeBoundsScanning) {
+          console.log('warning, exiting infinite loop!');
         }
         break;
       }
 
-      minBounds = minBounds.withMinY( Math.min( minBounds.minY, refinedBounds.minBounds.minY ) );
-      maxBounds = maxBounds.withMinY( Math.max( maxBounds.minY, refinedBounds.maxBounds.minY ) );
-      tempMin = Math.max( tempMin, refinedBounds.maxBounds.minX );
-      tempMax = Math.min( tempMax, refinedBounds.maxBounds.maxX );
+      minBounds = minBounds.withMinY(Math.min(minBounds.minY, refinedBounds.minBounds.minY));
+      maxBounds = maxBounds.withMinY(Math.max(maxBounds.minY, refinedBounds.maxBounds.minY));
+      tempMin = Math.max(tempMin, refinedBounds.maxBounds.minX);
+      tempMax = Math.min(tempMax, refinedBounds.maxBounds.maxX);
     }
 
     // maxY
     tempMin = maxBounds.minX;
     tempMax = maxBounds.maxX;
-    while ( isFinite( minBounds.maxY ) && isFinite( maxBounds.maxY ) && Math.abs( minBounds.maxY - maxBounds.maxY ) > precision ) {
+    while (isFinite(minBounds.maxY) && isFinite(maxBounds.maxY) && Math.abs(minBounds.maxY - maxBounds.maxY) > precision) {
       // use maximum bounds except for the y direction, so we don't miss things that we are looking for
-      refinedBounds = scan( idealTransform( new Bounds2( tempMin, minBounds.maxY, tempMax, maxBounds.maxY ) ) );
+      refinedBounds = scan(idealTransform(new Bounds2(tempMin, minBounds.maxY, tempMax, maxBounds.maxY)));
 
-      if ( minBounds.maxY >= refinedBounds.minBounds.maxY && maxBounds.maxY <= refinedBounds.maxBounds.maxY ) {
+      if (minBounds.maxY >= refinedBounds.minBounds.maxY && maxBounds.maxY <= refinedBounds.maxBounds.maxY) {
         // sanity check - break out of an infinite loop!
-        if ( debugChromeBoundsScanning ) {
-          console.log( 'warning, exiting infinite loop!' );
+        if (debugChromeBoundsScanning) {
+          console.log('warning, exiting infinite loop!');
         }
         break;
       }
 
-      minBounds = minBounds.withMaxY( Math.max( minBounds.maxY, refinedBounds.minBounds.maxY ) );
-      maxBounds = maxBounds.withMaxY( Math.min( maxBounds.maxY, refinedBounds.maxBounds.maxY ) );
-      tempMin = Math.max( tempMin, refinedBounds.maxBounds.minX );
-      tempMax = Math.min( tempMax, refinedBounds.maxBounds.maxX );
+      minBounds = minBounds.withMaxY(Math.max(minBounds.maxY, refinedBounds.minBounds.maxY));
+      maxBounds = maxBounds.withMaxY(Math.min(maxBounds.maxY, refinedBounds.maxBounds.maxY));
+      tempMin = Math.max(tempMin, refinedBounds.maxBounds.minX);
+      tempMax = Math.min(tempMax, refinedBounds.maxBounds.maxX);
     }
 
-    if ( debugChromeBoundsScanning ) {
-      console.log( `minBounds: ${minBounds}` );
-      console.log( `maxBounds: ${maxBounds}` );
+    if (debugChromeBoundsScanning) {
+      console.log(`minBounds: ${minBounds}`);
+      console.log(`maxBounds: ${maxBounds}`);
     }
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     const result: Bounds2 & { minBounds: Bounds2; maxBounds: Bounds2; isConsistent: boolean; precision: number } = new Bounds2(
       // Do finite checks so we don't return NaN
-      ( isFinite( minBounds.minX ) && isFinite( maxBounds.minX ) ) ? ( minBounds.minX + maxBounds.minX ) / 2 : Number.POSITIVE_INFINITY,
-      ( isFinite( minBounds.minY ) && isFinite( maxBounds.minY ) ) ? ( minBounds.minY + maxBounds.minY ) / 2 : Number.POSITIVE_INFINITY,
-      ( isFinite( minBounds.maxX ) && isFinite( maxBounds.maxX ) ) ? ( minBounds.maxX + maxBounds.maxX ) / 2 : Number.NEGATIVE_INFINITY,
-      ( isFinite( minBounds.maxY ) && isFinite( maxBounds.maxY ) ) ? ( minBounds.maxY + maxBounds.maxY ) / 2 : Number.NEGATIVE_INFINITY
+      (isFinite(minBounds.minX) && isFinite(maxBounds.minX)) ? (minBounds.minX + maxBounds.minX) / 2 : Number.POSITIVE_INFINITY,
+      (isFinite(minBounds.minY) && isFinite(maxBounds.minY)) ? (minBounds.minY + maxBounds.minY) / 2 : Number.POSITIVE_INFINITY,
+      (isFinite(minBounds.maxX) && isFinite(maxBounds.maxX)) ? (minBounds.maxX + maxBounds.maxX) / 2 : Number.NEGATIVE_INFINITY,
+      (isFinite(minBounds.maxY) && isFinite(maxBounds.maxY)) ? (minBounds.maxY + maxBounds.maxY) / 2 : Number.NEGATIVE_INFINITY
     );
 
     // extra data about our bounds
     result.minBounds = minBounds;
     result.maxBounds = maxBounds;
-    result.isConsistent = maxBounds.containsBounds( minBounds );
+    result.isConsistent = maxBounds.containsBounds(minBounds);
     result.precision = Math.max(
-      Math.abs( minBounds.minX - maxBounds.minX ),
-      Math.abs( minBounds.minY - maxBounds.minY ),
-      Math.abs( minBounds.maxX - maxBounds.maxX ),
-      Math.abs( minBounds.maxY - maxBounds.maxY )
+      Math.abs(minBounds.minX - maxBounds.minX),
+      Math.abs(minBounds.minY - maxBounds.minY),
+      Math.abs(minBounds.maxX - maxBounds.maxX),
+      Math.abs(minBounds.maxY - maxBounds.maxY)
     );
 
     // return the average
@@ -416,9 +433,9 @@ const Utils = {
    *
    * @returns The smallest power of 2 that is greater than or equal n
    */
-  toPowerOf2( n: number ): number {
+  toPowerOf2(n: number): number {
     let result = 1;
-    while ( result < n ) {
+    while (result < n) {
       result *= 2;
     }
     return result;
@@ -427,15 +444,15 @@ const Utils = {
   /**
    * Creates and compiles a GLSL Shader object in WebGL.
    */
-  createShader( gl: WebGLRenderingContext, source: string, type: number ): WebGLShader {
-    const shader = gl.createShader( type )!;
-    gl.shaderSource( shader, source );
-    gl.compileShader( shader );
+  createShader(gl: WebGLRenderingContext, source: string, type: number): WebGLShader {
+    const shader = gl.createShader(type)!;
+    gl.shaderSource(shader, source);
+    gl.compileShader(shader);
 
-    if ( !gl.getShaderParameter( shader, gl.COMPILE_STATUS ) ) {
-      console.log( 'GLSL compile error:' );
-      console.log( gl.getShaderInfoLog( shader ) );
-      console.log( source );
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+      console.log('GLSL compile error:');
+      console.log(gl.getShaderInfoLog(shader));
+      console.log(source);
 
       // Normally it would be best to throw an exception here, but a context loss could cause the shader parameter check
       // to fail, and we must handle context loss gracefully between any adjacent pair of gl calls.
@@ -445,12 +462,12 @@ const Utils = {
     return shader;
   },
 
-  applyWebGLContextDefaults( gl: WebGLRenderingContext ): void {
+  applyWebGLContextDefaults(gl: WebGLRenderingContext): void {
     // What color gets set when we call gl.clear()
-    gl.clearColor( 0, 0, 0, 0 );
+    gl.clearColor(0, 0, 0, 0);
 
     // Blending similar to http://localhost/phet/git/webgl-blendfunctions/blendfuncseparate.html
-    gl.enable( gl.BLEND );
+    gl.enable(gl.BLEND);
 
     // NOTE: We switched back to a fully premultiplied setup, so we have the corresponding blend function.
     // For normal colors (and custom WebGLNode handling), it is necessary to use premultiplied values (multiplying the
@@ -458,13 +475,13 @@ const Utils = {
     // already premultiplied, so the built-in shader does not do the extra premultiplication.
     // See https://github.com/phetsims/energy-skate-park/issues/39, https://github.com/phetsims/scenery/issues/397
     // and https://stackoverflow.com/questions/39341564/webgl-how-to-correctly-blend-alpha-channel-png
-    gl.blendFunc( gl.ONE, gl.ONE_MINUS_SRC_ALPHA );
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   },
 
   /**
    * Set whether webgl should be enabled, see docs for webglEnabled
    */
-  setWebGLEnabled( _webglEnabled: boolean ): void {
+  setWebGLEnabled(_webglEnabled: boolean): void {
     webglEnabled = _webglEnabled;
   },
 
@@ -473,27 +490,28 @@ const Utils = {
    *
    * @param [extensions] - A list of WebGL extensions that need to be supported
    */
-  checkWebGLSupport( extensions?: string[] ): boolean {
+  checkWebGLSupport(extensions?: string[]): boolean {
 
     // The webgl check can be shut off, please see docs at webglEnabled declaration site
-    if ( !webglEnabled ) {
+    if (!webglEnabled) {
       return false;
     }
-    const canvas = document.createElement( 'canvas' );
+    const canvas = document.createElement('canvas');
 
     const args = { failIfMajorPerformanceCaveat: true };
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       const gl: WebGLRenderingContext | null = !!window.WebGLRenderingContext &&
-                                               ( canvas.getContext( 'webgl', args ) || canvas.getContext( 'experimental-webgl', args ) );
+        (canvas.getContext('webgl', args) || canvas.getContext('experimental-webgl', args));
 
-      if ( !gl ) {
+      if (!gl) {
         return false;
       }
 
-      if ( extensions ) {
-        for ( let i = 0; i < extensions.length; i++ ) {
-          if ( gl.getExtension( extensions[ i ] ) === null ) {
+      if (extensions) {
+        for (let i = 0; i < extensions.length; i++) {
+          if (gl.getExtension(extensions[i]) === null) {
             return false;
           }
         }
@@ -501,7 +519,7 @@ const Utils = {
 
       return true;
     }
-    catch( e ) {
+    catch (e) {
       return false;
     }
   },
@@ -510,22 +528,23 @@ const Utils = {
    * Check to see whether IE11 has proper clearStencil support (required for three.js to work well).
    */
   checkIE11StencilSupport(): boolean {
-    const canvas = document.createElement( 'canvas' );
+    const canvas = document.createElement('canvas');
 
     try {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       const gl: WebGLRenderingContext | null = !!window.WebGLRenderingContext &&
-                                               ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) );
+        (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
 
-      if ( !gl ) {
+      if (!gl) {
         return false;
       }
 
       // Failure for https://github.com/mrdoob/three.js/issues/3600 / https://github.com/phetsims/molecule-shapes/issues/133
-      gl.clearStencil( 0 );
+      gl.clearStencil(0);
       return gl.getError() === 0;
     }
-    catch( e ) {
+    catch (e) {
       return false;
     }
   },
@@ -534,7 +553,7 @@ const Utils = {
    * Whether WebGL (with decent performance) is supported by the platform
    */
   get isWebGLSupported(): boolean {
-    if ( _extensionlessWebGLSupport === undefined ) {
+    if (_extensionlessWebGLSupport === undefined) {
       _extensionlessWebGLSupport = Utils.checkWebGLSupport();
     }
     return _extensionlessWebGLSupport;
@@ -545,39 +564,39 @@ const Utils = {
    *
    * NOTE: Only use this for debugging. Should not be called normally.
    */
-  loseContext( gl: WebGLRenderingContext ): void {
-    const extension = gl.getExtension( 'WEBGL_lose_context' );
-    if ( extension ) {
+  loseContext(gl: WebGLRenderingContext): void {
+    const extension = gl.getExtension('WEBGL_lose_context');
+    if (extension) {
       extension.loseContext();
 
       // NOTE: We don't want to rely on a common timer, so we're using the built-in form on purpose.
-      setTimeout( () => {
+      setTimeout(() => {
         extension.restoreContext();
-      }, 1000 );
+      }, 1000);
     }
   },
 
   /**
    * Creates a string useful for working around https://github.com/phetsims/collision-lab/issues/177.
    */
-  safariEmbeddingMarkWorkaround( str: string ): string {
-    if ( platform.safari ) {
+  safariEmbeddingMarkWorkaround(str: string): string {
+    if (platform.safari) {
       // NOTE: I don't believe it's likely/possible a valid UTF-8 string will contain these code points adjacently,
       // due to the property that you can start reading UTF-8 from any byte. So we're safe to split it and break it
       // into UTF-16 code units, since we're not mucking with surrogate pairs.
-      const utf16CodeUnits = str.split( '' );
+      const utf16CodeUnits = str.split('');
       let result = '';
 
       // NOTE: We're only inserting zero-width spaces between embedding marks, since prior to this our insertion between
       // certain code points was causing issues with Safari (https://github.com/phetsims/website-meteor/issues/656)
       let lastIsEmbeddingMark = false;
-      for ( let i = 0; i < utf16CodeUnits.length; i++ ) {
-        const next = utf16CodeUnits[ i ];
+      for (let i = 0; i < utf16CodeUnits.length; i++) {
+        const next = utf16CodeUnits[i];
         const nextIsEmbeddingMark = next === '\u202a' || next === '\u202b' || next === '\u202c';
 
         // Add in zero-width spaces for Safari, so it doesn't have adjacent embedding marks ever (which seems to prevent
         // things).
-        if ( lastIsEmbeddingMark && nextIsEmbeddingMark ) {
+        if (lastIsEmbeddingMark && nextIsEmbeddingMark) {
           result += '\u200B';
         }
         result += next;
@@ -593,5 +612,5 @@ const Utils = {
   }
 };
 
-scenery.register( 'Utils', Utils );
+scenery.register('Utils', Utils);
 export default Utils;

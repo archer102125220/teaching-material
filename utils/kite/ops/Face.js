@@ -11,9 +11,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import cleanArray from '../../phet-core/cleanArray';
-import Pool from '../../phet-core/Pool';
-import { kite } from '../imports';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Pool from '@/utils/phet-core/Pool';
+import { kite } from '@/utils/kite/imports';
 
 let globaId = 0;
 

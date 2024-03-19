@@ -9,50 +9,49 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-// @ts-expect-error
-import { EnglishKey } from './EnglishStringToCodeMap';
+import { type EnglishKey } from '@/utils/scenery/accessibility/EnglishStringToCodeMap';
 
-const ARROW_KEYS: EnglishKey[] = [ 'arrowLeft', 'arrowRight', 'arrowUp', 'arrowDown' ];
-const MOVEMENT_KEYS: EnglishKey[] = [ ...ARROW_KEYS, 'w', 'a', 's', 'd' ];
-const RANGE_KEYS: EnglishKey[] = [ ...ARROW_KEYS, 'pageUp', 'pageDown', 'end', 'home' ];
-const NUMBER_KEYS: EnglishKey[] = [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 ];
+const ARROW_KEYS: EnglishKey[] = ['arrowLeft', 'arrowRight', 'arrowUp', 'arrowDown'];
+const MOVEMENT_KEYS: EnglishKey[] = [...ARROW_KEYS, 'w', 'a', 's', 'd'];
+const RANGE_KEYS: EnglishKey[] = [...ARROW_KEYS, 'pageUp', 'pageDown', 'end', 'home'];
+const NUMBER_KEYS: EnglishKey[] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const EnglishStringKeyUtils = {
 
-  ARROW_KEYS: ARROW_KEYS,
-  MOVEMENT_KEYS: MOVEMENT_KEYS,
-  RANGE_KEYS: RANGE_KEYS,
-  NUMBER_KEYS: NUMBER_KEYS,
+  ARROW_KEYS,
+  MOVEMENT_KEYS,
+  RANGE_KEYS,
+  NUMBER_KEYS,
 
   /**
    * Returns true if the key maps to an arrow key. This is an EnglishStringToCodeMap key, NOT a KeyboardEvent.code.
    */
-  isArrowKey( key: EnglishKey ): boolean {
-    return ARROW_KEYS.includes( key );
+  isArrowKey(key: EnglishKey): boolean {
+    return ARROW_KEYS.includes(key);
   },
 
   /**
    * Returns true if the provided key maps to a typical "movement" key, using arrow and WASD keys. This is
    * an EnglishStringToCodeMap key, NOT a KeyboardEvent.code.
    */
-  isMovementKey( key: EnglishKey ): boolean {
-    return MOVEMENT_KEYS.includes( key );
+  isMovementKey(key: EnglishKey): boolean {
+    return MOVEMENT_KEYS.includes(key);
   },
 
   /**
    * Returns true if the key maps to a key used with "range" type input (like a slider). Provided key
    * should be one of EnglishStringToCodeMap's keys, NOT a KeyboardEvent.code.
    */
-  isRangeKey( key: EnglishKey ): boolean {
-    return RANGE_KEYS.includes( key );
+  isRangeKey(key: EnglishKey): boolean {
+    return RANGE_KEYS.includes(key);
   },
 
   /**
    * Returns true if the key is a number key. Provided key should be one of EnglishStringToCodeMap's keys, NOT a
    * KeyboardEvent.code.
    */
-  isNumberKey( key: EnglishKey ): boolean {
-    return NUMBER_KEYS.includes( key );
+  isNumberKey(key: EnglishKey): boolean {
+    return NUMBER_KEYS.includes(key);
   }
 };
 

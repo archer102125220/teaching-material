@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Matrix3 from '../../dot/Matrix3';
-import { Node, Pattern, scenery } from '../imports';
+import Matrix3 from '@/utils/dot/Matrix3';
+import { Node, Pattern, scenery } from '@/utils/scenery/imports';
 
 export default class NodePattern extends Pattern {
   public constructor(node: Node, resolution: number, x: number, y: number, width: number, height: number, matrix = Matrix3.IDENTITY) {

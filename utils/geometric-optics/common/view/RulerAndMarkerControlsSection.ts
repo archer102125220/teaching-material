@@ -6,11 +6,11 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import KeyboardHelpSection from '../../../scenery-phet/keyboard/help/KeyboardHelpSection';
-import TextKeyNode from '../../../scenery-phet/keyboard/TextKeyNode';
-import KeyboardHelpIconFactory from '../../../scenery-phet/keyboard/help/KeyboardHelpIconFactory';
-import KeyboardHelpSectionRow from '../../../scenery-phet/keyboard/help/KeyboardHelpSectionRow';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings';;
+import KeyboardHelpSection from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSection';
+import TextKeyNode from '@/utils/scenery-phet/keyboard/TextKeyNode';
+import KeyboardHelpIconFactory from '@/utils/scenery-phet/keyboard/help/KeyboardHelpIconFactory';
+import KeyboardHelpSectionRow from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSectionRow';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';;
 
 export class RulerAndMarkerControlsSection extends KeyboardHelpSection {
 

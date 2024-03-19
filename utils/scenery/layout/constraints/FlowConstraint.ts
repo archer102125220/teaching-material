@@ -9,12 +9,12 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../../dot/Bounds2';
-import Orientation from '../../../phet-core/Orientation';
-import arrayRemove from '../../../phet-core/arrayRemove';
-import mutate from '../../../phet-core/mutate';
-import { type ExternalFlowConfigurableOptions, FLOW_CONFIGURABLE_OPTION_KEYS, FlowCell, FlowConfigurable, FlowLine, type HorizontalLayoutJustification, LayoutAlign, LayoutJustification, Node, type NodeLayoutAvailableConstraintOptions, NodeLayoutConstraint, scenery, type VerticalLayoutJustification } from '../../imports';
-import type TProperty from '../../../axon/TProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Orientation from '@/utils/phet-core/Orientation';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import mutate from '@/utils/phet-core/mutate';
+import { type ExternalFlowConfigurableOptions, FLOW_CONFIGURABLE_OPTION_KEYS, FlowCell, FlowConfigurable, FlowLine, type HorizontalLayoutJustification, LayoutAlign, LayoutJustification, Node, type NodeLayoutAvailableConstraintOptions, NodeLayoutConstraint, scenery, type VerticalLayoutJustification } from '@/utils/scenery/imports';
+import type TProperty from '@/utils/axon/TProperty';
 
 const FLOW_CONSTRAINT_OPTION_KEYS = [
   ...FLOW_CONFIGURABLE_OPTION_KEYS,

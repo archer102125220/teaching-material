@@ -29,9 +29,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Utils from '../dot/Utils';
-import joist from './joist';
-import Sim from './Sim';
+import $ from '@/utils/sherpa/lib/jquery-2.1.0';
+
+import Utils from '@/utils/dot/Utils';
+import joist from '@/utils/joist/joist';
+import Sim from '@/utils/joist/Sim';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+// const $ = require('@/utils/sherpa/lib/jquery-2.1.0');
 
 // constants
 const FIELD_SEPARATOR = ' \u2014 '; // em dash, a long horizontal dash
@@ -55,7 +60,17 @@ class Profiler {
     }
 
     // this is where the profiler displays its output
-    $('body').append('<div style="z-index: 99999999;position: absolute;color:red; left: 10px;" id="phetProfiler" ></div>');
+    // $('body').append('<div style="z-index: 99999999;position: absolute;color:red; left: 10px;" id="phetProfiler" ></div>');
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    if (typeof window.SIM_DISPLAY === 'object' && typeof window.SIM_DISPLAY?.domElement?.parentNode === 'object') {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      $(window.SIM_DISPLAY.domElement).append('<div style="z-index: 99999999;position: absolute;color:red; left: 10px;" id="phetProfiler" ></div>');
+    } else {
+      $('body').append('<div style="z-index: 99999999;position: absolute;color:red; left: 10px;" id="phetProfiler" ></div>');
+    }
   }
 
   public static start(sim: Sim): void {

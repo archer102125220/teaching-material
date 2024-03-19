@@ -6,12 +6,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from './Bounds2';
-import dot from './dot';
-import InfiniteNumberIO from '../tandem/types/InfiniteNumberIO';
-// @ts-expect-error
-import { StateObject } from '../tandem/types/StateSchema';
-import IOType from '../tandem/types/IOType';
+import Bounds2 from '@/utils/dot/Bounds2';
+import dot from '@/utils/dot/dot';
+import InfiniteNumberIO from '@/utils/tandem/types/InfiniteNumberIO';
+import { type StateObject } from '@/utils/tandem/types/StateSchema';
+import IOType from '@/utils/tandem/types/IOType';
 
 const STATE_SCHEMA = {
   width: InfiniteNumberIO,
@@ -27,7 +26,7 @@ export default class Dimension2 {
   // Height of the dimension
   public height: number;
 
-  public constructor( width: number, height: number ) {
+  public constructor(width: number, height: number) {
     this.width = width;
     this.height = height;
   }
@@ -44,7 +43,7 @@ export default class Dimension2 {
    * This is the mutable form of the function copy(). This will mutate (change) this dimension, in addition to returning
    * this dimension itself.
    */
-  public set( dimension: Dimension2 ): Dimension2 {
+  public set(dimension: Dimension2): Dimension2 {
     this.width = dimension.width;
     this.height = dimension.height;
     return this;
@@ -53,7 +52,7 @@ export default class Dimension2 {
   /**
    * Sets the width of the dimension, returning this.
    */
-  public setWidth( width: number ): Dimension2 {
+  public setWidth(width: number): Dimension2 {
     this.width = width;
     return this;
   }
@@ -61,7 +60,7 @@ export default class Dimension2 {
   /**
    * Sets the height of the dimension, returning this.
    */
-  public setHeight( height: number ): Dimension2 {
+  public setHeight(height: number): Dimension2 {
     this.height = height;
     return this;
   }
@@ -74,12 +73,12 @@ export default class Dimension2 {
    * @param [dimension] - If not provided, creates a new Dimension2 with filled in values. Otherwise, fills
    *                      in the values of the provided dimension so that it equals this dimension.
    */
-  public copy( dimension?: Dimension2 ): Dimension2 {
-    if ( dimension ) {
-      return dimension.set( this );
+  public copy(dimension?: Dimension2): Dimension2 {
+    if (dimension) {
+      return dimension.set(this);
     }
     else {
-      return new Dimension2( this.width, this.height );
+      return new Dimension2(this.width, this.height);
     }
   }
 
@@ -87,7 +86,7 @@ export default class Dimension2 {
    * Swap width and height and return a new Dimension2
    */
   public swapped(): Dimension2 {
-    return new Dimension2( this.height, this.width );
+    return new Dimension2(this.height, this.width);
   }
 
   /**
@@ -95,40 +94,40 @@ export default class Dimension2 {
    * @param [x] - Minimum x coordinate of the bounds, or 0 if not provided.
    * @param [y] - Minimum y coordinate of the bounds, or 0 if not provided.
    */
-  public toBounds( x?: number, y?: number ): Bounds2 {
+  public toBounds(x?: number, y?: number): Bounds2 {
     x = x !== undefined ? x : 0;
     y = y !== undefined ? y : 0;
-    return new Bounds2( x, y, this.width + x, this.height + y );
+    return new Bounds2(x, y, this.width + x, this.height + y);
   }
 
   /**
    * Exact equality comparison between this dimension and another dimension.
    */
-  public equals( that: Dimension2 ): boolean {
+  public equals(that: Dimension2): boolean {
     return this.width === that.width && this.height === that.height;
   }
 
   public toStateObject(): Dimension2StateObject {
     return {
-      width: InfiniteNumberIO.toStateObject( this.width ),
-      height: InfiniteNumberIO.toStateObject( this.height )
+      width: InfiniteNumberIO.toStateObject(this.width),
+      height: InfiniteNumberIO.toStateObject(this.height)
     };
   }
 
-  public static fromStateObject( stateObject: Dimension2StateObject ): Dimension2 {
+  public static fromStateObject(stateObject: Dimension2StateObject): Dimension2 {
     return new Dimension2(
-      InfiniteNumberIO.fromStateObject( stateObject.width ),
-      InfiniteNumberIO.fromStateObject( stateObject.height )
+      InfiniteNumberIO.fromStateObject(stateObject.width),
+      InfiniteNumberIO.fromStateObject(stateObject.height)
     );
   }
 
-  public static Dimension2IO = new IOType<Dimension2, Dimension2StateObject>( 'Dimension2IO', {
+  public static Dimension2IO = new IOType<Dimension2, Dimension2StateObject>('Dimension2IO', {
     valueType: Dimension2,
     documentation: 'A dimension with "width" and "height" members.',
     stateSchema: STATE_SCHEMA,
-    toStateObject: ( range: Dimension2 ) => range.toStateObject(),
-    fromStateObject: ( stateObject: Dimension2StateObject ) => Dimension2.fromStateObject( stateObject )
-  } );
+    toStateObject: (range: Dimension2) => range.toStateObject(),
+    fromStateObject: (stateObject: Dimension2StateObject) => Dimension2.fromStateObject(stateObject)
+  });
 }
 
-dot.register( 'Dimension2', Dimension2 );
+dot.register('Dimension2', Dimension2);

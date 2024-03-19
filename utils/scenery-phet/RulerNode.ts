@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import { Shape } from '../kite/imports';
-import InstanceRegistry from '../phet-core/documentation/InstanceRegistry';
-import optionize from '../phet-core/optionize';
-import { Font, Node, type NodeOptions, Path, Rectangle, type TColor, Text } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import PhetFont from './PhetFont';
-import sceneryPhet from './sceneryPhet';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { Shape } from '@/utils/kite/imports';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize from '@/utils/phet-core/optionize';
+import { Font, Node, type NodeOptions, Path, Rectangle, type TColor, Text } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 // constants
 const DEFAULT_FONT = new PhetFont(18);

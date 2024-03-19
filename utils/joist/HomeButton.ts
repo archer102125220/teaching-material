@@ -6,18 +6,18 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Multilink from '../axon/Multilink';
-import { Shape } from '../kite/imports';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import { Color, HighlightPath, Node, Path, Rectangle } from '../scenery/imports';
-import homeSolidShape from '../sherpa/fontawesome-5/homeSolidShape';
-import ButtonInteractionState from '../sun/buttons/ButtonInteractionState';
-import Utterance from '../utterance-queue/Utterance';
-import joist from './joist';
-import JoistButton, { type JoistButtonOptions } from './JoistButton';
-import JoistStrings from './JoistStrings';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import type PickRequired from '../phet-core/types/PickRequired';
+import Multilink from '@/utils/axon/Multilink';
+import { Shape } from '@/utils/kite/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { Color, HighlightPath, Node, Path, Rectangle } from '@/utils/scenery/imports';
+import homeSolidShape from '@/utils/sherpa/fontawesome-5/homeSolidShape';
+import ButtonInteractionState from '@/utils/sun/buttons/ButtonInteractionState';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import joist from '@/utils/joist/joist';
+import JoistButton, { type JoistButtonOptions } from '@/utils/joist/JoistButton';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 // constants
 const homeScreenDescriptionStringProperty = JoistStrings.a11y.homeScreenDescriptionStringProperty;

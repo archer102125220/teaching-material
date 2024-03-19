@@ -8,10 +8,10 @@
 
 import _ from 'lodash';
 
-import Tandem from './Tandem';
-import tandemNamespace from './tandemNamespace';
-import IOType from './types/IOType';
-import StringIO from './types/StringIO.js';
+import Tandem from '@/utils/tandem/Tandem';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import StringIO from '@/utils/tandem/types/StringIO.js';
 
 export type LinkedElementState = {
   elementID: string;

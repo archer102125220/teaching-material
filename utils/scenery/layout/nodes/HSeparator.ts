@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { type EmptySelfOptions } from '../../../phet-core/optionize';
-import { Separator, type SeparatorOptions, scenery, WidthSizable, type WidthSizableOptions } from '../../imports';
+import { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { Separator, type SeparatorOptions, scenery, WidthSizable, type WidthSizableOptions } from '@/utils/scenery/imports';
 
 type SelfOptions = EmptySelfOptions;
 type ParentOptions = WidthSizableOptions & SeparatorOptions;

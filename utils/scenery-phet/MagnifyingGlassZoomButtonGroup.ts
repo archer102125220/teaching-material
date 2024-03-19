@@ -6,16 +6,16 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import NumberProperty from '../axon/NumberProperty';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import Dimension2 from '../dot/Dimension2';
-import MagnifyingGlassNode, { type MagnifyingGlassNodeOptions } from './MagnifyingGlassNode';
-import MinusNode from './MinusNode';
-import PhetColorScheme from './PhetColorScheme';
-import PlusNode from './PlusNode';
-import sceneryPhet from './sceneryPhet';
-import ZoomButtonGroup, { type ZoomButtonGroupOptions } from './ZoomButtonGroup';
-import optionize, { combineOptions } from '../phet-core/optionize';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Dimension2 from '@/utils/dot/Dimension2';
+import MagnifyingGlassNode, { type MagnifyingGlassNodeOptions } from '@/utils/scenery-phet/MagnifyingGlassNode';
+import MinusNode from '@/utils/scenery-phet/MinusNode';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import PlusNode from '@/utils/scenery-phet/PlusNode';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import ZoomButtonGroup, { type ZoomButtonGroupOptions } from '@/utils/scenery-phet/ZoomButtonGroup';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
 
 type SelfOptions = {
 

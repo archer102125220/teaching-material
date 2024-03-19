@@ -17,16 +17,18 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import PhetioDynamicElementContainer, { type ClearOptions, type PhetioDynamicElementContainerOptions } from './PhetioDynamicElementContainer';
-import Tandem from './Tandem';
-import tandemNamespace from './tandemNamespace';
-import IOType from './types/IOType';
-import PhetioObject from './PhetioObject';
-import optionize from '../phet-core/optionize';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import isSettingPhetioStateProperty from './isSettingPhetioStateProperty';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import IOTypeCache from './IOTypeCache';
+import _ from 'lodash';
+
+import PhetioDynamicElementContainer, { type ClearOptions, type PhetioDynamicElementContainerOptions } from '@/utils/tandem/PhetioDynamicElementContainer';
+import Tandem from '@/utils/tandem/Tandem';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import optionize from '@/utils/phet-core/optionize';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 // constants
 const DEFAULT_CONTAINER_SUFFIX = phetio.PhetioIDUtils.CAPSULE_SUFFIX;

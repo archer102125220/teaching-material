@@ -7,14 +7,14 @@
  *
  */
 
-import DerivedProperty from '../axon/DerivedProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import { Shape } from '../kite/imports';
-import Orientation from '../phet-core/Orientation';
-import { ManualConstraint, Node, Path, type TPaint } from '../scenery/imports';
-import SliderTrack from './SliderTrack';
-import sun from './sun';
-import SunConstants from './SunConstants';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { Shape } from '@/utils/kite/imports';
+import Orientation from '@/utils/phet-core/Orientation';
+import { ManualConstraint, Node, Path, type TPaint } from '@/utils/scenery/imports';
+import SliderTrack from '@/utils/sun/SliderTrack';
+import sun from '@/utils/sun/sun';
+import SunConstants from '@/utils/sun/SunConstants';
 
 export type SliderTickOptions = {
   tickLabelSpacing?: number;

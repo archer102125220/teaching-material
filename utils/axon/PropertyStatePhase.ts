@@ -9,16 +9,16 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Enumeration from '../phet-core/Enumeration';
-import EnumerationValue from '../phet-core/EnumerationValue';
-import axon from './axon';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import axon from '@/utils/axon/axon';
 
 class PropertyStatePhase extends EnumerationValue {
   public static readonly UNDEFER = new PropertyStatePhase();
   public static readonly NOTIFY = new PropertyStatePhase();
 
-  public static readonly enumeration = new Enumeration( PropertyStatePhase );
+  public static readonly enumeration = new Enumeration(PropertyStatePhase);
 }
 
-axon.register( 'PropertyStatePhase', PropertyStatePhase );
+axon.register('PropertyStatePhase', PropertyStatePhase);
 export default PropertyStatePhase;

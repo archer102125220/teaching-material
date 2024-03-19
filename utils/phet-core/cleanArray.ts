@@ -7,7 +7,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import phetCore from './phetCore';
+import phetCore from '@/utils/phet-core/phetCore';
 
 function cleanArray<T>( arr?: T[] | null | undefined ): T[] {
   window.assert && window.assert( !arr || ( Array.isArray( arr ) ), 'cleanArray either takes an Array' );

@@ -6,7 +6,9 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import tambo from './tambo';
+import _ from 'lodash';
+
+import tambo from '@/utils/tambo/tambo';
 
 // a type that contains information about where the audible sounds begin and end within an audio buffer
 type SoundBounds = {

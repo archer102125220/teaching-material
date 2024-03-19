@@ -13,13 +13,13 @@
 
 import _ from 'lodash';
 
-import inheritance from '../../../phet-core/inheritance';
-import memoize from '../../../phet-core/memoize';
+import inheritance from '@/utils/phet-core/inheritance';
+import memoize from '@/utils/phet-core/memoize';
 import {
   PaintableStatefulDrawable,
   scenery,
   SelfDrawable
-} from '../../imports';
+} from '@/utils/scenery/imports';
 
 const LineStatefulDrawable = memoize((type) => {
   window.assert && window.assert(_.includes(inheritance(type), SelfDrawable));

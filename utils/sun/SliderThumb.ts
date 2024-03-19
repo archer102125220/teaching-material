@@ -7,13 +7,13 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Dimension2 from '../dot/Dimension2';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import { Shape } from '../kite/imports';
-import optionize from '../phet-core/optionize';
-import { type TPaint, Path, PressListener, Rectangle, type RectangleOptions } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import sun from './sun';
+import Dimension2 from '@/utils/dot/Dimension2';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import { type TPaint, Path, PressListener, Rectangle, type RectangleOptions } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
 
 type SelfOptions = {
   size?: Dimension2;

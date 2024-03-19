@@ -7,7 +7,7 @@
  */
 import _ from 'lodash';
 
-import phetCore from './phetCore';
+import phetCore from '@/utils/phet-core/phetCore';
 
 function arrayRemove<T>( array: T[], toRemove: T ): void {
   window.assert && window.assert( Array.isArray( array ), 'arrayRemove takes an Array' );

@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Drawable, scenery } from '../imports';
+import { Drawable, scenery } from '@/utils/scenery/imports';
 
 class SelfDrawable extends Drawable {
   /**

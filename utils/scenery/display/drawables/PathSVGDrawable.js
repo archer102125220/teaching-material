@@ -6,14 +6,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import platform from '../../../phet-core/platform';
-import Poolable from '../../../phet-core/Poolable';
+import platform from '@/utils/phet-core/platform';
+import Poolable from '@/utils/phet-core/Poolable';
 import {
   PathStatefulDrawable,
   scenery,
   svgns,
   SVGSelfDrawable
-} from '../../imports';
+} from '@/utils/scenery/imports';
 
 // TODO: change this based on memory and performance characteristics of the platform https://github.com/phetsims/scenery/issues/1581
 const keepSVGPathElements = true; // whether we should pool SVG elements for the SVG rendering states, or whether we should free them when possible for memory

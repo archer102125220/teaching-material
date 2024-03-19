@@ -7,8 +7,8 @@
  * @author John Blanco
  */
 
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import tambo from './tambo';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import tambo from '@/utils/tambo/tambo';
 
 // create a Web Audio context
 let phetAudioContext: AudioContext;

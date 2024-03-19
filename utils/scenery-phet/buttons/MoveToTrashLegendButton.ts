@@ -7,18 +7,18 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import sceneryPhet from '../sceneryPhet.js';
-import MoveToTrashButton, { MoveToTrashButtonOptions } from './MoveToTrashButton.js';
-import ButtonNode from '../../../sun/js/buttons/ButtonNode.js';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import MoveToTrashButton, { type MoveToTrashButtonOptions } from '@/utils/scenery-phet/buttons/MoveToTrashButton';
+import ButtonNode from '@/utils/sun/buttons/ButtonNode';
 
 type SelfOptions = EmptySelfOptions;
 
 export default class MoveToTrashLegendButton extends MoveToTrashButton {
 
-  public constructor( providedOptions?: MoveToTrashButtonOptions ) {
+  public constructor(providedOptions?: MoveToTrashButtonOptions) {
 
-    const options = optionize<MoveToTrashButtonOptions, SelfOptions, MoveToTrashButtonOptions>()( {
+    const options = optionize<MoveToTrashButtonOptions, SelfOptions, MoveToTrashButtonOptions>()({
 
       baseColor: 'rgb( 230, 230, 240 )',
       buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
@@ -26,10 +26,10 @@ export default class MoveToTrashLegendButton extends MoveToTrashButton {
       xMargin: 7,
       yMargin: 3,
       iconScale: 0.4
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
   }
 }
 
-sceneryPhet.register( 'MoveToTrashLegendButton', MoveToTrashLegendButton );
+sceneryPhet.register('MoveToTrashLegendButton', MoveToTrashLegendButton);

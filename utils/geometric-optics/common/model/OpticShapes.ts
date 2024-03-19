@@ -8,7 +8,7 @@
  * @author Martin Veillette
  */
 
-import { Shape } from '../../../kite/imports';
+import { Shape } from '@/utils/kite/imports';
 
 type OpticShapes = {
 

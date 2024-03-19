@@ -9,15 +9,15 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import Emitter from '../../../axon/js/Emitter.js';
-import TEmitter from '../../../axon/js/TEmitter.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import EventType from '../../../tandem/js/EventType.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import sun from '../sun.js';
-import ButtonModel, { ButtonModelOptions } from './ButtonModel.js';
+import BooleanProperty from '@/utils/axon/BooleanProperty.js';
+import Emitter from '@/utils/axon/Emitter.js';
+import TEmitter from '@/utils/axon/BooleanProperty';
+import type TProperty from '@/utils/axon/TProperty.js';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize.js';
+import EventType from '@/utils/tandem/EventType.js';
+import Tandem from '@/utils/tandem/Tandem.js';
+import sun from '@/utils/sun/sun.js';
+import ButtonModel, { type ButtonModelOptions } from '@/utils/sun/buttons/ButtonModel.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -40,84 +40,84 @@ export default class StickyToggleButtonModel<T> extends ButtonModel {
    *   Would have preferred to call this `property` but it would clash with the Property function name.
    * @param providedOptions
    */
-  public constructor( valueUp: T, valueDown: T, valueProperty: TProperty<T>, providedOptions?: StickyToggleButtonModelOptions ) {
+  public constructor(valueUp: T, valueDown: T, valueProperty: TProperty<T>, providedOptions?: StickyToggleButtonModelOptions) {
 
-    const options = optionize<StickyToggleButtonModelOptions, SelfOptions, ButtonModelOptions>()( {
+    const options = optionize<StickyToggleButtonModelOptions, SelfOptions, ButtonModelOptions>()({
       tandem: Tandem.REQUIRED
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.valueUp = valueUp;
     this.valueDown = valueDown;
     this.valueProperty = valueProperty;
 
-    this.toggledEmitter = new Emitter( {
-      tandem: options.tandem.createTandem( 'toggledEmitter' ),
+    this.toggledEmitter = new Emitter({
+      tandem: options.tandem.createTandem('toggledEmitter'),
       phetioDocumentation: 'Emits when the button is toggled',
       phetioEventType: EventType.USER
-    } );
+    });
 
-    this.toggledEmitter.addListener( () => {
-      window.assert && window.assert( this.valueProperty.value === this.valueUp || this.valueProperty.value === this.valueDown,
-        `unrecognized value: ${this.valueProperty.value}` );
+    this.toggledEmitter.addListener(() => {
+      window.assert && window.assert(this.valueProperty.value === this.valueUp || this.valueProperty.value === this.valueDown,
+        `unrecognized value: ${this.valueProperty.value}`);
       this.valueProperty.value = this.valueProperty.value === this.valueUp ? this.valueDown : this.valueUp;
-    } );
+    });
 
     // When the user releases the toggle button, it should only fire an event if it is not during the same action in
     // which they pressed the button.  Track the state to see if they have already pushed the button.
     // Note: Does this need to be reset when the simulation does "reset all"?  I (Sam Reid) can't find any negative
     // consequences in the user interface of not resetting it, but maybe I missed something. Or maybe it would be safe
     // to reset it anyway.
-    this.pressedWhileDownProperty = new BooleanProperty( false );
+    this.pressedWhileDownProperty = new BooleanProperty(false);
 
     // If the button is up and the user presses it, show it pressed and toggle the state right away.  When the button is
     // released, pop up the button (unless it was part of the same action that pressed the button down in the first
     // place).
-    const downListener = ( down: boolean ) => {
+    const downListener = (down: boolean) => {
       const overOrFocused = this.overProperty.get() || this.focusedProperty.get();
-      if ( this.enabledProperty.get() && overOrFocused && !this.interrupted ) {
-        if ( down && valueProperty.value === valueUp ) {
+      if (this.enabledProperty.get() && overOrFocused && !this.interrupted) {
+        if (down && valueProperty.value === valueUp) {
           this.toggle();
-          this.pressedWhileDownProperty.set( false );
+          this.pressedWhileDownProperty.set(false);
         }
-        if ( !down && valueProperty.value === valueDown ) {
-          if ( this.pressedWhileDownProperty.get() ) {
+        if (!down && valueProperty.value === valueDown) {
+          if (this.pressedWhileDownProperty.get()) {
             this.toggle();
           }
           else {
-            this.pressedWhileDownProperty.set( true );
+            this.pressedWhileDownProperty.set(true);
           }
         }
       }
 
       // Handle the case where the pointer moved out then up over a toggle button, so it will respond to the next press
-      if ( !down && !overOrFocused ) {
-        this.pressedWhileDownProperty.set( true );
+      if (!down && !overOrFocused) {
+        this.pressedWhileDownProperty.set(true);
       }
     };
 
-    this.downProperty.link( downListener );
+    this.downProperty.link(downListener);
 
     // if the valueProperty is set externally to user interaction, update the buttonModel
     // downProperty so the model stays in sync
-    const valuePropertyListener = ( value: T ) => {
-      this.downProperty.set( value === valueDown );
+    const valuePropertyListener = (value: T) => {
+      this.downProperty.set(value === valueDown);
     };
-    valueProperty.link( valuePropertyListener );
+    valueProperty.link(valuePropertyListener);
 
     // make the button ready to toggle when enabled
-    const enabledPropertyOnListener = ( enabled: boolean ) => {
-      if ( enabled ) {
-        this.pressedWhileDownProperty.set( true );
+    const enabledPropertyOnListener = (enabled: boolean) => {
+      if (enabled) {
+        this.pressedWhileDownProperty.set(true);
       }
     };
-    this.enabledProperty.link( enabledPropertyOnListener );
+    this.enabledProperty.link(enabledPropertyOnListener);
 
     this.disposeToggleButtonModel = () => {
-      this.downProperty.unlink( downListener );
-      this.enabledProperty.unlink( enabledPropertyOnListener );
-      valueProperty.unlink( valuePropertyListener );
+      this.downProperty.unlink(downListener);
+      this.enabledProperty.unlink(enabledPropertyOnListener);
+      valueProperty.unlink(valuePropertyListener);
       this.toggledEmitter.dispose();
     };
   }
@@ -133,4 +133,4 @@ export default class StickyToggleButtonModel<T> extends ButtonModel {
   }
 }
 
-sun.register( 'StickyToggleButtonModel', StickyToggleButtonModel );
+sun.register('StickyToggleButtonModel', StickyToggleButtonModel);

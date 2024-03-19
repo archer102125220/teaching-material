@@ -7,9 +7,9 @@
  * @author Michael Kauzmann(PhET Interactive Simulations)
  */
 
-import optionize from '../phet-core/optionize';
-import axon from './axon';
-import BooleanProperty, { type BooleanPropertyOptions } from './BooleanProperty';
+import optionize from '@/utils/phet-core/optionize';
+import axon from '@/utils/axon/axon';
+import BooleanProperty, { type BooleanPropertyOptions } from '@/utils/axon/BooleanProperty';
 
 const TANDEM_NAME = 'enabledProperty';
 

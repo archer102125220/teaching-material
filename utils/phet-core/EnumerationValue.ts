@@ -26,10 +26,9 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import phetCore from './phetCore';
-import Enumeration from './Enumeration';
-// @ts-expect-error
-import Constructor from './types/Constructor';
+import phetCore from '@/utils/phet-core/phetCore';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import type Constructor from '@/utils/phet-core/types/Constructor';
 
 class EnumerationValue {
 
@@ -47,37 +46,37 @@ class EnumerationValue {
 
   // This method is unused, but needs to remain here so other types don't accidentally structurally match
   // enumeration values.  Without this, string satisfies the EnumerationValue interface, but we don't want it to.
-  private isEnumerationValue(): boolean {return true;}
+  private isEnumerationValue(): boolean { return true; }
 
   public constructor() {
     const c = this.constructor as Constructor<EnumerationValue>;
-    window.assert && window.assert( !EnumerationValue.sealedCache.has( c ), 'cannot create instanceof of a sealed constructor' );
+    window.assert && window.assert(!EnumerationValue.sealedCache.has(c), 'cannot create instanceof of a sealed constructor');
 
     this._name = null;
     this._enumeration = null;
   }
 
-  public set name( name: string ) {
-    window.assert && window.assert( !this._name, 'name cannot be changed once defined.' );
+  public set name(name: string) {
+    window.assert && window.assert(!this._name, 'name cannot be changed once defined.');
     this._name = name;
   }
 
   public get name(): string {
-    window.assert && window.assert( this._name, 'name cannot be retrieved until it has been filled in by Enumeration.' );
+    window.assert && window.assert(this._name, 'name cannot be retrieved until it has been filled in by Enumeration.');
     return this._name!;
   }
 
-  public set enumeration( enumeration: Enumeration<this> ) {
-    window.assert && window.assert( !this._enumeration, 'enumeration cannot be changed once defined.' );
+  public set enumeration(enumeration: Enumeration<this>) {
+    window.assert && window.assert(!this._enumeration, 'enumeration cannot be changed once defined.');
     this._enumeration = enumeration;
   }
 
   public get enumeration(): Enumeration<this> {
-    window.assert && window.assert( this._enumeration, 'enumeration cannot be retrieved until it has been filled in by Enumeration.' );
+    window.assert && window.assert(this._enumeration, 'enumeration cannot be retrieved until it has been filled in by Enumeration.');
     return this._enumeration!;
   }
 }
 
-phetCore.register( 'EnumerationValue', EnumerationValue );
+phetCore.register('EnumerationValue', EnumerationValue);
 
 export default EnumerationValue;

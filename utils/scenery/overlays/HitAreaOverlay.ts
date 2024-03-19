@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Shape } from '../../kite/imports';
-import { Display, type TOverlay, Node, scenery, ShapeBasedOverlay, Trail } from '../imports';
+import { Shape } from '@/utils/kite/imports';
+import { Display, type TOverlay, Node, scenery, ShapeBasedOverlay, Trail } from '@/utils/scenery/imports';
 
 export default class HitAreaOverlay extends ShapeBasedOverlay implements TOverlay {
   public constructor(display: Display, rootNode: Node) {

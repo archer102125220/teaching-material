@@ -8,15 +8,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import { HBox, Image, Node, RichText, type RichTextOptions } from '../scenery/imports';
-import Dialog, { type DialogOptions } from '../sun/Dialog';
-import IOType from '../tandem/types/IOType';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { HBox, Image, Node, RichText, type RichTextOptions } from '@/utils/scenery/imports';
+import Dialog, { type DialogOptions } from '@/utils/sun/Dialog';
+import IOType from '@/utils/tandem/types/IOType';
 import phetGirlWaggingFinger_png from '@/assets/images/scenery-phet/phetGirlWaggingFinger_png';
-import PhetFont from './PhetFont';
-import sceneryPhet from './sceneryPhet';
-import ReadOnlyProperty from '../axon/ReadOnlyProperty';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
 
 type SelfOptions = {
 

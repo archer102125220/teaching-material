@@ -7,25 +7,25 @@
  */
 
 
-import DerivedProperty from '../axon/DerivedProperty';
-import stepTimer from '../axon/stepTimer';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import type TBrand from '../brand/TBrand';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import StringUtils from '../phetcommon/util/StringUtils';
-import PhetFont from '../scenery-phet/PhetFont';
-import { allowLinksProperty, Node, PDOMPeer, RichText, VBox, VoicingRichText, VoicingText, VStrut } from '../scenery/imports';
-import Dialog, { type DialogOptions } from '../sun/Dialog';
-import Tandem from '../tandem/Tandem';
-import CreditsNode, { type CreditsData } from './CreditsNode';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import stepTimer from '@/utils/axon/stepTimer';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type TBrand from '@/utils/brand/TBrand';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { allowLinksProperty, Node, PDOMPeer, RichText, VBox, VoicingRichText, VoicingText, VStrut } from '@/utils/scenery/imports';
+import Dialog, { type DialogOptions } from '@/utils/sun/Dialog';
+import Tandem from '@/utils/tandem/Tandem';
+import CreditsNode, { type CreditsData } from '@/utils/joist/CreditsNode';
 import { type Locale } from '@/i18n/joist/localeProperty';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
-import packageJSON from './packageJSON';
-import updateCheck from './updateCheck';
-import UpdateNodes from './UpdateNodes';
-import UpdateState from './UpdateState';
-import DerivedStringProperty from '../axon/DerivedStringProperty';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import packageJSON from '@/utils/joist/packageJSON';
+import updateCheck from '@/utils/joist/updateCheck';
+import UpdateNodes from '@/utils/joist/UpdateNodes';
+import UpdateState from '@/utils/joist/UpdateState';
+import DerivedStringProperty from '@/utils/axon/DerivedStringProperty';
 
 // constants
 const MAX_WIDTH = 550; // Maximum width of elements in the dialog
@@ -160,7 +160,7 @@ export default class AboutDialog extends Dialog {
         phet.chipper.buildTimestamp.split('-')[0] : // e.g. "2017-04-20 19:04:59 UTC" -> "2017"
         new Date().getFullYear(); // in unbuilt mode
 
-      const copyright = StringUtils.fillIn(Brand.copyright, { year: year });
+      const copyright = StringUtils.fillIn(Brand.copyright, { year });
 
       brandChildren.push(new VoicingText(copyright, {
         font: new PhetFont(0.75 * NOMINAL_FONT_SIZE),
@@ -242,7 +242,7 @@ export default class AboutDialog extends Dialog {
     const content = new VBox({
       align: 'left',
       spacing: 6,
-      children: children,
+      children,
 
       // pdom - accessible container for all AboutDialog content
       tagName: 'div'

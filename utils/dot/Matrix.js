@@ -6,15 +6,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import isArray from '../phet-core/isArray';
-import dot from './dot';
-import './EigenvalueDecomposition';
-import LUDecomposition from './LUDecomposition';
-import QRDecomposition from './QRDecomposition';
-import SingularValueDecomposition from './SingularValueDecomposition';
-import Vector2 from './Vector2';
-import Vector3 from './Vector3';
-import Vector4 from './Vector4';
+import isArray from '@/utils/phet-core/isArray';
+import dot from '@/utils/dot/dot';
+import '@/utils/dot/EigenvalueDecomposition';
+import LUDecomposition from '@/utils/dot/LUDecomposition';
+import QRDecomposition from '@/utils/dot/QRDecomposition';
+import SingularValueDecomposition from '@/utils/dot/SingularValueDecomposition';
+import Vector2 from '@/utils/dot/Vector2';
+import Vector3 from '@/utils/dot/Vector3';
+import Vector4 from '@/utils/dot/Vector4';
 
 const ArrayType = window.Float64Array || Array;
 

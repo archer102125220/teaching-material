@@ -6,10 +6,16 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import JQuery from 'JQuery';
-import Bounds2 from '../../dot/Bounds2';
-import extendDefined from '../../phet-core/extendDefined';
-import { DOMDrawable, DOMSelfDrawable, Instance, Node, type NodeOptions, Renderer, scenery } from '../imports';
+import $ from '@/utils/sherpa/lib/jquery-2.1.0';
+
+import Bounds2 from '@/utils/dot/Bounds2';
+import extendDefined from '@/utils/phet-core/extendDefined';
+import { DOMDrawable, DOMSelfDrawable, Instance, Node, type NodeOptions, Renderer, scenery } from '@/utils/scenery/imports';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+// const $ = require('@/utils/sherpa/lib/jquery-2.1.0');
+
+type JQuery = typeof $;
 
 const DOM_OPTION_KEYS = [
   'element', // {HTMLElement} - Sets the element, see setElement() for more documentation
@@ -129,7 +135,10 @@ export default class DOM extends Node {
     // move to the temporary container
     this._container.removeChild(this._element);
     temporaryContainer.appendChild(this._element);
-    document.body.appendChild(temporaryContainer);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    (window.SIM_DISPLAY?.domElement?.parentNode || document.body).appendChild(temporaryContainer);
 
     // bounds computation and resize our container to fit precisely
     const selfBounds = this.calculateDOMBounds();
@@ -138,7 +147,9 @@ export default class DOM extends Node {
     this._$container.height(selfBounds.getHeight());
 
     // move back to the main container
-    document.body.removeChild(temporaryContainer);
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    (window.SIM_DISPLAY?.domElement?.parentNode || document.body).removeChild(temporaryContainer);
     temporaryContainer.removeChild(this._element);
     this._container.appendChild(this._element);
 

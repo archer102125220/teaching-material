@@ -8,10 +8,10 @@
  * @author Jesse Greenberg
  */
 
-import sceneryPhet from '../../sceneryPhet.js';
-import BasicActionsKeyboardHelpSection, { BasicActionsKeyboardHelpSectionOptions } from './BasicActionsKeyboardHelpSection.js';
-import SliderControlsKeyboardHelpSection, { SliderControlsKeyboardHelpSectionOptions } from './SliderControlsKeyboardHelpSection.js';
-import TwoColumnKeyboardHelpContent, { TwoColumnKeyboardHelpContentOptions } from './TwoColumnKeyboardHelpContent.js';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import BasicActionsKeyboardHelpSection, { type BasicActionsKeyboardHelpSectionOptions } from '@/utils/scenery-phet/keyboard/help/BasicActionsKeyboardHelpSection';
+import SliderControlsKeyboardHelpSection, { type SliderControlsKeyboardHelpSectionOptions } from '@/utils/scenery-phet/keyboard/help/SliderControlsKeyboardHelpSection';
+import TwoColumnKeyboardHelpContent, { type TwoColumnKeyboardHelpContentOptions } from '@/utils/scenery-phet/keyboard/help/TwoColumnKeyboardHelpContent';
 
 type SelfOptions = {
 
@@ -26,14 +26,14 @@ export type SliderControlsAndBasicActionsKeyboardHelpContentOptions = SelfOption
 
 export default class SliderControlsAndBasicActionsKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
 
-  public constructor( providedOptions?: SliderControlsAndBasicActionsKeyboardHelpContentOptions ) {
+  public constructor(providedOptions?: SliderControlsAndBasicActionsKeyboardHelpContentOptions) {
     const options = providedOptions || {};
 
-    const sliderHelpSection = new SliderControlsKeyboardHelpSection( options.sliderSectionOptions );
-    const basicActionsHelpSection = new BasicActionsKeyboardHelpSection( options.generalSectionOptions );
+    const sliderHelpSection = new SliderControlsKeyboardHelpSection(options.sliderSectionOptions);
+    const basicActionsHelpSection = new BasicActionsKeyboardHelpSection(options.generalSectionOptions);
 
-    super( [ sliderHelpSection ], [ basicActionsHelpSection ], options );
+    super([sliderHelpSection], [basicActionsHelpSection], options);
   }
 }
 
-sceneryPhet.register( 'SliderControlsAndBasicActionsKeyboardHelpContent', SliderControlsAndBasicActionsKeyboardHelpContent );
+sceneryPhet.register('SliderControlsAndBasicActionsKeyboardHelpContent', SliderControlsAndBasicActionsKeyboardHelpContent);

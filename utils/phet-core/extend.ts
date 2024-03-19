@@ -12,7 +12,7 @@
 
 import _ from 'lodash';
 
-import phetCore from './phetCore';
+import phetCore from '@/utils/phet-core/phetCore';
 
 function extend<T>(obj: T, ...sources: Array<object | undefined>): T {
   _.each(sources, source => {

@@ -6,6 +6,6 @@
  * @author John Blanco
  */
 
-import Namespace from '../phet-core/Namespace';
+import Namespace from '@/utils/phet-core/Namespace';
 
 export default new Namespace('tambo');

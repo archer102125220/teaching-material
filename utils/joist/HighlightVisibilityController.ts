@@ -7,11 +7,11 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Multilink from '../axon/Multilink';
-import Vector2 from '../dot/Vector2';
-import { Display, FocusManager, globalKeyStateTracker, KeyboardUtils, SceneryEvent, type TInputListener } from '../scenery/imports';
-import joist from './joist';
-import PreferencesModel from './preferences/PreferencesModel';
+import Multilink from '@/utils/axon/Multilink';
+import Vector2 from '@/utils/dot/Vector2';
+import { Display, FocusManager, globalKeyStateTracker, KeyboardUtils, SceneryEvent, type TInputListener } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import PreferencesModel from '@/utils/joist/preferences/PreferencesModel';
 
 // constants
 // The amount of Pointer movement required to switch from showing focus highlights to Interactive Highlights if both

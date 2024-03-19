@@ -7,20 +7,20 @@
  * @author Jesse Greenberg
  */
 
-import Property from '../axon/Property';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import { Color, Image } from '../scenery/imports';
-import Dialog from '../sun/Dialog';
-import PhetioCapsule from '../tandem/PhetioCapsule';
+import Property from '@/utils/axon/Property';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { Color, Image } from '@/utils/scenery/imports';
+import Dialog from '@/utils/sun/Dialog';
+import PhetioCapsule from '@/utils/tandem/PhetioCapsule';
 import keyboardIconOnWhite_png from '@/assets/images/joist/keyboardIconOnWhite_png'; // on a white navbar
 import keyboardIcon_png from '@/assets/images/joist/keyboardIcon_png'; // on a black navbar
-import joist from './joist';
-import JoistButton, { type JoistButtonOptions } from './JoistButton';
-import JoistStrings from './JoistStrings';
-import KeyboardHelpDialog from './KeyboardHelpDialog';
-import { type AnyScreen } from './Screen';
-import type PickRequired from '../phet-core/types/PickRequired';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
+import joist from '@/utils/joist/joist';
+import JoistButton, { type JoistButtonOptions } from '@/utils/joist/JoistButton';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import KeyboardHelpDialog from '@/utils/joist/KeyboardHelpDialog';
+import { type AnyScreen } from '@/utils/joist/Screen';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 // constants
 const keyboardShortcutsStringProperty = JoistStrings.a11y.keyboardHelp.keyboardShortcutsStringProperty;
@@ -72,7 +72,7 @@ class KeyboardHelpButton extends JoistButton {
 
     keyboardHelpDialogCapsule = new PhetioCapsule<KeyboardHelpDialog>(tandem => {
       return new KeyboardHelpDialog(screens, screenProperty, {
-        tandem: tandem,
+        tandem,
         focusOnHideNode: this
       });
     }, [], {

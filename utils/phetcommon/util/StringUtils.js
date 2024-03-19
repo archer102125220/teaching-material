@@ -8,7 +8,7 @@
 import _ from 'lodash';
 
 import localeInfoModule from '@/assets/chipper/localeInfoModule';
-import phetcommon from '../phetcommon';
+import phetcommon from '@/utils/phetcommon/phetcommon';
 
 // Unicode embedding marks that we use.
 const LTR = '\u202A';

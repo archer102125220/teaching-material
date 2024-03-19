@@ -9,23 +9,23 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../axon/BooleanProperty';
-import DerivedProperty from '../axon/DerivedProperty';
-import Utils from '../dot/Utils';
-import { Shape } from '../kite/imports';
-import merge from '../phet-core/merge';
-import optionize from '../phet-core/optionize';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import PhetColorScheme from '../scenery-phet/PhetColorScheme';
-import PhetFont from '../scenery-phet/PhetFont';
-import { FireListener, Node, PDOMPeer, Rectangle, Text, VBox, type VBoxOptions, Voicing, type VoicingOptions } from '../scenery/imports';
-import EventType from '../tandem/EventType';
-import Frame from './Frame';
-import HomeScreenModel from './HomeScreenModel';
-import joist from './joist';
-import Screen from './Screen';
-import Utterance from '../utterance-queue/Utterance';
-import type PickRequired from '../phet-core/types/PickRequired';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Utils from '@/utils/dot/Utils';
+import { Shape } from '@/utils/kite/imports';
+import merge from '@/utils/phet-core/merge';
+import optionize from '@/utils/phet-core/optionize';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { FireListener, Node, PDOMPeer, Rectangle, Text, VBox, type VBoxOptions, Voicing, type VoicingOptions } from '@/utils/scenery/imports';
+import EventType from '@/utils/tandem/EventType';
+import Frame from '@/utils/joist/Frame';
+import HomeScreenModel from '@/utils/joist/HomeScreenModel';
+import joist from '@/utils/joist/joist';
+import Screen from '@/utils/joist/Screen';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 // constants
 const LARGE_ICON_HEIGHT = 140;

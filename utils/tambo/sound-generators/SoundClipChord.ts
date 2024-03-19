@@ -6,15 +6,15 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../axon/DerivedProperty';
-import merge from '../../phet-core/merge';
-import optionize from '../../phet-core/optionize';
-import SoundClip, { type SoundClipOptions } from '../../tambo/sound-generators/SoundClip';
-import SoundGenerator, { type SoundGeneratorOptions } from '../../tambo/sound-generators/SoundGenerator';
-import tambo from '../tambo';
-import WrappedAudioBuffer from '../WrappedAudioBuffer';
-import type TSoundPlayer from '../TSoundPlayer';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import merge from '@/utils/phet-core/merge';
+import optionize from '@/utils/phet-core/optionize';
+import SoundClip, { type SoundClipOptions } from '@/utils/tambo/sound-generators/SoundClip';
+import SoundGenerator, { type SoundGeneratorOptions } from '@/utils/tambo/sound-generators/SoundGenerator';
+import tambo from '@/utils/tambo/tambo';
+import WrappedAudioBuffer from '@/utils/tambo/WrappedAudioBuffer';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 type SelfOptions = {
 

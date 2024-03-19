@@ -7,12 +7,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import RectangularPushButton, { RectangularPushButtonOptions } from '../../../sun/js/buttons/RectangularPushButton.js';
-import sceneryPhet from '../../../scenery-phet/js/sceneryPhet.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import ReturnIcon, { ReturnIconOptions } from '../ReturnIcon.js';
-import PhetColorScheme from '../PhetColorScheme.js';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import ReturnIcon, { type ReturnIconOptions } from '@/utils/scenery-phet/ReturnIcon';
+import PhetColorScheme from '@/utils/scenery-phet//PhetColorScheme';
 
 type SelfOptions = {
   iconOptions?: ReturnIconOptions;
@@ -22,20 +22,20 @@ export type ReturnButtonOptions = SelfOptions & StrictOmit<RectangularPushButton
 
 export default class ReturnButton extends RectangularPushButton {
 
-  public constructor( providedOptions?: ReturnButtonOptions ) {
+  public constructor(providedOptions?: ReturnButtonOptions) {
 
-    const options = optionize<ReturnButtonOptions, StrictOmit<SelfOptions, 'iconOptions'>, RectangularPushButtonOptions>()( {
+    const options = optionize<ReturnButtonOptions, StrictOmit<SelfOptions, 'iconOptions'>, RectangularPushButtonOptions>()({
 
       // RectangularPushButtonOptions
       xMargin: 5,
       yMargin: 5,
       baseColor: PhetColorScheme.BUTTON_YELLOW
-    }, providedOptions );
+    }, providedOptions);
 
-    options.content = new ReturnIcon( options.iconOptions );
+    options.content = new ReturnIcon(options.iconOptions);
 
-    super( options );
+    super(options);
   }
 }
 
-sceneryPhet.register( 'ReturnButton', ReturnButton );
+sceneryPhet.register('ReturnButton', ReturnButton);

@@ -49,10 +49,10 @@
 
 import _ from 'lodash';
 
-import CallbackTimer from '../../axon/CallbackTimer';
-import optionize from '../../phet-core/optionize';
-import { type EnglishKey, EnglishStringToCodeMap, FocusManager, globalKeyStateTracker, scenery, SceneryEvent, type TInputListener } from '../imports';
-import KeyboardUtils from '../accessibility/KeyboardUtils';
+import CallbackTimer from '@/utils/axon/CallbackTimer';
+import optionize from '@/utils/phet-core/optionize';
+import { type EnglishKey, EnglishStringToCodeMap, FocusManager, globalKeyStateTracker, scenery, SceneryEvent, type TInputListener } from '@/utils/scenery/imports';
+import KeyboardUtils from '@/utils/scenery/accessibility/KeyboardUtils';
 
 // NOTE: The typing for ModifierKey and OneKeyStroke is limited TypeScript, there is a limitation to the number of
 //       entries in a union type. If that limitation is not acceptable remove this typing. OR maybe TypeScript will

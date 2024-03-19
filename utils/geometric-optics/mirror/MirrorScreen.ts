@@ -7,18 +7,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Screen, { type ScreenOptions } from '../../joist/Screen';
-import ScreenIcon from '../../joist/ScreenIcon';
-import GOColors from '../common/GOColors';
-import geometricOptics from '../geometricOptics';
-import GeometricOpticsStrings from '../GeometricOpticsStrings';
-import MirrorModel from './model/MirrorModel';
-import MirrorNode from './view/MirrorNode';
-import MirrorScreenView from './view/MirrorScreenView';
-import { type OpticSurfaceType } from '../common/model/OpticSurfaceType';
-import optionize from '../../phet-core/optionize';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import { type GOSimOptions } from '../GOSim';
+import Screen, { type ScreenOptions } from '@/utils/joist/Screen';
+import ScreenIcon from '@/utils/joist/ScreenIcon';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import MirrorModel from '@/utils/geometric-optics/mirror/model/MirrorModel';
+import MirrorNode from '@/utils/geometric-optics/mirror/view/MirrorNode';
+import MirrorScreenView from '@/utils/geometric-optics/mirror/view/MirrorScreenView';
+import { type OpticSurfaceType } from '@/utils/geometric-optics/common/model/OpticSurfaceType';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { type GOSimOptions } from '@/utils/geometric-optics/GOSim';
 
 type SelfOptions = PickRequired<GOSimOptions, 'isBasicsVersion'>;
 

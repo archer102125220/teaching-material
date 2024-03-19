@@ -6,11 +6,11 @@
  * @author Aaron Davis (PhET Interactive Simulations)
  */
 
-import { DerivedProperty5 } from '../../axon/DerivedProperty';
-import sun from '../sun';
-import RadioButtonInteractionState from './RadioButtonInteractionState';
-import type TProperty from '../../axon/TProperty';
-import ButtonModel from './ButtonModel';
+import { DerivedProperty5 } from '@/utils/axon/DerivedProperty';
+import sun from '@/utils/sun/sun';
+import RadioButtonInteractionState from '@/utils/sun/buttons/RadioButtonInteractionState';
+import type TProperty from '@/utils/axon/TProperty';
+import ButtonModel from '@/utils/sun/buttons/ButtonModel';
 
 export default class RadioButtonInteractionStateProperty<T> extends DerivedProperty5<RadioButtonInteractionState, boolean, boolean, boolean, boolean, T> {
 

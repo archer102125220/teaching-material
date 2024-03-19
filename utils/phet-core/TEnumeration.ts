@@ -1,6 +1,6 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
-import EnumerationValue from './EnumerationValue';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
 
 /**
  * Abstraction used by EnumerationProperty, and implemented by Enumeration.ts
@@ -19,13 +19,13 @@ type TEnumeration<T extends EnumerationValue> = {
   readonly phetioDocumentation?: string;
 
   // Lookup a value for a key
-  getValue( key: string ): T;
+  getValue(key: string): T;
 
   // Reverse-lookup, find the key for the value, for PhET-iO deserialization
-  getKey( value: T ): string;
+  getKey(value: T): string;
 
   // Determines whether the value is in the enumeration
-  includes( value: T ): boolean;
+  includes(value: T): boolean;
 };
 
 type EnumerationContainer<T extends EnumerationValue> = {

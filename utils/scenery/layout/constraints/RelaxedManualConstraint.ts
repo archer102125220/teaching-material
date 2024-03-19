@@ -8,8 +8,8 @@
 
 import _ from 'lodash';
 
-import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
-import { LayoutCell, LayoutConstraint, LayoutProxy, Node, scenery } from '../../imports';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import { LayoutCell, LayoutConstraint, LayoutProxy, Node, scenery } from '@/utils/scenery/imports';
 
 // Turns a tuple of things into a tuple of LayoutProxies/null
 type LayoutProxyMap<T> = {

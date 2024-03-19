@@ -12,29 +12,31 @@
  * @author Martin Veillette (Berea College)
  */
 
-import DerivedProperty from '../axon/DerivedProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Multilink from '../axon/Multilink';
-import Property from '../axon/Property';
-import Bounds2 from '../dot/Bounds2';
-import Utils from '../dot/Utils';
-import Vector2 from '../dot/Vector2';
-import Vector2Property from '../dot/Vector2Property';
-import { Shape } from '../kite/imports';
-import InstanceRegistry from '../phet-core/documentation/InstanceRegistry';
-import optionize from '../phet-core/optionize';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import StringUtils from '../phetcommon/util/StringUtils';
-import ModelViewTransform2 from '../phetcommon/view/ModelViewTransform2';
-import { Circle, DragListener, Font, Image, InteractiveHighlightingNode, KeyboardDragListener, Line, Node, type NodeOptions, type NodeTranslationOptions, Path, type PressListenerEvent, Rectangle, type TColor, Text } from '../scenery/imports';
-import NumberIO from '../tandem/types/NumberIO';
+import _ from 'lodash';
+
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Multilink from '@/utils/axon/Multilink';
+import Property from '@/utils/axon/Property';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import Vector2Property from '@/utils/dot/Vector2Property';
+import { Shape } from '@/utils/kite/imports';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { Circle, DragListener, Font, Image, InteractiveHighlightingNode, KeyboardDragListener, Line, Node, type NodeOptions, type NodeTranslationOptions, Path, type PressListenerEvent, Rectangle, type TColor, Text } from '@/utils/scenery/imports';
+import NumberIO from '@/utils/tandem/types/NumberIO';
 import measuringTape_png from '@/assets/images/scenery-phet/measuringTape_png';
-import PhetFont from './PhetFont';
-import sceneryPhet from './sceneryPhet';
-import SceneryPhetStrings from './SceneryPhetStrings';
-import type TProperty from '../axon/TProperty';
-import DerivedStringProperty from '../axon/DerivedStringProperty';
-import Tandem from '../tandem/Tandem';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import type TProperty from '@/utils/axon/TProperty';
+import DerivedStringProperty from '@/utils/axon/DerivedStringProperty';
+import Tandem from '@/utils/tandem/Tandem';
 
 export type MeasuringTapeUnits = {
   name: string;

@@ -11,42 +11,42 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-export { default as kite } from './kite';
+export { default as kite } from '@/utils/kite/kite';
 
-export { default as LineStyles, LINE_STYLE_DEFAULT_OPTIONS } from './util/LineStyles';
-export type { LineStylesOptions, LineCap, LineJoin } from './util/LineStyles';
-export { default as Overlap } from './util/Overlap';
-export { default as RayIntersection } from './util/RayIntersection';
-export { default as SegmentIntersection } from './util/SegmentIntersection';
-export { default as svgNumber } from './util/svgNumber';
-export { default as intersectConicMatrices } from './util/intersectConicMatrices';
-export { default as svgPath } from './parser/svgPath';
+export { default as LineStyles, LINE_STYLE_DEFAULT_OPTIONS } from '@/utils/kite/util/LineStyles';
+export type { LineStylesOptions, LineCap, LineJoin } from '@/utils/kite/util/LineStyles';
+export { default as Overlap } from '@/utils/kite/util/Overlap';
+export { default as RayIntersection } from '@/utils/kite/util/RayIntersection';
+export { default as SegmentIntersection } from '@/utils/kite/util/SegmentIntersection';
+export { default as svgNumber } from '@/utils/kite/util/svgNumber';
+export { default as intersectConicMatrices } from '@/utils/kite/util/intersectConicMatrices';
+export { default as svgPath } from '@/utils/kite/parser/svgPath';
 
-export { default as Segment } from './segments/Segment';
-export type { ClosestToPointResult, PiecewiseLinearOptions, DashValues, SerializedSegment } from './segments/Segment';
-export { default as Line } from './segments/Line';
-export type { SerializedLine } from './segments/Line';
-export { default as Quadratic } from './segments/Quadratic';
-export type { SerializedQuadratic } from './segments/Quadratic';
-export { default as Cubic } from './segments/Cubic';
-export type { SerializedCubic } from './segments/Cubic';
-export { default as Arc } from './segments/Arc';
-export type { SerializedArc } from './segments/Arc';
-export { default as EllipticalArc } from './segments/EllipticalArc';
-export type { SerializedEllipticalArc } from './segments/EllipticalArc';
+export { default as Segment } from '@/utils/kite/segments/Segment';
+export type { ClosestToPointResult, PiecewiseLinearOptions, DashValues, SerializedSegment } from '@/utils/kite/segments/Segment';
+export { default as Line } from '@/utils/kite/segments/Line';
+export type { SerializedLine } from '@/utils/kite/segments/Line';
+export { default as Quadratic } from '@/utils/kite/segments/Quadratic';
+export type { SerializedQuadratic } from '@/utils/kite/segments/Quadratic';
+export { default as Cubic } from '@/utils/kite/segments/Cubic';
+export type { SerializedCubic } from '@/utils/kite/segments/Cubic';
+export { default as Arc } from '@/utils/kite/segments/Arc';
+export type { SerializedArc } from '@/utils/kite/segments/Arc';
+export { default as EllipticalArc } from '@/utils/kite/segments/EllipticalArc';
+export type { SerializedEllipticalArc } from '@/utils/kite/segments/EllipticalArc';
 
-export { default as Subpath } from './util/Subpath';
-export { default as Shape } from './Shape';
-export type { CornerRadiiOptions, SerializedShape, NonlinearTransformedOptions } from './Shape';
+export { default as Subpath } from '@/utils/kite/util/Subpath';
+export { default as Shape } from '@/utils/kite/Shape';
+export type { CornerRadiiOptions, SerializedShape, NonlinearTransformedOptions } from '@/utils/kite/Shape';
 
-export { default as HalfEdge } from './ops/HalfEdge';
-export { default as Vertex } from './ops/Vertex';
-export { default as Edge } from './ops/Edge';
-export { default as Face } from './ops/Face';
-export { default as Loop } from './ops/Loop';
-export { default as Boundary } from './ops/Boundary';
-export { default as BoundsIntersection } from './ops/BoundsIntersection';
-export { default as SegmentTree } from './ops/SegmentTree';
-export { default as EdgeSegmentTree } from './ops/EdgeSegmentTree';
-export { default as VertexSegmentTree } from './ops/VertexSegmentTree';
-export { default as Graph } from './ops/Graph';
+export { default as HalfEdge } from '@/utils/kite/ops/HalfEdge';
+export { default as Vertex } from '@/utils/kite/ops/Vertex';
+export { default as Edge } from '@/utils/kite/ops/Edge';
+export { default as Face } from '@/utils/kite/ops/Face';
+export { default as Loop } from '@/utils/kite/ops/Loop';
+export { default as Boundary } from '@/utils/kite/ops/Boundary';
+export { default as BoundsIntersection } from '@/utils/kite/ops/BoundsIntersection';
+export { default as SegmentTree } from '@/utils/kite/ops/SegmentTree';
+export { default as EdgeSegmentTree } from '@/utils/kite/ops/EdgeSegmentTree';
+export { default as VertexSegmentTree } from '@/utils/kite/ops/VertexSegmentTree';
+export { default as Graph } from '@/utils/kite/ops/Graph';

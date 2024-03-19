@@ -7,9 +7,9 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import axon from './axon';
-import PropertyStateHandler from './PropertyStateHandler';
+import axon from '@/utils/axon/axon';
+import PropertyStateHandler from '@/utils/axon/PropertyStateHandler';
 
 const propertyStateHandlerSingleton = new PropertyStateHandler();
-axon.register( 'propertyStateHandlerSingleton', propertyStateHandlerSingleton );
+axon.register('propertyStateHandlerSingleton', propertyStateHandlerSingleton);
 export default propertyStateHandlerSingleton;

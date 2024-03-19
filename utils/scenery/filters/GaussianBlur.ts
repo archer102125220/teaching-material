@@ -10,8 +10,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../dot/toSVGNumber';
-import { CanvasContextWrapper, Filter, scenery, svgns } from '../imports';
+import toSVGNumber from '@/utils/dot/toSVGNumber';
+import { CanvasContextWrapper, Filter, scenery, svgns } from '@/utils/scenery/imports';
 
 export default class GaussianBlur extends Filter {
 

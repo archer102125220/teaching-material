@@ -1,9 +1,5 @@
 {
   "name": "teaching-material",
-  "phet": {
-    "chipperSupportsOutputJSGruntTasks": true,
-    "supportsOutputJS": true
-  },
   "scripts": {
     "build": "nuxi build && node build-utils.mjs",
     "dev": "nuxt dev",

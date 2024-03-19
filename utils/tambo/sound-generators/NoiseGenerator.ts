@@ -6,12 +6,12 @@
  * @author John Blanco
  */
 
-import dotRandom from '../../../dot/js/dotRandom.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
-import soundConstants from '../soundConstants.js';
-import tambo from '../tambo.js';
-import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
+import dotRandom from '@/utils/dot/dotRandom';
+import optionize from '@/utils/phet-core/optionize';
+import audioContextStateChangeMonitor from '@/utils/tambo/audioContextStateChangeMonitor';
+import soundConstants from '@/utils/tambo/soundConstants';
+import tambo from '@/utils/tambo/tambo';
+import SoundGenerator, { type SoundGeneratorOptions } from '@/utils/tambo/sound-generators/SoundGenerator';
 
 type SelfOptions = {
   noiseType?: 'pink' | 'white' | 'brown';
@@ -73,11 +73,11 @@ class NoiseGenerator extends SoundGenerator {
   private timeOfDeferredStartRequest: number;
 
   // function that handles changes to the audio context
-  private readonly audioContextStateChangeListener: ( state: string ) => void;
+  private readonly audioContextStateChangeListener: (state: string) => void;
 
-  public constructor( providedOptions?: NoiseGeneratorOptions ) {
+  public constructor(providedOptions?: NoiseGeneratorOptions) {
 
-    const options = optionize<NoiseGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
+    const options = optionize<NoiseGeneratorOptions, SelfOptions, SoundGeneratorOptions>()({
       noiseType: 'pink',
       lowPassCutoffFrequency: null,
       highPassCutoffFrequency: null,
@@ -87,44 +87,44 @@ class NoiseGenerator extends SoundGenerator {
       lfoInitialFrequency: 2,
       lfoInitialDepth: 1,
       lfoType: 'sine'
-    }, providedOptions );
+    }, providedOptions);
 
     window.assert && window.assert(
-      [ 'white', 'pink', 'brown' ].includes( options.noiseType ),
+      ['white', 'pink', 'brown'].includes(options.noiseType),
       `invalid noise type: ${options.noiseType}`
     );
 
     window.assert && window.assert(
-    options.lfoInitialDepth >= 0 && options.lfoInitialDepth <= 1,
+      options.lfoInitialDepth >= 0 && options.lfoInitialDepth <= 1,
       `invalid value for lfoInitialDepth: ${options.lfoInitialDepth}`
     );
 
-    super( options );
+    super(options);
 
     const now = this.audioContext.currentTime;
 
     // if specified, create the low-pass filter
     let lowPassFilter;
-    if ( options.lowPassCutoffFrequency ) {
+    if (options.lowPassCutoffFrequency) {
       lowPassFilter = this.audioContext.createBiquadFilter();
       lowPassFilter.type = 'lowpass';
-      lowPassFilter.frequency.setValueAtTime( options.lowPassCutoffFrequency, now );
+      lowPassFilter.frequency.setValueAtTime(options.lowPassCutoffFrequency, now);
     }
 
     // if specified, create the high-pass filter
     let highPassFilter;
-    if ( options.highPassCutoffFrequency ) {
+    if (options.highPassCutoffFrequency) {
       highPassFilter = this.audioContext.createBiquadFilter();
       highPassFilter.type = 'highpass';
-      highPassFilter.frequency.setValueAtTime( options.highPassCutoffFrequency, now );
+      highPassFilter.frequency.setValueAtTime(options.highPassCutoffFrequency, now);
     }
 
     // if specified, create the band-pass filter
-    if ( options.qFactor && options.centerFrequency ) {
+    if (options.qFactor && options.centerFrequency) {
       this.bandPassFilter = this.audioContext.createBiquadFilter();
       this.bandPassFilter.type = 'bandpass';
-      this.bandPassFilter.frequency.setValueAtTime( options.centerFrequency, now );
-      this.bandPassFilter.Q.setValueAtTime( options.qFactor, now );
+      this.bandPassFilter.frequency.setValueAtTime(options.centerFrequency, now);
+      this.bandPassFilter.Q.setValueAtTime(options.qFactor, now);
     }
     else {
       this.bandPassFilter = null;
@@ -132,17 +132,17 @@ class NoiseGenerator extends SoundGenerator {
 
     // define the noise data
     const noiseBufferSize = NOISE_BUFFER_SECONDS * this.audioContext.sampleRate;
-    this.noiseBuffer = this.audioContext.createBuffer( 1, noiseBufferSize, this.audioContext.sampleRate );
-    const data = this.noiseBuffer.getChannelData( 0 );
+    this.noiseBuffer = this.audioContext.createBuffer(1, noiseBufferSize, this.audioContext.sampleRate);
+    const data = this.noiseBuffer.getChannelData(0);
 
     // fill in the sample buffer based on the noise type
     let white;
-    if ( options.noiseType === 'white' ) {
-      for ( let i = 0; i < noiseBufferSize; i++ ) {
-        data[ i ] = dotRandom.nextDouble() * 2 - 1;
+    if (options.noiseType === 'white') {
+      for (let i = 0; i < noiseBufferSize; i++) {
+        data[i] = dotRandom.nextDouble() * 2 - 1;
       }
     }
-    else if ( options.noiseType === 'pink' ) {
+    else if (options.noiseType === 'pink') {
       let b0 = 0;
       let b1 = 0;
       let b2 = 0;
@@ -150,7 +150,7 @@ class NoiseGenerator extends SoundGenerator {
       let b4 = 0;
       let b5 = 0;
       let b6 = 0;
-      for ( let i = 0; i < noiseBufferSize; i++ ) {
+      for (let i = 0; i < noiseBufferSize; i++) {
         white = dotRandom.nextDouble() * 2 - 1;
         b0 = 0.99886 * b0 + white * 0.0555179;
         b1 = 0.99332 * b1 + white * 0.0750759;
@@ -158,22 +158,22 @@ class NoiseGenerator extends SoundGenerator {
         b3 = 0.86650 * b3 + white * 0.3104856;
         b4 = 0.55000 * b4 + white * 0.5329522;
         b5 = -0.7616 * b5 - white * 0.0168980;
-        data[ i ] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
-        data[ i ] *= 0.11; // adjust to 0dB, empirically determined, will be approximate due to randomness of data
+        data[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+        data[i] *= 0.11; // adjust to 0dB, empirically determined, will be approximate due to randomness of data
         b6 = white * 0.115926;
       }
     }
-    else if ( options.noiseType === 'brown' ) {
+    else if (options.noiseType === 'brown') {
       let lastOut = 0;
-      for ( let i = 0; i < noiseBufferSize; i++ ) {
+      for (let i = 0; i < noiseBufferSize; i++) {
         white = dotRandom.nextDouble() * 2 - 1;
-        data[ i ] = ( lastOut + ( 0.02 * white ) ) / 1.02;
-        lastOut = data[ i ];
-        data[ i ] *= 3.5; // adjust to 0dB, empirically determined, will be approximate due to randomness of data
+        data[i] = (lastOut + (0.02 * white)) / 1.02;
+        lastOut = data[i];
+        data[i] *= 3.5; // adjust to 0dB, empirically determined, will be approximate due to randomness of data
       }
     }
     else {
-      throw new Error( `unexpected value for noiseType: ${options.noiseType}` );
+      throw new Error(`unexpected value for noiseType: ${options.noiseType}`);
     }
 
     // the source node from which the noise is played, set when play is called
@@ -184,40 +184,40 @@ class NoiseGenerator extends SoundGenerator {
     this.lfo.type = options.lfoType;
 
     // initialize LFO frequency, updated through methods defined below
-    this.lfo.frequency.setValueAtTime( options.lfoInitialFrequency, now );
+    this.lfo.frequency.setValueAtTime(options.lfoInitialFrequency, now);
     this.lfo.start();
 
     // set up the gain stage that will attenuate the LFO output so that it will range from -0.5 to +0.5
     this.lfoAttenuatorGainNode = this.audioContext.createGain();
     this.lfoAttenuatorGainNode.gain.value = options.lfoInitialDepth / 2;
-    this.lfo.connect( this.lfoAttenuatorGainNode );
+    this.lfo.connect(this.lfoAttenuatorGainNode);
 
     // set up the gain stage for the LFO - the main sound path will run through here
     this.lfoControlledGainNode = this.audioContext.createGain();
     this.lfoControlledGainNode.gain.value = 0.5; // this value is added to the attenuated LFO output value
 
     // set the initial enabled state of the LFO
-    if ( options.lfoInitiallyEnabled ) {
-      this.lfoAttenuatorGainNode.gain.setTargetAtTime( 0.5, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT );
-      this.lfoAttenuatorGainNode.connect( this.lfoControlledGainNode.gain );
+    if (options.lfoInitiallyEnabled) {
+      this.lfoAttenuatorGainNode.gain.setTargetAtTime(0.5, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT);
+      this.lfoAttenuatorGainNode.connect(this.lfoControlledGainNode.gain);
     }
     else {
-      this.lfoAttenuatorGainNode.gain.setTargetAtTime( 1, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT );
+      this.lfoAttenuatorGainNode.gain.setTargetAtTime(1, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT);
     }
 
     // wire up the audio path, working our way from the output back to the sound source(s)
-    this.lfoControlledGainNode.connect( this.soundSourceDestination );
+    this.lfoControlledGainNode.connect(this.soundSourceDestination);
     let nextOutputToConnect = this.lfoControlledGainNode;
-    if ( highPassFilter ) {
-      highPassFilter.connect( nextOutputToConnect );
+    if (highPassFilter) {
+      highPassFilter.connect(nextOutputToConnect);
       nextOutputToConnect = highPassFilter;
     }
-    if ( lowPassFilter ) {
-      lowPassFilter.connect( nextOutputToConnect );
+    if (lowPassFilter) {
+      lowPassFilter.connect(nextOutputToConnect);
       nextOutputToConnect = lowPassFilter;
     }
-    if ( this.bandPassFilter ) {
-      this.bandPassFilter.connect( nextOutputToConnect );
+    if (this.bandPassFilter) {
+      this.bandPassFilter.connect(nextOutputToConnect);
       nextOutputToConnect = this.bandPassFilter;
     }
 
@@ -228,7 +228,7 @@ class NoiseGenerator extends SoundGenerator {
     // define the listener for audio context state transitions
     this.audioContextStateChangeListener = state => {
 
-      if ( state === 'running' && this.isPlaying ) {
+      if (state === 'running' && this.isPlaying) {
 
         this.start();
 
@@ -245,19 +245,19 @@ class NoiseGenerator extends SoundGenerator {
    * Start the noise source.
    * @param [delay] - optional delay for when to start the noise source, in seconds
    */
-  public start( delay = 0 ): void {
+  public start(delay = 0): void {
 
-    if ( this.audioContext.state === 'running' ) {
+    if (this.audioContext.state === 'running') {
 
       const now = this.audioContext.currentTime;
 
       // only do something if not already playing, otherwise ignore this request
-      if ( !this.isPlaying ) {
+      if (!this.isPlaying) {
         this.noiseSource = this.audioContext.createBufferSource();
         this.noiseSource.buffer = this.noiseBuffer;
         this.noiseSource.loop = true;
-        this.noiseSource.connect( this.noiseSourceConnectionPoint );
-        this.noiseSource.start( now + delay );
+        this.noiseSource.connect(this.noiseSourceConnectionPoint);
+        this.noiseSource.start(now + delay);
       }
     }
     else {
@@ -265,7 +265,7 @@ class NoiseGenerator extends SoundGenerator {
       // This method was called when the audio context was not yet running, so add a listener to start if and when the
       // audio context state changes.
       this.timeOfDeferredStartRequest = Date.now();
-      if ( !audioContextStateChangeMonitor.hasListener( this.audioContext, this.audioContextStateChangeListener ) ) {
+      if (!audioContextStateChangeMonitor.hasListener(this.audioContext, this.audioContextStateChangeListener)) {
         audioContextStateChangeMonitor.addStateChangeListener(
           this.audioContext,
           this.audioContextStateChangeListener
@@ -281,11 +281,11 @@ class NoiseGenerator extends SoundGenerator {
    * Stop the noise source.
    * @param [time] - optional audio context time at which this should be stopped
    */
-  public stop( time = 0 ): void {
+  public stop(time = 0): void {
 
     // only stop if playing, otherwise ignore
-    if ( this.isPlaying && this.noiseSource ) {
-      this.noiseSource.stop( time );
+    if (this.isPlaying && this.noiseSource) {
+      this.noiseSource.stop(time);
       this.noiseSource = null;
     }
     this.isPlaying = false;
@@ -294,43 +294,43 @@ class NoiseGenerator extends SoundGenerator {
   /**
    * Set the frequency of the low frequency amplitude modulator (LFO).
    */
-  public setLfoFrequency( frequency: number ): void {
-    this.lfo.frequency.setTargetAtTime( frequency, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT );
+  public setLfoFrequency(frequency: number): void {
+    this.lfo.frequency.setTargetAtTime(frequency, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT);
   }
 
   /**
    * Set the depth of the LFO modulator.
    * @param depth - depth value from 0 (no modulation) to 1 (max modulation)
    */
-  public setLfoDepth( depth: number ): void {
-    this.lfoAttenuatorGainNode.gain.setTargetAtTime( depth / 2, this.audioContext.currentTime, LFO_DEPTH_CHANGE_TIME_CONSTANT );
+  public setLfoDepth(depth: number): void {
+    this.lfoAttenuatorGainNode.gain.setTargetAtTime(depth / 2, this.audioContext.currentTime, LFO_DEPTH_CHANGE_TIME_CONSTANT);
   }
 
   /**
    * Turn the low frequency amplitude modulation on/off.
    */
-  public setLfoEnabled( enabled: boolean ): void {
-    if ( enabled ) {
-      this.lfoAttenuatorGainNode.gain.setTargetAtTime( 0.5, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT );
-      this.lfoAttenuatorGainNode.connect( this.lfoControlledGainNode.gain );
+  public setLfoEnabled(enabled: boolean): void {
+    if (enabled) {
+      this.lfoAttenuatorGainNode.gain.setTargetAtTime(0.5, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT);
+      this.lfoAttenuatorGainNode.connect(this.lfoControlledGainNode.gain);
     }
     else {
-      this.lfoAttenuatorGainNode.disconnect( this.lfoControlledGainNode.gain );
-      this.lfoAttenuatorGainNode.gain.setTargetAtTime( 1, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT );
+      this.lfoAttenuatorGainNode.disconnect(this.lfoControlledGainNode.gain);
+      this.lfoAttenuatorGainNode.gain.setTargetAtTime(1, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT);
     }
   }
 
   /**
    * set the Q value for the band pass filter, assumes that noise generator was created with this filter enabled
    */
-  public setBandpassFilterCenterFrequency( frequency: number, timeConstant: number ): void {
+  public setBandpassFilterCenterFrequency(frequency: number, timeConstant: number): void {
     timeConstant = timeConstant || PARAMETER_CHANGE_TIME_CONSTANT;
-    if ( this.bandPassFilter !== null ) {
-      this.bandPassFilter.frequency.setTargetAtTime( frequency, this.audioContext.currentTime, timeConstant );
+    if (this.bandPassFilter !== null) {
+      this.bandPassFilter.frequency.setTargetAtTime(frequency, this.audioContext.currentTime, timeConstant);
     }
   }
 }
 
-tambo.register( 'NoiseGenerator', NoiseGenerator );
+tambo.register('NoiseGenerator', NoiseGenerator);
 
 export default NoiseGenerator;

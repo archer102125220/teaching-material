@@ -8,14 +8,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { HBox, Node } from '../../../../scenery/imports';
-import Panel, { type PanelOptions } from '../../../../sun/Panel';
-import geometricOptics from '../../../geometricOptics';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/optionize';
-import type PickRequired from '../../../../phet-core/types/PickRequired';
-import GOToolNode from './GOToolNode';
-import Bounds2 from '../../../../dot/Bounds2';
-import Vector2 from '../../../../dot/Vector2';
+import { HBox, Node } from '@/utils/scenery/imports';
+import Panel, { type PanelOptions } from '@/utils/sun/Panel';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import GOToolNode from '@/utils/geometric-optics/common/view/tools/GOToolNode';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
 
 type SelfOptions = EmptySelfOptions;
 

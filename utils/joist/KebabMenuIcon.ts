@@ -7,9 +7,9 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Shape } from '../kite/imports';
-import { Path, type PathOptions } from '../scenery/imports';
-import joist from './joist';
+import { Shape } from '@/utils/kite/imports';
+import { Path, type PathOptions } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
 
 // constants
 const CIRCLE_RADIUS = 2.5;

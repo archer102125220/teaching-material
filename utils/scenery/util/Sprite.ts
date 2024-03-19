@@ -6,11 +6,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import type TProperty from '../../axon/TProperty';
-import Property from '../../axon/Property';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import { scenery, SpriteImage } from '../imports';
+import type TProperty from '@/utils/axon/TProperty';
+import Property from '@/utils/axon/Property';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import { scenery, SpriteImage } from '@/utils/scenery/imports';
 
 export default class Sprite {
 

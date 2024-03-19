@@ -9,9 +9,9 @@
 
 import _ from 'lodash';
 
-import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType';
-import StateSchema from './StateSchema';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import StateSchema from '@/utils/tandem/types/StateSchema';
 
 const NumberIO = new IOType<number, number>( 'NumberIO', {
   valueType: 'number',

@@ -31,14 +31,14 @@
 
 import _ from 'lodash';
 
-import SingularValueDecomposition from '../../dot/SingularValueDecomposition';
-import Matrix from '../../dot/Matrix';
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { kite } from '../imports';
-import Complex from '../../dot/Complex';
-import Ray2 from '../../dot/Ray2';
-import Vector4 from '../../dot/Vector4';
+import SingularValueDecomposition from '@/utils/dot/SingularValueDecomposition';
+import Matrix from '@/utils/dot/Matrix';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { kite } from '@/utils/kite/imports';
+import Complex from '@/utils/dot/Complex';
+import Ray2 from '@/utils/dot/Ray2';
+import Vector4 from '@/utils/dot/Vector4';
 
 // Determinant of a 2x2 matrix
 const getDet2 = (a: Complex, b: Complex, c: Complex, d: Complex) => {

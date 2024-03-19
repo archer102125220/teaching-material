@@ -9,12 +9,12 @@
 
 import QUnit from 'qunit';
 
-import merge from '../../../phet-core/merge';
-import Display from '../../display/Display';
-import Node from '../../nodes/Node';
-import Rectangle from '../../nodes/Rectangle';
-import globalKeyStateTracker from '../globalKeyStateTracker';
-import KeyboardUtils from '../KeyboardUtils';
+import merge from '@/utils/phet-core/merge';
+import Display from '@/utils/scenery/display/Display';
+import Node from '@/utils/scenery/nodes/Node';
+import Rectangle from '@/utils/scenery/nodes/Rectangle';
+import globalKeyStateTracker from '@/utils/scenery/globalKeyStateTracker';
+import KeyboardUtils from '@/utils/scenery/KeyboardUtils';
 
 // constants
 const TEST_LABEL = 'Test Label';

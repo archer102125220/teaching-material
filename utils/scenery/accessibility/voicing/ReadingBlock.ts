@@ -19,19 +19,19 @@
 
 import _ from 'lodash';
 
-import TinyEmitter from '../../../axon/TinyEmitter';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import Bounds2 from '../../../dot/Bounds2';
-import { Shape } from '../../../kite/imports';
-import type Constructor from '../../../phet-core/types/Constructor';
-import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
-import ResponsePatternCollection from '../../../utterance-queue/ResponsePatternCollection';
-import { DelayedMutate, Focus, type Highlight, Node, PDOMInstance, ReadingBlockHighlight, ReadingBlockUtterance, type ReadingBlockUtteranceOptions, scenery, SceneryEvent, Voicing, voicingManager, type VoicingOptions } from '../../imports';
-import type TInputListener from '../../input/TInputListener';
-import { type ResolvedResponse, type VoicingResponse } from '../../../utterance-queue/ResponsePacket';
-import Utterance from '../../../utterance-queue/Utterance';
-import type TEmitter from '../../../axon/TEmitter';
-import memoize from '../../../phet-core/memoize';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Bounds2 from '@/utils/dot/Bounds2';
+import { Shape } from '@/utils/kite/imports';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import ResponsePatternCollection from '@/utils/utterance-queue/ResponsePatternCollection';
+import { DelayedMutate, Focus, type Highlight, Node, PDOMInstance, ReadingBlockHighlight, ReadingBlockUtterance, type ReadingBlockUtteranceOptions, scenery, SceneryEvent, Voicing, voicingManager, type VoicingOptions } from '@/utils/scenery/imports';
+import type TInputListener from '@/utils/scenery/input/TInputListener';
+import { type ResolvedResponse, type VoicingResponse } from '@/utils/utterance-queue/ResponsePacket';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import type TEmitter from '@/utils/axon/TEmitter';
+import memoize from '@/utils/phet-core/memoize';
 
 const READING_BLOCK_OPTION_KEYS = [
   'readingBlockTagName',

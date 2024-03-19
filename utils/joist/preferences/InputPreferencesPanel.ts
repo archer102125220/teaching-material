@@ -6,22 +6,22 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import merge from '../../phet-core/merge';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import StringUtils from '../../phetcommon/util/StringUtils';
-import { Node, Text, VBox, VoicingRichText } from '../../scenery/imports';
-import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
-import joist from '../joist';
-import JoistStrings from '../JoistStrings';
-import PreferencesDialog from './PreferencesDialog';
-import { type InputModel } from './PreferencesModel';
-import PreferencesPanel, { type PreferencesPanelOptions } from './PreferencesPanel';
-import PreferencesPanelSection from './PreferencesPanelSection';
-import PreferencesControl from './PreferencesControl';
-import PreferencesType from './PreferencesType';
-import PreferencesDialogConstants from './PreferencesDialogConstants';
-import { combineOptions } from '../../phet-core/optionize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import merge from '@/utils/phet-core/merge';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import { Node, Text, VBox, VoicingRichText } from '@/utils/scenery/imports';
+import ToggleSwitch, { type ToggleSwitchOptions } from '@/utils/sun/ToggleSwitch';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import { type InputModel } from '@/utils/joist/preferences/PreferencesModel';
+import PreferencesPanel, { type PreferencesPanelOptions } from '@/utils/joist/preferences/PreferencesPanel';
+import PreferencesPanelSection from '@/utils/joist/preferences/PreferencesPanelSection';
+import PreferencesControl from '@/utils/joist/preferences/PreferencesControl';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
+import PreferencesDialogConstants from '@/utils/joist/preferences/PreferencesDialogConstants';
+import { combineOptions } from '@/utils/phet-core/optionize';
 
 // constants
 const gestureControlEnabledAlertStringProperty = JoistStrings.a11y.preferences.tabs.input.gestureControl.enabledAlertStringProperty;

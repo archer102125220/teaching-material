@@ -8,17 +8,17 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { KeyboardListener, voicingUtteranceQueue } from '../../scenery/imports';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import resetAllSoundPlayer from '../../tambo/shared-sound-players/resetAllSoundPlayer';
-import optionize from '../../phet-core/optionize';
-import Tandem from '../../tandem/Tandem';
-import ActivationUtterance from '../../utterance-queue/ActivationUtterance';
-import PhetColorScheme from '../PhetColorScheme';
-import sceneryPhet from '../sceneryPhet';
-import SceneryPhetConstants from '../SceneryPhetConstants';
-import SceneryPhetStrings from '../SceneryPhetStrings';
-import ResetButton, { type ResetButtonOptions } from './ResetButton';
+import { KeyboardListener, voicingUtteranceQueue } from '@/utils/scenery/imports';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import resetAllSoundPlayer from '@/utils/tambo/shared-sound-players/resetAllSoundPlayer';
+import optionize from '@/utils/phet-core/optionize';
+import Tandem from '@/utils/tandem/Tandem';
+import ActivationUtterance from '@/utils/utterance-queue/ActivationUtterance';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetConstants from '@/utils/scenery-phet/SceneryPhetConstants';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import ResetButton, { type ResetButtonOptions } from '@/utils/scenery-phet/buttons/ResetButton';
 
 const MARGIN_COEFFICIENT = 5 / SceneryPhetConstants.DEFAULT_BUTTON_RADIUS;
 

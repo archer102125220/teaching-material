@@ -7,13 +7,11 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import phetCore from './phetCore';
-import Enumeration from './Enumeration';
-import EnumerationValue from './EnumerationValue';
-// @ts-expect-error
-import Constructor from './types/Constructor';
-// @ts-expect-error
-import IntentionalAny from './types/IntentionalAny';
+import phetCore from '@/utils/phet-core/phetCore';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 // So we don't introduce a dependency on phetcommon
 type MVT = {

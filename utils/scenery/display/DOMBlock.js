@@ -7,8 +7,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../phet-core/Poolable';
-import { Block, scenery } from '../imports';
+import Poolable from '@/utils/phet-core/Poolable';
+import { Block, scenery } from '@/utils/scenery/imports';
 
 class DOMBlock extends Block {
   /**

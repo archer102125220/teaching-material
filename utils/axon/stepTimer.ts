@@ -1,8 +1,8 @@
 // Copyright 2020-2024, University of Colorado Boulder
 // @author Sam Reid (PhET Interactive Simulations)
 
-import axon from './axon';
-import Timer from './Timer';
+import axon from '@/utils/axon/axon';
+import Timer from '@/utils/axon/Timer';
 
 /**
  * Register and return a singleton timer, which can be used to schedule events. This ticks under the following circumstances:

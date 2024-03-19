@@ -8,12 +8,12 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Ray2 from '../../dot/Ray2';
-import Utils from '../../dot/Utils';
-import Vector2 from '../../dot/Vector2';
-import { EllipticalArc, kite, Line, Overlap, RayIntersection, Segment, SegmentIntersection, svgNumber } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Ray2 from '@/utils/dot/Ray2';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import { EllipticalArc, kite, Line, Overlap, RayIntersection, Segment, SegmentIntersection, svgNumber } from '@/utils/kite/imports';
 
 // TODO: See if we should use this more https://github.com/phetsims/kite/issues/76
 const TWO_PI = Math.PI * 2;
@@ -319,9 +319,11 @@ export default class Arc extends Segment {
    * Gets the start position of this arc.
    */
   public getStart(): Vector2 {
+    console.log({ _start: this._start, _startAngle: this._startAngle });
     if (this._start === null) {
       this._start = this.positionAtAngle(this._startAngle);
     }
+    console.log({ _start: this._start, _startAngle: this._startAngle }, '_');
     return this._start;
   }
 
@@ -411,13 +413,17 @@ export default class Arc extends Segment {
    * Returns the bounds of this segment.
    */
   public getBounds(): Bounds2 {
+    // console.log('Arc.getBounds');
     if (this._bounds === null) {
+      // console.log('Arc.getBounds', { 'this.getStart()': this.getStart(), 'this.getEnd()': this.getEnd() });
+
       // acceleration for intersection
       this._bounds = Bounds2.NOTHING.copy().withPoint(this.getStart())
         .withPoint(this.getEnd());
 
       // if the angles are different, check extrema points
       if (this._startAngle !== this._endAngle) {
+        // console.log('Arc.getBounds', { 'this._startAngle !== this._endAngle': this._startAngle !== this._endAngle, _startAngle: this._startAngle, _endAngle: this._endAngle });
         // check all of the extrema points
         this.includeBoundsAtAngle(0);
         this.includeBoundsAtAngle(Math.PI / 2);
@@ -425,6 +431,8 @@ export default class Arc extends Segment {
         this.includeBoundsAtAngle(3 * Math.PI / 2);
       }
     }
+
+    // console.log({ _bounds: this._bounds });
     return this._bounds;
   }
 
@@ -494,6 +502,7 @@ export default class Arc extends Segment {
    * Returns the position of this arc at angle.
    */
   public positionAtAngle(angle: number): Vector2 {
+    console.log({ _radius: this._radius, angle });
     return this._center.plus(Vector2.createPolar(this._radius, angle));
   }
 
@@ -528,7 +537,7 @@ export default class Arc extends Segment {
    */
   public getSVGPathFragment(): string {
     let oldPathFragment;
-    if (assert) {
+    if (window.assert) {
       oldPathFragment = this._svgPathFragment;
       this._svgPathFragment = null;
     }
@@ -560,9 +569,9 @@ export default class Arc extends Segment {
         this._svgPathFragment = `${firstArc} ${secondArc}`;
       }
     }
-    if (assert) {
+    if (window.assert) {
       if (oldPathFragment) {
-        assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
+        window.assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
       }
     }
     return this._svgPathFragment;
@@ -983,7 +992,7 @@ export default class Arc extends Segment {
         results = [base];
       }
     }
-    if (assert) {
+    if (window.assert) {
       results.forEach(result => {
         assert!(Math.abs(result.distance(center1) - radius1) < 1e-8);
         assert!(Math.abs(result.distance(center2) - radius2) < 1e-8);

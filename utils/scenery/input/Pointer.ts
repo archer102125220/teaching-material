@@ -24,15 +24,15 @@
 
 import _ from 'lodash';
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import type TProperty from '../../axon/TProperty';
-import Vector2 from '../../dot/Vector2';
-import Enumeration from '../../phet-core/Enumeration';
-import EnumerationValue from '../../phet-core/EnumerationValue';
-import IOType from '../../tandem/types/IOType';
-import StringIO from '../../tandem/types/StringIO';
-import type TAttachableInputListener from './TAttachableInputListener';
-import { EventContext, scenery, SceneryEvent, type TInputListener, Trail } from '../imports';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import IOType from '@/utils/tandem/types/IOType';
+import StringIO from '@/utils/tandem/types/StringIO';
+import type TAttachableInputListener from '@/utils/scenery/input/TAttachableInputListener';
+import { EventContext, scenery, SceneryEvent, type TInputListener, Trail } from '@/utils/scenery/imports';
 
 export class Intent extends EnumerationValue {
   // listener attached to the pointer will be used for dragging

@@ -7,8 +7,8 @@
  * @author John Blanco
  */
 
-import { Shape } from '../kite/imports';
-import sceneryPhet from './sceneryPhet';
+import { Shape } from '@/utils/kite/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 export default class ResetShape extends Shape {
 

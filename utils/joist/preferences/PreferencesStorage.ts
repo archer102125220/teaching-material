@@ -9,9 +9,9 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import TProperty from '../../../axon/js/TProperty.js';
-import joist from '../joist.js';
-import IntentionalAny from '../../../phet-core/js/types/IntentionalAny.js';
+import type TProperty from '@/utils/axon/TProperty';
+import joist from '@/utils/joist/joist.js';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 let preferencesStorage: PreferencesStorage | null = null;
 
@@ -29,17 +29,17 @@ class PreferencesStorage {
     try {
 
       // Always store the line indices just in case they want to be used by the next run.
-      window.localStorage.setItem( 'test', 'test' );
+      window.localStorage.setItem('test', 'test');
     }
-    catch( e ) {
+    catch (e) {
       this.enabled = false; // can't use localStorage with browser settings
 
-      if ( e instanceof Error ) {
-        const safari = window.navigator.userAgent.includes( 'Safari' ) && !window.navigator.userAgent.includes( 'Chrome' );
+      if (e instanceof Error) {
+        const safari = window.navigator.userAgent.includes('Safari') && !window.navigator.userAgent.includes('Chrome');
 
-        if ( safari && e.message.includes( 'QuotaExceededError' ) ) {
-          console.log( 'It looks like you are browsing with private mode in Safari. ' +
-                       'Please turn that setting off if you want to use PreferencesStorage' );
+        if (safari && e.message.includes('QuotaExceededError')) {
+          console.log('It looks like you are browsing with private mode in Safari. ' +
+            'Please turn that setting off if you want to use PreferencesStorage');
         }
         else {
           throw e;
@@ -48,33 +48,33 @@ class PreferencesStorage {
     }
   }
 
-  private registerToLocalStorage( property: TProperty<unknown>, name: string ): void {
+  private registerToLocalStorage(property: TProperty<unknown>, name: string): void {
     const key = `${PREFERENCES_KEY}${name}`;
-    if ( window.localStorage.getItem( key ) ) {
-      property.value = JSON.parse( window.localStorage.getItem( key )! );
+    if (window.localStorage.getItem(key)) {
+      property.value = JSON.parse(window.localStorage.getItem(key)!);
     }
-    property.link( ( value: IntentionalAny ) => {
-      window.localStorage.setItem( key, JSON.stringify( value ) );
-    } );
-    this.registedProperties.push( property );
+    property.link((value: IntentionalAny) => {
+      window.localStorage.setItem(key, JSON.stringify(value));
+    });
+    this.registedProperties.push(property);
   }
 
-  public static register( property: TProperty<unknown>, name: string ): TProperty<unknown> {
-    if ( !phet.chipper.queryParameters.preferencesStorage ) {
+  public static register(property: TProperty<unknown>, name: string): TProperty<unknown> {
+    if (!phet.chipper.queryParameters.preferencesStorage) {
       return property;
     }
 
-    if ( !preferencesStorage ) {
+    if (!preferencesStorage) {
       preferencesStorage = new PreferencesStorage();
     }
 
-    if ( preferencesStorage.enabled ) {
-      preferencesStorage.registerToLocalStorage( property, name );
+    if (preferencesStorage.enabled) {
+      preferencesStorage.registerToLocalStorage(property, name);
     }
 
     return property;
   }
 }
 
-joist.register( 'PreferencesStorage', PreferencesStorage );
+joist.register('PreferencesStorage', PreferencesStorage);
 export default PreferencesStorage;

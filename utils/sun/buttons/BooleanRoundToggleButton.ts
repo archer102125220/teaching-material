@@ -6,14 +6,14 @@
  * @author Sam Reid
  */
 
-import Tandem from '../../tandem/Tandem';
-import BooleanToggleNode from '../BooleanToggleNode';
-import sun from '../sun';
-import RoundToggleButton, { type RoundToggleButtonOptions } from './RoundToggleButton';
-import { Node } from '../../scenery/imports';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Property from '../../axon/Property';
+import Tandem from '@/utils/tandem/Tandem';
+import BooleanToggleNode from '@/utils/sun/BooleanToggleNode';
+import sun from '@/utils/sun/sun';
+import RoundToggleButton, { type RoundToggleButtonOptions } from '@/utils/sun/buttons/RoundToggleButton';
+import { Node } from '@/utils/scenery/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Property from '@/utils/axon/Property';
 
 type SelfOptions = EmptySelfOptions;
 

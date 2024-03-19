@@ -9,9 +9,9 @@
 import _ from 'lodash';
 import QUnit from 'qunit';
 
-import Bounds2 from '../../dot/Bounds2';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
 import {
   CanvasNode,
   Color,
@@ -30,7 +30,7 @@ import {
   Utils,
   VStrut,
   WebGLNode
-} from '../imports.js';
+} from '@/utils/scenery/imports.js';
 
 QUnit.module('Trail');
 

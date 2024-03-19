@@ -8,8 +8,8 @@
  * @author Matt Pennington
  */
 
-import dot from './dot';
-import Utils from './Utils';
+import dot from '@/utils/dot/dot';
+import Utils from '@/utils/dot/Utils';
 
 class Complex {
   /**

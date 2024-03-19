@@ -6,16 +6,18 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import TProperty from '../../../axon/js/TProperty.js';
-import Bounds2 from '../../../dot/js/Bounds2.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import { Shape } from '../../../kite/js/imports.js';
-import IntentionalAny from '../../../phet-core/js/types/IntentionalAny.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import Touch from '../input/Touch.js';
-import Node from './Node.js';
-import Rectangle from './Rectangle.js';
+import QUnit from 'qunit';
+
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import Tandem from '@/utils/tandem/Tandem';
+import Touch from '@/utils/scenery/input/Touch';
+import Node from '@/utils/scenery/nodes/Node';
+import Rectangle from '@/utils/scenery/nodes/Rectangle';
 
 QUnit.module('Node');
 
@@ -30,26 +32,26 @@ QUnit.test('Mouse and Touch areas', assert => {
 
   node.addChild(rect);
 
-  window.assert.ok(!!rect.hitTest(new Vector2(10, 10)), 'Rectangle intersection');
-  window.assert.ok(!!rect.hitTest(new Vector2(90, 10)), 'Rectangle intersection');
-  window.assert.ok(!rect.hitTest(new Vector2(-10, 10)), 'Rectangle no intersection');
+  assert.ok(!!rect.hitTest(new Vector2(10, 10)), 'Rectangle intersection');
+  assert.ok(!!rect.hitTest(new Vector2(90, 10)), 'Rectangle intersection');
+  assert.ok(!rect.hitTest(new Vector2(-10, 10)), 'Rectangle no intersection');
 
   node.touchArea = Shape.rectangle(-50, -50, 100, 100);
 
-  window.assert.ok(!!node.hitTest(new Vector2(10, 10)), 'Node intersection');
-  window.assert.ok(!!node.hitTest(new Vector2(90, 10)), 'Node intersection');
-  window.assert.ok(!node.hitTest(new Vector2(-10, 10)), 'Node no intersection');
+  assert.ok(!!node.hitTest(new Vector2(10, 10)), 'Node intersection');
+  assert.ok(!!node.hitTest(new Vector2(90, 10)), 'Node intersection');
+  assert.ok(!node.hitTest(new Vector2(-10, 10)), 'Node no intersection');
 
-  window.assert.ok(!!node.trailUnderPointer(fakeTouchPointer(new Vector2(10, 10))), 'Node intersection (isTouch)');
-  window.assert.ok(!!node.trailUnderPointer(fakeTouchPointer(new Vector2(90, 10))), 'Node intersection (isTouch)');
-  window.assert.ok(!!node.trailUnderPointer(fakeTouchPointer(new Vector2(-10, 10))), 'Node intersection (isTouch)');
+  assert.ok(!!node.trailUnderPointer(fakeTouchPointer(new Vector2(10, 10))), 'Node intersection (isTouch)');
+  assert.ok(!!node.trailUnderPointer(fakeTouchPointer(new Vector2(90, 10))), 'Node intersection (isTouch)');
+  assert.ok(!!node.trailUnderPointer(fakeTouchPointer(new Vector2(-10, 10))), 'Node intersection (isTouch)');
 
   node.clipArea = Shape.rectangle(0, 0, 50, 50);
 
   // points outside the clip area shouldn't register as hits
-  window.assert.ok(!!node.trailUnderPointer(fakeTouchPointer(new Vector2(10, 10))), 'Node intersection (isTouch with clipArea)');
-  window.assert.ok(!node.trailUnderPointer(fakeTouchPointer(new Vector2(90, 10))), 'Node no intersection (isTouch with clipArea)');
-  window.assert.ok(!node.trailUnderPointer(fakeTouchPointer(new Vector2(-10, 10))), 'Node no intersection (isTouch with clipArea)');
+  assert.ok(!!node.trailUnderPointer(fakeTouchPointer(new Vector2(10, 10))), 'Node intersection (isTouch with clipArea)');
+  assert.ok(!node.trailUnderPointer(fakeTouchPointer(new Vector2(90, 10))), 'Node no intersection (isTouch with clipArea)');
+  assert.ok(!node.trailUnderPointer(fakeTouchPointer(new Vector2(-10, 10))), 'Node no intersection (isTouch with clipArea)');
 });
 
 
@@ -62,23 +64,23 @@ QUnit.test('Points (parent and child)', assert => {
   a.x = 10;
   b.y = 10;
 
-  window.assert.ok(new Vector2(5, 15).equalsEpsilon(b.localToParentPoint(new Vector2(5, 5)), epsilon), 'localToParentPoint on child');
-  window.assert.ok(new Vector2(15, 5).equalsEpsilon(a.localToParentPoint(new Vector2(5, 5)), epsilon), 'localToParentPoint on root');
+  assert.ok(new Vector2(5, 15).equalsEpsilon(b.localToParentPoint(new Vector2(5, 5)), epsilon), 'localToParentPoint on child');
+  assert.ok(new Vector2(15, 5).equalsEpsilon(a.localToParentPoint(new Vector2(5, 5)), epsilon), 'localToParentPoint on root');
 
-  window.assert.ok(new Vector2(5, -5).equalsEpsilon(b.parentToLocalPoint(new Vector2(5, 5)), epsilon), 'parentToLocalPoint on child');
-  window.assert.ok(new Vector2(-5, 5).equalsEpsilon(a.parentToLocalPoint(new Vector2(5, 5)), epsilon), 'parentToLocalPoint on root');
+  assert.ok(new Vector2(5, -5).equalsEpsilon(b.parentToLocalPoint(new Vector2(5, 5)), epsilon), 'parentToLocalPoint on child');
+  assert.ok(new Vector2(-5, 5).equalsEpsilon(a.parentToLocalPoint(new Vector2(5, 5)), epsilon), 'parentToLocalPoint on root');
 
-  window.assert.ok(new Vector2(15, 15).equalsEpsilon(b.localToGlobalPoint(new Vector2(5, 5)), epsilon), 'localToGlobalPoint on child');
-  window.assert.ok(new Vector2(15, 5).equalsEpsilon(a.localToGlobalPoint(new Vector2(5, 5)), epsilon), 'localToGlobalPoint on root (same as localToparent)');
+  assert.ok(new Vector2(15, 15).equalsEpsilon(b.localToGlobalPoint(new Vector2(5, 5)), epsilon), 'localToGlobalPoint on child');
+  assert.ok(new Vector2(15, 5).equalsEpsilon(a.localToGlobalPoint(new Vector2(5, 5)), epsilon), 'localToGlobalPoint on root (same as localToparent)');
 
-  window.assert.ok(new Vector2(-5, -5).equalsEpsilon(b.globalToLocalPoint(new Vector2(5, 5)), epsilon), 'globalToLocalPoint on child');
-  window.assert.ok(new Vector2(-5, 5).equalsEpsilon(a.globalToLocalPoint(new Vector2(5, 5)), epsilon), 'globalToLocalPoint on root (same as localToparent)');
+  assert.ok(new Vector2(-5, -5).equalsEpsilon(b.globalToLocalPoint(new Vector2(5, 5)), epsilon), 'globalToLocalPoint on child');
+  assert.ok(new Vector2(-5, 5).equalsEpsilon(a.globalToLocalPoint(new Vector2(5, 5)), epsilon), 'globalToLocalPoint on root (same as localToparent)');
 
-  window.assert.ok(new Vector2(15, 5).equalsEpsilon(b.parentToGlobalPoint(new Vector2(5, 5)), epsilon), 'parentToGlobalPoint on child');
-  window.assert.ok(new Vector2(5, 5).equalsEpsilon(a.parentToGlobalPoint(new Vector2(5, 5)), epsilon), 'parentToGlobalPoint on root');
+  assert.ok(new Vector2(15, 5).equalsEpsilon(b.parentToGlobalPoint(new Vector2(5, 5)), epsilon), 'parentToGlobalPoint on child');
+  assert.ok(new Vector2(5, 5).equalsEpsilon(a.parentToGlobalPoint(new Vector2(5, 5)), epsilon), 'parentToGlobalPoint on root');
 
-  window.assert.ok(new Vector2(-5, 5).equalsEpsilon(b.globalToParentPoint(new Vector2(5, 5)), epsilon), 'globalToParentPoint on child');
-  window.assert.ok(new Vector2(5, 5).equalsEpsilon(a.globalToParentPoint(new Vector2(5, 5)), epsilon), 'globalToParentPoint on root');
+  assert.ok(new Vector2(-5, 5).equalsEpsilon(b.globalToParentPoint(new Vector2(5, 5)), epsilon), 'globalToParentPoint on child');
+  assert.ok(new Vector2(5, 5).equalsEpsilon(a.globalToParentPoint(new Vector2(5, 5)), epsilon), 'globalToParentPoint on root');
 
 });
 
@@ -91,23 +93,23 @@ QUnit.test('Bounds (parent and child)', assert => {
 
   const bounds = new Bounds2(4, 4, 20, 30);
 
-  window.assert.ok(new Bounds2(4, 14, 20, 40).equalsEpsilon(b.localToParentBounds(bounds), epsilon), 'localToParentBounds on child');
-  window.assert.ok(new Bounds2(14, 4, 30, 30).equalsEpsilon(a.localToParentBounds(bounds), epsilon), 'localToParentBounds on root');
+  assert.ok(new Bounds2(4, 14, 20, 40).equalsEpsilon(b.localToParentBounds(bounds), epsilon), 'localToParentBounds on child');
+  assert.ok(new Bounds2(14, 4, 30, 30).equalsEpsilon(a.localToParentBounds(bounds), epsilon), 'localToParentBounds on root');
 
-  window.assert.ok(new Bounds2(4, -6, 20, 20).equalsEpsilon(b.parentToLocalBounds(bounds), epsilon), 'parentToLocalBounds on child');
-  window.assert.ok(new Bounds2(-6, 4, 10, 30).equalsEpsilon(a.parentToLocalBounds(bounds), epsilon), 'parentToLocalBounds on root');
+  assert.ok(new Bounds2(4, -6, 20, 20).equalsEpsilon(b.parentToLocalBounds(bounds), epsilon), 'parentToLocalBounds on child');
+  assert.ok(new Bounds2(-6, 4, 10, 30).equalsEpsilon(a.parentToLocalBounds(bounds), epsilon), 'parentToLocalBounds on root');
 
-  window.assert.ok(new Bounds2(14, 14, 30, 40).equalsEpsilon(b.localToGlobalBounds(bounds), epsilon), 'localToGlobalBounds on child');
-  window.assert.ok(new Bounds2(14, 4, 30, 30).equalsEpsilon(a.localToGlobalBounds(bounds), epsilon), 'localToGlobalBounds on root (same as localToParent)');
+  assert.ok(new Bounds2(14, 14, 30, 40).equalsEpsilon(b.localToGlobalBounds(bounds), epsilon), 'localToGlobalBounds on child');
+  assert.ok(new Bounds2(14, 4, 30, 30).equalsEpsilon(a.localToGlobalBounds(bounds), epsilon), 'localToGlobalBounds on root (same as localToParent)');
 
-  window.assert.ok(new Bounds2(-6, -6, 10, 20).equalsEpsilon(b.globalToLocalBounds(bounds), epsilon), 'globalToLocalBounds on child');
-  window.assert.ok(new Bounds2(-6, 4, 10, 30).equalsEpsilon(a.globalToLocalBounds(bounds), epsilon), 'globalToLocalBounds on root (same as localToParent)');
+  assert.ok(new Bounds2(-6, -6, 10, 20).equalsEpsilon(b.globalToLocalBounds(bounds), epsilon), 'globalToLocalBounds on child');
+  assert.ok(new Bounds2(-6, 4, 10, 30).equalsEpsilon(a.globalToLocalBounds(bounds), epsilon), 'globalToLocalBounds on root (same as localToParent)');
 
-  window.assert.ok(new Bounds2(14, 4, 30, 30).equalsEpsilon(b.parentToGlobalBounds(bounds), epsilon), 'parentToGlobalBounds on child');
-  window.assert.ok(new Bounds2(4, 4, 20, 30).equalsEpsilon(a.parentToGlobalBounds(bounds), epsilon), 'parentToGlobalBounds on root');
+  assert.ok(new Bounds2(14, 4, 30, 30).equalsEpsilon(b.parentToGlobalBounds(bounds), epsilon), 'parentToGlobalBounds on child');
+  assert.ok(new Bounds2(4, 4, 20, 30).equalsEpsilon(a.parentToGlobalBounds(bounds), epsilon), 'parentToGlobalBounds on root');
 
-  window.assert.ok(new Bounds2(-6, 4, 10, 30).equalsEpsilon(b.globalToParentBounds(bounds), epsilon), 'globalToParentBounds on child');
-  window.assert.ok(new Bounds2(4, 4, 20, 30).equalsEpsilon(a.globalToParentBounds(bounds), epsilon), 'globalToParentBounds on root');
+  assert.ok(new Bounds2(-6, 4, 10, 30).equalsEpsilon(b.globalToParentBounds(bounds), epsilon), 'globalToParentBounds on child');
+  assert.ok(new Bounds2(4, 4, 20, 30).equalsEpsilon(a.globalToParentBounds(bounds), epsilon), 'globalToParentBounds on root');
 });
 
 QUnit.test('Points (order of transforms)', assert => {
@@ -120,10 +122,10 @@ QUnit.test('Points (order of transforms)', assert => {
   b.scale(2);
   c.y = 10;
 
-  window.assert.ok(new Vector2(20, 30).equalsEpsilon(c.localToGlobalPoint(new Vector2(5, 5)), epsilon), 'localToGlobalPoint');
-  window.assert.ok(new Vector2(-2.5, -7.5).equalsEpsilon(c.globalToLocalPoint(new Vector2(5, 5)), epsilon), 'globalToLocalPoint');
-  window.assert.ok(new Vector2(20, 10).equalsEpsilon(c.parentToGlobalPoint(new Vector2(5, 5)), epsilon), 'parentToGlobalPoint');
-  window.assert.ok(new Vector2(-2.5, 2.5).equalsEpsilon(c.globalToParentPoint(new Vector2(5, 5)), epsilon), 'globalToParentPoint');
+  assert.ok(new Vector2(20, 30).equalsEpsilon(c.localToGlobalPoint(new Vector2(5, 5)), epsilon), 'localToGlobalPoint');
+  assert.ok(new Vector2(-2.5, -7.5).equalsEpsilon(c.globalToLocalPoint(new Vector2(5, 5)), epsilon), 'globalToLocalPoint');
+  assert.ok(new Vector2(20, 10).equalsEpsilon(c.parentToGlobalPoint(new Vector2(5, 5)), epsilon), 'parentToGlobalPoint');
+  assert.ok(new Vector2(-2.5, 2.5).equalsEpsilon(c.globalToParentPoint(new Vector2(5, 5)), epsilon), 'globalToParentPoint');
 });
 
 QUnit.test('Bounds (order of transforms)', assert => {
@@ -138,10 +140,10 @@ QUnit.test('Bounds (order of transforms)', assert => {
 
   const bounds = new Bounds2(4, 4, 20, 30);
 
-  window.assert.ok(new Bounds2(18, 28, 50, 80).equalsEpsilon(c.localToGlobalBounds(bounds), epsilon), 'localToGlobalBounds');
-  window.assert.ok(new Bounds2(-3, -8, 5, 5).equalsEpsilon(c.globalToLocalBounds(bounds), epsilon), 'globalToLocalBounds');
-  window.assert.ok(new Bounds2(18, 8, 50, 60).equalsEpsilon(c.parentToGlobalBounds(bounds), epsilon), 'parentToGlobalBounds');
-  window.assert.ok(new Bounds2(-3, 2, 5, 15).equalsEpsilon(c.globalToParentBounds(bounds), epsilon), 'globalToParentBounds');
+  assert.ok(new Bounds2(18, 28, 50, 80).equalsEpsilon(c.localToGlobalBounds(bounds), epsilon), 'localToGlobalBounds');
+  assert.ok(new Bounds2(-3, -8, 5, 5).equalsEpsilon(c.globalToLocalBounds(bounds), epsilon), 'globalToLocalBounds');
+  assert.ok(new Bounds2(18, 8, 50, 60).equalsEpsilon(c.parentToGlobalBounds(bounds), epsilon), 'parentToGlobalBounds');
+  assert.ok(new Bounds2(-3, 2, 5, 15).equalsEpsilon(c.globalToParentBounds(bounds), epsilon), 'globalToParentBounds');
 });
 
 QUnit.test('Trail and Node transform equivalence', assert => {
@@ -156,15 +158,15 @@ QUnit.test('Trail and Node transform equivalence', assert => {
 
   const trailMatrix = c.getUniqueTrail().getMatrix();
   const nodeMatrix = c.getUniqueTransform().getMatrix();
-  window.assert.ok(trailMatrix.equalsEpsilon(nodeMatrix, epsilon), 'Trail and Node transform equivalence');
+  assert.ok(trailMatrix.equalsEpsilon(nodeMatrix, epsilon), 'Trail and Node transform equivalence');
 });
 
 QUnit.test('Mutually exclusive options', assert => {
 
-  window.assert.ok(true, 'always true, even when assertions are not on.');
+  assert.ok(true, 'always true, even when assertions are not on.');
 
   const visibleProperty = new BooleanProperty(true);
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     return new Node({
       visible: false,
       visibleProperty
@@ -172,7 +174,7 @@ QUnit.test('Mutually exclusive options', assert => {
   }, 'visible and visibleProperty values do not match');
 
   const pickableProperty = new BooleanProperty(true);
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     return new Node({
       pickable: false,
       pickableProperty
@@ -180,7 +182,7 @@ QUnit.test('Mutually exclusive options', assert => {
   }, 'pickable and pickableProperty values do not match');
 
   const enabledProperty = new BooleanProperty(true);
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     return new Node({
       enabled: false,
       enabledProperty
@@ -188,7 +190,7 @@ QUnit.test('Mutually exclusive options', assert => {
   }, 'enabled and enabledProperty values do not match');
 
   const inputEnabledProperty = new BooleanProperty(true);
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     return new Node({
       inputEnabled: false,
       inputEnabledProperty
@@ -232,12 +234,12 @@ if (Tandem.PHET_IO_ENABLED) {
 
     const testNodeAndProperty = (node: Node, property: TProperty<IntentionalAny>) => {
       const initialValue = node[nodeField];
-      window.assert.ok(property.value === node[nodeField], 'initial values should be the same');
+      assert.ok(property.value === node[nodeField], 'initial values should be the same');
       // @ts-expect-error - no sure now to do this well in typescript
       node[nodeField] = !initialValue;
-      window.assert.ok(property.value === !initialValue, 'property should reflect node change');
+      assert.ok(property.value === !initialValue, 'property should reflect node change');
       property.value = initialValue;
-      window.assert.ok(node[nodeField] === initialValue, 'node should reflect property change');
+      assert.ok(node[nodeField] === initialValue, 'node should reflect property change');
 
       // @ts-expect-error - no sure now to do this well in typescript
       node[nodeField] = initialValue;
@@ -255,14 +257,14 @@ if (Tandem.PHET_IO_ENABLED) {
     // uninstrumentedNode => no property (before startup)
     let uninstrumented = new Node();
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(uninstrumented[nodeProperty]['targetProperty'] === undefined);
+    assert.ok(uninstrumented[nodeProperty]['targetProperty'] === undefined);
     // @ts-expect-error - no sure now to do this well in typescript
     testNodeAndProperty(uninstrumented, uninstrumented[nodeProperty]);
 
     // uninstrumentedNode => uninstrumented property (before startup)
     uninstrumented = new Node({ [nodeProperty]: uninstrumentedProperty });
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(uninstrumented[nodeProperty]['targetProperty'] === uninstrumentedProperty);
+    assert.ok(uninstrumented[nodeProperty]['targetProperty'] === uninstrumentedProperty);
     testNodeAndProperty(uninstrumented, uninstrumentedProperty);
 
     // uninstrumentedNode => instrumented property (before startup)
@@ -271,7 +273,7 @@ if (Tandem.PHET_IO_ENABLED) {
       [nodeProperty]: instrumentedProperty
     });
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(uninstrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
+    assert.ok(uninstrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
     testNodeAndProperty(uninstrumented, instrumentedProperty);
 
     //  uninstrumentedNode => instrumented property => instrument the Node (before startup) OK
@@ -281,7 +283,7 @@ if (Tandem.PHET_IO_ENABLED) {
     });
     uninstrumented.mutate({ tandem: Tandem.ROOT_TEST.createTandem(`${nodeField}MyNode`) });
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(uninstrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
+    assert.ok(uninstrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
     testNodeAndProperty(uninstrumented, instrumentedProperty);
     uninstrumented.dispose();
 
@@ -291,14 +293,14 @@ if (Tandem.PHET_IO_ENABLED) {
     // uninstrumentedNode => no property (before startup)
     uninstrumented = new Node();
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(uninstrumented[nodeProperty]['targetProperty'] === undefined);
+    assert.ok(uninstrumented[nodeProperty]['targetProperty'] === undefined);
     // @ts-expect-error - no sure now to do this well in typescript
     testNodeAndProperty(uninstrumented, uninstrumented[nodeProperty]);
 
     // uninstrumentedNode => uninstrumented property (before startup)
     uninstrumented = new Node({ [nodeProperty]: uninstrumentedProperty });
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(uninstrumented[nodeProperty]['targetProperty'] === uninstrumentedProperty);
+    assert.ok(uninstrumented[nodeProperty]['targetProperty'] === uninstrumentedProperty);
     testNodeAndProperty(uninstrumented, uninstrumentedProperty);
 
     // uninstrumentedNode => instrumented property (before startup)
@@ -307,7 +309,7 @@ if (Tandem.PHET_IO_ENABLED) {
       [nodeProperty]: instrumentedProperty
     });
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(uninstrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
+    assert.ok(uninstrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
     testNodeAndProperty(uninstrumented, instrumentedProperty);
 
     //  uninstrumentedNode => instrumented property => instrument the Node (before startup) OK
@@ -318,7 +320,7 @@ if (Tandem.PHET_IO_ENABLED) {
 
     uninstrumented.mutate({ tandem: Tandem.ROOT_TEST.createTandem(`${nodeField}MyNode`) });
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(uninstrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
+    assert.ok(uninstrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
     testNodeAndProperty(uninstrumented, instrumentedProperty);
     uninstrumented.dispose();
     apiValidation.simHasStarted = false;
@@ -334,9 +336,9 @@ if (Tandem.PHET_IO_ENABLED) {
       [phetioNodePropertyInstrumentedKeyName]: true
     });
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(instrumented[nodeProperty]['targetProperty'] === instrumented[nodeProperty].ownedPhetioProperty);
+    assert.ok(instrumented[nodeProperty]['targetProperty'] === instrumented[nodeProperty].ownedPhetioProperty);
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(instrumented['linkedElements'].length === 0, `no linked elements for default ${nodeProperty}`);
+    assert.ok(instrumented['linkedElements'].length === 0, `no linked elements for default ${nodeProperty}`);
     // @ts-expect-error - no sure now to do this well in typescript
     testNodeAndProperty(instrumented, instrumented[nodeProperty]);
     instrumented.dispose();
@@ -347,8 +349,8 @@ if (Tandem.PHET_IO_ENABLED) {
       [phetioNodePropertyInstrumentedKeyName]: true
     });
     // @ts-expect-error - no sure now to do this well in typescript
-    instrumented.hasOwnProperty('phetioNodePropertyInstrumentedKeyName') && window.assert.ok(instrumented[phetioNodePropertyInstrumentedKeyName] === true, 'getter should work');
-    window.assert && window.assert.throws(() => {
+    instrumented.hasOwnProperty('phetioNodePropertyInstrumentedKeyName') && assert.ok(instrumented[phetioNodePropertyInstrumentedKeyName] === true, 'getter should work');
+    window.assert && assert.throws(() => {
       instrumented.mutate({ [nodeProperty]: uninstrumentedProperty });
     }, `cannot remove instrumentation from the Node's ${nodeProperty}`);
     instrumented.dispose();
@@ -360,11 +362,11 @@ if (Tandem.PHET_IO_ENABLED) {
     });
     instrumented.mutate({ [nodeProperty]: instrumentedProperty });
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(instrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
+    assert.ok(instrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(instrumented['linkedElements'].length === 1, 'added linked element');
+    assert.ok(instrumented['linkedElements'].length === 1, 'added linked element');
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(instrumented['linkedElements'][0].element === instrumentedProperty,
+    assert.ok(instrumented['linkedElements'][0].element === instrumentedProperty,
       `added linked element should be for ${nodeProperty}`);
     testNodeAndProperty(instrumented, instrumentedProperty);
     instrumented.dispose();
@@ -374,11 +376,11 @@ if (Tandem.PHET_IO_ENABLED) {
       [nodeProperty]: instrumentedProperty
     });
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(instrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
+    assert.ok(instrumented[nodeProperty]['targetProperty'] === instrumentedProperty);
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(instrumented['linkedElements'].length === 1, 'added linked element');
+    assert.ok(instrumented['linkedElements'].length === 1, 'added linked element');
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(instrumented['linkedElements'][0].element === instrumentedProperty,
+    assert.ok(instrumented['linkedElements'][0].element === instrumentedProperty,
       `added linked element should be for ${nodeProperty}`);
     testNodeAndProperty(instrumented, instrumentedProperty);
     instrumented.dispose();
@@ -388,7 +390,7 @@ if (Tandem.PHET_IO_ENABLED) {
       tandem: Tandem.ROOT_TEST.createTandem(`${nodeField}MyNode`),
       [nodeProperty]: instrumentedProperty
     });
-    window.assert && window.assert.throws(() => {
+    window.assert && assert.throws(() => {
       instrumented.mutate({ [nodeProperty]: uninstrumentedProperty });
     }, `cannot remove instrumentation from the Node's ${nodeProperty}`);
     instrumented.dispose();
@@ -396,7 +398,7 @@ if (Tandem.PHET_IO_ENABLED) {
       tandem: Tandem.ROOT_TEST.createTandem(`${nodeField}MyNode`)
     });
     instrumented.mutate({ [nodeProperty]: instrumentedProperty });
-    window.assert && window.assert.throws(() => {
+    window.assert && assert.throws(() => {
       instrumented.mutate({ [nodeProperty]: uninstrumentedProperty });
     }, `cannot remove instrumentation from the Node's ${nodeProperty}`);
     instrumented.dispose();
@@ -409,9 +411,9 @@ if (Tandem.PHET_IO_ENABLED) {
       [phetioNodePropertyInstrumentedKeyName]: true
     });
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(instrumented1[nodeProperty]['targetProperty'] === instrumented1[nodeProperty].ownedPhetioProperty);
+    assert.ok(instrumented1[nodeProperty]['targetProperty'] === instrumented1[nodeProperty].ownedPhetioProperty);
     // @ts-expect-error - no sure now to do this well in typescript
-    window.assert.ok(instrumented1['linkedElements'].length === 0, `no linked elements for default ${nodeProperty}`);
+    assert.ok(instrumented1['linkedElements'].length === 0, `no linked elements for default ${nodeProperty}`);
     // @ts-expect-error - no sure now to do this well in typescript
     testNodeAndProperty(instrumented1, instrumented1[nodeProperty]);
 
@@ -420,7 +422,7 @@ if (Tandem.PHET_IO_ENABLED) {
       tandem: Tandem.ROOT_TEST.createTandem(`${nodeField}MyUniquelyNamedNodeThatWillNotBeDuplicated2`),
       [phetioNodePropertyInstrumentedKeyName]: true
     });
-    window.assert && window.assert.throws(() => {
+    window.assert && assert.throws(() => {
       // @ts-expect-error - no sure now to do this well in typescript
       instrumented2[nodePropertySetter](uninstrumentedProperty);
     }, `cannot remove instrumentation from the Node's ${nodeProperty}`);
@@ -431,7 +433,7 @@ if (Tandem.PHET_IO_ENABLED) {
       [nodeProperty]: instrumentedProperty
     });
 
-    window.assert && window.assert.throws(() => {
+    window.assert && assert.throws(() => {
       instrumented3.mutate({ [nodeProperty]: otherInstrumentedProperty });
     }, 'cannot swap out one instrumented for another');
 
@@ -440,13 +442,13 @@ if (Tandem.PHET_IO_ENABLED) {
       tandem: Tandem.ROOT_TEST.createTandem(`${nodeField}MyUniquelyNamedNodeThatWillNotBeDuplicated4`),
       [nodeProperty]: instrumentedProperty
     });
-    window.assert && window.assert.throws(() => {
+    window.assert && assert.throws(() => {
       instrumented4.mutate({ [nodeProperty]: uninstrumentedProperty });
     }, `cannot remove instrumentation from the Node's ${nodeProperty}`);
     const instrumented5 = new Node({});
     instrumented5.mutate({ [nodeProperty]: instrumentedProperty });
     instrumented5.mutate({ tandem: Tandem.ROOT_TEST.createTandem(`${nodeField}MyUniquelyNamedNodeThatWillNotBeDuplicated5`) });
-    window.assert && window.assert.throws(() => {
+    window.assert && assert.throws(() => {
       instrumented5.mutate({ [nodeProperty]: uninstrumentedProperty });
     }, `cannot remove instrumentation from the Node's ${nodeProperty}`);
     apiValidation.enabled = false;
@@ -482,7 +484,7 @@ if (Tandem.PHET_IO_ENABLED) {
       tandem: Tandem.ROOT_TEST.createTandem(`${nodeField}MyNode`),
       [phetioNodePropertyInstrumentedKeyName]: true
     });
-    window.assert && window.assert.throws(() => {
+    window.assert && assert.throws(() => {
       // @ts-expect-error - no sure now to do this well in typescript
       instrumented[nodePropertySetter](null);
     }, `cannot clear out an instrumented ${nodeProperty}`);
@@ -495,7 +497,7 @@ if (Tandem.PHET_IO_ENABLED) {
       instrumented = new Node({
         tandem: Tandem.ROOT_TEST.createTandem(`${nodeField}MyNode`)
       });
-      window.assert && window.assert.throws(() => {
+      window.assert && assert.throws(() => {
 
         // @ts-expect-error - no sure now to do this well in typescript
         instrumented[phetioNodePropertyInstrumentedKeyName] = true;

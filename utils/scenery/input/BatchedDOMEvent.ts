@@ -7,11 +7,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Enumeration from '../../phet-core/Enumeration';
-import EnumerationValue from '../../phet-core/EnumerationValue';
-import Pool, { type TPoolable } from '../../phet-core/Pool';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
-import { EventContext, Input, scenery } from '../imports';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import { EventContext, Input, scenery } from '@/utils/scenery/imports';
 
 export type BatchedDOMEventCallback = (...args: IntentionalAny[]) => void;
 

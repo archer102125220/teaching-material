@@ -11,10 +11,10 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../dot/Bounds2';
-import Vector2 from '../../dot/Vector2';
-import { Node, scenery, Trail } from '../imports';
-import { Shape } from '../../kite/imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import { Node, scenery, Trail } from '@/utils/scenery/imports';
+import { Shape } from '@/utils/kite/imports';
 
 export default class Picker {
 

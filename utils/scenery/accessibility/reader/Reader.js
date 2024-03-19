@@ -12,8 +12,8 @@
  * @author Jesse Greenberg
  */
 
-import Emitter from '../../../axon/Emitter';
-import { scenery } from '../../imports';
+import Emitter from '@/utils/axon/Emitter';
+import { scenery } from '@/utils/scenery/imports';
 
 class Reader {
   /**

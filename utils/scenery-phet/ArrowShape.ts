@@ -11,10 +11,12 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Vector2 from '../dot/Vector2';
-import { Shape } from '../kite/imports';
-import optionize from '../phet-core/optionize';
-import sceneryPhet from './sceneryPhet';
+import _ from 'lodash';
+
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 export type ArrowShapeOptions = {
   tailWidth?: number;

@@ -10,20 +10,20 @@
 
 import _ from 'lodash';
 
-import Tandem from '../tandem/Tandem';
-import IOType from '../tandem/types/IOType';
-import VoidIO from '../tandem/types/VoidIO';
-import axon from './axon';
-import Property, { type PropertyOptions } from './Property';
-import propertyStateHandlerSingleton from './propertyStateHandlerSingleton';
-import PropertyStatePhase from './PropertyStatePhase';
-import type TReadOnlyProperty from './TReadOnlyProperty';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import optionize from '../phet-core/optionize';
-import { type Dependencies, type RP1, type RP10, type RP11, type RP12, type RP13, type RP14, type RP15, type RP2, type RP3, type RP4, type RP5, type RP6, type RP7, type RP8, type RP9 } from './Multilink';
-import ReadOnlyProperty, { derivationStack } from './ReadOnlyProperty';
-import PhetioObject from '../tandem/PhetioObject';
-import IOTypeCache from '../tandem/IOTypeCache';
+import Tandem from '@/utils/tandem/Tandem';
+import IOType from '@/utils/tandem/types/IOType';
+import VoidIO from '@/utils/tandem/types/VoidIO';
+import axon from '@/utils/axon/axon';
+import Property, { type PropertyOptions } from '@/utils/axon/Property';
+import propertyStateHandlerSingleton from '@/utils/axon/propertyStateHandlerSingleton';
+import PropertyStatePhase from '@/utils/axon/PropertyStatePhase';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import optionize from '@/utils/phet-core/optionize';
+import { type Dependencies, type RP1, type RP10, type RP11, type RP12, type RP13, type RP14, type RP15, type RP2, type RP3, type RP4, type RP5, type RP6, type RP7, type RP8, type RP9 } from '@/utils/axon/Multilink';
+import ReadOnlyProperty, { derivationStack } from '@/utils/axon/ReadOnlyProperty';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 const DERIVED_PROPERTY_IO_PREFIX = 'DerivedPropertyIO';
 

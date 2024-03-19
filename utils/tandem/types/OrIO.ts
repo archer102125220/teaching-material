@@ -14,12 +14,12 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Validation from '../../axon/Validation';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
-import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType';
-import StateSchema from './StateSchema';
-import IOTypeCache from '../IOTypeCache';
+import Validation from '@/utils/axon/Validation';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import StateSchema from '@/utils/tandem/types/StateSchema';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 // cache each parameterized IOType so that it is only created once
 const cache = new IOTypeCache<string>();

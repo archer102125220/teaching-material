@@ -8,13 +8,11 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-// @ts-expect-error
-import IntentionalAny from '../phet-core/types/IntentionalAny';
-import IOType from '../tandem/types/IOType';
-import InfiniteNumberIO from '../tandem/types/InfiniteNumberIO';
-import dot from './dot';
-// @ts-expect-error
-import { StateObject } from '../tandem/types/StateSchema';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import IOType from '@/utils/tandem/types/IOType';
+import InfiniteNumberIO from '@/utils/tandem/types/InfiniteNumberIO';
+import dot from '@/utils/dot/dot';
+import { type StateObject } from '@/utils/tandem/types/StateSchema';
 
 export type TRange = {
   min: number;
@@ -39,7 +37,7 @@ class Range implements TRange {
    * @param min - the minimum value of the range
    * @param max - the maximum value of the range
    */
-  public constructor( min: number, max: number ) {
+  public constructor(min: number, max: number) {
     this._min = min;
     this._max = max;
   }
@@ -55,16 +53,16 @@ class Range implements TRange {
     return this.getMin();
   }
 
-  public set min( min: number ) {
-    this.setMin( min );
+  public set min(min: number) {
+    this.setMin(min);
   }
 
   /**
    * TODO: Allow chaining, https://github.com/phetsims/dot/issues/122
    * Setter for min
    */
-  public setMin( min: number ): void {
-    window.assert && window.assert( min <= this._max, `min must be <= max: ${min}` );
+  public setMin(min: number): void {
+    window.assert && window.assert(min <= this._max, `min must be <= max: ${min}`);
     this._min = min;
   }
 
@@ -79,23 +77,23 @@ class Range implements TRange {
     return this.getMax();
   }
 
-  public set max( max: number ) {
-    this.setMax( max );
+  public set max(max: number) {
+    this.setMax(max);
   }
 
   /**
    * Setter for max
    */
-  public setMax( max: number ): void {
-    window.assert && window.assert( this._min <= max, `max must be >= to min: ${max}` );
+  public setMax(max: number): void {
+    window.assert && window.assert(this._min <= max, `max must be >= to min: ${max}`);
     this._max = max;
   }
 
   /**
    * Sets the minimum and maximum value of the range
    */
-  public setMinMax( min: number, max: number ): this {
-    window.assert && window.assert( min <= max, `max must be >= to min. min: ${min}, max: ${max}` );
+  public setMinMax(min: number, max: number): this {
+    window.assert && window.assert(min <= max, `max must be >= to min. min: ${min}, max: ${max}`);
     this._min = min;
     this._max = max;
 
@@ -105,25 +103,25 @@ class Range implements TRange {
   /**
    * Sets the minimum and maximum value of this range from the provided Range.
    */
-  public set( range: Range ): this {
-    this.setMinMax( range.min, range.max );
+  public set(range: Range): this {
+    this.setMinMax(range.min, range.max);
     return this;
   }
 
-  public addValue( n: number ): void {
-    this._min = Math.min( this._min, n );
-    this._max = Math.max( this._max, n );
+  public addValue(n: number): void {
+    this._min = Math.min(this._min, n);
+    this._max = Math.max(this._max, n);
   }
 
-  public withValue( n: number ): Range {
-    return new Range( Math.min( this._min, n ), Math.max( this._max, n ) ); // eslint-disable-line no-html-constructors
+  public withValue(n: number): Range {
+    return new Range(Math.min(this._min, n), Math.max(this._max, n));
   }
 
   /**
    * Makes a copy of this range
    */
   public copy(): Range {
-    return new Range( this._min, this._max ); // eslint-disable-line no-html-constructors
+    return new Range(this._min, this._max);
   }
 
   /**
@@ -137,36 +135,36 @@ class Range implements TRange {
    * Gets the center of this range, that is the average value of the maximum and minimum value of this range
    */
   public getCenter(): number {
-    return ( this._max + this._min ) / 2;
+    return (this._max + this._min) / 2;
   }
 
   /**
    * Determines if this range contains the value
    */
-  public contains( value: number ): boolean {
-    return ( value >= this._min ) && ( value <= this._max );
+  public contains(value: number): boolean {
+    return (value >= this._min) && (value <= this._max);
   }
 
   /**
    * Does this range contain the specified range?
    */
-  public containsRange( range: Range ): boolean {
-    return ( this._min <= range.min ) && ( this._max >= range.max );
+  public containsRange(range: Range): boolean {
+    return (this._min <= range.min) && (this._max >= range.max);
   }
 
   /**
    * Determine if this range overlaps (intersects) with another range
    */
-  public intersects( range: Range ): boolean {
-    return ( this._max >= range.min ) && ( range.max >= this._min );
+  public intersects(range: Range): boolean {
+    return (this._max >= range.min) && (range.max >= this._min);
   }
 
   /**
    * Do the two ranges overlap with one another?  Note that this assumes that
    * This is a open interval.
    */
-  public intersectsExclusive( range: Range ): boolean {
-    return ( this._max > range.min ) && ( range.max > this._min );
+  public intersectsExclusive(range: Range): boolean {
+    return (this._max > range.min) && (range.max > this._min);
   }
 
   /**
@@ -178,10 +176,10 @@ class Range implements TRange {
    * The method below is the immutable form of the function includeRange(). The method will return a new range, and will not modify
    * this range.
    */
-  public union( range: Range ): Range {
-    return new Range( // eslint-disable-line no-html-constructors
-      Math.min( this.min, range.min ),
-      Math.max( this.max, range.max )
+  public union(range: Range): Range {
+    return new Range(
+      Math.min(this.min, range.min),
+      Math.max(this.max, range.max)
     );
   }
 
@@ -193,10 +191,10 @@ class Range implements TRange {
    * The method below the immutable form of the function constrainRange(). The method below will return a new range, and will not modify
    * this range.
    */
-  public intersection( range: Range ): Range {
-    return new Range( // eslint-disable-line no-html-constructors
-      Math.max( this.min, range.min ),
-      Math.min( this.max, range.max )
+  public intersection(range: Range): Range {
+    return new Range(
+      Math.max(this.min, range.min),
+      Math.min(this.max, range.max)
     );
   }
 
@@ -206,10 +204,10 @@ class Range implements TRange {
    * This is the mutable form of the function union(). This will mutate (change) this range, in addition to returning
    * this range itself.
    */
-  public includeRange( range: Range ): Range {
+  public includeRange(range: Range): Range {
     return this.setMinMax(
-      Math.min( this.min, range.min ),
-      Math.max( this.max, range.max )
+      Math.min(this.min, range.min),
+      Math.max(this.max, range.max)
     );
   }
 
@@ -219,10 +217,10 @@ class Range implements TRange {
    * This is the mutable form of the function intersection(). This will mutate (change) this range, in addition to returning
    * this range itself.
    */
-  public constrainRange( range: Range ): Range {
+  public constrainRange(range: Range): Range {
     return this.setMinMax(
-      Math.max( this.min, range.min ),
-      Math.min( this.max, range.max )
+      Math.max(this.min, range.min),
+      Math.min(this.max, range.max)
     );
   }
 
@@ -231,8 +229,8 @@ class Range implements TRange {
    *
    * Returns a new range that is the same as this range, but shifted by the specified amount.
    */
-  public shifted( n: number ): Range {
-    return new Range( this.min + n, this.max + n ); // eslint-disable-line no-html-constructors
+  public shifted(n: number): Range {
+    return new Range(this.min + n, this.max + n);
   }
 
   /**
@@ -245,35 +243,35 @@ class Range implements TRange {
   /**
    * Constrains a value to the range.
    */
-  public constrainValue( value: number ): number {
-    return Math.min( Math.max( value, this._min ), this._max );
+  public constrainValue(value: number): number {
+    return Math.min(Math.max(value, this._min), this._max);
   }
 
   /**
    * Determines if this Range is equal to some object.
    */
-  public equals( object: IntentionalAny ): boolean {
-    return ( this.constructor === object.constructor ) &&
-           ( this._min === object.min ) &&
-           ( this._max === object.max );
+  public equals(object: IntentionalAny): boolean {
+    return (this.constructor === object.constructor) &&
+      (this._min === object.min) &&
+      (this._max === object.max);
   }
 
   /**
    * Determines if this Range is approximately equal to some object.
    */
-  public equalsEpsilon( object: IntentionalAny, epsilon: number ): boolean {
-    return ( this.constructor === object.constructor ) &&
-           ( Math.abs( this._min - object.min ) <= epsilon ) &&
-           ( Math.abs( this._max - object.max ) <= epsilon );
+  public equalsEpsilon(object: IntentionalAny, epsilon: number): boolean {
+    return (this.constructor === object.constructor) &&
+      (Math.abs(this._min - object.min) <= epsilon) &&
+      (Math.abs(this._max - object.max) <= epsilon);
   }
 
   /**
    * Given a value, normalize it to this Range's length, returning a value between 0 and 1 for values contained in
    * the Range. If the value is not contained in Range, then the return value will not be between 0 and 1.
    */
-  public getNormalizedValue( value: number ): number {
-    window.assert && window.assert( this.getLength() !== 0, 'cannot get normalized value without a range length' );
-    return ( value - this.min ) / this.getLength();
+  public getNormalizedValue(value: number): number {
+    window.assert && window.assert(this.getLength() !== 0, 'cannot get normalized value without a range length');
+    return (value - this.min) / this.getLength();
   }
 
   /**
@@ -281,8 +279,8 @@ class Range implements TRange {
    * though, (even outside of the range). It is the client's responsibility to clamp if that is important to the
    * usage.
    */
-  public expandNormalizedValue( normalizedValue: number ): number {
-    window.assert && window.assert( this.getLength() !== 0, 'cannot get expand normalized value without a range length' );
+  public expandNormalizedValue(normalizedValue: number): number {
+    window.assert && window.assert(this.getLength() !== 0, 'cannot get expand normalized value without a range length');
     return normalizedValue * this.getLength() + this.min;
   }
 
@@ -291,44 +289,43 @@ class Range implements TRange {
    * This ES5 getter catches programming errors where defaultValue is still used with Range.
    */
   public get defaultValue(): number {
-    throw new Error( 'defaultValue is undefined, did you mean to use RangeWithValue?' );
+    throw new Error('defaultValue is undefined, did you mean to use RangeWithValue?');
   }
 
   public toStateObject(): RangeStateObject {
     return {
-      min: InfiniteNumberIO.toStateObject( this.min ),
-      max: InfiniteNumberIO.toStateObject( this.max )
+      min: InfiniteNumberIO.toStateObject(this.min),
+      max: InfiniteNumberIO.toStateObject(this.max)
     };
   }
 
   // Given a value and a delta to change that value, clamp the delta to make sure the value stays within range.
-  public clampDelta( value: number, delta: number ): number {
-    window.assert && window.assert( this.contains( value ) );
+  public clampDelta(value: number, delta: number): number {
+    window.assert && window.assert(this.contains(value));
     return value + delta < this.min ? this.min - value :
-           value + delta > this.max ? this.max - value :
-           delta;
+      value + delta > this.max ? this.max - value :
+        delta;
   }
 
-  public static fromStateObject( stateObject: RangeStateObject ): Range {
-    // eslint-disable-next-line no-html-constructors
+  public static fromStateObject(stateObject: RangeStateObject): Range {
     return new Range(
-      InfiniteNumberIO.fromStateObject( stateObject.min ),
-      InfiniteNumberIO.fromStateObject( stateObject.max )
+      InfiniteNumberIO.fromStateObject(stateObject.min),
+      InfiniteNumberIO.fromStateObject(stateObject.max)
     );
   }
 
-  public static RangeIO = new IOType<Range, RangeStateObject>( 'RangeIO', {
+  public static RangeIO = new IOType<Range, RangeStateObject>('RangeIO', {
     valueType: Range,
     documentation: 'A range with "min" and "max" members.',
     stateSchema: STATE_SCHEMA,
-    toStateObject: ( range: Range ) => range.toStateObject(),
-    fromStateObject: ( stateObject: RangeStateObject ) => Range.fromStateObject( stateObject )
-  } );
+    toStateObject: (range: Range) => range.toStateObject(),
+    fromStateObject: (stateObject: RangeStateObject) => Range.fromStateObject(stateObject)
+  });
 
-  public static readonly EVERYTHING = new Range( Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY ); // eslint-disable-line no-html-constructors
-  public static readonly NOTHING = new Range( Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY ); // eslint-disable-line no-html-constructors
+  public static readonly EVERYTHING = new Range(Number.NEGATIVE_INFINITY, Number.POSITIVE_INFINITY);
+  public static readonly NOTHING = new Range(Number.POSITIVE_INFINITY, Number.NEGATIVE_INFINITY);
 }
 
-dot.register( 'Range', Range );
+dot.register('Range', Range);
 
 export default Range;

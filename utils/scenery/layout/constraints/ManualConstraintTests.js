@@ -5,69 +5,70 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
+import QUnit from 'qunit';
 
-import Node from '../../nodes/Node.js';
-import Rectangle from '../../nodes/Rectangle.js';
-import ManualConstraint from './ManualConstraint.js';
+import Node from '@/utils/scenery/nodes/Node';
+import Rectangle from '@/utils/scenery/nodes/Rectangle';
+import ManualConstraint from '@/utils/scenery/layout/constraints/ManualConstraint';
 
-QUnit.module( 'ManualConstraint' );
+QUnit.module('ManualConstraint');
 
-QUnit.test( 'Identity', assert => {
-  const a = new Rectangle( 0, 0, 100, 50, { fill: 'red' } );
-  const b = new Rectangle( 0, 0, 100, 50, { fill: 'blue' } );
-  const aContainer = new Node( { children: [ a ] } );
-  const bContainer = new Node( { children: [ b ] } );
-  const root = new Node( { children: [ aContainer, bContainer ] } );
+QUnit.test('Identity', (assert) => {
+  const a = new Rectangle(0, 0, 100, 50, { fill: 'red' });
+  const b = new Rectangle(0, 0, 100, 50, { fill: 'blue' });
+  const aContainer = new Node({ children: [a] });
+  const bContainer = new Node({ children: [b] });
+  const root = new Node({ children: [aContainer, bContainer] });
 
-  ManualConstraint.create( root, [ a, b ], ( aProxy, bProxy ) => {
+  ManualConstraint.create(root, [a, b], (aProxy, bProxy) => {
     bProxy.left = aProxy.right;
-  } );
+  });
 
   root.validateBounds();
-  window.assert.equal( b.x, 100, 'x' );
+  assert.equal(b.x, 100, 'x');
 
   a.x = 100;
 
   root.validateBounds();
-  window.assert.equal( b.x, 200, 'x after 100' );
-} );
+  assert.equal(b.x, 200, 'x after 100');
+});
 
-QUnit.test( 'Translation', assert => {
-  const a = new Rectangle( 0, 0, 100, 50, { fill: 'red' } );
-  const b = new Rectangle( 0, 0, 100, 50, { fill: 'blue' } );
-  const aContainer = new Node( { children: [ a ] } );
-  const bContainer = new Node( { children: [ b ], x: 50 } );
-  const root = new Node( { children: [ aContainer, bContainer ] } );
+QUnit.test('Translation', (assert) => {
+  const a = new Rectangle(0, 0, 100, 50, { fill: 'red' });
+  const b = new Rectangle(0, 0, 100, 50, { fill: 'blue' });
+  const aContainer = new Node({ children: [a] });
+  const bContainer = new Node({ children: [b], x: 50 });
+  const root = new Node({ children: [aContainer, bContainer] });
 
-  ManualConstraint.create( root, [ a, b ], ( aProxy, bProxy ) => {
+  ManualConstraint.create(root, [a, b], (aProxy, bProxy) => {
     bProxy.left = aProxy.right;
-  } );
+  });
 
   root.validateBounds();
-  window.assert.equal( b.x, 50, 'x' );
+  assert.equal(b.x, 50, 'x');
 
   a.x = 100;
 
   root.validateBounds();
-  window.assert.equal( b.x, 150, 'x after 100' );
-} );
+  assert.equal(b.x, 150, 'x after 100');
+});
 
-QUnit.test( 'Scale', assert => {
-  const a = new Rectangle( 0, 0, 100, 50, { fill: 'red' } );
-  const b = new Rectangle( 0, 0, 100, 50, { fill: 'blue' } );
-  const aContainer = new Node( { children: [ a ], scale: 2 } );
-  const bContainer = new Node( { children: [ b ] } );
-  const root = new Node( { children: [ aContainer, bContainer ] } );
+QUnit.test('Scale', (assert) => {
+  const a = new Rectangle(0, 0, 100, 50, { fill: 'red' });
+  const b = new Rectangle(0, 0, 100, 50, { fill: 'blue' });
+  const aContainer = new Node({ children: [a], scale: 2 });
+  const bContainer = new Node({ children: [b] });
+  const root = new Node({ children: [aContainer, bContainer] });
 
-  ManualConstraint.create( root, [ a, b ], ( aProxy, bProxy ) => {
+  ManualConstraint.create(root, [a, b], (aProxy, bProxy) => {
     bProxy.left = aProxy.right;
-  } );
+  });
 
   root.validateBounds();
-  window.assert.equal( b.x, 200, 'x' );
+  assert.equal(b.x, 200, 'x');
 
   a.x = 100;
 
   root.validateBounds();
-  window.assert.equal( b.x, 400, 'x after 100' );
-} );
+  assert.equal(b.x, 400, 'x after 100');
+});

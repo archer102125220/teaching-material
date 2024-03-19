@@ -16,9 +16,9 @@
 
 import _ from 'lodash';
 
-import inheritance from './inheritance';
-import type IntentionalAny from './types/IntentionalAny';
-import phetCore from './phetCore';
+import inheritance from '@/utils/phet-core/inheritance';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import phetCore from '@/utils/phet-core/phetCore';
 
 const assertHasProperties = (object: IntentionalAny, properties: string[]): void => {
   if (assert && object) {

@@ -7,7 +7,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { scenery, sceneryDeserialize, scenerySerialize } from '../imports';
+import { scenery, sceneryDeserialize, scenerySerialize } from '@/utils/scenery/imports';
 
 const sceneryCopy = (value: unknown): unknown => {
   return sceneryDeserialize(scenerySerialize(value));

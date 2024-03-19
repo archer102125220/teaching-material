@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import scenery from '../scenery';
-import { allowLinksProperty } from '../imports';
+import scenery from '@/utils/scenery/scenery';
+import { allowLinksProperty } from '@/utils/scenery/imports';
 
 /**
  * Opens the URL in a new window or tab.

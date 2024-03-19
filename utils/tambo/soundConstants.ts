@@ -6,7 +6,7 @@
  * @author John Blanco
  */
 
-import tambo from './tambo';
+import tambo from '@/utils/tambo/tambo';
 
 // instance definition
 const soundConstants = {

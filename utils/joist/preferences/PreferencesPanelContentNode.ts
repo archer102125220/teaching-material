@@ -8,10 +8,10 @@
  *
  */
 
-import joist from '../joist.js';
-import { Node, VBox } from '../../../scenery/js/imports.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import Panel, { PanelOptions } from '../../../sun/js/Panel.js';
+import joist from '@/utils/joist/joist.js';
+import { Node, VBox } from '@/utils/scenery/imports';
+import optionize from '@/utils/phet-core/optionize';
+import Panel, { type PanelOptions } from '@/utils/sun/Panel';
 
 type SelfOptions = {
   content: Array<Node>;
@@ -20,19 +20,19 @@ type SelfOptions = {
 type PreferencesPanelContentNodeOptions = SelfOptions & PanelOptions;
 export default class PreferencesPanelContentNode extends Panel {
 
-  public constructor( providedOptions: PreferencesPanelContentNodeOptions ) {
+  public constructor(providedOptions: PreferencesPanelContentNodeOptions) {
 
-    const options = optionize<PreferencesPanelContentNodeOptions, SelfOptions, PanelOptions>()( {
+    const options = optionize<PreferencesPanelContentNodeOptions, SelfOptions, PanelOptions>()({
       fill: '#E8E8E8',
       stroke: null,
       xMargin: 10,
       yMargin: 10
-    }, providedOptions );
+    }, providedOptions);
 
-    const contentVBox = new VBox( { children: options.content, spacing: 10 } );
+    const contentVBox = new VBox({ children: options.content, spacing: 10 });
 
-    super( contentVBox, options );
+    super(contentVBox, options);
   }
 }
 
-joist.register( 'PreferencesPanelContentNode', PreferencesPanelContentNode );
+joist.register('PreferencesPanelContentNode', PreferencesPanelContentNode);

@@ -13,19 +13,26 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import IOType from '../tandem/types/IOType';
-// @ts-expect-error
-import InfiniteNumberIO, { InfiniteNumberStateObject } from '../tandem/types/InfiniteNumberIO';
-import Vector2 from './Vector2';
-import dot from './dot';
-import Matrix3 from './Matrix3';
-import Range from './Range';
-// @ts-expect-error
-import Pool, { TPoolable } from '../phet-core/Pool';
-import Orientation from '../phet-core/Orientation';
+import IOType from '@/utils/tandem/types/IOType';
+import InfiniteNumberIO, { type InfiniteNumberStateObject } from '@/utils/tandem/types/InfiniteNumberIO';
+import Vector2 from '@/utils/dot/Vector2';
+import dot from '@/utils/dot/dot';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Range from '@/utils/dot/Range';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
+import Orientation from '@/utils/phet-core/Orientation';
 
 // Temporary instances to be used in the transform method.
-const scratchVector2 = new Vector2(0, 0);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+const scratchVector2 = typeof window.scratchVector2 === 'object' ? window.scratchVector2 : new Vector2(0, 0);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+if (typeof window.scratchVector2 !== 'object') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  window.scratchVector2 = scratchVector2;
+}
 
 export type Bounds2StateObject = {
   minX: InfiniteNumberStateObject;
@@ -58,6 +65,7 @@ export default class Bounds2 implements TPoolable {
    */
   public constructor(minX: number, minY: number, maxX: number, maxY: number) {
     window.assert && window.assert(maxY !== undefined, 'Bounds2 requires 4 parameters');
+    // console.log('Bounds2.constructor');
 
     this.minX = minX;
     this.minY = minY;
@@ -445,7 +453,12 @@ export default class Bounds2 implements TPoolable {
       return bounds.set(this as unknown as Bounds2);
     }
     else {
-      return b2(this.minX, this.minY, this.maxX, this.maxY);
+      // console.log({ minX: this.minX, minY: this.minY, maxX: this.maxX, maxY: this.maxY });
+      // return b2(this.minX, this.minY, this.maxX, this.maxY);
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      return window.b2(this.minX, this.minY, this.maxX, this.maxY);
     }
   }
 
@@ -456,7 +469,16 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public union(bounds: Bounds2): Bounds2 {
-    return b2(
+    // return b2(
+    //   Math.min(this.minX, bounds.minX),
+    //   Math.min(this.minY, bounds.minY),
+    //   Math.max(this.maxX, bounds.maxX),
+    //   Math.max(this.maxY, bounds.maxY)
+    // );
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(
       Math.min(this.minX, bounds.minX),
       Math.min(this.minY, bounds.minY),
       Math.max(this.maxX, bounds.maxX),
@@ -471,7 +493,16 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public intersection(bounds: Bounds2): Bounds2 {
-    return b2(
+    // return b2(
+    //   Math.max(this.minX, bounds.minX),
+    //   Math.max(this.minY, bounds.minY),
+    //   Math.min(this.maxX, bounds.maxX),
+    //   Math.min(this.maxY, bounds.maxY)
+    // );
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(
       Math.max(this.minX, bounds.minX),
       Math.max(this.minY, bounds.minY),
       Math.min(this.maxX, bounds.maxX),
@@ -488,7 +519,16 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public withCoordinates(x: number, y: number): Bounds2 {
-    return b2(
+    // return b2(
+    //   Math.min(this.minX, x),
+    //   Math.min(this.minY, y),
+    //   Math.max(this.maxX, x),
+    //   Math.max(this.maxY, y)
+    // );
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(
       Math.min(this.minX, x),
       Math.min(this.minY, y),
       Math.max(this.maxX, x),
@@ -503,6 +543,10 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public withPoint(point: Vector2): Bounds2 {
+    // console.log('Bounds2.withPoint');
+    // console.log({ point });
+    // console.trace();
+
     return this.withCoordinates(point.x, point.y);
   }
 
@@ -533,7 +577,11 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public withMinX(minX: number): Bounds2 {
-    return b2(minX, this.minY, this.maxX, this.maxY);
+    // return b2(minX, this.minY, this.maxX, this.maxY);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(minX, this.minY, this.maxX, this.maxY);
   }
 
   /**
@@ -543,7 +591,11 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public withMinY(minY: number): Bounds2 {
-    return b2(this.minX, minY, this.maxX, this.maxY);
+    // return b2(this.minX, minY, this.maxX, this.maxY);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX, minY, this.maxX, this.maxY);
   }
 
   /**
@@ -553,7 +605,11 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public withMaxX(maxX: number): Bounds2 {
-    return b2(this.minX, this.minY, maxX, this.maxY);
+    // return b2(this.minX, this.minY, maxX, this.maxY);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX, this.minY, maxX, this.maxY);
   }
 
   /**
@@ -563,7 +619,11 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public withMaxY(maxY: number): Bounds2 {
-    return b2(this.minX, this.minY, this.maxX, maxY);
+    // return b2(this.minX, this.minY, this.maxX, maxY);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX, this.minY, this.maxX, maxY);
   }
 
   /**
@@ -575,7 +635,16 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public roundedOut(): Bounds2 {
-    return b2(
+    // return b2(
+    //   Math.floor(this.minX),
+    //   Math.floor(this.minY),
+    //   Math.ceil(this.maxX),
+    //   Math.ceil(this.maxY)
+    // );
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(
       Math.floor(this.minX),
       Math.floor(this.minY),
       Math.ceil(this.maxX),
@@ -592,7 +661,16 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public roundedIn(): Bounds2 {
-    return b2(
+    // return b2(
+    //   Math.ceil(this.minX),
+    //   Math.ceil(this.minY),
+    //   Math.floor(this.maxX),
+    //   Math.floor(this.maxY)
+    // );
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(
       Math.ceil(this.minX),
       Math.ceil(this.minY),
       Math.floor(this.maxX),
@@ -632,7 +710,11 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public dilatedX(x: number): Bounds2 {
-    return b2(this.minX - x, this.minY, this.maxX + x, this.maxY);
+    // return b2(this.minX - x, this.minY, this.maxX + x, this.maxY);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX - x, this.minY, this.maxX + x, this.maxY);
   }
 
   /**
@@ -642,7 +724,11 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public dilatedY(y: number): Bounds2 {
-    return b2(this.minX, this.minY - y, this.maxX, this.maxY + y);
+    // return b2(this.minX, this.minY - y, this.maxX, this.maxY + y);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX, this.minY - y, this.maxX, this.maxY + y);
   }
 
   /**
@@ -656,7 +742,11 @@ export default class Bounds2 implements TPoolable {
    * @param y - Amount to dilate vertically (for each side)
    */
   public dilatedXY(x: number, y: number): Bounds2 {
-    return b2(this.minX - x, this.minY - y, this.maxX + x, this.maxY + y);
+    // return b2(this.minX - x, this.minY - y, this.maxX + x, this.maxY + y);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX - x, this.minY - y, this.maxX + x, this.maxY + y);
   }
 
   /**
@@ -707,7 +797,11 @@ export default class Bounds2 implements TPoolable {
    * @param bottom - Amount to expand to the bottom (adds to maxY)
    */
   public withOffsets(left: number, top: number, right: number, bottom: number): Bounds2 {
-    return b2(this.minX - left, this.minY - top, this.maxX + right, this.maxY + bottom);
+    // return b2(this.minX - left, this.minY - top, this.maxX + right, this.maxY + bottom);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX - left, this.minY - top, this.maxX + right, this.maxY + bottom);
   }
 
   /**
@@ -717,7 +811,11 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public shiftedX(x: number): Bounds2 {
-    return b2(this.minX + x, this.minY, this.maxX + x, this.maxY);
+    // return b2(this.minX + x, this.minY, this.maxX + x, this.maxY);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX + x, this.minY, this.maxX + x, this.maxY);
   }
 
   /**
@@ -727,7 +825,11 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public shiftedY(y: number): Bounds2 {
-    return b2(this.minX, this.minY + y, this.maxX, this.maxY + y);
+    // return b2(this.minX, this.minY + y, this.maxX, this.maxY + y);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX, this.minY + y, this.maxX, this.maxY + y);
   }
 
   /**
@@ -737,7 +839,11 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public shiftedXY(x: number, y: number): Bounds2 {
-    return b2(this.minX + x, this.minY + y, this.maxX + x, this.maxY + y);
+    // return b2(this.minX + x, this.minY + y, this.maxX + x, this.maxY + y);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX + x, this.minY + y, this.maxX + x, this.maxY + y);
   }
 
   /**
@@ -756,7 +862,16 @@ export default class Bounds2 implements TPoolable {
    */
   public blend(bounds: Bounds2, ratio: number): Bounds2 {
     const t = 1 - ratio;
-    return b2(
+    // return b2(
+    //   t * this.minX + ratio * bounds.minX,
+    //   t * this.minY + ratio * bounds.minY,
+    //   t * this.maxX + ratio * bounds.maxX,
+    //   t * this.maxY + ratio * bounds.maxY
+    // );
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(
       t * this.minX + ratio * bounds.minX,
       t * this.minY + ratio * bounds.minY,
       t * this.maxX + ratio * bounds.maxX,
@@ -1073,7 +1188,11 @@ export default class Bounds2 implements TPoolable {
    * @param bottom - Amount to expand to the bottom (adds to maxY)
    */
   public offset(left: number, top: number, right: number, bottom: number): Bounds2 {
-    return b2(this.minX - left, this.minY - top, this.maxX + right, this.maxY + bottom);
+    // return b2(this.minX - left, this.minY - top, this.maxX + right, this.maxY + bottom);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(this.minX - left, this.minY - top, this.maxX + right, this.maxY + bottom);
   }
 
   /**
@@ -1189,7 +1308,11 @@ export default class Bounds2 implements TPoolable {
    * @param height - The height (maxY - minY) of the bounds.
    */
   public static rect(x: number, y: number, width: number, height: number): Bounds2 {
-    return b2(x, y, x + width, y + height);
+    // return b2(x, y, x + width, y + height);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    return window.b2(x, y, x + width, y + height);
   }
 
   /**
@@ -1223,10 +1346,18 @@ export default class Bounds2 implements TPoolable {
   static point(x: Vector2 | number, y?: number): Bounds2 { // eslint-disable-line @typescript-eslint/explicit-member-accessibility
     if (x instanceof Vector2) {
       const p = x;
-      return b2(p.x, p.y, p.x, p.y);
+      // return b2(p.x, p.y, p.x, p.y);
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      return window.b2(p.x, p.y, p.x, p.y);
     }
     else {
-      return b2(x, y!, x, y!);
+      // return b2(x, y!, x, y!);
+
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      return window.b2(x, y!, x, y!);
     }
   }
 
@@ -1279,7 +1410,16 @@ export default class Bounds2 implements TPoolable {
 
 dot.register('Bounds2', Bounds2);
 
-const b2 = Bounds2.pool.create.bind(Bounds2.pool);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+const b2 = typeof window.b2 === 'function' ? window.b2 : Bounds2.pool.create.bind(Bounds2.pool);
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+if (typeof window.b2 !== 'function') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  window.b2 = b2;
+}
 dot.register('b2', b2);
 
 Bounds2.prototype.isBounds = true;
@@ -1294,7 +1434,7 @@ function catchImmutableSetterLowHangingFruit(bounds: Bounds2): void {
   bounds.transform = () => { throw new Error('Attempt to set "transform" of an immutable Bounds2 object'); };
 }
 
-if (assert) {
+if (window.assert) {
   catchImmutableSetterLowHangingFruit(Bounds2.EVERYTHING);
   catchImmutableSetterLowHangingFruit(Bounds2.NOTHING);
 }

@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Random from '../../dot/Random';
-import Vector2 from '../../dot/Vector2';
-import { EventContext, scenery } from '../imports';
+import Random from '@/utils/dot/Random';
+import Vector2 from '@/utils/dot/Vector2';
+import { EventContext, scenery } from '@/utils/scenery/imports';
 
 class InputFuzzer {
   /**

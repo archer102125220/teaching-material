@@ -6,23 +6,23 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { DerivedProperty2 } from '../../../axon/js/DerivedProperty.js';
-import sun from '../sun.js';
-import ButtonInteractionState from './ButtonInteractionState.js';
-import MomentaryButtonModel from './MomentaryButtonModel.js';
+import { DerivedProperty2 } from '@/utils/axon/DerivedProperty.js';
+import sun from '@/utils/sun/sun.js';
+import ButtonInteractionState from '@/utils/sun/buttons/ButtonInteractionState.js';
+import MomentaryButtonModel from '@/utils/sun/buttons/MomentaryButtonModel.js';
 
 export default class MomentaryButtonInteractionStateProperty<T> extends DerivedProperty2<ButtonInteractionState, boolean, boolean> {
-  public constructor( buttonModel: MomentaryButtonModel<T> ) {
+  public constructor(buttonModel: MomentaryButtonModel<T>) {
     super(
-      [ buttonModel.looksOverProperty, buttonModel.looksPressedProperty ],
-      ( looksOver, looksPressed ) => {
+      [buttonModel.looksOverProperty, buttonModel.looksPressedProperty],
+      (looksOver, looksPressed) => {
         return looksOver && !looksPressed ? ButtonInteractionState.OVER :
-               looksPressed ? ButtonInteractionState.PRESSED :  // remain pressed regardless of whether 'over' is true
-               ButtonInteractionState.IDLE;
+          looksPressed ? ButtonInteractionState.PRESSED :  // remain pressed regardless of whether 'over' is true
+            ButtonInteractionState.IDLE;
       },
       { valueType: ButtonInteractionState }
     );
   }
 }
 
-sun.register( 'MomentaryButtonInteractionStateProperty', MomentaryButtonInteractionStateProperty );
+sun.register('MomentaryButtonInteractionStateProperty', MomentaryButtonInteractionStateProperty);

@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../phet-core/Poolable';
-import { DOMSelfDrawable, scenery, Utils } from '../../imports';
+import Poolable from '@/utils/phet-core/Poolable';
+import { DOMSelfDrawable, scenery, Utils } from '@/utils/scenery/imports';
 
 class DOMDrawable extends DOMSelfDrawable {
   /**

@@ -7,9 +7,9 @@
  * @author Andrew Adare (PhET Interactive Simulations)
  */
 
-import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType';
-import IOTypeCache from '../IOTypeCache';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 
 // cache each parameterized IOType so that it is only created once

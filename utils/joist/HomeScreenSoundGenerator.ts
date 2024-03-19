@@ -7,13 +7,13 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import MultiClip, { type MultiClipOptions } from '../tambo/sound-generators/MultiClip';
+import MultiClip, { type MultiClipOptions } from '@/utils/tambo/sound-generators/MultiClip';
 import screenSelectionHomeV3_mp3 from '@/assets/sounds/tambo/screenSelectionHomeV3_mp3';
 import switchingScreenSelectorIcons003_mp3 from '@/assets/sounds/tambo/switchingScreenSelectorIcons003_mp3';
-import joist from './joist';
-import HomeScreenModel from './HomeScreenModel';
-import Enumeration from '../phet-core/Enumeration';
-import EnumerationValue from '../phet-core/EnumerationValue';
+import joist from '@/utils/joist/joist';
+import HomeScreenModel from '@/utils/joist/HomeScreenModel';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
 
 class SoundType extends EnumerationValue {
   public static readonly HOME_SCREEN_SELECTED = new SoundType();

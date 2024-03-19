@@ -7,9 +7,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../dot/toSVGNumber';
-import cleanArray from '../../phet-core/cleanArray';
-import Poolable from '../../phet-core/Poolable';
+import toSVGNumber from '@/utils/dot/toSVGNumber';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Poolable from '@/utils/phet-core/Poolable';
 import {
   Drawable,
   GreedyStitcher,
@@ -17,7 +17,7 @@ import {
   scenery,
   Stitcher,
   Utils
-} from '../imports';
+} from '@/utils/scenery/imports';
 
 // constants
 const useGreedyStitcher = true;
@@ -135,8 +135,8 @@ class BackboneDrawable extends Drawable {
     this.clipDirtyListener =
       this.clipDirtyListener || this.onClipDirty.bind(this);
     if (this.willApplyFilters) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           this.filterRootAncestorInstance.trail.nodes.length <
             this.backboneInstance.trail.nodes.length,
           'Our backboneInstance should be deeper if we are applying filters'
@@ -173,9 +173,9 @@ class BackboneDrawable extends Drawable {
       this.stitcher ||
       (useGreedyStitcher ? new GreedyStitcher() : new RebuildStitcher());
 
-    sceneryLog &&
-      sceneryLog.BackboneDrawable &&
-      sceneryLog.BackboneDrawable(`initialized ${this.toString()}`);
+    window.sceneryLog &&
+      window.sceneryLog.BackboneDrawable &&
+      window.sceneryLog.BackboneDrawable(`initialized ${this.toString()}`);
   }
 
   /**
@@ -183,10 +183,12 @@ class BackboneDrawable extends Drawable {
    * @public
    */
   dispose() {
-    sceneryLog &&
-      sceneryLog.BackboneDrawable &&
-      sceneryLog.BackboneDrawable(`dispose ${this.toString()}`);
-    sceneryLog && sceneryLog.BackboneDrawable && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.BackboneDrawable &&
+      window.sceneryLog.BackboneDrawable(`dispose ${this.toString()}`);
+    window.sceneryLog &&
+      window.sceneryLog.BackboneDrawable &&
+      window.sceneryLog.push();
 
     while (this.watchedFilterNodes.length) {
       const node = this.watchedFilterNodes.pop();
@@ -230,7 +232,9 @@ class BackboneDrawable extends Drawable {
 
     super.dispose();
 
-    sceneryLog && sceneryLog.BackboneDrawable && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.BackboneDrawable &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -240,9 +244,9 @@ class BackboneDrawable extends Drawable {
   markBlocksForDisposal() {
     while (this.blocks.length) {
       const block = this.blocks.pop();
-      sceneryLog &&
-        sceneryLog.BackboneDrawable &&
-        sceneryLog.BackboneDrawable(
+      window.sceneryLog &&
+        window.sceneryLog.BackboneDrawable &&
+        window.sceneryLog.BackboneDrawable(
           `${this.toString()} removing block: ${block.toString()}`
         );
       // TODO: PERFORMANCE: does this cause reflows / style calculation https://github.com/phetsims/scenery/issues/1581
@@ -299,7 +303,7 @@ class BackboneDrawable extends Drawable {
    * @param {Drawable} drawable
    */
   markDirtyDrawable(drawable) {
-    if (assert) {
+    if (window.assert) {
       // Catch infinite loops
       this.display.ensureNotPainting();
     }
@@ -313,8 +317,11 @@ class BackboneDrawable extends Drawable {
    * @public
    */
   markTransformDirty() {
-    assert &&
-      assert(this.willApplyTransform, 'Sanity check for willApplyTransform');
+    window.assert &&
+      window.assert(
+        this.willApplyTransform,
+        'Sanity check for willApplyTransform'
+      );
 
     // relative matrix on backbone instance should be up to date, since we added the compute flags
     Utils.applyPreparedTransform(
@@ -462,14 +469,17 @@ class BackboneDrawable extends Drawable {
       }
       zIndex = block.zIndex;
 
-      if (assert) {
-        assert(this.blocks[k].zIndex % 1 === 0, 'z-indices should be integers');
-        assert(
+      if (window.assert) {
+        window.assert(
+          this.blocks[k].zIndex % 1 === 0,
+          'z-indices should be integers'
+        );
+        window.assert(
           this.blocks[k].zIndex > 0,
           'z-indices should be greater than zero for our needs (see spec)'
         );
         if (k > 0) {
-          assert(
+          window.assert(
             this.blocks[k - 1].zIndex < this.blocks[k].zIndex,
             'z-indices should be strictly increasing'
           );
@@ -493,24 +503,25 @@ class BackboneDrawable extends Drawable {
   stitch(firstDrawable, lastDrawable, firstChangeInterval, lastChangeInterval) {
     // no stitch necessary if there are no change intervals
     if (firstChangeInterval === null || lastChangeInterval === null) {
-      window.assert && window.assert(firstChangeInterval === null);
+      window.assert &&
+        window.assert(firstChangeInterval === null);
       window.assert && window.assert(lastChangeInterval === null);
       return;
     }
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         lastChangeInterval.nextChangeInterval === null,
         'This allows us to have less checks in the loop'
       );
 
-    if (sceneryLog && sceneryLog.Stitch) {
-      sceneryLog.Stitch(
+    if (window.sceneryLog && window.sceneryLog.Stitch) {
+      window.sceneryLog.Stitch(
         `Stitch intervals before constricting: ${this.toString()}`
       );
-      sceneryLog.push();
+      window.sceneryLog.push();
       Stitcher.debugIntervals(firstChangeInterval);
-      sceneryLog.pop();
+      window.sceneryLog.pop();
     }
 
     // Make the intervals as small as possible by skipping areas without changes, and collapse the interval
@@ -547,16 +558,16 @@ class BackboneDrawable extends Drawable {
     lastChangeInterval = lastNonemptyInterval;
     lastChangeInterval.nextChangeInterval = null;
 
-    if (sceneryLog && sceneryLog.Stitch && intervalsChanged) {
-      sceneryLog.Stitch(
+    if (window.sceneryLog && window.sceneryLog.Stitch && intervalsChanged) {
+      window.sceneryLog.Stitch(
         `Stitch intervals after constricting: ${this.toString()}`
       );
-      sceneryLog.push();
+      window.sceneryLog.push();
       Stitcher.debugIntervals(firstChangeInterval);
-      sceneryLog.pop();
+      window.sceneryLog.pop();
     }
 
-    if (sceneryLog && scenery.isLoggingPerformance()) {
+    if (window.sceneryLog && scenery.isLoggingPerformance()) {
       this.display.perfStitchCount++;
 
       let dInterval = firstChangeInterval;
@@ -597,16 +608,16 @@ class BackboneDrawable extends Drawable {
    * @param {boolean} allowDirty
    */
   audit(allowPendingBlock, allowPendingList, allowDirty) {
-    if (assertSlow) {
+    if (window.assertSlow) {
       super.audit(allowPendingBlock, allowPendingList, allowDirty);
 
-      assertSlow &&
-        assertSlow(
+      window.assertSlow &&
+        window.assertSlow(
           this.backboneInstance.isBackbone,
           'We should reference an instance that requires a backbone'
         );
-      assertSlow &&
-        assertSlow(
+      window.assertSlow &&
+        window.assertSlow(
           this.transformRootInstance.isTransformed,
           'Transform root should be transformed'
         );

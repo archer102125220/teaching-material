@@ -8,13 +8,13 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Validation from '../../axon/Validation';
-import CouldNotYetDeserializeError from '../CouldNotYetDeserializeError';
-import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType';
-import StringIO from './StringIO';
-import { type PhetioID } from '../TandemConstants';
-import IOTypeCache from '../IOTypeCache';
+import Validation from '@/utils/axon/Validation';
+import CouldNotYetDeserializeError from '@/utils/tandem/CouldNotYetDeserializeError';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import StringIO from '@/utils/tandem/types/StringIO';
+import { type PhetioID } from '@/utils/tandem/TandemConstants';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 // Cache each parameterized ReferenceIO so that it is only created once
 const cache = new IOTypeCache();

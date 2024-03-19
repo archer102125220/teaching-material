@@ -6,18 +6,20 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import platform from '../phet-core/platform';
-import { Color, HBox, type HBoxOptions } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import audioManager from './audioManager';
-import joist from './joist';
-import KeyboardHelpButton from './KeyboardHelpButton';
-import NavigationBarAudioToggleButton from './NavigationBarAudioToggleButton';
-import NavigationBarPreferencesButton from './preferences/NavigationBarPreferencesButton';
-import Sim from './Sim';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import type StrictOmit from '../phet-core/types/StrictOmit';
+import _ from 'lodash';
+
+import platform from '@/utils/phet-core/platform';
+import { Color, HBox, type HBoxOptions } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import audioManager from '@/utils/joist/audioManager';
+import joist from '@/utils/joist/joist';
+import KeyboardHelpButton from '@/utils/joist/KeyboardHelpButton';
+import NavigationBarAudioToggleButton from '@/utils/joist/NavigationBarAudioToggleButton';
+import NavigationBarPreferencesButton from '@/utils/joist/preferences/NavigationBarPreferencesButton';
+import Sim from '@/utils/joist/Sim';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 
 type SelfOptions = EmptySelfOptions;
 export type A11yButtonsHBoxOptions = SelfOptions & StrictOmit<HBoxOptions, 'children'>;
@@ -56,7 +58,7 @@ class A11yButtonsHBox extends HBox {
         tandem: options.tandem.createTandem('audioToggleButton'),
         pointerAreaDilationX: 1,
         pointerAreaDilationY: 0.15,
-        supportsAudioPreferences: supportsAudioPreferences
+        supportsAudioPreferences
       }));
     }
 

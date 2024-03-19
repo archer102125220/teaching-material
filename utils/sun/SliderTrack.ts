@@ -8,20 +8,22 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import type TProperty from '../axon/TProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Dimension2 from '../dot/Dimension2';
-import LinearFunction from '../dot/LinearFunction';
-import Range from '../dot/Range';
-import ValueChangeSoundPlayer, { type ValueChangeSoundPlayerOptions } from '../tambo/sound-generators/ValueChangeSoundPlayer';
-import optionize from '../phet-core/optionize';
-import { DragListener, Node, type NodeOptions, SceneryEvent, Trail, WidthSizable } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import sun from './sun';
-import Slider from './Slider';
-import { type VoicingOnEndResponse } from './accessibility/AccessibleValueHandler';
-import TinyProperty from '../axon/TinyProperty';
-import DerivedProperty from '../axon/DerivedProperty';
+import _ from 'lodash';
+
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Dimension2 from '@/utils/dot/Dimension2';
+import LinearFunction from '@/utils/dot/LinearFunction';
+import Range from '@/utils/dot/Range';
+import ValueChangeSoundPlayer, { type ValueChangeSoundPlayerOptions } from '@/utils/tambo/sound-generators/ValueChangeSoundPlayer';
+import optionize from '@/utils/phet-core/optionize';
+import { DragListener, Node, type NodeOptions, SceneryEvent, Trail, WidthSizable } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import Slider from '@/utils/sun/Slider';
+import { type VoicingOnEndResponse } from '@/utils/sun/accessibility/AccessibleValueHandler';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
 
 type SelfOptions = {
   // NOTE: for backwards-compatibility, the size does NOT include the extent of the stroke, so the track will be larger

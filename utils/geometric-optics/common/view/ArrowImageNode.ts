@@ -6,16 +6,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import geometricOptics from '../../geometricOptics';
-import ArrowImage from '../model/ArrowImage';
-import GOConstants from '../GOConstants';
-import ArrowNode, { type ArrowNodeOptions } from '../../../scenery-phet/ArrowNode';
-import { combineOptions } from '../../../phet-core/optionize';
-import OpticalImageNode, { type OpticalImageNodeOptions } from './OpticalImageNode';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import Multilink from '../../../axon/Multilink';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import ArrowImage from '@/utils/geometric-optics/common/model/ArrowImage';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import ArrowNode, { type ArrowNodeOptions } from '@/utils/scenery-phet/ArrowNode';
+import { combineOptions } from '@/utils/phet-core/optionize';
+import OpticalImageNode, { type OpticalImageNodeOptions } from '@/utils/geometric-optics/common/view/OpticalImageNode';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import Multilink from '@/utils/axon/Multilink';
 
 type ArrowImageNodeOptions = PickRequired<OpticalImageNodeOptions, 'tandem'>;
 

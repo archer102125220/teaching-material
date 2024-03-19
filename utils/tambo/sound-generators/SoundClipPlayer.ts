@@ -16,11 +16,11 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import soundManager, { type SoundGeneratorAddOptions } from '../soundManager';
-import tambo from '../tambo';
-import SoundClip, { type SoundClipOptions } from './SoundClip';
-import WrappedAudioBuffer from '../WrappedAudioBuffer';
-import optionize from '../../phet-core/optionize';
+import soundManager, { type SoundGeneratorAddOptions } from '@/utils/tambo/soundManager';
+import tambo from '@/utils/tambo/tambo';
+import SoundClip, { type SoundClipOptions } from '@/utils/tambo/sound-generators/SoundClip';
+import WrappedAudioBuffer from '@/utils/tambo/WrappedAudioBuffer';
+import optionize from '@/utils/phet-core/optionize';
 
 export type SoundClipPlayerOptions = {
   soundClipOptions?: SoundClipOptions;

@@ -17,12 +17,12 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import type KeysMatching from '../phet-core/types/KeysMatching';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import axon from './axon';
-import type TReadOnlyProperty from './TReadOnlyProperty';
-import DynamicProperty, { type DynamicPropertyOptions } from './DynamicProperty';
-import TinyProperty from './TinyProperty';
+import type KeysMatching from '@/utils/phet-core/types/KeysMatching';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import axon from '@/utils/axon/axon';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import DynamicProperty, { type DynamicPropertyOptions } from '@/utils/axon/DynamicProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
 
 type SelfOptions<ThisValueType, InputValueType> = {
   // If set to true then changes to this Property (if valuePropertyProperty.value is non-null at the time) will also be

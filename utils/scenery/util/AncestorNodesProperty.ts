@@ -8,9 +8,9 @@
 
 import _ from 'lodash';
 
-import TinyEmitter from '../../axon/TinyEmitter';
-import TinyProperty from '../../axon/TinyProperty';
-import { Node, scenery } from '../imports';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import { Node, scenery } from '@/utils/scenery/imports';
 
 export default class AncestorNodesProperty extends TinyProperty<Set<Node>> {
 

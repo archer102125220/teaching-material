@@ -15,14 +15,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyEmitter from '../../../axon/TinyEmitter';
-import memoize from '../../../phet-core/memoize';
-import { scenery } from '../../imports';
-import type Constructor from '../../../phet-core/types/Constructor';
-import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
-import type WithoutNull from '../../../phet-core/types/WithoutNull';
-import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
-import type TEmitter from '../../../axon/TEmitter';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import memoize from '@/utils/phet-core/memoize';
+import { scenery } from '@/utils/scenery/imports';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import type WithoutNull from '@/utils/phet-core/types/WithoutNull';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 const MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS = [
   'margin',

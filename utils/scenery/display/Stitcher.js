@@ -98,7 +98,7 @@
 
 import _ from 'lodash';
 
-import cleanArray from '../../phet-core/cleanArray';
+import cleanArray from '@/utils/phet-core/cleanArray';
 import {
   CanvasBlock,
   DOMBlock,
@@ -107,7 +107,7 @@ import {
   scenery,
   SVGBlock,
   WebGLBlock
-} from '../imports';
+} from '@/utils/scenery/imports';
 
 class Stitcher {
   /**

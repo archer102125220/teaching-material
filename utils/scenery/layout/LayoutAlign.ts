@@ -9,10 +9,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Orientation from '../../phet-core/Orientation';
-import { scenery } from '../imports';
-import EnumerationValue from '../../phet-core/EnumerationValue';
-import Enumeration from '../../phet-core/Enumeration';
+import Orientation from '@/utils/phet-core/Orientation';
+import { scenery } from '@/utils/scenery/imports';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import Enumeration from '@/utils/phet-core/Enumeration';
 
 export const HorizontalLayoutAlignValues = ['left', 'right', 'center', 'origin'] as const;
 export type HorizontalLayoutAlign = typeof HorizontalLayoutAlignValues[number];

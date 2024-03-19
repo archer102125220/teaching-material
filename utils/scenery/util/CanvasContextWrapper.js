@@ -10,8 +10,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
-import { scenery } from '../imports';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import { scenery } from '@/utils/scenery/imports';
 
 class CanvasContextWrapper {
   /**

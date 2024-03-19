@@ -12,11 +12,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import Vector2 from '../../dot/Vector2';
-import Orientation from '../../phet-core/Orientation';
-import Pool from '../../phet-core/Pool';
-import { type HeightSizableNode, isHeightSizable, isWidthSizable, Node, scenery, Trail, type WidthSizableNode } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import Orientation from '@/utils/phet-core/Orientation';
+import Pool from '@/utils/phet-core/Pool';
+import { type HeightSizableNode, isHeightSizable, isWidthSizable, Node, scenery, Trail, type WidthSizableNode } from '@/utils/scenery/imports';
 
 export default class LayoutProxy {
 

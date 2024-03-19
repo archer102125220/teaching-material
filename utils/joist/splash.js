@@ -5,7 +5,8 @@
  *
  * @author Sam Reid (PhET Interactive Simulations)
  */
-(function () {
+
+export function splash(container) {
   // Overall scale factor for the image + progress bar, matched empirically to desired size
   const SCALE_FACTOR = (1.0 / 4.0) * 1.042;
   const XML_NAMESPACE = 'http://www.w3.org/2000/svg';
@@ -55,15 +56,21 @@
     div.style.transform = transformString;
   }
 
+  const stylePosition =
+    typeof container?.parentNode?.appendChild === 'function'
+      ? 'absolute'
+      : 'fixed';
+
   // The main overlay for the whole screen, which will hide anything going on behind it.
   const splashBackgroundDiv = document.createElement('div');
-  splashBackgroundDiv.style.position = 'fixed';
+  splashBackgroundDiv.style.position = stylePosition;
   splashBackgroundDiv.style.left = '0px';
   splashBackgroundDiv.style.top = '0px';
   splashBackgroundDiv.style.width = '100%';
   splashBackgroundDiv.style.height = '100%';
   splashBackgroundDiv.style.backgroundColor = 'black';
-  splashBackgroundDiv.style.zIndex = 10000;
+  splashBackgroundDiv.style.zIndex =
+    typeof container?.parentNode?.appendChild === 'function' ? null : 10000;
   splashBackgroundDiv.style['-webkit-transform-origin'] = '0 0';
   splashBackgroundDiv.style['-ms-transform-origin'] = '0 0';
   splashBackgroundDiv.style['transform-origin'] = '0 0';
@@ -71,7 +78,7 @@
   // Create the container div which will hold the splash image and progress bar
   const centerLogoAndProgressDiv = document.createElement('div');
   centerLogoAndProgressDiv.id = SPLASH_CONTAINER_ID;
-  centerLogoAndProgressDiv.style.position = 'fixed';
+  centerLogoAndProgressDiv.style.position = stylePosition;
   centerLogoAndProgressDiv.style.left = '0px';
   centerLogoAndProgressDiv.style.top = '0px';
   centerLogoAndProgressDiv.style['-webkit-transform-origin'] = '0 0';
@@ -108,7 +115,12 @@
     // After creating and positioning the div, add it to the body.  This could show in the wrong position if the image
     // dimensions are 0x0, see https://github.com/phetsims/joist/issues/408
     splashBackgroundDiv.appendChild(centerLogoAndProgressDiv);
-    document.body.appendChild(splashBackgroundDiv);
+
+    if (typeof container?.parentNode?.appendChild === 'function') {
+      container.parentNode.appendChild(splashBackgroundDiv);
+    } else {
+      document.body.appendChild(splashBackgroundDiv);
+    }
   };
 
   // Create the progress bar
@@ -207,8 +219,14 @@
         window.removeEventListener(zoomEvent, preventZoom)
       );
 
-      document.body.removeChild(splashBackgroundDiv);
+      if (typeof container.parentNode?.removeChild === 'function') {
+        container.parentNode.removeChild(splashBackgroundDiv);
+      } else {
+        document.body.removeChild(splashBackgroundDiv);
+      }
       delete window.phetSplashScreen;
     }
   };
-})();
+}
+
+export default splash;

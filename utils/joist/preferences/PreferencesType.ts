@@ -6,9 +6,9 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Enumeration from '../../phet-core/Enumeration';
-import EnumerationValue from '../../phet-core/EnumerationValue';
-import joist from '../joist';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import joist from '@/utils/joist/joist';
 
 export default class PreferencesType extends EnumerationValue {
   public static readonly OVERVIEW = new PreferencesType();

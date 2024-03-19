@@ -8,10 +8,10 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import optionize from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import { GridBox, type GridBoxOptions, Node, SceneryConstants } from '../../scenery/imports';
-import joist from '../joist';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { GridBox, type GridBoxOptions, Node, SceneryConstants } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
 
 type SelfOptions = {
 

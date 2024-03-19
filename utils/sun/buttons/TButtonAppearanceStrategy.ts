@@ -5,10 +5,10 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import { Color, TPaint, Path } from '../../../scenery/js/imports.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import ButtonInteractionState from './ButtonInteractionState.js';
-import RadioButtonInteractionState from './RadioButtonInteractionState.js';
+import { Color, type TPaint, Path } from '@/utils/scenery/imports.js';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty.js';
+import ButtonInteractionState from '@/utils/sun/buttons/ButtonInteractionState.js';
+import RadioButtonInteractionState from '@/utils/sun/buttons/RadioButtonInteractionState.js';
 
 export type TButtonAppearanceStrategyOptions = {
 
@@ -30,13 +30,13 @@ export type TButtonAppearanceStrategyOptions = {
 };
 
 type TButtonAppearanceStrategy = {
-  new( content: Path,
-       interactionStateProperty: TReadOnlyProperty<ButtonInteractionState | RadioButtonInteractionState>,
-       baseColorProperty: TReadOnlyProperty<Color>,
-       options?: TButtonAppearanceStrategyOptions ): {
-    dispose?: () => void;
-    maxLineWidth: number;
-  };
+  new(content: Path,
+    interactionStateProperty: TReadOnlyProperty<ButtonInteractionState | RadioButtonInteractionState>,
+    baseColorProperty: TReadOnlyProperty<Color>,
+    options?: TButtonAppearanceStrategyOptions): {
+      dispose?: () => void;
+      maxLineWidth: number;
+    };
 };
 
 export default TButtonAppearanceStrategy;

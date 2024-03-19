@@ -16,11 +16,11 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Validation from '../../axon/Validation';
-import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType';
-import StateSchema from './StateSchema';
-import IOTypeCache from '../IOTypeCache';
+import Validation from '@/utils/axon/Validation';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import StateSchema from '@/utils/tandem/types/StateSchema';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 // Cache each parameterized IOType so that it is only created once
 const cache = new IOTypeCache();

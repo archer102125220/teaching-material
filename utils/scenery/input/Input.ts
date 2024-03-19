@@ -165,21 +165,21 @@
 
 import _ from 'lodash';
 
-import PhetioAction from '../../tandem/PhetioAction';
-import TinyEmitter from '../../axon/TinyEmitter';
-import Vector2 from '../../dot/Vector2';
-import cleanArray from '../../phet-core/cleanArray';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import platform from '../../phet-core/platform';
-import EventType from '../../tandem/EventType';
-import NullableIO from '../../tandem/types/NullableIO';
-import NumberIO from '../../tandem/types/NumberIO';
-import { BatchedDOMEvent, type BatchedDOMEventCallback, BatchedDOMEventType, BrowserEvents, Display, EventContext, EventContextIO, Mouse, Node, PDOMInstance, PDOMPointer, PDOMUtils, Pen, Pointer, scenery, SceneryEvent, type SceneryListenerFunction, type SupportedEventTypes, type TInputListener, Touch, Trail, type WindowTouch } from '../imports';
-import PhetioObject, { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import IOType from '../../tandem/types/IOType';
-import ArrayIO from '../../tandem/types/ArrayIO';
-import type PickOptional from '../../phet-core/types/PickOptional';
-import type TEmitter from '../../axon/TEmitter';
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import Vector2 from '@/utils/dot/Vector2';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import platform from '@/utils/phet-core/platform';
+import EventType from '@/utils/tandem/EventType';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import { BatchedDOMEvent, type BatchedDOMEventCallback, BatchedDOMEventType, BrowserEvents, Display, EventContext, EventContextIO, Mouse, Node, PDOMInstance, PDOMPointer, PDOMUtils, Pen, Pointer, scenery, SceneryEvent, type SceneryListenerFunction, type SupportedEventTypes, type TInputListener, Touch, Trail, type WindowTouch } from '@/utils/scenery/imports';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import IOType from '@/utils/tandem/types/IOType';
+import ArrayIO from '@/utils/tandem/types/ArrayIO';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 const ArrayIOPointerIO = ArrayIO(Pointer.PointerIO);
 
@@ -1384,7 +1384,7 @@ export default class Input extends PhetioObject {
     // In IE for pointer down events, we want to make sure than the next interactions off the page are sent to
     // this element (it will bubble). See https://github.com/phetsims/scenery/issues/464 and
     // http://news.qooxdoo.org/mouse-capturing.
-    const target = this.attachToWindow ? document.body : this.display.domElement;
+    const target = this.attachToWindow ? (window.SIM_DISPLAY?.domElement?.parentNode || document.body) : this.display.domElement;
     if (target.setPointerCapture && context.domEvent.pointerId) {
       // NOTE: This will error out if run on a playback destination, where a pointer with the given ID does not exist.
       target.setPointerCapture(context.domEvent.pointerId);
@@ -1403,7 +1403,7 @@ export default class Input extends PhetioObject {
         this.penStart(id, point, context);
         break;
       default:
-        if (assert) {
+        if (window.assert) {
           throw new Error(`Unknown pointer type: ${type}`);
         }
     }
@@ -1429,7 +1429,7 @@ export default class Input extends PhetioObject {
         this.penEnd(id, point, context);
         break;
       default:
-        if (assert) {
+        if (window.assert) {
           throw new Error(`Unknown pointer type: ${type}`);
         }
     }
@@ -2027,7 +2027,7 @@ export default class Input extends PhetioObject {
         // Special case for target since we can't set that read-only property. Instead use a substitute key.
         if (key === 'target') {
 
-          if (assert) {
+          if (window.assert) {
             const target = eventObject.target as { id?: string } | undefined;
             if (target && target.id) {
               assert(document.getElementById(target.id), 'target should exist in the PDOM to support playback.');

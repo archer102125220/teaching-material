@@ -8,11 +8,11 @@
 
 import _ from 'lodash';
 
-import Matrix3 from '../../../dot/Matrix3';
-import inheritance from '../../../phet-core/inheritance';
-import memoize from '../../../phet-core/memoize';
-import type Constructor from '../../../phet-core/types/Constructor';
-import { Node, scenery } from '../../imports';
+import Matrix3 from '@/utils/dot/Matrix3';
+import inheritance from '@/utils/phet-core/inheritance';
+import memoize from '@/utils/phet-core/memoize';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import { Node, scenery } from '@/utils/scenery/imports';
 
 const RichTextCleanable = memoize(<SuperType extends Constructor>(type: SuperType) => {
   window.assert && window.assert(_.includes(inheritance(type), Node), 'Only Node subtypes should mix Paintable');

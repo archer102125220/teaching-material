@@ -10,16 +10,34 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Ray2 from '../../dot/Ray2';
-import Utils from '../../dot/Utils';
-import Vector2 from '../../dot/Vector2';
-import { Cubic, kite, Line, Overlap, RayIntersection, Segment, svgNumber } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Ray2 from '@/utils/dot/Ray2';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import { Cubic, kite, Line, Overlap, RayIntersection, Segment, svgNumber } from '@/utils/kite/imports';
 
 // constants
-const solveQuadraticRootsReal = Utils.solveQuadraticRootsReal;
-const arePointsCollinear = Utils.arePointsCollinear;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+const solveQuadraticRootsReal = typeof window.solveQuadraticRootsReal === 'function' ? window.solveQuadraticRootsReal : Utils.solveQuadraticRootsReal;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+const arePointsCollinear = typeof window.arePointsCollinear === 'function' ? window.arePointsCollinear : Utils.arePointsCollinear;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+if (typeof window.solveQuadraticRootsReal !== 'function') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  window.solveQuadraticRootsReal = b2;
+}
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+if (typeof window.arePointsCollinear !== 'function') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  window.arePointsCollinear = b2;
+}
 
 // Used in multiple filters
 function isBetween0And1(t: number): boolean {
@@ -446,16 +464,16 @@ export default class Quadratic extends Segment {
    */
   public getSVGPathFragment(): string {
     let oldPathFragment;
-    if (assert) {
+    if (window.assert) {
       oldPathFragment = this._svgPathFragment;
       this._svgPathFragment = null;
     }
     if (!this._svgPathFragment) {
       this._svgPathFragment = `Q ${svgNumber(this._control.x)} ${svgNumber(this._control.y)} ${svgNumber(this._end.x)} ${svgNumber(this._end.y)}`;
     }
-    if (assert) {
+    if (window.assert) {
       if (oldPathFragment) {
-        assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
+        window.assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
       }
     }
     return this._svgPathFragment;

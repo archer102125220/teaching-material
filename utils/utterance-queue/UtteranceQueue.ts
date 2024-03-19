@@ -19,15 +19,15 @@
 
 import _ from 'lodash';
 
-import stepTimer from '../axon/stepTimer';
-import deprecationWarning from '../phet-core/deprecationWarning';
-import optionize from '../phet-core/optionize';
-import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
-import Announcer from './Announcer';
-import AriaLiveAnnouncer from './AriaLiveAnnouncer';
-import Utterance, { type FeatureSpecificAnnouncingControlProperty, type TAlertable } from './Utterance';
-import utteranceQueueNamespace from './utteranceQueueNamespace';
-import UtteranceWrapper from './UtteranceWrapper';
+import stepTimer from '@/utils/axon/stepTimer';
+import deprecationWarning from '@/utils/phet-core/deprecationWarning';
+import optionize from '@/utils/phet-core/optionize';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import Announcer from '@/utils/utterance-queue/Announcer';
+import AriaLiveAnnouncer from '@/utils/utterance-queue/AriaLiveAnnouncer';
+import Utterance, { type FeatureSpecificAnnouncingControlProperty, type TAlertable } from '@/utils/utterance-queue/Utterance';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
+import UtteranceWrapper from '@/utils/utterance-queue/UtteranceWrapper';
 
 type SelfOptions = {
 
@@ -652,7 +652,10 @@ class UtteranceQueue<A extends Announcer = Announcer> extends PhetioObject {
     const container = ariaLiveAnnouncer.ariaLiveContainer;
 
     // gracefully support if there is no body
-    document.body ? document.body.appendChild(container) : document.children[0].appendChild(container);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    (window.SIM_DISPLAY?.domElement?.parentNode || document.body) ? (window.SIM_DISPLAY?.domElement?.parentNode || document.body).appendChild(container) : document.children[0].appendChild(container);
 
     let previousTime = 0;
     const step = (elapsedTime: number) => {

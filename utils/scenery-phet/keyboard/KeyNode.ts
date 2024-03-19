@@ -11,11 +11,11 @@
  * @author Jesse Greenberg
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import optionize from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import { AlignBox, Node, type NodeOptions, Rectangle, type TColor } from '../../scenery/imports';
-import sceneryPhet from '../sceneryPhet';
+import Bounds2 from '@/utils/dot/Bounds2';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { AlignBox, Node, type NodeOptions, Rectangle, type TColor } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type XAlign = 'left' | 'center' | 'right';
 type YAlign = 'top' | 'center' | 'bottom';

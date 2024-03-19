@@ -7,13 +7,13 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import sceneryPhet from '../sceneryPhet';
-import TextKeyNode, { type TextKeyNodeOptions } from './TextKeyNode';
-import KeyNode from './KeyNode';
-import SceneryPhetStrings from '../SceneryPhetStrings';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import TextKeyNode, { type TextKeyNodeOptions } from '@/utils/scenery-phet/keyboard/TextKeyNode';
+import KeyNode from '@/utils/scenery-phet/keyboard/KeyNode';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 type SelfOptions = EmptySelfOptions;
 

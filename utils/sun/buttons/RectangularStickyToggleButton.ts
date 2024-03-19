@@ -8,12 +8,12 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import TProperty from '../../../axon/js/TProperty.js';
-import { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import sun from '../sun.js';
-import RectangularButton, { RectangularButtonOptions } from './RectangularButton.js';
-import StickyToggleButtonInteractionStateProperty from './StickyToggleButtonInteractionStateProperty.js';
-import StickyToggleButtonModel from './StickyToggleButtonModel.js';
+import type TProperty from '@/utils/axon/TProperty.js';
+import { type EmptySelfOptions } from '@/utils/phet-core/optionize.js';
+import sun from '@/utils/sun/sun.js';
+import RectangularButton, { type RectangularButtonOptions } from '@/utils/sun/buttons/RectangularButton.js';
+import StickyToggleButtonInteractionStateProperty from '@/utils/sun/buttons/StickyToggleButtonInteractionStateProperty.js';
+import StickyToggleButtonModel from '@/utils/sun/buttons/StickyToggleButtonModel.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -29,13 +29,13 @@ export default class RectangularStickyToggleButton<T> extends RectangularButton 
    * @param valueDown - value when the toggle is in the 'down' position
    * @param providedOptions?
    */
-  public constructor( valueProperty: TProperty<T>, valueUp: T, valueDown: T, providedOptions?: RectangularStickyToggleButtonOptions ) {
+  public constructor(valueProperty: TProperty<T>, valueUp: T, valueDown: T, providedOptions?: RectangularStickyToggleButtonOptions) {
 
     // Note it shares a tandem with this, so the emitter will be instrumented as a child of the button
-    const buttonModel = new StickyToggleButtonModel( valueUp, valueDown, valueProperty, providedOptions );
-    const stickyToggleButtonInteractionStateProperty = new StickyToggleButtonInteractionStateProperty( buttonModel );
+    const buttonModel = new StickyToggleButtonModel(valueUp, valueDown, valueProperty, providedOptions);
+    const stickyToggleButtonInteractionStateProperty = new StickyToggleButtonInteractionStateProperty(buttonModel);
 
-    super( buttonModel, stickyToggleButtonInteractionStateProperty, providedOptions );
+    super(buttonModel, stickyToggleButtonInteractionStateProperty, providedOptions);
 
     this.disposeRectangularStickyToggleButton = () => {
       buttonModel.dispose();
@@ -48,4 +48,4 @@ export default class RectangularStickyToggleButton<T> extends RectangularButton 
   }
 }
 
-sun.register( 'RectangularStickyToggleButton', RectangularStickyToggleButton );
+sun.register('RectangularStickyToggleButton', RectangularStickyToggleButton);

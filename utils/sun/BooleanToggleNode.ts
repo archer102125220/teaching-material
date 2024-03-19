@@ -8,11 +8,11 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import sun from './sun';
-import ToggleNode, { type ToggleNodeOptions } from './ToggleNode';
-import { Node } from '../scenery/imports';
-import type TProperty from '../axon/TProperty';
-import { type EmptySelfOptions } from '../phet-core/optionize';
+import sun from '@/utils/sun/sun';
+import ToggleNode, { type ToggleNodeOptions } from '@/utils/sun/ToggleNode';
+import { Node } from '@/utils/scenery/imports';
+import type TProperty from '@/utils/axon/TProperty';
+import { type EmptySelfOptions } from '@/utils/phet-core/optionize';
 
 type SelfOptions = EmptySelfOptions;
 

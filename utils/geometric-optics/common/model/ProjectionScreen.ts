@@ -8,17 +8,17 @@
  * @author Martin Veillette
  */
 
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Property from '../../../axon/Property';
-import Matrix3 from '../../../dot/Matrix3';
-import Vector2 from '../../../dot/Vector2';
-import Vector2Property from '../../../dot/Vector2Property';
-import { Shape } from '../../../kite/imports';
-import PhetioObject, { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import geometricOptics from '../../geometricOptics';
-import GOConstants from '../GOConstants';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Property from '@/utils/axon/Property';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import Vector2Property from '@/utils/dot/Vector2Property';
+import { Shape } from '@/utils/kite/imports';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
 
 // Dimensions of the screen, in cm. "Near" and "far" refer to pseudo-3D perspective.
 const SCREEN_WIDTH = 42;

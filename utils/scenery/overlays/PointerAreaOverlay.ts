@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import { Shape } from '../../kite/imports';
-import { Display, type TOverlay, Node, scenery, ShapeBasedOverlay, Trail } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import { Shape } from '@/utils/kite/imports';
+import { Display, type TOverlay, Node, scenery, ShapeBasedOverlay, Trail } from '@/utils/scenery/imports';
 
 export default class PointerAreaOverlay extends ShapeBasedOverlay implements TOverlay {
   public constructor(display: Display, rootNode: Node) {

@@ -36,7 +36,7 @@
 
 import _ from 'lodash';
 
-import cleanArray from '../../phet-core/cleanArray';
+import cleanArray from '@/utils/phet-core/cleanArray';
 import {
   Block,
   ChangeInterval,
@@ -44,7 +44,7 @@ import {
   Renderer,
   scenery,
   Stitcher
-} from '../imports';
+} from '@/utils/scenery/imports';
 
 // Returns whether the consecutive {Drawable}s 'a' and 'b' should be put into separate blocks
 function hasGapBetweenDrawables(a, b) {

@@ -14,7 +14,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import type NotNull from './NotNull';
+import type NotNull from '@/utils/phet-core/types/NotNull';
 
 type WithoutNull<T extends object, keys extends keyof T = keyof T> = T & { [key in keys]: NotNull<T[key]> };
 

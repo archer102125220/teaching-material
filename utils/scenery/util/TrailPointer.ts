@@ -12,9 +12,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import type WithoutNull from '../../phet-core/types/WithoutNull';
-import { Node, scenery, Trail } from '../imports';
-import { type TrailCallback } from './Trail';
+import type WithoutNull from '@/utils/phet-core/types/WithoutNull';
+import { Node, scenery, Trail } from '@/utils/scenery/imports';
+import { type TrailCallback } from '@/utils/scenery/util/Trail';
 
 export type ActiveTrailPointer = WithoutNull<TrailPointer, 'trail'>;
 

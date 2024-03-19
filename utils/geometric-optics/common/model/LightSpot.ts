@@ -9,21 +9,21 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../../../axon/DerivedProperty';
-import Vector2 from '../../../dot/Vector2';
-import Utils from '../../../dot/Utils';
-import NumberIO from '../../../tandem/types/NumberIO';
-import Optic from './Optic';
-import geometricOptics from '../../geometricOptics';
-import ProjectionScreen from './ProjectionScreen';
-import NullableIO from '../../../tandem/types/NullableIO';
-import GOConstants from '../../common/GOConstants';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import PhetioObject, { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import BooleanIO from '../../../tandem/types/BooleanIO';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import Utils from '@/utils/dot/Utils';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import ProjectionScreen from '@/utils/geometric-optics/common/model/ProjectionScreen';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import BooleanIO from '@/utils/tandem/types/BooleanIO';
 
 type PositionAndDiameter = {
   position: Vector2; // position of the light spot's center, in the vertical plane of the projection screen

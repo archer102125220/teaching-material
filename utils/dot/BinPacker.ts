@@ -30,8 +30,8 @@
 
 import _ from 'lodash';
 
-import Bounds2 from './Bounds2';
-import dot from './dot';
+import Bounds2 from '@/utils/dot/Bounds2';
+import dot from '@/utils/dot/dot';
 
 export default class BinPacker {
 

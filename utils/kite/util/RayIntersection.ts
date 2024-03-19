@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Utils from '../../dot/Utils';
-import Vector2 from '../../dot/Vector2';
-import { kite } from '../imports';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import { kite } from '@/utils/kite/imports';
 
 export default class RayIntersection {
 

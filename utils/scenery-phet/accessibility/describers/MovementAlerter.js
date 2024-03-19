@@ -11,18 +11,18 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Range from '../../../dot/Range';
-import Utils from '../../../dot/Utils';
-import Vector2 from '../../../dot/Vector2';
-import merge from '../../../phet-core/merge';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import ResponsePacket from '../../../utterance-queue/ResponsePacket';
-import Utterance from '../../../utterance-queue/Utterance';
-import sceneryPhet from '../../sceneryPhet';
-import SceneryPhetStrings from '../../SceneryPhetStrings';
-import Alerter from './Alerter';
-import BorderAlertsDescriber from './BorderAlertsDescriber';
-import DirectionEnum from './DirectionEnum';
+import Range from '@/utils/dot/Range';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import merge from '@/utils/phet-core/merge';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import ResponsePacket from '@/utils/utterance-queue/ResponsePacket';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import Alerter from '@/utils/scenery-phet/accessibility/describers/Alerter';
+import BorderAlertsDescriber from '@/utils/scenery-phet/accessibility/describers/BorderAlertsDescriber';
+import DirectionEnum from '@/utils/scenery-phet/accessibility/describers/DirectionEnum';
 
 // constants
 const downString = SceneryPhetStrings.a11y.movementAlerter.down;
@@ -84,9 +84,9 @@ const DIRECTION_MAP = {
 };
 const DIRECTION_MAP_KEYS = Object.keys(DIRECTION_MAP);
 
-if (assert) {
+if (window.assert) {
   DIRECTION_MAP_KEYS.forEach((direction) => {
-    assert(
+    window.assert(
       DirectionEnum.keys.indexOf(direction) >= 0,
       `unexpected direction: ${direction}. Keys should be the same as those in DirectionEnum`
     );
@@ -138,10 +138,10 @@ class MovementAlerter extends Alerter {
 
     // @private
     this.movementAlertKeys = Object.keys(options.movementAlerts);
-    if (assert) {
+    if (window.assert) {
       for (let i = 0; i < this.movementAlertKeys.length; i++) {
         const key = this.movementAlertKeys[i];
-        assert(
+        window.assert(
           DirectionEnum.keys.indexOf(key) >= 0,
           `unexpected key: ${key}. Keys should be the same as those in DirectionEnum`
         );
@@ -226,9 +226,9 @@ class MovementAlerter extends Alerter {
       );
 
       // make sure that these alerts exist
-      if (assert) {
+      if (window.assert) {
         directions.forEach((direction) => {
-          assert(
+          window.assert(
             this.movementAlerts[direction] &&
               typeof this.movementAlerts[direction] === 'string'
           );

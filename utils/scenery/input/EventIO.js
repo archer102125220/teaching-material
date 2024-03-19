@@ -9,13 +9,13 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import BooleanIO from '../../tandem/types/BooleanIO';
-import IOType from '../../tandem/types/IOType';
-import NullableIO from '../../tandem/types/NullableIO';
-import NumberIO from '../../tandem/types/NumberIO';
-import ObjectLiteralIO from '../../tandem/types/ObjectLiteralIO';
-import StringIO from '../../tandem/types/StringIO';
-import { Input, scenery } from '../imports';
+import BooleanIO from '@/utils/tandem/types/BooleanIO';
+import IOType from '@/utils/tandem/types/IOType';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import ObjectLiteralIO from '@/utils/tandem/types/ObjectLiteralIO';
+import StringIO from '@/utils/tandem/types/StringIO';
+import { Input, scenery } from '@/utils/scenery/imports';
 
 const EventIO = new IOType( 'EventIO', {
   valueType: window.Event,

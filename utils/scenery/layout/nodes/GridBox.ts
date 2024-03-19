@@ -48,11 +48,11 @@
 
 import _ from 'lodash';
 
-import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import optionize from '../../../phet-core/optionize';
-import Orientation from '../../../phet-core/Orientation';
-import { GRID_CONSTRAINT_OPTION_KEYS, GridCell, GridConstraint, type GridConstraintOptions, type HorizontalLayoutAlign, LAYOUT_NODE_OPTION_KEYS, LayoutAlign, LayoutNode, type LayoutNodeOptions, MarginLayoutCell, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery, SIZABLE_OPTION_KEYS, type VerticalLayoutAlign } from '../../imports';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize from '@/utils/phet-core/optionize';
+import Orientation from '@/utils/phet-core/Orientation';
+import { GRID_CONSTRAINT_OPTION_KEYS, GridCell, GridConstraint, type GridConstraintOptions, type HorizontalLayoutAlign, LAYOUT_NODE_OPTION_KEYS, LayoutAlign, LayoutNode, type LayoutNodeOptions, MarginLayoutCell, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery, SIZABLE_OPTION_KEYS, type VerticalLayoutAlign } from '@/utils/scenery/imports';
 
 // GridBox-specific options that can be passed in the constructor or mutate() call.
 const GRIDBOX_OPTION_KEYS = [

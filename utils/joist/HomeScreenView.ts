@@ -6,24 +6,26 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Bounds2 from '../dot/Bounds2';
-import StringUtils from '../phetcommon/util/StringUtils';
-import PhetFont from '../scenery-phet/PhetFont';
-import { AlignBox, HBox, Node, Text } from '../scenery/imports';
-import soundManager from '../tambo/soundManager';
-import HomeScreenButton from './HomeScreenButton';
-import HomeScreenSoundGenerator from './HomeScreenSoundGenerator';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
-import ScreenView, { type ScreenViewOptions } from './ScreenView';
-import { type AnyScreen } from './Screen';
-import HomeScreenModel from './HomeScreenModel';
-import Property from '../axon/Property';
-import optionize from '../phet-core/optionize';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import type PickRequired from '../phet-core/types/PickRequired';
-import PatternStringProperty from '../axon/PatternStringProperty';
-import Tandem from '../tandem/Tandem';
+import _ from 'lodash';
+
+import Bounds2 from '@/utils/dot/Bounds2';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { AlignBox, HBox, Node, Text } from '@/utils/scenery/imports';
+import soundManager from '@/utils/tambo/soundManager';
+import HomeScreenButton from '@/utils/joist/HomeScreenButton';
+import HomeScreenSoundGenerator from '@/utils/joist/HomeScreenSoundGenerator';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import ScreenView, { type ScreenViewOptions } from '@/utils/joist/ScreenView';
+import { type AnyScreen } from '@/utils/joist/Screen';
+import HomeScreenModel from '@/utils/joist/HomeScreenModel';
+import Property from '@/utils/axon/Property';
+import optionize from '@/utils/phet-core/optionize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
+import Tandem from '@/utils/tandem/Tandem';
 
 type SelfOptions = {
 

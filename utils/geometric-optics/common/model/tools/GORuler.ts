@@ -7,9 +7,9 @@
  * @author Sarah Chang (Swarthmore College)
  */
 
-import geometricOptics from '../../../geometricOptics';
-import type PickRequired from '../../../../phet-core/types/PickRequired';
-import GOTool, { type GOToolOptions } from './GOTool';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import GOTool, { type GOToolOptions } from '@/utils/geometric-optics/common/model/tools/GOTool';
 
 type RulerOrientation = 'horizontal' | 'vertical';
 

@@ -15,12 +15,12 @@
 
 import _ from 'lodash';
 
-import assertHasProperties from '../../phet-core/assertHasProperties';
-import type Constructor from '../../phet-core/types/Constructor';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
-import { DelayedMutate, Node, SceneryEvent } from '../../scenery/imports';
-import sun from '../sun';
-import AccessibleValueHandler, { type AccessibleValueHandlerOptions } from './AccessibleValueHandler';
+import assertHasProperties from '@/utils/phet-core/assertHasProperties';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import { DelayedMutate, Node, SceneryEvent } from '@/utils/scenery/imports';
+import sun from '@/utils/sun/sun';
+import AccessibleValueHandler, { type AccessibleValueHandlerOptions } from '@/utils/sun/accessibility/AccessibleValueHandler';
 
 const ACCESSIBLE_SLIDER_OPTIONS = [
   'startDrag',

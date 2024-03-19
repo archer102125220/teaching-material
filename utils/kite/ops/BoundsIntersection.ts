@@ -11,9 +11,9 @@
 
 import _ from 'lodash';
 
-import Vector2 from '../../dot/Vector2';
-import Pool from '../../phet-core/Pool';
-import { kite, Segment, SegmentIntersection } from '../imports';
+import Vector2 from '@/utils/dot/Vector2';
+import Pool from '@/utils/phet-core/Pool';
+import { kite, Segment, SegmentIntersection } from '@/utils/kite/imports';
 
 type ActiveBoundsIntersection = {
   [PropertyName in keyof BoundsIntersection]: BoundsIntersection[PropertyName] extends (infer T | null) ? T : BoundsIntersection[PropertyName];

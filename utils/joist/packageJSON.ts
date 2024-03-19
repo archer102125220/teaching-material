@@ -6,9 +6,9 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import joist from './joist';
+import joist from '@/utils/joist/joist';
 
-const packageJSON = (window.phet && phet.chipper) ? phet.chipper.packageObject : { name: 'placeholder' };
+const packageJSON = (window.phet && window.phet.chipper) ? window.phet.chipper.packageObject : { name: 'placeholder' };
 
 joist.register('packageJSON', packageJSON);
 

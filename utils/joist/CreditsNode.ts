@@ -9,14 +9,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import DerivedProperty from '../axon/DerivedProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import optionize from '../phet-core/optionize';
-import StringUtils from '../phetcommon/util/StringUtils';
-import PhetFont from '../scenery-phet/PhetFont';
-import { Node, VBox, type VBoxOptions, VoicingRichText, VoicingText, VStrut } from '../scenery/imports';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize from '@/utils/phet-core/optionize';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { Node, VBox, type VBoxOptions, VoicingRichText, VoicingText, VStrut } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
 
 type SelfOptions = {
   titleFont?: PhetFont;

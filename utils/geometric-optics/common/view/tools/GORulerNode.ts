@@ -11,26 +11,26 @@
  * @author Sarah Chang (Swarthmore College)
  */
 
-import DerivedProperty, { type UnknownDerivedProperty } from '../../../../axon/DerivedProperty';
-import Bounds2 from '../../../../dot/Bounds2';
-import Utils from '../../../../dot/Utils';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import PhetFont from '../../../../scenery-phet/PhetFont';
-import RulerNode from '../../../../scenery-phet/RulerNode';
-import { DragListener } from '../../../../scenery/imports';
-import geometricOptics from '../../../geometricOptics';
-import GeometricOpticsStrings from '../../../GeometricOpticsStrings';
-import GOConstants from '../../GOConstants';
-import GORuler from '../../model/tools/GORuler';
-import Vector2 from '../../../../dot/Vector2';
-import Tandem from '../../../../tandem/Tandem';
-import GORulerIcon from './GORulerIcon';
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import GOToolNode, { type GOToolNodeOptions } from './GOToolNode';
-import GOToolKeyboardDragListener from './GOToolKeyboardDragListener';
-import GOToolDragListener from './GOToolDragListener';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/optionize';
-import isSettingPhetioStateProperty from '../../../../tandem/isSettingPhetioStateProperty';
+import DerivedProperty, { type UnknownDerivedProperty } from '@/utils/axon/DerivedProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Utils from '@/utils/dot/Utils';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import RulerNode from '@/utils/scenery-phet/RulerNode';
+import { DragListener } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import GORuler from '@/utils/geometric-optics/common/model/tools/GORuler';
+import Vector2 from '@/utils/dot/Vector2';
+import Tandem from '@/utils/tandem/Tandem';
+import GORulerIcon from '@/utils/geometric-optics/common/view/tools/GORulerIcon';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import GOToolNode, { type GOToolNodeOptions } from '@/utils/geometric-optics/common/view/tools/GOToolNode';
+import GOToolKeyboardDragListener from '@/utils/geometric-optics/common/view/tools/GOToolKeyboardDragListener';
+import GOToolDragListener from '@/utils/geometric-optics/common/view/tools/GOToolDragListener';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
 
 
 // constants

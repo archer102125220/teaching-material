@@ -6,15 +6,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyEmitter from '../../axon/TinyEmitter';
-import Utils from '../../dot/Utils';
-import { Shape } from '../../kite/imports';
-import cleanArray from '../../phet-core/cleanArray';
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { scenery, svgns, xlinkns } from '../imports';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
-import type TEmitter from '../../axon/TEmitter';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import Utils from '@/utils/dot/Utils';
+import { Shape } from '@/utils/kite/imports';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { scenery, svgns, xlinkns } from '@/utils/scenery/imports';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 // Need to poly-fill on some browsers
 const log2 = Math.log2 || function (x: number) { return Math.log(x) / Math.LN2; };

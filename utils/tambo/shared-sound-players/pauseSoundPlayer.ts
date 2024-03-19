@@ -7,8 +7,8 @@
  */
 
 import pause_mp3 from '@/assets/sounds/tambo/pause_mp3';
-import SoundClipPlayer from '../sound-generators/SoundClipPlayer';
-import tambo from '../tambo';
+import SoundClipPlayer from '@/utils/tambo/sound-generators/SoundClipPlayer';
+import tambo from '@/utils/tambo/tambo';
 
 // create the shared sound instance
 const pauseSoundPlayer = new SoundClipPlayer(pause_mp3, {

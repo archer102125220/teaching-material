@@ -7,15 +7,15 @@
  * @author Jesse Greenberg
  */
 
-import joist from '../joist';
-import LegendsOfLearningSupport from './LegendsOfLearningSupport';
+import joist from '@/utils/joist/joist';
+import LegendsOfLearningSupport from '@/utils/joist/thirdPartySupport/LegendsOfLearningSupport';
 
 const ThirdPartySupport = {
   legendsOfLearning: LegendsOfLearningSupport
 };
 
 // verify that enum is immutable, without the runtime penalty in production code
-if (assert) { Object.freeze(ThirdPartySupport); }
+if (window.assert) { Object.freeze(ThirdPartySupport); }
 
 joist.register('ThirdPartySupport', ThirdPartySupport);
 

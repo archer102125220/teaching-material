@@ -20,35 +20,35 @@
 
 import _ from 'lodash';
 
-import BooleanProperty from '../axon/BooleanProperty';
-import Property from '../axon/Property';
-import dotRandom from '../dot/dotRandom';
-import InstanceRegistry from '../phet-core/documentation/InstanceRegistry';
-import optionize from '../phet-core/optionize';
-import { Display, extendsWidthSizable, Focus, FocusManager, isWidthSizable, MatrixBetweenProperty, Node, type NodeOptions, type PDOMBehaviorFunction, PDOMPeer, type PDOMValueType, type TColor, type TInputListener, type TPaint, WidthSizable, type WidthSizableOptions } from '../scenery/imports';
-import type TSoundPlayer from '../tambo/TSoundPlayer';
-import generalCloseSoundPlayer from '../tambo/shared-sound-players/generalCloseSoundPlayer';
-import generalOpenSoundPlayer from '../tambo/shared-sound-players/generalOpenSoundPlayer';
-import EventType from '../tandem/EventType';
-import Tandem from '../tandem/Tandem';
-import IOType from '../tandem/types/IOType';
-import ComboBoxButton from './ComboBoxButton';
-import ComboBoxListBox from './ComboBoxListBox';
-import sun from './sun';
-import SunConstants from './SunConstants';
-import DerivedProperty from '../axon/DerivedProperty';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import { isTReadOnlyProperty } from '../axon/TReadOnlyProperty';
-import { type SpeakableResolvedResponse } from '../utterance-queue/ResponsePacket';
-import type GroupItemOptions from './GroupItemOptions';
-import { getGroupItemNodes } from './GroupItemOptions';
-import Multilink from '../axon/Multilink';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import type PhetioProperty from '../axon/PhetioProperty';
-import Matrix3 from '../dot/Matrix3';
-import { type ComboBoxListItemNodeOptions } from './ComboBoxListItemNode';
-import TinyProperty from '../axon/TinyProperty';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import Property from '@/utils/axon/Property';
+import dotRandom from '@/utils/dot/dotRandom';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize from '@/utils/phet-core/optionize';
+import { Display, extendsWidthSizable, Focus, FocusManager, isWidthSizable, MatrixBetweenProperty, Node, type NodeOptions, type PDOMBehaviorFunction, PDOMPeer, type PDOMValueType, type TColor, type TInputListener, type TPaint, WidthSizable, type WidthSizableOptions } from '@/utils/scenery/imports';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import generalCloseSoundPlayer from '@/utils/tambo/shared-sound-players/generalCloseSoundPlayer';
+import generalOpenSoundPlayer from '@/utils/tambo/shared-sound-players/generalOpenSoundPlayer';
+import EventType from '@/utils/tandem/EventType';
+import Tandem from '@/utils/tandem/Tandem';
+import IOType from '@/utils/tandem/types/IOType';
+import ComboBoxButton from '@/utils/sun/ComboBoxButton';
+import ComboBoxListBox from '@/utils/sun/ComboBoxListBox';
+import sun from '@/utils/sun/sun';
+import SunConstants from '@/utils/sun/SunConstants';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { isTReadOnlyProperty } from '@/utils/axon/TReadOnlyProperty';
+import { type SpeakableResolvedResponse } from '@/utils/utterance-queue/ResponsePacket';
+import type GroupItemOptions from '@/utils/sun/GroupItemOptions';
+import { getGroupItemNodes } from '@/utils/sun/GroupItemOptions';
+import Multilink from '@/utils/axon/Multilink';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import type PhetioProperty from '@/utils/axon/PhetioProperty';
+import Matrix3 from '@/utils/dot/Matrix3';
+import { type ComboBoxListItemNodeOptions } from '@/utils/sun/ComboBoxListItemNode';
+import TinyProperty from '@/utils/axon/TinyProperty';
 
 // const
 const LIST_POSITION_VALUES = ['above', 'below'] as const; // where the list pops up relative to the button

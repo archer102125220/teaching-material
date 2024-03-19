@@ -6,9 +6,9 @@
  * @author John Blanco
  */
 
-import Enumeration from '../../phet-core/Enumeration';
-import EnumerationValue from '../../phet-core/EnumerationValue';
-import sun from '../sun';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import sun from '@/utils/sun/sun';
 
 export default class ButtonInteractionState extends EnumerationValue {
 

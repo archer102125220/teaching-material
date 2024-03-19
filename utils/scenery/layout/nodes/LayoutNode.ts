@@ -8,10 +8,10 @@
 
 import _ from 'lodash';
 
-import type TProperty from '../../../axon/TProperty';
-import Vector2 from '../../../dot/Vector2';
-import Vector2Property from '../../../dot/Vector2Property';
-import { Node, NodeLayoutConstraint, type NodeOptions, scenery, Sizable, type SizableOptions } from '../../imports';
+import type TProperty from '@/utils/axon/TProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import Vector2Property from '@/utils/dot/Vector2Property';
+import { Node, NodeLayoutConstraint, type NodeOptions, scenery, Sizable, type SizableOptions } from '@/utils/scenery/imports';
 
 type SelfOptions = {
   // Controls whether the layout container will re-trigger layout automatically after the "first" layout during

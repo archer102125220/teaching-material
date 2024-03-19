@@ -9,8 +9,8 @@
 
 import DerivedProperty from '@/utils/axon/DerivedProperty';
 import joist from '@/utils/joist/joist';
-import localeProperty, { type Locale } from './localeProperty';
-import fallbackLocalesProperty from './fallbackLocalesProperty';
+import localeProperty, { type Locale } from '@/i18n/joist/localeProperty';
+import fallbackLocalesProperty from '@/i18n/joist/fallbackLocalesProperty';
 
 const FALLBACK_LOCALE = 'en';
 

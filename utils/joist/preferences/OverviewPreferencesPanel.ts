@@ -7,15 +7,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import merge from '../../phet-core/merge';
-import { VBox, VoicingRichText } from '../../scenery/imports';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import merge from '@/utils/phet-core/merge';
+import { VBox, VoicingRichText } from '@/utils/scenery/imports';
 import isLeftToRightProperty from '@/i18n/joist/isLeftToRightProperty';
-import joist from '../joist';
-import JoistStrings from '../JoistStrings';
-import PreferencesDialog from './PreferencesDialog';
-import PreferencesPanel from './PreferencesPanel';
-import PreferencesType from './PreferencesType';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import PreferencesPanel from '@/utils/joist/preferences/PreferencesPanel';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
 
 class OverviewPreferencesPanel extends PreferencesPanel {
   public constructor(selectedTabProperty: TReadOnlyProperty<PreferencesType>, tabVisibleProperty: TReadOnlyProperty<boolean>) {

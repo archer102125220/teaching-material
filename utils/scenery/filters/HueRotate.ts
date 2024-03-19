@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../dot/toSVGNumber';
-import Utils from '../../dot/Utils';
-import { ColorMatrixFilter, scenery } from '../imports';
+import toSVGNumber from '@/utils/dot/toSVGNumber';
+import Utils from '@/utils/dot/Utils';
+import { ColorMatrixFilter, scenery } from '@/utils/scenery/imports';
 
 export default class HueRotate extends ColorMatrixFilter {
 

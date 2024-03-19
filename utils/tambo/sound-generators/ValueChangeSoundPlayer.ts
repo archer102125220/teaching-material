@@ -16,20 +16,20 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import Range from '../../dot/Range';
-import Utils from '../../dot/Utils';
-import optionize from '../../phet-core/optionize';
+import Range from '@/utils/dot/Range';
+import Utils from '@/utils/dot/Utils';
+import optionize from '@/utils/phet-core/optionize';
 import generalBoundaryBoop_mp3 from '@/assets/sounds/tambo/generalBoundaryBoop_mp3';
 import generalSoftClick_mp3 from '@/assets/sounds/tambo/generalSoftClick_mp3';
-import type TSoundPlayer from '../TSoundPlayer';
-import phetAudioContext from '../phetAudioContext';
-import generalBoundaryBoopSoundPlayer from '../shared-sound-players/generalBoundaryBoopSoundPlayer';
-import generalSoftClickSoundPlayer from '../shared-sound-players/generalSoftClickSoundPlayer';
-import nullSoundPlayer from '../shared-sound-players/nullSoundPlayer';
-import tambo from '../tambo';
-import SoundClip from './SoundClip';
-import SoundClipPlayer from './SoundClipPlayer';
-import { Disposable, type DisposableOptions, TinyProperty, type TReadOnlyProperty } from '../../axon/imports';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import phetAudioContext from '@/utils/tambo/phetAudioContext';
+import generalBoundaryBoopSoundPlayer from '@/utils/tambo/shared-sound-players/generalBoundaryBoopSoundPlayer';
+import generalSoftClickSoundPlayer from '@/utils/tambo/shared-sound-players/generalSoftClickSoundPlayer';
+import nullSoundPlayer from '@/utils/tambo/shared-sound-players/nullSoundPlayer';
+import tambo from '@/utils/tambo/tambo';
+import SoundClip from '@/utils/tambo/sound-generators/SoundClip';
+import SoundClipPlayer from '@/utils/tambo/sound-generators/SoundClipPlayer';
+import { Disposable, type DisposableOptions, TinyProperty, type TReadOnlyProperty } from '@/utils/axon/imports';
 
 // constants
 const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary

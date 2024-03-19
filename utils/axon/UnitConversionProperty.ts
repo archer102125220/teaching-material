@@ -22,15 +22,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import axon from './axon';
-import Range from '../dot/Range';
-import type TProperty from './TProperty';
-import MappedProperty, { type MappedPropertyOptions } from './MappedProperty';
-import Property from './Property';
-import { DEFAULT_RANGE } from './NumberProperty';
-import optionize from '../phet-core/optionize';
-import type TRangedProperty from './TRangedProperty';
-import { isTRangedProperty } from './TRangedProperty';
+import axon from '@/utils/axon/axon';
+import Range from '@/utils/dot/Range';
+import type TProperty from '@/utils/axon/TProperty';
+import MappedProperty, { type MappedPropertyOptions } from '@/utils/axon/MappedProperty';
+import Property from '@/utils/axon/Property';
+import { DEFAULT_RANGE } from '@/utils/axon/NumberProperty';
+import optionize from '@/utils/phet-core/optionize';
+import type TRangedProperty from '@/utils/axon/TRangedProperty';
+import { isTRangedProperty } from '@/utils/axon/TRangedProperty';
 
 type SelfOptions = {
   // The multiplicative factor to convert from INPUT => OUTPUT, e.g.

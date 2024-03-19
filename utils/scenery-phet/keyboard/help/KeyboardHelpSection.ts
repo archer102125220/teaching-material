@@ -16,17 +16,19 @@
  * @author Jesse Greenberg
  */
 
-import DerivedProperty from '../../../axon/DerivedProperty';
-import StringProperty from '../../../axon/StringProperty';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import { isTReadOnlyProperty } from '../../../axon/TReadOnlyProperty';
-import optionize, { combineOptions } from '../../../phet-core/optionize';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import { HBox, Node, ReadingBlock, type ReadingBlockOptions, RichText, type RichTextOptions, VBox, type VBoxOptions } from '../../../scenery/imports';
-import ResponsePacket from '../../../utterance-queue/ResponsePacket';
-import PhetFont from '../../PhetFont';
-import sceneryPhet from '../../sceneryPhet';
-import KeyboardHelpSectionRow from './KeyboardHelpSectionRow';
+import _ from 'lodash';
+
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import StringProperty from '@/utils/axon/StringProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { isTReadOnlyProperty } from '@/utils/axon/TReadOnlyProperty';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { HBox, Node, ReadingBlock, type ReadingBlockOptions, RichText, type RichTextOptions, VBox, type VBoxOptions } from '@/utils/scenery/imports';
+import ResponsePacket from '@/utils/utterance-queue/ResponsePacket';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import KeyboardHelpSectionRow from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSectionRow';
 
 // heading defaults
 const DEFAULT_HEADING_CONTENT_SPACING = 13; // spacing between h

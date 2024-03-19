@@ -5,8 +5,8 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-import Pool, { type TPoolable } from '../../../phet-core/Pool';
-import { Font, RichText, RichTextCleanable, RichTextUtils, scenery, Text, type TextBoundsMethod, type TPaint } from '../../imports';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
+import { Font, RichText, RichTextCleanable, RichTextUtils, scenery, Text, type TextBoundsMethod, type TPaint } from '@/utils/scenery/imports';
 
 export default class RichTextLeaf extends RichTextCleanable(Text) implements TPoolable {
 

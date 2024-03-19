@@ -15,21 +15,20 @@
 
 import _ from 'lodash';
 
-import PhetioObject from '../tandem/PhetioObject';
-import Tandem from '../tandem/Tandem';
-import CouldNotYetDeserializeError from '../tandem/CouldNotYetDeserializeError';
-import IOType from '../tandem/types/IOType';
-import ObjectLiteralIO from '../tandem/types/ObjectLiteralIO';
-import LocalizedString, { type LocalizedStringStateDelta, type StringsStateStateObject } from './LocalizedString';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import CouldNotYetDeserializeError from '@/utils/tandem/CouldNotYetDeserializeError';
+import IOType from '@/utils/tandem/types/IOType';
+import ObjectLiteralIO from '@/utils/tandem/types/ObjectLiteralIO';
+import LocalizedString, { type LocalizedStringStateDelta, type StringsStateStateObject } from '@/utils/chipper/LocalizedString';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 import { type Locale } from '@/i18n/joist/localeProperty';
 import localeInfoModule from '@/assets/chipper/localeInfoModule';
-import { type PhetioID } from '../tandem/TandemConstants';
-
-const locale: string = ((window.location?.search || '').substring(1).split('&').find((searchString: string) => searchString.split('=')?.[0] === 'locale')?.split('=')?.[1] || '');
+import { type PhetioID } from '@/utils/tandem/TandemConstants';
 
 // constants
-const FALLBACK_LOCALE = 'en';
+// const FALLBACK_LOCALE = 'en';
+const FALLBACK_LOCALE = window.phet?.chipper?.locale || 'en';
 
 // Holds all of our localizedStrings, so that we can save our phet-io string change state
 export const localizedStrings: LocalizedString[] = [];
@@ -45,8 +44,6 @@ window.phet.chipper.setAllStrings = (str: string) => {
     localizedString.property.value = str;
   });
 };
-
-console.log(window.location, { FALLBACK_LOCALE, locale });
 
 const stringKeyToTandemName = (key: string) => {
   return key.replace(/(?:[-_\s]\w)/g, word => word[1].toUpperCase());

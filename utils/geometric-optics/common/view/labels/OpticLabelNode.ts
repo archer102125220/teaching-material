@@ -6,18 +6,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../../../../axon/DerivedProperty';
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import { type EmptySelfOptions } from '../../../../phet-core/optionize';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import geometricOptics from '../../../geometricOptics';
-import GeometricOpticsStrings from '../../../GeometricOpticsStrings';
-import Lens from '../../../lens/model/Lens';
-import Mirror from '../../../mirror/model/Mirror';
-import Optic from '../../model/Optic';
-import LabelNode, { type LabelNodeOptions } from './LabelNode';
-import { type OpticSurfaceType } from '../../model/OpticSurfaceType';
-import DerivedStringProperty from '../../../../axon/DerivedStringProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
+import Mirror from '@/utils/geometric-optics/mirror/model/Mirror';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import LabelNode, { type LabelNodeOptions } from '@/utils/geometric-optics/common/view/labels/LabelNode';
+import { type OpticSurfaceType } from '@/utils/geometric-optics/common/model/OpticSurfaceType';
+import DerivedStringProperty from '@/utils/axon/DerivedStringProperty';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -63,12 +63,12 @@ export default class OpticLabelNode extends LabelNode {
           text = concaveLensString;
         }
         else {
-          throw Error(`unsupported opticSurfaceType for lens: ${opticSurfaceType}`);
+          throw new Error(`unsupported opticSurfaceType for lens: ${opticSurfaceType}`);
         }
       }
       else {
         // mirror
-        window.assert && window.assert(optic instanceof Mirror); // eslint-disable-line no-simple-type-checking-assertions
+        window.assert && window.assert(optic instanceof Mirror);
         if (opticSurfaceType === 'convex') {
           text = convexMirrorString;
         }
@@ -79,7 +79,7 @@ export default class OpticLabelNode extends LabelNode {
           text = flatMirrorString;
         }
         else {
-          throw Error(`unsupported opticSurfaceType for mirror: ${opticSurfaceType}`);
+          throw new Error(`unsupported opticSurfaceType for mirror: ${opticSurfaceType}`);
         }
       }
       return text;

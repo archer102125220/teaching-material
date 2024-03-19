@@ -8,8 +8,8 @@
  * @author Jesse Greenberg
  */
 
-import Utterance, { type UtteranceOptions } from '../../../utterance-queue/Utterance';
-import { Focus, scenery } from '../../imports';
+import Utterance, { type UtteranceOptions } from '@/utils/utterance-queue/Utterance';
+import { Focus, scenery } from '@/utils/scenery/imports';
 
 export type ReadingBlockUtteranceOptions = UtteranceOptions;
 

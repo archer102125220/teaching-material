@@ -8,15 +8,15 @@
 
 import _ from 'lodash';
 
-import TinyEmitter from '../../../axon/TinyEmitter';
-import type Constructor from '../../../phet-core/types/Constructor';
-import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
-import { DelayedMutate, Display, Focus, FocusManager, Instance, Node, Pointer, PressListener, scenery, SceneryEvent, type TInputListener, Trail } from '../../imports';
-import { type Highlight } from '../../overlays/HighlightOverlay';
-import type TEmitter from '../../../axon/TEmitter';
-import memoize from '../../../phet-core/memoize';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import TinyProperty from '../../../axon/TinyProperty';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import { DelayedMutate, Display, Focus, FocusManager, Instance, Node, Pointer, PressListener, scenery, SceneryEvent, type TInputListener, Trail } from '@/utils/scenery/imports';
+import { type Highlight } from '@/utils/scenery/overlays/HighlightOverlay';
+import type TEmitter from '@/utils/axon/TEmitter';
+import memoize from '@/utils/phet-core/memoize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
 
 // constants
 // option keys for InteractiveHighlighting, each of these will have a setter and getter and values are applied with mutate()
@@ -145,7 +145,7 @@ const InteractiveHighlighting = memoize(<SuperType extends Constructor<Node>>(Ty
         if (this._interactiveHighlightLayerable) {
 
           // if focus highlight is layerable, it must be a node for the scene graph
-          window.assert && window.assert(interactiveHighlight instanceof Node); // eslint-disable-line no-simple-type-checking-assertions
+          window.assert && window.assert(interactiveHighlight instanceof Node);
 
           // make sure the highlight is invisible, the HighlightOverlay will manage visibility
           (interactiveHighlight as Node).visible = false;

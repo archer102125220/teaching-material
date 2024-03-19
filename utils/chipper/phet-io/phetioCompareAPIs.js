@@ -32,7 +32,10 @@
  * @property {{major:number, minor:number}} version
  * @property {string} sim
  */
-(() => {
+
+import _lodash from 'lodash';
+
+export function handlePhetioCompareAPIs() {
   const METADATA_KEY_NAME = '_metadata';
   const DATA_KEY_NAME = '_data';
 
@@ -47,7 +50,7 @@
    * @returns {API} - In this version, phetioElements will be structured as a tree, but will have a verbose and complete
    *                  set of all metadata keys for each element. There will not be `metadataDefaults` in each type.
    */
-  const toStructuredTree = (api, _) => {
+  const toStructuredTree = (api, _ = _lodash) => {
     const sparseAPI = _.cloneDeep(api);
 
     // DUPLICATED with phetioEngine.js
@@ -519,4 +522,6 @@
     window.phetio = window.phetio || {};
     window.phetio.phetioCompareAPIs = _phetioCompareAPIs;
   }
-})();
+}
+
+export default handlePhetioCompareAPIs;

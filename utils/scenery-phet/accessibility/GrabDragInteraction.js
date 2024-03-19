@@ -53,11 +53,11 @@
 
 import _ from 'lodash';
 
-import EnabledComponent from '../../axon/EnabledComponent';
-import assertHasProperties from '../../phet-core/assertHasProperties';
-import getGlobal from '../../phet-core/getGlobal';
-import merge from '../../phet-core/merge';
-import StringUtils from '../../phetcommon/util/StringUtils';
+import EnabledComponent from '@/utils/axon/EnabledComponent';
+import assertHasProperties from '@/utils/phet-core/assertHasProperties';
+import getGlobal from '@/utils/phet-core/getGlobal';
+import merge from '@/utils/phet-core/merge';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
 import {
   HighlightFromNode,
   HighlightPath,
@@ -67,14 +67,14 @@ import {
   PDOMPeer,
   PressListener,
   Voicing
-} from '../../scenery/imports';
-import Tandem from '../../tandem/Tandem';
-import AriaLiveAnnouncer from '../../utterance-queue/AriaLiveAnnouncer';
-import ResponsePacket from '../../utterance-queue/ResponsePacket';
-import Utterance from '../../utterance-queue/Utterance';
-import sceneryPhet from '../sceneryPhet';
-import SceneryPhetStrings from '../SceneryPhetStrings';
-import GrabReleaseCueNode from './nodes/GrabReleaseCueNode';
+} from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import AriaLiveAnnouncer from '@/utils/utterance-queue/AriaLiveAnnouncer';
+import ResponsePacket from '@/utils/utterance-queue/ResponsePacket';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import GrabReleaseCueNode from '@/utils/scenery-phet/accessibility/nodes/GrabReleaseCueNode';
 
 // constants
 const grabPatternString = SceneryPhetStrings.a11y.grabDrag.grabPattern;
@@ -198,48 +198,49 @@ class GrabDragInteraction extends EnabledComponent {
       options
     );
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         typeof options.supportsGestureDescription === 'boolean',
         'supportsGestureDescription must be provided'
       );
 
     if (node.focusHighlightLayerable) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           node.focusHighlight,
           'if focusHighlightLayerable, the highlight must be set to the node before constructing the grab/drag interaction.'
         );
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           node.focusHighlight.parent,
           'if focusHighlightLayerable, the highlight must be added to the ' +
             'scene graph before grab/drag construction.'
         );
     }
     if (node.interactiveHighlightLayerable) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           node.interactiveHighlight,
           'An interactive highlight must be set to the Node before construcion when using interactiveHighlightLayerable'
         );
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           node.interactiveHighlight.parent,
           'if interactiveHighlightLayerable, the highlight must be added to the scene graph before construction'
         );
     }
     if (node.focusHighlight) {
-      assert &&
-        assert(
-          node.focusHighlight instanceof phet.scenery.HighlightPath,
+      window.assert &&
+        window.assert(
+          node.focusHighlight instanceof window.phet.scenery.HighlightPath,
           'if provided, focusHighlight must be a Path to support highlightChangedEmitter'
         );
     }
     if (node.interactiveHighlight) {
-      assert &&
-        assert(
-          node.interactiveHighlight instanceof phet.scenery.HighlightPath,
+      window.assert &&
+        window.assert(
+          node.interactiveHighlight instanceof
+            window.phet.scenery.HighlightPath,
           'if provided, interactiveHighlight must be a Path to support highlightChangedEmitter'
         );
     }
@@ -247,81 +248,85 @@ class GrabDragInteraction extends EnabledComponent {
     window.assert && window.assert(typeof options.onRelease === 'function');
     window.assert && window.assert(typeof options.onGrabbable === 'function');
     window.assert && window.assert(typeof options.onDraggable === 'function');
-    window.assert && window.assert(typeof options.showDragCueNode === 'function');
-    window.assert && window.assert(typeof options.showGrabCueNode === 'function');
-    window.assert && window.assert(Array.isArray(options.listenersForDragState));
-    window.assert && window.assert(Array.isArray(options.listenersForGrabState));
+    window.assert &&
+      window.assert(typeof options.showDragCueNode === 'function');
+    window.assert &&
+      window.assert(typeof options.showGrabCueNode === 'function');
+    window.assert &&
+      window.assert(Array.isArray(options.listenersForDragState));
+    window.assert &&
+      window.assert(Array.isArray(options.listenersForGrabState));
     window.assert && window.assert(options.grabbableOptions instanceof Object);
     window.assert && window.assert(options.grabCueOptions instanceof Object);
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         options.grabCueOptions.visible === undefined,
         'Should not set visibility of the cue node'
       );
     window.assert && window.assert(options.draggableOptions instanceof Object);
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.listenersForDragState.includes(keyboardDragListener),
         'GrabDragInteraction adds the KeyboardDragListener to listenersForDragState'
       );
     if (options.dragCueNode !== null) {
       window.assert && window.assert(options.dragCueNode instanceof Node);
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           !options.dragCueNode.parent,
           'GrabDragInteraction adds dragCueNode to focusHighlight'
         );
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           options.dragCueNode.visible === true,
           'dragCueNode should be visible to begin with'
         );
     }
 
     // GrabDragInteraction has its own API for description content.
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.grabbableOptions.descriptionContent,
         'set grabbableOptions.descriptionContent through custom Grab/Drag API, (see keyboardHelpText and gestureHelpText option).'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.grabbableOptions.helpText,
         'set grabbableOptions.helpText through custom Grab/Drag API, (see keyboardHelpText and gestureHelpText option).'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.grabbableOptions.descriptionTagName,
         'set grabbableOptions.descriptionTagName through custom Grab/Drag API, (see keyboardHelpText and gestureHelpText option).'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.draggableOptions.descriptionTagName,
         'set draggableOptions.descriptionTagName through custom Grab/Drag API, (see keyboardHelpText and gestureHelpText option).'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.draggableOptions.descriptionContent,
         'set draggableOptions.descriptionContent through custom Grab/Drag API, (see keyboardHelpText and gestureHelpText option).'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.draggableOptions.helpText,
         'set draggableOptions.helpText through custom Grab/Drag API, (see keyboardHelpText and gestureHelpText option).'
       );
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.draggableOptions.accessibleName,
         'GrabDragInteraction sets its own accessible name, see objectToGrabString'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.draggableOptions.innerContent,
         'GrabDragInteraction sets its own innerContent, see objectToGrabString'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.draggableOptions.ariaLabel,
         'GrabDragInteraction sets its own ariaLabel, see objectToGrabString'
       );
@@ -344,18 +349,18 @@ class GrabDragInteraction extends EnabledComponent {
     options.draggableOptions.innerContent = this.draggableAccessibleName;
     options.draggableOptions.ariaLabel = this.draggableAccessibleName;
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.grabbableOptions.accessibleName,
         'GrabDragInteraction sets its own accessible name, see objectToGrabString'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.grabbableOptions.innerContent,
         'GrabDragInteraction sets its own innerContent, see objectToGrabString'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !options.grabbableOptions.ariaLabel,
         'GrabDragInteraction sets its own ariaLabel, see objectToGrabString'
       );
@@ -439,9 +444,9 @@ class GrabDragInteraction extends EnabledComponent {
     // for both grabbing and dragging, the node with this interaction must be focusable, except when disabled.
     this.node.focusable = true;
 
-    assert &&
+    window.assert &&
       node.isVoicing &&
-      assert(
+      window.assert(
         node.voicingFocusListener === node.defaultFocusListener,
         'GrabDragInteraction sets its own voicingFocusListener.'
       );
@@ -577,8 +582,8 @@ class GrabDragInteraction extends EnabledComponent {
           // focusHighlight has been completely constructed (added to the scene graph) and can use its parent. But only
           // do it once.
           if (node.focusHighlightLayerable) {
-            assert &&
-              assert(
+            window.assert &&
+              window.assert(
                 this.grabFocusHighlight.parent,
                 'how can we have focusHighlightLayerable with a ' +
                   'node that is not in the scene graph?'
@@ -721,8 +726,8 @@ class GrabDragInteraction extends EnabledComponent {
 
       // Remove children if they were added to support layerable highlights
       if (node.focusHighlightLayerable) {
-        assert &&
-          assert(
+        window.assert &&
+          window.assert(
             this.grabFocusHighlight.parent,
             'how can we have focusHighlightLayerable with a ' +
               'node that is not in the scene graph?'
@@ -733,8 +738,8 @@ class GrabDragInteraction extends EnabledComponent {
       }
 
       if (node.interactiveHighlightLayerable) {
-        assert &&
-          assert(
+        window.assert &&
+          window.assert(
             this.grabInteractiveHighlight.parent,
             'how can we have interactiveHighlightLayerable with a ' +
               'node that is not in the scene graph?'
@@ -771,8 +776,8 @@ class GrabDragInteraction extends EnabledComponent {
    * @public
    */
   releaseDraggable() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !this.grabbable,
         'cannot set to grabbable if already set that way'
       );
@@ -876,9 +881,9 @@ class GrabDragInteraction extends EnabledComponent {
 
     // update the PDOM of the node
     this.node.mutate(optionsToMutate);
-    assert &&
+    window.assert &&
       this.enabledProperty.value &&
-      assert(
+      window.assert(
         this.node.focusable,
         'GrabDragInteraction node must remain focusable after mutation'
       );

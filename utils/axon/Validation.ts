@@ -33,12 +33,12 @@
 
 import _ from 'lodash';
 
-import EnumerationDeprecated from '../phet-core/EnumerationDeprecated';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import optionize from '../phet-core/optionize';
-import IOType from '../tandem/types/IOType';
-import axon from './axon';
-import { type ComparableObject } from './TinyProperty';
+import EnumerationDeprecated from '@/utils/phet-core/EnumerationDeprecated';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import optionize from '@/utils/phet-core/optionize';
+import IOType from '@/utils/tandem/types/IOType';
+import axon from '@/utils/axon/axon';
+import { type ComparableObject } from '@/utils/axon/TinyProperty';
 
 const TYPEOF_STRINGS = ['string', 'number', 'boolean', 'function'];
 
@@ -241,7 +241,7 @@ export default class Validation {
   }
 
   public static validateValidator<T>(validator: Validator<T>): void {
-    if (assert) {
+    if (window.assert) {
       const error = Validation.getValidatorValidationError(validator);
       error && assert(false, error);
     }

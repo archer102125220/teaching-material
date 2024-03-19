@@ -8,18 +8,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Shape } from '../kite/imports';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import optionize from '../phet-core/optionize';
-import { IndexedNodeIO, Node, type NodeOptions, PressListener, Rectangle, type TPaint, Voicing, type VoicingOptions } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import sun from './sun';
-import SunConstants from './SunConstants';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Property from '../axon/Property';
-import PatternStringProperty from '../axon/PatternStringProperty';
-import { type ComboBoxItemNoNode } from './ComboBox';
-import DerivedProperty from '../axon/DerivedProperty';
+import { Shape } from '@/utils/kite/imports';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize from '@/utils/phet-core/optionize';
+import { IndexedNodeIO, Node, type NodeOptions, PressListener, Rectangle, type TPaint, Voicing, type VoicingOptions } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import SunConstants from '@/utils/sun/SunConstants';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Property from '@/utils/axon/Property';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
+import { type ComboBoxItemNoNode } from '@/utils/sun/ComboBox';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
 
 type SelfOptions = {
   align?: 'left' | 'right' | 'center';

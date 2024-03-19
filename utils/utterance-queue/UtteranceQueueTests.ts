@@ -7,14 +7,14 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import stepTimer from '../axon/stepTimer';
-import ReadOnlyProperty from '../axon/ReadOnlyProperty';
-import { Display, voicingManager } from '../scenery/imports';
-import responseCollector from './responseCollector';
-import Utterance from './Utterance';
-import UtteranceQueue from './UtteranceQueue';
-import SpeechSynthesisAnnouncer from './SpeechSynthesisAnnouncer';
-import UtteranceQueueTestUtils from './UtteranceQueueTestUtils';
+import stepTimer from '@/utils/axon/stepTimer';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import { Display, voicingManager } from '@/utils/scenery/imports';
+import responseCollector from '@/utils/utterance-queue/responseCollector';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import UtteranceQueue from '@/utils/utterance-queue/UtteranceQueue';
+import SpeechSynthesisAnnouncer from '@/utils/utterance-queue/SpeechSynthesisAnnouncer';
+import UtteranceQueueTestUtils from '@/utils/utterance-queue/UtteranceQueueTestUtils';
 
 const queryParameters = QueryStringMachine.getAll({
 

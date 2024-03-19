@@ -1,10 +1,8 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
-// @ts-expect-error
-import Property, { PropertyOptions } from '../../axon/Property';
-// @ts-expect-error
-import optionize, { EmptySelfOptions } from '../../phet-core/optionize';
-import { Color, scenery } from '../imports';
+import Property, { type PropertyOptions } from '@/utils/axon/Property';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { Color, scenery } from '@/utils/scenery/imports';
 
 /**
  * Convenience type for creating Property.<Color>

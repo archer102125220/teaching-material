@@ -28,13 +28,13 @@
 
 import _ from 'lodash';
 
-import Multilink from '../../../axon/Multilink';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import Bounds2 from '../../../dot/Bounds2';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import { AlignGroup, type HeightSizableNode, isHeightSizable, isWidthSizable, LayoutConstraint, Node, type NodeOptions, scenery, Sizable, type SizableOptions, type WidthSizableNode } from '../../imports';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
+import Multilink from '@/utils/axon/Multilink';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Bounds2 from '@/utils/dot/Bounds2';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { AlignGroup, type HeightSizableNode, isHeightSizable, isWidthSizable, LayoutConstraint, Node, type NodeOptions, scenery, Sizable, type SizableOptions, type WidthSizableNode } from '@/utils/scenery/imports';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
 
 const ALIGNMENT_CONTAINER_OPTION_KEYS = [
   'alignBounds', // {Bounds2|null} - See setAlignBounds() for more documentation
@@ -206,8 +206,8 @@ export default class AlignBox extends SuperType {
    * re-check.
    */
   public invalidateAlignment(): void {
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.AlignBox(`AlignBox#${this.id} invalidateAlignment`);
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.AlignBox && window.sceneryLog.AlignBox(`AlignBox#${this.id} invalidateAlignment`);
+    window.sceneryLog && window.sceneryLog.AlignBox && window.sceneryLog.push();
 
     // The group update will change our alignBounds if required.
     if (this._group) {
@@ -217,7 +217,7 @@ export default class AlignBox extends SuperType {
     // If the alignBounds didn't change, we'll still need to update our own layout
     this.constraint.updateLayout();
 
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.AlignBox && window.sceneryLog.pop();
   }
 
   /**
@@ -586,12 +586,12 @@ export default class AlignBox extends SuperType {
    * Returns the bounding box of this box's content. This will include any margins.
    */
   public getContentBounds(): Bounds2 {
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.AlignBox(`AlignBox#${this.id} getContentBounds`);
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.AlignBox && window.sceneryLog.AlignBox(`AlignBox#${this.id} getContentBounds`);
+    window.sceneryLog && window.sceneryLog.AlignBox && window.sceneryLog.push();
 
     const bounds = this._content.bounds;
 
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.AlignBox && window.sceneryLog.pop();
 
     return new Bounds2(bounds.left - this._leftMargin,
       bounds.top - this._topMargin,
@@ -687,8 +687,8 @@ class AlignBoxConstraint extends LayoutConstraint {
     const box = this.alignBox;
     const content = this.content;
 
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.AlignBox(`AlignBoxConstraint#${this.alignBox.id} layout`);
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.AlignBox && window.sceneryLog.AlignBox(`AlignBoxConstraint#${this.alignBox.id} layout`);
+    window.sceneryLog && window.sceneryLog.AlignBox && window.sceneryLog.push();
 
     if (!content.bounds.isValid()) {
       return;
@@ -755,7 +755,7 @@ class AlignBoxConstraint extends LayoutConstraint {
       }
     }
 
-    sceneryLog && sceneryLog.AlignBox && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.AlignBox && window.sceneryLog.pop();
 
     // After the layout lock on purpose (we want these to be reentrant, especially if they change) - however only apply
     // this concept if we're capable of shrinking (we want the default to continue to block off the layoutBounds)

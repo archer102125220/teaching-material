@@ -16,13 +16,13 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import FunctionIO from '../../tandem/types/FunctionIO';
-import IOType from '../../tandem/types/IOType';
-import NullableIO from '../../tandem/types/NullableIO';
-import NumberIO from '../../tandem/types/NumberIO';
-import VoidIO from '../../tandem/types/VoidIO';
-import { Node, scenery } from '../imports';
-import deprecationWarning from '../../phet-core/deprecationWarning';
+import FunctionIO from '@/utils/tandem/types/FunctionIO';
+import IOType from '@/utils/tandem/types/IOType';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import VoidIO from '@/utils/tandem/types/VoidIO';
+import { Node, scenery } from '@/utils/scenery/imports';
+import deprecationWarning from '@/utils/phet-core/deprecationWarning';
 
 export type IndexedNodeIOParent = {
   onIndexedNodeIOChildMoved: (node: Node) => void;

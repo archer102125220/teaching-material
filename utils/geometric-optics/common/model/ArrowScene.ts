@@ -6,18 +6,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import geometricOptics from '../../geometricOptics';
-import Optic from './Optic';
-import Vector2 from '../../../dot/Vector2';
-import { type RaysType } from './RaysType';
-import LightRays from './LightRays';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Lens from '../../lens/model/Lens';
-import ArrowObject from './ArrowObject';
-import ArrowImage from './ArrowImage';
-import GOColors from '../GOColors';
-import GOScene, { type GOSceneOptions } from './GOScene';
-import type PickRequired from '../../../phet-core/types/PickRequired';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import Vector2 from '@/utils/dot/Vector2';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import LightRays from '@/utils/geometric-optics/common/model/LightRays';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
+import ArrowObject from '@/utils/geometric-optics/common/model/ArrowObject';
+import ArrowImage from '@/utils/geometric-optics/common/model/ArrowImage';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import GOScene, { type GOSceneOptions } from '@/utils/geometric-optics/common/model/GOScene';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 type SelfOptions = {
 

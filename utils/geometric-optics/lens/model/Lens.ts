@@ -7,19 +7,19 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import RangeWithValue from '../../../dot/RangeWithValue';
-import Optic, { type OpticOptions } from '../../common/model/Optic';
-import geometricOptics from '../../geometricOptics';
-import { type OpticSurfaceType } from '../../common/model/OpticSurfaceType';
-import Vector2 from '../../../dot/Vector2';
-import LensShapes from './LensShapes';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Utils from '../../../dot/Utils';
-import { Shape } from '../../../kite/imports';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import GOQueryParameters from '../../common/GOQueryParameters';
+import RangeWithValue from '@/utils/dot/RangeWithValue';
+import Optic, { type OpticOptions } from '@/utils/geometric-optics/common/model/Optic';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import { type OpticSurfaceType } from '@/utils/geometric-optics/common/model/OpticSurfaceType';
+import Vector2 from '@/utils/dot/Vector2';
+import LensShapes from '@/utils/geometric-optics/lens/model/LensShapes';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Utils from '@/utils/dot/Utils';
+import { Shape } from '@/utils/kite/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
 
 // IOR is a fixed value for the 'direct' focal-length model.
 const DIRECT_INDEX_OF_REFRACTION = 1.5;

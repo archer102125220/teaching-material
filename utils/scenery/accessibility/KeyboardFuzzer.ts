@@ -7,10 +7,10 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import stepTimer from '../../axon/stepTimer';
-import { type TimerListener } from '../../axon/Timer';
-import Random from '../../dot/Random';
-import { Display, globalKeyStateTracker, KeyboardUtils, PDOMUtils, scenery } from '../imports';
+import stepTimer from '@/utils/axon/stepTimer';
+import { type TimerListener } from '@/utils/axon/Timer';
+import Random from '@/utils/dot/Random';
+import { Display, globalKeyStateTracker, KeyboardUtils, PDOMUtils, scenery } from '@/utils/scenery/imports';
 
 type KeyupListener = (() => void) & {
   timeout: TimerListener;

@@ -10,11 +10,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import axon from './axon';
-import TinyEmitter from './TinyEmitter';
-import type TProperty from './TProperty';
-import type TReadOnlyProperty from './TReadOnlyProperty';
-import type { PropertyLazyLinkListener, PropertyLinkListener, PropertyListener } from './TReadOnlyProperty';
+import axon from '@/utils/axon/axon';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type { PropertyLazyLinkListener, PropertyLinkListener, PropertyListener } from '@/utils/axon/TReadOnlyProperty';
 
 export type ComparableObject = {
   equals: (a: unknown) => boolean;

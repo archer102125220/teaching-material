@@ -7,15 +7,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import sceneryPhet from '../../sceneryPhet.js';
-import KeyboardHelpSection, { KeyboardHelpSectionOptions } from './KeyboardHelpSection.js';
-import SceneryPhetStrings from '../../SceneryPhetStrings.js';
-import KeyboardHelpSectionRow from './KeyboardHelpSectionRow.js';
-import ArrowKeyNode from '../ArrowKeyNode.js';
-import KeyboardHelpIconFactory from './KeyboardHelpIconFactory.js';
-import TextKeyNode from '../TextKeyNode.js';
-import NumberKeyNode from '../NumberKeyNode.js';
-import optionize from '../../../../phet-core/js/optionize.js';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import KeyboardHelpSection, { type KeyboardHelpSectionOptions } from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSection';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import KeyboardHelpSectionRow from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSectionRow';
+import ArrowKeyNode from '@/utils/scenery-phet/keyboard/ArrowKeyNode';
+import KeyboardHelpIconFactory from '@/utils/scenery-phet/keyboard/help/KeyboardHelpIconFactory';
+import TextKeyNode from '@/utils/scenery-phet/keyboard/TextKeyNode';
+import NumberKeyNode from '@/utils/scenery-phet/keyboard/NumberKeyNode';
+import optionize from '@/utils/phet-core/optionize';
 
 const headingStringProperty = SceneryPhetStrings.keyboardHelpDialog.faucetControls.faucetControlsStringProperty;
 const adjustFaucetFlowStringProperty = SceneryPhetStrings.keyboardHelpDialog.faucetControls.adjustFaucetFlowStringProperty;
@@ -33,33 +33,33 @@ type FaucetControlsKeyboardHelpSectionOptions = SelfOptions & KeyboardHelpSectio
 
 export default class FaucetControlsKeyboardHelpSection extends KeyboardHelpSection {
 
-  public constructor( providedOptions?: FaucetControlsKeyboardHelpSectionOptions ) {
+  public constructor(providedOptions?: FaucetControlsKeyboardHelpSectionOptions) {
 
-    const options = optionize<FaucetControlsKeyboardHelpSectionOptions, SelfOptions, KeyboardHelpSectionOptions>()( {
+    const options = optionize<FaucetControlsKeyboardHelpSectionOptions, SelfOptions, KeyboardHelpSectionOptions>()({
 
       // SelfOptions
       tapToDispenseEnabled: false
-    }, providedOptions );
+    }, providedOptions);
 
-    const leftRightArrowKeysIcon = KeyboardHelpIconFactory.iconRow( [ new ArrowKeyNode( 'left' ), new ArrowKeyNode( 'right' ) ] );
+    const leftRightArrowKeysIcon = KeyboardHelpIconFactory.iconRow([new ArrowKeyNode('left'), new ArrowKeyNode('right')]);
 
     // Adjust faucet flow [<] [>]
-    const adjustFaucetFlowRow = KeyboardHelpSectionRow.labelWithIcon( adjustFaucetFlowStringProperty, leftRightArrowKeysIcon );
+    const adjustFaucetFlowRow = KeyboardHelpSectionRow.labelWithIcon(adjustFaucetFlowStringProperty, leftRightArrowKeysIcon);
 
     // Adjust in smaller steps [Shift] + [<] [>]
-    const adjustInSmallerStepsRow = KeyboardHelpSectionRow.labelWithIcon( adjustInSmallerStepsStringProperty,
-      KeyboardHelpIconFactory.shiftPlusIcon( leftRightArrowKeysIcon ) );
+    const adjustInSmallerStepsRow = KeyboardHelpSectionRow.labelWithIcon(adjustInSmallerStepsStringProperty,
+      KeyboardHelpIconFactory.shiftPlusIcon(leftRightArrowKeysIcon));
 
     // Adjust in larger steps [Pg Up] [Pg Down]
-    const adjustInLargerStepsRow = KeyboardHelpSectionRow.labelWithIcon( adjustInLargerStepsStringProperty,
-      KeyboardHelpIconFactory.pageUpPageDownRowIcon() );
+    const adjustInLargerStepsRow = KeyboardHelpSectionRow.labelWithIcon(adjustInLargerStepsStringProperty,
+      KeyboardHelpIconFactory.pageUpPageDownRowIcon());
 
     // Close faucet [Home] or [0]
-    const closeFaucetRow = KeyboardHelpSectionRow.labelWithIcon( closeFaucetStringProperty,
-      KeyboardHelpIconFactory.iconOrIcon( TextKeyNode.home(), new NumberKeyNode( 0 ) ) );
+    const closeFaucetRow = KeyboardHelpSectionRow.labelWithIcon(closeFaucetStringProperty,
+      KeyboardHelpIconFactory.iconOrIcon(TextKeyNode.home(), new NumberKeyNode(0)));
 
     // Open faucet fully [End]
-    const openFaucetFullyRow = KeyboardHelpSectionRow.labelWithIcon( openFaucetFullyStringProperty, TextKeyNode.end() );
+    const openFaucetFullyRow = KeyboardHelpSectionRow.labelWithIcon(openFaucetFullyStringProperty, TextKeyNode.end());
 
     const content: KeyboardHelpSectionRow[] = [
       adjustFaucetFlowRow,
@@ -70,14 +70,14 @@ export default class FaucetControlsKeyboardHelpSection extends KeyboardHelpSecti
     ];
 
     // Open faucet briefly [Space] or [Enter]
-    if ( options.tapToDispenseEnabled ) {
-      const openFaucetBrieflyRow = KeyboardHelpSectionRow.labelWithIcon( openFaucetBrieflyStringProperty,
-        KeyboardHelpIconFactory.iconOrIcon( TextKeyNode.space(), TextKeyNode.enter() ) );
-      content.push( openFaucetBrieflyRow );
+    if (options.tapToDispenseEnabled) {
+      const openFaucetBrieflyRow = KeyboardHelpSectionRow.labelWithIcon(openFaucetBrieflyStringProperty,
+        KeyboardHelpIconFactory.iconOrIcon(TextKeyNode.space(), TextKeyNode.enter()));
+      content.push(openFaucetBrieflyRow);
     }
 
-    super( headingStringProperty, content, options );
+    super(headingStringProperty, content, options);
   }
 }
 
-sceneryPhet.register( 'FaucetControlsKeyboardHelpSection', FaucetControlsKeyboardHelpSection );
+sceneryPhet.register('FaucetControlsKeyboardHelpSection', FaucetControlsKeyboardHelpSection);

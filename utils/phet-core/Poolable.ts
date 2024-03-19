@@ -10,13 +10,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-// @ts-expect-error
-import Constructor from './types/Constructor';
-import extend from './extend';
-import phetCore from './phetCore';
-import optionize from './optionize';
-// @ts-expect-error
-import IntentionalAny from './types/IntentionalAny';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import extend from '@/utils/phet-core/extend';
+import phetCore from '@/utils/phet-core/phetCore';
+import optionize from '@/utils/phet-core/optionize';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 type PoolableOptions<Type extends Constructor> = {
   // If an object needs to be created without a direct call (say, to fill the pool initially), these are the arguments
@@ -42,18 +40,18 @@ type PoolableInstance = {
   freeToPool(): void;
 };
 type PoolableVersion<Type extends Constructor> = InstanceType<Type> & PoolableInstance;
-type PoolableInitializer<Type extends Constructor> = ( ...args: ConstructorParameters<Type> ) => IntentionalAny;
-type PoolableClass<Type extends Constructor> = ( new ( ...args: ConstructorParameters<Type> ) => ( PoolableVersion<Type> ) ) & PoolableType<Type>;
+type PoolableInitializer<Type extends Constructor> = (...args: ConstructorParameters<Type>) => IntentionalAny;
+type PoolableClass<Type extends Constructor> = (new (...args: ConstructorParameters<Type>) => (PoolableVersion<Type>)) & PoolableType<Type>;
 type PoolableExistingStatics<Type extends Constructor> = {
   // We grab the static values of a type
-  [Property in keyof Type]: Type[ Property ]
+  [Property in keyof Type]: Type[Property]
 };
 type PoolableType<Type extends Constructor> = {
   pool: PoolableVersion<Type>[];
   dirtyFromPool(): PoolableVersion<Type>;
-  createFromPool( ...args: ConstructorParameters<Type> ): PoolableVersion<Type>;
+  createFromPool(...args: ConstructorParameters<Type>): PoolableVersion<Type>;
   get poolSize(): number;
-  set maxPoolSize( value: number );
+  set maxPoolSize(value: number);
   get maxPoolSize(): number;
 } & PoolableExistingStatics<Type>;
 
@@ -64,18 +62,18 @@ const Poolable = {
   /**
    * Changes the given type (and its prototype) to support object pooling.
    */
-  mixInto<Type extends Constructor>( type: Type, providedOptions?: PoolableOptions<Type> ): PoolableClass<Type> {
-    const options = optionize<PoolableOptions<Type>, PoolableOptions<Type>>()( {
+  mixInto<Type extends Constructor>(type: Type, providedOptions?: PoolableOptions<Type>): PoolableClass<Type> {
+    const options = optionize<PoolableOptions<Type>, PoolableOptions<Type>>()({
 
       defaultArguments: [] as unknown as ConstructorParameters<Type>,
       initialize: type.prototype.initialize,
       maxSize: 100,
       initialSize: 0,
       useDefaultConstruction: false
-    }, providedOptions ) as Required<PoolableOptions<Type>>;
+    }, providedOptions) as Required<PoolableOptions<Type>>;
 
-    window.assert && window.assert( options.maxSize >= 0 );
-    window.assert && window.assert( options.initialSize >= 0 );
+    window.assert && window.assert(options.maxSize >= 0);
+    window.assert && window.assert(options.initialSize >= 0);
 
     // The actual array we store things in. Always push/pop.
     const pool: InstanceType<Type>[] = [];
@@ -87,22 +85,22 @@ const Poolable = {
     // not provided in the arguments array below. By calling bind on itself, we're able to get a version of bind that
     // inserts the constructor as the first argument of the .apply called later so we don't create garbage by having
     // to pack `arguments` into an array AND THEN concatenate it with a new first element (the type itself).
-    const partialConstructor = Function.prototype.bind.bind( type, type );
+    const partialConstructor = Function.prototype.bind.bind(type, type);
 
     // Basically our type constructor, but with the default arguments included already.
-    const DefaultConstructor = partialConstructor( ...options.defaultArguments );
+    const DefaultConstructor = partialConstructor(...options.defaultArguments);
 
     const initialize = options.initialize;
     const useDefaultConstruction = options.useDefaultConstruction;
 
     const proto = type.prototype;
 
-    extend<Type>( type, {
+    extend<Type>(type, {
       /**
        * This should not be modified externally. In the future if desired, functions could be added to help
        * adding/removing poolable instances manually.
        */
-      pool: pool,
+      pool,
 
       /**
        * Returns an object with arbitrary state (possibly constructed with the default arguments).
@@ -115,19 +113,19 @@ const Poolable = {
        * Returns an object that behaves as if it was constructed with the given arguments. May result in a new object
        * being created (if the pool is empty), or it may use the constructor to mutate an object from the pool.
        */
-      createFromPool( ...args: ConstructorParameters<Type> ): PoolableVersion<Type> {
+      createFromPool(...args: ConstructorParameters<Type>): PoolableVersion<Type> {
         let result;
 
-        if ( pool.length ) {
+        if (pool.length) {
           result = pool.pop();
-          initialize.apply( result, args );
+          initialize.apply(result, args);
         }
-        else if ( useDefaultConstruction ) {
+        else if (useDefaultConstruction) {
           result = new DefaultConstructor();
-          initialize.apply( result, args );
+          initialize.apply(result, args);
         }
         else {
-          result = new ( partialConstructor( ...args ) )();
+          result = new (partialConstructor(...args))();
         }
 
         return result;
@@ -143,8 +141,8 @@ const Poolable = {
       /**
        * Sets the maximum pool size.
        */
-      set maxPoolSize( value: number ) {
-        window.assert && window.assert( value === Number.POSITIVE_INFINITY || ( Number.isInteger( value ) && value >= 0 ), 'maxPoolSize should be a non-negative integer or infinity' );
+      set maxPoolSize(value: number) {
+        window.assert && window.assert(value === Number.POSITIVE_INFINITY || (Number.isInteger(value) && value >= 0), 'maxPoolSize should be a non-negative integer or infinity');
 
         maxPoolSize = value;
       },
@@ -155,30 +153,30 @@ const Poolable = {
       get maxPoolSize(): number {
         return maxPoolSize;
       }
-    } );
+    });
 
-    extend( proto, {
+    extend(proto, {
       /**
        * Adds this object into the pool, so that it can be reused elsewhere. Generally when this is done, no other
        * references to the object should be held (since they should not be used at all).
        */
       freeToPool() {
-        if ( pool.length < maxPoolSize ) {
-          pool.push( this as InstanceType<Type> );
+        if (pool.length < maxPoolSize) {
+          pool.push(this as InstanceType<Type>);
         }
       }
-    } );
+    });
 
     // Initialize the pool (if it should have objects)
-    while ( pool.length < options.initialSize ) {
-      pool.push( new DefaultConstructor() );
+    while (pool.length < options.initialSize) {
+      pool.push(new DefaultConstructor());
     }
 
     return type as unknown as PoolableClass<Type>;
   }
 };
 
-phetCore.register( 'Poolable', Poolable );
+phetCore.register('Poolable', Poolable);
 
 export default Poolable;
 export type { PoolableOptions, PoolableInstance, PoolableVersion, PoolableInitializer, PoolableClass, PoolableType };

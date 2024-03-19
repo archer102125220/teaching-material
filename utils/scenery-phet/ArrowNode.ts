@@ -9,13 +9,13 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Vector2 from '../dot/Vector2';
-import { Shape } from '../kite/imports';
-import InstanceRegistry from '../phet-core/documentation/InstanceRegistry';
-import optionize from '../phet-core/optionize';
-import { Path, type PathOptions } from '../scenery/imports';
-import ArrowShape from './ArrowShape';
-import sceneryPhet from './sceneryPhet';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize from '@/utils/phet-core/optionize';
+import { Path, type PathOptions } from '@/utils/scenery/imports';
+import ArrowShape from '@/utils/scenery-phet/ArrowShape';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type SelfOptions = {
   headHeight?: number;

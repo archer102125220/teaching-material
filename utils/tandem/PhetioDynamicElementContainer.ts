@@ -15,24 +15,24 @@
 
 import _ from 'lodash';
 
-import Emitter from '../axon/Emitter';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import validate from '../axon/validate';
-import arrayRemove from '../phet-core/arrayRemove';
-import merge from '../phet-core/merge';
-import type PickRequired from '../phet-core/types/PickRequired';
-import optionize from '../phet-core/optionize';
-import DynamicTandem from './DynamicTandem';
-import PhetioObject, { type PhetioObjectMetadataInput, type PhetioObjectOptions } from './PhetioObject';
-import Tandem, { DYNAMIC_ARCHETYPE_NAME } from './Tandem';
-import tandemNamespace from './tandemNamespace';
-import IOType from './types/IOType';
-import { type PhetioElementMetadata, type PhetioState } from './TandemConstants';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import type TEmitter from '../axon/TEmitter';
-import StringIO from './types/StringIO';
-import isSettingPhetioStateProperty from './isSettingPhetioStateProperty';
-import isClearingPhetioDynamicElementsProperty from './isClearingPhetioDynamicElementsProperty';
+import Emitter from '@/utils/axon/Emitter';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import validate from '@/utils/axon/validate';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import merge from '@/utils/phet-core/merge';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import optionize from '@/utils/phet-core/optionize';
+import DynamicTandem from '@/utils/tandem/DynamicTandem';
+import PhetioObject, { type PhetioObjectMetadataInput, type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import Tandem, { DYNAMIC_ARCHETYPE_NAME } from '@/utils/tandem/Tandem';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import { type PhetioElementMetadata, type PhetioState } from '@/utils/tandem/TandemConstants';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type TEmitter from '@/utils/axon/TEmitter';
+import StringIO from '@/utils/tandem/types/StringIO';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
+import isClearingPhetioDynamicElementsProperty from '@/utils/tandem/isClearingPhetioDynamicElementsProperty';
 
 export type ClearOptions = {
   phetioState?: PhetioState | null;
@@ -294,7 +294,7 @@ abstract class PhetioDynamicElementContainer<T extends PhetioObject, P extends I
     }
     else {
       createdObjectTandem = this.tandem.createTandem(componentName, this.tandem.getExtendedOptions());
-      window.assert && window.assert(createdObjectTandem instanceof DynamicTandem, 'createdObjectTandem should be an instance of DynamicTandem'); // eslint-disable-line no-simple-type-checking-assertions
+      window.assert && window.assert(createdObjectTandem instanceof DynamicTandem, 'createdObjectTandem should be an instance of DynamicTandem');
     }
 
     const createdObject = this.createElement(createdObjectTandem, ...argsForCreateFunction);

@@ -12,8 +12,8 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Color } from '../scenery/imports';
-import sceneryPhet from './sceneryPhet';
+import { Color } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/sun/sceneryPhet';
 
 // Colors that are used for one or more things in the color scheme.
 const DARK_GREEN = new Color(0, 200, 0);

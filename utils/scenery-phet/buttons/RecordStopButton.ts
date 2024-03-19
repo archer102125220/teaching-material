@@ -6,13 +6,13 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import InstanceRegistry from '../../../phet-core/js/documentation/InstanceRegistry.js';
-import { Circle, Rectangle } from '../../../scenery/js/imports.js';
-import BooleanRoundToggleButton, { BooleanRoundToggleButtonOptions } from '../../../sun/js/buttons/BooleanRoundToggleButton.js';
-import PhetColorScheme from '../PhetColorScheme.js';
-import sceneryPhet from '../sceneryPhet.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import Property from '../../../axon/js/Property.js';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import { Circle, Rectangle } from '@/utils/scenery/imports';
+import BooleanRoundToggleButton, { type BooleanRoundToggleButtonOptions } from '@/utils/sun/buttons/BooleanRoundToggleButton';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import optionize from '@/utils/phet-core/optionize';
+import Property from '@/utils/axon/Property';
 
 type SelfOptions = {
   radius?: number;
@@ -22,9 +22,9 @@ export type RecordStopButtonOptions = SelfOptions & BooleanRoundToggleButtonOpti
 
 export default class RecordStopButton extends BooleanRoundToggleButton {
 
-  public constructor( recordingProperty: Property<boolean>, providedOptions?: RecordStopButtonOptions ) {
+  public constructor(recordingProperty: Property<boolean>, providedOptions?: RecordStopButtonOptions) {
 
-    const options = optionize<RecordStopButtonOptions, SelfOptions, BooleanRoundToggleButtonOptions>()( {
+    const options = optionize<RecordStopButtonOptions, SelfOptions, BooleanRoundToggleButtonOptions>()({
 
       // RecordStopButtonOptions
       radius: 30,
@@ -32,24 +32,24 @@ export default class RecordStopButton extends BooleanRoundToggleButton {
       // BooleanRoundToggleButtonOptions
       xMargin: 16.5,
       yMargin: 16.5
-    }, providedOptions );
+    }, providedOptions);
 
     const squareLength = 0.75 * options.radius;
 
     // stop icon, a black square
-    const stopIcon = new Rectangle( 0, 0, 0.75 * options.radius, 0.75 * options.radius, { fill: 'black' } );
+    const stopIcon = new Rectangle(0, 0, 0.75 * options.radius, 0.75 * options.radius, { fill: 'black' });
 
     // record icon, a red circle
-    const recordIcon = new Circle( 0.6 * squareLength, {
+    const recordIcon = new Circle(0.6 * squareLength, {
       fill: PhetColorScheme.RED_COLORBLIND,
       center: stopIcon.center
-    } );
+    });
 
-    super( recordingProperty, stopIcon, recordIcon, options );
+    super(recordingProperty, stopIcon, recordIcon, options);
 
     // support for binder documentation, stripped out in builds and only runs when ?binder is specified
-    assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL( 'scenery-phet', 'RecordStopButton', this );
+    assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL('scenery-phet', 'RecordStopButton', this);
   }
 }
 
-sceneryPhet.register( 'RecordStopButton', RecordStopButton );
+sceneryPhet.register('RecordStopButton', RecordStopButton);

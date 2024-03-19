@@ -7,16 +7,16 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import joist from '../joist';
-import { Color, FireListener, HighlightOverlay, Rectangle, Text } from '../../scenery/imports';
-import Tandem from '../../tandem/Tandem';
-import PreferencesDialog from './PreferencesDialog';
-import PhetColorScheme from '../../scenery-phet/PhetColorScheme';
-import Property from '../../axon/Property';
+import joist from '@/utils/joist/joist';
+import { Color, FireListener, HighlightOverlay, Rectangle, Text } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import Property from '@/utils/axon/Property';
 import { type Locale } from '@/i18n/joist/localeProperty';
-import StringUtils from '../../phetcommon/util/StringUtils';
-import pushButtonSoundPlayer from '../../tambo/shared-sound-players/pushButtonSoundPlayer';
-import JoistStrings from '../JoistStrings';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import pushButtonSoundPlayer from '@/utils/tambo/shared-sound-players/pushButtonSoundPlayer';
+import JoistStrings from '@/utils/joist/JoistStrings';
 import localeInfoModule from '@/assets/chipper/localeInfoModule';
 
 export default class LanguageSelectionNode extends Rectangle {

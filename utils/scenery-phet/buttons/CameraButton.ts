@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import optionize from '../../phet-core/optionize';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import { Path, type TColor } from '../../scenery/imports';
-import RectangularPushButton, { type RectangularPushButtonOptions } from '../../sun/buttons/RectangularPushButton';
-import cameraSolidShape from '../../sherpa/fontawesome-5/cameraSolidShape';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import PhetColorScheme from '../PhetColorScheme';
-import sceneryPhet from '../sceneryPhet';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { Path, type TColor } from '@/utils/scenery/imports';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
+import cameraSolidShape from '@/utils/sherpa/fontawesome-5/cameraSolidShape';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type SelfOptions = {
   iconFill?: TColor;

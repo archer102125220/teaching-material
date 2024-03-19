@@ -8,8 +8,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import validate from '../../axon/validate';
-import { scenery } from '../imports';
+import validate from '@/utils/axon/validate';
+import { scenery } from '@/utils/scenery/imports';
 
 const KEY_RIGHT_ARROW = 'ArrowRight';
 const KEY_LEFT_ARROW = 'ArrowLeft';

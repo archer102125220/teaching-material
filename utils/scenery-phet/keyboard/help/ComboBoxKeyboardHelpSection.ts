@@ -6,17 +6,17 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import PatternStringProperty from '../../../axon/PatternStringProperty';
-import StringProperty from '../../../axon/StringProperty';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import optionize from '../../../phet-core/optionize';
-import sceneryPhet from '../../sceneryPhet';
-import SceneryPhetStrings from '../../SceneryPhetStrings';
-import TextKeyNode from '../TextKeyNode';
-import KeyboardHelpIconFactory from './KeyboardHelpIconFactory';
-import KeyboardHelpSection, { type KeyboardHelpSectionOptions } from './KeyboardHelpSection';
-import KeyboardHelpSectionRow from './KeyboardHelpSectionRow';
-import Tandem from '../../../tandem/Tandem';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
+import StringProperty from '@/utils/axon/StringProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize from '@/utils/phet-core/optionize';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import TextKeyNode from '@/utils/scenery-phet/keyboard/TextKeyNode';
+import KeyboardHelpIconFactory from '@/utils/scenery-phet/keyboard/help/KeyboardHelpIconFactory';
+import KeyboardHelpSection, { type KeyboardHelpSectionOptions } from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSection';
+import KeyboardHelpSectionRow from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSectionRow';
+import Tandem from '@/utils/tandem/Tandem';
 
 type SelfOptions = {
 

@@ -6,23 +6,23 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Bounds2 from '../../../dot/Bounds2';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { DragListener, HighlightFromNode, KeyboardDragListener, type KeyboardDragListenerOptions } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import ArrowObject from '../model/ArrowObject';
-import Optic from '../model/Optic';
-import GOConstants from '../GOConstants';
-import ArrowNode, { type ArrowNodeOptions } from '../../../scenery-phet/ArrowNode';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import Vector2 from '../../../dot/Vector2';
-import { combineOptions } from '../../../phet-core/optionize';
-import { type ObjectDragMode } from './ObjectDragMode';
-import OpticalObjectNode, { type OpticalObjectNodeOptions } from './OpticalObjectNode';
-import type TProperty from '../../../axon/TProperty';
-import Multilink from '../../../axon/Multilink';
-import isSettingPhetioStateProperty from '../../../tandem/isSettingPhetioStateProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { DragListener, HighlightFromNode, KeyboardDragListener, type KeyboardDragListenerOptions } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import ArrowObject from '@/utils/geometric-optics/common/model/ArrowObject';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import ArrowNode, { type ArrowNodeOptions } from '@/utils/scenery-phet/ArrowNode';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import { combineOptions } from '@/utils/phet-core/optionize';
+import { type ObjectDragMode } from '@/utils/geometric-optics/common/view/ObjectDragMode';
+import OpticalObjectNode, { type OpticalObjectNodeOptions } from '@/utils/geometric-optics/common/view/OpticalObjectNode';
+import type TProperty from '@/utils/axon/TProperty';
+import Multilink from '@/utils/axon/Multilink';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
 
 const SNAP_TO_MIN_MAGNITUDE = 20; // cm
 

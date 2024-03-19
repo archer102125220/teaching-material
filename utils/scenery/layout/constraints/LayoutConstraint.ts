@@ -16,9 +16,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import type TEmitter from '../../../axon/TEmitter';
-import TinyEmitter from '../../../axon/TinyEmitter';
-import { type HeightSizableNode, LayoutProxy, extendsHeightSizable, extendsWidthSizable, Node, scenery, type SizableNode, type WidthSizableNode } from '../../imports';
+import type TEmitter from '@/utils/axon/TEmitter';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import { type HeightSizableNode, LayoutProxy, extendsHeightSizable, extendsWidthSizable, Node, scenery, type SizableNode, type WidthSizableNode } from '@/utils/scenery/imports';
 
 export default abstract class LayoutConstraint {
 

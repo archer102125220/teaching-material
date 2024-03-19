@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Pool from '../../../phet-core/Pool';
-import { GridCell, LayoutLine, scenery } from '../../imports';
+import Pool from '@/utils/phet-core/Pool';
+import { GridCell, LayoutLine, scenery } from '@/utils/scenery/imports';
 
 export default class GridLine extends LayoutLine {
 

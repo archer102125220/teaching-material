@@ -6,17 +6,17 @@
  * @author Jonathan Olson <jonathan.olson>
  */
 
-import TinyProperty from '../axon/TinyProperty';
-import TinyOverrideProperty from '../axon/TinyOverrideProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import TinyOverrideProperty from '@/utils/axon/TinyOverrideProperty';
 import { type Locale } from '@/i18n/joist/localeProperty';
 import localeOrderProperty from '@/i18n/joist/localeOrderProperty';
-import Tandem from '../tandem/Tandem';
-import chipper from './chipper';
-import type TProperty from '../axon/TProperty';
-import { localizedStrings } from './getStringModule';
-import arrayRemove from '../phet-core/arrayRemove';
-import { type PhetioID } from '../tandem/TandemConstants';
-import LocalizedStringProperty from './LocalizedStringProperty';
+import Tandem from '@/utils/tandem/Tandem';
+import chipper from '@/utils/chipper/chipper';
+import type TProperty from '@/utils/axon/TProperty';
+import { localizedStrings } from '@/utils/chipper/getStringModule';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import { type PhetioID } from '@/utils/tandem/TandemConstants';
+import LocalizedStringProperty from '@/utils/chipper/LocalizedStringProperty';
 
 // constants
 const FALLBACK_LOCALE = 'en';
@@ -191,6 +191,7 @@ class LocalizedString {
     }
     else {
       // doesn't exist in those
+      // eslint-disable-next-line no-lonely-if
       if (locale.includes('_')) {
         return locale.slice(0, 2) as Locale; // zh_CN => zh
       }

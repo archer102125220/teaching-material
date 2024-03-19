@@ -7,8 +7,8 @@
  * @author Jesse Greenberg
  */
 
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import { HighlightFromNode, type HighlightFromNodeOptions, Node, scenery } from '../../imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { HighlightFromNode, type HighlightFromNodeOptions, Node, scenery } from '@/utils/scenery/imports';
 
 // constants
 const ACTIVATED_HIGHLIGHT_COLOR = 'rgba(255,255,0,0.5)';

@@ -8,21 +8,21 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import { Utils } from '../scenery/imports';
-import PhetioObject from '../tandem/PhetioObject';
-import Tandem from '../tandem/Tandem';
-import ArrayIO from '../tandem/types/ArrayIO';
-import BooleanIO from '../tandem/types/BooleanIO';
-import IOType from '../tandem/types/IOType';
-import NullableIO from '../tandem/types/NullableIO';
-import NumberIO from '../tandem/types/NumberIO';
-import ObjectLiteralIO from '../tandem/types/ObjectLiteralIO';
-import StringIO from '../tandem/types/StringIO';
-import joist from './joist';
-import { type AnyScreen } from './Screen';
-import packageJSON from './packageJSON';
-import Sim from './Sim';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import { Utils } from '@/utils/scenery/imports';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import ArrayIO from '@/utils/tandem/types/ArrayIO';
+import BooleanIO from '@/utils/tandem/types/BooleanIO';
+import IOType from '@/utils/tandem/types/IOType';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import ObjectLiteralIO from '@/utils/tandem/types/ObjectLiteralIO';
+import StringIO from '@/utils/tandem/types/StringIO';
+import joist from '@/utils/joist/joist';
+import { type AnyScreen } from '@/utils/joist/Screen';
+import packageJSON from '@/utils/joist/packageJSON';
+import Sim from '@/utils/joist/Sim';
 
 export type ScreenState = {
   name: string;

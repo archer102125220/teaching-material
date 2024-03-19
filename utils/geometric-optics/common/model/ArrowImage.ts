@@ -6,12 +6,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import geometricOptics from '../../geometricOptics';
-import OpticalImage from './OpticalImage';
-import Optic from './Optic';
-import ArrowObject from './ArrowObject';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import { type TColor } from '../../../scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import OpticalImage from '@/utils/geometric-optics/common/model/OpticalImage';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import ArrowObject from '@/utils/geometric-optics/common/model/ArrowObject';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { type TColor } from '@/utils/scenery/imports';
 
 type ArrowImageOptions = PickRequired<OpticalImage, 'tandem' | 'phetioDocumentation'>;
 

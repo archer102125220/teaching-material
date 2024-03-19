@@ -7,16 +7,16 @@
  *
  * @author Chris Malley (PixelZoom, Inc.)
  */
-import LabelNode, { type LabelNodeOptions } from './LabelNode';
-import GeometricOpticsStrings from '../../../GeometricOpticsStrings';
-import geometricOptics from '../../../geometricOptics';
-import StringUtils from '../../../../phetcommon/util/StringUtils';
-import BooleanProperty from '../../../../axon/BooleanProperty';
-import optionize from '../../../../phet-core/optionize';
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import Vector2 from '../../../../dot/Vector2';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import DerivedStringProperty from '../../../../axon/DerivedStringProperty';
+import LabelNode, { type LabelNodeOptions } from '@/utils/geometric-optics/common/view/labels/LabelNode';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import optionize from '@/utils/phet-core/optionize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import DerivedStringProperty from '@/utils/axon/DerivedStringProperty';
 
 type SelfOptions = {
 

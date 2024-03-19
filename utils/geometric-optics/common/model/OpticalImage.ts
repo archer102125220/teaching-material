@@ -10,20 +10,20 @@
  * @author Martin Veillette
  */
 
-import BooleanProperty from '../../../axon/BooleanProperty';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Property from '../../../axon/Property';
-import Vector2 from '../../../dot/Vector2';
-import PhetioObject, { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import StringUnionIO from '../../../tandem/types/StringUnionIO';
-import geometricOptics from '../../geometricOptics';
-import Optic from './Optic';
-import { type OpticalImageType, OpticalImageTypeValues } from './OpticalImageType';
-import OpticalObject from './OpticalObject';
-import optionize from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import NumberIO from '../../../tandem/types/NumberIO';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Property from '@/utils/axon/Property';
+import Vector2 from '@/utils/dot/Vector2';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import StringUnionIO from '@/utils/tandem/types/StringUnionIO';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import { type OpticalImageType, OpticalImageTypeValues } from '@/utils/geometric-optics/common/model/OpticalImageType';
+import OpticalObject from '@/utils/geometric-optics/common/model/OpticalObject';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import NumberIO from '@/utils/tandem/types/NumberIO';
 
 type SelfOptions = {
 

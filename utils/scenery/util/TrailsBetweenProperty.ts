@@ -7,8 +7,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyProperty from '../../axon/TinyProperty';
-import { Node, scenery, Trail } from '../imports';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import { Node, scenery, Trail } from '@/utils/scenery/imports';
 
 export default class TrailsBetweenProperty extends TinyProperty<Trail[]> {
 

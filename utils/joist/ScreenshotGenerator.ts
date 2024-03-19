@@ -7,10 +7,10 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Matrix3 from '../dot/Matrix3';
-import { CanvasContextWrapper, Utils } from '../scenery/imports';
-import joist from './joist';
-import Sim from './Sim';
+import Matrix3 from '@/utils/dot/Matrix3';
+import { CanvasContextWrapper, Utils } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import Sim from '@/utils/joist/Sim';
 
 class ScreenshotGenerator {
 

@@ -8,17 +8,17 @@
 
 import _ from 'lodash';
 
-import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
-import { LINE_STYLE_DEFAULT_OPTIONS, type LineCap, type LineJoin, LineStyles } from '../../kite/imports';
-import arrayRemove from '../../phet-core/arrayRemove';
-import assertHasProperties from '../../phet-core/assertHasProperties';
-import inheritance from '../../phet-core/inheritance';
-import platform from '../../phet-core/platform';
-import memoize from '../../phet-core/memoize';
-import { CanvasContextWrapper, Color, Gradient, type TPaint, type TPaintableDrawable, LinearGradient, Node, Paint, PaintDef, Path, Pattern, RadialGradient, Renderer, scenery, Text } from '../imports';
-import type Constructor from '../../phet-core/types/Constructor';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
-import Vector2 from '../../dot/Vector2';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import { LINE_STYLE_DEFAULT_OPTIONS, type LineCap, type LineJoin, LineStyles } from '@/utils/kite/imports';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import assertHasProperties from '@/utils/phet-core/assertHasProperties';
+import inheritance from '@/utils/phet-core/inheritance';
+import platform from '@/utils/phet-core/platform';
+import memoize from '@/utils/phet-core/memoize';
+import { CanvasContextWrapper, Color, Gradient, type TPaint, type TPaintableDrawable, LinearGradient, Node, Paint, PaintDef, Path, Pattern, RadialGradient, Renderer, scenery, Text } from '@/utils/scenery/imports';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import Vector2 from '@/utils/dot/Vector2';
 
 const isSafari5 = platform.safari5;
 

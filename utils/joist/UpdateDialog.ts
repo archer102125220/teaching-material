@@ -6,14 +6,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import stepTimer from '../axon/stepTimer';
-import { type EmptySelfOptions } from '../phet-core/optionize';
-import { Node } from '../scenery/imports';
-import Dialog, { type DialogOptions } from '../sun/Dialog';
-import joist from './joist';
-import updateCheck from './updateCheck';
-import UpdateNodes from './UpdateNodes';
-import UpdateState from './UpdateState';
+import stepTimer from '@/utils/axon/stepTimer';
+import { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { Node } from '@/utils/scenery/imports';
+import Dialog, { type DialogOptions } from '@/utils/sun/Dialog';
+import joist from '@/utils/joist/joist';
+import updateCheck from '@/utils/joist/updateCheck';
+import UpdateNodes from '@/utils/joist/UpdateNodes';
+import UpdateState from '@/utils/joist/UpdateState';
 
 type SelfOptions = EmptySelfOptions;
 

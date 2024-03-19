@@ -6,10 +6,10 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import qunitStart from '../../chipper/js/sim-tests/qunitStart.js';
-import './ResponsePacketTests.js';
-import './UtteranceTests.js';
-import './UtteranceQueueTests.js';
+import qunitStart from '@/utils/chipper/sim-tests/qunitStart';
+import '@/utils/utterance-queue/ResponsePacketTests';
+import '@/utils/utterance-queue/UtteranceTests';
+import '@/utils/utterance-queue/UtteranceQueueTests';
 
 // Since our tests are loaded asynchronously, we must direct QUnit to begin the tests
 qunitStart();

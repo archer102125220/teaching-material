@@ -6,16 +6,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../../../../axon/DerivedProperty';
-import geometricOptics from '../../../geometricOptics';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import Bounds2 from '../../../../dot/Bounds2';
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import GOLabelsNode, { type GOSceneLabelsNodeOptions } from './GOLabelsNode';
-import OpticalObjectLabelNode from './OpticalObjectLabelNode';
-import BooleanProperty from '../../../../axon/BooleanProperty';
-import OpticalImageLabelNode from './OpticalImageLabelNode';
-import FramedSceneNode from '../FramedSceneNode';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import GOLabelsNode, { type GOSceneLabelsNodeOptions } from '@/utils/geometric-optics/common/view/labels/GOLabelsNode';
+import OpticalObjectLabelNode from '@/utils/geometric-optics/common/view/labels/OpticalObjectLabelNode';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import OpticalImageLabelNode from '@/utils/geometric-optics/common/view/labels/OpticalImageLabelNode';
+import FramedSceneNode from '@/utils/geometric-optics/common/view/FramedSceneNode';
 
 export default class FramedLabelsNode extends GOLabelsNode {
 

@@ -7,9 +7,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import { Line, type LineOptions, scenery } from '../../imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { Line, type LineOptions, scenery } from '@/utils/scenery/imports';
 
 type SelfOptions = EmptySelfOptions;
 

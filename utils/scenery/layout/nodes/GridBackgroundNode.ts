@@ -11,9 +11,9 @@
 
 import _ from 'lodash';
 
-import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
-import optionize from '../../../phet-core/optionize';
-import { GridCell, GridConstraint, Node, type NodeOptions, Rectangle, scenery, type TPaint } from '../../imports';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import optionize from '@/utils/phet-core/optionize';
+import { GridCell, GridConstraint, Node, type NodeOptions, Rectangle, scenery, type TPaint } from '@/utils/scenery/imports';
 
 type CreateCellBackground = (gridCell: GridCell) => Node | null;
 type SelfOptions = {

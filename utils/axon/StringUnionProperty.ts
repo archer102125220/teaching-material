@@ -7,12 +7,12 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Property, { type PropertyOptions } from './Property';
-import StringUnionIO from '../tandem/types/StringUnionIO';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import type PickRequired from '../phet-core/types/PickRequired';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import axon from './axon';
+import Property, { type PropertyOptions } from '@/utils/axon/Property';
+import StringUnionIO from '@/utils/tandem/types/StringUnionIO';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import axon from '@/utils/axon/axon';
 
 type StringEnumerationPropertyOptions<T> = StrictOmit<PropertyOptions<T>, 'phetioValueType'> &
   PickRequired<PropertyOptions<T>, 'validValues'>;

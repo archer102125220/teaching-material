@@ -7,28 +7,28 @@
  * @author Aaron Davis (PhET Interactive Simulations)
  */
 
-import Emitter from '../../axon/Emitter';
-import type TEmitter from '../../axon/TEmitter';
-import type TProperty from '../../axon/TProperty';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import optionize from '../../phet-core/optionize';
-import { Color, Node, type PaintableNode, PaintColorProperty } from '../../scenery/imports';
-import type TSoundPlayer from '../../tambo/TSoundPlayer';
-import pushButtonSoundPlayer from '../../tambo/shared-sound-players/pushButtonSoundPlayer';
-import EventType from '../../tandem/EventType';
-import PhetioObject from '../../tandem/PhetioObject';
-import Tandem from '../../tandem/Tandem';
-import ColorConstants from '../ColorConstants';
-import sun from '../sun';
-import ButtonModel from './ButtonModel';
-import RadioButtonInteractionState from './RadioButtonInteractionState';
-import RadioButtonInteractionStateProperty from './RadioButtonInteractionStateProperty';
-import RectangularButton, { type RectangularButtonOptions } from './RectangularButton';
-import type TButtonAppearanceStrategy from './TButtonAppearanceStrategy';
-import type { TButtonAppearanceStrategyOptions } from './TButtonAppearanceStrategy';
-import type TContentAppearanceStrategy from './TContentAppearanceStrategy';
-import type { TContentAppearanceStrategyOptions } from './TContentAppearanceStrategy';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
+import Emitter from '@/utils/axon/Emitter';
+import type TEmitter from '@/utils/axon/TEmitter';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize from '@/utils/phet-core/optionize';
+import { Color, Node, type PaintableNode, PaintColorProperty } from '@/utils/scenery/imports';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import pushButtonSoundPlayer from '@/utils/tambo/shared-sound-players/pushButtonSoundPlayer';
+import EventType from '@/utils/tandem/EventType';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import ColorConstants from '@/utils/sun/ColorConstants';
+import sun from '@/utils/sun/sun';
+import ButtonModel from '@/utils/sun/buttons/ButtonModel';
+import RadioButtonInteractionState from '@/utils/sun/buttons/RadioButtonInteractionState';
+import RadioButtonInteractionStateProperty from '@/utils/sun/buttons/RadioButtonInteractionStateProperty';
+import RectangularButton, { type RectangularButtonOptions } from '@/utils/sun/buttons/RectangularButton';
+import type TButtonAppearanceStrategy from '@/utils/sun/buttons/TButtonAppearanceStrategy';
+import type { TButtonAppearanceStrategyOptions } from '@/utils/sun/buttons/TButtonAppearanceStrategy';
+import type TContentAppearanceStrategy from '@/utils/sun/buttons/TContentAppearanceStrategy';
+import type { TContentAppearanceStrategyOptions } from '@/utils/sun/buttons/TContentAppearanceStrategy';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 
 type SelfOptions = {
 

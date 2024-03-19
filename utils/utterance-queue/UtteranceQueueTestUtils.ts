@@ -6,7 +6,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import stepTimer from '../../axon/js/stepTimer.js';
+import stepTimer from '@/utils/axon/stepTimer';
 
 // Arbitrary value to let the
 const TIMING_BUFFER = 300;
@@ -17,8 +17,8 @@ class UtteranceQueueTestUtils {
    * Helper es6 promise timeout function.
    * @param ms
    */
-  public static timeout( ms: number ): Promise<unknown> {
-    return new Promise( resolve => setTimeout( resolve, ms ) );
+  public static timeout(ms: number): Promise<unknown> {
+    return new Promise(resolve => setTimeout(resolve, ms));
   }
 
   /**
@@ -31,15 +31,14 @@ class UtteranceQueueTestUtils {
     // Give plenty of time for the Announcer to be ready to speak again. For some reason this needs to be a really
     // large number to get tests to pass consistently. I am starting to have a hunch that QUnit tries to run
     // async tests in parallel...
-    await UtteranceQueueTestUtils.timeout( TIMING_BUFFER * 3 );
+    await UtteranceQueueTestUtils.timeout(TIMING_BUFFER * 3);
 
     // From debugging, I am not convinced that setInterval is called consistently while we wait for timeouts. Stepping
     // the timer here improves consistency and gets certain tests passing. Specifically, I want to make sure that
     // timing variables related to waiting for voicingManager to be readyToAnnounce have enough time to reset
-    stepTimer.emit( TIMING_BUFFER * 3 );
+    stepTimer.emit(TIMING_BUFFER * 3);
   }
 }
 
 // This is a test utility file and does not need to be in the namespace.
-// eslint-disable-next-line default-export-class-should-register-namespace
 export default UtteranceQueueTestUtils;

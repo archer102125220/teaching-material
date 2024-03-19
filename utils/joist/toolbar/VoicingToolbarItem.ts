@@ -7,23 +7,25 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import PlayStopButton from '../../scenery-phet/buttons/PlayStopButton';
-import PhetFont from '../../scenery-phet/PhetFont';
-import { AlignGroup, Display, HBox, Node, type NodeOptions, ReadingBlockHighlight, SceneryEvent, Text, voicingManager, VoicingText, voicingUtteranceQueue } from '../../scenery/imports';
-import Tandem from '../../tandem/Tandem';
-import Utterance from '../../utterance-queue/Utterance';
-import joist from '../joist';
-import JoistStrings from '../JoistStrings';
-import PreferencesControl from '../preferences/PreferencesControl';
-import VoicingToolbarAlertManager from './VoicingToolbarAlertManager';
-import LookAndFeel from '../LookAndFeel';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../phet-core/optionize';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import { type SpeakableResolvedResponse } from '../../utterance-queue/ResponsePacket';
-import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
-import PreferencesDialogConstants from '../preferences/PreferencesDialogConstants';
+import _ from 'lodash';
+
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import PlayStopButton from '@/utils/scenery-phet/buttons/PlayStopButton';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { AlignGroup, Display, HBox, Node, type NodeOptions, ReadingBlockHighlight, SceneryEvent, Text, voicingManager, VoicingText, voicingUtteranceQueue } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import PreferencesControl from '@/utils/joist/preferences/PreferencesControl';
+import VoicingToolbarAlertManager from '@/utils/joist/toolbar/VoicingToolbarAlertManager';
+import LookAndFeel from '@/utils/joist/LookAndFeel';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { type SpeakableResolvedResponse } from '@/utils/utterance-queue/ResponsePacket';
+import ToggleSwitch, { type ToggleSwitchOptions } from '@/utils/sun/ToggleSwitch';
+import PreferencesDialogConstants from '@/utils/joist/preferences/PreferencesDialogConstants';
 
 // constants
 const CONTENT_VERTICAL_SPACING = 10;

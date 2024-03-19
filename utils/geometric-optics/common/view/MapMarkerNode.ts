@@ -6,11 +6,11 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import { Node, type NodeOptions, Path, type PathOptions } from '../../../scenery/imports';
-import mapMarkerAltSolidShape from '../../../sherpa/fontawesome-5/mapMarkerAltSolidShape';
-import geometricOptics from '../../geometricOptics';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { Node, type NodeOptions, Path, type PathOptions } from '@/utils/scenery/imports';
+import mapMarkerAltSolidShape from '@/utils/sherpa/fontawesome-5/mapMarkerAltSolidShape';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
 
 type MapMarkerNodeOptions = PickOptional<NodeOptions, 'scale' | 'tagName'> & PickRequired<PathOptions, 'fill' | 'stroke'>;
 

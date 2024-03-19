@@ -12,9 +12,9 @@
  */
 import _ from 'lodash';
 
-import StringProperty from '../../axon/StringProperty';
-import Tandem from '../../tandem/Tandem';
-import { scenery, SceneryConstants } from '../imports';
+import StringProperty from '@/utils/axon/StringProperty';
+import Tandem from '@/utils/tandem/Tandem';
+import { scenery, SceneryConstants } from '@/utils/scenery/imports';
 
 // Use the color profile specified in query parameters, or default to 'default'
 const initialProfileName = _.hasIn(

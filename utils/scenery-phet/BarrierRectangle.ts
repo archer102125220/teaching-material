@@ -7,14 +7,14 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import { FireListener, Plane, type PlaneOptions } from '../scenery/imports';
-import EventType from '../tandem/EventType';
-import dotRandom from '../dot/dotRandom';
-import sceneryPhet from './sceneryPhet';
-import { type ObservableArray } from '../axon/createObservableArray';
-import { type PopupableNode } from '../sun/Popupable';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import Tandem from '../tandem/Tandem';
+import { FireListener, Plane, type PlaneOptions } from '@/utils/scenery/imports';
+import EventType from '@/utils/tandem/EventType';
+import dotRandom from '@/utils/dot/dotRandom';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import { type ObservableArray } from '@/utils/axon/createObservableArray';
+import { type PopupableNode } from '@/utils/sun/Popupable';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import Tandem from '@/utils/tandem/Tandem';
 
 type SelfOptions = EmptySelfOptions;
 

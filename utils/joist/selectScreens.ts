@@ -1,7 +1,10 @@
 // Copyright 2020-2023, University of Colorado Boulder
-import joist from './joist';
-import HomeScreen from './HomeScreen';
-import { type AnyScreen } from './Screen';
+
+import _ from 'lodash';
+
+import joist from '@/utils/joist/joist';
+import HomeScreen from '@/utils/joist/HomeScreen';
+import { type AnyScreen } from '@/utils/joist/Screen';
 
 export type ScreenReturnType = {
   homeScreen: HomeScreen | null;

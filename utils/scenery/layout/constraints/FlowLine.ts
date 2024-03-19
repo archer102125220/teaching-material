@@ -8,9 +8,9 @@
 
 import _ from 'lodash';
 
-import Orientation from '../../../phet-core/Orientation';
-import Pool from '../../../phet-core/Pool';
-import { FlowCell, LayoutLine, scenery } from '../../imports';
+import Orientation from '@/utils/phet-core/Orientation';
+import Pool from '@/utils/phet-core/Pool';
+import { FlowCell, LayoutLine, scenery } from '@/utils/scenery/imports';
 
 export default class FlowLine extends LayoutLine {
 

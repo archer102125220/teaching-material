@@ -7,14 +7,14 @@
  * @author Martin Veillette
  */
 
-import Property from '../../../axon/Property';
-import { Text, VBox } from '../../../scenery/imports';
-import Tandem from '../../../tandem/Tandem';
-import geometricOptics from '../../geometricOptics';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings';
-import GOConstants from '../GOConstants';
-import { type RaysType } from '../model/RaysType';
-import RaysRadioButtonGroup from './RaysRadioButtonGroup';
+import Property from '@/utils/axon/Property';
+import { Text, VBox } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import RaysRadioButtonGroup from '@/utils/geometric-optics/common/view/RaysRadioButtonGroup';
 
 export default class RaysSubpanel extends VBox {
 

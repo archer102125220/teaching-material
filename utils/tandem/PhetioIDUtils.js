@@ -10,7 +10,8 @@
  * @author Chris Malley (PixelZoom, Inc.)
  * @author Sam Reid (PhET Interactive Simulations)
  */
-(function () {
+
+export function handlePhetioIDUtils() {
   // define the phetio global
   window.phetio = window.phetio || {};
 
@@ -335,4 +336,6 @@
      */
     CAPSULE_SUFFIX
   };
-})();
+}
+
+export default handlePhetioIDUtils;

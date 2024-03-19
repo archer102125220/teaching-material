@@ -9,19 +9,19 @@
  */
 import _ from 'lodash';
 
-import Bounds2 from '../../../dot/Bounds2';
-import Matrix3 from '../../../dot/Matrix3';
-import arrayRemove from '../../../phet-core/arrayRemove';
-import merge from '../../../phet-core/merge';
-import Poolable from '../../../phet-core/Poolable';
-import stripEmbeddingMarks from '../../../phet-core/stripEmbeddingMarks';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import merge from '@/utils/phet-core/merge';
+import Poolable from '@/utils/phet-core/Poolable';
+import stripEmbeddingMarks from '@/utils/phet-core/stripEmbeddingMarks';
 import {
   FocusManager,
   PDOMInstance,
   PDOMSiblingStyle,
   PDOMUtils,
   scenery
-} from '../../imports';
+} from '@/utils/scenery/imports';
 
 // constants
 const PRIMARY_SIBLING = 'PRIMARY_SIBLING';
@@ -79,8 +79,8 @@ class PDOMPeer {
       options
     );
 
-    assert &&
-      assert(
+    window.window.assert &&
+      window.window.assert(
         !this.id || this.isDisposed,
         'If we previously existed, we need to have been disposed'
       );
@@ -209,7 +209,11 @@ class PDOMPeer {
         this.node.accessibleName,
         callbacksForOtherNodes
       );
-      window.assert && window.assert(typeof options === 'object', 'should return an object');
+      window.window.assert &&
+        window.window.assert(
+          typeof options === 'object',
+          'should return an object'
+        );
     }
 
     if (this.node.pdomHeading !== null) {
@@ -219,7 +223,11 @@ class PDOMPeer {
         this.node.pdomHeading,
         callbacksForOtherNodes
       );
-      window.assert && window.assert(typeof options === 'object', 'should return an object');
+      window.window.assert &&
+        window.window.assert(
+          typeof options === 'object',
+          'should return an object'
+        );
     }
 
     if (this.node.helpText !== null) {
@@ -229,7 +237,11 @@ class PDOMPeer {
         this.node.helpText,
         callbacksForOtherNodes
       );
-      window.assert && window.assert(typeof options === 'object', 'should return an object');
+      window.window.assert &&
+        window.window.assert(
+          typeof options === 'object',
+          'should return an object'
+        );
     }
 
     // create the base DOM element representing this accessible instance
@@ -321,7 +333,8 @@ class PDOMPeer {
     this.node.updateOtherNodesActiveDescendant();
 
     callbacksForOtherNodes.forEach((callback) => {
-      window.assert && window.assert(typeof callback === 'function');
+      window.window.assert &&
+        window.window.assert(typeof callback === 'function');
       callback();
     });
   }
@@ -435,8 +448,8 @@ class PDOMPeer {
       const associationObject = this.node.ariaLabelledbyAssociations[i];
 
       // Assert out if the model list is different than the data held in the associationObject
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           associationObject.otherNode.nodesThatAreAriaLabelledbyThisNode.indexOf(
             this.node
           ) >= 0,
@@ -458,8 +471,8 @@ class PDOMPeer {
       const associationObject = this.node.ariaDescribedbyAssociations[i];
 
       // Assert out if the model list is different than the data held in the associationObject
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           associationObject.otherNode.nodesThatAreAriaDescribedbyThisNode.indexOf(
             this.node
           ) >= 0,
@@ -481,8 +494,8 @@ class PDOMPeer {
       const associationObject = this.node.activeDescendantAssociations[i];
 
       // Assert out if the model list is different than the data held in the associationObject
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           associationObject.otherNode.nodesThatAreActiveDescendantToThisNode.indexOf(
             this.node
           ) >= 0,
@@ -552,8 +565,8 @@ class PDOMPeer {
    * @public (scenery-internal)
    */
   onInputValueChange() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.node.inputValue !== undefined,
         'use null to remove input value attribute'
       );
@@ -690,12 +703,12 @@ class PDOMPeer {
    * @param {string} attribute
    */
   removeAttributeFromAllElements(attribute) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         attribute !== DISABLED_ATTRIBUTE_NAME,
         'this method does not currently support disabled, to make Display.interactive toggling easier to implement'
       );
-    window.assert && window.assert(typeof attribute === 'string');
+    window.window.assert && window.window.assert(typeof attribute === 'string');
     this._primarySibling && this._primarySibling.removeAttribute(attribute);
     this._labelSibling && this._labelSibling.removeAttribute(attribute);
     this._descriptionSibling &&
@@ -711,7 +724,7 @@ class PDOMPeer {
    * @param {Object} [options]
    */
   setClassToElement(className, options) {
-    window.assert && window.assert(typeof className === 'string');
+    window.window.assert && window.window.assert(typeof className === 'string');
 
     options = merge(
       {
@@ -732,7 +745,7 @@ class PDOMPeer {
    * @param {Object} [options]
    */
   removeClassFromElement(className, options) {
-    window.assert && window.assert(typeof className === 'string');
+    window.window.assert && window.window.assert(typeof className === 'string');
 
     options = merge(
       {
@@ -752,8 +765,8 @@ class PDOMPeer {
    * @param {Object} associationObject - see addAriaLabelledbyAssociation() for schema
    */
   setAssociationAttribute(attribute, associationObject) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         PDOMUtils.ASSOCIATION_ATTRIBUTES.indexOf(attribute) >= 0,
         `unsupported attribute for setting with association object: ${attribute}`
       );
@@ -774,7 +787,8 @@ class PDOMPeer {
         firstPDOMInstance.peer = this;
       }
 
-      window.assert && window.assert(firstPDOMInstance.peer, 'peer should exist');
+      window.window.assert &&
+        window.window.assert(firstPDOMInstance.peer, 'peer should exist');
 
       // we can use the same element's id to update all of this Node's peers
       const otherPeerElement = firstPDOMInstance.peer.getElementByName(
@@ -789,7 +803,8 @@ class PDOMPeer {
         // NOTE: in the future, we would like to verify that the association exists but can't do that yet because
         // we have to support cases where we set label association prior to setting the sibling/parent tagName
         const previousAttributeValue = element.getAttribute(attribute) || '';
-        window.assert && window.assert(typeof previousAttributeValue === 'string');
+        window.window.assert &&
+          window.window.assert(typeof previousAttributeValue === 'string');
 
         const newAttributeValue = [
           previousAttributeValue.trim(),
@@ -823,7 +838,8 @@ class PDOMPeer {
   arrangeContentElement(contentElement, appendElement) {
     // if there is a containerParent
     if (this.topLevelElements[0] === this._containerParent) {
-      window.assert && window.assert(this.topLevelElements.length === 1);
+      window.window.assert &&
+        window.window.assert(this.topLevelElements.length === 1);
 
       if (appendElement) {
         this._containerParent.appendChild(contentElement);
@@ -858,7 +874,7 @@ class PDOMPeer {
    * @returns {boolean}
    */
   isVisible() {
-    if (assert) {
+    if (window.assert) {
       let visibleElements = 0;
       this.topLevelElements.forEach((element) => {
         // support property or attribute
@@ -866,7 +882,7 @@ class PDOMPeer {
           visibleElements += 1;
         }
       });
-      assert(
+      window.assert(
         this.visible
           ? visibleElements === this.topLevelElements.length
           : visibleElements === 0,
@@ -883,7 +899,7 @@ class PDOMPeer {
    * @param {boolean} visible
    */
   setVisible(visible) {
-    window.assert && window.assert(typeof visible === 'boolean');
+    window.window.assert && window.window.assert(typeof visible === 'boolean');
     if (this.visible !== visible) {
       this.visible = visible;
       for (let i = 0; i < this.topLevelElements.length; i++) {
@@ -922,8 +938,11 @@ class PDOMPeer {
    * @public (scenery-internal)
    */
   focus() {
-    assert &&
-      assert(this._primarySibling, 'must have a primary sibling to focus');
+    window.assert &&
+      window.assert(
+        this._primarySibling,
+        'must have a primary sibling to focus'
+      );
 
     // We do not want to steal focus from any parent application. For example, if this element is in an iframe.
     // See https://github.com/phetsims/joist/issues/897.
@@ -937,8 +956,11 @@ class PDOMPeer {
    * @public (scenery-internal)
    */
   blur() {
-    assert &&
-      assert(this._primarySibling, 'must have a primary sibling to blur');
+    window.assert &&
+      window.assert(
+        this._primarySibling,
+        'must have a primary sibling to blur'
+      );
 
     // no op by the browser if primary sibling does not have focus
     this._primarySibling.blur();
@@ -950,7 +972,8 @@ class PDOMPeer {
    * @param {boolean} focusable
    */
   setFocusable(focusable) {
-    window.assert && window.assert(typeof focusable === 'boolean');
+    window.window.assert &&
+      window.window.assert(typeof focusable === 'boolean');
 
     const peerHadFocus = this.isFocused();
     if (this.focusable !== focusable) {
@@ -975,8 +998,8 @@ class PDOMPeer {
    * @param {string|null} content - the content for the label sibling.
    */
   setLabelSiblingContent(content) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         content === null || typeof content === 'string',
         'incorrect label content type'
       );
@@ -995,8 +1018,8 @@ class PDOMPeer {
    * @param {string|null} content - the content for the description sibling.
    */
   setDescriptionSiblingContent(content) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         content === null || typeof content === 'string',
         'incorrect description content type'
       );
@@ -1014,18 +1037,18 @@ class PDOMPeer {
    * @param {string|null} content - the content for the primary sibling.
    */
   setPrimarySiblingContent(content) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         content === null || typeof content === 'string',
         'incorrect inner content type'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.pdomInstance.children.length === 0,
         'descendants exist with accessible content, innerContent cannot be used'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         PDOMUtils.tagNameSupportsContent(this._primarySibling.tagName),
         `tagName: ${this.node.tagName} does not support inner content`
       );
@@ -1165,13 +1188,13 @@ class PDOMPeer {
    * @private
    */
   positionElements(positionInPDOM) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this._primarySibling,
         'a primary sibling required to receive CSS positioning'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.positionDirty,
         'elements should only be repositioned if dirty'
       );

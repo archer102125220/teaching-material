@@ -8,19 +8,19 @@
  * @author Sarah Chang (Swarthmore College)
  */
 
-import DerivedProperty from '../../../../axon/DerivedProperty';
-import Vector2 from '../../../../dot/Vector2';
-import { Node, type NodeOptions } from '../../../../scenery/imports';
-import geometricOptics from '../../../geometricOptics';
-import GeometricOpticsStrings from '../../../GeometricOpticsStrings';
-import LabelNode from './LabelNode';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import Bounds2 from '../../../../dot/Bounds2';
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import OpticLabelNode from './OpticLabelNode';
-import type PickRequired from '../../../../phet-core/types/PickRequired';
-import GOSceneNode from '../GOSceneNode';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/optionize';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import { Node, type NodeOptions } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import LabelNode from '@/utils/geometric-optics/common/view/labels/LabelNode';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import OpticLabelNode from '@/utils/geometric-optics/common/view/labels/OpticLabelNode';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import GOSceneNode from '@/utils/geometric-optics/common/view/GOSceneNode';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
 
 const FOCAL_POINT_LABEL_Y_OFFSET = 7;
 

@@ -9,10 +9,10 @@
 
 import _ from 'lodash';
 
-import toSVGNumber from '../../dot/toSVGNumber';
-import cleanArray from '../../phet-core/cleanArray';
-import Poolable from '../../phet-core/Poolable';
-import { scenery, svgns } from '../imports';
+import toSVGNumber from '@/utils/dot/toSVGNumber';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Poolable from '@/utils/phet-core/Poolable';
+import { scenery, svgns } from '@/utils/scenery/imports';
 
 let globalId = 1;
 

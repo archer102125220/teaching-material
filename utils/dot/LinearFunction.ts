@@ -13,8 +13,8 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Utils from './Utils';
-import dot from './dot';
+import Utils from '@/utils/dot/Utils';
+import dot from '@/utils/dot/dot';
 
 export default class LinearFunction {
   private a1: number;

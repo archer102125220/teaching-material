@@ -6,21 +6,23 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import PhetioAction from '../tandem/PhetioAction';
-import optionize, { combineOptions } from '../phet-core/optionize';
-import { KeyboardListener, KeyboardUtils, Node, SceneryEvent, type SpeakingOptions, type TInputListener, type TPaint, VBox, type VoicingNode } from '../scenery/imports';
-import multiSelectionSoundPlayerFactory from '../tambo/multiSelectionSoundPlayerFactory';
-import generalCloseSoundPlayer from '../tambo/shared-sound-players/generalCloseSoundPlayer';
-import generalOpenSoundPlayer from '../tambo/shared-sound-players/generalOpenSoundPlayer';
-import EventType from '../tandem/EventType';
-import Tandem from '../tandem/Tandem';
-import ComboBoxListItemNode, { type ComboBoxListItemNodeOptions } from './ComboBoxListItemNode';
-import Panel, { type PanelOptions } from './Panel';
-import sun from './sun';
-import type TSoundPlayer from '../tambo/TSoundPlayer';
-import DerivedProperty from '../axon/DerivedProperty';
-import type TProperty from '../axon/TProperty';
-import ComboBox, { type ComboBoxA11yNamePropertyMap, type ComboBoxItemNoNode } from './ComboBox';
+import _ from 'lodash';
+
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import { KeyboardListener, KeyboardUtils, Node, SceneryEvent, type SpeakingOptions, type TInputListener, type TPaint, VBox, type VoicingNode } from '@/utils/scenery/imports';
+import multiSelectionSoundPlayerFactory from '@/utils/tambo/multiSelectionSoundPlayerFactory';
+import generalCloseSoundPlayer from '@/utils/tambo/shared-sound-players/generalCloseSoundPlayer';
+import generalOpenSoundPlayer from '@/utils/tambo/shared-sound-players/generalOpenSoundPlayer';
+import EventType from '@/utils/tandem/EventType';
+import Tandem from '@/utils/tandem/Tandem';
+import ComboBoxListItemNode, { type ComboBoxListItemNodeOptions } from '@/utils/sun/ComboBoxListItemNode';
+import Panel, { type PanelOptions } from '@/utils/sun/Panel';
+import sun from '@/utils/sun/sun';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import ComboBox, { type ComboBoxA11yNamePropertyMap, type ComboBoxItemNoNode } from '@/utils/sun/ComboBox';
 
 type SelfOptions = {
 

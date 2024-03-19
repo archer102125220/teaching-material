@@ -7,9 +7,11 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import _ from 'lodash';
+
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 const DynamicMarkerIO = new IOType<IntentionalAny, object>('DynamicMarkerIO', {
   supertype: IOType.ObjectIO,

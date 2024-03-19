@@ -9,15 +9,15 @@
 
 import _ from 'lodash';
 
-import Property from '../../../axon/Property';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import TinyProperty from '../../../axon/TinyProperty';
-import Bounds2 from '../../../dot/Bounds2';
-import { LayoutConstraint, LayoutProxy, MarginLayoutCell, Node, scenery } from '../../imports';
-import type TProperty from '../../../axon/TProperty';
-import optionize from '../../../phet-core/optionize';
-import Vector2 from '../../../dot/Vector2';
-import Orientation from '../../../phet-core/Orientation';
+import Property from '@/utils/axon/Property';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import { LayoutConstraint, LayoutProxy, MarginLayoutCell, Node, scenery } from '@/utils/scenery/imports';
+import type TProperty from '@/utils/axon/TProperty';
+import optionize from '@/utils/phet-core/optionize';
+import Vector2 from '@/utils/dot/Vector2';
+import Orientation from '@/utils/phet-core/Orientation';
 
 // Position changes smaller than this will be ignored
 const CHANGE_POSITION_THRESHOLD = 1e-9;

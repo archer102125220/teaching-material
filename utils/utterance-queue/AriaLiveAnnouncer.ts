@@ -26,16 +26,16 @@
  * @author John Blanco
  */
 
-import stepTimer from '../axon/stepTimer';
-import Enumeration from '../phet-core/Enumeration';
-import EnumerationValue from '../phet-core/EnumerationValue';
-import optionize from '../phet-core/optionize';
-import platform from '../phet-core/platform';
-import { PDOMUtils } from '../scenery/imports';
-import Announcer, { type AnnouncerAnnounceOptions, type AnnouncerOptions } from './Announcer';
-import Utterance from './Utterance';
-import utteranceQueueNamespace from './utteranceQueueNamespace';
-import { type ResolvedResponse } from './ResponsePacket';
+import stepTimer from '@/utils/axon/stepTimer';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import optionize from '@/utils/phet-core/optionize';
+import platform from '@/utils/phet-core/platform';
+import { PDOMUtils } from '@/utils/scenery/imports';
+import Announcer, { type AnnouncerAnnounceOptions, type AnnouncerOptions } from '@/utils/utterance-queue/Announcer';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
+import { type ResolvedResponse } from '@/utils/utterance-queue/ResponsePacket';
 
 // constants
 const NUMBER_OF_ARIA_LIVE_ELEMENTS = 4;
@@ -117,7 +117,7 @@ class AriaLiveAnnouncer extends Announcer {
     this.politeElementIndex = 0;
     this.assertiveElementIndex = 0;
 
-    this.ariaLiveContainer = document.createElement('div'); //container div
+    this.ariaLiveContainer = document.createElement('div'); // container div
     this.ariaLiveContainer.setAttribute('lang', options.lang);
     this.ariaLiveContainer.setAttribute('id', `aria-live-elements-${ariaLiveAnnouncerIndex}`);
     this.ariaLiveContainer.setAttribute('style', 'position: absolute; left: 0px; top: 0px; width: 0px; height: 0px; ' +

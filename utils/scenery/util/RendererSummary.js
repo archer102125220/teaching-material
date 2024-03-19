@@ -9,7 +9,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Node, Renderer, scenery } from '../imports';
+import { Node, Renderer, scenery } from '@/utils/scenery/imports';
 
 const summaryBits = [
   // renderer bits ("Is renderer X supported by the entire sub-tree?")
@@ -53,16 +53,16 @@ class RendererSummary {
    * @param {Node} node
    */
   constructor(node) {
-    window.assert && window.assert(node instanceof Node);
+    window.window.assert && window.window.assert(node instanceof Node);
 
     // NOTE: assumes that we are created in the Node constructor
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         node._rendererBitmask === Renderer.bitmaskNodeDefault,
         'Node must have a default bitmask when creating a RendererSummary'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         node._children.length === 0,
         'Node cannot have children when creating a RendererSummary'
       );
@@ -97,7 +97,7 @@ class RendererSummary {
    * @param {number} newBitmask
    */
   summaryChange(oldBitmask, newBitmask) {
-    assert && this.audit();
+    window.assert && this.audit();
 
     const changeBitmask = oldBitmask ^ newBitmask; // bit set only if it changed
 
@@ -128,7 +128,8 @@ class RendererSummary {
 
     if (ancestorOldMask || ancestorNewMask) {
       const oldSubtreeBitmask = this.bitmask;
-      window.assert && window.assert(oldSubtreeBitmask !== undefined);
+      window.window.assert &&
+        window.window.assert(oldSubtreeBitmask !== undefined);
 
       for (let j = 0; j < numSummaryBits; j++) {
         const ancestorBit = summaryBits[j];
@@ -140,8 +141,8 @@ class RendererSummary {
         // Check for removed bits
         if (ancestorOldMask & ancestorBit) {
           this.bitmask ^= ancestorBit;
-          assert &&
-            assert(
+          window.assert &&
+            window.assert(
               !(this.bitmask & ancestorBit),
               'Should be cleared, doing cheaper XOR assuming it already was set'
             );
@@ -159,10 +160,14 @@ class RendererSummary {
         );
       }
 
-      window.assert && window.assert(this.bitmask === this.computeBitmask(), 'Sanity check');
+      window.window.assert &&
+        window.window.assert(
+          this.bitmask === this.computeBitmask(),
+          'Sanity check'
+        );
     }
 
-    assert && this.audit();
+    window.assert && this.audit();
   }
 
   /**
@@ -335,12 +340,12 @@ class RendererSummary {
    * @public
    */
   audit() {
-    if (assert) {
+    if (window.assert) {
       for (let i = 0; i < numSummaryBits; i++) {
         const bit = summaryBits[i];
         const countIsZero = this._counts[i] === 0;
         const bitmaskContainsBit = !!(this.bitmask & bit);
-        assert(
+        window.assert(
           countIsZero === bitmaskContainsBit,
           'Bits should be set if count is zero'
         );

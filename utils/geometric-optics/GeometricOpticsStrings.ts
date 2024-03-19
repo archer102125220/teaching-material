@@ -3,10 +3,10 @@
 /**
  * Auto-generated from modulify, DO NOT manually modify.
  */
-/* eslint-disable */
-import getStringModule from '../chipper/getStringModule';
-import type LocalizedStringProperty from '../chipper/LocalizedStringProperty';
-import geometricOptics from './geometricOptics';
+
+import getStringModule from '@/utils/chipper/getStringModule';
+import type LocalizedStringProperty from '@/utils/chipper/LocalizedStringProperty';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
 
 type StringsType = {
   'geometric-optics': {
@@ -77,8 +77,8 @@ type StringsType = {
 };
 
 // console.log( JSON.stringify( window.phet.chipper.strings ) );
-const GeometricOpticsStrings = getStringModule( 'GEOMETRIC_OPTICS' ) as StringsType;
+const GeometricOpticsStrings = getStringModule('GEOMETRIC_OPTICS') as StringsType;
 
-geometricOptics.register( 'GeometricOpticsStrings', GeometricOpticsStrings );
+geometricOptics.register('GeometricOpticsStrings', GeometricOpticsStrings);
 
 export default GeometricOpticsStrings;

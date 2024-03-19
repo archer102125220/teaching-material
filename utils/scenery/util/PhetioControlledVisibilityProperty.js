@@ -7,11 +7,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import DerivedProperty from '../../axon/DerivedProperty';
-import merge from '../../phet-core/merge';
-import Tandem from '../../tandem/Tandem';
-import { scenery } from '../imports';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import merge from '@/utils/phet-core/merge';
+import Tandem from '@/utils/tandem/Tandem';
+import { scenery } from '@/utils/scenery/imports';
 
 class PhetioControlledVisibilityProperty extends DerivedProperty {
   /**

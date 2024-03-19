@@ -2,7 +2,7 @@
 
 // @author Michael Kauzmann (PhET Interactive Simulations)
 
-import getLinks from './getLinks';
+import getLinks from '@/utils/brand/getLinks';
 
 type TBrand = {
   id: string;

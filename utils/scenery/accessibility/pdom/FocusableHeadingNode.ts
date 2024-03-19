@@ -12,9 +12,9 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import optionize from '../../../phet-core/optionize';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import { Node, type NodeOptions, scenery } from '../../imports';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { Node, type NodeOptions, scenery } from '@/utils/scenery/imports';
 
 // Available heading levels, according to DOM spec.
 type HeadingLevelNumber = 1 | 2 | 3 | 4 | 5 | 6;

@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import dot from './dot';
+import dot from '@/utils/dot/dot';
 
 /**
  * Outputs a number for use in SVG's style/transform/path strings.
@@ -17,11 +17,11 @@ import dot from './dot';
  * @param {number} number
  * @returns {string}
  */
-function toSVGNumber( number ) {
+function toSVGNumber(number) {
   // Largest guaranteed number of digits according to https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Number/toFixed
   // See https://github.com/phetsims/dot/issues/36
-  return number.toFixed( 20 );
+  return number.toFixed(20);
 }
 
-dot.register( 'toSVGNumber', toSVGNumber );
+dot.register('toSVGNumber', toSVGNumber);
 export default toSVGNumber;

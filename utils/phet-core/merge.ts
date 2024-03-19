@@ -14,8 +14,8 @@
 
 import _ from 'lodash';
 
-import phetCore from './phetCore';
-import type IntentionalAny from './types/IntentionalAny';
+import phetCore from '@/utils/phet-core/phetCore';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 // constants
 const OPTIONS_SUFFIX = 'Options';

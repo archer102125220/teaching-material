@@ -25,14 +25,14 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Transform3 from '../../dot/Transform3';
-import Utils from '../../dot/Utils';
-import Vector2 from '../../dot/Vector2';
-import arrayRemove from '../../phet-core/arrayRemove';
-import cleanArray from '../../phet-core/cleanArray';
-import merge from '../../phet-core/merge';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Transform3 from '@/utils/dot/Transform3';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import merge from '@/utils/phet-core/merge';
 import {
   Arc,
   Boundary,
@@ -48,7 +48,7 @@ import {
   Subpath,
   Vertex,
   VertexSegmentTree
-} from '../imports';
+} from '@/utils/kite/imports';
 
 let bridgeId = 0;
 let globalId = 0;
@@ -297,8 +297,11 @@ class Graph {
       if (start.equals(end)) {
         vertices.push(Vertex.pool.create(start));
       } else {
-        assert &&
-          assert(start.distance(end) < 1e-5, 'Inaccurate start/end points');
+        window.assert &&
+          window.assert(
+            start.distance(end) < 1e-5,
+            'Inaccurate start/end points'
+          );
         vertices.push(Vertex.pool.create(start.average(end)));
       }
     }
@@ -521,13 +524,13 @@ class Graph {
    */
   addEdge(edge) {
     window.assert && window.assert(edge instanceof Edge);
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !_.includes(edge.startVertex.incidentHalfEdges, edge.reversedHalf),
         'Should not already be connected'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !_.includes(edge.endVertex.incidentHalfEdges, edge.forwardHalf),
         'Should not already be connected'
       );
@@ -672,8 +675,8 @@ class Graph {
       const bounds = edge.segment.bounds;
 
       // TODO: see if object allocations are slow here https://github.com/phetsims/kite/issues/76
-      queue.push({ start: true, edge: edge }, bounds.minY - epsilon);
-      queue.push({ start: false, edge: edge }, bounds.maxY + epsilon);
+      queue.push({ start: true, edge }, bounds.minY - epsilon);
+      queue.push({ start: false, edge }, bounds.maxY + epsilon);
     };
 
     // Removes an edge from the queue (effectively... when we pop from the queue, we'll check its ID data, and if it was
@@ -907,8 +910,8 @@ class Graph {
    * @private
    */
   eliminateSelfIntersection() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.boundaries.length === 0,
         'Only handles simpler level primitive splitting right now'
       );
@@ -922,7 +925,8 @@ class Graph {
         const selfIntersection = segment.getSelfIntersection();
 
         if (selfIntersection) {
-          window.assert && window.assert(selfIntersection.aT < selfIntersection.bT);
+          window.assert &&
+            window.assert(selfIntersection.aT < selfIntersection.bT);
 
           const segments = segment.subdivisions([
             selfIntersection.aT,
@@ -985,8 +989,8 @@ class Graph {
       const bounds = edge.segment.bounds;
 
       // TODO: see if object allocations are slow here https://github.com/phetsims/kite/issues/76
-      queue.push({ start: true, edge: edge }, bounds.minY - epsilon);
-      queue.push({ start: false, edge: edge }, bounds.maxY + epsilon);
+      queue.push({ start: true, edge }, bounds.minY - epsilon);
+      queue.push({ start: false, edge }, bounds.maxY + epsilon);
     };
 
     // Removes an edge from the queue (effectively... when we pop from the queue, we'll check its ID data, and if it was
@@ -1166,12 +1170,7 @@ class Graph {
       changed = true;
     }
 
-    return changed
-      ? {
-          addedEdges: addedEdges,
-          removedEdges: removedEdges
-        }
-      : null;
+    return changed ? { addedEdges, removedEdges } : null;
   }
 
   /**
@@ -1183,8 +1182,8 @@ class Graph {
    * @param {Vertex} vertex - The vertex that is placed at the split location
    */
   splitEdge(edge, t, vertex) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.boundaries.length === 0,
         'Only handles simpler level primitive splitting right now'
       );
@@ -1217,14 +1216,14 @@ class Graph {
    * @private
    */
   collapseVertices() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         _.every(this.edges, (edge) =>
           _.includes(this.vertices, edge.startVertex)
         )
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         _.every(this.edges, (edge) => _.includes(this.vertices, edge.endVertex))
       );
 
@@ -1248,8 +1247,8 @@ class Graph {
     // Adds an vertex to the queue
     const addToQueue = (vertex) => {
       // TODO: see if object allocations are slow here https://github.com/phetsims/kite/issues/76
-      queue.push({ start: true, vertex: vertex }, vertex.point.y - epsilon);
-      queue.push({ start: false, vertex: vertex }, vertex.point.y + epsilon);
+      queue.push({ start: true, vertex }, vertex.point.y - epsilon);
+      queue.push({ start: false, vertex }, vertex.point.y + epsilon);
     };
 
     // Removes a vertex from the queue (effectively... when we pop from the queue, we'll check its ID data, and if it
@@ -1372,14 +1371,14 @@ class Graph {
       verticesToDispose[i].dispose();
     }
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         _.every(this.edges, (edge) =>
           _.includes(this.vertices, edge.startVertex)
         )
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         _.every(this.edges, (edge) => _.includes(this.vertices, edge.endVertex))
       );
   }
@@ -1455,14 +1454,14 @@ class Graph {
    * @private
    */
   removeLowOrderVertices() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         _.every(this.edges, (edge) =>
           _.includes(this.vertices, edge.startVertex)
         )
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         _.every(this.edges, (edge) => _.includes(this.vertices, edge.endVertex))
       );
 
@@ -1491,14 +1490,14 @@ class Graph {
         }
       }
     }
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         _.every(this.edges, (edge) =>
           _.includes(this.vertices, edge.startVertex)
         )
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         _.every(this.edges, (edge) => _.includes(this.vertices, edge.endVertex))
       );
   }
@@ -1640,7 +1639,8 @@ class Graph {
 
         const forwardFace = forwardHalf.face;
         const reversedFace = reversedHalf.face;
-        window.assert && window.assert(forwardFace !== reversedFace);
+        window.assert &&
+          window.assert(forwardFace !== reversedFace);
 
         const solvedForward = forwardFace.windingMap !== null;
         const solvedReversed = reversedFace.windingMap !== null;
@@ -1648,10 +1648,10 @@ class Graph {
         if (solvedForward && solvedReversed) {
           edges.splice(j, 1);
 
-          if (assert) {
+          if (window.assert) {
             for (let m = 0; m < this.shapeIds.length; m++) {
               const id = this.shapeIds[m];
-              assert(
+              window.assert(
                 forwardFace.windingMap[id] - reversedFace.windingMap[id] ===
                   this.computeDifferential(edge, id)
               );
@@ -1690,8 +1690,11 @@ class Graph {
     let differential = 0; // forward face - reversed face
     for (let m = 0; m < this.loops.length; m++) {
       const loop = this.loops[m];
-      assert &&
-        assert(loop.closed, 'This is only defined to work for closed loops');
+      window.assert &&
+        window.assert(
+          loop.closed,
+          'This is only defined to work for closed loops'
+        );
       if (loop.shapeId !== shapeId) {
         continue;
       }

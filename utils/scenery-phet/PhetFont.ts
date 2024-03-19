@@ -11,10 +11,10 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { combineOptions } from '../phet-core/optionize';
-import { Font, type FontOptions } from '../scenery/imports';
-import sceneryPhet from './sceneryPhet';
-import sceneryPhetQueryParameters from './sceneryPhetQueryParameters';
+import { combineOptions } from '@/utils/phet-core/optionize';
+import { Font, type FontOptions } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import sceneryPhetQueryParameters from '@/utils/scenery-phet/sceneryPhetQueryParameters';
 
 export default class PhetFont extends Font {
 

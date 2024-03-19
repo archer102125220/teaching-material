@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import cleanArray from '../../phet-core/cleanArray';
-import Poolable from '../../phet-core/Poolable';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Poolable from '@/utils/phet-core/Poolable';
 import {
   CountMap,
   FittedBlock,
@@ -15,7 +15,7 @@ import {
   SVGGroup,
   svgns,
   Utils
-} from '../imports';
+} from '@/utils/scenery/imports';
 
 class SVGBlock extends FittedBlock {
   /**

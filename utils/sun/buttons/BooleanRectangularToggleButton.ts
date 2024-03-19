@@ -6,14 +6,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import Tandem from '../../tandem/Tandem';
-import BooleanToggleNode from '../BooleanToggleNode';
-import sun from '../sun';
-import RectangularToggleButton, { type RectangularToggleButtonOptions } from './RectangularToggleButton';
-import { Node } from '../../scenery/imports';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Property from '../../axon/Property';
+import Tandem from '@/utils/tandem/Tandem';
+import BooleanToggleNode from '@/utils/sun/BooleanToggleNode';
+import sun from '@/utils/sun/sun';
+import RectangularToggleButton, { type RectangularToggleButtonOptions } from '@/utils/sun/buttons/RectangularToggleButton';
+import { Node } from '@/utils/scenery/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Property from '@/utils/axon/Property';
 
 type SelfOptions = EmptySelfOptions;
 

@@ -15,12 +15,12 @@
 
 import _ from 'lodash';
 
-import merge from '../phet-core/merge';
-import Bounds2 from './Bounds2';
-import dot from './dot';
-import Range from './Range';
-import Utils from './Utils';
-import Vector2 from './Vector2';
+import merge from '@/utils/phet-core/merge';
+import Bounds2 from '@/utils/dot/Bounds2';
+import dot from '@/utils/dot/dot';
+import Range from '@/utils/dot/Range';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
 
 class Random {
   /**
@@ -96,13 +96,15 @@ class Random {
    * @returns {number} an integer between min and max, inclusive
    */
   nextIntBetween(min, max) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         arguments.length === 2,
         'nextIntBetween must have exactly 2 arguments'
       );
-    window.assert && window.assert(Number.isInteger(min), `min must be an integer: ${min}`);
-    window.assert && window.assert(Number.isInteger(max), `max must be an integer: ${max}`);
+    window.assert &&
+      window.assert(Number.isInteger(min), `min must be an integer: ${min}`);
+    window.assert &&
+      window.assert(Number.isInteger(max), `max must be an integer: ${max}`);
 
     const range = max - min;
     return this.nextInt(range + 1) + min;
@@ -116,7 +118,8 @@ class Random {
    * @template T
    */
   sample(array) {
-    window.assert && window.assert(array.length > 0, 'Array should have at least 1 item.');
+    window.assert &&
+      window.assert(array.length > 0, 'Array should have at least 1 item.');
     const index = this.nextIntBetween(0, array.length - 1);
     return array[index];
   }
@@ -162,8 +165,11 @@ class Random {
   nextDoubleBetween(min, max) {
     window.assert && window.assert(min < max, 'min must be < max');
     const value = min + this.nextDouble() * (max - min);
-    assert &&
-      assert(value >= min && value < max, `value out of range: ${value}`);
+    window.assert &&
+      window.assert(
+        value >= min && value < max,
+        `value out of range: ${value}`
+      );
     return value;
   }
 
@@ -202,7 +208,8 @@ class Random {
    * @public
    */
   nextPointInBounds(bounds) {
-    window.assert && window.assert(bounds instanceof Bounds2, 'invalid Bounds2');
+    window.assert &&
+      window.assert(bounds instanceof Bounds2, 'invalid Bounds2');
     return new Vector2(
       this.nextDoubleBetween(bounds.minX, bounds.maxX),
       this.nextDoubleBetween(bounds.minY, bounds.maxY)
@@ -217,8 +224,8 @@ class Random {
     window.assert && window.assert(seed === null || typeof seed === 'number');
 
     if (typeof seed === 'number') {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           Math.seedrandom,
           'cannot set seed with 3rd party library "Math.seedrandom".'
         );
@@ -258,8 +265,8 @@ class Random {
     }
 
     // The fallback is the last test
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !weights[weights.length - 1] === 0,
         'if last weight is zero, should have selected something beforehand'
       );

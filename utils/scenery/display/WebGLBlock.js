@@ -8,10 +8,10 @@
  * @author Sharfudeen Ashraf (For Ghent University)
  */
 
-import TinyEmitter from '../../axon/TinyEmitter';
-import Matrix3 from '../../dot/Matrix3';
-import cleanArray from '../../phet-core/cleanArray';
-import Poolable from '../../phet-core/Poolable';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import Matrix3 from '@/utils/dot/Matrix3';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Poolable from '@/utils/phet-core/Poolable';
 import {
   FittedBlock,
   Renderer,
@@ -19,7 +19,7 @@ import {
   ShaderProgram,
   SpriteSheet,
   Utils
-} from '../imports';
+} from '@/utils/scenery/imports';
 
 class WebGLBlock extends FittedBlock {
   /**

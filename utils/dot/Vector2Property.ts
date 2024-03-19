@@ -6,12 +6,12 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Property, { type PropertyOptions } from '../axon/Property';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import Bounds2 from './Bounds2';
-import Vector2 from './Vector2';
-import dot from './dot';
-import optionize from '../phet-core/optionize';
+import Property, { type PropertyOptions } from '@/utils/axon/Property';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import dot from '@/utils/dot/dot';
+import optionize from '@/utils/phet-core/optionize';
 
 const VALID_NON_NAN = { isValidValue: (v: Vector2) => !isNaN(v.x) && !isNaN(v.y), validationMessage: 'Vector2 x/y should not be NaN' };
 

@@ -8,17 +8,17 @@
  * @author Martin Veillette
  */
 
-import { HBox, Node } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import FocalLengthControl from './FocalLengthControl';
-import GOPreferences from '../model/GOPreferences';
-import RadiusOfCurvatureControl from './RadiusOfCurvatureControl';
-import Lens from '../../lens/model/Lens';
-import IndexOfRefractionControl from './IndexOfRefractionControl';
-import DiameterControl from './DiameterControl';
-import Optic from '../model/Optic';
-import Tandem from '../../../tandem/Tandem';
-import DerivedProperty from '../../../axon/DerivedProperty';
+import { HBox, Node } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import FocalLengthControl from '@/utils/geometric-optics/common/view/FocalLengthControl';
+import GOPreferences from '@/utils/geometric-optics/common/model/GOPreferences';
+import RadiusOfCurvatureControl from '@/utils/geometric-optics/common/view/RadiusOfCurvatureControl';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
+import IndexOfRefractionControl from '@/utils/geometric-optics/common/view/IndexOfRefractionControl';
+import DiameterControl from '@/utils/geometric-optics/common/view/DiameterControl';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import Tandem from '@/utils/tandem/Tandem';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
 
 const X_SPACING = 15; // horizontal space between control
 const ALIGN = 'bottom'; // align bottoms of all NumberControls

@@ -7,9 +7,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Vector2 from '../../dot/Vector2';
-import Pool from '../../phet-core/Pool';
-import { kite } from '../imports';
+import Vector2 from '@/utils/dot/Vector2';
+import Pool from '@/utils/phet-core/Pool';
+import { kite } from '@/utils/kite/imports';
 
 let globaId = 0;
 

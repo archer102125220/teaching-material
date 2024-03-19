@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../dot/toSVGNumber';
-import { CanvasContextWrapper, Filter, scenery } from '../imports';
+import toSVGNumber from '@/utils/dot/toSVGNumber';
+import { CanvasContextWrapper, Filter, scenery } from '@/utils/scenery/imports';
 
 export default class Invert extends Filter {
 

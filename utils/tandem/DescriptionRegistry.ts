@@ -8,10 +8,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import tandemNamespace from './tandemNamespace';
-import PhetioObject from './PhetioObject';
-import Tandem from './Tandem';
-import TinyEmitter from '../axon/TinyEmitter';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
 
 type DescriptionEntry = {
   // Boo, this doesn't work

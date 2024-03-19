@@ -7,23 +7,23 @@
  * @author Martin Veillette
  */
 
-import Property from '../../../axon/Property';
-import { HBox, VSeparator } from '../../../scenery/imports';
-import Panel, { type PanelOptions } from '../../../sun/Panel';
-import geometricOptics from '../../geometricOptics';
-import GOColors from '../GOColors';
-import Optic from '../model/Optic';
-import { type RaysType } from '../model/RaysType';
-import VisibilityCheckboxGroup from './VisibilityCheckboxGroup';
-import VisibleProperties from './VisibleProperties';
-import optionize from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import RaysSubpanel from './RaysSubpanel';
-import OpticSubpanel from './OpticSubpanel';
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import { type GOSimOptions } from '../../GOSim';
-import EnumerationProperty from '../../../axon/EnumerationProperty';
-import OpticalObjectChoice from '../model/OpticalObjectChoice';
+import Property from '@/utils/axon/Property';
+import { HBox, VSeparator } from '@/utils/scenery/imports';
+import Panel, { type PanelOptions } from '@/utils/sun/Panel';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import VisibilityCheckboxGroup from '@/utils/geometric-optics/common/view/VisibilityCheckboxGroup';
+import VisibleProperties from '@/utils/geometric-optics/common/view/VisibleProperties';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import RaysSubpanel from '@/utils/geometric-optics/common/view/RaysSubpanel';
+import OpticSubpanel from '@/utils/geometric-optics/common/view/OpticSubpanel';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import { type GOSimOptions } from '@/utils/geometric-optics/GOSim';
+import EnumerationProperty from '@/utils/axon/EnumerationProperty';
+import OpticalObjectChoice from '@/utils/geometric-optics/common/model/OpticalObjectChoice';
 
 type SelfOptions = PickRequired<GOSimOptions, 'isBasicsVersion'>;
 

@@ -8,10 +8,10 @@
  * @author Jesse Greenberg
  */
 
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import { type SpeakableResolvedResponse } from '../../utterance-queue/ResponsePacket';
-import joist from '../joist';
-import { type AnyScreen } from '../Screen';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { type SpeakableResolvedResponse } from '@/utils/utterance-queue/ResponsePacket';
+import joist from '@/utils/joist/joist';
+import { type AnyScreen } from '@/utils/joist/Screen';
 
 class VoicingToolbarAlertManager {
 

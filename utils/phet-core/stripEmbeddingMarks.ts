@@ -8,7 +8,7 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import phetCore from './phetCore';
+import phetCore from '@/utils/phet-core/phetCore';
 
 function stripEmbeddingMarks(string: string): string {
   return string.replace(/\u202a|\u202b|\u202c/g, '');

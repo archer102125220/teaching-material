@@ -7,12 +7,12 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import { Imageable, type ImageableImage, type ImageableOptions, scenery } from '../imports';
-import mutate from '../../phet-core/mutate';
-import optionize from '../../phet-core/optionize';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import { Imageable, type ImageableImage, type ImageableOptions, scenery } from '@/utils/scenery/imports';
+import mutate from '@/utils/phet-core/mutate';
+import optionize from '@/utils/phet-core/optionize';
 
 let globalIdCounter = 1;
 const scratchVector = new Vector2(0, 0);

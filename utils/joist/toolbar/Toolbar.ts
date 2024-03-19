@@ -12,26 +12,26 @@
  * @author Jesse Greenberg
  */
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import DerivedProperty from '../../axon/DerivedProperty';
-import type TProperty from '../../axon/TProperty';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import NumberProperty from '../../axon/NumberProperty';
-import stepTimer from '../../axon/stepTimer';
-import Matrix3 from '../../dot/Matrix3';
-import { Shape } from '../../kite/imports';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import { Node, type NodeOptions, Path, Rectangle, voicingManager } from '../../scenery/imports';
-import ButtonNode from '../../sun/buttons/ButtonNode';
-import RoundPushButton from '../../sun/buttons/RoundPushButton';
-import Tandem from '../../tandem/Tandem';
-import audioManager from '../audioManager';
-import joist from '../joist';
-import JoistStrings from '../JoistStrings';
-import VoicingToolbarAlertManager from './VoicingToolbarAlertManager';
-import VoicingToolbarItem from './VoicingToolbarItem';
-import LookAndFeel from '../LookAndFeel';
-import { type AnyScreen } from '../Screen';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import stepTimer from '@/utils/axon/stepTimer';
+import Matrix3 from '@/utils/dot/Matrix3';
+import { Shape } from '@/utils/kite/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { Node, type NodeOptions, Path, Rectangle, voicingManager } from '@/utils/scenery/imports';
+import ButtonNode from '@/utils/sun/buttons/ButtonNode';
+import RoundPushButton from '@/utils/sun/buttons/RoundPushButton';
+import Tandem from '@/utils/tandem/Tandem';
+import audioManager from '@/utils/joist/audioManager';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import VoicingToolbarAlertManager from '@/utils/joist/toolbar/VoicingToolbarAlertManager';
+import VoicingToolbarItem from '@/utils/joist/toolbar/VoicingToolbarItem';
+import LookAndFeel from '@/utils/joist/LookAndFeel';
+import { type AnyScreen } from '@/utils/joist/Screen';
 
 // constants
 const MAX_ANIMATION_SPEED = 250; // in view coordinates per second, assuming 60 fps

@@ -7,18 +7,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Shape } from '../../../kite/imports';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import ArrowNode from '../../../scenery-phet/ArrowNode';
-import { Circle, DragListener, HighlightFromNode, InteractiveHighlighting, KeyboardDragListener, type KeyboardDragListenerOptions, Node, type NodeOptions, VBox, type VBoxOptions } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import GOColors from '../GOColors';
-import SecondPoint from '../model/SecondPoint';
-import GOConstants from '../GOConstants';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type TProperty from '../../../axon/TProperty';
-import CueingArrowsNode from './CueingArrowsNode';
+import { Shape } from '@/utils/kite/imports';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import ArrowNode from '@/utils/scenery-phet/ArrowNode';
+import { Circle, DragListener, HighlightFromNode, InteractiveHighlighting, KeyboardDragListener, type KeyboardDragListenerOptions, Node, type NodeOptions, VBox, type VBoxOptions } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import SecondPoint from '@/utils/geometric-optics/common/model/SecondPoint';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type TProperty from '@/utils/axon/TProperty';
+import CueingArrowsNode from '@/utils/geometric-optics/common/view/CueingArrowsNode';
 
 type SelfOptions = EmptySelfOptions;
 

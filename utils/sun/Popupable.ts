@@ -9,16 +9,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import BooleanProperty from '../axon/BooleanProperty';
-import Property from '../axon/Property';
-import Bounds2 from '../dot/Bounds2';
-import ScreenView from '../joist/ScreenView';
-import gracefulBind from '../phet-core/gracefulBind';
-import optionize from '../phet-core/optionize';
-import type Constructor from '../phet-core/types/Constructor';
-import type PickOptional from '../phet-core/types/PickOptional';
-import { FocusManager, Node, type NodeOptions } from '../scenery/imports';
-import sun from './sun';
+import _ from 'lodash';
+
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import Property from '@/utils/axon/Property';
+import Bounds2 from '@/utils/dot/Bounds2';
+import ScreenView from '@/utils/joist/ScreenView';
+import gracefulBind from '@/utils/phet-core/gracefulBind';
+import optionize from '@/utils/phet-core/optionize';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import { FocusManager, Node, type NodeOptions } from '@/utils/scenery/imports';
+import sun from '@/utils/sun/sun';
 
 type SelfOptions = {
 

@@ -30,10 +30,10 @@
 
 import _ from 'lodash';
 
-import { Node, type NodeOptions, scenery } from '../imports';
-import type Constructor from '../../phet-core/types/Constructor';
-import { combineOptions } from '../../phet-core/optionize';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import { Node, type NodeOptions, scenery } from '@/utils/scenery/imports';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import { combineOptions } from '@/utils/phet-core/optionize';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 /**
  * @param name - A unique name for each call, which customizes the internal key names used to track state

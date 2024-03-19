@@ -14,18 +14,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Property from '../../../axon/Property';
-import Vector2 from '../../../dot/Vector2';
-import Vector2Property from '../../../dot/Vector2Property';
-import PhetioObject, { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import geometricOptics from '../../geometricOptics';
-import GOConstants from '../GOConstants';
-import optionize from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import NumberIO from '../../../tandem/types/NumberIO';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Property from '@/utils/axon/Property';
+import Vector2 from '@/utils/dot/Vector2';
+import Vector2Property from '@/utils/dot/Vector2Property';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import NumberIO from '@/utils/tandem/types/NumberIO';
 
 type SelfOptions = {
 

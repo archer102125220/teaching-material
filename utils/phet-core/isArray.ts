@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import phetCore from './phetCore';
-import type IntentionalAny from './types/IntentionalAny';
+import phetCore from '@/utils/phet-core/phetCore';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 function isArray(array: IntentionalAny): array is IntentionalAny[] {
   // yes, this is actually how to do this. see http://stackoverflow.com/questions/4775722/javascript-check-if-object-is-array

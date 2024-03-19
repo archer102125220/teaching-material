@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import cleanArray from '../../phet-core/cleanArray';
-import type WithoutNull from '../../phet-core/types/WithoutNull';
-import { Gradient, scenery, SVGBlock, SVGGradientStop } from '../imports';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import type WithoutNull from '@/utils/phet-core/types/WithoutNull';
+import { Gradient, scenery, SVGBlock, SVGGradientStop } from '@/utils/scenery/imports';
 
 export type ActiveSVGGradient = WithoutNull<SVGGradient, 'svgBlock' | 'gradient'>;
 

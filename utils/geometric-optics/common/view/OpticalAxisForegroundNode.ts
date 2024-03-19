@@ -12,18 +12,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Bounds2 from '../../../dot/Bounds2';
-import Vector2 from '../../../dot/Vector2';
-import { Shape } from '../../../kite/imports';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import geometricOptics from '../../geometricOptics';
-import OpticalAxisNode, { type OpticalAxisNodeOptions } from './OpticalAxisNode';
-import GOQueryParameters from '../GOQueryParameters';
-import { Node, Path } from '../../../scenery/imports';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import GOColors from '../GOColors';
-import type TEmitter from '../../../axon/TEmitter';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import OpticalAxisNode, { type OpticalAxisNodeOptions } from '@/utils/geometric-optics/common/view/OpticalAxisNode';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
+import { Node, Path } from '@/utils/scenery/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 type SelfOptions = EmptySelfOptions;
 

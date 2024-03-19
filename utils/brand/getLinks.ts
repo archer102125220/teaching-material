@@ -8,10 +8,10 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 import { type Locale } from '@/i18n/joist/localeProperty';
-import JoistStrings from '../joist/JoistStrings';
-import brand from './brand';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import brand from '@/utils/brand/brand';
 
 const termsPrivacyAndLicensingStringProperty = JoistStrings.termsPrivacyAndLicensingStringProperty;
 const translationCreditsLinkStringProperty = JoistStrings.translation.credits.linkStringProperty;

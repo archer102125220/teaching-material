@@ -7,7 +7,7 @@
 
 import _ from 'lodash';
 
-import isHMR from './isHMR';
+import isHMR from '@/utils/phet-core/isHMR';
 
 class Namespace {
   public readonly name: string;
@@ -54,10 +54,12 @@ class Namespace {
     if (key.includes('.')) {
       if (!isHMR) {
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         window.assert && window.assert(!this[key], `${key} is already registered for namespace ${this.name}`);
       }
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       this[key] = value;
     }
@@ -70,11 +72,13 @@ class Namespace {
       for (let i = 0; i < keys.length - 1; i++) { // for all but the last key
 
         if (!isHMR) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           window.assert && window.assert(!!parent[keys[i]],
             `${[this.name].concat(keys.slice(0, i + 1)).join('.')} needs to be defined to register ${key}`);
         }
 
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         parent = parent[keys[i]];
       }
@@ -83,10 +87,12 @@ class Namespace {
       const lastKey = keys[keys.length - 1];
 
       if (!isHMR) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         window.assert && window.assert(!parent[lastKey], `${key} is already registered for namespace ${this.name}`);
       }
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       parent[lastKey] = value;
     }

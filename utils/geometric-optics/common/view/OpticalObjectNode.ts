@@ -7,16 +7,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import { InteractiveHighlighting, Node, type NodeOptions } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import CueingArrowsNode from './CueingArrowsNode';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import { type ObjectDragMode } from './ObjectDragMode';
-import OpticalObject from '../model/OpticalObject';
-import type TProperty from '../../../axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { InteractiveHighlighting, Node, type NodeOptions } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import CueingArrowsNode from '@/utils/geometric-optics/common/view/CueingArrowsNode';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import { type ObjectDragMode } from '@/utils/geometric-optics/common/view/ObjectDragMode';
+import OpticalObject from '@/utils/geometric-optics/common/model/OpticalObject';
+import type TProperty from '@/utils/axon/TProperty';
 
 type SelfOptions = EmptySelfOptions;
 

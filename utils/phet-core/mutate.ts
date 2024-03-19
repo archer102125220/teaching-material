@@ -8,7 +8,7 @@
 
 import _ from 'lodash';
 
-import phetCore from './phetCore';
+import phetCore from '@/utils/phet-core/phetCore';
 
 /**
  * For example:
@@ -36,12 +36,15 @@ function mutate(target: object, orderedKeys: string[], options?: object): void {
   _.each(orderedKeys, key => {
 
     // See https://github.com/phetsims/scenery/issues/580 for more about passing undefined.
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     window.assert && window.assert(!options.hasOwnProperty(key) || options[key] !== undefined,
       `Undefined not allowed for key: ${key}`);
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     if (options[key] !== undefined) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       target[key] = options[key]!;
     }

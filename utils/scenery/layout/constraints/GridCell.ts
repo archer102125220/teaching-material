@@ -8,10 +8,10 @@
 
 import _ from 'lodash';
 
-import Orientation from '../../../phet-core/Orientation';
-import OrientationPair from '../../../phet-core/OrientationPair';
-import { type ExternalGridConfigurableOptions, GridConfigurable, GridConstraint, GRID_CONFIGURABLE_OPTION_KEYS, LayoutAlign, LayoutProxy, MarginLayoutCell, Node, scenery } from '../../imports';
-import optionize from '../../../phet-core/optionize';
+import Orientation from '@/utils/phet-core/Orientation';
+import OrientationPair from '@/utils/phet-core/OrientationPair';
+import { type ExternalGridConfigurableOptions, GridConfigurable, GridConstraint, GRID_CONFIGURABLE_OPTION_KEYS, LayoutAlign, LayoutProxy, MarginLayoutCell, Node, scenery } from '@/utils/scenery/imports';
+import optionize from '@/utils/phet-core/optionize';
 
 const GRID_CELL_KEYS = [
   ...GRID_CONFIGURABLE_OPTION_KEYS,

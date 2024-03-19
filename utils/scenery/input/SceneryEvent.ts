@@ -12,12 +12,12 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Vector2 from '../../dot/Vector2';
-import IOType from '../../tandem/types/IOType';
-import NullableIO from '../../tandem/types/NullableIO';
-import StringIO from '../../tandem/types/StringIO';
-import { EventContext, Mouse, Node, PDOMPointer, Pointer, scenery, Trail } from '../imports';
-import EventIO from './EventIO';
+import Vector2 from '@/utils/dot/Vector2';
+import IOType from '@/utils/tandem/types/IOType';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import StringIO from '@/utils/tandem/types/StringIO';
+import { EventContext, Mouse, Node, PDOMPointer, Pointer, scenery, Trail } from '@/utils/scenery/imports';
+import EventIO from '@/utils/scenery/input/EventIO';
 
 // "out" here ensures that SceneryListenerFunctions don't specify a wider type arguments for the event, see  https://github.com/phetsims/scenery/issues/1483
 export default class SceneryEvent<out DOMEvent extends Event = Event> {

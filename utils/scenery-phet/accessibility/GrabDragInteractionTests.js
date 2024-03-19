@@ -5,7 +5,6 @@
  *
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
-
 import QUnit from 'qunit';
 
 import {
@@ -13,9 +12,9 @@ import {
   KeyboardDragListener,
   Node,
   Rectangle
-} from '../../scenery/imports';
-import Tandem from '../../tandem/Tandem';
-import GrabDragInteraction from './GrabDragInteraction';
+} from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import GrabDragInteraction from '@/utils/scenery-phet/accessibility/GrabDragInteraction';
 
 // constants
 const thingString = 'thing';
@@ -24,19 +23,18 @@ const movableString = 'movable';
 QUnit.module('GrabDragInteraction');
 
 QUnit.test('GrabDragInteraction defaults', (assert) => {
-  window.assert.ok(true, 'first test');
+  assert.ok(true, 'first test');
 
   const rootNode = new Node({ tagName: 'div' });
   const display = new Display(rootNode);
   display.initializeEvents();
   document.body.appendChild(display.domElement);
 
-  window.phet = window.phet || {}; // eslint-disable-line no-global-assign
-  window.phet.joist = window.phet.joist || {}; // eslint-disable-line bad-phet-library-text
-  window.phet.joist.sim = window.phet.joist.sim || {}; // eslint-disable-line bad-phet-library-text
+  window.phet = window.phet || {};
+  window.phet.joist = window.phet.joist || {};
+  window.phet.joist.sim = window.phet.joist.sim || {};
 
   // GrabDragInteraction requires a sim
-  // eslint-disable-next-line bad-phet-library-text
   window.phet.joist.sim.supportsGestureDescription =
     window.phet.joist.sim.supportsGestureDescription || false;
 
@@ -56,19 +54,19 @@ QUnit.test('GrabDragInteraction defaults', (assert) => {
     // GrabDragInteraction requires the page to be active to behave corectly, otherwise focus/blur events do not
     // fire. See https://github.com/phetsims/aqua/issues/134.
     if (document.hasFocus()) {
-      window.assert.ok(interaction.grabbable, 'default to grabbable');
-      window.assert.ok(
+      assert.ok(interaction.grabbable, 'default to grabbable');
+      assert.ok(
         a.tagName.toUpperCase() === 'BUTTON',
         'grabbable defaults to button'
       );
-      window.assert.ok(a.ariaRole === null, 'no role for grabbable');
-      window.assert.ok(
+      assert.ok(a.ariaRole === null, 'no role for grabbable');
+      assert.ok(
         a.ariaLabel.indexOf(thingString) >= 0,
         'ariaLabel should include thing string for grabbable'
       );
 
       const aElement = a.pdomInstances[0].peer.primarySibling;
-      window.assert.ok(
+      assert.ok(
         aElement.tagName === 'BUTTON',
         'grabbable defaults to button html element.'
       );
@@ -84,35 +82,35 @@ QUnit.test('GrabDragInteraction defaults', (assert) => {
   a.pdomInstances[0].peer.primarySibling.click();
 
   const testDefaultDraggable = () => {
-    window.assert.ok(
+    assert.ok(
       !interaction.grabbable,
       'should be draggable after click draggable'
     );
-    window.assert.ok(a.tagName.toUpperCase() === 'DIV', 'draggable defaults to div');
-    window.assert.ok(a.ariaRole === 'application', 'draggable gets application role');
-    window.assert.ok(
+    assert.ok(a.tagName.toUpperCase() === 'DIV', 'draggable defaults to div');
+    assert.ok(a.ariaRole === 'application', 'draggable gets application role');
+    assert.ok(
       a.ariaLabel.indexOf(thingString) >= 0,
       'ariaLabel should include thing string'
     );
-    window.assert.ok(
+    assert.ok(
       a.ariaLabel === a.innerContent,
       'ariaLabel should include thing string'
     );
 
     const aElement = a.pdomInstances[0].peer.primarySibling;
-    window.assert.ok(
+    assert.ok(
       aElement.tagName === 'DIV',
       'draggable defaults to div html element.'
     );
-    window.assert.ok(
+    assert.ok(
       aElement.getAttribute('aria-roledescription') === movableString,
       'aria role description should describe that it is movable by default'
     );
-    window.assert.ok(
+    assert.ok(
       aElement.innerHTML === a.ariaLabel,
       'element innerHTML should be same as model label'
     );
-    window.assert.ok(
+    assert.ok(
       aElement.getAttribute('aria-label') === a.ariaLabel,
       'element innerHTML should be same as model label'
     );

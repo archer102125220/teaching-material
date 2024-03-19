@@ -19,16 +19,16 @@
  * @author Jesse Greenberg
  */
 
-import BooleanProperty from '../axon/BooleanProperty';
-import DerivedProperty from '../axon/DerivedProperty';
-import { Display, voicingManager } from '../scenery/imports';
-import soundManager from '../tambo/soundManager';
-import PhetioObject from '../tandem/PhetioObject';
-import Tandem from '../tandem/Tandem';
-import joist from './joist';
-import Sim from './Sim';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import isSettingPhetioStateProperty from '../tandem/isSettingPhetioStateProperty';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import { Display, voicingManager } from '@/utils/scenery/imports';
+import soundManager from '@/utils/tambo/soundManager';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import joist from '@/utils/joist/joist';
+import Sim from '@/utils/joist/Sim';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
 
 const ANY_AUDIO_SUPPORTED = phet.chipper.queryParameters.supportsVoicing || phet.chipper.queryParameters.supportsSound;
 

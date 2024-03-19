@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Node, type NodeOptions } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import OpticalImage from '../model/OpticalImage';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import BooleanIO from '../../../tandem/types/BooleanIO';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import { Node, type NodeOptions } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import OpticalImage from '@/utils/geometric-optics/common/model/OpticalImage';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import BooleanIO from '@/utils/tandem/types/BooleanIO';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 type SelfOptions = EmptySelfOptions;
 

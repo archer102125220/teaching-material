@@ -6,20 +6,20 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import PatternStringProperty from '../../axon/PatternStringProperty';
-import merge from '../../phet-core/merge';
-import optionize, { combineOptions } from '../../phet-core/optionize';
-import { Node, Text, VBox, VoicingRichText, VoicingText } from '../../scenery/imports';
-import Checkbox from '../../sun/Checkbox';
-import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
-import Tandem from '../../tandem/Tandem';
-import joist from '../joist';
-import JoistStrings from '../JoistStrings';
-import PreferencesDialog from './PreferencesDialog';
-import { type AudioModel } from './PreferencesModel';
-import PreferencesPanelSection, { type PreferencesPanelSectionOptions } from './PreferencesPanelSection';
-import PreferencesControl from './PreferencesControl';
-import PreferencesDialogConstants from './PreferencesDialogConstants';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
+import merge from '@/utils/phet-core/merge';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import { Node, Text, VBox, VoicingRichText, VoicingText } from '@/utils/scenery/imports';
+import Checkbox from '@/utils/sun/Checkbox';
+import ToggleSwitch, { type ToggleSwitchOptions } from '@/utils/sun/ToggleSwitch';
+import Tandem from '@/utils/tandem/Tandem';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import { type AudioModel } from '@/utils/joist/preferences/PreferencesModel';
+import PreferencesPanelSection, { type PreferencesPanelSectionOptions } from '@/utils/joist/preferences/PreferencesPanelSection';
+import PreferencesControl from '@/utils/joist/preferences/PreferencesControl';
+import PreferencesDialogConstants from '@/utils/joist/preferences/PreferencesDialogConstants';
 
 // constants
 const soundsLabelStringProperty = JoistStrings.preferences.tabs.audio.sounds.titleStringProperty;

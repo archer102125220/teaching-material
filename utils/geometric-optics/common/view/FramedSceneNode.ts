@@ -7,26 +7,26 @@
  * @author Martin Veillette
  */
 
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import geometricOptics from '../../geometricOptics';
-import FramedScene from '../model/FramedScene';
-import FramedImageNode from './FramedImageNode';
-import VisibleProperties from './VisibleProperties';
-import FramedObjectNode from './FramedObjectNode';
-import Bounds2 from '../../../dot/Bounds2';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import SecondPointNode from './SecondPointNode';
-import { type RaysType } from '../model/RaysType';
-import GOColors from '../GOColors';
-import RealLightRaysNode from './RealLightRaysNode';
-import RealLightRaysForegroundNode from './RealLightRaysForegroundNode';
-import OpticalAxisForegroundNode from './OpticalAxisForegroundNode';
-import VirtualLightRaysNode from './VirtualLightRaysNode';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import GOSceneNode, { type GOSceneNodeOptions } from './GOSceneNode';
-import BooleanProperty from '../../../axon/BooleanProperty';
-import ToolJumpPoint from '../model/tools/ToolJumpPoint';
-import { type ObjectDragMode } from './ObjectDragMode';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import FramedScene from '@/utils/geometric-optics/common/model/FramedScene';
+import FramedImageNode from '@/utils/geometric-optics/common/view/FramedImageNode';
+import VisibleProperties from '@/utils/geometric-optics/common/view/VisibleProperties';
+import FramedObjectNode from '@/utils/geometric-optics/common/view/FramedObjectNode';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import SecondPointNode from '@/utils/geometric-optics/common/view/SecondPointNode';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import RealLightRaysNode from '@/utils/geometric-optics/common/view/RealLightRaysNode';
+import RealLightRaysForegroundNode from '@/utils/geometric-optics/common/view/RealLightRaysForegroundNode';
+import OpticalAxisForegroundNode from '@/utils/geometric-optics/common/view/OpticalAxisForegroundNode';
+import VirtualLightRaysNode from '@/utils/geometric-optics/common/view/VirtualLightRaysNode';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import GOSceneNode, { type GOSceneNodeOptions } from '@/utils/geometric-optics/common/view/GOSceneNode';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import ToolJumpPoint from '@/utils/geometric-optics/common/model/tools/ToolJumpPoint';
+import { type ObjectDragMode } from '@/utils/geometric-optics/common/view/ObjectDragMode';
 
 type SelfOptions = {
   objectDragModeProperty: TReadOnlyProperty<ObjectDragMode>;

@@ -9,21 +9,21 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import { AlignGroup, Node, type NodeOptions } from '../../scenery/imports';
-import joist from '../joist';
-import AudioPreferencesPanel from './AudioPreferencesPanel';
-import SimulationPreferencesPanel from './SimulationPreferencesPanel';
-import InputPreferencesPanel from './InputPreferencesPanel';
-import VisualPreferencesPanel from './VisualPreferencesPanel';
-import PreferencesModel from './PreferencesModel';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import LocalizationPreferencesPanel from './LocalizationPreferencesPanel';
-import PreferencesType from './PreferencesType';
-import OverviewPreferencesPanel from './OverviewPreferencesPanel';
-import PreferencesTabs from './PreferencesTabs';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import Tandem from '../../tandem/Tandem';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { AlignGroup, Node, type NodeOptions } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import AudioPreferencesPanel from '@/utils/joist/preferences/AudioPreferencesPanel';
+import SimulationPreferencesPanel from '@/utils/joist/preferences/SimulationPreferencesPanel';
+import InputPreferencesPanel from '@/utils/joist/preferences/InputPreferencesPanel';
+import VisualPreferencesPanel from '@/utils/joist/preferences/VisualPreferencesPanel';
+import PreferencesModel from '@/utils/joist/preferences/PreferencesModel';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import LocalizationPreferencesPanel from '@/utils/joist/preferences/LocalizationPreferencesPanel';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
+import OverviewPreferencesPanel from '@/utils/joist/preferences/OverviewPreferencesPanel';
+import PreferencesTabs from '@/utils/joist/preferences/PreferencesTabs';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import Tandem from '@/utils/tandem/Tandem';
 
 type SelfOptions = EmptySelfOptions;
 type PreferencesPanelsOptions = SelfOptions & NodeOptions & PickRequired<NodeOptions, 'tandem'>;

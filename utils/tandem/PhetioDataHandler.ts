@@ -11,16 +11,16 @@
 
 import _ from 'lodash';
 
-import assertMutuallyExclusiveOptions from '../phet-core/assertMutuallyExclusiveOptions';
-import optionize from '../phet-core/optionize';
-import PhetioObject, { type PhetioObjectOptions } from './PhetioObject';
-import Tandem from './Tandem';
-import IOType from './types/IOType';
-import axon from '../axon/axon';
-import validate from '../axon/validate';
-import Validation, { type Validator } from '../axon/Validation';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import optionize from '@/utils/phet-core/optionize';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import IOType from '@/utils/tandem/types/IOType';
+import axon from '@/utils/axon/axon';
+import validate from '@/utils/axon/validate';
+import Validation, { type Validator } from '@/utils/axon/Validation';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 const VALIDATE_OPTIONS_FALSE = { validateValidator: false };
 

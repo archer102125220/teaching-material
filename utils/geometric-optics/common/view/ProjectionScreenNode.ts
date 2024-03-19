@@ -7,25 +7,25 @@
  * @author Martin Veillette
  */
 
-import DerivedProperty from '../../../axon/DerivedProperty';
-import Bounds2 from '../../../dot/Bounds2';
-import Vector2 from '../../../dot/Vector2';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { Circle, Color, DragListener, HighlightFromNode, Image, InteractiveHighlighting, KeyboardDragListener, type KeyboardDragListenerOptions, Line, Node, type NodeOptions, Path } from '../../../scenery/imports';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { Circle, Color, DragListener, HighlightFromNode, Image, InteractiveHighlighting, KeyboardDragListener, type KeyboardDragListenerOptions, Line, Node, type NodeOptions, Path } from '@/utils/scenery/imports';
 import projectionScreenBottom_png from '@/assets/images/geometric-optics/projectionScreenBottom_png';
 import projectionScreenTop_png from '@/assets/images/geometric-optics/projectionScreenTop_png';
-import GOColors from '../../common/GOColors';
-import geometricOptics from '../../geometricOptics';
-import ProjectionScreen from '../model/ProjectionScreen';
-import CueingArrowsNode from './CueingArrowsNode';
-import GOQueryParameters from '../../common/GOQueryParameters';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import OriginNode from './OriginNode';
-import GOConstants from '../../common/GOConstants';
-import BooleanProperty from '../../../axon/BooleanProperty';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import isSettingPhetioStateProperty from '../../../tandem/isSettingPhetioStateProperty';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import ProjectionScreen from '@/utils/geometric-optics/common/model/ProjectionScreen';
+import CueingArrowsNode from '@/utils/geometric-optics/common/view/CueingArrowsNode';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import OriginNode from '@/utils/geometric-optics/common/view/OriginNode';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
 
 type SelfOptions = EmptySelfOptions;
 

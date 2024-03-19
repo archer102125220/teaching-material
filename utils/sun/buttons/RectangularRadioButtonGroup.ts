@@ -10,22 +10,22 @@
 
 import _ from 'lodash';
 
-import { Shape } from '../../kite/imports';
-import InstanceRegistry from '../../phet-core/documentation/InstanceRegistry';
-import { Color, FlowBox, type FlowBoxOptions, HighlightPath, Node, PDOMPeer, type PDOMValueType, Rectangle, SceneryConstants, type TInputListener } from '../../scenery/imports';
-import multiSelectionSoundPlayerFactory from '../../tambo/multiSelectionSoundPlayerFactory';
-import Tandem from '../../tandem/Tandem';
-import ColorConstants from '../ColorConstants';
-import sun from '../sun';
-import RectangularRadioButton, { type RectangularRadioButtonOptions } from './RectangularRadioButton';
-import { type VoicingResponse } from '../../utterance-queue/ResponsePacket';
-import type TSoundPlayer from '../../tambo/TSoundPlayer';
-import type TContentAppearanceStrategy from './TContentAppearanceStrategy';
-import optionize, { combineOptions } from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import type GroupItemOptions from '../GroupItemOptions';
-import { getGroupItemNodes } from '../GroupItemOptions';
-import type PhetioProperty from '../../axon/PhetioProperty';
+import { Shape } from '@/utils/kite/imports';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import { Color, FlowBox, type FlowBoxOptions, HighlightPath, Node, PDOMPeer, type PDOMValueType, Rectangle, SceneryConstants, type TInputListener } from '@/utils/scenery/imports';
+import multiSelectionSoundPlayerFactory from '@/utils/tambo/multiSelectionSoundPlayerFactory';
+import Tandem from '@/utils/tandem/Tandem';
+import ColorConstants from '@/utils/sun/ColorConstants';
+import sun from '@/utils/sun/sun';
+import RectangularRadioButton, { type RectangularRadioButtonOptions } from '@/utils/sun/buttons/RectangularRadioButton';
+import { type VoicingResponse } from '@/utils/utterance-queue/ResponsePacket';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import type TContentAppearanceStrategy from '@/utils/sun/buttons/TContentAppearanceStrategy';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import type GroupItemOptions from '@/utils/sun/GroupItemOptions';
+import { getGroupItemNodes } from '@/utils/sun/GroupItemOptions';
+import type PhetioProperty from '@/utils/axon/PhetioProperty';
 
 // pdom - Unique ID for each instance of RectangularRadioButtonGroup. Used to create the 'name' option that is passed
 // to each RectangularRadioButton in the group. All buttons in the group must have the same 'name', and that name

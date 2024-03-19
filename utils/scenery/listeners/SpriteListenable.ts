@@ -9,11 +9,11 @@
 
 import _ from 'lodash';
 
-import inheritance from '../../phet-core/inheritance';
-import memoize from '../../phet-core/memoize';
-import type Constructor from '../../phet-core/types/Constructor';
-import { PressListener, type PressListenerEvent, scenery, SpriteInstance, Sprites, Node } from '../imports';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import inheritance from '@/utils/phet-core/inheritance';
+import memoize from '@/utils/phet-core/memoize';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import { PressListener, type PressListenerEvent, scenery, SpriteInstance, Sprites, Node } from '@/utils/scenery/imports';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 /**
  * @param type - Should be a PressListener-based type

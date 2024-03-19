@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { type TPathDrawable } from '../../imports';
+import { type TPathDrawable } from '@/utils/scenery/imports';
 
 type TCircleDrawable = {
   markDirtyRadius(): void;

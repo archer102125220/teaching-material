@@ -9,9 +9,9 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType';
-import StateSchema from './StateSchema';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import StateSchema from '@/utils/tandem/types/StateSchema';
 
 export type InfiniteNumberStateObject = number | 'POSITIVE_INFINITY' | 'NEGATIVE_INFINITY';
 

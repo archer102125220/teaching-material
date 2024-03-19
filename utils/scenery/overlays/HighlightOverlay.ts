@@ -9,13 +9,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import { Shape } from '../../kite/imports';
-import optionize from '../../phet-core/optionize';
-import { ActivatedReadingBlockHighlight, Display, Focus, FocusManager, HighlightFromNode, HighlightPath, Node, scenery, type TOverlay, type TPaint, Trail, TransformTracker } from '../imports';
-import { type InteractiveHighlightingNode } from '../accessibility/voicing/InteractiveHighlighting';
-import { type ReadingBlockNode } from '../accessibility/voicing/ReadingBlock';
-import type TProperty from '../../axon/TProperty';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import { ActivatedReadingBlockHighlight, Display, Focus, FocusManager, HighlightFromNode, HighlightPath, Node, scenery, type TOverlay, type TPaint, Trail, TransformTracker } from '@/utils/scenery/imports';
+import { type InteractiveHighlightingNode } from '@/utils/scenery/accessibility/voicing/InteractiveHighlighting';
+import { type ReadingBlockNode } from '@/utils/scenery/accessibility/voicing/ReadingBlock';
+import type TProperty from '@/utils/axon/TProperty';
 
 // colors for the focus highlights, can be changed for different application backgrounds or color profiles, see
 // the setters and getters below for these values.
@@ -792,7 +792,7 @@ export default class HighlightOverlay implements TOverlay {
    */
   private onInteractiveHighlightChange(): void {
 
-    if (assert) {
+    if (window.assert) {
       const interactiveHighlightNode = this.node as InteractiveHighlightingNode;
       const lockedPointerFocus = this.display.focusManager.lockedPointerFocusProperty.value;
       assert(interactiveHighlightNode || (lockedPointerFocus && lockedPointerFocus.trail.lastNode() === this.node),

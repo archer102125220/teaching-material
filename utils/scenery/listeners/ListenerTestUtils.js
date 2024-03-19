@@ -6,11 +6,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Vector2 from '../../../dot/js/Vector2.js';
-import Display from '../display/Display.js';
-import { EventContext } from '../imports.js';
-import Node from '../nodes/Node.js';
-import Rectangle from '../nodes/Rectangle.js';
+import Vector2 from '@/utils/dot/Vector2';
+import Display from '@/utils/scenery/display/Display';
+import { EventContext } from '@/utils/scenery/imports';
+import Node from '@/utils/scenery/nodes/Node';
+import Rectangle from '@/utils/scenery/nodes/Rectangle';
 
 const ListenerTestUtils = {
 

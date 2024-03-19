@@ -9,39 +9,41 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Property from '../axon/Property';
-import ReadOnlyProperty from '../axon/ReadOnlyProperty';
-import Dimension2 from '../dot/Dimension2';
-import CompletePiecewiseLinearFunction from '../dot/CompletePiecewiseLinearFunction';
-import Range from '../dot/Range';
-import Utils from '../dot/Utils';
-import assertMutuallyExclusiveOptions from '../phet-core/assertMutuallyExclusiveOptions';
-import InstanceRegistry from '../phet-core/documentation/InstanceRegistry';
-import optionize, { combineOptions } from '../phet-core/optionize';
-import Orientation from '../phet-core/Orientation';
-import swapObjectKeys from '../phet-core/swapObjectKeys';
-import { DragListener, HighlightFromNode, LayoutConstraint, Node, type NodeOptions, SceneryConstants, Sizable, type TPaint } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import IOType from '../tandem/types/IOType';
-import ValueChangeSoundPlayer, { type ValueChangeSoundPlayerOptions } from '../tambo/sound-generators/ValueChangeSoundPlayer';
-import AccessibleSlider, { type AccessibleSliderOptions } from './accessibility/AccessibleSlider';
-import DefaultSliderTrack from './DefaultSliderTrack';
-import SliderThumb from './SliderThumb';
-import SliderTrack from './SliderTrack';
-import SliderTick, { type SliderTickOptions } from './SliderTick';
-import sun from './sun';
-import type PickOptional from '../phet-core/types/PickOptional';
-import Multilink from '../axon/Multilink';
-import type TProperty from '../axon/TProperty';
-import TinyProperty from '../axon/TinyProperty';
-import SunConstants from './SunConstants';
-import createObservableArray, { type ObservableArray } from '../axon/createObservableArray';
-import type PickRequired from '../phet-core/types/PickRequired';
-import isSettingPhetioStateProperty from '../tandem/isSettingPhetioStateProperty';
-import PhetioObject from '../tandem/PhetioObject';
-import type PhetioProperty from '../axon/PhetioProperty';
+import _ from 'lodash';
+
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Property from '@/utils/axon/Property';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import Dimension2 from '@/utils/dot/Dimension2';
+import CompletePiecewiseLinearFunction from '@/utils/dot/CompletePiecewiseLinearFunction';
+import Range from '@/utils/dot/Range';
+import Utils from '@/utils/dot/Utils';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import Orientation from '@/utils/phet-core/Orientation';
+import swapObjectKeys from '@/utils/phet-core/swapObjectKeys';
+import { DragListener, HighlightFromNode, LayoutConstraint, Node, type NodeOptions, SceneryConstants, Sizable, type TPaint } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import IOType from '@/utils/tandem/types/IOType';
+import ValueChangeSoundPlayer, { type ValueChangeSoundPlayerOptions } from '@/utils/tambo/sound-generators/ValueChangeSoundPlayer';
+import AccessibleSlider, { type AccessibleSliderOptions } from '@/utils/sun/accessibility/AccessibleSlider';
+import DefaultSliderTrack from '@/utils/sun/DefaultSliderTrack';
+import SliderThumb from '@/utils/sun/SliderThumb';
+import SliderTrack from '@/utils/sun/SliderTrack';
+import SliderTick, { type SliderTickOptions } from '@/utils/sun/SliderTick';
+import sun from '@/utils/sun/sun';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import Multilink from '@/utils/axon/Multilink';
+import type TProperty from '@/utils/axon/TProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import SunConstants from '@/utils/sun/SunConstants';
+import createObservableArray, { type ObservableArray } from '@/utils/axon/createObservableArray';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import type PhetioProperty from '@/utils/axon/PhetioProperty';
 
 // constants
 const DEFAULT_HORIZONTAL_TRACK_SIZE = new Dimension2(100, 5);

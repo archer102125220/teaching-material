@@ -7,25 +7,25 @@
  * @author Martin Veillette
  */
 
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import geometricOptics from '../../geometricOptics';
-import VisibleProperties from './VisibleProperties';
-import Bounds2 from '../../../dot/Bounds2';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import { type RaysType } from '../model/RaysType';
-import GOColors from '../../common/GOColors';
-import RealLightRaysNode from './RealLightRaysNode';
-import BooleanProperty from '../../../axon/BooleanProperty';
-import LightScene from '../model/LightScene';
-import ProjectionScreenNode from './ProjectionScreenNode';
-import LightSpotNode from './LightSpotNode';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import LightObjectNode from './LightObjectNode';
-import OpticalAxisInFrontOfProjectionScreenNode from './OpticalAxisInFrontOfProjectionScreenNode';
-import GOSceneNode, { type GOSceneNodeOptions } from './GOSceneNode';
-import BooleanIO from '../../../tandem/types/BooleanIO';
-import ToolJumpPoint from '../model/tools/ToolJumpPoint';
-import { type ObjectDragMode } from './ObjectDragMode';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import VisibleProperties from '@/utils/geometric-optics/common/view/VisibleProperties';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import RealLightRaysNode from '@/utils/geometric-optics/common/view/RealLightRaysNode';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import LightScene from '@/utils/geometric-optics/common/model/LightScene';
+import ProjectionScreenNode from '@/utils/geometric-optics/common/view/ProjectionScreenNode';
+import LightSpotNode from '@/utils/geometric-optics/common/view/LightSpotNode';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import LightObjectNode from '@/utils/geometric-optics/common/view/LightObjectNode';
+import OpticalAxisInFrontOfProjectionScreenNode from '@/utils/geometric-optics/common/view/OpticalAxisInFrontOfProjectionScreenNode';
+import GOSceneNode, { type GOSceneNodeOptions } from '@/utils/geometric-optics/common/view/GOSceneNode';
+import BooleanIO from '@/utils/tandem/types/BooleanIO';
+import ToolJumpPoint from '@/utils/geometric-optics/common/model/tools/ToolJumpPoint';
+import { type ObjectDragMode } from '@/utils/geometric-optics/common/view/ObjectDragMode';
 
 type SelfOptions = {
   objectDragModeProperty: TReadOnlyProperty<ObjectDragMode>;

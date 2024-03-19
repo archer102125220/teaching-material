@@ -7,18 +7,18 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { SceneryConstants, VoicingText, Text } from '../../scenery/imports';
-import joist from '../joist';
-import PreferencesDialog from './PreferencesDialog';
-import PreferencesControl, { type PreferencesControlOptions } from './PreferencesControl';
-import JoistStrings from '../JoistStrings';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Property from '../../axon/Property';
-import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
-import PreferencesDialogConstants from './PreferencesDialogConstants';
-import PatternStringProperty from '../../axon/PatternStringProperty';
-import Tandem from '../../tandem/Tandem';
+import { SceneryConstants, VoicingText, Text } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import PreferencesControl, { type PreferencesControlOptions } from '@/utils/joist/preferences/PreferencesControl';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Property from '@/utils/axon/Property';
+import ToggleSwitch, { type ToggleSwitchOptions } from '@/utils/sun/ToggleSwitch';
+import PreferencesDialogConstants from '@/utils/joist/preferences/PreferencesDialogConstants';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
+import Tandem from '@/utils/tandem/Tandem';
 
 type SelfOptions = EmptySelfOptions;
 type ParentOptions = PreferencesControlOptions;

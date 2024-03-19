@@ -9,11 +9,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyProperty from '../../axon/TinyProperty';
-import Matrix3 from '../../dot/Matrix3';
-import arrayDifference from '../../phet-core/arrayDifference';
-import optionize from '../../phet-core/optionize';
-import { AncestorNodesProperty, Node, scenery, Trail } from '../imports';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import Matrix3 from '@/utils/dot/Matrix3';
+import arrayDifference from '@/utils/phet-core/arrayDifference';
+import optionize from '@/utils/phet-core/optionize';
+import { AncestorNodesProperty, Node, scenery, Trail } from '@/utils/scenery/imports';
 
 type CoordinateFrame = 'parent' | 'local';
 

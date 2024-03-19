@@ -11,11 +11,11 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import { CanvasContextWrapper, Instance, Node, type NodeOptions, Renderer, scenery, Utils, WebGLNodeDrawable, WebGLSelfDrawable } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import { CanvasContextWrapper, Instance, Node, type NodeOptions, Renderer, scenery, Utils, WebGLNodeDrawable, WebGLSelfDrawable } from '@/utils/scenery/imports';
 
 const WEBGL_NODE_OPTION_KEYS = [
   'canvasBounds' // {Bounds2} - Sets the available Canvas bounds that content will show up in. See setCanvasBounds()

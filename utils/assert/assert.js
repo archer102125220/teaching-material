@@ -4,9 +4,16 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import '@/utils/query-string-machine/QueryStringMachine';
+import QueryStringMachine from '@/utils/query-string-machine/QueryStringMachine';
 
-(function () {
+if (
+  typeof window === 'object' &&
+  typeof window.QueryStringMachine !== 'object'
+) {
+  window.QueryStringMachine = QueryStringMachine;
+}
+
+export function createAssert() {
   window.assertions = window.assertions || {};
   window.assertions.assertFunction =
     window.assertions.assertFunction ||
@@ -65,4 +72,6 @@ import '@/utils/query-string-machine/QueryStringMachine';
       window.console.log &&
       window.console.log('disabling assertSlow');
   };
-})();
+}
+
+export default createAssert;

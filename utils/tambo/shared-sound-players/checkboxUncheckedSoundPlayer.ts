@@ -7,8 +7,8 @@
  */
 
 import checkboxUnchecked_mp3 from '@/assets/sounds/tambo/checkboxUnchecked_mp3';
-import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
-import tambo from '../tambo.js';
+import SoundClipPlayer from '@/utils/tambo/sound-generators/SoundClipPlayer';
+import tambo from '@/utils/tambo/tambo';
 
 // create the shared sound instance
 const checkboxUncheckedSoundPlayer = new SoundClipPlayer(checkboxUnchecked_mp3, {

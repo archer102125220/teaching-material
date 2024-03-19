@@ -25,16 +25,16 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import DerivedProperty from '../../axon/DerivedProperty';
-import type TProperty from '../../axon/TProperty';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import Property from '../../axon/Property';
-import Tandem from '../../tandem/Tandem';
-import NullableIO from '../../tandem/types/NullableIO';
-import Utterance from '../../utterance-queue/Utterance';
-import { Display, Focus, FocusDisplayedController, Node, PDOMInstance, PDOMUtils, ReadingBlockUtterance, scenery, voicingManager } from '../imports';
-import { type InteractiveHighlightingNode } from './voicing/InteractiveHighlighting';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Property from '@/utils/axon/Property';
+import Tandem from '@/utils/tandem/Tandem';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import { Display, Focus, FocusDisplayedController, Node, PDOMInstance, PDOMUtils, ReadingBlockUtterance, scenery, voicingManager } from '@/utils/scenery/imports';
+import { type InteractiveHighlightingNode } from '@/utils/scenery/accessibility/voicing/InteractiveHighlighting';
 
 type SpeakingListener = (text: string, utterance: Utterance) => void;
 
@@ -124,6 +124,7 @@ export default class FocusManager {
       this.readingBlockFocusProperty.value = utterance instanceof ReadingBlockUtterance ? utterance.readingBlockFocus : null;
     };
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     voicingManager.startSpeakingEmitter.addListener(this.startSpeakingListener);
 
@@ -141,6 +142,7 @@ export default class FocusManager {
       }
     };
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     voicingManager.endSpeakingEmitter.addListener(this.endSpeakingListener);
 
@@ -182,9 +184,11 @@ export default class FocusManager {
     this.pointerHighlightsVisibleProperty.dispose();
     this.lockedPointerFocusDisplayedController.dispose();
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     voicingManager.startSpeakingEmitter.removeListener(this.startSpeakingListener);
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     voicingManager.endSpeakingEmitter.removeListener(this.endSpeakingListener);
 

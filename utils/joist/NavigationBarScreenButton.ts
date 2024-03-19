@@ -8,21 +8,21 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../axon/DerivedProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Multilink from '../axon/Multilink';
-import Property from '../axon/Property';
-import Utils from '../dot/Utils';
-import { Shape } from '../kite/imports';
-import optionize from '../phet-core/optionize';
-import PhetColorScheme from '../scenery-phet/PhetColorScheme';
-import PhetFont from '../scenery-phet/PhetFont';
-import { Color, Node, type NodeOptions, Rectangle, Text, VBox, Voicing, type VoicingOptions } from '../scenery/imports';
-import PushButtonModel from '../sun/buttons/PushButtonModel';
-import HighlightNode from './HighlightNode';
-import joist from './joist';
-import { type AnyScreen } from './Screen';
-import type PickRequired from '../phet-core/types/PickRequired';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Multilink from '@/utils/axon/Multilink';
+import Property from '@/utils/axon/Property';
+import Utils from '@/utils/dot/Utils';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { Color, Node, type NodeOptions, Rectangle, Text, VBox, Voicing, type VoicingOptions } from '@/utils/scenery/imports';
+import PushButtonModel from '@/utils/sun/buttons/PushButtonModel';
+import HighlightNode from '@/utils/joist/HighlightNode';
+import joist from '@/utils/joist/joist';
+import { type AnyScreen } from '@/utils/joist/Screen';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 // constants
 const HIGHLIGHT_SPACING = 4;

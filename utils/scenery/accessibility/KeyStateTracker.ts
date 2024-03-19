@@ -12,15 +12,15 @@
 
 import _ from 'lodash';
 
-import PhetioAction from '../../tandem/PhetioAction';
-import Emitter from '../../axon/Emitter';
-import stepTimer from '../../axon/stepTimer';
-import EventType from '../../tandem/EventType';
-import { EventIO, KeyboardUtils, scenery } from '../imports';
-import { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import type PickOptional from '../../phet-core/types/PickOptional';
-import type TEmitter from '../../axon/TEmitter';
-import platform from '../../phet-core/platform';
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import Emitter from '@/utils/axon/Emitter';
+import stepTimer from '@/utils/axon/stepTimer';
+import EventType from '@/utils/tandem/EventType';
+import { EventIO, KeyboardUtils, scenery } from '@/utils/scenery/imports';
+import { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import type TEmitter from '@/utils/axon/TEmitter';
+import platform from '@/utils/phet-core/platform';
 
 // Type describing the state of a single key in the KeyState.
 type KeyStateInfo = {

@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
-import { Color, Gradient, Paint, scenery } from '../imports';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import { Color, Gradient, Paint, scenery } from '@/utils/scenery/imports';
 
 const PaintDef = {
   /**

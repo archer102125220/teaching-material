@@ -6,13 +6,13 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Enumeration from '../../../phet-core/Enumeration';
-import EnumerationValue from '../../../phet-core/EnumerationValue';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
 import pencilIcon_png from '@/assets/images/geometric-optics/pencilIcon_png';
 import penguinIcon_png from '@/assets/images/geometric-optics/penguinIcon_png';
 import lightIcon_png from '@/assets/images/geometric-optics/lightIcon_png';
-import geometricOptics from '../../geometricOptics';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
 import pencilRightFacingUpright_png from '@/assets/images/geometric-optics/pencilRightFacingUpright_png';
 import pencilRightFacingInverted_png from '@/assets/images/geometric-optics/pencilRightFacingInverted_png';
 import pencilLeftFacingUpright_png from '@/assets/images/geometric-optics/pencilLeftFacingUpright_png';
@@ -21,17 +21,17 @@ import penguinRightFacingUpright_png from '@/assets/images/geometric-optics/peng
 import penguinRightFacingInverted_png from '@/assets/images/geometric-optics/penguinRightFacingInverted_png';
 import penguinLeftFacingUpright_png from '@/assets/images/geometric-optics/penguinLeftFacingUpright_png';
 import penguinLeftFacingInverted_png from '@/assets/images/geometric-optics/penguinLeftFacingInverted_png';
-import GOConstants from '../GOConstants';
-import ArrowNode, { type ArrowNodeOptions } from '../../../scenery-phet/ArrowNode';
-import { Node } from '../../../scenery/imports';
-import GOColors from '../GOColors';
-import { combineOptions } from '../../../phet-core/optionize';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import ArrowNode, { type ArrowNodeOptions } from '@/utils/scenery-phet/ArrowNode';
+import { Node } from '@/utils/scenery/imports';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import { combineOptions } from '@/utils/phet-core/optionize';
 import starRightFacingUpright_png from '@/assets/images/geometric-optics/starRightFacingUpright_png';
 import starRightFacingInverted_png from '@/assets/images/geometric-optics/starRightFacingInverted_png';
 import starLeftFacingUpright_png from '@/assets/images/geometric-optics/starLeftFacingUpright_png';
 import starLeftFacingInverted_png from '@/assets/images/geometric-optics/starLeftFacingInverted_png';
 import starIcon_png from '@/assets/images/geometric-optics/starIcon_png';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 // Identifies the general type of optical object for a choice in the combo box. I'd prefer not to have this addition
 // type baggage, but it's symptomatic of the fact that we have 3 scenes and 5 choices (3 of which map to the same scene).

@@ -20,15 +20,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyEmitter from '../../../axon/TinyEmitter';
-import Orientation from '../../../phet-core/Orientation';
-import memoize from '../../../phet-core/memoize';
-import mutate from '../../../phet-core/mutate';
-import { type HorizontalLayoutAlign, LayoutAlign, type LayoutOrientation, MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS, MarginLayoutConfigurable, type MarginLayoutConfigurableOptions, scenery, type VerticalLayoutAlign } from '../../imports';
-import type Constructor from '../../../phet-core/types/Constructor';
-import type WithoutNull from '../../../phet-core/types/WithoutNull';
-import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
-import type TEmitter from '../../../axon/TEmitter';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import Orientation from '@/utils/phet-core/Orientation';
+import memoize from '@/utils/phet-core/memoize';
+import mutate from '@/utils/phet-core/mutate';
+import { type HorizontalLayoutAlign, LayoutAlign, type LayoutOrientation, MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS, MarginLayoutConfigurable, type MarginLayoutConfigurableOptions, scenery, type VerticalLayoutAlign } from '@/utils/scenery/imports';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type WithoutNull from '@/utils/phet-core/types/WithoutNull';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 const FLOW_CONFIGURABLE_OPTION_KEYS = [
   'orientation',

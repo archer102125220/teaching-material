@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import BasicActionsKeyboardHelpSection from '../../../scenery-phet/keyboard/help/BasicActionsKeyboardHelpSection';
-import ComboBoxKeyboardHelpSection from '../../../scenery-phet/keyboard/help/ComboBoxKeyboardHelpSection';
-import SliderControlsKeyboardHelpSection from '../../../scenery-phet/keyboard/help/SliderControlsKeyboardHelpSection';
-import TwoColumnKeyboardHelpContent from '../../../scenery-phet/keyboard/help/TwoColumnKeyboardHelpContent';
-import geometricOptics from '../../geometricOptics';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings';
-import MoveDraggableItemsKeyboardHelpSection from '../../../scenery-phet/keyboard/help/MoveDraggableItemsKeyboardHelpSection';
-import { RulerAndMarkerControlsSection } from './RulerAndMarkerControlsSection';
+import BasicActionsKeyboardHelpSection from '@/utils/scenery-phet/keyboard/help/BasicActionsKeyboardHelpSection';
+import ComboBoxKeyboardHelpSection from '@/utils/scenery-phet/keyboard/help/ComboBoxKeyboardHelpSection';
+import SliderControlsKeyboardHelpSection from '@/utils/scenery-phet/keyboard/help/SliderControlsKeyboardHelpSection';
+import TwoColumnKeyboardHelpContent from '@/utils/scenery-phet/keyboard/help/TwoColumnKeyboardHelpContent';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import MoveDraggableItemsKeyboardHelpSection from '@/utils/scenery-phet/keyboard/help/MoveDraggableItemsKeyboardHelpSection';
+import { RulerAndMarkerControlsSection } from '@/utils/geometric-optics/common/view/RulerAndMarkerControlsSection';
 
 export default class GOKeyboardHelpContent extends TwoColumnKeyboardHelpContent {
 

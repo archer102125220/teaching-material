@@ -7,16 +7,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../../../axon/DerivedProperty';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import NumberProperty from '../../../axon/NumberProperty';
-import Property from '../../../axon/Property';
-import Range from '../../../dot/Range';
-import Vector2 from '../../../dot/Vector2';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import PhetioObject, { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import geometricOptics from '../../geometricOptics';
-import type PickRequired from '../../../phet-core/types/PickRequired';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import Property from '@/utils/axon/Property';
+import Range from '@/utils/dot/Range';
+import Vector2 from '@/utils/dot/Vector2';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 type SelfOptions = EmptySelfOptions;
 

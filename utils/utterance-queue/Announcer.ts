@@ -6,18 +6,18 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Emitter from '../axon/Emitter';
-import type TEmitter from '../axon/TEmitter';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
-import IOType from '../tandem/types/IOType';
-import NullableIO from '../tandem/types/NullableIO';
-import NumberIO from '../tandem/types/NumberIO';
-import OrIO from '../tandem/types/OrIO';
-import StringIO from '../tandem/types/StringIO';
-import { type ResolvedResponse } from './ResponsePacket';
-import Utterance from './Utterance';
-import utteranceQueueNamespace from './utteranceQueueNamespace';
+import Emitter from '@/utils/axon/Emitter';
+import type TEmitter from '@/utils/axon/TEmitter';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import IOType from '@/utils/tandem/types/IOType';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import OrIO from '@/utils/tandem/types/OrIO';
+import StringIO from '@/utils/tandem/types/StringIO';
+import { type ResolvedResponse } from '@/utils/utterance-queue/ResponsePacket';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
 
 type SelfOptions = {
   respectResponseCollectorProperties?: boolean;

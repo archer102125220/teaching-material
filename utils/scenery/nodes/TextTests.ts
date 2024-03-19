@@ -5,19 +5,20 @@
  *
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
+import QUnit from 'qunit';
 
-import DerivedProperty from '../../axon/DerivedProperty';
-import StringProperty from '../../axon/StringProperty';
-import Text from './Text';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import StringProperty from '@/utils/axon/StringProperty';
+import Text from '@/utils/scenery/nodes/Text';
 
 QUnit.module('Text');
 
 QUnit.test('Mutually exclusive options', assert => {
 
-  window.assert.ok(true, 'always true, even when assertions are not on.');
+  assert.ok(true, 'always true, even when assertions are not on.');
 
   const stringProperty = new StringProperty('oh boy, here we go.');
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     return new Text({
 
       // @ts-expect-error for testing
@@ -30,7 +31,7 @@ QUnit.test('Mutually exclusive options', assert => {
 
 QUnit.test('DerivedProperty stringProperty', assert => {
 
-  window.assert.ok(true, 'always true, even when assertions are not on.');
+  assert.ok(true, 'always true, even when assertions are not on.');
 
   const string = 'oh boy, here we go';
   const stringProperty = new StringProperty(string);
@@ -40,11 +41,11 @@ QUnit.test('DerivedProperty stringProperty', assert => {
 
   const text = new Text(aBitExtraForAStringProperty);
 
-  window.assert.ok(text.stringProperty.value === string + extra);
+  assert.ok(text.stringProperty.value === string + extra);
   stringProperty.value = string + extra;
-  window.assert.ok(text.string === string + extra + extra);
+  assert.ok(text.string === string + extra + extra);
 
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     text.string = 'hi';
   }, 'cannot set a derivedProperty');
 });

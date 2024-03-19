@@ -6,15 +6,15 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor';
-import soundConstants from '../soundConstants';
-import SoundUtils from '../SoundUtils';
-import tambo from '../tambo';
-import SoundGenerator, { type SoundGeneratorOptions } from './SoundGenerator';
-import WrappedAudioBuffer from '../WrappedAudioBuffer';
-import optionize from '../../phet-core/optionize';
-import Property from '../../axon/Property';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import audioContextStateChangeMonitor from '@/utils/tambo/audioContextStateChangeMonitor';
+import soundConstants from '@/utils/tambo/soundConstants';
+import SoundUtils from '@/utils/tambo/SoundUtils';
+import tambo from '@/utils/tambo/tambo';
+import SoundGenerator, { type SoundGeneratorOptions } from '@/utils/tambo/sound-generators/SoundGenerator';
+import WrappedAudioBuffer from '@/utils/tambo/WrappedAudioBuffer';
+import optionize from '@/utils/phet-core/optionize';
+import Property from '@/utils/axon/Property';
 
 type SelfOptions = {
 

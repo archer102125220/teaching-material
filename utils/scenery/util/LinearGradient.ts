@@ -10,8 +10,8 @@
 
 import _ from 'lodash';
 
-import Vector2 from '../../dot/Vector2';
-import { ColorDef, Gradient, scenery, SVGBlock, SVGLinearGradient } from '../imports';
+import Vector2 from '@/utils/dot/Vector2';
+import { ColorDef, Gradient, scenery, SVGBlock, SVGLinearGradient } from '@/utils/scenery/imports';
 
 export default class LinearGradient extends Gradient {
 

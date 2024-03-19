@@ -7,9 +7,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import axon from './axon';
-import TinyProperty from './TinyProperty';
-import type TReadOnlyProperty from './TReadOnlyProperty';
+import axon from '@/utils/axon/axon';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 export default class TinyOverrideProperty<T> extends TinyProperty<T> {
 

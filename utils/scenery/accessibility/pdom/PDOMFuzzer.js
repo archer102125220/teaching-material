@@ -8,10 +8,10 @@
 
 import _ from 'lodash';
 
-import Permutation from '../../../dot/Permutation';
-import Random from '../../../dot/Random';
-import arrayDifference from '../../../phet-core/arrayDifference';
-import { Display, Node, PDOMTree, scenery } from '../../imports';
+import Permutation from '@/utils/dot/Permutation';
+import Random from '@/utils/dot/Random';
+import arrayDifference from '@/utils/phet-core/arrayDifference';
+import { Display, Node, PDOMTree, scenery } from '@/utils/scenery/imports';
 
 class PDOMFuzzer {
   /**

@@ -7,7 +7,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { scenery, Spacer, type SpacerOptions } from '../imports';
+import { scenery, Spacer, type SpacerOptions } from '@/utils/scenery/imports';
 
 export type HStrutOptions = SpacerOptions;
 

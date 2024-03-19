@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { kite, SegmentTree, Vertex } from '../imports';
+import { kite, SegmentTree, Vertex } from '@/utils/kite/imports';
 
 export default class VertexSegmentTree extends SegmentTree<Vertex> {
   public getMinX( vertex: Vertex, epsilon: number ): number {

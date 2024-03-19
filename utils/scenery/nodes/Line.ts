@@ -6,13 +6,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import extendDefined from '../../phet-core/extendDefined';
-import { CanvasContextWrapper, CanvasSelfDrawable, Instance, LineCanvasDrawable, LineSVGDrawable, Path, type PathOptions, Renderer, scenery, SVGSelfDrawable, type TLineDrawable } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import extendDefined from '@/utils/phet-core/extendDefined';
+import { CanvasContextWrapper, CanvasSelfDrawable, Instance, LineCanvasDrawable, LineSVGDrawable, Path, type PathOptions, Renderer, scenery, SVGSelfDrawable, type TLineDrawable } from '@/utils/scenery/imports';
 
 const LINE_OPTION_KEYS = [
   'p1', // {Vector2} - Start position
@@ -373,6 +373,7 @@ export default class Line extends Path {
    * Computes the bounds of the Line, including any applied stroke. Overridden for efficiency.
    */
   public override computeShapeBounds(): Bounds2 {
+    console.log('Line.computeShapeBounds');
     // optimized form for a single line segment (no joins, just two caps)
     if (this._stroke) {
       const lineCap = this.getLineCap();

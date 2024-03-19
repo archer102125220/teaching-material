@@ -8,17 +8,23 @@
 
 import _ from 'lodash';
 
-import Pool, { type TPoolable } from '../phet-core/Pool';
-import IOType from '../tandem/types/IOType';
-import NumberIO from '../tandem/types/NumberIO';
-import dot from './dot';
-import Utils from './Utils';
-import Vector3 from './Vector3';
-import { type StateObject } from '../tandem/types/StateSchema';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
+import IOType from '@/utils/tandem/types/IOType';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import dot from '@/utils/dot/dot';
+import Utils from '@/utils/dot/Utils';
+import Vector3 from '@/utils/dot/Vector3';
+import { type StateObject } from '@/utils/tandem/types/StateSchema';
 
 const ADDING_ACCUMULATOR = (vector: Vector2, nextVector: Vector2) => {
   return vector.add(nextVector);
 };
+
+const STATE_SCHEMA = {
+  x: NumberIO,
+  y: NumberIO
+};
+export type Vector2StateObject = StateObject<typeof STATE_SCHEMA>;
 
 export default class Vector2 implements TPoolable {
 
@@ -659,6 +665,7 @@ export default class Vector2 implements TPoolable {
    * @param angle - In radians
    */
   public setPolar(magnitude: number, angle: number): Vector2 {
+    // console.log({ magnitude, angle, 'Math.cos(angle)': Math.cos(angle) });
     return this.setXY(magnitude * Math.cos(angle), magnitude * Math.sin(angle));
   }
 
@@ -735,17 +742,20 @@ export default class Vector2 implements TPoolable {
   /**
    * ImmutableVector2 zero vector: $\begin{bmatrix} 0\\0 \end{bmatrix}$
    */
-  public static ZERO: Vector2; // eslint-disable-line uppercase-statics-should-be-readonly
+  // eslint-disable-next-line no-use-before-define
+  public static ZERO: Vector2;
 
   /**
    * ImmutableVector2 vector: $\begin{bmatrix} 1\\0 \end{bmatrix}$
    */
-  public static X_UNIT: Vector2; // eslint-disable-line uppercase-statics-should-be-readonly
+  // eslint-disable-next-line no-use-before-define
+  public static X_UNIT: Vector2;
 
   /**
    * ImmutableVector2 vector: $\begin{bmatrix} 0\\1 \end{bmatrix}$
    */
-  public static Y_UNIT: Vector2; // eslint-disable-line uppercase-statics-should-be-readonly
+  // eslint-disable-next-line no-use-before-define
+  public static Y_UNIT: Vector2;
 
   public static Vector2IO: IOType;
 }
@@ -774,15 +784,9 @@ ImmutableVector2.mutableOverrideHelper('setXY');
 ImmutableVector2.mutableOverrideHelper('setX');
 ImmutableVector2.mutableOverrideHelper('setY');
 
-Vector2.ZERO = assert ? new ImmutableVector2(0, 0) : new Vector2(0, 0);
-Vector2.X_UNIT = assert ? new ImmutableVector2(1, 0) : new Vector2(1, 0);
-Vector2.Y_UNIT = assert ? new ImmutableVector2(0, 1) : new Vector2(0, 1);
-
-const STATE_SCHEMA = {
-  x: NumberIO,
-  y: NumberIO
-};
-export type Vector2StateObject = StateObject<typeof STATE_SCHEMA>;
+Vector2.ZERO = window.assert ? new ImmutableVector2(0, 0) : new Vector2(0, 0);
+Vector2.X_UNIT = window.assert ? new ImmutableVector2(1, 0) : new Vector2(1, 0);
+Vector2.Y_UNIT = window.assert ? new ImmutableVector2(0, 1) : new Vector2(0, 1);
 
 Vector2.Vector2IO = new IOType<Vector2, Vector2StateObject>('Vector2IO', {
   valueType: Vector2,

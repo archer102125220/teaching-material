@@ -7,14 +7,15 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import dot from './dot';
+import dot from '@/utils/dot/dot';
 
 class RunningAverage {
   /**
    * @param {number} windowSize - number of points to average
    */
   constructor(windowSize) {
-    window.assert && window.assert(windowSize > 0, 'window size must be positive');
+    window.assert &&
+      window.assert(windowSize > 0, 'window size must be positive');
 
     // @private {number}
     this.windowSize = windowSize;
@@ -76,7 +77,8 @@ class RunningAverage {
    * @returns {number}
    */
   updateRunningAverage(sample) {
-    window.assert && window.assert(typeof sample === 'number' && isFinite(sample));
+    window.assert &&
+      window.assert(typeof sample === 'number' && isFinite(sample));
 
     // Limit at the window size
     this.numSamples = Math.min(this.windowSize, this.numSamples + 1);

@@ -18,23 +18,23 @@
 
 import _ from 'lodash';
 
-import Utils from '../../dot/Utils';
-import Range from '../../dot/Range';
-import assertHasProperties from '../../phet-core/assertHasProperties';
-import Orientation from '../../phet-core/Orientation';
-import { animatedPanZoomSingleton, DelayedMutate, KeyboardUtils, Node, type NodeOptions, PDOMPointer, PDOMUtils, type PDOMValueType, SceneryEvent, type SceneryListenerFunction, type TInputListener, Voicing, type VoicingOptions } from '../../scenery/imports';
-import Utterance from '../../utterance-queue/Utterance';
-import sun from '../sun';
-import optionize, { combineOptions } from '../../phet-core/optionize';
-import Multilink, { type UnknownMultilink } from '../../axon/Multilink';
-import UtteranceQueue from '../../utterance-queue/UtteranceQueue';
-import type TProperty from '../../axon/TProperty';
-import type Constructor from '../../phet-core/types/Constructor';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import DynamicProperty from '../../axon/DynamicProperty';
-import Property from '../../axon/Property';
-import platform from '../../phet-core/platform';
+import Utils from '@/utils/dot/Utils';
+import Range from '@/utils/dot/Range';
+import assertHasProperties from '@/utils/phet-core/assertHasProperties';
+import Orientation from '@/utils/phet-core/Orientation';
+import { animatedPanZoomSingleton, DelayedMutate, KeyboardUtils, Node, type NodeOptions, PDOMPointer, PDOMUtils, type PDOMValueType, SceneryEvent, type SceneryListenerFunction, type TInputListener, Voicing, type VoicingOptions } from '@/utils/scenery/imports';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import sun from '@/utils/sun/sun';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import Multilink, { type UnknownMultilink } from '@/utils/axon/Multilink';
+import UtteranceQueue from '@/utils/utterance-queue/UtteranceQueue';
+import type TProperty from '@/utils/axon/TProperty';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import DynamicProperty from '@/utils/axon/DynamicProperty';
+import Property from '@/utils/axon/Property';
+import platform from '@/utils/phet-core/platform';
 
 // constants
 const DEFAULT_TAG_NAME = 'input';

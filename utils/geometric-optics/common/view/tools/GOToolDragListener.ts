@@ -6,17 +6,17 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Bounds2 from '../../../../dot/Bounds2';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import { DragListener, type DragListenerOptions, type PressedDragListener } from '../../../../scenery/imports';
-import geometricOptics from '../../../geometricOptics';
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/optionize';
-import GOToolNode from './GOToolNode';
-import Vector2 from '../../../../dot/Vector2';
-import type PickRequired from '../../../../phet-core/types/PickRequired';
-import type PickOptional from '../../../../phet-core/types/PickOptional';
-import GOTool from '../../model/tools/GOTool';
+import Bounds2 from '@/utils/dot/Bounds2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { DragListener, type DragListenerOptions, type PressedDragListener } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import GOToolNode from '@/utils/geometric-optics/common/view/tools/GOToolNode';
+import Vector2 from '@/utils/dot/Vector2';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import GOTool from '@/utils/geometric-optics/common/model/tools/GOTool';
 
 type SelfOptions = EmptySelfOptions;
 

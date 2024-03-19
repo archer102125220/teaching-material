@@ -6,12 +6,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Vector2 from '../../../dot/Vector2';
-import geometricOptics from '../../geometricOptics';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import HTMLImageElementObject, { type HTMLImageElementObjectOptions } from './HTMLImageElementObject';
-import Property from '../../../axon/Property';
+import Vector2 from '@/utils/dot/Vector2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import HTMLImageElementObject, { type HTMLImageElementObjectOptions } from '@/utils/geometric-optics/common/model/HTMLImageElementObject';
+import Property from '@/utils/axon/Property';
 
 // Where the point-of-interest is relative to the left-top corner of PNG files for lights.
 // This value is specific to the light*.png files, and must be uniform for all light*.png files.

@@ -17,17 +17,17 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Property from '../axon/Property';
-import Bounds2 from '../dot/Bounds2';
-import Matrix3 from '../dot/Matrix3';
-import optionize from '../phet-core/optionize';
-import ControlAreaNode from '../scenery-phet/accessibility/nodes/ControlAreaNode';
-import PlayAreaNode from '../scenery-phet/accessibility/nodes/PlayAreaNode';
-import ScreenSummaryNode from '../scenery-phet/accessibility/nodes/ScreenSummaryNode';
-import { Node, type NodeOptions } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import joist from './joist';
-import { type SpeakableResolvedResponse } from '../utterance-queue/ResponsePacket';
+import Property from '@/utils/axon/Property';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import optionize from '@/utils/phet-core/optionize';
+import ControlAreaNode from '@/utils/scenery-phet/accessibility/nodes/ControlAreaNode';
+import PlayAreaNode from '@/utils/scenery-phet/accessibility/nodes/PlayAreaNode';
+import ScreenSummaryNode from '@/utils/scenery-phet/accessibility/nodes/ScreenSummaryNode';
+import { Node, type NodeOptions } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import joist from '@/utils/joist/joist';
+import { type SpeakableResolvedResponse } from '@/utils/utterance-queue/ResponsePacket';
 
 /*
  * Default width and height for iPad2, iPad3, iPad4 running Safari with default tabs and decorations

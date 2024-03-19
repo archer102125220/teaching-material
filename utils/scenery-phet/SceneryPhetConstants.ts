@@ -5,7 +5,7 @@
  *
  * @author Jesse Greenberg
  */
-import sceneryPhet from './sceneryPhet';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 const SceneryPhetConstants = {
 

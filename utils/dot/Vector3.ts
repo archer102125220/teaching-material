@@ -8,13 +8,13 @@
 
 import _ from 'lodash';
 
-import Pool, { type TPoolable } from '../phet-core/Pool';
-import IOType from '../tandem/types/IOType';
-import NumberIO from '../tandem/types/NumberIO';
-import dot from './dot';
-import Utils from './Utils';
-import Vector2, { v2 } from './Vector2';
-import Vector4, { v4 } from './Vector4';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
+import IOType from '@/utils/tandem/types/IOType';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import dot from '@/utils/dot/dot';
+import Utils from '@/utils/dot/Utils';
+import Vector2, { v2 } from '@/utils/dot/Vector2';
+import Vector4, { v4 } from '@/utils/dot/Vector4';
 
 const ADDING_ACCUMULATOR = (vector: Vector3, nextVector: Vector3) => {
   return vector.add(nextVector);
@@ -655,10 +655,10 @@ export default class Vector3 implements TPoolable {
 
   public isVector3!: boolean;
   public dimension!: number;
-  public static ZERO: Vector3; // eslint-disable-line uppercase-statics-should-be-readonly
-  public static X_UNIT: Vector3; // eslint-disable-line uppercase-statics-should-be-readonly
-  public static Y_UNIT: Vector3; // eslint-disable-line uppercase-statics-should-be-readonly
-  public static Z_UNIT: Vector3; // eslint-disable-line uppercase-statics-should-be-readonly
+  public static ZERO: Vector3;
+  public static X_UNIT: Vector3;
+  public static Y_UNIT: Vector3;
+  public static Z_UNIT: Vector3;
   public static Vector3IO: IOType;
 }
 

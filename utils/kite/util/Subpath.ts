@@ -11,12 +11,11 @@
 
 import _ from 'lodash';
 
-import TinyEmitter from '../../axon/TinyEmitter';
-import Bounds2 from '../../dot/Bounds2';
-import Vector2 from '../../dot/Vector2';
-import Matrix3 from '../../dot/Matrix3';
-// @ts-expect-error
-import { Arc, ClosestToPointResult, DashValues, kite, Line, LineStyles, PiecewiseLinearOptions, Segment, SerializedSegment } from '../imports';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import { Arc, type ClosestToPointResult, type DashValues, kite, Line, LineStyles, type PiecewiseLinearOptions, Segment, type SerializedSegment } from '@/utils/kite/imports';
 
 type DashItem = DashValues & {
   hasLeftFilled: boolean;

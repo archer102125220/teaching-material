@@ -7,7 +7,6 @@
   </div>
 </template>
 <script setup>
-console.log(132);
 </script>
 
 <style lang="scss" scoped>

@@ -8,18 +8,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import RealLightRaysNode, { type RealLightRaysNodeOptions } from './RealLightRaysNode';
-import geometricOptics from '../../geometricOptics';
-import LightRays from '../model/LightRays';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import GOQueryParameters from '../GOQueryParameters';
-import Bounds2 from '../../../dot/Bounds2';
-import Vector2 from '../../../dot/Vector2';
-import { Shape } from '../../../kite/imports';
-import { Path } from '../../../scenery/imports';
-import { type OpticalImageType } from '../model/OpticalImageType';
-import { type EmptySelfOptions, optionize3 } from '../../../phet-core/optionize';
+import RealLightRaysNode, { type RealLightRaysNodeOptions } from '@/utils/geometric-optics/common/view/RealLightRaysNode';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import LightRays from '@/utils/geometric-optics/common/model/LightRays';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import { Path } from '@/utils/scenery/imports';
+import { type OpticalImageType } from '@/utils/geometric-optics/common/model/OpticalImageType';
+import { type EmptySelfOptions, optionize3 } from '@/utils/phet-core/optionize';
 
 type SelfOptions = EmptySelfOptions;
 

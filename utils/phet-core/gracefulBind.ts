@@ -6,7 +6,9 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import phetCore from './phetCore';
+import _ from 'lodash';
+
+import phetCore from '@/utils/phet-core/phetCore';
 
 /**
  * If the path exists on the window global, return it as a bound function, otherwise returns null

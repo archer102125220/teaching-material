@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Node, type NodeOptions, type TColor } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import GuideNode from './GuideNode';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import Guides from '../model/Guides';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type PickOptional from '../../../phet-core/types/PickOptional';
+import { Node, type NodeOptions, type TColor } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GuideNode from '@/utils/geometric-optics/common/view/GuideNode';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import Guides from '@/utils/geometric-optics/common/model/Guides';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
 
 type SelfOptions = EmptySelfOptions;
 

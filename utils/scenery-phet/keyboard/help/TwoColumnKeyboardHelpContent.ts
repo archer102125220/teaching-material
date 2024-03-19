@@ -6,11 +6,11 @@
  * @author Jesse Greenberg
  */
 
-import optionize, { combineOptions } from '../../../phet-core/optionize';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import { HBox, Node, type NodeOptions, VBox, type VBoxOptions } from '../../../scenery/imports';
-import sceneryPhet from '../../sceneryPhet';
-import KeyboardHelpSection from './KeyboardHelpSection';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { HBox, Node, type NodeOptions, VBox, type VBoxOptions } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import KeyboardHelpSection from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSection';
 
 type SelfOptions = {
 

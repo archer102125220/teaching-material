@@ -7,16 +7,16 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import { Shape } from '../kite/imports';
-import InstanceRegistry from '../phet-core/documentation/InstanceRegistry';
-import optionize from '../phet-core/optionize';
-import { Path } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import BooleanRectangularToggleButton, { type BooleanRectangularToggleButtonOptions } from './buttons/BooleanRectangularToggleButton';
-import ButtonNode from './buttons/ButtonNode';
-import sun from './sun';
-import Property from '../axon/Property';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { Shape } from '@/utils/kite/imports';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize from '@/utils/phet-core/optionize';
+import { Path } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import BooleanRectangularToggleButton, { type BooleanRectangularToggleButtonOptions } from '@/utils/sun/buttons/BooleanRectangularToggleButton';
+import ButtonNode from '@/utils/sun/buttons/ButtonNode';
+import sun from '@/utils/sun/sun';
+import Property from '@/utils/axon/Property';
 
 // constants
 const SYMBOL_RELATIVE_WIDTH = 0.6; // width of +/- symbols relative to button sideLength (see options)

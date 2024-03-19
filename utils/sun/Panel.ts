@@ -9,9 +9,11 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import { optionize3, type OptionizeDefaults } from '../phet-core/optionize';
-import { isHeightSizable, isWidthSizable, LayoutConstraint, Node, type NodeOptions, Rectangle, Sizable, type SizableOptions, type TPaint } from '../scenery/imports';
-import sun from './sun';
+import _ from 'lodash';
+
+import { optionize3, type OptionizeDefaults } from '@/utils/phet-core/optionize';
+import { isHeightSizable, isWidthSizable, LayoutConstraint, Node, type NodeOptions, Rectangle, Sizable, type SizableOptions, type TPaint } from '@/utils/scenery/imports';
+import sun from '@/utils/sun/sun';
 
 // valid values for options.align
 const ALIGN_VALUES = ['left', 'center', 'right'] as const;

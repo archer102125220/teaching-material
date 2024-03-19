@@ -8,14 +8,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import BooleanProperty from '../../../axon/BooleanProperty';
-import Property from '../../../axon/Property';
-import { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import geometricOptics from '../../geometricOptics';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import Tandem from '../../../tandem/Tandem';
-import Optic from '../model/Optic';
-import Mirror from '../../mirror/model/Mirror';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import Property from '@/utils/axon/Property';
+import { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import Tandem from '@/utils/tandem/Tandem';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import Mirror from '@/utils/geometric-optics/mirror/model/Mirror';
 
 type VisiblePropertiesOptions = PickRequired<PhetioObjectOptions, 'tandem'>;
 

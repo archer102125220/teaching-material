@@ -53,18 +53,18 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ReadOnlyProperty from './ReadOnlyProperty';
-import TinyProperty from './TinyProperty';
-import type TReadOnlyProperty from './TReadOnlyProperty';
-import Utils from '../dot/Utils';
-import optionize from '../phet-core/optionize';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import type CollapsePropertyValue from '../phet-core/types/CollapsePropertyValue';
-import type KeysMatching from '../phet-core/types/KeysMatching';
-import type KeysNotMatching from '../phet-core/types/KeysNotMatching';
-import axon from './axon';
-import Tandem from '../tandem/Tandem';
-import DerivedStringProperty, { type DerivedStringPropertyOptions } from './DerivedStringProperty';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Utils from '@/utils/dot/Utils';
+import optionize from '@/utils/phet-core/optionize';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type CollapsePropertyValue from '@/utils/phet-core/types/CollapsePropertyValue';
+import type KeysMatching from '@/utils/phet-core/types/KeysMatching';
+import type KeysNotMatching from '@/utils/phet-core/types/KeysNotMatching';
+import axon from '@/utils/axon/axon';
+import Tandem from '@/utils/tandem/Tandem';
+import DerivedStringProperty, { type DerivedStringPropertyOptions } from '@/utils/axon/DerivedStringProperty';
 
 // The type of allowed values for a PatternStringProperty
 type ValuesType = Record<string, IntentionalAny>;

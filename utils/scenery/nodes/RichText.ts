@@ -61,21 +61,21 @@
 import _ from 'lodash';
 
 import himalaya from 'himalaya';
-import type TProperty from '../../axon/TProperty';
-import { type PropertyOptions } from '../../axon/Property';
-import StringProperty from '../../axon/StringProperty';
-import TinyForwardingProperty from '../../axon/TinyForwardingProperty';
-import Range from '../../dot/Range';
-import Tandem from '../../tandem/Tandem';
-import IOType from '../../tandem/types/IOType';
-import { allowLinksProperty, Color, Font, getLineBreakRanges, type HimalayaNode, isHimalayaElementNode, isHimalayaTextNode, Line, Node, type NodeOptions, type RichTextCleanableNode, RichTextElement, RichTextLeaf, RichTextLink, RichTextNode, RichTextUtils, RichTextVerticalSpacer, scenery, Text, type TextBoundsMethod, type TPaint, WidthSizable } from '../imports';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../phet-core/optionize';
-import PhetioObject, { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import cleanArray from '../../phet-core/cleanArray';
-import phetioElementSelectionProperty from '../../tandem/phetioElementSelectionProperty';
-// import '../../../sherpa/lib/himalaya-1.1.0';
-import type RequiredOption from '../../phet-core/types/RequiredOption';
+import type TProperty from '@/utils/axon/TProperty';
+import { type PropertyOptions } from '@/utils/axon/Property';
+import StringProperty from '@/utils/axon/StringProperty';
+import TinyForwardingProperty from '@/utils/axon/TinyForwardingProperty';
+import Range from '@/utils/dot/Range';
+import Tandem from '@/utils/tandem/Tandem';
+import IOType from '@/utils/tandem/types/IOType';
+import { allowLinksProperty, Color, Font, getLineBreakRanges, type HimalayaNode, isHimalayaElementNode, isHimalayaTextNode, Line, Node, type NodeOptions, type RichTextCleanableNode, RichTextElement, RichTextLeaf, RichTextLink, RichTextNode, RichTextUtils, RichTextVerticalSpacer, scenery, Text, type TextBoundsMethod, type TPaint, WidthSizable } from '@/utils/scenery/imports';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import phetioElementSelectionProperty from '@/utils/tandem/phetioElementSelectionProperty';
+// import '@/utils/sherpa/lib/himalaya-1.1.0';
+import type RequiredOption from '@/utils/phet-core/types/RequiredOption';
 
 // @ts-expect-error - Since himalaya isn't in tsconfig
 const himalayaVar = himalaya;
@@ -606,7 +606,7 @@ export default class RichText extends WidthSizable(Node) {
     // Clear them out afterwards, for memory purposes
     this._linkItems.length = 0;
 
-    if (assert) {
+    if (window.assert) {
       if (this._links && this._links !== true) {
         Object.keys(this._links).forEach(link => {
           assert && allowLinksProperty.value && !isStringTest && assert(usedLinks.includes(link), `Unused RichText link: ${link}`);

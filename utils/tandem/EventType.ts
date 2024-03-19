@@ -6,11 +6,11 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Enumeration from '../phet-core/Enumeration';
-import EnumerationValue from '../phet-core/EnumerationValue';
-import TandemConstants from './TandemConstants';
-import tandemNamespace from './tandemNamespace';
-import EnumerationIO from './types/EnumerationIO';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import TandemConstants from '@/utils/tandem/TandemConstants';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import EnumerationIO from '@/utils/tandem/types/EnumerationIO';
 
 class EventType extends EnumerationValue {
 

@@ -6,14 +6,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../../dot/Bounds2';
-import Matrix3 from '../../../dot/Matrix3';
-import Utils from '../../../dot/Utils';
-import { Shape } from '../../../kite/imports';
-import Orientation from '../../../phet-core/Orientation';
-import OrientationPair from '../../../phet-core/OrientationPair';
-import Tandem from '../../../tandem/Tandem';
-import { Font, type TColor, LayoutAlign, LayoutCell, LayoutProxy, Node, NodeLayoutConstraint, NodePattern, Path, PressListener, Rectangle, RichText, scenery, Text } from '../../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Utils from '@/utils/dot/Utils';
+import { Shape } from '@/utils/kite/imports';
+import Orientation from '@/utils/phet-core/Orientation';
+import OrientationPair from '@/utils/phet-core/OrientationPair';
+import Tandem from '@/utils/tandem/Tandem';
+import { Font, type TColor, LayoutAlign, LayoutCell, LayoutProxy, Node, NodeLayoutConstraint, NodePattern, Path, PressListener, Rectangle, RichText, scenery, Text } from '@/utils/scenery/imports';
 
 // Interface expected to be overridden by subtypes (GridCell, FlowCell)
 export type MarginLayout = {
@@ -79,7 +79,7 @@ export default class MarginLayoutCell extends LayoutCell {
 
     const preferredSize = (stretch && this.isSizable(orientation)) ? lineSize : this.getMinimumSize(orientation);
 
-    if (assert) {
+    if (window.assert) {
       const maxSize = orientation === Orientation.HORIZONTAL ? this.node.maxWidth : this.node.maxHeight;
       assert(!this.isSizable(orientation) || maxSize === null || Math.abs(maxSize - preferredSize) > -1e-9,
         `Tried to set a preferred size ${preferredSize} larger than the specified max${orientation === Orientation.HORIZONTAL ? 'Width' : 'Height'} of ${maxSize}. ` +

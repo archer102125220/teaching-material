@@ -11,7 +11,7 @@
  * @author Jesse Greenberg
  */
 
-import { scenery, SceneryStyle } from '../../imports';
+import { scenery, SceneryStyle } from '@/utils/scenery/imports';
 
 // constants
 const SIBLING_CLASS_NAME = 'a11y-pdom-element';

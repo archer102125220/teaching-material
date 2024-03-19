@@ -9,8 +9,8 @@
  * @author Jesse Greenberg
  */
 
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import { HighlightFromNode, type HighlightFromNodeOptions, Node, scenery } from '../../imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { HighlightFromNode, type HighlightFromNodeOptions, Node, scenery } from '@/utils/scenery/imports';
 
 type SelfOptions = EmptySelfOptions;
 type ReadingBlockHighlightOptions = SelfOptions & HighlightFromNodeOptions;

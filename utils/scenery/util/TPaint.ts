@@ -1,7 +1,7 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import { Color, Paint } from '../imports';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { Color, Paint } from '@/utils/scenery/imports';
 
 /**
  * Type representing a PaintDef

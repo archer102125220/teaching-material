@@ -7,8 +7,8 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import { Pointer, scenery, Trail } from '../imports';
-import Vector2 from '../../dot/Vector2';
+import { Pointer, scenery, Trail } from '@/utils/scenery/imports';
+import Vector2 from '@/utils/dot/Vector2';
 
 export default class MultiListenerPress {
   public pointer: Pointer;

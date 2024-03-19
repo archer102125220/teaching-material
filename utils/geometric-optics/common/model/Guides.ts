@@ -6,12 +6,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Disposable from '../../../axon/Disposable';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Vector2 from '../../../dot/Vector2';
-import Optic from './Optic';
-import geometricOptics from '../../geometricOptics';
-import Guide from './Guide';
+import Disposable from '@/utils/axon/Disposable';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Guide from '@/utils/geometric-optics/common/model/Guide';
 
 export default class Guides {
 

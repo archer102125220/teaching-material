@@ -7,19 +7,19 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import geometricOptics from '../../geometricOptics';
-import lockSolidShape from '../../../sherpa/fontawesome-5/lockSolidShape';
-import unlockSolidShape from '../../../sherpa/fontawesome-5/unlockSolidShape';
-import { AlignBox, AlignGroup, HBox, type HBoxOptions, type NodeTranslationOptions, Path } from '../../../scenery/imports';
-import CueingArrowsNode from './CueingArrowsNode';
-import ButtonNode from '../../../sun/buttons/ButtonNode';
-import PhetColorScheme from '../../../scenery-phet/PhetColorScheme';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../../phet-core/optionize';
-import { type ObjectDragMode } from './ObjectDragMode';
-import ToggleNode from '../../../sun/ToggleNode';
-import RectangularToggleButton, { type RectangularToggleButtonOptions } from '../../../sun/buttons/RectangularToggleButton';
-import Property from '../../../axon/Property';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import lockSolidShape from '@/utils/sherpa/fontawesome-5/lockSolidShape';
+import unlockSolidShape from '@/utils/sherpa/fontawesome-5/unlockSolidShape';
+import { AlignBox, AlignGroup, HBox, type HBoxOptions, type NodeTranslationOptions, Path } from '@/utils/scenery/imports';
+import CueingArrowsNode from '@/utils/geometric-optics/common/view/CueingArrowsNode';
+import ButtonNode from '@/utils/sun/buttons/ButtonNode';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { type ObjectDragMode } from '@/utils/geometric-optics/common/view/ObjectDragMode';
+import ToggleNode from '@/utils/sun/ToggleNode';
+import RectangularToggleButton, { type RectangularToggleButtonOptions } from '@/utils/sun/buttons/RectangularToggleButton';
+import Property from '@/utils/axon/Property';
 
 const ARROWS_SCALE = 0.65;
 const LOCK_SCALE = 0.045;

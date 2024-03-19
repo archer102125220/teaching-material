@@ -6,13 +6,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
-import Pool, { type TPoolable } from '../../phet-core/Pool';
-import type WithoutNull from '../../phet-core/types/WithoutNull';
-import { type ActiveSVGGradient, Color, type TColor, scenery, svgns } from '../imports';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
+import type WithoutNull from '@/utils/phet-core/types/WithoutNull';
+import { type ActiveSVGGradient, Color, type TColor, scenery, svgns } from '@/utils/scenery/imports';
 
 const scratchColor = new Color('transparent');
 
+// eslint-disable-next-line no-use-before-define
 export type ActiveSVGGradientStop = WithoutNull<SVGGradientStop, 'svgGradient'>;
 
 class SVGGradientStop implements TPoolable {

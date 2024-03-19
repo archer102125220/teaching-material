@@ -9,8 +9,8 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import TinyProperty from '../axon/TinyProperty';
-import tambo from './tambo';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import tambo from '@/utils/tambo/tambo';
 
 class WrappedAudioBuffer {
 

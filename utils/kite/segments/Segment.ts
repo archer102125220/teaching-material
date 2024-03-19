@@ -11,21 +11,17 @@
 
 import _ from 'lodash';
 
-// @ts-expect-error
-import TEmitter from '../../axon/TEmitter';
-import TinyEmitter from '../../axon/TinyEmitter';
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Ray2 from '../../dot/Ray2';
-import Utils from '../../dot//Utils';
-import Vector2 from '../../dot/Vector2';
-import optionize from '../../phet-core/optionize';
-// @ts-expect-error
-import KeysMatching from '../../phet-core/types/KeysMatching';
-// @ts-expect-error
-import { Arc, BoundsIntersection, Cubic, EllipticalArc, kite, Line, Quadratic, RayIntersection, SegmentIntersection, SerializedArc, SerializedCubic, SerializedEllipticalArc, SerializedLine, SerializedQuadratic, Shape, Subpath } from '../imports';
-// @ts-expect-error
-import IntentionalAny from '../../phet-core/types/IntentionalAny';
+import type TEmitter from '@/utils/axon/TEmitter';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Ray2 from '@/utils/dot/Ray2';
+import Utils from '@/utils/dot//Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import optionize from '@/utils/phet-core/optionize';
+import type KeysMatching from '@/utils/phet-core/types/KeysMatching';
+import { Arc, BoundsIntersection, Cubic, EllipticalArc, kite, Line, Quadratic, RayIntersection, SegmentIntersection, type SerializedArc, type SerializedCubic, type SerializedEllipticalArc, type SerializedLine, type SerializedQuadratic, Shape, Subpath } from '@/utils/kite/imports';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 export type DashValues = {
 

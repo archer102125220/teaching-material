@@ -7,14 +7,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Property from '../../axon/Property';
-import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
-import IOType from '../../tandem/types/IOType';
-import NullableIO from '../../tandem/types/NullableIO';
-import OrIO from '../../tandem/types/OrIO';
-import ReferenceIO from '../../tandem/types/ReferenceIO';
-import StringIO from '../../tandem/types/StringIO';
-import { Color, type TColor, scenery } from '../imports';
+import Property from '@/utils/axon/Property';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import IOType from '@/utils/tandem/types/IOType';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import OrIO from '@/utils/tandem/types/OrIO';
+import ReferenceIO from '@/utils/tandem/types/ReferenceIO';
+import StringIO from '@/utils/tandem/types/StringIO';
+import { Color, type TColor, scenery } from '@/utils/scenery/imports';
 
 const ColorDef = {
   /**

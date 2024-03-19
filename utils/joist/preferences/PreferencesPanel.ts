@@ -6,14 +6,14 @@
  * @author Jesse Greenberg
  */
 
-import joist from '../joist';
-import { Node, type NodeOptions } from '../../scenery/imports';
-import Multilink from '../../axon/Multilink';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import PreferencesType from './PreferencesType';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Tandem from '../../tandem/Tandem';
+import joist from '@/utils/joist/joist';
+import { Node, type NodeOptions } from '@/utils/scenery/imports';
+import Multilink from '@/utils/axon/Multilink';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Tandem from '@/utils/tandem/Tandem';
 
 type SelfOptions = EmptySelfOptions;
 export type PreferencesPanelOptions = StrictOmit<NodeOptions, 'tagName' | 'labelTagName'>;

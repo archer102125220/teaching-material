@@ -7,10 +7,10 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import optionize from '../../../phet-core/js/optionize.js';
-import phetAudioContext from '../phetAudioContext.js';
-import tambo from '../tambo.js';
-import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
+import optionize from '@/utils/phet-core/optionize';
+import phetAudioContext from '@/utils/tambo/phetAudioContext';
+import tambo from '@/utils/tambo/tambo';
+import SoundGenerator, { type SoundGeneratorOptions } from '@/utils/tambo/sound-generators/SoundGenerator';
 
 type SelfOptions = {
 
@@ -32,14 +32,14 @@ class OscillatorSoundGenerator extends SoundGenerator {
   private readonly frequency: number;
   private waveformType: OscillatorType;
 
-  public constructor( providedOptions?: OscillatorSoundGeneratorOptions ) {
+  public constructor(providedOptions?: OscillatorSoundGeneratorOptions) {
 
-    const options = optionize<OscillatorSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
+    const options = optionize<OscillatorSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>()({
       initialFrequency: 440,
       initialWaveformType: 'sine'
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     // state initialization
     this.oscillatorNode = null;
@@ -52,11 +52,11 @@ class OscillatorSoundGenerator extends SoundGenerator {
    * generators. If the oscillator is already playing, this has no effect.
    */
   public play(): void {
-    if ( !this.oscillatorNode ) {
+    if (!this.oscillatorNode) {
       this.oscillatorNode = phetAudioContext.createOscillator();
       this.oscillatorNode.type = this.waveformType;
-      this.oscillatorNode.frequency.setValueAtTime( this.frequency, phetAudioContext.currentTime );
-      this.oscillatorNode.connect( this.mainGainNode );
+      this.oscillatorNode.frequency.setValueAtTime(this.frequency, phetAudioContext.currentTime);
+      this.oscillatorNode.connect(this.mainGainNode);
       this.oscillatorNode.start();
     }
   }
@@ -65,7 +65,7 @@ class OscillatorSoundGenerator extends SoundGenerator {
    * Stops the oscillator. If the oscillator isn't playing, this has no effect.
    */
   public stop(): void {
-    if ( this.oscillatorNode ) {
+    if (this.oscillatorNode) {
       this.oscillatorNode.stop();
       this.oscillatorNode = null;
     }
@@ -74,14 +74,14 @@ class OscillatorSoundGenerator extends SoundGenerator {
   /**
    * Sets the waveform type.
    */
-  public setWaveformType( waveformType: OscillatorType ): void {
+  public setWaveformType(waveformType: OscillatorType): void {
     this.waveformType = waveformType;
-    if ( this.oscillatorNode ) {
+    if (this.oscillatorNode) {
       this.oscillatorNode.type = waveformType;
     }
   }
 }
 
-tambo.register( 'OscillatorSoundGenerator', OscillatorSoundGenerator );
+tambo.register('OscillatorSoundGenerator', OscillatorSoundGenerator);
 
 export default OscillatorSoundGenerator;

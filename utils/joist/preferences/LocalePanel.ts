@@ -10,13 +10,13 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import joist from '../joist';
-import Panel from '../../sun/Panel';
-import { GridBox } from '../../scenery/imports';
-import Property from '../../axon/Property';
-import LanguageSelectionNode from './LanguageSelectionNode';
+import joist from '@/utils/joist/joist';
+import Panel from '@/utils/sun/Panel';
+import { GridBox } from '@/utils/scenery/imports';
+import Property from '@/utils/axon/Property';
+import LanguageSelectionNode from '@/utils/joist/preferences/LanguageSelectionNode';
 import { type Locale } from '@/i18n/joist/localeProperty';
-import JoistStrings from '../JoistStrings';
+import JoistStrings from '@/utils/joist/JoistStrings';
 
 class LocalePanel extends Panel {
   public constructor(localeProperty: Property<Locale>) {

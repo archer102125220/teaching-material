@@ -7,16 +7,16 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Node, VBox, type VBoxOptions } from '../../scenery/imports';
-import joist from '../joist';
-import PreferencesDialog from './PreferencesDialog';
-import { type SimulationModel } from './PreferencesModel';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import PreferencesPanelSection from './PreferencesPanelSection';
-import PreferencesType from './PreferencesType';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import PreferencesPanel, { type PreferencesPanelOptions } from './PreferencesPanel';
+import { Node, VBox, type VBoxOptions } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import { type SimulationModel } from '@/utils/joist/preferences/PreferencesModel';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import PreferencesPanelSection from '@/utils/joist/preferences/PreferencesPanelSection';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import PreferencesPanel, { type PreferencesPanelOptions } from '@/utils/joist/preferences/PreferencesPanel';
 
 type SelfOptions = EmptySelfOptions;
 type SimulationPreferencesPanelOptions = SelfOptions &
@@ -55,7 +55,7 @@ class SimulationPreferencesPanel extends PreferencesPanel {
 
     simulationModel.customPreferences.forEach(customPreference => {
       const contentNode = customPreference.createContent(options.tandem);
-      const preferencesPanelSection = new PreferencesPanelSection({ contentNode: contentNode });
+      const preferencesPanelSection = new PreferencesPanelSection({ contentNode });
       providedChildren.push(preferencesPanelSection);
     });
 

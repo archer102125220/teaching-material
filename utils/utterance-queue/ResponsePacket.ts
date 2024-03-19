@@ -17,12 +17,12 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import ReadOnlyProperty from '../axon/ReadOnlyProperty';
-import TinyProperty from '../axon/TinyProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import { optionize3, type OptionizeDefaults } from '../phet-core/optionize';
-import ResponsePatternCollection from './ResponsePatternCollection';
-import utteranceQueueNamespace from './utteranceQueueNamespace';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { optionize3, type OptionizeDefaults } from '@/utils/phet-core/optionize';
+import ResponsePatternCollection from '@/utils/utterance-queue/ResponsePatternCollection';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
 
 // The text sent to an Announcer technology, after resolving it from potentially more complicated structures holding a response
 export type ResolvedResponse = string | number | null;

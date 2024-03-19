@@ -11,17 +11,23 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../axon/BooleanProperty';
-import type TProperty from '../axon/TProperty';
-import DynamicStringTest from './DynamicStringTest';
-import optionize from '../phet-core/optionize';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import { animatedPanZoomSingleton, Display, type DisplayOptions, InputFuzzer, KeyboardFuzzer, Node, type RendererType, scenery, Utils } from '../scenery/imports';
-import '../sherpa/lib/game-up-camera-1.0.0';
-import Tandem from '../tandem/Tandem';
-import HighlightVisibilityController from './HighlightVisibilityController';
-import joist from './joist';
-import PreferencesModel from './preferences/PreferencesModel';
+import _ from 'lodash';
+import $ from '@/utils/sherpa/lib/jquery-2.1.0';
+
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import DynamicStringTest from '@/utils/joist/DynamicStringTest';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { animatedPanZoomSingleton, Display, type DisplayOptions, InputFuzzer, KeyboardFuzzer, Node, type RendererType, scenery, Utils } from '@/utils/scenery/imports';
+import '@/utils/sherpa/lib/game-up-camera-1.0.0';
+import Tandem from '@/utils/tandem/Tandem';
+import HighlightVisibilityController from '@/utils/joist/HighlightVisibilityController';
+import joist from '@/utils/joist/joist';
+import PreferencesModel from '@/utils/joist/preferences/PreferencesModel';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+// const $ = require('@/utils/sherpa/lib/jquery-2.1.0');
 
 type SelfOptions = {
   webgl?: boolean;
@@ -45,6 +51,8 @@ export default class SimDisplay extends Display {
 
   // For consistent option defaults
   public static readonly DEFAULT_WEBGL = false;
+
+  public container?: HTMLElement | Element | null = null;
 
   public constructor(providedOptions: SimDisplayOptions) {
 
@@ -119,8 +127,7 @@ export default class SimDisplay extends Display {
       parentNode.addEventListener('selectstart', () => false);
       const $parentNode = $(parentNode);
       $parentNode.css('padding', '0').css('margin', '0').css('overflow', 'hidden');
-    }
-    else {
+    } else {
 
       const $body = $('body');
 
@@ -135,6 +142,8 @@ export default class SimDisplay extends Display {
     }
 
     super(new Node({ renderer: options.rootRenderer }), options);
+
+    this.container = options.container;
 
     this.simulationRoot = new Node();
     this.rootNode.addChild(this.simulationRoot);
@@ -216,6 +225,10 @@ export default class SimDisplay extends Display {
         window.location.reload();
       }
     });
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    window.SIM_DISPLAY = this;
   }
 
   /**

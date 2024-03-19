@@ -10,10 +10,10 @@
 
 import _ from 'lodash';
 
-import RangeWithValue from '../../dot/RangeWithValue';
-import logGlobal from '../../phet-core/logGlobal';
-import geometricOptics from '../geometricOptics';
-import { FocalLengthModelTypeValues } from './model/FocalLengthModelType';
+import RangeWithValue from '@/utils/dot/RangeWithValue';
+import logGlobal from '@/utils/phet-core/logGlobal';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import { FocalLengthModelTypeValues } from '@/utils/geometric-optics/common/model/FocalLengthModelType';
 
 const SCHEMA_MAP = {
 

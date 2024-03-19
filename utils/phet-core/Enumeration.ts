@@ -27,14 +27,12 @@
 
 import _ from 'lodash';
 
-import phetCore from './phetCore';
-// @ts-expect-error
-import TEnumeration from './TEnumeration';
-import EnumerationValue from './EnumerationValue';
-import inheritance from './inheritance';
-// @ts-expect-error
-import Constructor from './types/Constructor';
-import optionize from './optionize';
+import phetCore from '@/utils/phet-core/phetCore';
+import type TEnumeration from '@/utils/phet-core/TEnumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import inheritance from '@/utils/phet-core/inheritance';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import optionize from '@/utils/phet-core/optionize';
 
 export type EnumerationOptions<T extends EnumerationValue> = {
   phetioDocumentation?: string;

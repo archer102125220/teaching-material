@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Pool, { type TPoolable } from '../../phet-core/Pool';
-import { Pattern, scenery, svgns, xlinkns } from '../imports';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
+import { Pattern, scenery, svgns, xlinkns } from '@/utils/scenery/imports';
 
 export default class SVGPattern implements TPoolable {
 

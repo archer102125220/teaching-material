@@ -8,8 +8,8 @@
 
 import _ from 'lodash';
 
-import arrayRemove from '../../phet-core/arrayRemove';
-import platform from '../../phet-core/platform';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import platform from '@/utils/phet-core/platform';
 import {
   BatchedDOMEventType,
   Display,
@@ -19,7 +19,7 @@ import {
   globalKeyStateTracker,
   PDOMUtils,
   scenery
-} from '../imports';
+} from '@/utils/scenery/imports';
 
 // Sometimes we need to add a listener that does absolutely nothing
 const noop = () => {};
@@ -45,8 +45,8 @@ const BrowserEvents = {
   addDisplay(display, attachToWindow, passiveEvents) {
     window.assert && window.assert(display instanceof Display);
     window.assert && window.assert(typeof attachToWindow === 'boolean');
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !_.includes(this.attachedDisplays, display),
         'A display cannot be concurrently attached to events more than one time'
       );
@@ -90,8 +90,8 @@ const BrowserEvents = {
   removeDisplay(display, attachToWindow, passiveEvents) {
     window.assert && window.assert(display instanceof Display);
     window.assert && window.assert(typeof attachToWindow === 'boolean');
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         _.includes(this.attachedDisplays, display),
         'This display was not already attached to listen for window events'
       );
@@ -132,8 +132,8 @@ const BrowserEvents = {
         eventOptions.capture = false;
       }
 
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           !eventOptions.capture,
           'Do not use capture without consulting globalKeyStateTracker, ' +
             'which expects have listeners called FIRST in keyboard-related cases.'
@@ -247,25 +247,25 @@ const BrowserEvents = {
 
     if (this.canUsePointerEvents) {
       // accepts pointer events corresponding to the spec at http://www.w3.org/TR/pointerevents/
-      sceneryLog &&
-        sceneryLog.Input &&
-        sceneryLog.Input(
+      window.sceneryLog &&
+        window.sceneryLog.Input &&
+        window.sceneryLog.Input(
           'Detected pointer events support, using that instead of mouse/touch events'
         );
 
       eventTypes = this.pointerListenerTypes;
     } else if (this.canUseMSPointerEvents) {
-      sceneryLog &&
-        sceneryLog.Input &&
-        sceneryLog.Input(
+      window.sceneryLog &&
+        window.sceneryLog.Input &&
+        window.sceneryLog.Input(
           'Detected MS pointer events support, using that instead of mouse/touch events'
         );
 
       eventTypes = this.msPointerListenerTypes;
     } else {
-      sceneryLog &&
-        sceneryLog.Input &&
-        sceneryLog.Input(
+      window.sceneryLog &&
+        window.sceneryLog.Input &&
+        window.sceneryLog.Input(
           'No pointer events support detected, using mouse/touch events'
         );
 
@@ -311,12 +311,14 @@ const BrowserEvents = {
    */
   addOrRemoveListeners(element, addOrRemove, passiveEvents) {
     window.assert && window.assert(typeof addOrRemove === 'boolean');
-    assert &&
-      assert(typeof passiveEvents === 'boolean' || passiveEvents === null);
+    window.assert &&
+      window.assert(
+        typeof passiveEvents === 'boolean' || passiveEvents === null
+      );
 
     const forWindow = element === window;
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !forWindow || this.listenersAttachedToWindow > 0 === !addOrRemove,
         'Do not add listeners to the window when already attached, or remove listeners when none are attached'
       );
@@ -327,8 +329,8 @@ const BrowserEvents = {
     } else {
       this.listenersAttachedToElement += delta;
     }
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.listenersAttachedToWindow === 0 ||
           this.listenersAttachedToElement === 0,
         'Listeners should not be added both with addDisplayToWindow and addDisplayToElement. Use only one.'
@@ -413,8 +415,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onpointerdown: function onpointerdown(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointerdown');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('pointerdown');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // Get the active element BEFORE any actions are taken
     const eventContext = new EventContext(domEvent);
@@ -431,7 +435,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -441,8 +445,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onpointerup: function onpointerup(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointerup');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('pointerup');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // Get the active element BEFORE any actions are taken
     const eventContext = new EventContext(domEvent);
@@ -457,7 +463,7 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -467,8 +473,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onpointermove: function onpointermove(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointermove');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('pointermove');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -478,7 +486,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -488,8 +496,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onpointerover: function onpointerover(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointerover');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('pointerover');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -499,7 +509,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -509,8 +519,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onpointerout: function onpointerout(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointerout');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('pointerout');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -520,7 +532,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -530,8 +542,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onpointercancel: function onpointercancel(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('pointercancel');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('pointercancel');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -541,7 +555,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -551,8 +565,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   ongotpointercapture: function ongotpointercapture(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('gotpointercapture');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('gotpointercapture');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -562,7 +578,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -572,10 +588,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onlostpointercapture: function onlostpointercapture(domEvent) {
-    sceneryLog &&
-      sceneryLog.OnInput &&
-      sceneryLog.OnInput('lostpointercapture');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('lostpointercapture');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -585,7 +601,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -595,8 +611,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onMSPointerDown: function onMSPointerDown(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerDown');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('MSPointerDown');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -606,7 +624,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -616,8 +634,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onMSPointerUp: function onMSPointerUp(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerUp');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('MSPointerUp');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -627,7 +647,7 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -637,8 +657,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onMSPointerMove: function onMSPointerMove(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerMove');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('MSPointerMove');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -648,7 +670,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -658,8 +680,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onMSPointerOver: function onMSPointerOver(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerOver');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('MSPointerOver');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -669,7 +693,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -679,8 +703,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onMSPointerOut: function onMSPointerOut(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerOut');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('MSPointerOut');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -690,7 +716,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -700,8 +726,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onMSPointerCancel: function onMSPointerCancel(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('MSPointerCancel');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('MSPointerCancel');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -711,7 +739,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -721,8 +749,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   ontouchstart: function ontouchstart(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('touchstart');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('touchstart');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -732,7 +762,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -742,8 +772,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   ontouchend: function ontouchend(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('touchend');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('touchend');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // Get the active element BEFORE any actions are taken
     const eventContext = new EventContext(domEvent);
@@ -758,7 +790,7 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -768,8 +800,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   ontouchmove: function ontouchmove(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('touchmove');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('touchmove');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -779,7 +813,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -789,8 +823,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   ontouchcancel: function ontouchcancel(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('touchcancel');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('touchcancel');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -800,7 +836,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -810,8 +846,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onmousedown: function onmousedown(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('mousedown');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('mousedown');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // Get the active element BEFORE any actions are taken
     const eventContext = new EventContext(domEvent);
@@ -826,7 +864,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -836,8 +874,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onmouseup: function onmouseup(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('mouseup');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('mouseup');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // Get the active element BEFORE any actions are taken
     const eventContext = new EventContext(domEvent);
@@ -852,7 +892,7 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -862,8 +902,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onmousemove: function onmousemove(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('mousemove');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('mousemove');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -873,7 +915,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -883,8 +925,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onmouseover: function onmouseover(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('mouseover');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('mouseover');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -894,7 +938,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -904,8 +948,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onmouseout: function onmouseout(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('mouseout');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('mouseout');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -915,7 +961,7 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   /**
@@ -925,8 +971,10 @@ const BrowserEvents = {
    * @param {Event} domEvent
    */
   onwheel: function onwheel(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('wheel');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('wheel');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -936,12 +984,14 @@ const BrowserEvents = {
       false
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   onfocusin: function onfocusin(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('focusin');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('focusin');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
 
@@ -960,12 +1010,14 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   onfocusout: function onfocusout(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('focusout');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('focusout');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
 
@@ -984,12 +1036,14 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   oninput: function oninput(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('input');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('input');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
 
@@ -1000,12 +1054,14 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   onchange: function onchange(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('change');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('change');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -1015,12 +1071,14 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   onclick: function onclick(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('click');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('click');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -1030,12 +1088,14 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   onkeydown: function onkeydown(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('keydown');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('keydown');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -1045,12 +1105,14 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   },
 
   onkeyup: function onkeyup(domEvent) {
-    sceneryLog && sceneryLog.OnInput && sceneryLog.OnInput('keyup');
-    sceneryLog && sceneryLog.OnInput && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.OnInput &&
+      window.sceneryLog.OnInput('keyup');
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.push();
 
     // NOTE: Will be called without a proper 'this' reference. Do NOT rely on it here.
     BrowserEvents.batchWindowEvent(
@@ -1060,7 +1122,7 @@ const BrowserEvents = {
       true
     );
 
-    sceneryLog && sceneryLog.OnInput && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.OnInput && window.sceneryLog.pop();
   }
 };
 

@@ -8,14 +8,14 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Property from '../../axon/Property';
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import ModelViewTransform2 from '../../phetcommon/view/ModelViewTransform2';
-import isSettingPhetioStateProperty from '../../tandem/isSettingPhetioStateProperty';
-import Tandem from '../../tandem/Tandem';
-import { MultiListener, type MultiListenerOptions, MultiListenerPress, Node, scenery } from '../imports';
-import optionize from '../../phet-core/optionize';
+import Property from '@/utils/axon/Property';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
+import Tandem from '@/utils/tandem/Tandem';
+import { MultiListener, type MultiListenerOptions, MultiListenerPress, Node, scenery } from '@/utils/scenery/imports';
+import optionize from '@/utils/phet-core/optionize';
 
 // constants
 // Reusable Matrix3 instance to avoid creating lots of them

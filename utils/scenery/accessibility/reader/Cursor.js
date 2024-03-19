@@ -15,8 +15,8 @@
  * @author Jesse Greenberg
  */
 
-import Property from '../../../axon/Property';
-import { scenery } from '../../imports';
+import Property from '@/utils/axon/Property';
+import { scenery } from '@/utils/scenery/imports';
 
 // constants
 const SPACE = ' '; // space to insert between words of text content

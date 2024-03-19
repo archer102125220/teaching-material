@@ -11,9 +11,9 @@
 
 import _ from 'lodash';
 
-import Matrix3 from '../../dot/Matrix3';
-import optionize from '../../phet-core/optionize';
-import { scenery, Trail } from '../imports';
+import Matrix3 from '@/utils/dot/Matrix3';
+import optionize from '@/utils/phet-core/optionize';
+import { scenery, Trail } from '@/utils/scenery/imports';
 
 type SelfOptions = {
   // Whether the bounds listeners should be added with on() or onStatic().

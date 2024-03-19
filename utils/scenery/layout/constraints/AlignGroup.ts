@@ -19,15 +19,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import type TProperty from '../../../axon/TProperty';
-import NumberProperty from '../../../axon/NumberProperty';
-import Bounds2 from '../../../dot/Bounds2';
-import arrayRemove from '../../../phet-core/arrayRemove';
-import { combineOptions, optionize3 } from '../../../phet-core/optionize';
-import { AlignBox, Node, scenery } from '../../imports';
-import { type AlignBoxOptions } from '../nodes/AlignBox';
-import Disposable, { type DisposableOptions } from '../../../axon/Disposable';
-import Orientation from '../../../phet-core/Orientation';
+import type TProperty from '@/utils/axon/TProperty';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import { combineOptions, optionize3 } from '@/utils/phet-core/optionize';
+import { AlignBox, Node, scenery } from '@/utils/scenery/imports';
+import { type AlignBoxOptions } from '@/utils/scenery/layout/nodes/AlignBox';
+import Disposable, { type DisposableOptions } from '@/utils/axon/Disposable';
+import Orientation from '@/utils/phet-core/Orientation';
 
 let globalId = 1;
 

@@ -4,6 +4,6 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import '../../axon/js/main.js';
-import '../../phet-core/js/main.js';
-import './main.js';
+import '@/utils/axon/main';
+import '@/utils/phet-core/main';
+import '@/utils/utterance-queue/main';

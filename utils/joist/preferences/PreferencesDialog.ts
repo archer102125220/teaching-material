@@ -9,20 +9,20 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import EnumerationProperty from '../../axon/EnumerationProperty';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import PhetFont from '../../scenery-phet/PhetFont';
-import { HSeparator, KeyboardListener, Text, VBox } from '../../scenery/imports';
-import Dialog, { type DialogOptions } from '../../sun/Dialog';
-import soundManager from '../../tambo/soundManager';
-import joist from '../joist';
-import JoistStrings from '../JoistStrings';
-import PreferencesModel from './PreferencesModel';
-import PreferencesPanels from './PreferencesPanels';
-import PreferencesTabs from './PreferencesTabs';
-import PreferencesTabSwitchSoundGenerator from './PreferencesTabSwitchSoundGenerator';
-import PreferencesType from './PreferencesType';
+import EnumerationProperty from '@/utils/axon/EnumerationProperty';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { HSeparator, KeyboardListener, Text, VBox } from '@/utils/scenery/imports';
+import Dialog, { type DialogOptions } from '@/utils/sun/Dialog';
+import soundManager from '@/utils/tambo/soundManager';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import PreferencesModel from '@/utils/joist/preferences/PreferencesModel';
+import PreferencesPanels from '@/utils/joist/preferences/PreferencesPanels';
+import PreferencesTabs from '@/utils/joist/preferences/PreferencesTabs';
+import PreferencesTabSwitchSoundGenerator from '@/utils/joist/preferences/PreferencesTabSwitchSoundGenerator';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
 
 // constants
 const TITLE_FONT = new PhetFont({ size: 24, weight: 'bold' });

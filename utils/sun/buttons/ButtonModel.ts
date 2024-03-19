@@ -9,18 +9,18 @@
 
 import _ from 'lodash';
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import Emitter from '../../axon/Emitter';
-import Property from '../../axon/Property';
-import optionize, { combineOptions } from '../../phet-core/optionize';
-import { PressListener, type PressListenerOptions } from '../../scenery/imports';
-import PhetioObject from '../../tandem/PhetioObject';
-import Tandem from '../../tandem/Tandem';
-import EnabledComponent, { type EnabledComponentOptions } from '../../axon/EnabledComponent';
-import sun from '../sun';
-import Multilink, { type UnknownMultilink } from '../../axon/Multilink';
-import { type EnabledPropertyOptions } from '../../axon/EnabledProperty';
-import type TEmitter from '../../axon/TEmitter';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import Emitter from '@/utils/axon/Emitter';
+import Property from '@/utils/axon/Property';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import { PressListener, type PressListenerOptions } from '@/utils/scenery/imports';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import EnabledComponent, { type EnabledComponentOptions } from '@/utils/axon/EnabledComponent';
+import sun from '@/utils/sun/sun';
+import Multilink, { type UnknownMultilink } from '@/utils/axon/Multilink';
+import { type EnabledPropertyOptions } from '@/utils/axon/EnabledProperty';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 type SelfOptions = {
 

@@ -9,9 +9,9 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { Display, type TOverlay, Node, PDOMPointer, Pointer, scenery, svgns, Utils } from '../imports';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Display, type TOverlay, Node, PDOMPointer, Pointer, scenery, svgns, Utils } from '@/utils/scenery/imports';
 
 export default class PointerOverlay implements TOverlay {
 
@@ -33,6 +33,7 @@ export default class PointerOverlay implements TOverlay {
     this.pointerSVGContainer.style.position = 'absolute';
     this.pointerSVGContainer.style.top = '0';
     this.pointerSVGContainer.style.left = '0';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     this.pointerSVGContainer.style['pointer-events'] = 'none';
 
@@ -57,6 +58,7 @@ export default class PointerOverlay implements TOverlay {
       svg.style.position = 'absolute';
       svg.style.top = '0';
       svg.style.left = '0';
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       svg.style['pointer-events'] = 'none';
 

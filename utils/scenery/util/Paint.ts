@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Matrix3 from '../../dot/Matrix3';
-import { scenery, SVGBlock, SVGGradient, SVGPattern } from '../imports';
+import Matrix3 from '@/utils/dot/Matrix3';
+import { scenery, SVGBlock, SVGGradient, SVGPattern } from '@/utils/scenery/imports';
 
 let globalId = 1;
 

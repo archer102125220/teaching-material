@@ -8,9 +8,9 @@
  * @author Jesse Greenberg
  */
 
-import Tandem from '../../tandem/Tandem';
-import { KeyStateTracker, scenery } from '../imports';
-import { type KeyStateTrackerOptions } from './KeyStateTracker';
+import Tandem from '@/utils/tandem/Tandem';
+import { KeyStateTracker, scenery } from '@/utils/scenery/imports';
+import { type KeyStateTrackerOptions } from '@/utils/scenery/accessibility/KeyStateTracker';
 
 class GlobalKeyStateTracker extends KeyStateTracker {
   public constructor(options?: KeyStateTrackerOptions) {

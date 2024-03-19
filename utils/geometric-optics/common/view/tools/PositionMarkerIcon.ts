@@ -7,14 +7,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import Vector2 from '../../../../dot/Vector2';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import geometricOptics from '../../../geometricOptics';
-import PositionMarkerNode from './PositionMarkerNode';
-import MapMarkerNode from '../MapMarkerNode';
-import GOToolIcon from './GOToolIcon';
-import PositionMarker from '../../model/tools/PositionMarker';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import PositionMarkerNode from '@/utils/geometric-optics/common/view/tools/PositionMarkerNode';
+import MapMarkerNode from '@/utils/geometric-optics/common/view/MapMarkerNode';
+import GOToolIcon from '@/utils/geometric-optics/common/view/tools/GOToolIcon';
+import PositionMarker from '@/utils/geometric-optics/common/model/tools/PositionMarker';
 
 export default class PositionMarkerIcon extends GOToolIcon {
 

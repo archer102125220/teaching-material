@@ -1,8 +1,8 @@
 // Copyright 2022, University of Colorado Boulder
 
-import type TProperty from './TProperty';
-import ReadOnlyProperty, { type PropertyOptions } from './ReadOnlyProperty';
-import axon from './axon';
+import type TProperty from '@/utils/axon/TProperty';
+import ReadOnlyProperty, { type PropertyOptions } from '@/utils/axon/ReadOnlyProperty';
+import axon from '@/utils/axon/axon';
 
 /**
  * Adds initial value and reset, and a mutable interface.

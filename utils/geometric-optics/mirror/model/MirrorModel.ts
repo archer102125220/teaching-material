@@ -6,15 +6,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Vector2 from '../../../dot/Vector2';
-import GOModel, { type GOModelOptions } from '../../common/model/GOModel';
-import geometricOptics from '../../geometricOptics';
-import Mirror from './Mirror';
-import OpticalObjectChoice from '../../common/model/OpticalObjectChoice';
-import optionize from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import { type GOSimOptions } from '../../GOSim';
-import GOQueryParameters from '../../common/GOQueryParameters';
+import Vector2 from '@/utils/dot/Vector2';
+import GOModel, { type GOModelOptions } from '@/utils/geometric-optics/common/model/GOModel';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Mirror from '@/utils/geometric-optics/mirror/model/Mirror';
+import OpticalObjectChoice from '@/utils/geometric-optics/common/model/OpticalObjectChoice';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { type GOSimOptions } from '@/utils/geometric-optics/GOSim';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
 
 type SelfOptions = PickRequired<GOSimOptions, 'isBasicsVersion'>;
 

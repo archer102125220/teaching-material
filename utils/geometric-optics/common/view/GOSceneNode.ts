@@ -7,27 +7,27 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { Node, type NodeOptions } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import VisibleProperties from './VisibleProperties';
-import Bounds2 from '../../../dot/Bounds2';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import OpticalAxisNode from './OpticalAxisNode';
-import OpticVerticalAxisNode from './OpticVerticalAxisNode';
-import { type RaysType } from '../model/RaysType';
-import FocalPointNode from './FocalPointNode';
-import TwoFPointNode from './TwoFPointNode';
-import GOColors from '../GOColors';
-import Tandem from '../../../tandem/Tandem';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import GuidesNode from './GuidesNode';
-import BooleanIO from '../../../tandem/types/BooleanIO';
-import GOScene from '../model/GOScene';
-import optionize from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import ToolJumpPoint from '../model/tools/ToolJumpPoint';
-import Lens from '../../lens/model/Lens';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { Node, type NodeOptions } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import VisibleProperties from '@/utils/geometric-optics/common/view/VisibleProperties';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import OpticalAxisNode from '@/utils/geometric-optics/common/view/OpticalAxisNode';
+import OpticVerticalAxisNode from '@/utils/geometric-optics/common/view/OpticVerticalAxisNode';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import FocalPointNode from '@/utils/geometric-optics/common/view/FocalPointNode';
+import TwoFPointNode from '@/utils/geometric-optics/common/view/TwoFPointNode';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import Tandem from '@/utils/tandem/Tandem';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import GuidesNode from '@/utils/geometric-optics/common/view/GuidesNode';
+import BooleanIO from '@/utils/tandem/types/BooleanIO';
+import GOScene from '@/utils/geometric-optics/common/model/GOScene';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import ToolJumpPoint from '@/utils/geometric-optics/common/model/tools/ToolJumpPoint';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
 
 type SelfOptions = {
 

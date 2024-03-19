@@ -7,10 +7,12 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Range from '../../../dot/js/Range.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import tambo from '../tambo.js';
-import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
+import _ from 'lodash';
+
+import Range from '@/utils/dot/Range';
+import optionize from '@/utils/phet-core/optionize';
+import tambo from '@/utils/tambo/tambo';
+import SoundGenerator, { type SoundGeneratorOptions } from '@/utils/tambo/sound-generators/SoundGenerator';
 
 type SelfOptions = {
 
@@ -38,14 +40,14 @@ class PitchedPopGenerator extends SoundGenerator {
   // next sound source to use to play a sound
   private nextSoundSourceIndex: number;
 
-  public constructor( providedOptions?: PitchedPopGeneratorOptions ) {
+  public constructor(providedOptions?: PitchedPopGeneratorOptions) {
 
-    const options = optionize<PitchedPopGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
-      pitchRange: new Range( 220, 660 ),
+    const options = optionize<PitchedPopGeneratorOptions, SelfOptions, SoundGeneratorOptions>()({
+      pitchRange: new Range(220, 660),
       numPopGenerators: DEFAULT_NUM_POP_GENERATORS
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.pitchRange = options.pitchRange;
 
@@ -56,33 +58,33 @@ class PitchedPopGenerator extends SoundGenerator {
     // The following parameter values for the dynamics compressor were empirically determined through informed
     // experimentation.
     const now = this.audioContext.currentTime;
-    dynamicsCompressorNode.threshold.setValueAtTime( -3, now );
-    dynamicsCompressorNode.knee.setValueAtTime( 0, now ); // hard knee
-    dynamicsCompressorNode.ratio.setValueAtTime( 12, now );
-    dynamicsCompressorNode.attack.setValueAtTime( 0, now );
-    dynamicsCompressorNode.release.setValueAtTime( 0.25, now );
-    dynamicsCompressorNode.connect( this.soundSourceDestination );
+    dynamicsCompressorNode.threshold.setValueAtTime(-3, now);
+    dynamicsCompressorNode.knee.setValueAtTime(0, now); // hard knee
+    dynamicsCompressorNode.ratio.setValueAtTime(12, now);
+    dynamicsCompressorNode.attack.setValueAtTime(0, now);
+    dynamicsCompressorNode.release.setValueAtTime(0.25, now);
+    dynamicsCompressorNode.connect(this.soundSourceDestination);
 
     // Create the sound sources - several are created so that pops can be played in rapid succession if desired.
     this.soundSources = [];
-    _.times( options.numPopGenerators, () => {
+    _.times(options.numPopGenerators, () => {
 
       const oscillator = this.audioContext.createOscillator();
       const now = this.audioContext.currentTime;
       oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime( options.pitchRange.min, now );
-      oscillator.start( 0 );
+      oscillator.frequency.setValueAtTime(options.pitchRange.min, now);
+      oscillator.start(0);
 
       const gainNode = this.audioContext.createGain();
-      gainNode.gain.setValueAtTime( 0, now );
-      oscillator.connect( gainNode );
-      gainNode.connect( dynamicsCompressorNode );
+      gainNode.gain.setValueAtTime(0, now);
+      oscillator.connect(gainNode);
+      gainNode.connect(dynamicsCompressorNode);
 
-      this.soundSources.push( {
-        oscillator: oscillator,
-        gainNode: gainNode
-      } );
-    } );
+      this.soundSources.push({
+        oscillator,
+        gainNode
+      });
+    });
 
     this.nextSoundSourceIndex = 0;
   }
@@ -92,11 +94,11 @@ class PitchedPopGenerator extends SoundGenerator {
    * relativePitch - a value from 0 to 1 indicating the proportionate frequency to play within the pitch range
    [duration] - the duration of the pop sound to be played, in seconds
    */
-  public playPop( relativePitch: number, duration = DEFAULT_POP_DURATION ): void {
+  public playPop(relativePitch: number, duration = DEFAULT_POP_DURATION): void {
 
-    window.assert && window.assert( relativePitch >= 0 && relativePitch <= 1, 'relative pitch value out of range' );
+    window.assert && window.assert(relativePitch >= 0 && relativePitch <= 1, 'relative pitch value out of range');
 
-    if ( !this.fullyEnabled ) {
+    if (!this.fullyEnabled) {
 
       // ignore the request
       return;
@@ -105,23 +107,23 @@ class PitchedPopGenerator extends SoundGenerator {
     // determine the frequency value of the pop
     const minFrequency = this.pitchRange.min;
     const maxFrequency = this.pitchRange.max;
-    const frequency = minFrequency + relativePitch * ( maxFrequency - minFrequency );
+    const frequency = minFrequency + relativePitch * (maxFrequency - minFrequency);
 
     // get a sound source from the pool, then index to the next one (see above for type info on sound sources)
-    const soundSource = this.soundSources[ this.nextSoundSourceIndex ];
-    this.nextSoundSourceIndex = ( this.nextSoundSourceIndex + 1 ) % this.soundSources.length;
+    const soundSource = this.soundSources[this.nextSoundSourceIndex];
+    this.nextSoundSourceIndex = (this.nextSoundSourceIndex + 1) % this.soundSources.length;
 
     // play the pop sound
     const now = this.audioContext.currentTime;
-    soundSource.gainNode.gain.cancelScheduledValues( now );
-    soundSource.oscillator.frequency.setValueAtTime( frequency / 2, now );
-    soundSource.gainNode.gain.setValueAtTime( 0, now );
-    soundSource.oscillator.frequency.linearRampToValueAtTime( frequency * 2, now + duration );
-    soundSource.gainNode.gain.setTargetAtTime( 1, now, ENVELOPE_TIME_CONSTANT );
-    soundSource.gainNode.gain.setTargetAtTime( 0, now + duration, ENVELOPE_TIME_CONSTANT );
+    soundSource.gainNode.gain.cancelScheduledValues(now);
+    soundSource.oscillator.frequency.setValueAtTime(frequency / 2, now);
+    soundSource.gainNode.gain.setValueAtTime(0, now);
+    soundSource.oscillator.frequency.linearRampToValueAtTime(frequency * 2, now + duration);
+    soundSource.gainNode.gain.setTargetAtTime(1, now, ENVELOPE_TIME_CONSTANT);
+    soundSource.gainNode.gain.setTargetAtTime(0, now + duration, ENVELOPE_TIME_CONSTANT);
   }
 }
 
-tambo.register( 'PitchedPopGenerator', PitchedPopGenerator );
+tambo.register('PitchedPopGenerator', PitchedPopGenerator);
 
 export default PitchedPopGenerator;

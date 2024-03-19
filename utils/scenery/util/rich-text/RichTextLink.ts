@@ -6,9 +6,9 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-import Pool, { type TPoolable } from '../../../phet-core/Pool';
-import Tandem from '../../../tandem/Tandem';
-import { allowLinksProperty, FireListener, Node, openPopup, RichTextCleanable, type RichTextHref, scenery, type TInputListener, Voicing } from '../../imports';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
+import Tandem from '@/utils/tandem/Tandem';
+import { allowLinksProperty, FireListener, Node, openPopup, RichTextCleanable, type RichTextHref, scenery, type TInputListener, Voicing } from '@/utils/scenery/imports';
 
 export default class RichTextLink extends Voicing(RichTextCleanable(Node)) implements TPoolable {
 

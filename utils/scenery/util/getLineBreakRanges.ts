@@ -6,9 +6,9 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-import { scenery } from '../imports';
-import optionize from '../../phet-core/optionize';
-import Range from '../../dot/Range';
+import { scenery } from '@/utils/scenery/imports';
+import optionize from '@/utils/phet-core/optionize';
+import Range from '@/utils/dot/Range';
 
 export type GetLineBreaksOptions = {
   // Line breaks can be "required" or "optional". If this is true, ranges will only be given for required line breaks.
@@ -20,22 +20,22 @@ export type GetLineBreaksOptions = {
  * These ranges may exclude things like whitespace in-between words, so if a line is being used, the ranges included
  * should just use the starting-min and ending-max to determine what should be included.
  */
-const getLineBreakRanges = ( str: string, providedOptions?: GetLineBreaksOptions ): Range[] => {
-  const options = optionize<GetLineBreaksOptions>()( {
+const getLineBreakRanges = (str: string, providedOptions?: GetLineBreaksOptions): Range[] => {
+  const options = optionize<GetLineBreaksOptions>()({
     requiredOnly: false
-  }, providedOptions );
+  }, providedOptions);
 
   const ranges: Range[] = [];
 
-  const lineBreaker = new LineBreaker( str );
+  const lineBreaker = new window.LineBreaker(str);
 
   // Make it iterable (this was refactored out, but the typing was awkward)
-  lineBreaker[ Symbol.iterator ] = () => {
+  lineBreaker[Symbol.iterator] = () => {
     return {
       next() {
         const value = lineBreaker.nextBreak();
-        if ( value !== null ) {
-          return { value: value, done: false };
+        if (value !== null) {
+          return { value, done: false };
         }
         else {
           return { done: true };
@@ -45,29 +45,29 @@ const getLineBreakRanges = ( str: string, providedOptions?: GetLineBreaksOptions
   };
 
   let lastIndex = 0;
-  for ( const brk of lineBreaker ) {
+  for (const brk of lineBreaker) {
     const index = brk.position;
 
-    if ( options.requiredOnly && !brk.required ) {
+    if (options.requiredOnly && !brk.required) {
       continue;
     }
 
     // Don't include empty ranges, if they occur.
-    if ( lastIndex !== index ) {
-      ranges.push( new Range( lastIndex, index ) );
+    if (lastIndex !== index) {
+      ranges.push(new Range(lastIndex, index));
     }
 
     lastIndex = brk.position;
   }
 
   // Ending range, if it's not empty
-  if ( lastIndex < str.length ) {
-    ranges.push( new Range( lastIndex, str.length ) );
+  if (lastIndex < str.length) {
+    ranges.push(new Range(lastIndex, str.length));
   }
 
   return ranges;
 };
 
-scenery.register( 'getLineBreakRanges', getLineBreakRanges );
+scenery.register('getLineBreakRanges', getLineBreakRanges);
 
 export default getLineBreakRanges;

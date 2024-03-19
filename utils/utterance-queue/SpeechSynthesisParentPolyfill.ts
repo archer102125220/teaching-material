@@ -9,7 +9,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace.js';
 
 const SpeechSynthesisParentPolyfill = {
 

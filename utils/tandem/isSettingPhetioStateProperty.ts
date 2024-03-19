@@ -6,8 +6,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import tandemNamespace from './tandemNamespace';
-import TinyProperty from '../axon/TinyProperty';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import TinyProperty from '@/utils/axon/TinyProperty';
 
 const isSettingPhetioStateProperty = new TinyProperty(false);
 

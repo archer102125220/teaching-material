@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import { FlowBox, type FlowBoxOptions, Node } from '../scenery/imports';
-import RectangularPushButton, { type RectangularPushButtonOptions } from '../sun/buttons/RectangularPushButton';
-import Tandem from '../tandem/Tandem';
-import optionize, { combineOptions } from '../phet-core/optionize';
-import sceneryPhet from './sceneryPhet';
-import type TRangedProperty from '../axon/TRangedProperty';
-import SceneryPhetStrings from './SceneryPhetStrings';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { FlowBox, type FlowBoxOptions, Node } from '@/utils/scenery/imports';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
+import Tandem from '@/utils/tandem/Tandem';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import type TRangedProperty from '@/utils/axon/TRangedProperty';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
 
 type SelfOptions = {
 

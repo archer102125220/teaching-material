@@ -13,24 +13,35 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Ray2 from '../../dot/Ray2';
-import Transform3 from '../../dot/Transform3';
-import Utils from '../../dot/Utils';
-import Vector2 from '../../dot/Vector2';
-import Enumeration from '../../phet-core/Enumeration';
-import EnumerationValue from '../../phet-core/EnumerationValue';
-import { Arc, BoundsIntersection, kite, Line, Overlap, RayIntersection, Segment, SegmentIntersection, svgNumber } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Ray2 from '@/utils/dot/Ray2';
+import Transform3 from '@/utils/dot/Transform3';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import { Arc, BoundsIntersection, kite, Line, Overlap, RayIntersection, Segment, SegmentIntersection, svgNumber } from '@/utils/kite/imports';
 
 // constants
-const toDegrees = Utils.toDegrees;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+const toDegrees = typeof window.toDegrees === 'object' ? window.toDegrees : Utils.toDegrees;
 
-const unitCircleConicMatrix = Matrix3.rowMajor(
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+const unitCircleConicMatrix = typeof window.unitCircleConicMatrix === 'object' ? window.unitCircleConicMatrix : Matrix3.rowMajor(
   1, 0, 0,
   0, 1, 0,
   0, 0, -1
 );
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+if (typeof window.unitCircleConicMatrix !== 'object') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  window.unitCircleConicMatrix = unitCircleConicMatrix;
+}
 
 export type SerializedEllipticalArc = {
   type: 'EllipticalArc';
@@ -693,7 +704,7 @@ export default class EllipticalArc extends Segment {
    */
   public getSVGPathFragment(): string {
     let oldPathFragment;
-    if (assert) {
+    if (window.assert) {
       oldPathFragment = this._svgPathFragment;
       this._svgPathFragment = null;
     }
@@ -725,9 +736,9 @@ export default class EllipticalArc extends Segment {
         this._svgPathFragment = `${firstArc} ${secondArc}`;
       }
     }
-    if (assert) {
+    if (window.assert) {
       if (oldPathFragment) {
-        assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
+        window.assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
       }
     }
     return this._svgPathFragment;

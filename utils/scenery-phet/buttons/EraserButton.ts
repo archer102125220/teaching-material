@@ -6,15 +6,15 @@
  * @author John Blanco
  */
 
-import InstanceRegistry from '../../phet-core/documentation/InstanceRegistry';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import optionize from '../../phet-core/optionize';
-import { Image } from '../../scenery/imports';
-import RectangularPushButton, { type RectangularPushButtonOptions } from '../../sun/buttons/RectangularPushButton';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize from '@/utils/phet-core/optionize';
+import { Image } from '@/utils/scenery/imports';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
 import eraser_png from '@/assets/images/scenery-phet/eraser_png';
-import PhetColorScheme from '../PhetColorScheme';
-import sceneryPhet from '../sceneryPhet';
-import SoundClipPlayer from '../../tambo/sound-generators/SoundClipPlayer';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SoundClipPlayer from '@/utils/tambo/sound-generators/SoundClipPlayer';
 import erase_mp3 from '@/assets/sounds/scenery-phet/erase_mp3';
 
 type SelfOptions = {

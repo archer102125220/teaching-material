@@ -9,12 +9,12 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import EnumerationProperty from '../axon/EnumerationProperty';
-import joist from './joist';
-import packageJSON from './packageJSON'; // parse name/version out of the package.json
-import UpdateState from './UpdateState';
+import EnumerationProperty from '@/utils/axon/EnumerationProperty';
+import joist from '@/utils/joist/joist';
+import packageJSON from '@/utils/joist/packageJSON'; // parse name/version out of the package.json
+import UpdateState from '@/utils/joist/UpdateState';
 
-const SimVersion = phet.preloads.chipper.SimVersion; // use preload from chipper (auto-copied from perennial)
+const SimVersion = window.phet.preloads.chipper.SimVersion; // use preload from chipper (auto-copied from perennial)
 
 // constants
 const simName = packageJSON.name;

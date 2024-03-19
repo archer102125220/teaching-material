@@ -6,8 +6,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import qunitStart from '../../chipper/js/sim-tests/qunitStart.js';
-import './ShapeTests.js';
+import qunitStart from '@/utils/chipper/sim-tests/qunitStart';
+import '@/utils/kite/ShapeTests';
 
 // Since our tests are loaded asynchronously, we must direct QUnit to begin the tests
 qunitStart();

@@ -5,20 +5,20 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import merge from '../phet-core/merge';
-import StringUtils from '../phetcommon/util/StringUtils';
-import PhetFont from '../scenery-phet/PhetFont';
-import SpinningIndicatorNode from '../scenery-phet/SpinningIndicatorNode';
-import { allowLinksProperty, HBox, Node, openPopup, Path, Rectangle, RichText, type RichTextLinks, VBox, VoicingText, VStrut } from '../scenery/imports';
-import checkSolidShape from '../sherpa/fontawesome-5/checkSolidShape';
-import exclamationTriangleSolidShape from '../sherpa/fontawesome-5/exclamationTriangleSolidShape';
-import TextPushButton from '../sun/buttons/TextPushButton';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
-import updateCheck from './updateCheck';
-import UpdateState from './UpdateState';
-import UpdateDialog from './UpdateDialog';
-import DerivedProperty from '../axon/DerivedProperty';
+import merge from '@/utils/phet-core/merge';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import SpinningIndicatorNode from '@/utils/scenery-phet/SpinningIndicatorNode';
+import { allowLinksProperty, HBox, Node, openPopup, Path, Rectangle, RichText, type RichTextLinks, VBox, VoicingText, VStrut } from '@/utils/scenery/imports';
+import checkSolidShape from '@/utils/sherpa/fontawesome-5/checkSolidShape';
+import exclamationTriangleSolidShape from '@/utils/sherpa/fontawesome-5/exclamationTriangleSolidShape';
+import TextPushButton from '@/utils/sun/buttons/TextPushButton';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import updateCheck from '@/utils/joist/updateCheck';
+import UpdateState from '@/utils/joist/UpdateState';
+import UpdateDialog from '@/utils/joist/UpdateDialog';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
 
 // constants
 const UPDATE_TEXT_FONT = new PhetFont(14);

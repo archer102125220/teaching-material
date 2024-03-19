@@ -6,10 +6,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Node, scenery } from '../imports';
-import memoize from '../../phet-core/memoize';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
-import type Constructor from '../../phet-core/types/Constructor';
+import { Node, scenery } from '@/utils/scenery/imports';
+import memoize from '@/utils/phet-core/memoize';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type Constructor from '@/utils/phet-core/types/Constructor';
 
 const Leaf = memoize(<SuperType extends Constructor<Node>>(type: SuperType) => {
 

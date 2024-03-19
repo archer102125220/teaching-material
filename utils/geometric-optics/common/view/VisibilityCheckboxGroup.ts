@@ -7,30 +7,30 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { HBox, Node, Text } from '../../../scenery/imports';
-import VerticalCheckboxGroup, { type VerticalCheckboxGroupItem, type VerticalCheckboxGroupOptions } from '../../../sun/VerticalCheckboxGroup';
-import geometricOptics from '../../geometricOptics';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings';
-import GuideNode from './GuideNode';
-import GOConstants from '../GOConstants';
-import VisibleProperties from './VisibleProperties';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import optionize from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import SecondPointNode from './SecondPointNode';
-import FocalPointNode from './FocalPointNode';
-import TwoFPointNode from './TwoFPointNode';
-import GOPreferences from '../model/GOPreferences';
-import GOQueryParameters from '../GOQueryParameters';
-import { type GOSimOptions } from '../../GOSim';
-import Optic from '../model/Optic';
-import Lens from '../../lens/model/Lens';
-import Property from '../../../axon/Property';
-import EnumerationProperty from '../../../axon/EnumerationProperty';
-import OpticalObjectChoice from '../model/OpticalObjectChoice';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import BooleanIO from '../../../tandem/types/BooleanIO';
+import { HBox, Node, Text } from '@/utils/scenery/imports';
+import VerticalCheckboxGroup, { type VerticalCheckboxGroupItem, type VerticalCheckboxGroupOptions } from '@/utils/sun/VerticalCheckboxGroup';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import GuideNode from '@/utils/geometric-optics/common/view/GuideNode';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import VisibleProperties from '@/utils/geometric-optics/common/view/VisibleProperties';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import SecondPointNode from '@/utils/geometric-optics/common/view/SecondPointNode';
+import FocalPointNode from '@/utils/geometric-optics/common/view/FocalPointNode';
+import TwoFPointNode from '@/utils/geometric-optics/common/view/TwoFPointNode';
+import GOPreferences from '@/utils/geometric-optics/common/model/GOPreferences';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
+import { type GOSimOptions } from '@/utils/geometric-optics/GOSim';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
+import Property from '@/utils/axon/Property';
+import EnumerationProperty from '@/utils/axon/EnumerationProperty';
+import OpticalObjectChoice from '@/utils/geometric-optics/common/model/OpticalObjectChoice';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import BooleanIO from '@/utils/tandem/types/BooleanIO';
 
 type SelfOptions = PickRequired<GOSimOptions, 'isBasicsVersion'>;
 

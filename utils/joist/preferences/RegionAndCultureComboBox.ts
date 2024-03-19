@@ -6,15 +6,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import ComboBox, { type ComboBoxOptions } from '../../sun/ComboBox';
-import joist from '../joist';
-import { Text } from '../../scenery/imports';
-import PreferencesDialog from './PreferencesDialog';
-import Property from '../../axon/Property';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Tandem from '../../tandem/Tandem';
-import RegionAndCulturePortrayal from './RegionAndCulturePortrayal';
+import ComboBox, { type ComboBoxOptions } from '@/utils/sun/ComboBox';
+import joist from '@/utils/joist/joist';
+import { Text } from '@/utils/scenery/imports';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import Property from '@/utils/axon/Property';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Tandem from '@/utils/tandem/Tandem';
+import RegionAndCulturePortrayal from '@/utils/joist/preferences/RegionAndCulturePortrayal';
 
 type SelfOptions = EmptySelfOptions;
 type RegionAndCultureComboBoxOptions = SelfOptions & StrictOmit<ComboBoxOptions, 'tandem'>;

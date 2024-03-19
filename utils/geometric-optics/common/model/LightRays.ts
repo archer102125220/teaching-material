@@ -8,20 +8,20 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Disposable from '../../../axon/Disposable';
-import Emitter from '../../../axon/Emitter';
-import Vector2 from '../../../dot/Vector2';
-import geometricOptics from '../../geometricOptics';
-import LightRay, { type LightRaySegment } from './LightRay';
-import Optic from './Optic';
-import { type RaysType } from './RaysType';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import ProjectionScreen from './ProjectionScreen';
-import Utils from '../../../dot/Utils';
-import OpticalImage from './OpticalImage';
-import Vector2Property from '../../../dot/Vector2Property';
-import Multilink from '../../../axon/Multilink';
-import type TEmitter from '../../../axon/TEmitter';
+import Disposable from '@/utils/axon/Disposable';
+import Emitter from '@/utils/axon/Emitter';
+import Vector2 from '@/utils/dot/Vector2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import LightRay, { type LightRaySegment } from '@/utils/geometric-optics/common/model/LightRay';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import ProjectionScreen from '@/utils/geometric-optics/common/model/ProjectionScreen';
+import Utils from '@/utils/dot/Utils';
+import OpticalImage from '@/utils/geometric-optics/common/model/OpticalImage';
+import Vector2Property from '@/utils/dot/Vector2Property';
+import Multilink from '@/utils/axon/Multilink';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 // constants related to 'Many' rays representation, see https://github.com/phetsims/geometric-optics/issues/289
 const MANY_MIN_RAYS = 20;

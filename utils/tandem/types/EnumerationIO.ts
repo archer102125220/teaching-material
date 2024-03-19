@@ -5,13 +5,13 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import EnumerationValue from '../../phet-core/EnumerationValue';
-import type TEnumeration from '../../phet-core/TEnumeration';
-import type { EnumerationContainer } from '../../phet-core/TEnumeration';
-import IOType from './IOType';
-import StateSchema from './StateSchema';
-import tandemNamespace from '../tandemNamespace';
-import IOTypeCache from '../IOTypeCache';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import type TEnumeration from '@/utils/phet-core/TEnumeration';
+import type { EnumerationContainer } from '@/utils/phet-core/TEnumeration';
+import IOType from '@/utils/tandem/types/IOType';
+import StateSchema from '@/utils/tandem/types/StateSchema';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 // Cache each parameterized IOType so that it is only created once.
 const cache = new IOTypeCache<TEnumeration<EnumerationValue>>();

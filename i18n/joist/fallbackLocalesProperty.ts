@@ -15,7 +15,7 @@ import Tandem from '@/utils/tandem/Tandem';
 import ArrayIO from '@/utils/tandem/types/ArrayIO';
 import StringIO from '@/utils/tandem/types/StringIO';
 import joist from '@/utils/joist/joist';
-import { type Locale } from './localeProperty';
+import { type Locale } from '@/i18n/joist/localeProperty';
 
 const fallbackLocalesProperty = new Property<Locale[]>([], {
   tandem: Tandem.GENERAL_MODEL.createTandem('fallbackLocalesProperty'),

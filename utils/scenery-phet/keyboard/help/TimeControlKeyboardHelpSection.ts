@@ -6,12 +6,12 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import sceneryPhet from '../../sceneryPhet.js';
-import KeyboardHelpSection, { KeyboardHelpSectionOptions } from './KeyboardHelpSection.js';
-import KeyboardHelpSectionRow from './KeyboardHelpSectionRow.js';
-import SceneryPhetStrings from '../../SceneryPhetStrings.js';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize from '@/utils/phet-core/optionize';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import KeyboardHelpSection, { type KeyboardHelpSectionOptions } from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSection';
+import KeyboardHelpSectionRow from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSectionRow';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
 
 // constants
 const timingControlsStringProperty = SceneryPhetStrings.keyboardHelpDialog.timingControls.timingControlsStringProperty;
@@ -34,20 +34,20 @@ type ParentOptions = KeyboardHelpSectionOptions;
 export type TimeControlKeyboardHelpSectionOptions = SelfOptions & ParentOptions;
 
 class TimeControlKeyboardHelpSection extends KeyboardHelpSection {
-  public constructor( providedOptions?: TimeControlKeyboardHelpSectionOptions ) {
-    const options = optionize<TimeControlKeyboardHelpSectionOptions, SelfOptions, ParentOptions>()( {
+  public constructor(providedOptions?: TimeControlKeyboardHelpSectionOptions) {
+    const options = optionize<TimeControlKeyboardHelpSectionOptions, SelfOptions, ParentOptions>()({
       headingString: timingControlsStringProperty,
       pauseOrPlayActionString: pauseOrPlayActionStringProperty,
       pauseOrPlayActionDescriptionString: pauseOrPlayActionDescriptionStringProperty
-    }, providedOptions );
+    }, providedOptions);
 
-    const playPauseRow = KeyboardHelpSectionRow.createPlayPauseKeyRow( options.pauseOrPlayActionString, {
+    const playPauseRow = KeyboardHelpSectionRow.createPlayPauseKeyRow(options.pauseOrPlayActionString, {
       labelInnerContent: options.pauseOrPlayActionDescriptionString
-    } );
+    });
 
-    super( options.headingString, [ playPauseRow ], options );
+    super(options.headingString, [playPauseRow], options);
   }
 }
 
-sceneryPhet.register( 'TimeControlKeyboardHelpSection', TimeControlKeyboardHelpSection );
+sceneryPhet.register('TimeControlKeyboardHelpSection', TimeControlKeyboardHelpSection);
 export default TimeControlKeyboardHelpSection;

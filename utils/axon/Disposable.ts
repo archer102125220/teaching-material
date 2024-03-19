@@ -13,9 +13,9 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import axon from './axon';
-import type TEmitter from './TEmitter';
-import TinyEmitter from './TinyEmitter';
+import axon from '@/utils/axon/axon';
+import type TEmitter from '@/utils/axon/TEmitter';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
 
 // Used in subclasses to support mutate.
 export type DisposableOptions = {
@@ -40,7 +40,7 @@ class Disposable {
 
     providedOptions && this.initializeDisposable(providedOptions);
 
-    if (assert) {
+    if (window.assert) {
 
       // Wrap the prototype dispose method with a check. NOTE: We will not catch devious cases where the dispose() is
       // overridden after the Node constructor (which may happen).

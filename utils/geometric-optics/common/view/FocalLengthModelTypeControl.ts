@@ -7,19 +7,19 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import GeometricOpticsStrings from '../../GeometricOpticsStrings';
-import geometricOptics from '../../geometricOptics';
-import { type FocalLengthModelType } from '../model/FocalLengthModelType';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import { Text, VBox, type VBoxOptions } from '../../../scenery/imports';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import Property from '../../../axon/Property';
-import PreferencesDialog from '../../../joist/preferences/PreferencesDialog';
-import { type AquaRadioButtonGroupItem } from '../../../sun/AquaRadioButtonGroup';
-import VerticalAquaRadioButtonGroup, { type VerticalAquaRadioButtonGroupOptions } from '../../../sun/VerticalAquaRadioButtonGroup';
-import Tandem from '../../../tandem/Tandem';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import { type FocalLengthModelType } from '@/utils/geometric-optics/common/model/FocalLengthModelType';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { Text, VBox, type VBoxOptions } from '@/utils/scenery/imports';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import Property from '@/utils/axon/Property';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import { type AquaRadioButtonGroupItem } from '@/utils/sun/AquaRadioButtonGroup';
+import VerticalAquaRadioButtonGroup, { type VerticalAquaRadioButtonGroupOptions } from '@/utils/sun/VerticalAquaRadioButtonGroup';
+import Tandem from '@/utils/tandem/Tandem';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 type SelfOptions = EmptySelfOptions;
 

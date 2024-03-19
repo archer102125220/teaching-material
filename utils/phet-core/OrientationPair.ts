@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import EnumerationMap from './EnumerationMap';
-import Orientation from './Orientation';
-import phetCore from './phetCore';
+import EnumerationMap from '@/utils/phet-core/EnumerationMap';
+import Orientation from '@/utils/phet-core/Orientation';
+import phetCore from '@/utils/phet-core/phetCore';
 
 class OrientationPair<T> extends EnumerationMap<Orientation, T> {
 

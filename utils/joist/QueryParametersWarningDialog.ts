@@ -7,12 +7,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import OopsDialog, { type OopsDialogOptions } from '../scenery-phet/OopsDialog';
-import PhetFont from '../scenery-phet/PhetFont';
-import { Text } from '../scenery/imports';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import OopsDialog, { type OopsDialogOptions } from '@/utils/scenery-phet/OopsDialog';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { Text } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
 
 type SelfOptions = EmptySelfOptions;
 export type QueryParametersWarningDialogOptions = SelfOptions & OopsDialogOptions;

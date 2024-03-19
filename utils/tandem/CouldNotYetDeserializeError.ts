@@ -12,7 +12,7 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import tandemNamespace from './tandemNamespace';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
 
 class CouldNotYetDeserializeError extends Error {
   public constructor() {

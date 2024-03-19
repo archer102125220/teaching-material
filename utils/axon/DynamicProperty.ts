@@ -99,13 +99,13 @@
 
 import _ from 'lodash';
 
-import type KeysMatching from '../phet-core/types/KeysMatching';
-import axon from './axon';
-import type TProperty from './TProperty';
-import Property, { type PropertyOptions } from './Property';
-import ReadOnlyProperty from './ReadOnlyProperty';
-import optionize from '../phet-core/optionize';
-import type TReadOnlyProperty from './TReadOnlyProperty';
+import type KeysMatching from '@/utils/phet-core/types/KeysMatching';
+import axon from '@/utils/axon/axon';
+import type TProperty from '@/utils/axon/TProperty';
+import Property, { type PropertyOptions } from '@/utils/axon/Property';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import optionize from '@/utils/phet-core/optionize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 export type TNullableProperty<T> = TReadOnlyProperty<T | null> | TReadOnlyProperty<T>;
 

@@ -21,16 +21,13 @@
 
 import _ from 'lodash';
 
-// @ts-expect-error
-import Validation, { Validator } from '../../axon/Validation';
-import assertMutuallyExclusiveOptions from '../../phet-core/assertMutuallyExclusiveOptions.js';
-import optionize from '../../phet-core/optionize';
-import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType';
-// @ts-expect-error
-import IntentionalAny from '../../phet-core/types/IntentionalAny';
-// @ts-expect-error
-import { IOTypeName } from '../TandemConstants';
+import Validation, { type Validator } from '@/utils/axon/Validation';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions.js';
+import optionize from '@/utils/phet-core/optionize';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import { type IOTypeName } from '@/utils/tandem/TandemConstants';
 
 /**
  * This is the primary functionality of the StateSchema class. An IOType can be provided a composite schema like so:
@@ -143,7 +140,7 @@ export default class StateSchema<T, SelfStateType> {
 
         const coreObjectAccessorName = this.getCoreObjectAccessorName(stateKey, coreObject);
 
-        if (assert) {
+        if (window.assert) {
           const descriptor = Object.getOwnPropertyDescriptor(coreObject, coreObjectAccessorName)!;
 
           let isGetter = false;

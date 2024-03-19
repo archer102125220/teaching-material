@@ -9,17 +9,17 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import axon from './axon';
-import TinyProperty from './TinyProperty';
-import { PropertyLinkListener } from './TReadOnlyProperty';
+import axon from '@/utils/axon/axon';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import { type PropertyLinkListener } from '@/utils/axon/TReadOnlyProperty';
 
 export default class TinyStaticProperty<T> extends TinyProperty<T> {
 
   // When set, it will be called whenever there is an attempt to read the value of this TinyStaticProperty.
   private readonly onAccessAttempt: () => void;
 
-  public constructor( value: T, onAccessAttempt: () => void ) {
-    super( value );
+  public constructor(value: T, onAccessAttempt: () => void) {
+    super(value);
 
     this.onAccessAttempt = onAccessAttempt;
   }
@@ -36,8 +36,8 @@ export default class TinyStaticProperty<T> extends TinyProperty<T> {
   /**
    * Don't set the value of a TinyStaticProperty!
    */
-  public override set( value: T ): void {
-    throw new Error( 'Cannot set a TinyStaticProperty value' );
+  public override set(value: T): void {
+    throw new Error('Cannot set a TinyStaticProperty value');
   }
 
   /**
@@ -50,31 +50,31 @@ export default class TinyStaticProperty<T> extends TinyProperty<T> {
   /**
    * Directly notifies listeners of changes.
    */
-  public override notifyListeners( oldValue: T | null ): void {
+  public override notifyListeners(oldValue: T | null): void {
 
     // We use this.get() to ensure value is up to date with onAccessAttempt().
-    this.emit( this.get(), oldValue, this );
+    this.emit(this.get(), oldValue, this);
   }
 
   /**
    * Adds listener and calls it immediately. If listener is already registered, this is a no-op. The initial
    * notification provides the current value for newValue and null for oldValue.
    */
-  public override link( listener: PropertyLinkListener<T> ): void {
-    this.addListener( listener );
+  public override link(listener: PropertyLinkListener<T>): void {
+    this.addListener(listener);
 
     // listener called with this.get() to ensure value is up to date with onAccessAttempt().
-    listener( this.get(), null, this ); // null should be used when an object is expected but unavailable
+    listener(this.get(), null, this); // null should be used when an object is expected but unavailable
   }
 
   /**
    * Returns true if and only if the specified value equals the value of this property
    */
-  protected override equalsValue( value: T ): boolean {
+  protected override equalsValue(value: T): boolean {
 
     // checked with this.get() to ensure value is up to date with onAccessAttempt()
-    return this.areValuesEqual( value, this.get() );
+    return this.areValuesEqual(value, this.get());
   }
 }
 
-axon.register( 'TinyStaticProperty', TinyStaticProperty );
+axon.register('TinyStaticProperty', TinyStaticProperty);

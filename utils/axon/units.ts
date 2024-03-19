@@ -12,7 +12,7 @@
 
 import _ from 'lodash';
 
-import axon from './axon';
+import axon from '@/utils/axon/axon';
 
 const units = {
   values: [

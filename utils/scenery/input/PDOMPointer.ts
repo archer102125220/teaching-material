@@ -8,8 +8,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Vector2 from '../../dot/Vector2';
-import { Display, Node, PDOMInstance, Pointer, scenery, Trail } from '../imports';
+import Vector2 from '@/utils/dot/Vector2';
+import { Display, Node, PDOMInstance, Pointer, scenery, Trail } from '@/utils/scenery/imports';
 
 export default class PDOMPointer extends Pointer {
 

@@ -12,7 +12,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import NotUndefined from './NotUndefined';
+import type NotUndefined from '@/utils/phet-core/types/NotUndefined';
 
 type RequiredOption<Options extends object, Name extends keyof Options> = NotUndefined<Options[Name]>;
 export default RequiredOption;

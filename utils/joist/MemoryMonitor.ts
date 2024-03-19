@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import RunningAverage from '../dot/RunningAverage';
-import optionize from '../phet-core/optionize';
-import joist from './joist';
+import RunningAverage from '@/utils/dot/RunningAverage';
+import optionize from '@/utils/phet-core/optionize';
+import joist from '@/utils/joist/joist';
 
 // constants
 const MB = 1024 * 1024;

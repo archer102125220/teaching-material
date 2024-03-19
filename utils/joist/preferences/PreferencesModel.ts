@@ -8,27 +8,27 @@
 
 import _ from 'lodash';
 
-import { colorProfileProperty, Node, voicingManager, voicingUtteranceQueue } from '../../scenery/imports';
-import responseCollector from '../../utterance-queue/responseCollector';
-import BooleanProperty from '../../axon/BooleanProperty';
-import joist from '../joist';
-import PreferencesStorage from './PreferencesStorage';
-import soundManager from '../../tambo/soundManager';
-import audioManager from '../audioManager';
-import Property from '../../axon/Property';
-import NumberProperty from '../../axon/NumberProperty';
-import PhetioObject, { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import SpeechSynthesisAnnouncer from '../../utterance-queue//SpeechSynthesisAnnouncer';
-import Tandem from '../../tandem/Tandem';
+import { colorProfileProperty, Node, voicingManager, voicingUtteranceQueue } from '@/utils/scenery/imports';
+import responseCollector from '@/utils/utterance-queue/responseCollector';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import joist from '@/utils/joist/joist';
+import PreferencesStorage from '@/utils/joist/preferences/PreferencesStorage';
+import soundManager from '@/utils/tambo/soundManager';
+import audioManager from '@/utils/joist/audioManager';
+import Property from '@/utils/axon/Property';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import SpeechSynthesisAnnouncer from '@/utils/utterance-queue//SpeechSynthesisAnnouncer';
+import Tandem from '@/utils/tandem/Tandem';
 import localeProperty, { type Locale } from '@/i18n/joist/localeProperty';
-import merge from '../../phet-core/merge';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import IOType from '../../tandem/types/IOType';
-import BooleanIO from '../../tandem/types/BooleanIO';
-import RegionAndCulturePortrayal from './RegionAndCulturePortrayal';
-import Multilink from '../../axon/Multilink';
-import packageJSON from '../packageJSON';
+import merge from '@/utils/phet-core/merge';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import IOType from '@/utils/tandem/types/IOType';
+import BooleanIO from '@/utils/tandem/types/BooleanIO';
+import RegionAndCulturePortrayal from '@/utils/joist/preferences/RegionAndCulturePortrayal';
+import Multilink from '@/utils/axon/Multilink';
+import packageJSON from '@/utils/joist/packageJSON';
 
 const simFeatures = packageJSON?.phet?.simFeatures || {};
 
@@ -208,7 +208,6 @@ export default class PreferencesModel extends PhetioObject {
     const options = {
 
       // Put the spread first so that nested options' defaults will correctly override
-      // eslint-disable-next-line no-object-spread-on-non-literals
       ...(optionize<PreferencesModelOptions, EmptySelfOptions, PhetioObjectOptions>()({
 
         // phet-io
@@ -320,7 +319,7 @@ export default class PreferencesModel extends PhetioObject {
     const portrayals = options.localizationOptions.portrayals;
     if (portrayals.length > 0) {
 
-      if (assert) {
+      if (window.assert) {
         const providedPortrayalIDs = portrayals.map(portrayal => portrayal.regionAndCultureID);
         const supportedRegionsAndCultures = simFeatures.supportedRegionsAndCultures;
         window.assert && window.assert(_.every(providedPortrayalIDs, provided => supportedRegionsAndCultures.includes(provided)),

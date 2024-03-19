@@ -8,7 +8,7 @@
 
 import _ from 'lodash';
 
-import phetCore from './phetCore';
+import phetCore from '@/utils/phet-core/phetCore';
 
 /**
  * Given two arrays, find the items that are only in one of them (mutates the aOnly/bOnly/inBoth parameters)

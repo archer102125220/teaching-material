@@ -15,11 +15,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import deprecationWarning from '../../phet-core/deprecationWarning';
-import merge from '../../phet-core/merge';
-import EventType from '../../tandem/EventType';
-import IOType from '../../tandem/types/IOType';
-import { DownUpListener, scenery } from '../imports';
+import deprecationWarning from '@/utils/phet-core/deprecationWarning';
+import merge from '@/utils/phet-core/merge';
+import EventType from '@/utils/tandem/EventType';
+import IOType from '@/utils/tandem/types/IOType';
+import { DownUpListener, scenery } from '@/utils/scenery/imports';
 
 /**
  * @deprecated - please use FireListener for new code (set up for the `fire` callback to be easy, and has Properties

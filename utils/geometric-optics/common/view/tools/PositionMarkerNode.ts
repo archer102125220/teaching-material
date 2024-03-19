@@ -7,21 +7,21 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../../../../axon/DerivedProperty';
-import Bounds2 from '../../../../dot/Bounds2';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import { DragListener } from '../../../../scenery/imports';
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import optionize from '../../../../phet-core/optionize';
-import PositionMarker from '../../model/tools/PositionMarker';
-import PositionMarkerIcon from './PositionMarkerIcon';
-import GOToolNode, { type GOToolNodeOptions } from './GOToolNode';
-import Vector2 from '../../../../dot/Vector2';
-import MapMarkerNode from '../MapMarkerNode';
-import GOToolKeyboardDragListener from './GOToolKeyboardDragListener';
-import GOToolDragListener from './GOToolDragListener';
-import geometricOptics from '../../../geometricOptics';
-import isSettingPhetioStateProperty from '../../../../tandem/isSettingPhetioStateProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { DragListener } from '@/utils/scenery/imports';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize from '@/utils/phet-core/optionize';
+import PositionMarker from '@/utils/geometric-optics/common/model/tools/PositionMarker';
+import PositionMarkerIcon from '@/utils/geometric-optics/common/view/tools/PositionMarkerIcon';
+import GOToolNode, { type GOToolNodeOptions } from '@/utils/geometric-optics/common/view/tools/GOToolNode';
+import Vector2 from '@/utils/dot/Vector2';
+import MapMarkerNode from '@/utils/geometric-optics/common/view/MapMarkerNode';
+import GOToolKeyboardDragListener from '@/utils/geometric-optics/common/view/tools/GOToolKeyboardDragListener';
+import GOToolDragListener from '@/utils/geometric-optics/common/view/tools/GOToolDragListener';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
 
 type SelfOptions = {
 

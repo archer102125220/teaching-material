@@ -7,14 +7,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import PhetFont from '../../scenery-phet/PhetFont';
-import geometricOptics from '../geometricOptics';
-import NumberControl, { type NumberControlOptions } from '../../scenery-phet/NumberControl';
-import Dimension2 from '../../dot/Dimension2';
-import Range from '../../dot/Range';
-import { type KeyboardDragListenerOptions } from '../../scenery/imports';
-import { type ArrowNodeOptions } from '../../scenery-phet/ArrowNode';
-import { type CreditsData } from '../../joist/CreditsNode';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import NumberControl, { type NumberControlOptions } from '@/utils/scenery-phet/NumberControl';
+import Dimension2 from '@/utils/dot/Dimension2';
+import Range from '@/utils/dot/Range';
+import { type KeyboardDragListenerOptions } from '@/utils/scenery/imports';
+import { type ArrowNodeOptions } from '@/utils/scenery-phet/ArrowNode';
+import { type CreditsData } from '@/utils/joist/CreditsNode';
 
 const CONTROL_FONT = new PhetFont(14);
 

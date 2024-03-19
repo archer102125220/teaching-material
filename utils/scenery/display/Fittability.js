@@ -10,8 +10,8 @@
 
 import _ from 'lodash';
 
-import TinyEmitter from '../../axon/TinyEmitter';
-import { scenery } from '../imports';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import { scenery } from '@/utils/scenery/imports';
 
 class Fittability {
   /**

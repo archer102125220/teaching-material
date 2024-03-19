@@ -14,10 +14,10 @@
  */
 
 import radioButtonV2_mp3 from '@/assets/sounds/tambo/radioButtonV2_mp3';
-import SoundClip from './sound-generators/SoundClip';
-import soundManager from './soundManager';
-import tambo from './tambo';
-import type TSoundPlayer from './TSoundPlayer';
+import SoundClip from '@/utils/tambo/sound-generators/SoundClip';
+import soundManager from '@/utils/tambo/soundManager';
+import tambo from '@/utils/tambo/tambo';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
 
 class MultiSelectionSoundPlayerFactory {
 

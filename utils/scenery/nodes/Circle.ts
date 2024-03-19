@@ -6,13 +6,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import extendDefined from '../../phet-core/extendDefined';
-import { CanvasContextWrapper, CanvasSelfDrawable, CircleCanvasDrawable, CircleDOMDrawable, CircleSVGDrawable, DOMSelfDrawable, Features, type TCircleDrawable, Instance, Path, type PathOptions, Renderer, scenery, SVGSelfDrawable, type VoicingOptions } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import extendDefined from '@/utils/phet-core/extendDefined';
+import { CanvasContextWrapper, CanvasSelfDrawable, CircleCanvasDrawable, CircleDOMDrawable, CircleSVGDrawable, DOMSelfDrawable, Features, type TCircleDrawable, Instance, Path, type PathOptions, Renderer, scenery, SVGSelfDrawable, type VoicingOptions } from '@/utils/scenery/imports';
 
 const CIRCLE_OPTION_KEYS = [
   'radius' // {number} - see setRadius() for more documentation
@@ -218,6 +218,7 @@ export default class Circle extends Path {
    * Computes the bounds of the Circle, including any applied stroke. Overridden for efficiency.
    */
   public override computeShapeBounds(): Bounds2 {
+    console.log('Circle.computeShapeBounds');
     let bounds = new Bounds2(-this._radius, -this._radius, this._radius, this._radius);
     if (this._stroke) {
       // since we are axis-aligned, any stroke will expand our bounds by a guaranteed set amount

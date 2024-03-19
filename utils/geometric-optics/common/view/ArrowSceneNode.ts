@@ -6,23 +6,23 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import geometricOptics from '../../geometricOptics';
-import VisibleProperties from './VisibleProperties';
-import Bounds2 from '../../../dot/Bounds2';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import { type RaysType } from '../model/RaysType';
-import GOColors from '../GOColors';
-import RealLightRaysNode from './RealLightRaysNode';
-import BooleanProperty from '../../../axon/BooleanProperty';
-import VirtualLightRaysNode from './VirtualLightRaysNode';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import ArrowScene from '../model/ArrowScene';
-import ArrowObjectNode from './ArrowObjectNode';
-import ArrowImageNode from './ArrowImageNode';
-import GOSceneNode, { type GOSceneNodeOptions } from './GOSceneNode';
-import ToolJumpPoint from '../model/tools/ToolJumpPoint';
-import { type ObjectDragMode } from './ObjectDragMode';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import VisibleProperties from '@/utils/geometric-optics/common/view/VisibleProperties';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import RealLightRaysNode from '@/utils/geometric-optics/common/view/RealLightRaysNode';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import VirtualLightRaysNode from '@/utils/geometric-optics/common/view/VirtualLightRaysNode';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import ArrowScene from '@/utils/geometric-optics/common/model/ArrowScene';
+import ArrowObjectNode from '@/utils/geometric-optics/common/view/ArrowObjectNode';
+import ArrowImageNode from '@/utils/geometric-optics/common/view/ArrowImageNode';
+import GOSceneNode, { type GOSceneNodeOptions } from '@/utils/geometric-optics/common/view/GOSceneNode';
+import ToolJumpPoint from '@/utils/geometric-optics/common/model/tools/ToolJumpPoint';
+import { type ObjectDragMode } from '@/utils/geometric-optics/common/view/ObjectDragMode';
 
 type SelfOptions = {
 

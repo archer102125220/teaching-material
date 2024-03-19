@@ -6,8 +6,10 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import phetCore from './phetCore';
-import IntentionalAny from './types/IntentionalAny';
+import _ from 'lodash';
+
+import phetCore from '@/utils/phet-core/phetCore';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 /**
  * If the path exists on the window global, return it, otherwise returns null

@@ -7,7 +7,7 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 type FocalLengthModel = {
 

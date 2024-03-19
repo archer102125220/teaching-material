@@ -12,12 +12,12 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Ray2 from '../../dot/Ray2';
-import Utils from '../../dot/Utils';
-import Vector2 from '../../dot/Vector2';
-import { BoundsIntersection, kite, Line, Overlap, Quadratic, RayIntersection, Segment, SegmentIntersection, svgNumber } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Ray2 from '@/utils/dot/Ray2';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import { BoundsIntersection, kite, Line, Overlap, Quadratic, RayIntersection, Segment, SegmentIntersection, svgNumber } from '@/utils/kite/imports';
 
 const solveQuadraticRootsReal = Utils.solveQuadraticRootsReal; // function that returns an array of number
 const solveCubicRootsReal = Utils.solveCubicRootsReal; // function that returns an array of number
@@ -650,16 +650,16 @@ export default class Cubic extends Segment {
    */
   public getSVGPathFragment(): string {
     let oldPathFragment;
-    if (assert) {
+    if (window.assert) {
       oldPathFragment = this._svgPathFragment;
       this._svgPathFragment = null;
     }
     if (!this._svgPathFragment) {
       this._svgPathFragment = `C ${svgNumber(this._control1.x)} ${svgNumber(this._control1.y)} ${svgNumber(this._control2.x)} ${svgNumber(this._control2.y)} ${svgNumber(this._end.x)} ${svgNumber(this._end.y)}`;
     }
-    if (assert) {
+    if (window.assert) {
       if (oldPathFragment) {
-        assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
+        window.assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
       }
     }
     return this._svgPathFragment;

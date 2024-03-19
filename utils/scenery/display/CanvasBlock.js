@@ -6,10 +6,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import cleanArray from '../../phet-core/cleanArray';
-import Poolable from '../../phet-core/Poolable';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Poolable from '@/utils/phet-core/Poolable';
 import {
   CanvasContextWrapper,
   Features,
@@ -17,7 +17,7 @@ import {
   Renderer,
   scenery,
   Utils
-} from '../imports';
+} from '@/utils/scenery/imports';
 
 const scratchMatrix = new Matrix3();
 const scratchMatrix2 = new Matrix3();
@@ -585,7 +585,7 @@ class CanvasBlock extends FittedBlock {
 
     window.assert && window.assert(drawable);
 
-    if (assert) {
+    if (window.assert) {
       // Catch infinite loops
       this.display.ensureNotPainting();
     }

@@ -6,15 +6,15 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import stepBack_mp3 from '../../sounds/stepBack_mp3.js';
-import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
-import tambo from '../tambo.js';
+import stepBack_mp3 from '@/assets/sounds/tambo/stepBack_mp3';
+import SoundClipPlayer from '@/utils/tambo/sound-generators/SoundClipPlayer';
+import tambo from '@/utils/tambo/tambo';
 
 // create the shared sound instance
-const stepBackwardSoundPlayer = new SoundClipPlayer( stepBack_mp3, {
+const stepBackwardSoundPlayer = new SoundClipPlayer(stepBack_mp3, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
-} );
+});
 
-tambo.register( 'stepBackwardSoundPlayer', stepBackwardSoundPlayer );
+tambo.register('stepBackwardSoundPlayer', stepBackwardSoundPlayer);
 export default stepBackwardSoundPlayer;

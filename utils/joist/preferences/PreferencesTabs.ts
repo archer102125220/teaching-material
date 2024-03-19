@@ -9,17 +9,17 @@
 
 import _ from 'lodash';
 
-import type TProperty from '../../axon/TProperty';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import globeSolidShape from '../../sherpa/fontawesome-5/globeSolidShape';
-import { HBox, type HBoxOptions, KeyboardListener, Node, Path } from '../../scenery/imports';
-import joist from '../joist';
-import JoistStrings from '../JoistStrings';
-import PreferencesType from './PreferencesType';
-import PreferencesTab from './PreferencesTab';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import Multilink from '../../axon/Multilink';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import globeSolidShape from '@/utils/sherpa/fontawesome-5/globeSolidShape';
+import { HBox, type HBoxOptions, KeyboardListener, Node, Path } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
+import PreferencesTab from '@/utils/joist/preferences/PreferencesTab';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import Multilink from '@/utils/axon/Multilink';
 
 type SelfOptions = EmptySelfOptions;
 

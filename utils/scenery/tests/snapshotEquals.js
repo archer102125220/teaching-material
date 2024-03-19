@@ -6,7 +6,11 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import scenery from '../scenery';
+import $ from '@/utils/sherpa/lib/jquery-2.1.0';
+
+import scenery from '@/utils/scenery';
+
+// const $ = require('@/utils/sherpa/lib/jquery-2.1.0');
 
 function snapshotToCanvas(snapshot) {
   const canvas = document.createElement('canvas');

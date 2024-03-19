@@ -5,17 +5,16 @@
  *
  * @author Sam Reid (PhET Interactive Simulations)
  */
-
 import _ from 'lodash';
 
-import Display from '../../display/Display';
-import Circle from '../../nodes/Circle';
-import Node from '../../nodes/Node';
-import Rectangle from '../../nodes/Rectangle';
-import PDOMFuzzer from './PDOMFuzzer';
-import PDOMPeer from './PDOMPeer';
-import PDOMUtils from './PDOMUtils';
-import { type ParallelDOMOptions, type PDOMBehaviorFunction } from './ParallelDOM';
+import Display from '@/utils/scenery/display/Display';
+import Circle from '@/utils/scenery/nodes/Circle';
+import Node from '@/utils/scenery/nodes/Node';
+import Rectangle from '@/utils/scenery/nodes/Rectangle';
+import PDOMFuzzer from '@/utils/scenery/accessibility/pdom/PDOMFuzzer';
+import PDOMPeer from '@/utils/scenery/accessibility/pdom/PDOMPeer';
+import PDOMUtils from '@/utils/scenery/accessibility/pdom/PDOMUtils';
+import { type ParallelDOMOptions, type PDOMBehaviorFunction } from '@/utils/scenery/accessibility/pdom/ParallelDOM';
 
 // constants
 const TEST_INNER_CONTENT = 'Test Inner Content Here please^&*. Thanks you so very mucho.';
@@ -113,45 +112,45 @@ QUnit.test('tagName/innerContent options', assert => {
   rootNode.addChild(a);
 
   const aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(a.pdomInstances.length === 1, 'only 1 instance');
-  window.assert.ok(aElement.parentElement!.childNodes.length === 1, 'parent contains one primary siblings');
-  window.assert.ok(aElement.tagName === 'BUTTON', 'default label tagName');
-  window.assert.ok(aElement.textContent === TEST_LABEL, 'no html should use textContent');
+  assert.ok(a.pdomInstances.length === 1, 'only 1 instance');
+  assert.ok(aElement.parentElement!.childNodes.length === 1, 'parent contains one primary siblings');
+  assert.ok(aElement.tagName === 'BUTTON', 'default label tagName');
+  assert.ok(aElement.textContent === TEST_LABEL, 'no html should use textContent');
 
   a.innerContent = TEST_LABEL_HTML;
-  window.assert.ok(aElement.innerHTML === TEST_LABEL_HTML, 'html label should use innerHTML');
+  assert.ok(aElement.innerHTML === TEST_LABEL_HTML, 'html label should use innerHTML');
 
   a.innerContent = TEST_LABEL_HTML_2;
-  window.assert.ok(aElement.innerHTML === TEST_LABEL_HTML_2, 'html label should use innerHTML, overwrite from html');
+  assert.ok(aElement.innerHTML === TEST_LABEL_HTML_2, 'html label should use innerHTML, overwrite from html');
 
   a.innerContent = null;
-  window.assert.ok(aElement.innerHTML === '', 'innerHTML should be empty after clearing innerContent');
+  assert.ok(aElement.innerHTML === '', 'innerHTML should be empty after clearing innerContent');
 
   a.tagName = null;
-  window.assert.ok(a.pdomInstances.length === 0, 'set to null should clear accessible instances');
+  assert.ok(a.pdomInstances.length === 0, 'set to null should clear accessible instances');
 
   // make sure that no errors when setting innerContent with tagName null.
   a.innerContent = 'hello';
 
   a.tagName = 'button';
   a.innerContent = TEST_LABEL_HTML_2;
-  window.assert.ok(getPrimarySiblingElementByNode(a).innerHTML === TEST_LABEL_HTML_2, 'innerContent not cleared when tagName set to null.');
+  assert.ok(getPrimarySiblingElementByNode(a).innerHTML === TEST_LABEL_HTML_2, 'innerContent not cleared when tagName set to null.');
 
   // verify that setting inner content on an input is not allowed
   const b = new Node({ tagName: 'input', inputType: 'range' });
   rootNode.addChild(b);
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     b.innerContent = 'this should fail';
   }, /.*/, 'cannot set inner content on input');
 
   // now that it is a div, innerContent is allowed
   b.tagName = 'div';
-  window.assert.ok(b.tagName === 'div', 'expect tagName setter to work.');
+  assert.ok(b.tagName === 'div', 'expect tagName setter to work.');
   b.innerContent = TEST_LABEL;
-  window.assert.ok(b.innerContent === TEST_LABEL, 'inner content allowed');
+  assert.ok(b.innerContent === TEST_LABEL, 'inner content allowed');
 
   // revert tag name to input, should throw an error
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     b.tagName = 'input';
   }, /.*/, 'error thrown after setting tagName to input on Node with innerContent.');
 
@@ -171,20 +170,20 @@ QUnit.test('containerTagName option', assert => {
   const a = new Node({ tagName: 'button' });
 
   rootNode.addChild(a);
-  window.assert.ok(a.pdomInstances.length === 1, 'only 1 instance');
-  window.assert.ok(a.pdomInstances[0].peer!.containerParent === null, 'no container parent for just button');
-  window.assert.ok(rootNode['_pdomInstances'][0].peer!.primarySibling!.children[0] === a['_pdomInstances'][0].peer!.primarySibling!,
+  assert.ok(a.pdomInstances.length === 1, 'only 1 instance');
+  assert.ok(a.pdomInstances[0].peer!.containerParent === null, 'no container parent for just button');
+  assert.ok(rootNode['_pdomInstances'][0].peer!.primarySibling!.children[0] === a['_pdomInstances'][0].peer!.primarySibling!,
     'rootNode peer should hold node a\'s peer in the PDOM');
 
   a.containerTagName = 'div';
 
-  window.assert.ok(a.pdomInstances[0].peer!.containerParent!.id.includes('container'), 'container parent is div if specified');
-  window.assert.ok(rootNode['_pdomInstances'][0].peer!.primarySibling!.children[0] === a['_pdomInstances'][0].peer!.containerParent!,
+  assert.ok(a.pdomInstances[0].peer!.containerParent!.id.includes('container'), 'container parent is div if specified');
+  assert.ok(rootNode['_pdomInstances'][0].peer!.primarySibling!.children[0] === a['_pdomInstances'][0].peer!.containerParent!,
     'container parent is div if specified');
 
   a.containerTagName = null;
 
-  window.assert.ok(!a.pdomInstances[0].peer!.containerParent!, 'container parent is cleared if specified');
+  assert.ok(!a.pdomInstances[0].peer!.containerParent!, 'container parent is cleared if specified');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 });
@@ -203,52 +202,52 @@ QUnit.test('labelTagName/labelContent option', assert => {
 
   const aElement = getPrimarySiblingElementByNode(a);
   const labelSibling = aElement.parentElement!.childNodes[0] as HTMLElement;
-  window.assert.ok(a.pdomInstances.length === 1, 'only 1 instance');
-  window.assert.ok(aElement.parentElement!.childNodes.length === 2, 'parent contains two siblings');
-  window.assert.ok(labelSibling.tagName === DEFAULT_LABEL_TAG_NAME, 'default label tagName');
-  window.assert.ok(labelSibling.textContent === TEST_LABEL, 'no html should use textContent');
+  assert.ok(a.pdomInstances.length === 1, 'only 1 instance');
+  assert.ok(aElement.parentElement!.childNodes.length === 2, 'parent contains two siblings');
+  assert.ok(labelSibling.tagName === DEFAULT_LABEL_TAG_NAME, 'default label tagName');
+  assert.ok(labelSibling.textContent === TEST_LABEL, 'no html should use textContent');
 
   a.labelContent = TEST_LABEL_HTML;
-  window.assert.ok(labelSibling.innerHTML === TEST_LABEL_HTML, 'html label should use innerHTML');
+  assert.ok(labelSibling.innerHTML === TEST_LABEL_HTML, 'html label should use innerHTML');
 
   a.labelContent = null;
-  window.assert.ok(labelSibling.innerHTML === '', 'label content should be empty after setting to null');
+  assert.ok(labelSibling.innerHTML === '', 'label content should be empty after setting to null');
 
   a.labelContent = TEST_LABEL_HTML_2;
-  window.assert.ok(labelSibling.innerHTML === TEST_LABEL_HTML_2, 'html label should use innerHTML, overwrite from html');
+  assert.ok(labelSibling.innerHTML === TEST_LABEL_HTML_2, 'html label should use innerHTML, overwrite from html');
 
   a.tagName = 'div';
 
   const newAElement = getPrimarySiblingElementByNode(a);
   const newLabelSibling = newAElement.parentElement!.childNodes[0] as HTMLElement;
 
-  window.assert.ok(newLabelSibling.innerHTML === TEST_LABEL_HTML_2, 'tagName independent of: html label should use innerHTML, overwrite from html');
+  assert.ok(newLabelSibling.innerHTML === TEST_LABEL_HTML_2, 'tagName independent of: html label should use innerHTML, overwrite from html');
 
   a.labelTagName = null;
 
   // make sure label was cleared from PDOM
-  window.assert.ok(getPrimarySiblingElementByNode(a).parentElement!.childNodes.length === 1,
+  assert.ok(getPrimarySiblingElementByNode(a).parentElement!.childNodes.length === 1,
     'Only one element after clearing label');
 
-  window.assert.ok(a.labelContent === TEST_LABEL_HTML_2, 'clearing labelTagName should not change content, even  though it is not displayed');
+  assert.ok(a.labelContent === TEST_LABEL_HTML_2, 'clearing labelTagName should not change content, even  though it is not displayed');
 
   a.labelTagName = 'p';
-  window.assert.ok(a.labelTagName === 'p', 'expect labelTagName setter to work.');
+  assert.ok(a.labelTagName === 'p', 'expect labelTagName setter to work.');
 
   const b = new Node({ tagName: 'p', labelContent: 'I am groot' });
   rootNode.addChild(b);
   let bLabelElement = document.getElementById(b.pdomInstances[0].peer!.labelSibling!.id)!;
-  window.assert.ok(!bLabelElement.getAttribute('for'), 'for attribute should not be on non label label sibling.');
+  assert.ok(!bLabelElement.getAttribute('for'), 'for attribute should not be on non label label sibling.');
   b.labelTagName = 'label';
   bLabelElement = document.getElementById(b.pdomInstances[0].peer!.labelSibling!.id)!;
-  window.assert.ok(bLabelElement.getAttribute('for') !== null, 'for attribute should be on "label" tag for label sibling.');
+  assert.ok(bLabelElement.getAttribute('for') !== null, 'for attribute should be on "label" tag for label sibling.');
 
   const c = new Node({ tagName: 'p' });
   rootNode.addChild(c);
   c.labelTagName = 'label';
   c.labelContent = TEST_LABEL;
   const cLabelElement = document.getElementById(c.pdomInstances[0].peer!.labelSibling!.id)!;
-  window.assert.ok(cLabelElement.getAttribute('for') !== null, 'order should not matter');
+  assert.ok(cLabelElement.getAttribute('for') !== null, 'order should not matter');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 
@@ -281,14 +280,14 @@ QUnit.test('container element not needed for multiple siblings', assert => {
   let bElement = getPrimarySiblingElementByNode(b);
   let cPeer = c.pdomInstances[0].peer!;
   let dPeer = d.pdomInstances[0].peer!;
-  window.assert.ok(bElement.children.length === 3, 'c.p, c.section, d.div should all be on the same level');
+  assert.ok(bElement.children.length === 3, 'c.p, c.section, d.div should all be on the same level');
   const confirmOriginalOrder = () => {
-    window.assert.ok(bElement.children[0].tagName === 'P', 'p first');
-    window.assert.ok(bElement.children[1].tagName === 'SECTION', 'section 2nd');
-    window.assert.ok(bElement.children[2].tagName === 'DIV', 'div 3rd');
-    window.assert.ok(bElement.children[0] === cPeer.labelSibling, 'c label first');
-    window.assert.ok(bElement.children[1] === cPeer.primarySibling, 'c primary 2nd');
-    window.assert.ok(bElement.children[2] === dPeer.containerParent, 'd container 3rd');
+    assert.ok(bElement.children[0].tagName === 'P', 'p first');
+    assert.ok(bElement.children[1].tagName === 'SECTION', 'section 2nd');
+    assert.ok(bElement.children[2].tagName === 'DIV', 'div 3rd');
+    assert.ok(bElement.children[0] === cPeer.labelSibling, 'c label first');
+    assert.ok(bElement.children[1] === cPeer.primarySibling, 'c primary 2nd');
+    assert.ok(bElement.children[2] === dPeer.containerParent, 'd container 3rd');
   };
   confirmOriginalOrder();
 
@@ -302,14 +301,14 @@ QUnit.test('container element not needed for multiple siblings', assert => {
   cPeer = c.pdomInstances[0].peer!; // refresh the DOM Elements
   dPeer = d.pdomInstances[0].peer!; // refresh the DOM Elements
   let ePeer = e.pdomInstances[0].peer!;
-  window.assert.ok(bElement.children.length === 5, 'e children should be added to the same PDOM level.');
+  assert.ok(bElement.children.length === 5, 'e children should be added to the same PDOM level.');
   confirmOriginalOrder();
 
   const confirmOriginalWithE = () => {
-    window.assert.ok(bElement.children[3].tagName === 'P', 'P 4rd');
-    window.assert.ok(bElement.children[4].tagName === 'SPAN', 'SPAN 3rd');
-    window.assert.ok(bElement.children[3] === ePeer.descriptionSibling, 'e description 4th');
-    window.assert.ok(bElement.children[4] === ePeer.primarySibling, 'e primary 5th');
+    assert.ok(bElement.children[3].tagName === 'P', 'P 4rd');
+    assert.ok(bElement.children[4].tagName === 'SPAN', 'SPAN 3rd');
+    assert.ok(bElement.children[3] === ePeer.descriptionSibling, 'e description 4th');
+    assert.ok(bElement.children[4] === ePeer.primarySibling, 'e primary 5th');
   };
 
   // dynamically adding parent
@@ -318,10 +317,10 @@ QUnit.test('container element not needed for multiple siblings', assert => {
   cPeer = c.pdomInstances[0].peer!; // refresh the DOM Elements
   dPeer = d.pdomInstances[0].peer!; // refresh the DOM Elements
   ePeer = e.pdomInstances[0].peer!;
-  window.assert.ok(bElement.children.length === 4, 'e children should now be under e\'s container.');
+  assert.ok(bElement.children.length === 4, 'e children should now be under e\'s container.');
   confirmOriginalOrder();
-  window.assert.ok(bElement.children[3].tagName === 'ARTICLE', 'SPAN 3rd');
-  window.assert.ok(bElement.children[3] === ePeer.containerParent, 'e parent 3rd');
+  assert.ok(bElement.children[3].tagName === 'ARTICLE', 'SPAN 3rd');
+  assert.ok(bElement.children[3] === ePeer.containerParent, 'e parent 3rd');
 
   // clear container
   e.containerTagName = null;
@@ -329,24 +328,24 @@ QUnit.test('container element not needed for multiple siblings', assert => {
   cPeer = c.pdomInstances[0].peer!; // refresh the DOM Elements
   dPeer = d.pdomInstances[0].peer!; // refresh the DOM Elements
   ePeer = e.pdomInstances[0].peer!;
-  window.assert.ok(bElement.children.length === 5, 'e children should be added to the same PDOM level again.');
+  assert.ok(bElement.children.length === 5, 'e children should be added to the same PDOM level again.');
   confirmOriginalOrder();
   confirmOriginalWithE();
 
   // proper disposal
   e.dispose();
   bElement = getPrimarySiblingElementByNode(b);
-  window.assert.ok(bElement.children.length === 3, 'e children should have been removed');
-  window.assert.ok(e.pdomInstances.length === 0, 'e is disposed');
+  assert.ok(bElement.children.length === 3, 'e children should have been removed');
+  assert.ok(e.pdomInstances.length === 0, 'e is disposed');
   confirmOriginalOrder();
 
   // reorder d correctly when c removed
   b.removeChild(c);
-  window.assert.ok(bElement.children.length === 1, 'c children should have been removed, only d container');
+  assert.ok(bElement.children.length === 1, 'c children should have been removed, only d container');
   bElement = getPrimarySiblingElementByNode(b);
   dPeer = d.pdomInstances[0].peer!;
-  window.assert.ok(bElement.children[0].tagName === 'DIV', 'DIV first');
-  window.assert.ok(bElement.children[0] === dPeer.containerParent, 'd container first');
+  assert.ok(bElement.children[0].tagName === 'DIV', 'DIV first');
+  assert.ok(bElement.children[0] === dPeer.containerParent, 'd container first');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 
@@ -366,32 +365,32 @@ QUnit.test('descriptionTagName/descriptionContent option', assert => {
 
   const aElement = getPrimarySiblingElementByNode(a);
   const descriptionSibling = aElement.parentElement!.childNodes[0] as HTMLElement;
-  window.assert.ok(a.pdomInstances.length === 1, 'only 1 instance');
-  window.assert.ok(aElement.parentElement!.childNodes.length === 2, 'parent contains two siblings');
-  window.assert.ok(descriptionSibling.tagName === DEFAULT_DESCRIPTION_TAG_NAME, 'default label tagName');
-  window.assert.ok(descriptionSibling.textContent === TEST_DESCRIPTION, 'no html should use textContent');
+  assert.ok(a.pdomInstances.length === 1, 'only 1 instance');
+  assert.ok(aElement.parentElement!.childNodes.length === 2, 'parent contains two siblings');
+  assert.ok(descriptionSibling.tagName === DEFAULT_DESCRIPTION_TAG_NAME, 'default label tagName');
+  assert.ok(descriptionSibling.textContent === TEST_DESCRIPTION, 'no html should use textContent');
 
   a.descriptionContent = TEST_DESCRIPTION_HTML;
-  window.assert.ok(descriptionSibling.innerHTML === TEST_DESCRIPTION_HTML, 'html label should use innerHTML');
+  assert.ok(descriptionSibling.innerHTML === TEST_DESCRIPTION_HTML, 'html label should use innerHTML');
 
   a.descriptionContent = null;
-  window.assert.ok(descriptionSibling.innerHTML === '', 'description content should be cleared');
+  assert.ok(descriptionSibling.innerHTML === '', 'description content should be cleared');
 
   a.descriptionContent = TEST_DESCRIPTION_HTML_2;
-  window.assert.ok(descriptionSibling.innerHTML === TEST_DESCRIPTION_HTML_2, 'html label should use innerHTML, overwrite from html');
+  assert.ok(descriptionSibling.innerHTML === TEST_DESCRIPTION_HTML_2, 'html label should use innerHTML, overwrite from html');
 
   a.descriptionTagName = null;
 
   // make sure description was cleared from PDOM
-  window.assert.ok(getPrimarySiblingElementByNode(a).parentElement!.childNodes.length === 1,
+  assert.ok(getPrimarySiblingElementByNode(a).parentElement!.childNodes.length === 1,
     'Only one element after clearing description');
 
-  window.assert.ok(a.descriptionContent === TEST_DESCRIPTION_HTML_2, 'clearing descriptionTagName should not change content, even  though it is not displayed');
+  assert.ok(a.descriptionContent === TEST_DESCRIPTION_HTML_2, 'clearing descriptionTagName should not change content, even  though it is not displayed');
 
-  window.assert.ok(a.descriptionTagName === null, 'expect descriptionTagName setter to work.');
+  assert.ok(a.descriptionTagName === null, 'expect descriptionTagName setter to work.');
 
   a.descriptionTagName = 'p';
-  window.assert.ok(a.descriptionTagName === 'p', 'expect descriptionTagName setter to work.');
+  assert.ok(a.descriptionTagName === 'p', 'expect descriptionTagName setter to work.');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 
@@ -427,22 +426,22 @@ QUnit.test('ParallelDOM options', assert => {
   rootNode.addChild(divNode);
 
   // verify that setters and getters worked correctly
-  window.assert.ok(buttonNode.labelTagName === 'label', 'Label tag name');
-  window.assert.ok(buttonNode.containerTagName === 'div', 'container tag name');
-  window.assert.ok(buttonNode.labelContent === TEST_LABEL, 'Accessible label');
-  window.assert.ok(buttonNode.descriptionTagName!.toUpperCase() === DEFAULT_DESCRIPTION_TAG_NAME, 'Description tag name');
-  window.assert.equal(buttonNode.focusable, false, 'Focusable');
-  window.assert.ok(buttonNode.ariaRole === 'button', 'Aria role');
-  window.assert.ok(buttonNode.descriptionContent === TEST_DESCRIPTION, 'Accessible Description');
-  window.assert.ok(buttonNode.focusHighlight instanceof Circle, 'Focus highlight');
-  window.assert.ok(buttonNode.tagName === 'input', 'Tag name');
-  window.assert.ok(buttonNode.inputType === 'button', 'Input type');
+  assert.ok(buttonNode.labelTagName === 'label', 'Label tag name');
+  assert.ok(buttonNode.containerTagName === 'div', 'container tag name');
+  assert.ok(buttonNode.labelContent === TEST_LABEL, 'Accessible label');
+  assert.ok(buttonNode.descriptionTagName!.toUpperCase() === DEFAULT_DESCRIPTION_TAG_NAME, 'Description tag name');
+  assert.equal(buttonNode.focusable, false, 'Focusable');
+  assert.ok(buttonNode.ariaRole === 'button', 'Aria role');
+  assert.ok(buttonNode.descriptionContent === TEST_DESCRIPTION, 'Accessible Description');
+  assert.ok(buttonNode.focusHighlight instanceof Circle, 'Focus highlight');
+  assert.ok(buttonNode.tagName === 'input', 'Tag name');
+  assert.ok(buttonNode.inputType === 'button', 'Input type');
 
-  window.assert.ok(divNode.tagName === 'div', 'Tag name');
-  window.assert.ok(divNode.ariaLabel === TEST_LABEL, 'Use aria label');
-  window.assert.equal(divNode.pdomVisible, false, 'pdom visible');
-  window.assert.ok(divNode.labelTagName === null, 'Label tag name with aria label is independent');
-  window.assert.ok(divNode.descriptionTagName!.toUpperCase() === DEFAULT_DESCRIPTION_TAG_NAME, 'Description tag name');
+  assert.ok(divNode.tagName === 'div', 'Tag name');
+  assert.ok(divNode.ariaLabel === TEST_LABEL, 'Use aria label');
+  assert.equal(divNode.pdomVisible, false, 'pdom visible');
+  assert.ok(divNode.labelTagName === null, 'Label tag name with aria label is independent');
+  assert.ok(divNode.descriptionTagName!.toUpperCase() === DEFAULT_DESCRIPTION_TAG_NAME, 'Description tag name');
 
   // verify DOM structure - options above should create something like:
   // <div id="display-root">
@@ -466,27 +465,27 @@ QUnit.test('ParallelDOM options', assert => {
   const divElement = getPrimarySiblingElementByNode(divNode);
   const pDescription = divElement.parentElement!.childNodes[0]; // description before primary div
 
-  window.assert.ok(buttonParent.tagName === 'DIV', 'parent container');
-  window.assert.ok(buttonLabel.tagName === 'LABEL', 'Label first');
-  window.assert.ok(buttonLabel.getAttribute('for') === buttonElement.id, 'label for attribute');
-  window.assert.ok(buttonLabel.textContent === TEST_LABEL, 'label content');
-  window.assert.ok(buttonDescription.tagName === DEFAULT_DESCRIPTION_TAG_NAME, 'description second');
-  window.assert.equal(buttonDescription.textContent, TEST_DESCRIPTION, 'description content');
-  window.assert.ok(buttonPeers[2] === buttonElement, 'Button third');
-  window.assert.ok(buttonElement.getAttribute('type') === 'button', 'input type set');
-  window.assert.ok(buttonElement.getAttribute('role') === 'button', 'button role set');
-  window.assert.ok(buttonElement.tabIndex === -1, 'not focusable');
+  assert.ok(buttonParent.tagName === 'DIV', 'parent container');
+  assert.ok(buttonLabel.tagName === 'LABEL', 'Label first');
+  assert.ok(buttonLabel.getAttribute('for') === buttonElement.id, 'label for attribute');
+  assert.ok(buttonLabel.textContent === TEST_LABEL, 'label content');
+  assert.ok(buttonDescription.tagName === DEFAULT_DESCRIPTION_TAG_NAME, 'description second');
+  assert.equal(buttonDescription.textContent, TEST_DESCRIPTION, 'description content');
+  assert.ok(buttonPeers[2] === buttonElement, 'Button third');
+  assert.ok(buttonElement.getAttribute('type') === 'button', 'input type set');
+  assert.ok(buttonElement.getAttribute('role') === 'button', 'button role set');
+  assert.ok(buttonElement.tabIndex === -1, 'not focusable');
 
-  window.assert.ok(divElement.getAttribute('aria-label') === TEST_LABEL, 'aria label set');
-  window.assert.ok(divElement.parentElement!.hidden, 'hidden set should act on parent');
-  window.assert.ok(pDescription.textContent === TEST_DESCRIPTION, 'description content');
-  window.assert.ok(pDescription.parentElement === divElement.parentElement, 'description is sibling to primary');
-  window.assert.ok(divElement.parentElement!.childNodes.length === 2, 'no label element for aria-label, just description and primary siblings');
+  assert.ok(divElement.getAttribute('aria-label') === TEST_LABEL, 'aria label set');
+  assert.ok(divElement.parentElement!.hidden, 'hidden set should act on parent');
+  assert.ok(pDescription.textContent === TEST_DESCRIPTION, 'description content');
+  assert.ok(pDescription.parentElement === divElement.parentElement, 'description is sibling to primary');
+  assert.ok(divElement.parentElement!.childNodes.length === 2, 'no label element for aria-label, just description and primary siblings');
 
   // clear values
   buttonNode.inputType = null;
   buttonElement = getPrimarySiblingElementByNode(buttonNode);
-  window.assert.ok(buttonElement.getAttribute('type') === null, 'input type cleared');
+  assert.ok(buttonElement.getAttribute('type') === null, 'input type cleared');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 
@@ -514,7 +513,7 @@ function testAssociationAttribute(assert: Assert, attribute: string): void {
   const b = new Node({ tagName: 'p', innerContent: TEST_LABEL_2 });
   rootNode.children = [a, b];
 
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     a.setPDOMAttribute(attribute, 'hello');
   }, /.*/, 'cannot set association attributes with setPDOMAttribute');
 
@@ -526,7 +525,7 @@ function testAssociationAttribute(assert: Assert, attribute: string): void {
 
   let aElement = getPrimarySiblingElementByNode(a);
   let bElement = getPrimarySiblingElementByNode(b);
-  window.assert.ok(aElement.getAttribute(attribute)!.includes(bElement.id), `${attribute} for one node.`);
+  assert.ok(aElement.getAttribute(attribute)!.includes(bElement.id), `${attribute} for one node.`);
 
   const c = new Node({ tagName: 'div', innerContent: TEST_LABEL });
   rootNode.addChild(c);
@@ -541,7 +540,7 @@ function testAssociationAttribute(assert: Assert, attribute: string): void {
   bElement = getPrimarySiblingElementByNode(b);
   let cElement = getPrimarySiblingElementByNode(c);
   const expectedValue = [bElement.id, cElement.id].join(' ');
-  window.assert.ok(aElement.getAttribute(attribute) === expectedValue, `${attribute} two nodes`);
+  assert.ok(aElement.getAttribute(attribute) === expectedValue, `${attribute} two nodes`);
 
   // Make c invalidate
   rootNode.removeChild(c);
@@ -552,8 +551,8 @@ function testAssociationAttribute(assert: Assert, attribute: string): void {
   aElement = getPrimarySiblingElementByNode(a);
   cElement = getPrimarySiblingElementByNode(c);
 
-  window.assert.ok(aElement.getAttribute(attribute) !== oldValue, 'should have invalidated on tree change');
-  window.assert.ok(aElement.getAttribute(attribute) === [bElement.id, cElement.id].join(' '),
+  assert.ok(aElement.getAttribute(attribute) !== oldValue, 'should have invalidated on tree change');
+  assert.ok(aElement.getAttribute(attribute) === [bElement.id, cElement.id].join(' '),
     'should have invalidated on tree change');
 
   const d = new Node({ tagName: 'div', descriptionTagName: 'p', innerContent: TEST_LABEL, containerTagName: 'div' });
@@ -568,8 +567,8 @@ function testAssociationAttribute(assert: Assert, attribute: string): void {
 
   const bParentContainer = getPrimarySiblingElementByNode(b).parentElement!;
   const dDescriptionElement = getPrimarySiblingElementByNode(d).parentElement!.childNodes[0] as HTMLElement;
-  window.assert.ok(bParentContainer.getAttribute(attribute) !== oldValue, 'should have invalidated on tree change');
-  window.assert.ok(bParentContainer.getAttribute(attribute) === dDescriptionElement.id,
+  assert.ok(bParentContainer.getAttribute(attribute) !== oldValue, 'should have invalidated on tree change');
+  assert.ok(bParentContainer.getAttribute(attribute) === dDescriptionElement.id,
     `b parent container element is ${attribute} d description sibling`);
 
   // say we have a scene graph that looks like:
@@ -612,9 +611,9 @@ function testAssociationAttribute(assert: Assert, attribute: string): void {
   let fElement = getPrimarySiblingElementByNode(f);
   let gElement = getPrimarySiblingElementByNode(g);
   let hElement = getPrimarySiblingElementByNode(h);
-  window.assert.ok(eElement.getAttribute(attribute) === fElement.id, `eElement should be ${attribute} fElement`);
-  window.assert.ok(fElement.getAttribute(attribute) === gElement.id, `fElement should be ${attribute} gElement`);
-  window.assert.ok(gElement.getAttribute(attribute) === hElement.id, `gElement should be ${attribute} hElement`);
+  assert.ok(eElement.getAttribute(attribute) === fElement.id, `eElement should be ${attribute} fElement`);
+  assert.ok(fElement.getAttribute(attribute) === gElement.id, `fElement should be ${attribute} gElement`);
+  assert.ok(gElement.getAttribute(attribute) === hElement.id, `gElement should be ${attribute} hElement`);
 
   // re-arrange the scene graph and make sure that the attribute ids remain up to date
   //    e
@@ -635,9 +634,9 @@ function testAssociationAttribute(assert: Assert, attribute: string): void {
   fElement = getPrimarySiblingElementByNode(f);
   gElement = getPrimarySiblingElementByNode(g);
   hElement = getPrimarySiblingElementByNode(h);
-  window.assert.ok(eElement.getAttribute(attribute) === fElement.id, `eElement should still be ${attribute} fElement`);
-  window.assert.ok(fElement.getAttribute(attribute) === gElement.id, `fElement should still be ${attribute} gElement`);
-  window.assert.ok(gElement.getAttribute(attribute) === hElement.id, `gElement should still be ${attribute} hElement`);
+  assert.ok(eElement.getAttribute(attribute) === fElement.id, `eElement should still be ${attribute} fElement`);
+  assert.ok(fElement.getAttribute(attribute) === gElement.id, `fElement should still be ${attribute} gElement`);
+  assert.ok(gElement.getAttribute(attribute) === hElement.id, `gElement should still be ${attribute} hElement`);
 
   // test aria labelled by your self, but a different peer Element, multiple attribute ids included in the test.
   const containerTagName = 'div';
@@ -677,10 +676,10 @@ function testAssociationAttribute(assert: Assert, attribute: string): void {
       return instance.peer!.getElementId(siblingString, instance.getPDOMInstanceUniqueId());
     };
 
-    window.assert.ok(nodePrimaryElement.getAttribute(attribute)!.includes(getUniqueIdStringForSibling('label')), `${attribute} your own label element.`);
-    window.assert.ok(nodeParent.getAttribute(attribute)!.includes(getUniqueIdStringForSibling('description')), `parent ${attribute} your own description element.`);
+    assert.ok(nodePrimaryElement.getAttribute(attribute)!.includes(getUniqueIdStringForSibling('label')), `${attribute} your own label element.`);
+    assert.ok(nodeParent.getAttribute(attribute)!.includes(getUniqueIdStringForSibling('description')), `parent ${attribute} your own description element.`);
 
-    window.assert.ok(nodeParent.getAttribute(attribute)!.includes(getUniqueIdStringForSibling('label')), `parent ${attribute} your own label element.`);
+    assert.ok(nodeParent.getAttribute(attribute)!.includes(getUniqueIdStringForSibling('label')), `parent ${attribute} your own label element.`);
 
   };
 
@@ -695,7 +694,7 @@ function testAssociationAttribute(assert: Assert, attribute: string): void {
   const testK = () => {
     const kValue = k['_pdomInstances'][0].peer!.primarySibling!.getAttribute(attribute);
     const jID = j['_pdomInstances'][0].peer!.labelSibling!.getAttribute('id');
-    window.assert.ok(jID === kValue, 'k pointing to j');
+    assert.ok(jID === kValue, 'k pointing to j');
   };
 
   // audit the content we have created
@@ -783,7 +782,7 @@ function testAssociationAttributeBySetters(assert: Assert, attribute: Associatio
 
   const nPeer = getPDOMPeerByNode(n);
   const oElement = getPrimarySiblingElementByNode(o);
-  window.assert.ok(oElement.getAttribute(attribute)!.includes(
+  assert.ok(oElement.getAttribute(attribute)!.includes(
     nPeer.getElementId('label', nPeer.pdomInstance!.getPDOMInstanceUniqueId())),
     `${attribute} for two nodes with setter (label).`);
 
@@ -810,17 +809,17 @@ function testAssociationAttributeBySetters(assert: Assert, attribute: Associatio
   // test getters and setters
   const m = new Node(options);
   rootNode.addChild(m);
-  window.assert.ok(_.isEqual(m[associationsArrayName], options[associationsArrayName]), 'test association object getter');
+  assert.ok(_.isEqual(m[associationsArrayName], options[associationsArrayName]), 'test association object getter');
   m[associationRemovalFunction](randomAssociationObject);
   options[associationsArrayName]!.splice(options[associationsArrayName]!.indexOf(randomAssociationObject), 1);
-  window.assert.ok(_.isEqual(m[associationsArrayName], options[associationsArrayName]), 'test association object getter after removal');
+  assert.ok(_.isEqual(m[associationsArrayName], options[associationsArrayName]), 'test association object getter after removal');
 
   m[associationsArrayName] = [];
-  window.assert.ok(getPrimarySiblingElementByNode(m).getAttribute(attribute) === null, 'clear with setter');
+  assert.ok(getPrimarySiblingElementByNode(m).getAttribute(attribute) === null, 'clear with setter');
 
   m[associationsArrayName] = options[associationsArrayName]!;
   m.dispose();
-  window.assert.ok(m[associationsArrayName].length === 0, 'cleared when disposed');
+  assert.ok(m[associationsArrayName].length === 0, 'cleared when disposed');
 
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
@@ -862,8 +861,8 @@ QUnit.test('ParallelDOM invalidation', assert => {
 
   // verify that elements are in the DOM
   const a1Element = getPrimarySiblingElementByNode(a1);
-  window.assert.ok(a1Element, 'button in DOM');
-  window.assert.ok(a1Element.tagName === 'BUTTON', 'button tag name set');
+  assert.ok(a1Element, 'button in DOM');
+  assert.ok(a1Element.tagName === 'BUTTON', 'button tag name set');
 
   // give the button a container parent and some empty siblings
   a1.labelTagName = 'div';
@@ -880,10 +879,10 @@ QUnit.test('ParallelDOM invalidation', assert => {
   //  <p id='description'></p>
   //  <button></button>
   // </div>
-  window.assert.ok(document.getElementById(parentElement!.id), 'container parent in DOM');
-  window.assert.ok(buttonPeers[0].tagName === 'DIV', 'label first');
-  window.assert.ok(buttonPeers[1].tagName === 'P', 'description second');
-  window.assert.ok(buttonPeers[2].tagName === 'BUTTON', 'primarySibling third');
+  assert.ok(document.getElementById(parentElement!.id), 'container parent in DOM');
+  assert.ok(buttonPeers[0].tagName === 'DIV', 'label first');
+  assert.ok(buttonPeers[1].tagName === 'P', 'description second');
+  assert.ok(buttonPeers[2].tagName === 'BUTTON', 'primarySibling third');
 
   // make the button a div and use an inline label, and place the description below
   a1.tagName = 'div';
@@ -902,12 +901,12 @@ QUnit.test('ParallelDOM invalidation', assert => {
   buttonElement = a1.pdomInstances[0].peer!.primarySibling!;
   parentElement = buttonElement.parentElement;
   const newButtonPeers = parentElement!.childNodes as unknown as HTMLElement[];
-  window.assert.ok(newButtonPeers[0] === getPrimarySiblingElementByNode(a1), 'div first');
-  window.assert.ok(newButtonPeers[1].id.includes('description'), 'description after div when appending both elements');
-  window.assert.ok(newButtonPeers.length === 2, 'no label peer when using just aria-label attribute');
+  assert.ok(newButtonPeers[0] === getPrimarySiblingElementByNode(a1), 'div first');
+  assert.ok(newButtonPeers[1].id.includes('description'), 'description after div when appending both elements');
+  assert.ok(newButtonPeers.length === 2, 'no label peer when using just aria-label attribute');
 
   const elementInDom = document.getElementById(a1.pdomInstances[0].peer!.primarySibling!.id)!;
-  window.assert.ok(elementInDom.getAttribute('aria-label') === TEST_LABEL, 'aria-label set');
+  assert.ok(elementInDom.getAttribute('aria-label') === TEST_LABEL, 'aria-label set');
 
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
@@ -925,50 +924,50 @@ QUnit.test('ParallelDOM setters/getters', assert => {
   let a1Element = getPrimarySiblingElementByNode(a1);
   const initialLength = a1.getPDOMAttributes().length;
   a1.setPDOMAttribute('role', 'switch');
-  window.assert.ok(a1.getPDOMAttributes().length === initialLength + 1, 'attribute set should only add 1');
-  window.assert.ok(a1.getPDOMAttributes()[a1.getPDOMAttributes().length - 1].attribute === 'role', 'attribute set');
-  window.assert.ok(a1Element.getAttribute('role') === 'switch', 'HTML attribute set');
-  window.assert.ok(a1.hasPDOMAttribute('role'), 'should have pdom attribute');
+  assert.ok(a1.getPDOMAttributes().length === initialLength + 1, 'attribute set should only add 1');
+  assert.ok(a1.getPDOMAttributes()[a1.getPDOMAttributes().length - 1].attribute === 'role', 'attribute set');
+  assert.ok(a1Element.getAttribute('role') === 'switch', 'HTML attribute set');
+  assert.ok(a1.hasPDOMAttribute('role'), 'should have pdom attribute');
 
   a1.removePDOMAttribute('role');
-  window.assert.ok(!a1.hasPDOMAttribute('role'), 'should not have pdom attribute');
-  window.assert.ok(!a1Element.getAttribute('role'), 'attribute removed');
+  assert.ok(!a1.hasPDOMAttribute('role'), 'should not have pdom attribute');
+  assert.ok(!a1Element.getAttribute('role'), 'attribute removed');
 
   const b = new Node({ focusable: true });
   a1.addChild(b);
   b.tagName = 'div';
-  window.assert.ok(getPrimarySiblingElementByNode(b).tabIndex >= 0, 'set tagName after focusable');
+  assert.ok(getPrimarySiblingElementByNode(b).tabIndex >= 0, 'set tagName after focusable');
 
   // test setting attribute as DOM property, should NOT have attribute value pair (DOM uses empty string for empty)
   a1.setPDOMAttribute('hidden', true, { asProperty: true });
   a1Element = getPrimarySiblingElementByNode(a1);
-  window.assert.equal(a1Element.hidden, true, 'hidden set as Property');
-  window.assert.ok(a1Element.getAttribute('hidden') === '', 'hidden should not be set as attribute');
+  assert.equal(a1Element.hidden, true, 'hidden set as Property');
+  assert.ok(a1Element.getAttribute('hidden') === '', 'hidden should not be set as attribute');
 
 
   // test setting and removing PDOM classes
   a1.setPDOMClass(TEST_CLASS_ONE);
-  window.assert.ok(getPrimarySiblingElementByNode(a1).classList.contains(TEST_CLASS_ONE), 'TEST_CLASS_ONE missing from classList');
+  assert.ok(getPrimarySiblingElementByNode(a1).classList.contains(TEST_CLASS_ONE), 'TEST_CLASS_ONE missing from classList');
 
   // two classes
   a1.setPDOMClass(TEST_CLASS_TWO);
   a1Element = getPrimarySiblingElementByNode(a1);
-  window.assert.ok(a1Element.classList.contains(TEST_CLASS_ONE) && a1Element.classList.contains(TEST_CLASS_ONE), 'One of the classes missing from classList');
+  assert.ok(a1Element.classList.contains(TEST_CLASS_ONE) && a1Element.classList.contains(TEST_CLASS_ONE), 'One of the classes missing from classList');
 
   // modify the Node in a way that would cause a full redraw, make sure classes still exist
   a1.tagName = 'button';
   a1Element = getPrimarySiblingElementByNode(a1);
-  window.assert.ok(a1Element.classList.contains(TEST_CLASS_ONE) && a1Element.classList.contains(TEST_CLASS_ONE), 'One of the classes missing from classList after changing tagName');
+  assert.ok(a1Element.classList.contains(TEST_CLASS_ONE) && a1Element.classList.contains(TEST_CLASS_ONE), 'One of the classes missing from classList after changing tagName');
 
   // remove them one at a time
   a1.removePDOMClass(TEST_CLASS_ONE);
   a1Element = getPrimarySiblingElementByNode(a1);
-  window.assert.ok(!a1Element.classList.contains(TEST_CLASS_ONE), 'TEST_CLASS_ONE should be removed from classList');
-  window.assert.ok(a1Element.classList.contains(TEST_CLASS_TWO), 'TEST_CLASS_TWO should still be in classList');
+  assert.ok(!a1Element.classList.contains(TEST_CLASS_ONE), 'TEST_CLASS_ONE should be removed from classList');
+  assert.ok(a1Element.classList.contains(TEST_CLASS_TWO), 'TEST_CLASS_TWO should still be in classList');
 
   a1.removePDOMClass(TEST_CLASS_TWO);
   a1Element = getPrimarySiblingElementByNode(a1);
-  window.assert.ok(!a1Element.classList.contains(TEST_CLASS_ONE) && !a1Element.classList.contains(TEST_CLASS_ONE), 'classList should not contain any added classes');
+  assert.ok(!a1Element.classList.contains(TEST_CLASS_ONE) && !a1Element.classList.contains(TEST_CLASS_ONE), 'classList should not contain any added classes');
 
   pdomAuditRootNode(a1);
 
@@ -978,14 +977,14 @@ QUnit.test('ParallelDOM setters/getters', assert => {
 
 QUnit.test('Next/Previous focusable', assert => {
   if (!canRunTests) {
-    window.assert.ok(true, 'Skipping test because document does not have focus');
+    assert.ok(true, 'Skipping test because document does not have focus');
     return;
   }
 
   // Especially important for puppeteer which doesn't support focus/blur events
   // see https://github.com/phetsims/aqua/issues/134
   if (!document.hasFocus()) {
-    window.assert.ok(true, 'Unable to run focus tests if document does not have focus.');
+    assert.ok(true, 'Unable to run focus tests if document does not have focus.');
   }
   else {
     const util = PDOMUtils;
@@ -1003,7 +1002,7 @@ QUnit.test('Next/Previous focusable', assert => {
     const e = new Node({ tagName: 'div', focusable: true, focusHighlight: 'invisible' });
     rootNode.children = [a, b, c, d];
 
-    window.assert.ok(a.focusable, 'should be focusable');
+    assert.ok(a.focusable, 'should be focusable');
 
     // get dom elements from the body
     const rootElement = getPrimarySiblingElementByNode(rootNode);
@@ -1013,31 +1012,31 @@ QUnit.test('Next/Previous focusable', assert => {
     const dElement = getPrimarySiblingElementByNode(d);
 
     a.focus();
-    window.assert.ok(document.activeElement!.id === aElement.id, 'a in focus (next)');
+    assert.ok(document.activeElement!.id === aElement.id, 'a in focus (next)');
 
     util.getNextFocusable(rootElement).focus();
-    window.assert.ok(document.activeElement!.id === bElement.id, 'b in focus (next)');
+    assert.ok(document.activeElement!.id === bElement.id, 'b in focus (next)');
 
     util.getNextFocusable(rootElement).focus();
-    window.assert.ok(document.activeElement!.id === cElement.id, 'c in focus (next)');
+    assert.ok(document.activeElement!.id === cElement.id, 'c in focus (next)');
 
     util.getNextFocusable(rootElement).focus();
-    window.assert.ok(document.activeElement!.id === dElement.id, 'd in focus (next)');
+    assert.ok(document.activeElement!.id === dElement.id, 'd in focus (next)');
 
     util.getNextFocusable(rootElement).focus();
-    window.assert.ok(document.activeElement!.id === dElement.id, 'd still in focus (next)');
+    assert.ok(document.activeElement!.id === dElement.id, 'd still in focus (next)');
 
     util.getPreviousFocusable(rootElement).focus();
-    window.assert.ok(document.activeElement!.id === cElement.id, 'c in focus (previous)');
+    assert.ok(document.activeElement!.id === cElement.id, 'c in focus (previous)');
 
     util.getPreviousFocusable(rootElement).focus();
-    window.assert.ok(document.activeElement!.id === bElement.id, 'b in focus (previous)');
+    assert.ok(document.activeElement!.id === bElement.id, 'b in focus (previous)');
 
     util.getPreviousFocusable(rootElement).focus();
-    window.assert.ok(document.activeElement!.id === aElement.id, 'a in focus (previous)');
+    assert.ok(document.activeElement!.id === aElement.id, 'a in focus (previous)');
 
     util.getPreviousFocusable(rootElement).focus();
-    window.assert.ok(document.activeElement!.id === aElement.id, 'a still in focus (previous)');
+    assert.ok(document.activeElement!.id === aElement.id, 'a still in focus (previous)');
 
     rootNode.removeAllChildren();
     rootNode.addChild(a);
@@ -1051,7 +1050,7 @@ QUnit.test('Next/Previous focusable', assert => {
 
     a.focus();
     util.getNextFocusable(rootElement).focus();
-    window.assert.ok(document.activeElement!.id === aElement.id, 'a only element focusable');
+    assert.ok(document.activeElement!.id === aElement.id, 'a only element focusable');
 
     pdomAuditRootNode(rootNode);
     display.dispose();
@@ -1079,13 +1078,13 @@ QUnit.test('Remove accessibility subtree', assert => {
   let dDOMElement = getPrimarySiblingElementByNode(d);
 
   // verify the dom
-  window.assert.ok(rootDOMElement.children.length === 5, 'children added');
+  assert.ok(rootDOMElement.children.length === 5, 'children added');
 
   // redefine because the dom element references above have become stale
   rootDOMElement = getPrimarySiblingElementByNode(rootNode);
   dDOMElement = getPrimarySiblingElementByNode(d);
-  window.assert.ok(rootDOMElement.children.length === 5, 'children added back');
-  window.assert.ok(dDOMElement.children.length === 1, 'descendant child added back');
+  assert.ok(rootDOMElement.children.length === 5, 'children added back');
+  assert.ok(dDOMElement.children.length === 1, 'descendant child added back');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 
@@ -1122,13 +1121,13 @@ QUnit.test('accessible-dag', assert => {
   //     <div id="d">
   //       <div id="e-instance2">
   const instances = e.pdomInstances;
-  window.assert.ok(e.pdomInstances.length === 3, 'node e should have 3 accessible instances');
-  window.assert.ok((instances[0].peer!.primarySibling!.id !== instances[1].peer!.primarySibling!.id) &&
+  assert.ok(e.pdomInstances.length === 3, 'node e should have 3 accessible instances');
+  assert.ok((instances[0].peer!.primarySibling!.id !== instances[1].peer!.primarySibling!.id) &&
     (instances[1].peer!.primarySibling!.id !== instances[2].peer!.primarySibling!.id) &&
     (instances[0].peer!.primarySibling!.id !== instances[2].peer!.primarySibling!.id), 'each dom element should be unique');
-  window.assert.ok(document.getElementById(instances[0].peer!.primarySibling!.id), 'peer primarySibling 0 should be in the DOM');
-  window.assert.ok(document.getElementById(instances[1].peer!.primarySibling!.id), 'peer primarySibling 1 should be in the DOM');
-  window.assert.ok(document.getElementById(instances[2].peer!.primarySibling!.id), 'peer primarySibling 2 should be in the DOM');
+  assert.ok(document.getElementById(instances[0].peer!.primarySibling!.id), 'peer primarySibling 0 should be in the DOM');
+  assert.ok(document.getElementById(instances[1].peer!.primarySibling!.id), 'peer primarySibling 1 should be in the DOM');
+  assert.ok(document.getElementById(instances[2].peer!.primarySibling!.id), 'peer primarySibling 2 should be in the DOM');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 
@@ -1138,7 +1137,7 @@ QUnit.test('replaceChild', assert => {
 
   // this suite involves focus tests which do not work on headless puppeteer
   if (!document.hasFocus()) {
-    window.assert.ok(true, 'Unable to run focus tests if document does not have focus.');
+    assert.ok(true, 'Unable to run focus tests if document does not have focus.');
   }
   else {
 
@@ -1167,9 +1166,9 @@ QUnit.test('replaceChild', assert => {
     a.replaceChild(e, testNode);
     const afterIndex = a.indexOfChild(testNode);
 
-    window.assert.ok(a.hasChild(testNode), 'a should have child testNode after it replaced node e');
-    window.assert.ok(!a.hasChild(e), 'a should no longer have child node e after it was replaced by testNode');
-    window.assert.ok(initIndex === afterIndex, 'testNode should be at the same place as e was after replaceChild');
+    assert.ok(a.hasChild(testNode), 'a should have child testNode after it replaced node e');
+    assert.ok(!a.hasChild(e), 'a should no longer have child node e after it was replaced by testNode');
+    assert.ok(initIndex === afterIndex, 'testNode should be at the same place as e was after replaceChild');
 
     // create a scene graph to test how scenery manages focus
     //    a
@@ -1187,38 +1186,38 @@ QUnit.test('replaceChild', assert => {
     d.addChild(e);
 
     f.focus();
-    window.assert.ok(f.focused, 'f has focus before being replaced');
+    assert.ok(f.focused, 'f has focus before being replaced');
 
     // replace f with testNode, ensure that testNode receives focus after replacing
     a.replaceChild(f, testNode);
-    window.assert.ok(!a.hasChild(f), 'a should no longer have child f');
-    window.assert.ok(a.hasChild(testNode), 'a should now have child testNode');
-    window.assert.ok(!f.focused, 'f no longer has focus after being replaced');
-    window.assert.ok(testNode.focused, 'testNode has focus after replacing focused node f');
-    window.assert.ok(testNode.pdomInstances[0].peer!.primarySibling === document.activeElement, 'browser is focusing testNode');
+    assert.ok(!a.hasChild(f), 'a should no longer have child f');
+    assert.ok(a.hasChild(testNode), 'a should now have child testNode');
+    assert.ok(!f.focused, 'f no longer has focus after being replaced');
+    assert.ok(testNode.focused, 'testNode has focus after replacing focused node f');
+    assert.ok(testNode.pdomInstances[0].peer!.primarySibling === document.activeElement, 'browser is focusing testNode');
 
     testNode.blur();
-    window.assert.ok(!!testNode, 'testNode blurred before being replaced');
+    assert.ok(!!testNode, 'testNode blurred before being replaced');
 
     // replace testNode with f after bluring testNode, neither should have focus after the replacement
     a.replaceChild(testNode, f);
-    window.assert.ok(a.hasChild(f), 'node f should replace node testNode');
-    window.assert.ok(!a.hasChild(testNode), 'testNode should no longer be a child of node a');
-    window.assert.ok(!testNode.focused, 'testNode should not have focus after being replaced');
-    window.assert.ok(!f.focused, 'f should not have focus after replacing testNode, testNode did not have focus');
-    window.assert.ok(f.pdomInstances[0].peer!.primarySibling !== document.activeElement, 'browser should not be focusing node f');
+    assert.ok(a.hasChild(f), 'node f should replace node testNode');
+    assert.ok(!a.hasChild(testNode), 'testNode should no longer be a child of node a');
+    assert.ok(!testNode.focused, 'testNode should not have focus after being replaced');
+    assert.ok(!f.focused, 'f should not have focus after replacing testNode, testNode did not have focus');
+    assert.ok(f.pdomInstances[0].peer!.primarySibling !== document.activeElement, 'browser should not be focusing node f');
 
     // focus node d and replace with non-focusable testNode, neither should have focus since testNode is not focusable
     d.focus();
     testNode.focusable = false;
-    window.assert.ok(d.focused, 'd has focus before being replaced');
-    window.assert.ok(!testNode.focusable, 'testNode is not focusable before replacing node d');
+    assert.ok(d.focused, 'd has focus before being replaced');
+    assert.ok(!testNode.focusable, 'testNode is not focusable before replacing node d');
 
     b.replaceChild(d, testNode);
-    window.assert.ok(b.hasChild(testNode), 'testNode should be a child of node b after replacing with replaceChild');
-    window.assert.ok(!b.hasChild(d), 'd should not be a child of b after it was replaced with replaceChild');
-    window.assert.ok(!d.focused, 'd does not have focus after being replaced by testNode');
-    window.assert.ok(!testNode.focused, 'testNode does not have focus after replacing node d (testNode is not focusable)');
+    assert.ok(b.hasChild(testNode), 'testNode should be a child of node b after replacing with replaceChild');
+    assert.ok(!b.hasChild(d), 'd should not be a child of b after it was replaced with replaceChild');
+    assert.ok(!d.focused, 'd does not have focus after being replaced by testNode');
+    assert.ok(!testNode.focused, 'testNode does not have focus after replacing node d (testNode is not focusable)');
 
     display.dispose();
     display.domElement.parentElement!.removeChild(display.domElement);
@@ -1276,41 +1275,41 @@ QUnit.test('pdomVisible', assert => {
   const divAChildren = divA.childNodes;
   const divEChildren = divE.childNodes;
 
-  window.assert.ok(_.includes(divAChildren, buttonB), 'button B should be an immediate child of div A');
-  window.assert.ok(_.includes(divAChildren, divE), 'div E should be an immediate child of div A');
-  window.assert.ok(_.includes(divAChildren, buttonG2), 'button G2 should be an immediate child of div A');
-  window.assert.ok(_.includes(divEChildren, buttonG1), 'button G1 should be an immediate child of div E');
+  assert.ok(_.includes(divAChildren, buttonB), 'button B should be an immediate child of div A');
+  assert.ok(_.includes(divAChildren, divE), 'div E should be an immediate child of div A');
+  assert.ok(_.includes(divAChildren, buttonG2), 'button G2 should be an immediate child of div A');
+  assert.ok(_.includes(divEChildren, buttonG1), 'button G1 should be an immediate child of div E');
 
   // make node B invisible for accessibility - it should should visible, but hidden from screen readers
   b.pdomVisible = false;
-  window.assert.equal(b.visible, true, 'b should be visible after becoming hidden for screen readers');
-  window.assert.equal(b.pdomVisible, false, 'b state should reflect it is hidden for screen readers');
-  window.assert.equal(buttonB.hidden, true, 'buttonB should be hidden for screen readers');
-  window.assert.equal(b.pdomDisplayed, false, 'pdomVisible=false, b should have no representation in the PDOM');
+  assert.equal(b.visible, true, 'b should be visible after becoming hidden for screen readers');
+  assert.equal(b.pdomVisible, false, 'b state should reflect it is hidden for screen readers');
+  assert.equal(buttonB.hidden, true, 'buttonB should be hidden for screen readers');
+  assert.equal(b.pdomDisplayed, false, 'pdomVisible=false, b should have no representation in the PDOM');
   b.pdomVisible = true;
 
   // make node B invisible - it should not be visible, and it should be hidden for screen readers
   b.visible = false;
-  window.assert.equal(b.visible, false, 'state of node b is visible');
-  window.assert.equal(buttonB.hidden, true, 'buttonB is hidden from screen readers after becoming invisible');
-  window.assert.equal(b.pdomVisible, true, 'state of node b still reflects pdom visibility when invisible');
-  window.assert.equal(b.pdomDisplayed, false, 'b invisible and should have no representation in the PDOM');
+  assert.equal(b.visible, false, 'state of node b is visible');
+  assert.equal(buttonB.hidden, true, 'buttonB is hidden from screen readers after becoming invisible');
+  assert.equal(b.pdomVisible, true, 'state of node b still reflects pdom visibility when invisible');
+  assert.equal(b.pdomDisplayed, false, 'b invisible and should have no representation in the PDOM');
   b.visible = true;
 
   // make node f invisible - g's trail that goes through f should be invisible to AT, tcomhe child of c should remain pdomVisible
   f.visible = false;
-  window.assert.equal(g.isPDOMVisible(), true, 'state of pdomVisible should remain true on node g');
-  window.assert.ok(!buttonG1.hidden, 'buttonG1 (child of e) should not be hidden after parent node f made invisible (no accessible content on node f)');
-  window.assert.equal(buttonG2.hidden, true, 'buttonG2 should be hidden after parent node f made invisible (no accessible content on node f)');
-  window.assert.equal(g.pdomDisplayed, true, 'one parent still visible, g still has one PDOMInstance displayed in PDOM');
+  assert.equal(g.isPDOMVisible(), true, 'state of pdomVisible should remain true on node g');
+  assert.ok(!buttonG1.hidden, 'buttonG1 (child of e) should not be hidden after parent node f made invisible (no accessible content on node f)');
+  assert.equal(buttonG2.hidden, true, 'buttonG2 should be hidden after parent node f made invisible (no accessible content on node f)');
+  assert.equal(g.pdomDisplayed, true, 'one parent still visible, g still has one PDOMInstance displayed in PDOM');
   f.visible = true;
 
   // make node c (no accessible content) invisible to screen, e should be hidden and g2 should be hidden
   c.pdomVisible = false;
-  window.assert.equal(c.visible, true, 'c should still be visible after becoming invisible to screen readers');
-  window.assert.equal(divE.hidden, true, 'div E should be hidden after parent node c (no accessible content) is made invisible to screen readers');
-  window.assert.equal(buttonG2.hidden, true, 'buttonG2 should be hidden after ancestor node c (no accessible content) is made invisible to screen readers');
-  window.assert.ok(!divA.hidden, 'div A should not have been hidden by making descendant c invisible to screen readers');
+  assert.equal(c.visible, true, 'c should still be visible after becoming invisible to screen readers');
+  assert.equal(divE.hidden, true, 'div E should be hidden after parent node c (no accessible content) is made invisible to screen readers');
+  assert.equal(buttonG2.hidden, true, 'buttonG2 should be hidden after ancestor node c (no accessible content) is made invisible to screen readers');
+  assert.ok(!divA.hidden, 'div A should not have been hidden by making descendant c invisible to screen readers');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 
@@ -1325,16 +1324,16 @@ QUnit.test('inputValue', assert => {
   const a = new Node({ tagName: 'input', inputType: 'radio', inputValue: 'i am value' });
   rootNode.addChild(a);
   let aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.getAttribute('value') === 'i am value', 'should have correct value');
+  assert.ok(aElement.getAttribute('value') === 'i am value', 'should have correct value');
 
   const differentValue = 'i am different value';
   a.inputValue = differentValue;
   aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.getAttribute('value') === differentValue, 'should have different value');
+  assert.ok(aElement.getAttribute('value') === differentValue, 'should have different value');
 
   rootNode.addChild(new Node({ children: [a] }));
   aElement = a.pdomInstances[1].peer!.primarySibling!;
-  window.assert.ok(aElement.getAttribute('value') === differentValue, 'should have the same different value');
+  assert.ok(aElement.getAttribute('value') === differentValue, 'should have the same different value');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 
@@ -1350,24 +1349,24 @@ QUnit.test('ariaValueText', assert => {
   const a = new Node({ tagName: 'input', ariaValueText, inputType: 'range' });
   rootNode.addChild(a);
   let aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.getAttribute('aria-valuetext') === ariaValueText, 'should have correct value text.');
-  window.assert.ok(a.ariaValueText === ariaValueText, 'should have correct value text, getter');
+  assert.ok(aElement.getAttribute('aria-valuetext') === ariaValueText, 'should have correct value text.');
+  assert.ok(a.ariaValueText === ariaValueText, 'should have correct value text, getter');
 
   const differentValue = 'i am different value text';
   a.ariaValueText = differentValue;
   aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.getAttribute('aria-valuetext') === differentValue, 'should have different value text');
-  window.assert.ok(a.ariaValueText === differentValue, 'should have different value text, getter');
+  assert.ok(aElement.getAttribute('aria-valuetext') === differentValue, 'should have different value text');
+  assert.ok(a.ariaValueText === differentValue, 'should have different value text, getter');
 
   rootNode.addChild(new Node({ children: [a] }));
   aElement = a.pdomInstances[1].peer!.primarySibling!;
-  window.assert.ok(aElement.getAttribute('aria-valuetext') === differentValue, 'should have the same different value text after children moving');
-  window.assert.ok(a.ariaValueText === differentValue, 'should have the same different value text after children moving, getter');
+  assert.ok(aElement.getAttribute('aria-valuetext') === differentValue, 'should have the same different value text after children moving');
+  assert.ok(a.ariaValueText === differentValue, 'should have the same different value text after children moving, getter');
 
   a.tagName = 'div';
   aElement = a.pdomInstances[1].peer!.primarySibling!;
-  window.assert.ok(aElement.getAttribute('aria-valuetext') === differentValue, 'value text as div');
-  window.assert.ok(a.ariaValueText === differentValue, 'value text as div, getter');
+  assert.ok(aElement.getAttribute('aria-valuetext') === differentValue, 'value text as div');
+  assert.ok(a.ariaValueText === differentValue, 'value text as div, getter');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 
@@ -1385,11 +1384,11 @@ QUnit.test('setPDOMAttribute', assert => {
 
   a.setPDOMAttribute('test', 'test1');
   let aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.getAttribute('test') === 'test1', 'setPDOMAttribute for primary sibling');
+  assert.ok(aElement.getAttribute('test') === 'test1', 'setPDOMAttribute for primary sibling');
 
   a.removePDOMAttribute('test');
   aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.getAttribute('test') === null, 'removePDOMAttribute for primary sibling');
+  assert.ok(aElement.getAttribute('test') === null, 'removePDOMAttribute for primary sibling');
 
   a.setPDOMAttribute('test', 'testValue');
   a.setPDOMAttribute('test', 'testValueLabel', {
@@ -1399,8 +1398,8 @@ QUnit.test('setPDOMAttribute', assert => {
   const testBothAttributes = () => {
     aElement = getPrimarySiblingElementByNode(a);
     const aLabelElement = aElement.parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-    window.assert.ok(aElement.getAttribute('test') === 'testValue', 'setPDOMAttribute for primary sibling 2');
-    window.assert.ok(aLabelElement.getAttribute('test') === 'testValueLabel', 'setPDOMAttribute for label sibling');
+    assert.ok(aElement.getAttribute('test') === 'testValue', 'setPDOMAttribute for primary sibling 2');
+    assert.ok(aLabelElement.getAttribute('test') === 'testValueLabel', 'setPDOMAttribute for label sibling');
   };
   testBothAttributes();
 
@@ -1413,8 +1412,8 @@ QUnit.test('setPDOMAttribute', assert => {
   });
   aElement = getPrimarySiblingElementByNode(a);
   const aLabelElement = aElement.parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-  window.assert.ok(aElement.getAttribute('test') === 'testValue', 'removePDOMAttribute for label should not effect primary sibling ');
-  window.assert.ok(aLabelElement.getAttribute('test') === null, 'removePDOMAttribute for label sibling');
+  assert.ok(aElement.getAttribute('test') === 'testValue', 'removePDOMAttribute for label should not effect primary sibling ');
+  assert.ok(aLabelElement.getAttribute('test') === null, 'removePDOMAttribute for label sibling');
 
   a.removePDOMAttributes();
   const attributeName = 'multiTest';
@@ -1422,18 +1421,18 @@ QUnit.test('setPDOMAttribute', assert => {
     asProperty: false
   });
   aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.getAttribute(attributeName) === 'true', 'asProperty:false should set attribute');
+  assert.ok(aElement.getAttribute(attributeName) === 'true', 'asProperty:false should set attribute');
 
   a.setPDOMAttribute(attributeName, false, {
     asProperty: true
   });
-  window.assert.ok(!aElement.getAttribute(attributeName), 'asProperty:true should remove attribute');
+  assert.ok(!aElement.getAttribute(attributeName), 'asProperty:true should remove attribute');
 
   // @ts-expect-error for testing
-  window.assert.equal(aElement[attributeName], false, 'asProperty:true should set property');
+  assert.equal(aElement[attributeName], false, 'asProperty:true should set property');
 
   const testAttributes = a.getPDOMAttributes().filter(a => a.attribute === attributeName);
-  window.assert.ok(testAttributes.length === 1, 'asProperty change should alter the attribute, not add a new one.');
+  assert.ok(testAttributes.length === 1, 'asProperty change should alter the attribute, not add a new one.');
 
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
@@ -1448,14 +1447,14 @@ QUnit.test('pdomChecked', assert => {
   const a = new Node({ tagName: 'input', inputType: 'radio', pdomChecked: true });
   rootNode.addChild(a);
   let aElement = getPrimarySiblingElementByNode(a) as HTMLInputElement;
-  window.assert.ok(aElement.checked, 'should be checked');
+  assert.ok(aElement.checked, 'should be checked');
 
   a.pdomChecked = false;
   aElement = getPrimarySiblingElementByNode(a) as HTMLInputElement;
-  window.assert.ok(!aElement.checked, 'should not be checked');
+  assert.ok(!aElement.checked, 'should not be checked');
 
   a.inputType = 'range';
-  window.assert && window.assert.throws(() => {
+  window.assert && assert.throws(() => {
     a.pdomChecked = true;
   }, /.*/, 'should fail if inputType range');
 
@@ -1466,7 +1465,7 @@ QUnit.test('pdomChecked', assert => {
 
 QUnit.test('swapVisibility', assert => {
   if (!canRunTests) {
-    window.assert.ok(true, 'Skipping test because document does not have focus');
+    assert.ok(true, 'Skipping test because document does not have focus');
     return;
   }
 
@@ -1492,10 +1491,10 @@ QUnit.test('swapVisibility', assert => {
   b.visible = true;
   c.visible = false;
   b.swapVisibility(c);
-  window.assert.equal(b.visible, false, 'b should now be invisible');
-  window.assert.equal(c.visible, true, 'c should now be visible');
-  window.assert.equal(b.focused, false, 'b should not have focus after being made invisible');
-  window.assert.equal(c.focused, false, 'c should not have  focus since b did not have focus');
+  assert.equal(b.visible, false, 'b should now be invisible');
+  assert.equal(c.visible, true, 'c should now be visible');
+  assert.equal(b.focused, false, 'b should not have focus after being made invisible');
+  assert.equal(c.focused, false, 'c should not have  focus since b did not have focus');
 
   // swap visibility between two nodes where the one that is initially visible has keyboard focus, the newly visible
   // node then receive focus
@@ -1503,10 +1502,10 @@ QUnit.test('swapVisibility', assert => {
   c.visible = false;
   b.focus();
   b.swapVisibility(c);
-  window.assert.equal(b.visible, false, 'b should be invisible after swapVisibility');
-  window.assert.equal(c.visible, true, 'c should be visible after  swapVisibility');
-  window.assert.equal(b.focused, false, 'b should no longer have focus  after swapVisibility');
-  window.assert.equal(c.focused, true, 'c should now have focus after swapVisibility');
+  assert.equal(b.visible, false, 'b should be invisible after swapVisibility');
+  assert.equal(c.visible, true, 'c should be visible after  swapVisibility');
+  assert.equal(b.focused, false, 'b should no longer have focus  after swapVisibility');
+  assert.equal(c.focused, true, 'c should now have focus after swapVisibility');
 
   // swap visibility between two nodes where the one that is initially visible has keyboard focus, the newly visible
   // node then receive focus - like the previous test but c.swapVisibility( b ) is the same as b.swapVisibility( c )
@@ -1514,10 +1513,10 @@ QUnit.test('swapVisibility', assert => {
   c.visible = false;
   b.focus();
   b.swapVisibility(c);
-  window.assert.equal(b.visible, false, 'b should be invisible after swapVisibility');
-  window.assert.equal(c.visible, true, 'c should be visible after  swapVisibility');
-  window.assert.equal(b.focused, false, 'b should no longer have focus  after swapVisibility');
-  window.assert.equal(c.focused, true, 'c should now have focus after swapVisibility');
+  assert.equal(b.visible, false, 'b should be invisible after swapVisibility');
+  assert.equal(c.visible, true, 'c should be visible after  swapVisibility');
+  assert.equal(b.focused, false, 'b should no longer have focus  after swapVisibility');
+  assert.equal(c.focused, true, 'c should now have focus after swapVisibility');
 
   // swap visibility between two nodes where the first node has focus, but the second node is not focusable. After
   // swapping, neither should have focus
@@ -1526,10 +1525,10 @@ QUnit.test('swapVisibility', assert => {
   b.focus();
   c.focusable = false;
   b.swapVisibility(c);
-  window.assert.equal(b.visible, false, 'b should be invisible after visibility is swapped');
-  window.assert.equal(c.visible, true, 'c should be visible after visibility is swapped');
-  window.assert.equal(b.focused, false, 'b should no longer have focus after visibility is swapped');
-  window.assert.equal(c.focused, false, 'c should not have focus after visibility is swapped because it is not focusable');
+  assert.equal(b.visible, false, 'b should be invisible after visibility is swapped');
+  assert.equal(c.visible, true, 'c should be visible after visibility is swapped');
+  assert.equal(b.focused, false, 'b should no longer have focus after visibility is swapped');
+  assert.equal(c.focused, false, 'c should not have focus after visibility is swapped because it is not focusable');
 
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
@@ -1545,21 +1544,21 @@ QUnit.test('Aria Label Setter', assert => {
   // create some nodes for testing
   const a = new Node({ tagName: 'button', ariaLabel: TEST_LABEL_2 });
 
-  window.assert.ok(a.ariaLabel === TEST_LABEL_2, 'aria-label getter/setter');
-  window.assert.ok(a.labelContent === null, 'no other label set with aria-label');
-  window.assert.ok(a.innerContent === null, 'no inner content set with aria-label');
+  assert.ok(a.ariaLabel === TEST_LABEL_2, 'aria-label getter/setter');
+  assert.ok(a.labelContent === null, 'no other label set with aria-label');
+  assert.ok(a.innerContent === null, 'no inner content set with aria-label');
 
   rootNode.addChild(a);
   let buttonA = a.pdomInstances[0].peer!.primarySibling!;
-  window.assert.ok(buttonA.getAttribute('aria-label') === TEST_LABEL_2, 'setter on dom element');
-  window.assert.ok(buttonA.innerHTML === '', 'no inner html with aria-label setter');
+  assert.ok(buttonA.getAttribute('aria-label') === TEST_LABEL_2, 'setter on dom element');
+  assert.ok(buttonA.innerHTML === '', 'no inner html with aria-label setter');
 
   a.ariaLabel = null;
 
   buttonA = a.pdomInstances[0].peer!.primarySibling!;
-  window.assert.ok(!buttonA.hasAttribute('aria-label'), 'setter can clear on dom element');
-  window.assert.ok(buttonA.innerHTML === '', 'no inner html with aria-label setter when clearing');
-  window.assert.ok(a.ariaLabel === null, 'cleared in Node model.');
+  assert.ok(!buttonA.hasAttribute('aria-label'), 'setter can clear on dom element');
+  assert.ok(buttonA.innerHTML === '', 'no inner html with aria-label setter when clearing');
+  assert.ok(a.ariaLabel === null, 'cleared in Node model.');
 
   pdomAuditRootNode(rootNode);
   display.dispose();
@@ -1569,7 +1568,7 @@ QUnit.test('Aria Label Setter', assert => {
 
 QUnit.test('focusable option', assert => {
   if (!canRunTests) {
-    window.assert.ok(true, 'Skipping test because document does not have focus');
+    assert.ok(true, 'Skipping test because document does not have focus');
     return;
   }
 
@@ -1583,42 +1582,42 @@ QUnit.test('focusable option', assert => {
   const a = new Node({ tagName: 'div', focusable: true });
   rootNode.addChild(a);
 
-  window.assert.equal(a.focusable, true, 'focusable option setter');
-  window.assert.ok(getPrimarySiblingElementByNode(a).tabIndex === 0, 'tab index on primary sibling with setter');
+  assert.equal(a.focusable, true, 'focusable option setter');
+  assert.ok(getPrimarySiblingElementByNode(a).tabIndex === 0, 'tab index on primary sibling with setter');
 
   // change the tag name, but focusable should stay the same
   a.tagName = 'p';
 
-  window.assert.equal(a.focusable, true, 'tagName option should not change focusable value');
-  window.assert.ok(getPrimarySiblingElementByNode(a).tabIndex === 0, 'tagName option should not change tab index on primary sibling');
+  assert.equal(a.focusable, true, 'tagName option should not change focusable value');
+  assert.ok(getPrimarySiblingElementByNode(a).tabIndex === 0, 'tagName option should not change tab index on primary sibling');
 
   a.focusable = false;
-  window.assert.ok(getPrimarySiblingElementByNode(a).tabIndex === -1, 'set focusable false');
+  assert.ok(getPrimarySiblingElementByNode(a).tabIndex === -1, 'set focusable false');
 
   const b = new Node({ tagName: 'p' });
   rootNode.addChild(b);
 
   b.focusable = true;
 
-  window.assert.ok(b.focusable, 'set focusable as setter');
-  window.assert.ok(getPrimarySiblingElementByNode(b).tabIndex === 0, 'set focusable as setter');
+  assert.ok(b.focusable, 'set focusable as setter');
+  assert.ok(getPrimarySiblingElementByNode(b).tabIndex === 0, 'set focusable as setter');
 
   // HTML elements that are natively focusable are focusable by default
   const c = new Node({ tagName: 'button' });
-  window.assert.ok(c.focusable, 'button is focusable by default');
+  assert.ok(c.focusable, 'button is focusable by default');
 
   // change tagName to something that is not focusable, focusable should be false
   c.tagName = 'p';
-  window.assert.ok(!c.focusable, 'button changed to paragraph, should no longer be focusable');
+  assert.ok(!c.focusable, 'button changed to paragraph, should no longer be focusable');
 
   // When focusable is set to null on an element that is not focusable by default, it should lose focus
   const d = new Node({ tagName: 'div', focusable: true, focusHighlight });
   rootNode.addChild(d);
   d.focus();
-  window.assert.ok(d.focused, 'focusable div should be focused after calling focus()');
+  assert.ok(d.focused, 'focusable div should be focused after calling focus()');
 
   d.focusable = null;
-  window.assert.ok(!d.focused, 'default div should lose focus after node restored to null focusable');
+  assert.ok(!d.focused, 'default div should lose focus after node restored to null focusable');
 
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
@@ -1645,31 +1644,31 @@ QUnit.test('append siblings/appendLabel/appendDescription setters', assert => {
 
   const aElement = getPrimarySiblingElementByNode(a);
   let containerElement = aElement.parentElement!;
-  window.assert.ok(containerElement.tagName.toUpperCase() === 'SECTION', 'container parent is set to right tag');
+  assert.ok(containerElement.tagName.toUpperCase() === 'SECTION', 'container parent is set to right tag');
 
   let peerElements = containerElement.childNodes as unknown as HTMLElement[];
-  window.assert.ok(peerElements.length === 3, 'expected three siblings');
-  window.assert.ok(peerElements[0].tagName.toUpperCase() === DEFAULT_DESCRIPTION_TAG_NAME, 'description first sibling');
-  window.assert.ok(peerElements[1].tagName.toUpperCase() === 'LI', 'primary sibling second sibling');
-  window.assert.ok(peerElements[2].tagName.toUpperCase() === 'H3', 'label sibling last');
+  assert.ok(peerElements.length === 3, 'expected three siblings');
+  assert.ok(peerElements[0].tagName.toUpperCase() === DEFAULT_DESCRIPTION_TAG_NAME, 'description first sibling');
+  assert.ok(peerElements[1].tagName.toUpperCase() === 'LI', 'primary sibling second sibling');
+  assert.ok(peerElements[2].tagName.toUpperCase() === 'H3', 'label sibling last');
 
   a.appendDescription = true;
   containerElement = getPrimarySiblingElementByNode(a).parentElement!;
   peerElements = containerElement.childNodes as unknown as HTMLElement[];
-  window.assert.ok(containerElement.childNodes.length === 3, 'expected three siblings');
-  window.assert.ok(peerElements[0].tagName.toUpperCase() === 'LI', 'primary sibling first sibling');
-  window.assert.ok(peerElements[1].tagName.toUpperCase() === 'H3', 'label sibling second');
-  window.assert.ok(peerElements[2].tagName.toUpperCase() === DEFAULT_DESCRIPTION_TAG_NAME, 'description last sibling');
+  assert.ok(containerElement.childNodes.length === 3, 'expected three siblings');
+  assert.ok(peerElements[0].tagName.toUpperCase() === 'LI', 'primary sibling first sibling');
+  assert.ok(peerElements[1].tagName.toUpperCase() === 'H3', 'label sibling second');
+  assert.ok(peerElements[2].tagName.toUpperCase() === DEFAULT_DESCRIPTION_TAG_NAME, 'description last sibling');
 
   // clear it out back to defaults should work with setters
   a.appendDescription = false;
   a.appendLabel = false;
   containerElement = getPrimarySiblingElementByNode(a).parentElement!;
   peerElements = containerElement.childNodes as unknown as HTMLElement[];
-  window.assert.ok(containerElement.childNodes.length === 3, 'expected three siblings');
-  window.assert.ok(peerElements[0].tagName.toUpperCase() === 'H3', 'label sibling first');
-  window.assert.ok(peerElements[1].tagName.toUpperCase() === DEFAULT_DESCRIPTION_TAG_NAME, 'description sibling second');
-  window.assert.ok(peerElements[2].tagName.toUpperCase() === 'LI', 'primary sibling last');
+  assert.ok(containerElement.childNodes.length === 3, 'expected three siblings');
+  assert.ok(peerElements[0].tagName.toUpperCase() === 'H3', 'label sibling first');
+  assert.ok(peerElements[1].tagName.toUpperCase() === DEFAULT_DESCRIPTION_TAG_NAME, 'description sibling second');
+  assert.ok(peerElements[2].tagName.toUpperCase() === 'LI', 'primary sibling last');
 
   // test order when using appendLabel/appendDescription without a parent container - order should be primary sibling,
   // label sibling, description sibling
@@ -1689,9 +1688,9 @@ QUnit.test('append siblings/appendLabel/appendDescription setters', assert => {
   let bElementParent = bElement.parentElement!;
   let indexOfPrimaryElement = Array.prototype.indexOf.call(bElementParent.childNodes, bElement);
 
-  window.assert.ok(bElementParent.childNodes[indexOfPrimaryElement] === bElement, 'b primary sibling first with no container, both appended');
-  window.assert.ok(bElementParent.childNodes[indexOfPrimaryElement + 1] === bPeer.labelSibling, 'b label sibling second with no container, both appended');
-  window.assert.ok(bElementParent.childNodes[indexOfPrimaryElement + 2] === bPeer.descriptionSibling, 'b description sibling third with no container, both appended');
+  assert.ok(bElementParent.childNodes[indexOfPrimaryElement] === bElement, 'b primary sibling first with no container, both appended');
+  assert.ok(bElementParent.childNodes[indexOfPrimaryElement + 1] === bPeer.labelSibling, 'b label sibling second with no container, both appended');
+  assert.ok(bElementParent.childNodes[indexOfPrimaryElement + 2] === bPeer.descriptionSibling, 'b description sibling third with no container, both appended');
 
   // test order when only description appended and no parent container - order should be label, primary, then
   // description
@@ -1703,9 +1702,9 @@ QUnit.test('append siblings/appendLabel/appendDescription setters', assert => {
   bElementParent = bElement.parentElement!;
   indexOfPrimaryElement = Array.prototype.indexOf.call(bElementParent.childNodes, bElement);
 
-  window.assert.ok(bElementParent.childNodes[indexOfPrimaryElement - 1] === bPeer.labelSibling, 'b label sibling first with no container, description appended');
-  window.assert.ok(bElementParent.childNodes[indexOfPrimaryElement] === bElement, 'b primary sibling second with no container, description appended');
-  window.assert.ok(bElementParent.childNodes[indexOfPrimaryElement + 1] === bPeer.descriptionSibling, 'b description sibling third with no container, description appended');
+  assert.ok(bElementParent.childNodes[indexOfPrimaryElement - 1] === bPeer.labelSibling, 'b label sibling first with no container, description appended');
+  assert.ok(bElementParent.childNodes[indexOfPrimaryElement] === bElement, 'b primary sibling second with no container, description appended');
+  assert.ok(bElementParent.childNodes[indexOfPrimaryElement + 1] === bPeer.descriptionSibling, 'b description sibling third with no container, description appended');
 
   pdomAuditRootNode(rootNode);
   display.dispose();
@@ -1727,14 +1726,14 @@ QUnit.test('containerAriaRole option', assert => {
   });
 
   rootNode.addChild(a);
-  window.assert.ok(a.containerAriaRole === 'application', 'role attribute should be on node property');
+  assert.ok(a.containerAriaRole === 'application', 'role attribute should be on node property');
   let aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.parentElement!.getAttribute('role') === 'application', 'role attribute should be on parent element');
+  assert.ok(aElement.parentElement!.getAttribute('role') === 'application', 'role attribute should be on parent element');
 
   a.containerAriaRole = null;
-  window.assert.ok(a.containerAriaRole === null, 'role attribute should be cleared on node');
+  assert.ok(a.containerAriaRole === null, 'role attribute should be cleared on node');
   aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.parentElement!.getAttribute('role') === null, 'role attribute should be cleared on parent element');
+  assert.ok(aElement.parentElement!.getAttribute('role') === null, 'role attribute should be cleared on parent element');
 
   pdomAuditRootNode(rootNode);
   display.dispose();
@@ -1756,14 +1755,14 @@ QUnit.test('ariaRole option', assert => {
   });
 
   rootNode.addChild(a);
-  window.assert.ok(a.ariaRole === 'application', 'role attribute should be on node property');
+  assert.ok(a.ariaRole === 'application', 'role attribute should be on node property');
   let aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.getAttribute('role') === 'application', 'role attribute should be on element');
+  assert.ok(aElement.getAttribute('role') === 'application', 'role attribute should be on element');
 
   a.ariaRole = null;
-  window.assert.ok(a.ariaRole === null, 'role attribute should be cleared on node');
+  assert.ok(a.ariaRole === null, 'role attribute should be cleared on node');
   aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.getAttribute('role') === null, 'role attribute should be cleared on element');
+  assert.ok(aElement.getAttribute('role') === null, 'role attribute should be cleared on element');
 
   pdomAuditRootNode(rootNode);
   display.dispose();
@@ -1775,7 +1774,7 @@ QUnit.test('ariaRole option', assert => {
 // Higher level setter/getter options
 QUnit.test('accessibleName option', assert => {
 
-  window.assert.ok(true);
+  assert.ok(true);
 
   // test the behavior of focusable function
   const rootNode = new Node({ tagName: 'div' });
@@ -1785,18 +1784,18 @@ QUnit.test('accessibleName option', assert => {
   const a = new Node({ tagName: 'div', accessibleName: TEST_LABEL });
   rootNode.addChild(a);
 
-  window.assert.ok(a.accessibleName === TEST_LABEL, 'accessibleName getter');
+  assert.ok(a.accessibleName === TEST_LABEL, 'accessibleName getter');
 
   const aElement = getPrimarySiblingElementByNode(a);
-  window.assert.ok(aElement.textContent === TEST_LABEL, 'accessibleName setter on div');
+  assert.ok(aElement.textContent === TEST_LABEL, 'accessibleName setter on div');
 
   const b = new Node({ tagName: 'input', accessibleName: TEST_LABEL, inputType: 'range' });
   a.addChild(b);
   const bElement = getPrimarySiblingElementByNode(b);
   const bParent = getPrimarySiblingElementByNode(b).parentElement!;
   const bLabelSibling = bParent.children[DEFAULT_LABEL_SIBLING_INDEX]!;
-  window.assert.ok(bLabelSibling.textContent === TEST_LABEL, 'accessibleName sets label sibling');
-  window.assert.ok(bLabelSibling.getAttribute('for')!.includes(bElement.id), 'accessibleName sets label\'s "for" attribute');
+  assert.ok(bLabelSibling.textContent === TEST_LABEL, 'accessibleName sets label sibling');
+  assert.ok(bLabelSibling.getAttribute('for')!.includes(bElement.id), 'accessibleName sets label\'s "for" attribute');
 
   const c = new Node({ containerTagName: 'div', tagName: 'div', ariaLabel: 'overrideThis' });
   rootNode.addChild(c);
@@ -1806,22 +1805,22 @@ QUnit.test('accessibleName option', assert => {
   };
   c.accessibleNameBehavior = cAccessibleNameBehavior;
 
-  window.assert.ok(c.accessibleNameBehavior === cAccessibleNameBehavior, 'getter works');
+  assert.ok(c.accessibleNameBehavior === cAccessibleNameBehavior, 'getter works');
 
   let cLabelElement = getPrimarySiblingElementByNode(c).parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-  window.assert.ok(cLabelElement.getAttribute('aria-label') === 'overrideThis', 'accessibleNameBehavior should not work until there is accessible name');
+  assert.ok(cLabelElement.getAttribute('aria-label') === 'overrideThis', 'accessibleNameBehavior should not work until there is accessible name');
   c.accessibleName = 'accessible name description';
   cLabelElement = getPrimarySiblingElementByNode(c).parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-  window.assert.ok(cLabelElement.getAttribute('aria-label') === 'accessible name description', 'accessible name setter');
+  assert.ok(cLabelElement.getAttribute('aria-label') === 'accessible name description', 'accessible name setter');
 
   c.accessibleName = '';
 
   cLabelElement = getPrimarySiblingElementByNode(c).parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-  window.assert.ok(cLabelElement.getAttribute('aria-label') === '', 'accessibleNameBehavior should work for empty string');
+  assert.ok(cLabelElement.getAttribute('aria-label') === '', 'accessibleNameBehavior should work for empty string');
 
   c.accessibleName = null;
   cLabelElement = getPrimarySiblingElementByNode(c).parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-  window.assert.ok(cLabelElement.getAttribute('aria-label') === 'overrideThis', 'accessibleNameBehavior should not work until there is accessible name');
+  assert.ok(cLabelElement.getAttribute('aria-label') === 'overrideThis', 'accessibleNameBehavior should not work until there is accessible name');
 
 
   const d = new Node({ containerTagName: 'div', tagName: 'div' });
@@ -1833,22 +1832,22 @@ QUnit.test('accessibleName option', assert => {
   };
   d.accessibleNameBehavior = dAccessibleNameBehavior;
 
-  window.assert.ok(d.accessibleNameBehavior === dAccessibleNameBehavior, 'getter works');
+  assert.ok(d.accessibleNameBehavior === dAccessibleNameBehavior, 'getter works');
   let dLabelElement = getPrimarySiblingElementByNode(d).parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-  window.assert.ok(dLabelElement.getAttribute('aria-label') === null, 'accessibleNameBehavior should not work until there is accessible name');
+  assert.ok(dLabelElement.getAttribute('aria-label') === null, 'accessibleNameBehavior should not work until there is accessible name');
   const accessibleNameDescription = 'accessible name description';
   d.accessibleName = accessibleNameDescription;
   dLabelElement = getPrimarySiblingElementByNode(d).parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-  window.assert.ok(dLabelElement.getAttribute('aria-label') === accessibleNameDescription, 'accessible name setter');
+  assert.ok(dLabelElement.getAttribute('aria-label') === accessibleNameDescription, 'accessible name setter');
 
   d.accessibleName = '';
 
   dLabelElement = getPrimarySiblingElementByNode(d).parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-  window.assert.ok(dLabelElement.getAttribute('aria-label') === '', 'accessibleNameBehavior should work for empty string');
+  assert.ok(dLabelElement.getAttribute('aria-label') === '', 'accessibleNameBehavior should work for empty string');
 
   d.accessibleName = null;
   dLabelElement = getPrimarySiblingElementByNode(d).parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-  window.assert.ok(dLabelElement.getAttribute('aria-label') === null, 'accessibleNameBehavior should not work until there is accessible name');
+  assert.ok(dLabelElement.getAttribute('aria-label') === null, 'accessibleNameBehavior should not work until there is accessible name');
 
   pdomAuditRootNode(rootNode);
   display.dispose();
@@ -1858,7 +1857,7 @@ QUnit.test('accessibleName option', assert => {
 
 QUnit.test('pdomHeading option', assert => {
 
-  window.assert.ok(true);
+  assert.ok(true);
 
   // test the behavior of focusable function
   const rootNode = new Node({ tagName: 'div' });
@@ -1868,11 +1867,11 @@ QUnit.test('pdomHeading option', assert => {
   const a = new Node({ tagName: 'div', pdomHeading: TEST_LABEL, containerTagName: 'div' });
   rootNode.addChild(a);
 
-  window.assert.ok(a.pdomHeading === TEST_LABEL, 'accessibleName getter');
+  assert.ok(a.pdomHeading === TEST_LABEL, 'accessibleName getter');
 
   const aLabelSibling = getPrimarySiblingElementByNode(a).parentElement!.children[DEFAULT_LABEL_SIBLING_INDEX];
-  window.assert.ok(aLabelSibling.textContent === TEST_LABEL, 'pdomHeading setter on div');
-  window.assert.ok(aLabelSibling.tagName === 'H1', 'pdomHeading setter should be h1');
+  assert.ok(aLabelSibling.textContent === TEST_LABEL, 'pdomHeading setter on div');
+  assert.ok(aLabelSibling.tagName === 'H1', 'pdomHeading setter should be h1');
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 
@@ -1880,7 +1879,7 @@ QUnit.test('pdomHeading option', assert => {
 
 QUnit.test('helpText option', assert => {
 
-  window.assert.ok(true);
+  assert.ok(true);
 
   // test the behavior of focusable function
   const rootNode = new Node({ tagName: 'div' });
@@ -1897,11 +1896,11 @@ QUnit.test('helpText option', assert => {
   rootNode.addChild(a);
 
   rootNode.addChild(new Node({ tagName: 'input', inputType: 'range' }));
-  window.assert.ok(a.helpText === TEST_DESCRIPTION, 'helpText getter');
+  assert.ok(a.helpText === TEST_DESCRIPTION, 'helpText getter');
 
   // default for help text is to append description after the primary sibling
   const aDescriptionElement = getPrimarySiblingElementByNode(a).parentElement!.children[APPENDED_DESCRIPTION_SIBLING_INDEX];
-  window.assert.ok(aDescriptionElement.textContent === TEST_DESCRIPTION, 'helpText setter on div');
+  assert.ok(aDescriptionElement.textContent === TEST_DESCRIPTION, 'helpText setter on div');
 
   const b = new Node({
     containerTagName: 'div',
@@ -1919,19 +1918,19 @@ QUnit.test('helpText option', assert => {
   };
 
   let bDescriptionElement = getPrimarySiblingElementByNode(b).parentElement!.children[DEFAULT_DESCRIPTION_SIBLING_INDEX];
-  window.assert.ok(bDescriptionElement.textContent === 'overrideThis', 'helpTextBehavior should not work until there is help text');
+  assert.ok(bDescriptionElement.textContent === 'overrideThis', 'helpTextBehavior should not work until there is help text');
   b.helpText = 'help text description';
   bDescriptionElement = getPrimarySiblingElementByNode(b).parentElement!.children[DEFAULT_DESCRIPTION_SIBLING_INDEX];
-  window.assert.ok(bDescriptionElement.textContent === 'help text description', 'help text setter');
+  assert.ok(bDescriptionElement.textContent === 'help text description', 'help text setter');
 
   b.helpText = '';
 
   bDescriptionElement = getPrimarySiblingElementByNode(b).parentElement!.children[DEFAULT_DESCRIPTION_SIBLING_INDEX];
-  window.assert.ok(bDescriptionElement.textContent === '', 'helpTextBehavior should work for empty string');
+  assert.ok(bDescriptionElement.textContent === '', 'helpTextBehavior should work for empty string');
 
   b.helpText = null;
   bDescriptionElement = getPrimarySiblingElementByNode(b).parentElement!.children[DEFAULT_DESCRIPTION_SIBLING_INDEX];
-  window.assert.ok(bDescriptionElement.textContent === 'overrideThis', 'helpTextBehavior should not work until there is help text');
+  assert.ok(bDescriptionElement.textContent === 'overrideThis', 'helpTextBehavior should not work until there is help text');
 
   pdomAuditRootNode(rootNode);
   display.dispose();
@@ -1940,7 +1939,7 @@ QUnit.test('helpText option', assert => {
 
 QUnit.test('move to front/move to back', assert => {
   if (!canRunTests) {
-    window.assert.ok(true, 'Skipping test because document does not have focus');
+    assert.ok(true, 'Skipping test because document does not have focus');
     return;
   }
 
@@ -1958,7 +1957,7 @@ QUnit.test('move to front/move to back', assert => {
 
   // after moving a to front, b should still have focus
   a.moveToFront();
-  window.assert.ok(b.focused, 'b should have focus after a moved to front');
+  assert.ok(b.focused, 'b should have focus after a moved to front');
 
   // after moving a to back, b should still have focus
   a.moveToBack();
@@ -1966,7 +1965,7 @@ QUnit.test('move to front/move to back', assert => {
   // add a guard where we don't check this if focus has been moved somewhere else. This happens sometimes with
   // dev tools or other windows opened, see https://github.com/phetsims/scenery/issues/827
   if (document.body.contains(document.activeElement) && document.body !== document.activeElement) {
-    window.assert.ok(b.focused, 'b should have focus after a moved to back');
+    assert.ok(b.focused, 'b should have focus after a moved to back');
   }
 
   display.dispose();
@@ -1985,15 +1984,15 @@ QUnit.test('Node.enabledProperty with PDOM', assert => {
   });
 
   rootNode.addChild(pdomNode);
-  window.assert.ok(pdomNode.pdomInstances.length === 1, 'should have an instance when attached to display');
-  window.assert.ok(!!pdomNode.pdomInstances[0].peer, 'should have a peer');
+  assert.ok(pdomNode.pdomInstances.length === 1, 'should have an instance when attached to display');
+  assert.ok(!!pdomNode.pdomInstances[0].peer, 'should have a peer');
 
-  window.assert.ok(pdomNode.pdomInstances[0].peer!.primarySibling!.getAttribute('aria-disabled') !== 'true', 'should be enabled to start');
+  assert.ok(pdomNode.pdomInstances[0].peer!.primarySibling!.getAttribute('aria-disabled') !== 'true', 'should be enabled to start');
   pdomNode.enabled = false;
-  window.assert.ok(pdomNode.pdomInstances[0].peer!.primarySibling!.getAttribute('aria-disabled') === 'true', 'should be aria-disabled when disabled');
+  assert.ok(pdomNode.pdomInstances[0].peer!.primarySibling!.getAttribute('aria-disabled') === 'true', 'should be aria-disabled when disabled');
   pdomNode.enabled = true;
-  window.assert.ok(pdomNode.pdomInstances[0].peer!.primarySibling!.getAttribute('aria-disabled') === 'false', 'Actually set to false since it was previously disabled.');
-  pdomNode.dispose;
+  assert.ok(pdomNode.pdomInstances[0].peer!.primarySibling!.getAttribute('aria-disabled') === 'false', 'Actually set to false since it was previously disabled.');
+  // pdomNode.dispose;
   display.dispose();
   display.domElement.parentElement!.removeChild(display.domElement);
 });
@@ -2023,12 +2022,12 @@ QUnit.test('Display.interactive toggling in the PDOM', assert => {
 
   rootNode.addChild(pdomParent);
 
-  window.assert.ok(true, 'initial case');
+  assert.ok(true, 'initial case');
 
   const testDisabled = (node: Node, disabled: boolean | undefined, message: string, pdomInstance = 0): void => {
 
     // @ts-expect-error "disabled" is only supported by certain attributes, see https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/disabled
-    window.assert.ok(node.pdomInstances[pdomInstance].peer!.primarySibling!.disabled === disabled, message);
+    assert.ok(node.pdomInstances[pdomInstance].peer!.primarySibling!.disabled === disabled, message);
   };
 
   testDisabled(pdomParent, DEFAULT_DISABLED_WHEN_SUPPORTED, 'pdomParent initial no disabled');
@@ -2189,7 +2188,7 @@ QUnit.test('PDOMFuzzer with 3 nodes', assert => {
   for (let i = 0; i < 5000; i++) {
     fuzzer.step();
   }
-  window.assert.expect(0);
+  assert.expect(0);
   fuzzer.dispose();
 });
 
@@ -2198,7 +2197,7 @@ QUnit.test('PDOMFuzzer with 4 nodes', assert => {
   for (let i = 0; i < 1000; i++) {
     fuzzer.step();
   }
-  window.assert.expect(0);
+  assert.expect(0);
   fuzzer.dispose();
 });
 
@@ -2207,6 +2206,6 @@ QUnit.test('PDOMFuzzer with 5 nodes', assert => {
   for (let i = 0; i < 300; i++) {
     fuzzer.step();
   }
-  window.assert.expect(0);
+  assert.expect(0);
   fuzzer.dispose();
 });

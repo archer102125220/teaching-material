@@ -9,10 +9,10 @@
  * @author Jesse Greenberg
  */
 
-import SpeechSynthesisAnnouncer, { type SpeechSynthesisAnnouncerOptions, type SpeechSynthesisInitializeOptions } from '../../../utterance-queue/SpeechSynthesisAnnouncer';
-import { globalKeyStateTracker, KeyboardUtils, scenery } from '../../imports';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type TEmitter from '../../../axon/TEmitter';
+import SpeechSynthesisAnnouncer, { type SpeechSynthesisAnnouncerOptions, type SpeechSynthesisInitializeOptions } from '@/utils/utterance-queue/SpeechSynthesisAnnouncer';
+import { globalKeyStateTracker, KeyboardUtils, scenery } from '@/utils/scenery/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 type SelfOptions = EmptySelfOptions;
 type VoicingManagerOptions = SelfOptions & SpeechSynthesisAnnouncerOptions;

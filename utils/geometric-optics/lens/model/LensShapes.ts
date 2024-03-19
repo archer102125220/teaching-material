@@ -11,11 +11,11 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Vector2 from '../../../dot/Vector2';
-import { Shape } from '../../../kite/imports';
-import optionize from '../../../phet-core/optionize';
-import type OpticShapes from '../../common/model/OpticShapes';
-import geometricOptics from '../../geometricOptics';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import type OpticShapes from '@/utils/geometric-optics/common/model/OpticShapes';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
 
 // When isHollywooded:true, this value is added to the actual ROC.
 const HOLLYWOOD_RADIUS_OFFSET = 100; // cm

@@ -8,10 +8,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Vector2 from '../../dot/Vector2';
-import cleanArray from '../../phet-core/cleanArray';
-import Pool from '../../phet-core/Pool';
-import { kite, Line } from '../imports';
+import Vector2 from '@/utils/dot/Vector2';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Pool from '@/utils/phet-core/Pool';
+import { kite, Line } from '@/utils/kite/imports';
 
 let globaId = 0;
 

@@ -9,10 +9,12 @@
 
 import QUnit from 'qunit';
 
-import Bounds2 from '../dot/Bounds2';
-import Matrix3 from '../dot/Matrix3';
-import Ray2 from '../dot/Ray2';
-import Vector2 from '../dot/Vector2';
+import $ from '@/utils/sherpa/lib/jquery-2.1.0';
+
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Ray2 from '@/utils/dot/Ray2';
+import Vector2 from '@/utils/dot/Vector2';
 import {
   Arc,
   Cubic,
@@ -21,7 +23,9 @@ import {
   Quadratic,
   Shape,
   Subpath
-} from './imports';
+} from '@/utils/kite/imports';
+
+// const $ = require('@/utils/sherpa/lib/jquery-2.1.0');
 
 QUnit.module('Shape');
 

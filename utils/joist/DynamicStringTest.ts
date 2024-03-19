@@ -10,9 +10,9 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { localizedStrings } from '../chipper/getStringModule';
-import Utils from '../dot/Utils';
-import joist from './joist';
+import { localizedStrings } from '@/utils/chipper/getStringModule';
+import Utils from '@/utils/dot/Utils';
+import joist from '@/utils/joist/joist';
 
 const INITIAL_STRING_FACTOR = 1;
 const MAX_STRING_FACTOR = 8; // so that the sim and/or browser doesn't lock up when strings get excessively long

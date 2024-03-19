@@ -7,19 +7,21 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import optionize, { combineOptions } from '../phet-core/optionize';
-import { FlowBox, type FlowBoxOptions, KeyboardListener, PDOMPeer, SceneryConstants } from '../scenery/imports';
-import multiSelectionSoundPlayerFactory from '../tambo/multiSelectionSoundPlayerFactory';
-import Tandem from '../tandem/Tandem';
-import AquaRadioButton, { type AquaRadioButtonOptions } from './AquaRadioButton';
-import sun from './sun';
-import Emitter from '../axon/Emitter';
-import type TEmitter from '../axon/TEmitter';
-import type GroupItemOptions from './GroupItemOptions';
-import { getGroupItemNodes } from './GroupItemOptions';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import type PhetioProperty from '../axon/PhetioProperty';
+import _ from 'lodash';
+
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import { FlowBox, type FlowBoxOptions, KeyboardListener, PDOMPeer, SceneryConstants } from '@/utils/scenery/imports';
+import multiSelectionSoundPlayerFactory from '@/utils/tambo/multiSelectionSoundPlayerFactory';
+import Tandem from '@/utils/tandem/Tandem';
+import AquaRadioButton, { type AquaRadioButtonOptions } from '@/utils/sun/AquaRadioButton';
+import sun from '@/utils/sun/sun';
+import Emitter from '@/utils/axon/Emitter';
+import type TEmitter from '@/utils/axon/TEmitter';
+import type GroupItemOptions from '@/utils/sun/GroupItemOptions';
+import { getGroupItemNodes } from '@/utils/sun/GroupItemOptions';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type PhetioProperty from '@/utils/axon/PhetioProperty';
 
 // pdom - An id for each instance of AquaRadioButtonGroup, passed to individual buttons in the group.
 // Each button in a radio button group must have the same "name" attribute to be considered in a group, otherwise

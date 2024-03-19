@@ -6,12 +6,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import geometricOptics from '../../geometricOptics';
-import OpticalObject, { type OpticalObjectOptions } from './OpticalObject';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Vector2 from '../../../dot/Vector2';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import { type TColor } from '../../../scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import OpticalObject, { type OpticalObjectOptions } from '@/utils/geometric-optics/common/model/OpticalObject';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { type TColor } from '@/utils/scenery/imports';
 
 type SelfOptions = {
   fill: TColor; // the fill color for the arrow

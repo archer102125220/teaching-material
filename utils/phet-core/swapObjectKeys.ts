@@ -12,8 +12,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import phetCore from './phetCore';
-import type IntentionalAny from './types/IntentionalAny';
+import phetCore from '@/utils/phet-core/phetCore';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 // Get a unique object reference to compare against. This is preferable to comparing against `undefined` because
 // that doesn't differentiate between and object with a key that has a value of undefined, `{x:undefined}` verses

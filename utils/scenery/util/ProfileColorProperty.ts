@@ -8,11 +8,11 @@
 
 import _ from 'lodash';
 
-import arrayRemove from '../../phet-core/arrayRemove';
-import Namespace from '../../phet-core/Namespace';
-import { type PropertyOptions } from '../../axon/Property';
-import { Color, colorProfileProperty, ColorProperty, scenery, SceneryConstants } from '../imports';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import Namespace from '@/utils/phet-core/Namespace';
+import { type PropertyOptions } from '@/utils/axon/Property';
+import { Color, colorProfileProperty, ColorProperty, scenery, SceneryConstants } from '@/utils/scenery/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
 
 // constant
 const NAME_SEPARATOR = '.';
@@ -96,7 +96,7 @@ export default class ProfileColorProperty extends ColorProperty {
     });
 
     // assert that names are unique
-    if (assert) {
+    if (window.assert) {
       const matches = instances.filter(e => e.name === this.name);
       window.assert && window.assert(matches.length === 0, 'cannot use the same name for two different ProfileColorProperty instances: ' + name);
     }

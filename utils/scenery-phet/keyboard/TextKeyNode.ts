@@ -6,15 +6,15 @@
  * @author Jesse Greenberg
  */
 
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import optionize from '../../phet-core/optionize';
-import platform from '../../phet-core/platform';
-import { Font, RichText, type TColor } from '../../scenery/imports';
-import PhetFont from '../PhetFont';
-import sceneryPhet from '../sceneryPhet';
-import SceneryPhetStrings from '../SceneryPhetStrings';
-import KeyNode, { type KeyNodeOptions } from './KeyNode';
-import type PhetioProperty from '../../axon/PhetioProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize from '@/utils/phet-core/optionize';
+import platform from '@/utils/phet-core/platform';
+import { Font, RichText, type TColor } from '@/utils/scenery/imports';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import KeyNode, { type KeyNodeOptions } from '@/utils/scenery-phet/keyboard/KeyNode';
+import type PhetioProperty from '@/utils/axon/PhetioProperty';
 
 type SelfOptions = {
   font?: Font;

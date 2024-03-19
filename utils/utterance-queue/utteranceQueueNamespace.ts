@@ -8,6 +8,6 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Namespace from '../phet-core/Namespace';
+import Namespace from '@/utils/phet-core/Namespace';
 
 export default new Namespace('utteranceQueue');

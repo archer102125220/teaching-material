@@ -6,11 +6,11 @@
  * @author Jesse Greenberg
  */
 
-import { type LineJoin, Shape } from '../../kite/imports';
-import optionize from '../../phet-core/optionize';
-import { type TColor, Path } from '../../scenery/imports';
-import sceneryPhet from '../sceneryPhet';
-import KeyNode, { type KeyNodeOptions } from './KeyNode';
+import { type LineJoin, Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import { type TColor, Path } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import KeyNode, { type KeyNodeOptions } from '@/utils/scenery-phet/keyboard/KeyNode';
 
 // constants
 const DEFAULT_ARROW_HEIGHT = 10;

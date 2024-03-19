@@ -6,15 +6,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import geometricOptics from '../../geometricOptics';
-import { type NodeTranslationOptions, Path, type PathOptions } from '../../../scenery/imports';
-import ArrowShape from '../../../scenery-phet/ArrowShape';
-import { Shape } from '../../../kite/imports';
-import optionize from '../../../phet-core/optionize';
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import GOPreferences from '../model/GOPreferences';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import { type NodeTranslationOptions, Path, type PathOptions } from '@/utils/scenery/imports';
+import ArrowShape from '@/utils/scenery-phet/ArrowShape';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import GOPreferences from '@/utils/geometric-optics/common/model/GOPreferences';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 type CueingArrowsDirection = 'horizontal' | 'vertical' | 'both';
 

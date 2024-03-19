@@ -12,9 +12,9 @@
 
 import _ from 'lodash';
 
-import type TProperty from '../../axon/TProperty';
-import optionize from '../../phet-core/optionize';
-import { Focus, Instance, Node, scenery, TrailVisibilityTracker } from '../imports';
+import type TProperty from '@/utils/axon/TProperty';
+import optionize from '@/utils/phet-core/optionize';
+import { Focus, Instance, Node, scenery, TrailVisibilityTracker } from '@/utils/scenery/imports';
 
 type FocusDisplayedControllerOptions = {
 

@@ -8,13 +8,15 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import Property from '../axon/Property';
-import ReadOnlyProperty from '../axon/ReadOnlyProperty';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import Tandem from '../tandem/Tandem';
-import joist from './joist';
-import Screen, { type AnyScreen } from './Screen';
-import type TModel from './TModel';
+import _ from 'lodash';
+
+import Property from '@/utils/axon/Property';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import Tandem from '@/utils/tandem/Tandem';
+import joist from '@/utils/joist/joist';
+import Screen, { type AnyScreen } from '@/utils/joist/Screen';
+import type TModel from '@/utils/joist/TModel';
 
 class HomeScreenModel implements TModel {
   public simScreens: AnyScreen[]; // screens in the simulations that are not the HomeScreen

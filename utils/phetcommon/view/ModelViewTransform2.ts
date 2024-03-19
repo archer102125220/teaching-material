@@ -11,13 +11,13 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Ray2 from '../../dot/Ray2';
-import Transform3 from '../../dot/Transform3';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import phetcommon from '../phetcommon';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Ray2 from '@/utils/dot/Ray2';
+import Transform3 from '@/utils/dot/Transform3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import phetcommon from '@/utils/phetcommon/phetcommon';
 
 class ModelViewTransform2 extends Transform3 {
 

@@ -13,20 +13,20 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import tandemNamespace from './tandemNamespace';
-import IOType from './types/IOType';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import Tandem from './Tandem';
-import VoidIO from './types/VoidIO';
-import PhetioDataHandler, { type Parameter, type PhetioDataHandlerOptions } from './PhetioDataHandler';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import Emitter from '../axon/Emitter';
-import PhetioObject from './PhetioObject';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import ArrayIO from './types/ArrayIO';
-import NullableIO from './types/NullableIO';
-import StringIO from './types/StringIO';
-import IOTypeCache from './IOTypeCache';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import Tandem from '@/utils/tandem/Tandem';
+import VoidIO from '@/utils/tandem/types/VoidIO';
+import PhetioDataHandler, { type Parameter, type PhetioDataHandlerOptions } from '@/utils/tandem/PhetioDataHandler';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import Emitter from '@/utils/axon/Emitter';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import ArrayIO from '@/utils/tandem/types/ArrayIO';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import StringIO from '@/utils/tandem/types/StringIO';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 
 const EMPTY_ARRAY: Parameter[] = [];

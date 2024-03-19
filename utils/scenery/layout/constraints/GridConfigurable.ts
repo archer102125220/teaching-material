@@ -17,13 +17,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import type Constructor from '../../../phet-core/types/Constructor';
-import memoize from '../../../phet-core/memoize';
-import mutate from '../../../phet-core/mutate';
-import { type HorizontalLayoutAlign, HorizontalLayoutAlignValues, LayoutAlign, MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS, MarginLayoutConfigurable, type MarginLayoutConfigurableOptions, scenery, type VerticalLayoutAlign, VerticalLayoutAlignValues } from '../../imports';
-import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
-import type WithoutNull from '../../../phet-core/types/WithoutNull';
-import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import memoize from '@/utils/phet-core/memoize';
+import mutate from '@/utils/phet-core/mutate';
+import { type HorizontalLayoutAlign, HorizontalLayoutAlignValues, LayoutAlign, MARGIN_LAYOUT_CONFIGURABLE_OPTION_KEYS, MarginLayoutConfigurable, type MarginLayoutConfigurableOptions, scenery, type VerticalLayoutAlign, VerticalLayoutAlignValues } from '@/utils/scenery/imports';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import type WithoutNull from '@/utils/phet-core/types/WithoutNull';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 const GRID_CONFIGURABLE_OPTION_KEYS = [
   'xAlign',

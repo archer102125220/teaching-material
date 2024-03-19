@@ -6,16 +6,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../../../../axon/DerivedProperty';
-import Vector2 from '../../../../dot/Vector2';
-import optionize from '../../../../phet-core/optionize';
-import type PickRequired from '../../../../phet-core/types/PickRequired';
-import { DragListener, IndexedNodeIO, InteractiveHighlighting, Node, type NodeOptions, type PressListenerEvent } from '../../../../scenery/imports';
-import GOTool from '../../model/tools/GOTool';
-import ToolJumpPoint from '../../model/tools/ToolJumpPoint';
-import GOToolboxNode from './GOToolboxNode';
-import geometricOptics from '../../../geometricOptics';
-import type PickOptional from '../../../../phet-core/types/PickOptional';
+import _ from 'lodash';
+
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { DragListener, IndexedNodeIO, InteractiveHighlighting, Node, type NodeOptions, type PressListenerEvent } from '@/utils/scenery/imports';
+import GOTool from '@/utils/geometric-optics/common/model/tools/GOTool';
+import ToolJumpPoint from '@/utils/geometric-optics/common/model/tools/ToolJumpPoint';
+import GOToolboxNode from '@/utils/geometric-optics/common/view/tools/GOToolboxNode';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
 
 type SelfOptions = {
 

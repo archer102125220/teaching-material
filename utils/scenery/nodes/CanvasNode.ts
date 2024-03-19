@@ -10,11 +10,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import { CanvasContextWrapper, CanvasNodeDrawable, CanvasSelfDrawable, Instance, Node, type NodeOptions, Renderer, scenery } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import { CanvasContextWrapper, CanvasNodeDrawable, CanvasSelfDrawable, Instance, Node, type NodeOptions, Renderer, scenery } from '@/utils/scenery/imports';
 
 const CANVAS_NODE_OPTION_KEYS = [
   'canvasBounds'

@@ -7,21 +7,21 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../axon/DerivedProperty';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import Multilink from '../../axon/Multilink';
-import Dimension2 from '../../dot/Dimension2';
-import { Shape } from '../../kite/imports';
-import optionize from '../../phet-core/optionize';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import { Color, type TPaint, LinearGradient, Node, PaintColorProperty, Path } from '../../scenery/imports';
-import sun from '../sun';
-import ButtonInteractionState from './ButtonInteractionState';
-import ButtonModel from './ButtonModel';
-import ButtonNode, { type ButtonNodeOptions, type ExternalButtonNodeOptions } from './ButtonNode';
-import RadioButtonInteractionState from './RadioButtonInteractionState';
-import type TButtonAppearanceStrategy from './TButtonAppearanceStrategy';
-import type { TButtonAppearanceStrategyOptions } from './TButtonAppearanceStrategy';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Multilink from '@/utils/axon/Multilink';
+import Dimension2 from '@/utils/dot/Dimension2';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { Color, type TPaint, LinearGradient, Node, PaintColorProperty, Path } from '@/utils/scenery/imports';
+import sun from '@/utils/sun/sun';
+import ButtonInteractionState from '@/utils/sun/buttons/ButtonInteractionState';
+import ButtonModel from '@/utils/sun/buttons/ButtonModel';
+import ButtonNode, { type ButtonNodeOptions, type ExternalButtonNodeOptions } from '@/utils/sun/buttons/ButtonNode';
+import RadioButtonInteractionState from '@/utils/sun/buttons/RadioButtonInteractionState';
+import type TButtonAppearanceStrategy from '@/utils/sun/buttons/TButtonAppearanceStrategy';
+import type { TButtonAppearanceStrategyOptions } from '@/utils/sun/buttons/TButtonAppearanceStrategy';
 
 // constants
 const VERTICAL_HIGHLIGHT_GRADIENT_LENGTH = 7; // In screen coords, which are roughly pixels.

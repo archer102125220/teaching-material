@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import phetCore from './phetCore';
+import phetCore from '@/utils/phet-core/phetCore';
 
 type TEnumeration<T> = {
   enumeration: {

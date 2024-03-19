@@ -15,11 +15,11 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor';
-import tambo from '../tambo';
-import SoundGenerator, { type SoundGeneratorOptions } from './SoundGenerator';
-import WrappedAudioBuffer from '../WrappedAudioBuffer';
-import optionize from '../../phet-core/optionize';
+import audioContextStateChangeMonitor from '@/utils/tambo/audioContextStateChangeMonitor';
+import tambo from '@/utils/tambo/tambo';
+import SoundGenerator, { type SoundGeneratorOptions } from '@/utils/tambo/sound-generators/SoundGenerator';
+import WrappedAudioBuffer from '@/utils/tambo/WrappedAudioBuffer';
+import optionize from '@/utils/phet-core/optionize';
 
 type SelfOptions = {
   initialPlaybackRate?: number;

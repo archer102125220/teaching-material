@@ -9,7 +9,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { scenery } from '../imports';
+import { scenery } from '@/utils/scenery/imports';
 
 class HandleDownlistener {
   /**

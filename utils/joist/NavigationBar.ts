@@ -23,25 +23,27 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../axon/DerivedProperty';
-import StringProperty from '../axon/StringProperty';
-import Dimension2 from '../dot/Dimension2';
-import PhetFont from '../scenery-phet/PhetFont';
-import { AlignBox, Color, HBox, ManualConstraint, Node, PDOMPeer, Rectangle, RelaxedManualConstraint, Text } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import A11yButtonsHBox from './A11yButtonsHBox';
-import HomeButton from './HomeButton';
-import HomeScreen from './HomeScreen';
-import HomeScreenView from './HomeScreenView';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
-import NavigationBarScreenButton from './NavigationBarScreenButton';
-import PhetButton from './PhetButton';
-import Sim from './Sim';
-import ReadOnlyProperty from '../axon/ReadOnlyProperty';
-import Bounds2 from '../dot/Bounds2';
-import { type AnyScreen } from './Screen';
-import BooleanProperty from '../axon/BooleanProperty';
+import _ from 'lodash';
+
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import StringProperty from '@/utils/axon/StringProperty';
+import Dimension2 from '@/utils/dot/Dimension2';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { AlignBox, Color, HBox, ManualConstraint, Node, PDOMPeer, Rectangle, RelaxedManualConstraint, Text } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import A11yButtonsHBox from '@/utils/joist/A11yButtonsHBox';
+import HomeButton from '@/utils/joist/HomeButton';
+import HomeScreen from '@/utils/joist/HomeScreen';
+import HomeScreenView from '@/utils/joist/HomeScreenView';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import NavigationBarScreenButton from '@/utils/joist/NavigationBarScreenButton';
+import PhetButton from '@/utils/joist/PhetButton';
+import Sim from '@/utils/joist/Sim';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import { type AnyScreen } from '@/utils/joist/Screen';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
 
 // constants
 // for layout of the NavigationBar, used in the following way:
@@ -129,7 +131,7 @@ class NavigationBar extends Node {
     this.a11yButtonsHBox = new A11yButtonsHBox(
       sim,
       this.navigationBarFillProperty, {
-      tandem: tandem // no need for a container here. If there is a conflict, then it will error loudly.
+      tandem // no need for a container here. If there is a conflict, then it will error loudly.
     }
     );
     this.barContents.addChild(this.a11yButtonsHBox);

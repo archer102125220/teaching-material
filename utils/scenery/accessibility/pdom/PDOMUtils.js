@@ -12,12 +12,12 @@
 
 import _ from 'lodash';
 
-import { isTReadOnlyProperty } from '../../../axon/TReadOnlyProperty';
-import validate from '../../../axon/validate';
-import Validation from '../../../axon/Validation';
-import merge from '../../../phet-core/merge';
-import stripEmbeddingMarks from '../../../phet-core/stripEmbeddingMarks';
-import { PDOMSiblingStyle, scenery } from '../../imports';
+import { isTReadOnlyProperty } from '@/utils/axon/TReadOnlyProperty';
+import validate from '@/utils/axon/validate';
+import Validation from '@/utils/axon/Validation';
+import merge from '@/utils/phet-core/merge';
+import stripEmbeddingMarks from '@/utils/phet-core/stripEmbeddingMarks';
+import { PDOMSiblingStyle, scenery } from '@/utils/scenery/imports';
 
 // constants
 const NEXT = 'NEXT';
@@ -178,7 +178,10 @@ function getLinearDOMElements(domElement) {
 function isElementHidden(domElement) {
   if (domElement.hidden) {
     return true;
-  } else if (domElement === document.body) {
+  } else if (
+    domElement === document.body ||
+    domElement === window.SIM_DISPLAY?.domElement?.parentNode
+  ) {
     return false;
   } else {
     return isElementHidden(domElement.parentElement);
@@ -197,7 +200,8 @@ function isElementHidden(domElement) {
  */
 function getNextPreviousFocusable(direction, parentElement) {
   // linearize the document [or the desired parent] for traversal
-  const parent = parentElement || document.body;
+  const parent =
+    parentElement || window.SIM_DISPLAY?.domElement?.parentNode || document.body;
   const linearDOM = getLinearDOMElements(parent);
 
   const activeElement = document.activeElement;
@@ -258,7 +262,8 @@ const PDOMUtils = {
           ? valueOrProperty
           : valueOrProperty.value;
 
-    window.assert && window.assert(result === null || typeof result === 'string');
+    window.assert &&
+      window.assert(result === null || typeof result === 'string');
 
     return result;
   },
@@ -297,11 +302,15 @@ const PDOMUtils = {
    * @returns {HTMLElement}
    */
   getFirstFocusable(parentElement) {
-    const parent = parentElement || document.body;
+    const parent =
+      parentElement ||
+      window.SIM_DISPLAY?.domElement?.parentNode ||
+      document.body;
     const linearDOM = getLinearDOMElements(parent);
 
     // return the document.body if no element is found
-    let firstFocusable = document.body;
+    let firstFocusable =
+      window.SIM_DISPLAY?.domElement?.parentNode || document.body;
 
     let nextIndex = 0;
     while (nextIndex < linearDOM.length) {
@@ -327,7 +336,9 @@ const PDOMUtils = {
   getRandomFocusable(random) {
     window.assert && window.assert(random, 'Random expected');
 
-    const linearDOM = getLinearDOMElements(document.body);
+    const linearDOM = getLinearDOMElements(
+      window.SIM_DISPLAY?.domElement?.parentNode || document.body
+    );
     const focusableElements = [];
     for (let i = 0; i < linearDOM.length; i++) {
       PDOMUtils.isElementFocusable(linearDOM[i]) &&
@@ -364,8 +375,8 @@ const PDOMUtils = {
     if (textContent === null) {
       return false;
     }
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         typeof textContent === 'string',
         'unsupported type for textContent.'
       );
@@ -436,7 +447,8 @@ const PDOMUtils = {
    */
   setTextContent(domElement, textContent) {
     window.assert && window.assert(domElement instanceof Element); // parent to HTMLElement, to support other namespaces
-    window.assert && window.assert(textContent === null || typeof textContent === 'string');
+    window.assert &&
+      window.assert(textContent === null || typeof textContent === 'string');
 
     if (textContent === null) {
       domElement.innerHTML = '';
@@ -489,7 +501,11 @@ const PDOMUtils = {
    * @returns {boolean}
    */
   isElementFocusable(domElement) {
-    if (!document.body.contains(domElement)) {
+    if (
+      !(window.SIM_DISPLAY?.domElement?.parentNode || document.body).contains(
+        domElement
+      )
+    ) {
       return false;
     }
 
@@ -527,8 +543,8 @@ const PDOMUtils = {
     for (let i = 0; i < childrenToRemove.length; i++) {
       const childToRemove = childrenToRemove[i];
 
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           element.contains(childToRemove),
           'element does not contain child to be removed: ',
           childToRemove

@@ -12,12 +12,12 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../../dot/Bounds2';
-import Orientation from '../../../phet-core/Orientation';
-import OrientationPair from '../../../phet-core/OrientationPair';
-import mutate from '../../../phet-core/mutate';
-import { type ExternalGridConfigurableOptions, GRID_CONFIGURABLE_OPTION_KEYS, GridCell, GridConfigurable, GridLine, LayoutAlign, Node, type NodeLayoutAvailableConstraintOptions, NodeLayoutConstraint, scenery } from '../../imports';
-import type TProperty from '../../../axon/TProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Orientation from '@/utils/phet-core/Orientation';
+import OrientationPair from '@/utils/phet-core/OrientationPair';
+import mutate from '@/utils/phet-core/mutate';
+import { type ExternalGridConfigurableOptions, GRID_CONFIGURABLE_OPTION_KEYS, GridCell, GridConfigurable, GridLine, LayoutAlign, Node, type NodeLayoutAvailableConstraintOptions, NodeLayoutConstraint, scenery } from '@/utils/scenery/imports';
+import type TProperty from '@/utils/axon/TProperty';
 
 const GRID_CONSTRAINT_OPTION_KEYS = [
   ...GRID_CONFIGURABLE_OPTION_KEYS,

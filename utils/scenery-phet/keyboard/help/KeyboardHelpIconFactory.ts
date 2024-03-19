@@ -7,17 +7,17 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Dimension2 from '../../../dot/Dimension2';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../../phet-core/optionize';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import { HBox, type HBoxOptions, Node, Text } from '../../../scenery/imports';
-import PhetFont from '../../PhetFont';
-import PlusNode from '../../PlusNode';
-import sceneryPhet from '../../sceneryPhet';
-import SceneryPhetStrings from '../../SceneryPhetStrings';
-import ArrowKeyNode from '../ArrowKeyNode';
-import LetterKeyNode from '../LetterKeyNode';
-import TextKeyNode from '../TextKeyNode';
+import Dimension2 from '@/utils/dot/Dimension2';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { HBox, type HBoxOptions, Node, Text } from '@/utils/scenery/imports';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import PlusNode from '@/utils/scenery-phet/PlusNode';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import ArrowKeyNode from '@/utils/scenery-phet/keyboard/ArrowKeyNode';
+import LetterKeyNode from '@/utils/scenery-phet/keyboard/LetterKeyNode';
+import TextKeyNode from '@/utils/scenery-phet/keyboard/TextKeyNode';
 
 // constants
 const DEFAULT_HORIZONTAL_KEY_SPACING = 1.3;

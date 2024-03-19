@@ -9,21 +9,21 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import FunctionIO from '../tandem/types/FunctionIO';
-import IOType from '../tandem/types/IOType';
-import VoidIO from '../tandem/types/VoidIO';
-import PhetioDataHandler, { type PhetioDataHandlerOptions } from '../tandem/PhetioDataHandler';
-import axon from './axon';
-import TinyEmitter from './TinyEmitter';
-import Tandem from '../tandem/Tandem';
-import type TEmitter from './TEmitter';
-import type { TEmitterListener, TEmitterParameter } from './TEmitter';
-import NullableIO from '../tandem/types/NullableIO';
-import StringIO from '../tandem/types/StringIO';
-import ArrayIO from '../tandem/types/ArrayIO';
-import IOTypeCache from '../tandem/IOTypeCache';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import FunctionIO from '@/utils/tandem/types/FunctionIO';
+import IOType from '@/utils/tandem/types/IOType';
+import VoidIO from '@/utils/tandem/types/VoidIO';
+import PhetioDataHandler, { type PhetioDataHandlerOptions } from '@/utils/tandem/PhetioDataHandler';
+import axon from '@/utils/axon/axon';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import Tandem from '@/utils/tandem/Tandem';
+import type TEmitter from '@/utils/axon/TEmitter';
+import type { TEmitterListener, TEmitterParameter } from '@/utils/axon/TEmitter';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import StringIO from '@/utils/tandem/types/StringIO';
+import ArrayIO from '@/utils/tandem/types/ArrayIO';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 // By default, Emitters are not stateful
 const PHET_IO_STATE_DEFAULT = false;

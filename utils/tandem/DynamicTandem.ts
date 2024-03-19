@@ -8,11 +8,11 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import Tandem, { type TandemOptions } from './Tandem';
-import tandemNamespace from './tandemNamespace';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import TandemConstants from './TandemConstants';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Tandem, { type TandemOptions } from '@/utils/tandem/Tandem';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import TandemConstants from '@/utils/tandem/TandemConstants';
 
 type DynamicTandemOptions = StrictOmit<TandemOptions, 'isValidTandemName'>;
 

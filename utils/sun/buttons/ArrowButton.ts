@@ -10,12 +10,12 @@
 
 import _ from 'lodash';
 
-import { Shape } from '../../kite/imports';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import optionize from '../../phet-core/optionize';
-import { type TPaint, Path } from '../../scenery/imports';
-import sun from '../sun';
-import RectangularPushButton, { type RectangularPushButtonOptions } from './RectangularPushButton';
+import { Shape } from '@/utils/kite/imports';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize from '@/utils/phet-core/optionize';
+import { type TPaint, Path } from '@/utils/scenery/imports';
+import sun from '@/utils/sun/sun';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
 
 // constants
 const DEFAULT_ARROW_HEIGHT = 20;

@@ -5,10 +5,10 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import optionize from '../phet-core/optionize';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import { Circle, type TColor, Line, Node, type NodeOptions } from '../scenery/imports';
-import sceneryPhet from './sceneryPhet';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { Circle, type TColor, Line, Node, type NodeOptions } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type SelfOptions = {
   glassRadius?: number;

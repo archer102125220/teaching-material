@@ -22,12 +22,12 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-// @ts-expect-error
-import Constructor from './types/Constructor';
-import phetCore from './phetCore';
-import optionize from './optionize';
-// @ts-expect-error
-import IntentionalAny from './types/IntentionalAny';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import phetCore from '@/utils/phet-core/phetCore';
+import optionize from '@/utils/phet-core/optionize';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+
+type PoolableInitializer<T extends Constructor> = (...args: ConstructorParameters<T>) => InstanceType<T>;
 
 type SelfPoolableOptions<T extends Constructor> = {
   // If an object needs to be created without a direct call (say, to fill the pool initially), these are the arguments
@@ -51,11 +51,10 @@ type SelfPoolableOptions<T extends Constructor> = {
 };
 
 export type PoolableOptions<T extends Constructor> =
-  SelfPoolableOptions<T> & ( InstanceType<T> extends { initialize: PoolableInitializer<T> } ? unknown : {
+  SelfPoolableOptions<T> & (InstanceType<T> extends { initialize: PoolableInitializer<T> } ? unknown : {
     // Require initialize if our type doesn't have a compatible initialize method.
     initialize: PoolableInitializer<T>;
-  } );
-type PoolableInitializer<T extends Constructor> = ( ...args: ConstructorParameters<T> ) => InstanceType<T>;
+  });
 
 export type TPoolable = {
 
@@ -66,31 +65,31 @@ export type TPoolable = {
 
 // Our linter complains that {} should be either Record<string, unknown>, unknown, or Record<string, never>. However in
 // this case, we actually want it to be any type of non-nullish structural type, to see if there is anything required.
-export type PossiblyRequiredParameterSpread<T> = ( {} extends T ? [ T? ] : [ T ] ); // eslint-disable-line @typescript-eslint/ban-types
+export type PossiblyRequiredParameterSpread<T> = ({} extends T ? [T?] : [T]); // eslint-disable-line @typescript-eslint/ban-types
 
 export default class Pool<T extends Constructor> {
   private readonly objects: InstanceType<T>[] = [];
 
   private _maxPoolSize: number;
-  private readonly partialConstructor: ( ...args: IntentionalAny[] ) => IntentionalAny;
+  private readonly partialConstructor: (...args: IntentionalAny[]) => IntentionalAny;
   private readonly DefaultConstructor: IntentionalAny;
   private readonly initialize: PoolableInitializer<T>;
   private readonly useDefaultConstruction: boolean;
 
   // The `initialize` option is required if the type doesn't have a correctly-typed initialize method. Therefore, we
   // do some Typescript magic to require providedOptions if that's the case (otherwise providedOptions is optional).
-  public constructor( type: T, ...providedOptionsSpread: PossiblyRequiredParameterSpread<PoolableOptions<T>> ) {
-    const options = optionize<SelfPoolableOptions<T>, SelfPoolableOptions<T>>()( {
+  public constructor(type: T, ...providedOptionsSpread: PossiblyRequiredParameterSpread<PoolableOptions<T>>) {
+    const options = optionize<SelfPoolableOptions<T>, SelfPoolableOptions<T>>()({
 
       defaultArguments: [] as unknown as ConstructorParameters<T>,
-      initialize: ( type.prototype as unknown as { initialize: PoolableInitializer<T> } ).initialize,
+      initialize: (type.prototype as unknown as { initialize: PoolableInitializer<T> }).initialize,
       maxSize: 100,
       initialSize: 0,
       useDefaultConstruction: false
-    }, providedOptionsSpread[ 0 ] );
+    }, providedOptionsSpread[0]);
 
-    window.assert && window.assert( options.maxSize >= 0 );
-    window.assert && window.assert( options.initialSize >= 0 );
+    window.assert && window.assert(options.maxSize >= 0);
+    window.assert && window.assert(options.initialSize >= 0);
 
     this._maxPoolSize = options.maxSize;
 
@@ -99,24 +98,24 @@ export default class Pool<T extends Constructor> {
     // not provided in the arguments array below. By calling bind on itself, we're able to get a version of bind that
     // inserts the constructor as the first argument of the .apply called later so we don't create garbage by having
     // to pack `arguments` into an array AND THEN concatenate it with a new first element (the type itself).
-    this.partialConstructor = Function.prototype.bind.bind( type, type );
+    this.partialConstructor = Function.prototype.bind.bind(type, type);
 
     // Basically our type constructor, but with the default arguments included already.
-    this.DefaultConstructor = this.partialConstructor( ...options.defaultArguments! ); 
+    this.DefaultConstructor = this.partialConstructor(...options.defaultArguments!);
 
     this.initialize = options.initialize;
-    window.assert && window.assert( this.initialize, 'Either pass in an initialize option, or provide a method named initialize on the type with the proper signature' );
+    window.assert && window.assert(this.initialize, 'Either pass in an initialize option, or provide a method named initialize on the type with the proper signature');
 
     this.useDefaultConstruction = options.useDefaultConstruction;
 
     // Initialize the pool (if it should have objects)
-    while ( this.objects.length < options.initialSize ) {
-      this.objects.push( this.createDefaultObject() );
+    while (this.objects.length < options.initialSize) {
+      this.objects.push(this.createDefaultObject());
     }
   }
 
   private createDefaultObject(): InstanceType<T> {
-    return new ( this.DefaultConstructor )();
+    return new (this.DefaultConstructor)();
   }
 
   /**
@@ -130,19 +129,19 @@ export default class Pool<T extends Constructor> {
    * Returns an object that behaves as if it was constructed with the given arguments. May result in a new object
    * being created (if the pool is empty), or it may use the constructor to mutate an object from the pool.
    */
-  public create( ...args: ConstructorParameters<T> ): InstanceType<T> {
+  public create(...args: ConstructorParameters<T>): InstanceType<T> {
     let result;
 
-    if ( this.objects.length ) {
+    if (this.objects.length) {
       result = this.objects.pop();
-      this.initialize.apply( result, args );
+      this.initialize.apply(result, args);
     }
-    else if ( this.useDefaultConstruction ) {
+    else if (this.useDefaultConstruction) {
       result = this.createDefaultObject();
-      this.initialize.apply( result, args );
+      this.initialize.apply(result, args);
     }
     else {
-      result = new ( this.partialConstructor( ...args ) )();
+      result = new (this.partialConstructor(...args))();
     }
 
     return result;
@@ -158,8 +157,8 @@ export default class Pool<T extends Constructor> {
   /**
    * Sets the maximum pool size.
    */
-  public set maxPoolSize( value: number ) {
-    window.assert && window.assert( value === Number.POSITIVE_INFINITY || ( Number.isInteger( value ) && value >= 0 ), 'maxPoolSize should be a non-negative integer or infinity' );
+  public set maxPoolSize(value: number) {
+    window.assert && window.assert(value === Number.POSITIVE_INFINITY || (Number.isInteger(value) && value >= 0), 'maxPoolSize should be a non-negative integer or infinity');
 
     this._maxPoolSize = value;
   }
@@ -171,15 +170,15 @@ export default class Pool<T extends Constructor> {
     return this._maxPoolSize;
   }
 
-  public freeToPool( object: InstanceType<T> ): void {
-    if ( this.objects.length < this.maxPoolSize ) {
-      this.objects.push( object );
+  public freeToPool(object: InstanceType<T>): void {
+    if (this.objects.length < this.maxPoolSize) {
+      this.objects.push(object);
     }
   }
 
-  public forEach( callback: ( object: InstanceType<T> ) => void ): void {
-    this.objects.forEach( callback );
+  public forEach(callback: (object: InstanceType<T>) => void): void {
+    this.objects.forEach(callback);
   }
 }
 
-phetCore.register( 'Pool', Pool );
+phetCore.register('Pool', Pool);

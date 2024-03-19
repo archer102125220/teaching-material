@@ -11,29 +11,29 @@
  */
 
 
-import kite from './kite.js';
-import './ops/Boundary.js';
-import './ops/BoundsIntersection.js';
-import './ops/Edge.js';
-import './ops/Face.js';
-import './ops/Graph.js';
-import './ops/HalfEdge.js';
-import './ops/Loop.js';
-import './ops/SegmentTree.js';
-import './ops/Vertex.js';
-import './parser/svgPath.js';
-import './segments/Arc.js';
-import './segments/Cubic.js';
-import './segments/EllipticalArc.js';
-import './segments/Line.js';
-import './segments/Quadratic.js';
-import './segments/Segment.js';
-import './Shape.js';
-import './util/intersectConicMatrices.js';
-import './util/LineStyles.js';
-import './util/Overlap.js';
-import './util/SegmentIntersection.js';
-import './util/Subpath.js';
+import kite from '@/utils/kite/kite';
+import '@/utils/kite/ops/Boundary';
+import '@/utils/kite/ops/BoundsIntersection';
+import '@/utils/kite/ops/Edge';
+import '@/utils/kite/ops/Face';
+import '@/utils/kite/ops/Graph';
+import '@/utils/kite/ops/HalfEdge';
+import '@/utils/kite/ops/Loop';
+import '@/utils/kite/ops/SegmentTree';
+import '@/utils/kite/ops/Vertex';
+import '@/utils/kite/parser/svgPath';
+import '@/utils/kite/segments/Arc';
+import '@/utils/kite/segments/Cubic';
+import '@/utils/kite/segments/EllipticalArc';
+import '@/utils/kite/segments/Line';
+import '@/utils/kite/segments/Quadratic';
+import '@/utils/kite/segments/Segment';
+import '@/utils/kite/Shape';
+import '@/utils/kite/util/intersectConicMatrices';
+import '@/utils/kite/util/LineStyles';
+import '@/utils/kite/util/Overlap';
+import '@/utils/kite/util/SegmentIntersection';
+import '@/utils/kite/util/Subpath';
 
 // note: the kite variable is filled in as modules are visited
 export default kite;

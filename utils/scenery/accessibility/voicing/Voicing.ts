@@ -26,17 +26,17 @@
 
 import _ from 'lodash';
 
-import inheritance from '../../../phet-core/inheritance';
-import ResponsePacket, { type ResolvedResponse, type SpeakableResolvedOptions, type VoicingResponse } from '../../../utterance-queue/ResponsePacket';
-import ResponsePatternCollection from '../../../utterance-queue/ResponsePatternCollection';
-import Utterance, { type TAlertable, type UtteranceOptions } from '../../../utterance-queue/Utterance';
-import { DelayedMutate, Instance, InteractiveHighlighting, type InteractiveHighlightingOptions, Node, scenery, type SceneryListenerFunction, voicingUtteranceQueue } from '../../imports';
-import { combineOptions } from '../../../phet-core/optionize';
-import type Constructor from '../../../phet-core/types/Constructor';
-import type IntentionalAny from '../../../phet-core/types/IntentionalAny';
-import responseCollector from '../../../utterance-queue/responseCollector';
-import TinyProperty from '../../../axon/TinyProperty';
-import Tandem from '../../../tandem/Tandem';
+import inheritance from '@/utils/phet-core/inheritance';
+import ResponsePacket, { type ResolvedResponse, type SpeakableResolvedOptions, type VoicingResponse } from '@/utils/utterance-queue/ResponsePacket';
+import ResponsePatternCollection from '@/utils/utterance-queue/ResponsePatternCollection';
+import Utterance, { type TAlertable, type UtteranceOptions } from '@/utils/utterance-queue/Utterance';
+import { DelayedMutate, Instance, InteractiveHighlighting, type InteractiveHighlightingOptions, Node, scenery, type SceneryListenerFunction, voicingUtteranceQueue } from '@/utils/scenery/imports';
+import { combineOptions } from '@/utils/phet-core/optionize';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import responseCollector from '@/utils/utterance-queue/responseCollector';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import Tandem from '@/utils/tandem/Tandem';
 
 // Helps enforce that the utterance is defined.
 function assertUtterance(utterance: Utterance | null): asserts utterance is Utterance {

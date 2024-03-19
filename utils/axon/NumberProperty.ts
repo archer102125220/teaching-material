@@ -7,21 +7,21 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Range, { type RangeStateObject } from '../dot/Range';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import Tandem from '../tandem/Tandem';
-import IOType from '../tandem/types/IOType';
-import NullableIO from '../tandem/types/NullableIO';
-import NumberIO from '../tandem/types/NumberIO';
-import StringIO from '../tandem/types/StringIO';
-import axon from './axon';
-import ReadOnlyProperty, { type ReadOnlyPropertyState } from './ReadOnlyProperty';
-import Property, { type PropertyOptions } from './Property';
-import validate from './validate';
-import type TRangedProperty from './TRangedProperty';
-import assertMutuallyExclusiveOptions from '../phet-core/assertMutuallyExclusiveOptions';
-import { type PhetioID } from '../tandem/TandemConstants';
+import Range, { type RangeStateObject } from '@/utils/dot/Range';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import Tandem from '@/utils/tandem/Tandem';
+import IOType from '@/utils/tandem/types/IOType';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import StringIO from '@/utils/tandem/types/StringIO';
+import axon from '@/utils/axon/axon';
+import ReadOnlyProperty, { type ReadOnlyPropertyState } from '@/utils/axon/ReadOnlyProperty';
+import Property, { type PropertyOptions } from '@/utils/axon/Property';
+import validate from '@/utils/axon/validate';
+import type TRangedProperty from '@/utils/axon/TRangedProperty';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import { type PhetioID } from '@/utils/tandem/TandemConstants';
 
 const VALID_INTEGER = { valueType: 'number', isValidValue: (v: number) => v % 1 === 0, validationMessage: 'Should be a valid integer' };
 const VALID_NON_NAN = { isValidValue: (v: number) => !isNaN(v), validationMessage: 'Should not be NaN' };
@@ -150,7 +150,7 @@ export default class NumberProperty extends Property<number> implements TRangedP
       if (ownsRangeProperty) {
         this.rangeProperty.dispose();
       }
-      else if (assert) {
+      else if (window.assert) {
         this.rangeProperty.unlink(rangePropertyObserver);
       }
     };

@@ -153,31 +153,31 @@
 
 import _ from 'lodash';
 
-import BooleanProperty, { type BooleanPropertyOptions } from '../../axon/BooleanProperty';
-import EnabledProperty, { type EnabledPropertyOptions } from '../../axon/EnabledProperty';
-import Property, { type PropertyOptions } from '../../axon/Property';
-import TinyEmitter from '../../axon/TinyEmitter';
-import TinyForwardingProperty from '../../axon/TinyForwardingProperty';
-import TinyProperty from '../../axon/TinyProperty';
-import TinyStaticProperty from '../../axon/TinyStaticProperty';
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Transform3 from '../../dot/Transform3';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import arrayDifference from '../../phet-core/arrayDifference';
-import deprecationWarning from '../../phet-core/deprecationWarning';
-import PhetioObject, { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import Tandem from '../../tandem/Tandem';
-import BooleanIO from '../../tandem/types/BooleanIO';
-import IOType from '../../tandem/types/IOType';
-import type TProperty from '../../axon/TProperty';
-import { ACCESSIBILITY_OPTION_KEYS, CanvasContextWrapper, CanvasSelfDrawable, Display, DOMSelfDrawable, Drawable, Features, Filter, Image, type ImageOptions, Instance, isHeightSizable, isWidthSizable, LayoutConstraint, Mouse, ParallelDOM, type ParallelDOMOptions, Picker, Pointer, Renderer, RendererSummary, scenery, serializeConnectedNodes, SVGSelfDrawable, type TInputListener, type TLayoutOptions, Trail, WebGLSelfDrawable } from '../imports';
-import optionize, { combineOptions, type EmptySelfOptions, optionize3 } from '../../phet-core/optionize';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
-import Utils from '../../dot/Utils';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import type TEmitter from '../../axon/TEmitter';
+import BooleanProperty, { type BooleanPropertyOptions } from '@/utils/axon/BooleanProperty';
+import EnabledProperty, { type EnabledPropertyOptions } from '@/utils/axon/EnabledProperty';
+import Property, { type PropertyOptions } from '@/utils/axon/Property';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import TinyForwardingProperty from '@/utils/axon/TinyForwardingProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import TinyStaticProperty from '@/utils/axon/TinyStaticProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Transform3 from '@/utils/dot/Transform3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import arrayDifference from '@/utils/phet-core/arrayDifference';
+import deprecationWarning from '@/utils/phet-core/deprecationWarning';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import BooleanIO from '@/utils/tandem/types/BooleanIO';
+import IOType from '@/utils/tandem/types/IOType';
+import type TProperty from '@/utils/axon/TProperty';
+import { ACCESSIBILITY_OPTION_KEYS, CanvasContextWrapper, CanvasSelfDrawable, Display, DOMSelfDrawable, Drawable, Features, Filter, Image, type ImageOptions, Instance, isHeightSizable, isWidthSizable, LayoutConstraint, Mouse, ParallelDOM, type ParallelDOMOptions, Picker, Pointer, Renderer, RendererSummary, scenery, serializeConnectedNodes, SVGSelfDrawable, type TInputListener, type TLayoutOptions, Trail, WebGLSelfDrawable } from '@/utils/scenery/imports';
+import optionize, { combineOptions, type EmptySelfOptions, optionize3 } from '@/utils/phet-core/optionize';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import Utils from '@/utils/dot/Utils';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 let globalIdCounter = 1;
 
@@ -192,10 +192,24 @@ const INPUT_ENABLED_PROPERTY_TANDEM_NAME = 'inputEnabledProperty';
 const PHET_IO_STATE_DEFAULT = false;
 
 // Store the number of parents from the single Node instance that has the most parents in the whole runtime.
-let maxParentCount = 0;
+// let maxParentCount = 0;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+if (typeof window.maxParentCount !== 'number') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  window.maxParentCount = 0;
+}
 
 // Store the number of children from the single Node instance that has the most children in the whole runtime.
-let maxChildCount = 0;
+// let maxChildCount = 0;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-expect-error
+if (typeof window.maxChildCount !== 'number') {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-expect-error
+  window.maxChildCount = 0;
+}
 
 export const REQUIRES_BOUNDS_OPTION_KEYS = [
   'leftTop', // {Vector2} - The upper-left corner of this Node's bounds, see setLeftTop() for more documentation
@@ -729,6 +743,9 @@ class Node extends ParallelDOM {
     this._mutatorKeys = _.cloneDeep(ACCESSIBILITY_OPTION_KEYS).concat(_.cloneDeep(ACCESSIBILITY_OPTION_KEYS));
 
     this._id = globalIdCounter++;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
+    // this._id = window.globalIdCounter++;
     this._instances = [];
     this._rootedDisplays = [];
     this._drawables = [];
@@ -794,7 +811,7 @@ class Node extends ParallelDOM {
     this._selfBoundsDirty = true;
     this._childBoundsDirty = true;
 
-    if (assert) {
+    if (window.assert) {
       // for assertions later to ensure that we are using the same Bounds2 copies as before
       this._originalBounds = this.boundsProperty._value;
       this._originalLocalBounds = this.localBoundsProperty._value;
@@ -859,22 +876,42 @@ class Node extends ParallelDOM {
     node._parents.push(this);
     if (assert && window.phet?.chipper?.queryParameters && isFinite(phet.chipper.queryParameters.parentLimit)) {
       const parentCount = node._parents.length;
-      if (maxParentCount < parentCount) {
-        maxParentCount = parentCount;
-        console.log(`Max Node parents: ${maxParentCount}`);
-        assert(maxParentCount <= phet.chipper.queryParameters.parentLimit,
-          `parent count of ${maxParentCount} above ?parentLimit=${phet.chipper.queryParameters.parentLimit}`);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (window.maxParentCount < parentCount) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        window.maxParentCount = parentCount;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        console.log(`Max Node parents: ${window.maxParentCount}`);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        assert(window.maxParentCount <= phet.chipper.queryParameters.parentLimit,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          `parent count of ${window.maxParentCount} above ?parentLimit=${phet.chipper.queryParameters.parentLimit}`);
       }
     }
 
     this._children.splice(index, 0, node);
     if (assert && window.phet?.chipper?.queryParameters && isFinite(phet.chipper.queryParameters.childLimit)) {
       const childCount = this._children.length;
-      if (maxChildCount < childCount) {
-        maxChildCount = childCount;
-        console.log(`Max Node children: ${maxChildCount}`);
-        assert(maxChildCount <= phet.chipper.queryParameters.childLimit,
-          `child count of ${maxChildCount} above ?childLimit=${phet.chipper.queryParameters.childLimit}`);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (window.maxChildCount < childCount) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        window.maxChildCount = childCount;
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        console.log(`Max Node children: ${window.maxChildCount}`);
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        assert(window.maxChildCount <= phet.chipper.queryParameters.childLimit,
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          `child count of ${window.maxChildCount} above ?childLimit=${phet.chipper.queryParameters.childLimit}`);
       }
     }
 
@@ -1107,9 +1144,9 @@ class Node extends ParallelDOM {
     }
 
     // Sanity checks to make sure our resulting children array is correct.
-    if (assert) {
+    if (window.assert) {
       for (let j = 0; j < this._children.length; j++) {
-        assert(children[j] === this._children[j],
+        window.assert(children[j] === this._children[j],
           'Incorrect child after setChildren, possibly a reentrancy issue');
       }
     }
@@ -1347,6 +1384,8 @@ class Node extends ParallelDOM {
    * @returns - Was the self-bounds potentially updated?
    */
   public validateSelfBounds(): boolean {
+    // console.log('Node.validateSelfBounds');
+    // console.log({ 'this._selfBoundsDirty': this._selfBoundsDirty, 'this.selfBoundsProperty': this.selfBoundsProperty, scratchBounds2, 'this.selfBoundsProperty._value': JSON.parse(JSON.stringify(this.selfBoundsProperty._value)) });
     // validate bounds of ourself if necessary
     if (this._selfBoundsDirty) {
       const oldSelfBounds = scratchBounds2.set(this.selfBoundsProperty._value);
@@ -1546,11 +1585,11 @@ class Node extends ParallelDOM {
       this.validateBounds(); // RE-ENTRANT CALL HERE, it will validateBounds()
     }
 
-    if (assert) {
-      assert(this._originalBounds === this.boundsProperty._value, 'Reference for bounds changed!');
-      assert(this._originalLocalBounds === this.localBoundsProperty._value, 'Reference for localBounds changed!');
-      assert(this._originalSelfBounds === this.selfBoundsProperty._value, 'Reference for selfBounds changed!');
-      assert(this._originalChildBounds === this.childBoundsProperty._value, 'Reference for childBounds changed!');
+    if (window.assert) {
+      window.assert(this._originalBounds === this.boundsProperty._value, 'Reference for bounds changed!');
+      window.assert(this._originalLocalBounds === this.localBoundsProperty._value, 'Reference for localBounds changed!');
+      window.assert(this._originalSelfBounds === this.selfBoundsProperty._value, 'Reference for selfBounds changed!');
+      window.assert(this._originalChildBounds === this.childBoundsProperty._value, 'Reference for childBounds changed!');
     }
 
     // double-check that all of our bounds handling has been accurate
@@ -1690,6 +1729,7 @@ class Node extends ParallelDOM {
    * Should be called to notify that our selfBounds needs to change to this new value.
    */
   public invalidateSelf(newSelfBounds?: Bounds2): void {
+    console.log('invalidateSelf');
     window.assert && window.assert(newSelfBounds === undefined || newSelfBounds instanceof Bounds2,
       'invalidateSelf\'s newSelfBounds, if provided, needs to be Bounds2');
 
@@ -2279,6 +2319,7 @@ class Node extends ParallelDOM {
    * Calls the callback on nodes recursively in a depth-first manner.
    */
   public walkDepthFirst(callback: (node: Node) => void): void {
+    // eslint-disable-next-line n/no-callback-literal
     callback(this);
     const length = this._children.length;
     for (let i = 0; i < length; i++) {
@@ -5586,7 +5627,7 @@ class Node extends ParallelDOM {
       'If provided, height should be a non-negative integer');
 
     this.toImage((image, x, y) => {
-      callback(new Node({ // eslint-disable-line no-html-constructors
+      callback(new Node({
         children: [
           new Image(image, { x: -x, y: -y })
         ]
@@ -5617,7 +5658,7 @@ class Node extends ParallelDOM {
 
     let result: Node | null = null;
     this.toCanvas((canvas, x, y) => {
-      result = new Node({ // eslint-disable-line no-html-constructors
+      result = new Node({
         children: [
           new Image(canvas, { x: -x, y: -y })
         ]
@@ -5682,7 +5723,7 @@ class Node extends ParallelDOM {
     window.assert && window.assert(height === undefined || (typeof height === 'number' && height >= 0 && (height % 1 === 0)),
       'If provided, height should be a non-negative integer');
 
-    return new Node({ // eslint-disable-line no-html-constructors
+    return new Node({
       children: [
         this.toDataURLImageSynchronous(x, y, width, height)
       ]
@@ -5731,18 +5772,18 @@ class Node extends ParallelDOM {
     const resolution = options.resolution;
     const sourceBounds = options.sourceBounds;
 
-    if (assert) {
-      assert(typeof resolution === 'number' && resolution > 0, 'resolution should be a positive number');
-      assert(sourceBounds === null || sourceBounds instanceof Bounds2, 'sourceBounds should be null or a Bounds2');
+    if (window.assert) {
+      window.assert(typeof resolution === 'number' && resolution > 0, 'resolution should be a positive number');
+      window.assert(sourceBounds === null || sourceBounds instanceof Bounds2, 'sourceBounds should be null or a Bounds2');
       if (sourceBounds) {
-        assert(sourceBounds.isValid(), 'sourceBounds should be valid (finite non-negative)');
-        assert(Number.isInteger(sourceBounds.width), 'sourceBounds.width should be an integer');
-        assert(Number.isInteger(sourceBounds.height), 'sourceBounds.height should be an integer');
+        window.assert(sourceBounds.isValid(), 'sourceBounds should be valid (finite non-negative)');
+        window.assert(Number.isInteger(sourceBounds.width), 'sourceBounds.width should be an integer');
+        window.assert(Number.isInteger(sourceBounds.height), 'sourceBounds.height should be an integer');
       }
     }
 
     // We'll need to wrap it in a container Node temporarily (while rasterizing) for the scale
-    const wrapperNode = new Node({ // eslint-disable-line no-html-constructors
+    const wrapperNode = new Node({
       scale: resolution,
       children: [this]
     });
@@ -5803,7 +5844,7 @@ class Node extends ParallelDOM {
     }
 
     if (options.wrap) {
-      const wrappedNode = new Node({ children: [image!] }); // eslint-disable-line no-html-constructors
+      const wrappedNode = new Node({ children: [image!] });
       if (options.useTargetBounds) {
         wrappedNode.localBounds = finalParentBounds;
       }
@@ -6316,12 +6357,10 @@ class Node extends ParallelDOM {
     window.assert && window.assert(Object.getPrototypeOf(options) === Object.prototype,
       'Extra prototype on Node options object is a code smell');
 
-    // @ts-expect-error
     window.assert && window.assert(_.filter(['translation', 'x', 'left', 'right', 'centerX', 'centerTop', 'rightTop', 'leftCenter', 'center', 'rightCenter', 'leftBottom', 'centerBottom', 'rightBottom'], key => options[key] !== undefined).length <= 1,
       `More than one mutation on this Node set the x component, check ${Object.keys(options).join(',')}`);
 
 
-    // @ts-expect-error
     window.assert && window.assert(_.filter(['translation', 'y', 'top', 'bottom', 'centerY', 'centerTop', 'rightTop', 'leftCenter', 'center', 'rightCenter', 'leftBottom', 'centerBottom', 'rightBottom'], key => options[key] !== undefined).length <= 1,
       `More than one mutation on this Node set the y component, check ${Object.keys(options).join(',')}`);
 
@@ -6344,6 +6383,7 @@ class Node extends ParallelDOM {
 
       // See https://github.com/phetsims/scenery/issues/580 for more about passing undefined.
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       window.assert && window.assert(!options.hasOwnProperty(key) || options[key] !== undefined, `Undefined not allowed for Node key: ${key}`);
 
@@ -6354,11 +6394,13 @@ class Node extends ParallelDOM {
         // if the key refers to a function that is not ES5 writable, it will execute that function with the single argument
         if (descriptor && typeof descriptor.value === 'function') {
 
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           this[key](options[key]);
         }
         else {
 
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           this[key] = options[key];
         }
@@ -6573,6 +6615,7 @@ Node.prototype._mutatorKeys = ACCESSIBILITY_OPTION_KEYS.concat(NODE_OPTION_KEYS)
  */
 Node.prototype.drawableMarkFlags = [];
 
+console.log({ 'scenery.Node': scenery.Node });
 scenery.register('Node', Node);
 
 // {IOType}

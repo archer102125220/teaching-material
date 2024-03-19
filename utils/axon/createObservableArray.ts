@@ -12,21 +12,21 @@
 
 import _ from 'lodash';
 
-import arrayRemove from '../phet-core/arrayRemove';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import assertMutuallyExclusiveOptions from '../phet-core/assertMutuallyExclusiveOptions';
-import merge from '../phet-core/merge';
-import optionize, { combineOptions } from '../phet-core/optionize';
-import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
-import ArrayIO from '../tandem/types/ArrayIO';
-import IOType from '../tandem/types/IOType';
-import axon from './axon';
-import Emitter, { type EmitterOptions } from './Emitter';
-import NumberProperty, { type NumberPropertyOptions } from './NumberProperty';
-import Validation from './Validation';
-import type TEmitter from './TEmitter';
-import isSettingPhetioStateProperty from '../tandem/isSettingPhetioStateProperty';
-import IOTypeCache from '../tandem/IOTypeCache';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import merge from '@/utils/phet-core/merge';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import ArrayIO from '@/utils/tandem/types/ArrayIO';
+import IOType from '@/utils/tandem/types/IOType';
+import axon from '@/utils/axon/axon';
+import Emitter, { type EmitterOptions } from '@/utils/axon/Emitter';
+import NumberProperty, { type NumberPropertyOptions } from '@/utils/axon/NumberProperty';
+import Validation from '@/utils/axon/Validation';
+import type TEmitter from '@/utils/axon/TEmitter';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 // NOTE: Is this up-to-date and correct? Looks like we tack on phet-io stuff depending on the phetioType.
 type ObservableArrayListener<T> = (element: T) => void;

@@ -10,16 +10,16 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import optionize from '../../../phet-core/optionize';
-import sceneryPhet from '../../sceneryPhet';
-import SceneryPhetStrings from '../../SceneryPhetStrings';
-import TextKeyNode from '../TextKeyNode';
-import KeyboardHelpIconFactory from './KeyboardHelpIconFactory';
-import KeyboardHelpSection, { type KeyboardHelpSectionOptions } from './KeyboardHelpSection';
-import KeyboardHelpSectionRow from './KeyboardHelpSectionRow';
-import LetterKeyNode from '../LetterKeyNode';
-import StringUtils from '../../../phetcommon/util/StringUtils';
-import NumberKeyNode from '../NumberKeyNode';
+import optionize from '@/utils/phet-core/optionize';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import TextKeyNode from '@/utils/scenery-phet/keyboard/TextKeyNode';
+import KeyboardHelpIconFactory from '@/utils/scenery-phet/keyboard/help/KeyboardHelpIconFactory';
+import KeyboardHelpSection, { type KeyboardHelpSectionOptions } from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSection';
+import KeyboardHelpSectionRow from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSectionRow';
+import LetterKeyNode from '@/utils/scenery-phet/keyboard/LetterKeyNode';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import NumberKeyNode from '@/utils/scenery-phet/keyboard/NumberKeyNode';
 
 type SelfOptions = {
 

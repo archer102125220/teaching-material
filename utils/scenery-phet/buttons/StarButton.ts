@@ -6,13 +6,13 @@
  * @author John Blanco
  */
 
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import { Path } from '../../../scenery/js/imports.js';
-import RectangularPushButton, { RectangularPushButtonOptions } from '../../../sun/js/buttons/RectangularPushButton.js';
-import PhetColorScheme from '../PhetColorScheme.js';
-import sceneryPhet from '../sceneryPhet.js';
-import StarShape from '../StarShape.js';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { Path } from '@/utils/scenery/imports';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import StarShape from '@/utils/scenery-phet/StarShape';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -20,22 +20,22 @@ export type StarButtonOptions = SelfOptions & StrictOmit<RectangularPushButtonOp
 
 export default class StarButton extends RectangularPushButton {
 
-  public constructor( providedOptions?: StarButtonOptions ) {
+  public constructor(providedOptions?: StarButtonOptions) {
 
-    const options = optionize<StarButtonOptions, SelfOptions, RectangularPushButtonOptions>()( {
+    const options = optionize<StarButtonOptions, SelfOptions, RectangularPushButtonOptions>()({
 
       // RectangularPushButtonOptions
       baseColor: PhetColorScheme.BUTTON_YELLOW,
 
       // Match the size of the star button to the refresh buttons, since they often appear together.
-      // see https://github.com/phetsims/scenery-phet/issues/44
+      // see https://github.com/phetsims/scenery/-phet/issues/44
       xMargin: 8.134152255572697
-    }, providedOptions );
+    }, providedOptions);
 
-    options.content = new Path( new StarShape(), { fill: 'black' } );
+    options.content = new Path(new StarShape(), { fill: 'black' });
 
-    super( options );
+    super(options);
   }
 }
 
-sceneryPhet.register( 'StarButton', StarButton );
+sceneryPhet.register('StarButton', StarButton);

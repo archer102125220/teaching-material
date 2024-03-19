@@ -14,7 +14,7 @@
 
 import _ from 'lodash';
 
-import phetCore from './phetCore';
+import phetCore from '@/utils/phet-core/phetCore';
 
 /**
  * @param options - an options object.  Could be before or after merge, and may therefore

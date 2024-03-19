@@ -7,10 +7,10 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Dimension2 from '../dot/Dimension2';
-import optionize from '../phet-core/optionize';
-import { Rectangle, type RectangleOptions } from '../scenery/imports';
-import sceneryPhet from './sceneryPhet';
+import Dimension2 from '@/utils/dot/Dimension2';
+import optionize from '@/utils/phet-core/optionize';
+import { Rectangle, type RectangleOptions } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 // constants
 const DEFAULT_SIZE = new Dimension2(20, 5);

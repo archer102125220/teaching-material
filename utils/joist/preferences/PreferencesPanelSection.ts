@@ -7,11 +7,11 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import optionize, { combineOptions } from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import { AlignGroup, Node, type NodeOptions, VBox, type VBoxOptions } from '../../scenery/imports';
-import joist from '../joist';
-import PreferencesDialog from './PreferencesDialog';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { AlignGroup, Node, type NodeOptions, VBox, type VBoxOptions } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
 
 type SelfOptions = {
 

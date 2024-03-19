@@ -9,7 +9,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 type CollapsePropertyValue<T> = T extends TReadOnlyProperty<infer Value> ? Value : T;
 export default CollapsePropertyValue;

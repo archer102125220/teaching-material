@@ -10,29 +10,28 @@
  * @author Jesse Greenberg
  */
 
-import optionize, { EmptySelfOptions } from '../phet-core/optionize';
-// @ts-expect-error
-import Utterance, { UtteranceOptions } from './Utterance';
-import utteranceQueueNamespace from './utteranceQueueNamespace';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import Utterance, { type UtteranceOptions } from '@/utils/utterance-queue/Utterance';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
 
 type SelfOptions = EmptySelfOptions;
 export type ActivationUtteranceOptions = SelfOptions & UtteranceOptions;
 
 export default class ActivationUtterance extends Utterance {
 
-  public constructor( providedOptions?: ActivationUtteranceOptions ) {
+  public constructor(providedOptions?: ActivationUtteranceOptions) {
 
-    const options = optionize<ActivationUtteranceOptions, SelfOptions, UtteranceOptions>()( {
+    const options = optionize<ActivationUtteranceOptions, SelfOptions, UtteranceOptions>()({
 
       // {number} - in ms, should be larger than 500, prevents the utterance from being duplicated within the delay
       // of press and hold for most typical user settings
       alertStableDelay: 500
-    }, providedOptions );
+    }, providedOptions);
 
-    window.assert && window.assert( options.alertStableDelay >= 500, 'Utterance will likely be duplicated if activated with key press and hold' );
+    window.assert && window.assert(options.alertStableDelay >= 500, 'Utterance will likely be duplicated if activated with key press and hold');
 
-    super( options );
+    super(options);
   }
 }
 
-utteranceQueueNamespace.register( 'ActivationUtterance', ActivationUtterance );
+utteranceQueueNamespace.register('ActivationUtterance', ActivationUtterance);

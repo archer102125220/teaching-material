@@ -17,11 +17,11 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Transform3 from '../../dot/Transform3';
-import Vector2 from '../../dot/Vector2';
-import { Node, PDOMUtils, scenery, TrailPointer } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Transform3 from '@/utils/dot/Transform3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Node, PDOMUtils, scenery, TrailPointer } from '@/utils/scenery/imports';
 
 // constants
 const ID_SEPARATOR = PDOMUtils.PDOM_UNIQUE_ID_SEPARATOR;
@@ -52,7 +52,7 @@ export default class Trail {
    * @param [nodes]
    */
   public constructor(nodes?: Trail | Node[] | Node) {
-    if (assert) {
+    if (window.assert) {
       // Only do this if assertions are enabled, otherwise we won't access it at all
       this.immutable = undefined;
     }
@@ -370,7 +370,7 @@ export default class Trail {
 
   public setImmutable(): this {
     // if assertions are disabled, we hope this is inlined as a no-op
-    if (assert) {
+    if (window.assert) {
       assert(this.immutable !== false, 'A trail cannot be made immutable after being flagged as mutable');
       this.immutable = true;
     }
@@ -382,7 +382,7 @@ export default class Trail {
 
   public setMutable(): this {
     // if assertions are disabled, we hope this is inlined as a no-op
-    if (assert) {
+    if (window.assert) {
       assert(this.immutable !== true, 'A trail cannot be made mutable after being flagged as immutable');
       this.immutable = false;
     }
@@ -745,7 +745,7 @@ export default class Trail {
    */
   public getUniqueId(): string {
     // sanity checks
-    if (assert) {
+    if (window.assert) {
       const oldUniqueId = this.uniqueId;
       this.updateUniqueId();
       assert(oldUniqueId === this.uniqueId);

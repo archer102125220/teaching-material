@@ -6,15 +6,17 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import InstanceRegistry from '../../phet-core/documentation/InstanceRegistry';
-import optionize from '../../phet-core/optionize';
-import pushButtonSoundPlayer from '../../tambo/shared-sound-players/pushButtonSoundPlayer';
-import type TSoundPlayer from '../../tambo/TSoundPlayer';
-import Tandem from '../../tandem/Tandem';
-import sun from '../sun';
-import PushButtonInteractionStateProperty from './PushButtonInteractionStateProperty';
-import PushButtonModel, { type PushButtonListener, type PushButtonModelOptions } from './PushButtonModel';
-import RectangularButton, { type RectangularButtonOptions } from './RectangularButton';
+import _ from 'lodash';
+
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize from '@/utils/phet-core/optionize';
+import pushButtonSoundPlayer from '@/utils/tambo/shared-sound-players/pushButtonSoundPlayer';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import PushButtonInteractionStateProperty from '@/utils/sun/buttons/PushButtonInteractionStateProperty';
+import PushButtonModel, { type PushButtonListener, type PushButtonModelOptions } from '@/utils/sun/buttons/PushButtonModel';
+import RectangularButton, { type RectangularButtonOptions } from '@/utils/sun/buttons/RectangularButton';
 
 type SelfOptions = {
   soundPlayer?: TSoundPlayer;

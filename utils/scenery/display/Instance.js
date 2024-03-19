@@ -22,10 +22,10 @@
 
 import _ from 'lodash';
 
-import TinyEmitter from '../../axon/TinyEmitter';
-import arrayRemove from '../../phet-core/arrayRemove';
-import cleanArray from '../../phet-core/cleanArray';
-import Poolable from '../../phet-core/Poolable';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Poolable from '@/utils/phet-core/Poolable';
 import {
   BackboneDrawable,
   CanvasBlock,
@@ -39,7 +39,7 @@ import {
   SharedCanvasCacheDrawable,
   Trail,
   Utils
-} from '../imports';
+} from '@/utils/scenery/imports';
 
 let globalIdCounter = 1;
 

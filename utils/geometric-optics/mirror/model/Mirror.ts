@@ -7,18 +7,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import RangeWithValue from '../../../dot/RangeWithValue';
-import Optic, { type OpticOptions } from '../../common/model/Optic';
-import geometricOptics from '../../geometricOptics';
-import { type OpticSurfaceType } from '../../common/model/OpticSurfaceType';
-import Vector2 from '../../../dot/Vector2';
-import MirrorShapes from './MirrorShapes';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import optionize from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import GOQueryParameters from '../../common/GOQueryParameters';
-import { type GOSimOptions } from '../../GOSim';
+import RangeWithValue from '@/utils/dot/RangeWithValue';
+import Optic, { type OpticOptions } from '@/utils/geometric-optics/common/model/Optic';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import { type OpticSurfaceType } from '@/utils/geometric-optics/common/model/OpticSurfaceType';
+import Vector2 from '@/utils/dot/Vector2';
+import MirrorShapes from '@/utils/geometric-optics/mirror/model/MirrorShapes';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
+import { type GOSimOptions } from '@/utils/geometric-optics/GOSim';
 
 // IOR is a fixed value for both the 'direct' and 'indirect' focal-length models.
 // Although a mirror does not have an IOR, its focal length is equivalent to a lens with an IOR of 2.
@@ -46,7 +46,7 @@ export default class Mirror extends Optic {
       opticSurfaceTypes: providedOptions.isBasicsVersion ? ['flat'] : ['concave', 'convex', 'flat'],
       diameterRange: GOQueryParameters.dRangeMirror, // in cm
       sign: -1, // a positive distance indicates that the image is to the left of the mirror, so invert the sign
-      indexOfRefractionPropertyFeatured: indexOfRefractionPropertyFeatured,
+      indexOfRefractionPropertyFeatured,
       radiusOfCurvaturePropertyFeatured: radiusOfCurvatureMagnitudePropertyFeatured,
       directFocalLengthModelOptions: {
         focalLengthMagnitudeRange: GOQueryParameters.fRangeMirror, // in cm
@@ -55,9 +55,9 @@ export default class Mirror extends Optic {
       },
       indirectFocalLengthModelOptions: {
         radiusOfCurvatureMagnitudeRange: GOQueryParameters.rocRangeMirror, // in cm
-        radiusOfCurvatureMagnitudePropertyFeatured: radiusOfCurvatureMagnitudePropertyFeatured,
+        radiusOfCurvatureMagnitudePropertyFeatured,
         indexOfRefractionRange: INDEX_OF_REFRACTION_RANGE,
-        indexOfRefractionPropertyFeatured: indexOfRefractionPropertyFeatured,
+        indexOfRefractionPropertyFeatured,
         tandem: focalLengthModelsTandem.createTandem('indirectFocalLengthModel')
       }
     }, providedOptions);

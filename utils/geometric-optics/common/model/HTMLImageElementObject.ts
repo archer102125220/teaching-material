@@ -8,15 +8,15 @@
  * @author Martin Veillette
  */
 
-import DerivedProperty from '../../../axon/DerivedProperty';
-import geometricOptics from '../../geometricOptics';
-import Bounds2 from '../../../dot/Bounds2';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import OpticalObject, { type OpticalObjectOptions } from './OpticalObject';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import Dimension2 from '../../../dot/Dimension2';
-import Vector2 from '../../../dot/Vector2';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import OpticalObject, { type OpticalObjectOptions } from '@/utils/geometric-optics/common/model/OpticalObject';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import Dimension2 from '@/utils/dot/Dimension2';
+import Vector2 from '@/utils/dot/Vector2';
 
 export type HTMLImageElementObjectOptions = PickRequired<OpticalObjectOptions, 'position' | 'tandem'>
   & PickOptional<OpticalObjectOptions, 'phetioDocumentation'>;

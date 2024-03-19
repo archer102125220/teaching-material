@@ -8,16 +8,16 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Property from '../../axon/Property';
-import optionize from '../../phet-core/optionize';
-import type TSoundPlayer from '../../tambo/TSoundPlayer';
-import toggleOffSoundPlayer from '../../tambo/shared-sound-players/toggleOffSoundPlayer';
-import toggleOnSoundPlayer from '../../tambo/shared-sound-players/toggleOnSoundPlayer';
-import Tandem from '../../tandem/Tandem';
-import sun from '../sun';
-import RoundButton, { type RoundButtonOptions } from './RoundButton';
-import ToggleButtonInteractionStateProperty from './ToggleButtonInteractionStateProperty';
-import ToggleButtonModel from './ToggleButtonModel';
+import Property from '@/utils/axon/Property';
+import optionize from '@/utils/phet-core/optionize';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import toggleOffSoundPlayer from '@/utils/tambo/shared-sound-players/toggleOffSoundPlayer';
+import toggleOnSoundPlayer from '@/utils/tambo/shared-sound-players/toggleOnSoundPlayer';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import RoundButton, { type RoundButtonOptions } from '@/utils/sun/buttons/RoundButton';
+import ToggleButtonInteractionStateProperty from '@/utils/sun/buttons/ToggleButtonInteractionStateProperty';
+import ToggleButtonModel from '@/utils/sun/buttons/ToggleButtonModel';
 
 type SelfOptions = {
 

@@ -11,16 +11,16 @@
 
 import _ from 'lodash';
 
-import validate from '../../axon/validate';
-import Validation, { type Validator } from '../../axon/Validation';
-import optionize from '../../phet-core/optionize';
-import PhetioConstants from '../PhetioConstants';
-import TandemConstants, { type IOTypeName, type PhetioElementMetadata } from '../TandemConstants';
-import tandemNamespace from '../tandemNamespace';
-import StateSchema, { type CompositeSchema, type CompositeStateObjectType } from './StateSchema';
-import type PhetioObject from '../PhetioObject';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny.js';
-import PhetioDynamicElementContainer from '../PhetioDynamicElementContainer';
+import validate from '@/utils/axon/validate';
+import Validation, { type Validator } from '@/utils/axon/Validation';
+import optionize from '@/utils/phet-core/optionize';
+import PhetioConstants from '@/utils/tandem/PhetioConstants';
+import TandemConstants, { type IOTypeName, type PhetioElementMetadata } from '@/utils/tandem/TandemConstants';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import StateSchema, { type CompositeSchema, type CompositeStateObjectType } from '@/utils/tandem/types/StateSchema';
+import type PhetioObject from '@/utils/tandem/PhetioObject';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny.js';
+import PhetioDynamicElementContainer from '@/utils/tandem/PhetioDynamicElementContainer';
 
 // constants
 const VALIDATE_OPTIONS_FALSE = { validateValidator: false };
@@ -316,7 +316,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
     this.isFunctionType = options.isFunctionType;
     this.addChildElement = options.addChildElement;
 
-    if (assert) {
+    if (window.assert) {
 
       window.assert && window.assert(supertype || this.typeName === 'ObjectIO', 'supertype is required');
       window.assert && window.assert(!this.typeName.includes('.'), 'Dots should not appear in type names');

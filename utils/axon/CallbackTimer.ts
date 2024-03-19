@@ -7,9 +7,9 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import axon from './axon';
-import stepTimer from './stepTimer';
-import { type TimerListener } from './Timer';
+import axon from '@/utils/axon/axon';
+import stepTimer from '@/utils/axon/stepTimer';
+import { type TimerListener } from '@/utils/axon/Timer';
 
 export type CallbackTimerCallback = () => void;
 

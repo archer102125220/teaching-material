@@ -8,8 +8,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
-import Utterance from './Utterance.js';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace.js';
+import Utterance from '@/utils/utterance-queue/Utterance.js';
 
 // One instance per entry in the UtteranceQueue.queue
 class UtteranceWrapper {

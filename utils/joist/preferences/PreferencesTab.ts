@@ -7,20 +7,20 @@
  * @author Jesse Greenberg
  */
 
-import joist from '../joist';
-import { HighlightPath, HBox, Line, Node, type NodeOptions, PressListener, Rectangle, Text, Voicing, type VoicingOptions } from '../../scenery/imports';
-import PreferencesType from './PreferencesType';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import type TProperty from '../../axon/TProperty';
-import optionize from '../../phet-core/optionize';
-import PreferencesDialog from './PreferencesDialog';
-import Multilink from '../../axon/Multilink';
-import JoistStrings from '../JoistStrings';
-import Tandem from '../../tandem/Tandem';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
+import joist from '@/utils/joist/joist';
+import { HighlightPath, HBox, Line, Node, type NodeOptions, PressListener, Rectangle, Text, Voicing, type VoicingOptions } from '@/utils/scenery/imports';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import optionize from '@/utils/phet-core/optionize';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import Multilink from '@/utils/axon/Multilink';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import Tandem from '@/utils/tandem/Tandem';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 
-import PatternStringProperty from '../../axon/PatternStringProperty';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
 
 type SelfOptions = {
 

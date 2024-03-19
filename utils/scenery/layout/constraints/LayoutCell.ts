@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Orientation from '../../../phet-core/Orientation';
-import { LayoutConstraint, LayoutProxy, LayoutProxyProperty, Node, scenery } from '../../imports';
+import Orientation from '@/utils/phet-core/Orientation';
+import { LayoutConstraint, LayoutProxy, LayoutProxyProperty, Node, scenery } from '@/utils/scenery/imports';
 
 // NOTE: This would be an abstract class, but that is incompatible with how mixin constraints work in TypeScript
 export default class LayoutCell {

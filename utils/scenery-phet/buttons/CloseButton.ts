@@ -8,14 +8,14 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Shape } from '../../kite/imports';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import optionize from '../../phet-core/optionize';
-import { Path, type PathOptions } from '../../scenery/imports';
-import RectangularPushButton, { type RectangularPushButtonOptions } from '../../sun/buttons/RectangularPushButton';
-import PhetColorScheme from '../PhetColorScheme';
-import sceneryPhet from '../sceneryPhet';
-import SceneryPhetStrings from '../SceneryPhetStrings';
+import { Shape } from '@/utils/kite/imports';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize from '@/utils/phet-core/optionize';
+import { Path, type PathOptions } from '@/utils/scenery/imports';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
+import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
 
 type SelfOptions = {
   iconLength?: number; // length of the 'X' icon, whose bounds are square

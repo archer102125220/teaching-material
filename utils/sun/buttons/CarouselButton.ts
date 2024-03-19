@@ -6,15 +6,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Dimension2 from '../../../dot/js/Dimension2.js';
-import Matrix3 from '../../../dot/js/Matrix3.js';
-import { Shape } from '../../../kite/js/imports.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import { PaintColorProperty, Path, PathOptions } from '../../../scenery/js/imports.js';
-import sun from '../sun.js';
-import ButtonNode from './ButtonNode.js';
-import RectangularPushButton, { RectangularPushButtonOptions } from './RectangularPushButton.js';
+import Dimension2 from '@/utils/dot/Dimension2.js';
+import Matrix3 from '@/utils/dot/Matrix3.js';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize.js';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit.js';
+import { PaintColorProperty, Path, type PathOptions } from '@/utils/scenery/imports.js';
+import sun from '@/utils/sun/sun.js';
+import ButtonNode from '@/utils/sun/buttons/ButtonNode.js';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton.js';
 
 // maps options.arrowDirection to rotation angles, in radians
 const ANGLES = {
@@ -38,14 +38,14 @@ export default class CarouselButton extends RectangularPushButton {
 
   private readonly customStrokeProperty: PaintColorProperty | null;
 
-  public constructor( providedOptions?: CarouselButtonOptions ) {
+  public constructor(providedOptions?: CarouselButtonOptions) {
 
     // see supertype for additional options
-    const options = optionize<CarouselButtonOptions, SelfOptions, RectangularPushButtonOptions>()( {
+    const options = optionize<CarouselButtonOptions, SelfOptions, RectangularPushButtonOptions>()({
 
       // CarouselButtonOptions
       arrowDirection: 'up',
-      arrowSize: new Dimension2( 20, 7 ),
+      arrowSize: new Dimension2(20, 7),
 
       arrowPathOptions: {
         stroke: 'black',
@@ -58,31 +58,31 @@ export default class CarouselButton extends RectangularPushButton {
       buttonAppearanceStrategy: ButtonNode.FlatAppearanceStrategy,
       cornerRadius: 4
 
-    }, providedOptions );
+    }, providedOptions);
 
     let customStrokeProperty: PaintColorProperty | null = null;
 
-    if ( options.stroke === undefined ) {
-      customStrokeProperty = new PaintColorProperty( options.baseColor, {
+    if (options.stroke === undefined) {
+      customStrokeProperty = new PaintColorProperty(options.baseColor, {
         luminanceFactor: -0.8
-      } );
+      });
       options.stroke = customStrokeProperty;
     }
 
     // validate options
-    window.assert && window.assert( ANGLES.hasOwnProperty( options.arrowDirection ), `invalid direction: ${options.arrowDirection}` );
+    window.assert && window.assert(ANGLES.hasOwnProperty(options.arrowDirection), `invalid direction: ${options.arrowDirection}`);
 
     // Generic arrow shape, points 'up'
     let arrowShape = new Shape()
-      .moveTo( 0, 0 )
-      .lineTo( options.arrowSize.width / 2, -options.arrowSize.height )
-      .lineTo( options.arrowSize.width, 0 );
+      .moveTo(0, 0)
+      .lineTo(options.arrowSize.width / 2, -options.arrowSize.height)
+      .lineTo(options.arrowSize.width, 0);
 
     // Transform arrow shape to match direction
-    arrowShape = arrowShape.transformed( Matrix3.rotation2( ANGLES[ options.arrowDirection ] ) );
+    arrowShape = arrowShape.transformed(Matrix3.rotation2(ANGLES[options.arrowDirection]));
 
     // Arrow node
-    options.content = new Path( arrowShape, options.arrowPathOptions );
+    options.content = new Path(arrowShape, options.arrowPathOptions);
 
     // set up the options such that the inner corners are square and outer ones are rounded
     const arrowDirection = options.arrowDirection;
@@ -94,7 +94,7 @@ export default class CarouselButton extends RectangularPushButton {
 
     // Computes touch area dilations/shifts so that the pointer area will not overlap with the contents of a Carousel.
     // We do this here so that it's set up to work with any dynamic layout
-    if ( arrowDirection === 'up' || arrowDirection === 'down' ) {
+    if (arrowDirection === 'up' || arrowDirection === 'down') {
       const mouseAreaYDilation = options.mouseAreaYDilation / 2 || 0;
       const touchAreaYDilation = options.touchAreaYDilation / 2 || 0;
 
@@ -113,7 +113,7 @@ export default class CarouselButton extends RectangularPushButton {
       options.touchAreaXShift = arrowDirection === 'left' ? -touchAreaXDilation : touchAreaXDilation;
     }
 
-    super( options );
+    super(options);
 
     this.customStrokeProperty = customStrokeProperty;
   }
@@ -125,4 +125,4 @@ export default class CarouselButton extends RectangularPushButton {
   }
 }
 
-sun.register( 'CarouselButton', CarouselButton );
+sun.register('CarouselButton', CarouselButton);

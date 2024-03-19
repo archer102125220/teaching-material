@@ -8,7 +8,9 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import tambo from './tambo';
+import _ from 'lodash';
+
+import tambo from '@/utils/tambo/tambo';
 
 // type definition for audio context state change listeners
 type AudioContextStateChangeListener = ((state: AudioContextState) => void);

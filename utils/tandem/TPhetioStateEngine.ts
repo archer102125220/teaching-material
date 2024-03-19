@@ -8,10 +8,10 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import PhetioObject from './PhetioObject';
-import type TEmitter from '../axon/TEmitter';
-import { type FullPhetioState } from './TandemConstants';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import type TEmitter from '@/utils/axon/TEmitter';
+import { type FullPhetioState } from '@/utils/tandem/TandemConstants';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 export type TPhetioStateEngine = {
   onBeforeApplyStateEmitter: TEmitter<[PhetioObject]>;

@@ -6,13 +6,13 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import { Shape } from '../../../kite/js/imports.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import InstanceRegistry from '../../../phet-core/js/documentation/InstanceRegistry.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import { HBox, Path, Rectangle } from '../../../scenery/js/imports.js';
-import RoundPushButton, { RoundPushButtonOptions } from '../../../sun/js/buttons/RoundPushButton.js';
-import sceneryPhet from '../sceneryPhet.js';
+import { Shape } from '@/utils/kite/imports';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { HBox, Path, Rectangle } from '@/utils/scenery/imports';
+import RoundPushButton, { type RoundPushButtonOptions } from '@/utils/sun/buttons/RoundPushButton';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 // constants
 const scale = 0.75;
@@ -28,25 +28,25 @@ export type RestartButtonOptions = SelfOptions & StrictOmit<RoundPushButtonOptio
 
 export default class RestartButton extends RoundPushButton {
 
-  public constructor( providedOptions?: RestartButtonOptions ) {
+  public constructor(providedOptions?: RestartButtonOptions) {
 
-    const options = optionize<RestartButtonOptions, SelfOptions, RoundPushButtonOptions>()( {}, providedOptions );
+    const options = optionize<RestartButtonOptions, SelfOptions, RoundPushButtonOptions>()({}, providedOptions);
 
-    const barPath = new Rectangle( 0, 0, barWidth, barHeight, { fill: 'black' } );
-    const trianglePath = new Path( new Shape().moveTo( 0, triangleHeight / 2 ).lineTo( -triangleWidth, 0 ).lineTo( 0, -triangleHeight / 2 ).close(), {
+    const barPath = new Rectangle(0, 0, barWidth, barHeight, { fill: 'black' });
+    const trianglePath = new Path(new Shape().moveTo(0, triangleHeight / 2).lineTo(-triangleWidth, 0).lineTo(0, -triangleHeight / 2).close(), {
       fill: 'black'
-    } );
-    const trianglePath2 = new Path( new Shape().moveTo( 0, triangleHeight / 2 ).lineTo( -triangleWidth, 0 ).lineTo( 0, -triangleHeight / 2 ).close(), {
+    });
+    const trianglePath2 = new Path(new Shape().moveTo(0, triangleHeight / 2).lineTo(-triangleWidth, 0).lineTo(0, -triangleHeight / 2).close(), {
       fill: 'black'
-    } );
+    });
 
-    options.content = new HBox( { children: [ barPath, trianglePath, trianglePath2 ], spacing: -1 } );
+    options.content = new HBox({ children: [barPath, trianglePath, trianglePath2], spacing: -1 });
 
-    super( options );
+    super(options);
 
     // support for binder documentation, stripped out in builds and only runs when ?binder is specified
-    assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL( 'scenery-phet', 'RestartButton', this );
+    assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL('scenery-phet', 'RestartButton', this);
   }
 }
 
-sceneryPhet.register( 'RestartButton', RestartButton );
+sceneryPhet.register('RestartButton', RestartButton);

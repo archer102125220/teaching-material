@@ -25,26 +25,25 @@
 
 import _ from 'lodash';
 
-import optionize, { combineOptions } from '../../phet-core/optionize';
-// @ts-expect-error
-import PhetioObject, { PhetioObjectOptions } from '../../tandem/PhetioObject';
-import IOType from '../../tandem/types/IOType';
-import StringIO from '../../tandem/types/StringIO';
-import { scenery } from '../imports';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import IOType from '@/utils/tandem/types/IOType';
+import StringIO from '@/utils/tandem/types/StringIO';
+import { scenery } from '@/utils/scenery/imports';
 
 // Valid values for the 'style' property of Font
-const VALID_STYLES = [ 'normal', 'italic', 'oblique' ];
+const VALID_STYLES = ['normal', 'italic', 'oblique'];
 
 // Valid values for the 'variant' property of Font
-const VALID_VARIANTS = [ 'normal', 'small-caps' ];
+const VALID_VARIANTS = ['normal', 'small-caps'];
 
 // Valid values for the 'weight' property of Font
-const VALID_WEIGHTS = [ 'normal', 'bold', 'bolder', 'lighter',
-  '100', '200', '300', '400', '500', '600', '700', '800', '900' ];
+const VALID_WEIGHTS = ['normal', 'bold', 'bolder', 'lighter',
+  '100', '200', '300', '400', '500', '600', '700', '800', '900'];
 
 // Valid values for the 'stretch' property of Font
-const VALID_STRETCHES = [ 'normal', 'ultra-condensed', 'extra-condensed', 'condensed', 'semi-condensed',
-  'semi-expanded', 'expanded', 'extra-expanded', 'ultra-expanded' ];
+const VALID_STRETCHES = ['normal', 'ultra-condensed', 'extra-condensed', 'condensed', 'semi-condensed',
+  'semi-expanded', 'expanded', 'extra-expanded', 'ultra-expanded'];
 
 export type FontStyle = 'normal' | 'italic' | 'oblique';
 export type FontVariant = 'normal' | 'small-caps';
@@ -110,11 +109,11 @@ export default class Font extends PhetioObject {
   // Shorthand font property
   private readonly _font: string;
 
-  public constructor( providedOptions?: FontOptions ) {
-    window.assert && window.assert( providedOptions === undefined || ( typeof providedOptions === 'object' && Object.getPrototypeOf( providedOptions ) === Object.prototype ),
-      'options, if provided, should be a raw object' );
+  public constructor(providedOptions?: FontOptions) {
+    window.assert && window.assert(providedOptions === undefined || (typeof providedOptions === 'object' && Object.getPrototypeOf(providedOptions) === Object.prototype),
+      'options, if provided, should be a raw object');
 
-    const options = optionize<FontOptions, SelfOptions, PhetioObjectOptions>()( {
+    const options = optionize<FontOptions, SelfOptions, PhetioObjectOptions>()({
       // {string} - 'normal', 'italic' or 'oblique'
       style: 'normal',
 
@@ -142,34 +141,34 @@ export default class Font extends PhetioObject {
       family: 'sans-serif',
 
       phetioType: Font.FontIO
-    }, providedOptions );
+    }, providedOptions);
 
-    window.assert && window.assert( typeof options.weight === 'string' || typeof options.weight === 'number', 'Font weight should be specified as a string or number' );
-    window.assert && window.assert( typeof options.size === 'string' || typeof options.size === 'number', 'Font size should be specified as a string or number' );
+    window.assert && window.assert(typeof options.weight === 'string' || typeof options.weight === 'number', 'Font weight should be specified as a string or number');
+    window.assert && window.assert(typeof options.size === 'string' || typeof options.size === 'number', 'Font size should be specified as a string or number');
 
-    super( options );
+    super(options);
 
     this._style = options.style;
     this._variant = options.variant;
     this._weight = `${options.weight}` as FontWeight; // cast to string, we'll double check it later
     this._stretch = options.stretch;
-    this._size = Font.castSize( options.size );
+    this._size = Font.castSize(options.size);
     this._lineHeight = options.lineHeight;
     this._family = options.family;
 
     // sanity checks to prevent errors in interpretation or in the font shorthand usage
-    window.assert && window.assert( typeof this._style === 'string' && _.includes( VALID_STYLES, this._style ),
-      'Font style must be one of "normal", "italic", or "oblique"' );
-    window.assert && window.assert( typeof this._variant === 'string' && _.includes( VALID_VARIANTS, this._variant ),
-      'Font variant must be "normal" or "small-caps"' );
-    window.assert && window.assert( typeof this._weight === 'string' && _.includes( VALID_WEIGHTS, this._weight ),
-      'Font weight must be one of "normal", "bold", "bolder", "lighter", "100", "200", "300", "400", "500", "600", "700", "800", or "900"' );
-    window.assert && window.assert( typeof this._stretch === 'string' && _.includes( VALID_STRETCHES, this._stretch ),
-      'Font stretch must be one of "normal", "ultra-condensed", "extra-condensed", "condensed", "semi-condensed", "semi-expanded", "expanded", "extra-expanded", or "ultra-expanded"' );
-    window.assert && window.assert( typeof this._size === 'string' && !_.includes( [ '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' ], this._size[ this._size.length - 1 ] ),
-      'Font size must be either passed as a number (not a string, interpreted as px), or must contain a suffix for percentage, absolute or relative units, or an explicit size constant' );
-    window.assert && window.assert( typeof this._lineHeight === 'string' );
-    window.assert && window.assert( typeof this._family === 'string' );
+    window.assert && window.assert(typeof this._style === 'string' && _.includes(VALID_STYLES, this._style),
+      'Font style must be one of "normal", "italic", or "oblique"');
+    window.assert && window.assert(typeof this._variant === 'string' && _.includes(VALID_VARIANTS, this._variant),
+      'Font variant must be "normal" or "small-caps"');
+    window.assert && window.assert(typeof this._weight === 'string' && _.includes(VALID_WEIGHTS, this._weight),
+      'Font weight must be one of "normal", "bold", "bolder", "lighter", "100", "200", "300", "400", "500", "600", "700", "800", or "900"');
+    window.assert && window.assert(typeof this._stretch === 'string' && _.includes(VALID_STRETCHES, this._stretch),
+      'Font stretch must be one of "normal", "ultra-condensed", "extra-condensed", "condensed", "semi-condensed", "semi-expanded", "expanded", "extra-expanded", or "ultra-expanded"');
+    window.assert && window.assert(typeof this._size === 'string' && !_.includes(['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'], this._size[this._size.length - 1]),
+      'Font size must be either passed as a number (not a string, interpreted as px), or must contain a suffix for percentage, absolute or relative units, or an explicit size constant');
+    window.assert && window.assert(typeof this._lineHeight === 'string');
+    window.assert && window.assert(typeof this._family === 'string');
 
     // Initialize the shorthand font property
     this._font = this.computeShorthand();
@@ -241,19 +240,19 @@ export default class Font extends PhetioObject {
    * Returns an approximate value of this font's size in px.
    */
   public getNumericSize(): number {
-    const pxMatch = this._size.match( /^(\d+)px$/ );
-    if ( pxMatch ) {
-      return Number( pxMatch[ 1 ] );
+    const pxMatch = this._size.match(/^(\d+)px$/);
+    if (pxMatch) {
+      return Number(pxMatch[1]);
     }
 
-    const ptMatch = this._size.match( /^(\d+)pt$/ );
-    if ( ptMatch ) {
-      return 0.75 * Number( ptMatch[ 1 ] );
+    const ptMatch = this._size.match(/^(\d+)pt$/);
+    if (ptMatch) {
+      return 0.75 * Number(ptMatch[1]);
     }
 
-    const emMatch = this._size.match( /^(\d+)em$/ );
-    if ( emMatch ) {
-      return Number( emMatch[ 1 ] ) / 16;
+    const emMatch = this._size.match(/^(\d+)em$/);
+    if (emMatch) {
+      return Number(emMatch[1]) / 16;
     }
 
     return 12; // a guess?
@@ -283,9 +282,9 @@ export default class Font extends PhetioObject {
    * Returns a new Font object, which is a copy of this object. If options are provided, they override the current
    * values in this object.
    */
-  public copy( options?: FontOptions ): Font {
+  public copy(options?: FontOptions): Font {
     // TODO: get merge working in typescript https://github.com/phetsims/scenery/issues/1581
-    return new Font( combineOptions<FontOptions>( {
+    return new Font(combineOptions<FontOptions>({
       style: this._style,
       variant: this._variant,
       weight: this._weight,
@@ -293,7 +292,7 @@ export default class Font extends PhetioObject {
       size: this._size,
       lineHeight: this._lineHeight,
       family: this._family
-    }, options ) );
+    }, options));
   }
 
   /**
@@ -303,12 +302,12 @@ export default class Font extends PhetioObject {
    */
   private computeShorthand(): string {
     let ret = '';
-    if ( this._style !== 'normal' ) { ret += `${this._style} `; }
-    if ( this._variant !== 'normal' ) { ret += `${this._variant} `; }
-    if ( this._weight !== 'normal' ) { ret += `${this._weight} `; }
-    if ( this._stretch !== 'normal' ) { ret += `${this._stretch} `; }
+    if (this._style !== 'normal') { ret += `${this._style} `; }
+    if (this._variant !== 'normal') { ret += `${this._variant} `; }
+    if (this._weight !== 'normal') { ret += `${this._weight} `; }
+    if (this._stretch !== 'normal') { ret += `${this._stretch} `; }
     ret += this._size;
-    if ( this._lineHeight !== 'normal' ) { ret += `/${this._lineHeight}`; }
+    if (this._lineHeight !== 'normal') { ret += `/${this._lineHeight}`; }
     ret += ` ${this._family}`;
     return ret;
   }
@@ -331,8 +330,8 @@ export default class Font extends PhetioObject {
    *
    * @param size - If it's a number, 'px' will be appended
    */
-  public static castSize( size: string | number ): string {
-    if ( typeof size === 'number' ) {
+  public static castSize(size: string | number): string {
+    if (typeof size === 'number') {
       return `${size}px`; // add the pixels suffix by default for numbers
     }
     else {
@@ -340,20 +339,20 @@ export default class Font extends PhetioObject {
     }
   }
 
-  public static isFontStyle( style: string ): style is FontStyle {
-    return VALID_STYLES.includes( style );
+  public static isFontStyle(style: string): style is FontStyle {
+    return VALID_STYLES.includes(style);
   }
 
-  public static isFontVariant( variant: string ): variant is FontVariant {
-    return VALID_VARIANTS.includes( variant );
+  public static isFontVariant(variant: string): variant is FontVariant {
+    return VALID_VARIANTS.includes(variant);
   }
 
-  public static isFontWeight( weight: string ): weight is FontWeight {
-    return VALID_WEIGHTS.includes( weight );
+  public static isFontWeight(weight: string): weight is FontWeight {
+    return VALID_WEIGHTS.includes(weight);
   }
 
-  public static isFontStretch( stretch: string ): stretch is FontStretch {
-    return VALID_STRETCHES.includes( stretch );
+  public static isFontStretch(stretch: string): stretch is FontStretch {
+    return VALID_STRETCHES.includes(stretch);
   }
 
   /**
@@ -364,50 +363,50 @@ export default class Font extends PhetioObject {
    *   [ [ <‘font-style’> || <font-variant-css21> || <‘font-weight’> || <‘font-stretch’> ]? <‘font-size’>
    *   [ / <‘line-height’> ]? <‘font-family’> ]
    */
-  public static fromCSS( cssString: string ): Font {
+  public static fromCSS(cssString: string): Font {
     // parse a somewhat proper CSS3 form (not guaranteed to handle it precisely the same as browsers yet)
 
     const options: FontOptions = {};
 
     // split based on whitespace allowed by CSS spec (more restrictive than regular regexp whitespace)
-    const tokens = _.filter( cssString.split( /[\x09\x0A\x0C\x0D\x20]/ ), token => token.length > 0 ); // eslint-disable-line no-control-regex
+    const tokens = _.filter(cssString.split(/[\x09\x0A\x0C\x0D\x20]/), token => token.length > 0); // eslint-disable-line no-control-regex
 
     // pull tokens out until we reach something that doesn't match. that must be the font size (according to spec)
-    for ( let i = 0; i < tokens.length; i++ ) {
-      const token = tokens[ i ];
-      if ( token === 'normal' ) {
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      if (token === 'normal') {
         // nothing has to be done, everything already normal as default
       }
-      else if ( Font.isFontStyle( token ) ) {
-        window.assert && window.assert( options.style === undefined, `Style cannot be applied twice. Already set to "${options.style}", attempt to replace with "${token}"` );
+      else if (Font.isFontStyle(token)) {
+        window.assert && window.assert(options.style === undefined, `Style cannot be applied twice. Already set to "${options.style}", attempt to replace with "${token}"`);
         options.style = token;
       }
-      else if ( Font.isFontVariant( token ) ) {
-        window.assert && window.assert( options.variant === undefined, `Variant cannot be applied twice. Already set to "${options.variant}", attempt to replace with "${token}"` );
+      else if (Font.isFontVariant(token)) {
+        window.assert && window.assert(options.variant === undefined, `Variant cannot be applied twice. Already set to "${options.variant}", attempt to replace with "${token}"`);
         options.variant = token;
       }
-      else if ( Font.isFontWeight( token ) ) {
-        window.assert && window.assert( options.weight === undefined, `Weight cannot be applied twice. Already set to "${options.weight}", attempt to replace with "${token}"` );
+      else if (Font.isFontWeight(token)) {
+        window.assert && window.assert(options.weight === undefined, `Weight cannot be applied twice. Already set to "${options.weight}", attempt to replace with "${token}"`);
         options.weight = token;
       }
-      else if ( Font.isFontStretch( token ) ) {
-        window.assert && window.assert( options.stretch === undefined, `Stretch cannot be applied twice. Already set to "${options.stretch}", attempt to replace with "${token}"` );
+      else if (Font.isFontStretch(token)) {
+        window.assert && window.assert(options.stretch === undefined, `Stretch cannot be applied twice. Already set to "${options.stretch}", attempt to replace with "${token}"`);
         options.stretch = token;
       }
       else {
         // not a style/variant/weight/stretch, must be a font size, possibly with an included line-height
-        const subtokens = token.split( /\// ); // extract font size from any line-height
-        options.size = subtokens[ 0 ];
-        if ( subtokens[ 1 ] ) {
-          options.lineHeight = subtokens[ 1 ];
+        const subtokens = token.split(/\//); // extract font size from any line-height
+        options.size = subtokens[0];
+        if (subtokens[1]) {
+          options.lineHeight = subtokens[1];
         }
         // all future tokens are guaranteed to be part of the font-family if it is given according to spec
-        options.family = tokens.slice( i + 1 ).join( ' ' );
+        options.family = tokens.slice(i + 1).join(' ');
         break;
       }
     }
 
-    return new Font( options );
+    return new Font(options);
   }
 
   public static FontIO: IOType<Font, FontState>;
@@ -418,21 +417,21 @@ export default class Font extends PhetioObject {
 
 type FontState = Required<SelfOptions>;
 
-scenery.register( 'Font', Font );
+scenery.register('Font', Font);
 
-Font.FontIO = new IOType<Font, FontState>( 'FontIO', {
+Font.FontIO = new IOType<Font, FontState>('FontIO', {
   valueType: Font,
   documentation: 'Font handling for text drawing. Options:' +
-                 '<ul>' +
-                 '<li><strong>style:</strong> normal      &mdash; normal | italic | oblique </li>' +
-                 '<li><strong>variant:</strong> normal    &mdash; normal | small-caps </li>' +
-                 '<li><strong>weight:</strong> normal     &mdash; normal | bold | bolder | lighter | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 </li>' +
-                 '<li><strong>stretch:</strong> normal    &mdash; normal | ultra-condensed | extra-condensed | condensed | semi-condensed | semi-expanded | expanded | extra-expanded | ultra-expanded </li>' +
-                 '<li><strong>size:</strong> 10px         &mdash; absolute-size | relative-size | length | percentage -- unitless number interpreted as px. absolute suffixes: cm, mm, in, pt, pc, px. relative suffixes: em, ex, ch, rem, vw, vh, vmin, vmax. </li>' +
-                 '<li><strong>lineHeight:</strong> normal &mdash; normal | number | length | percentage -- NOTE: Canvas spec forces line-height to normal </li>' +
-                 '<li><strong>family:</strong> sans-serif &mdash; comma-separated list of families, including generic families (serif, sans-serif, cursive, fantasy, monospace). ideally escape with double-quotes</li>' +
-                 '</ul>',
-  toStateObject: ( font: Font ): FontState => ( {
+    '<ul>' +
+    '<li><strong>style:</strong> normal      &mdash; normal | italic | oblique </li>' +
+    '<li><strong>variant:</strong> normal    &mdash; normal | small-caps </li>' +
+    '<li><strong>weight:</strong> normal     &mdash; normal | bold | bolder | lighter | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 </li>' +
+    '<li><strong>stretch:</strong> normal    &mdash; normal | ultra-condensed | extra-condensed | condensed | semi-condensed | semi-expanded | expanded | extra-expanded | ultra-expanded </li>' +
+    '<li><strong>size:</strong> 10px         &mdash; absolute-size | relative-size | length | percentage -- unitless number interpreted as px. absolute suffixes: cm, mm, in, pt, pc, px. relative suffixes: em, ex, ch, rem, vw, vh, vmin, vmax. </li>' +
+    '<li><strong>lineHeight:</strong> normal &mdash; normal | number | length | percentage -- NOTE: Canvas spec forces line-height to normal </li>' +
+    '<li><strong>family:</strong> sans-serif &mdash; comma-separated list of families, including generic families (serif, sans-serif, cursive, fantasy, monospace). ideally escape with double-quotes</li>' +
+    '</ul>',
+  toStateObject: (font: Font): FontState => ({
     style: font.getStyle(),
     variant: font.getVariant(),
     weight: font.getWeight(),
@@ -440,10 +439,10 @@ Font.FontIO = new IOType<Font, FontState>( 'FontIO', {
     size: font.getSize(),
     lineHeight: font.getLineHeight(),
     family: font.getFamily()
-  } ),
+  }),
 
-  fromStateObject( stateObject: FontState ) {
-    return new Font( stateObject );
+  fromStateObject(stateObject: FontState) {
+    return new Font(stateObject);
   },
 
   stateSchema: {
@@ -455,4 +454,4 @@ Font.FontIO = new IOType<Font, FontState>( 'FontIO', {
     lineHeight: StringIO,
     family: StringIO
   }
-} );
+});

@@ -12,12 +12,12 @@
 
 import _ from 'lodash';
 
-import arrayRemove from '../phet-core/arrayRemove';
-import merge from '../phet-core/merge';
-import optionize from '../phet-core/optionize';
-import PhetioObject from './PhetioObject';
-import TandemConstants, { type PhetioID } from './TandemConstants';
-import tandemNamespace from './tandemNamespace';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import merge from '@/utils/phet-core/merge';
+import optionize from '@/utils/phet-core/optionize';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import TandemConstants, { type PhetioID } from '@/utils/tandem/TandemConstants';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
 
 // constants
 // Tandem can't depend on joist, so cannot use packageJSON module

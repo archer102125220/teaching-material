@@ -23,16 +23,16 @@
 
 import _ from 'lodash';
 
-import Property from '../../axon/Property';
-import Matrix from '../../dot/Matrix';
-import Matrix3 from '../../dot/Matrix3';
-import SingularValueDecomposition from '../../dot/SingularValueDecomposition';
-import Vector2 from '../../dot/Vector2';
-import arrayRemove from '../../phet-core/arrayRemove';
-import { Intent, Mouse, MultiListenerPress, Node, Pointer, scenery, SceneryEvent, type TInputListener } from '../imports';
-import { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import optionize from '../../phet-core/optionize';
-import Tandem from '../../tandem/Tandem';
+import Property from '@/utils/axon/Property';
+import Matrix from '@/utils/dot/Matrix';
+import Matrix3 from '@/utils/dot/Matrix3';
+import SingularValueDecomposition from '@/utils/dot/SingularValueDecomposition';
+import Vector2 from '@/utils/dot/Vector2';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import { Intent, Mouse, MultiListenerPress, Node, Pointer, scenery, SceneryEvent, type TInputListener } from '@/utils/scenery/imports';
+import { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import optionize from '@/utils/phet-core/optionize';
+import Tandem from '@/utils/tandem/Tandem';
 
 // constants
 // pointer must move this much to initiate a move interruption for panning, in the global coordinate frame

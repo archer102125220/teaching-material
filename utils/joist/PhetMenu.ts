@@ -7,28 +7,30 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../axon/DerivedProperty';
-import TinyProperty from '../axon/TinyProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import { Shape } from '../kite/imports';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import platform from '../phet-core/platform';
-import stripEmbeddingMarks from '../phet-core/stripEmbeddingMarks';
-import type WithRequired from '../phet-core/types/WithRequired';
-import { FullScreen, HSeparator, KeyboardListener, Node, type NodeOptions, openPopup, Path, PDOMUtils, VBox } from '../scenery/imports';
-import Dialog from '../sun/Dialog';
-import MenuItem, { type MenuItemOptions } from '../sun/MenuItem';
-import Popupable, { type PopupableOptions } from '../sun/Popupable';
-import PhetioCapsule from '../tandem/PhetioCapsule';
-import IOType from '../tandem/types/IOType';
-import AboutDialog from './AboutDialog';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
-import ScreenshotGenerator from './ScreenshotGenerator';
-import Sim from './Sim';
-import updateCheck from './updateCheck';
-import UpdateDialog from './UpdateDialog';
-import UpdateState from './UpdateState';
+import _ from 'lodash';
+
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { Shape } from '@/utils/kite/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import platform from '@/utils/phet-core/platform';
+import stripEmbeddingMarks from '@/utils/phet-core/stripEmbeddingMarks';
+import type WithRequired from '@/utils/phet-core/types/WithRequired';
+import { FullScreen, HSeparator, KeyboardListener, Node, type NodeOptions, openPopup, Path, PDOMUtils, VBox } from '@/utils/scenery/imports';
+import Dialog from '@/utils/sun/Dialog';
+import MenuItem, { type MenuItemOptions } from '@/utils/sun/MenuItem';
+import Popupable, { type PopupableOptions } from '@/utils/sun/Popupable';
+import PhetioCapsule from '@/utils/tandem/PhetioCapsule';
+import IOType from '@/utils/tandem/types/IOType';
+import AboutDialog from '@/utils/joist/AboutDialog';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import ScreenshotGenerator from '@/utils/joist/ScreenshotGenerator';
+import Sim from '@/utils/joist/Sim';
+import updateCheck from '@/utils/joist/updateCheck';
+import UpdateDialog from '@/utils/joist/UpdateDialog';
+import UpdateState from '@/utils/joist/UpdateState';
 
 type MenuItemDescriptor = {
   textStringProperty: TReadOnlyProperty<string>;

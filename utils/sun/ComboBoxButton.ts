@@ -9,25 +9,25 @@
 
 import _ from 'lodash';
 
-import { Shape } from '../kite/imports';
-import optionize from '../phet-core/optionize';
-import { AriaHasPopUpMutator, GridBox, Line, Node, Path, type PDOMBehaviorFunction, PDOMPeer, type TPaint } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import ButtonNode from './buttons/ButtonNode';
-import RectangularPushButton, { type RectangularPushButtonOptions } from './buttons/RectangularPushButton';
-import sun from './sun';
-import SunConstants from './SunConstants';
-import type TProperty from '../axon/TProperty';
-import nullSoundPlayer from '../tambo/shared-sound-players/nullSoundPlayer';
-import TinyProperty from '../axon/TinyProperty';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import ComboBox, { type ComboBoxA11yNamePropertyMap, type ComboBoxItemNoNode } from './ComboBox';
-import Multilink from '../axon/Multilink';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import PatternStringProperty from '../axon/PatternStringProperty';
-import Property from '../axon/Property';
-import DerivedProperty from '../axon/DerivedProperty';
-import DynamicProperty from '../axon/DynamicProperty';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import { AriaHasPopUpMutator, GridBox, Line, Node, Path, type PDOMBehaviorFunction, PDOMPeer, type TPaint } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import ButtonNode from '@/utils/sun/buttons/ButtonNode';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
+import sun from '@/utils/sun/sun';
+import SunConstants from '@/utils/sun/SunConstants';
+import type TProperty from '@/utils/axon/TProperty';
+import nullSoundPlayer from '@/utils/tambo/shared-sound-players/nullSoundPlayer';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import ComboBox, { type ComboBoxA11yNamePropertyMap, type ComboBoxItemNoNode } from '@/utils/sun/ComboBox';
+import Multilink from '@/utils/axon/Multilink';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
+import Property from '@/utils/axon/Property';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import DynamicProperty from '@/utils/axon/DynamicProperty';
 
 // constants
 const ALIGN_VALUES = ['left', 'center', 'right'] as const;

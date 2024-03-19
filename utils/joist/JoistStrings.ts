@@ -4,9 +4,9 @@
  * Auto-generated from modulify, DO NOT manually modify.
  */
 /* eslint-disable */
-import getStringModule from '../chipper/getStringModule';
-import type LocalizedStringProperty from '../chipper/LocalizedStringProperty';
-import joist from './joist';
+import getStringModule from '@/utils/chipper/getStringModule';
+import type LocalizedStringProperty from '@/utils/chipper/LocalizedStringProperty';
+import joist from '@/utils/joist/joist';
 
 type StringsType = {
   'joist': {

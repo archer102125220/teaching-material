@@ -11,30 +11,32 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../axon/BooleanProperty';
-import DerivedProperty from '../axon/DerivedProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Property from '../axon/Property';
-import Bounds2 from '../dot/Bounds2';
-import Dimension2 from '../dot/Dimension2';
-import { Shape } from '../kite/imports';
-import optionize from '../phet-core/optionize';
-import StringUtils from '../phetcommon/util/StringUtils';
-import { Color, Node, Path, type PDOMValueType, ProfileColorProperty, Rectangle } from '../scenery/imports';
-import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
-import Tandem from '../tandem/Tandem';
-import IOType from '../tandem/types/IOType';
-import ReferenceIO from '../tandem/types/ReferenceIO';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
-import ScreenIcon from './ScreenIcon';
-import ScreenView from './ScreenView';
-import type PickRequired from '../phet-core/types/PickRequired';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import Multilink from '../axon/Multilink';
-import type TModel from './TModel';
-import PatternStringProperty from '../axon/PatternStringProperty';
-import type PhetioProperty from '../axon/PhetioProperty';
+import _ from 'lodash';
+
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Property from '@/utils/axon/Property';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Dimension2 from '@/utils/dot/Dimension2';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import { Color, Node, Path, type PDOMValueType, ProfileColorProperty, Rectangle } from '@/utils/scenery/imports';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import IOType from '@/utils/tandem/types/IOType';
+import ReferenceIO from '@/utils/tandem/types/ReferenceIO';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import ScreenIcon from '@/utils/joist/ScreenIcon';
+import ScreenView from '@/utils/joist/ScreenView';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import Multilink from '@/utils/axon/Multilink';
+import type TModel from '@/utils/joist/TModel';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
+import type PhetioProperty from '@/utils/axon/PhetioProperty';
 
 const screenNamePatternStringProperty = JoistStrings.a11y.screenNamePatternStringProperty;
 const screenSimPatternStringProperty = JoistStrings.a11y.screenSimPatternStringProperty;

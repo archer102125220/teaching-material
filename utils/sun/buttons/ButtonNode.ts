@@ -8,23 +8,23 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../axon/DerivedProperty';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import Multilink, { type UnknownMultilink } from '../../axon/Multilink';
-import Bounds2 from '../../dot/Bounds2';
-import Dimension2 from '../../dot/Dimension2';
-import optionize, { combineOptions } from '../../phet-core/optionize';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import { AlignBox, type AlignBoxXAlign, type AlignBoxYAlign, Brightness, Color, Contrast, Grayscale, isHeightSizable, isWidthSizable, LayoutConstraint, Node, type NodeOptions, type PaintableNode, PaintColorProperty, Path, PressListener, type PressListenerOptions, SceneryConstants, Sizable, type SizableOptions, type TColor, type TPaint, Voicing, type VoicingOptions } from '../../scenery/imports';
-import ColorConstants from '../ColorConstants';
-import sun from '../sun';
-import ButtonInteractionState from './ButtonInteractionState';
-import ButtonModel from './ButtonModel';
-import type TButtonAppearanceStrategy from './TButtonAppearanceStrategy';
-import type { TButtonAppearanceStrategyOptions } from './TButtonAppearanceStrategy';
-import type TContentAppearanceStrategy from './TContentAppearanceStrategy';
-import type { TContentAppearanceStrategyOptions } from './TContentAppearanceStrategy';
-import TinyProperty from '../../axon/TinyProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Multilink, { type UnknownMultilink } from '@/utils/axon/Multilink';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Dimension2 from '@/utils/dot/Dimension2';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { AlignBox, type AlignBoxXAlign, type AlignBoxYAlign, Brightness, Color, Contrast, Grayscale, isHeightSizable, isWidthSizable, LayoutConstraint, Node, type NodeOptions, type PaintableNode, PaintColorProperty, Path, PressListener, type PressListenerOptions, SceneryConstants, Sizable, type SizableOptions, type TColor, type TPaint, Voicing, type VoicingOptions } from '@/utils/scenery/imports';
+import ColorConstants from '@/utils/sun/ColorConstants';
+import sun from '@/utils/sun/sun';
+import ButtonInteractionState from '@/utils/sun/buttons/ButtonInteractionState';
+import ButtonModel from '@/utils/sun/buttons/ButtonModel';
+import type TButtonAppearanceStrategy from '@/utils/sun/buttons/TButtonAppearanceStrategy';
+import type { TButtonAppearanceStrategyOptions } from '@/utils/sun/buttons/TButtonAppearanceStrategy';
+import type TContentAppearanceStrategy from '@/utils/sun/buttons/TContentAppearanceStrategy';
+import type { TContentAppearanceStrategyOptions } from '@/utils/sun/buttons/TContentAppearanceStrategy';
+import TinyProperty from '@/utils/axon/TinyProperty';
 
 // constants
 const CONTRAST_FILTER = new Contrast(0.7);

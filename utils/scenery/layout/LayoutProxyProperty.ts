@@ -17,8 +17,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { DerivedProperty1 } from '../../axon/DerivedProperty';
-import { LayoutProxy, Node, scenery, Trail, TrailsBetweenProperty, TransformTracker } from '../imports';
+import { DerivedProperty1 } from '@/utils/axon/DerivedProperty';
+import { LayoutProxy, Node, scenery, Trail, TrailsBetweenProperty, TransformTracker } from '@/utils/scenery/imports';
 
 type SelfOptions = {
   // If provided, this will be called when the transform of the proxy changes

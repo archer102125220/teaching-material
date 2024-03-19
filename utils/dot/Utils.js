@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 // Copyright 2013-2023, University of Colorado Boulder
 
 /**
@@ -7,9 +8,9 @@
  */
 
 import Big from 'big.js';
-import dot from './dot';
-import Vector2 from './Vector2';
-import Vector3 from './Vector3';
+import dot from '@/utils/dot/dot';
+import Vector2 from '@/utils/dot/Vector2';
+import Vector3 from '@/utils/dot/Vector3';
 
 // constants
 const EPSILON = Number.MIN_VALUE;
@@ -54,7 +55,8 @@ const Utils = {
    * @returns {number}
    */
   moduloBetweenDown(value, min, max) {
-    window.assert && window.assert(max > min, 'max > min required for moduloBetween');
+    window.assert &&
+      window.assert(max > min, 'max > min required for moduloBetween');
 
     const divisor = max - min;
 
@@ -261,8 +263,8 @@ const Utils = {
    * @returns {boolean}
    */
   pointInCircleFromPoints(p1, p2, p3, p) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         Utils.triangleAreaSigned(p1, p2, p3) > 0,
         'Defined points should be in a counterclockwise order'
       );
@@ -440,7 +442,7 @@ const Utils = {
     if (a === 0) {
       roots = Utils.solveQuadraticRootsReal(b, c, d);
     } else {
-      //We need to test whether a is several orders of magnitude less than b, c, d
+      // We need to test whether a is several orders of magnitude less than b, c, d
       const epsilon = 1e7;
 
       if (
@@ -495,10 +497,10 @@ const Utils = {
       }
     }
 
-    assert &&
+    window.assert &&
       roots &&
       roots.forEach((root) =>
-        assert(
+        window.assert(
           isFinite(root),
           'All returned solveCubicRootsReal roots should be finite'
         )
@@ -531,8 +533,11 @@ const Utils = {
    * @returns {number}
    */
   linear(a1, a2, b1, b2, a3) {
-    assert &&
-      assert(typeof a3 === 'number', 'linear requires a number to evaluate');
+    window.assert &&
+      window.assert(
+        typeof a3 === 'number',
+        'linear requires a number to evaluate'
+      );
     return ((b2 - b1) / (a2 - a1)) * (a3 - a1) + b1;
   },
 
@@ -568,8 +573,8 @@ const Utils = {
    */
   toFixed(value, decimalPlaces) {
     window.assert && window.assert(typeof value === 'number');
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         Number.isInteger(decimalPlaces),
         `decimal places must be an integer: ${decimalPlaces}`
       );
@@ -581,7 +586,6 @@ const Utils = {
       return '-Infinity';
     }
 
-    // eslint-disable-next-line bad-sim-text
     const result = new Big(value).toFixed(decimalPlaces);
 
     // Avoid reporting -0.000
@@ -880,8 +884,8 @@ const Utils = {
    * @returns {number}
    */
   numberOfDecimalPlaces(value) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         typeof value === 'number' && isFinite(value),
         `value must be a finite number ${value}`
       );

@@ -8,20 +8,20 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import phetCore from './phetCore';
+import phetCore from '@/utils/phet-core/phetCore';
 
-function escapeHTML( str: string ): string {
+function escapeHTML(str: string): string {
   // see https://www.owasp.org/index.php/XSS_(Cross_Site_Scripting)_Prevention_Cheat_Sheet
   // HTML Entity Encoding
   return str
-    .replace( /&/g, '&amp;' )
-    .replace( /</g, '&lt;' )
-    .replace( />/g, '&gt;' )
-    .replace( /"/g, '&quot;' )
-    .replace( /'/g, '&#x27;' )
-    .replace( /\//g, '&#x2F;' );
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
 }
 
-phetCore.register( 'escapeHTML', escapeHTML );
+phetCore.register('escapeHTML', escapeHTML);
 
 export default escapeHTML;

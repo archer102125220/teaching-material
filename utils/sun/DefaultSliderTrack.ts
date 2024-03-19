@@ -10,16 +10,16 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Multilink from '../axon/Multilink';
-import type TProperty from '../axon/TProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Range from '../dot/Range';
-import optionize, { combineOptions } from '../phet-core/optionize';
-import type PickRequired from '../phet-core/types/PickRequired';
-import { type TPaint, Node, Rectangle } from '../scenery/imports';
-import SliderTrack from './SliderTrack';
-import { type SliderTrackOptions } from './SliderTrack';
-import sun from './sun';
+import Multilink from '@/utils/axon/Multilink';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Range from '@/utils/dot/Range';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { type TPaint, Node, Rectangle } from '@/utils/scenery/imports';
+import SliderTrack from '@/utils/sun/SliderTrack';
+import { type SliderTrackOptions } from '@/utils/sun/SliderTrack';
+import sun from '@/utils/sun/sun';
 
 type SelfOptions = {
   fillEnabled?: TPaint;

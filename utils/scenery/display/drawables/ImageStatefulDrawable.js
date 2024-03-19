@@ -11,9 +11,9 @@
 
 import _ from 'lodash';
 
-import inheritance from '../../../phet-core/inheritance';
-import memoize from '../../../phet-core/memoize';
-import { scenery, SelfDrawable } from '../../imports';
+import inheritance from '@/utils/phet-core/inheritance';
+import memoize from '@/utils/phet-core/memoize';
+import { scenery, SelfDrawable } from '@/utils/scenery/imports';
 
 const ImageStatefulDrawable = memoize((type) => {
   window.assert && window.assert(_.includes(inheritance(type), SelfDrawable));

@@ -7,17 +7,17 @@
  * @author Martin Veillette
  */
 
-import Vector2 from '../../../dot/Vector2';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { Image, Node } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import Optic from '../model/Optic';
-import FramedImage from '../model/FramedImage';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import GOConstants from '../GOConstants';
-import OpticalImageNode, { type OpticalImageNodeOptions } from './OpticalImageNode';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import FramedImageMaskNode from './FramedImageMaskNode';
+import Vector2 from '@/utils/dot/Vector2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { Image, Node } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import FramedImage from '@/utils/geometric-optics/common/model/FramedImage';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import OpticalImageNode, { type OpticalImageNodeOptions } from '@/utils/geometric-optics/common/view/OpticalImageNode';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import FramedImageMaskNode from '@/utils/geometric-optics/common/view/FramedImageMaskNode';
 
 type FramedImageNodeOptions = PickRequired<OpticalImageNodeOptions, 'tandem'>;
 

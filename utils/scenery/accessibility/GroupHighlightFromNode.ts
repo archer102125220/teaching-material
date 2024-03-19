@@ -7,8 +7,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import { HighlightFromNode, type HighlightFromNodeOptions, HighlightPath, Node, scenery } from '../imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { HighlightFromNode, type HighlightFromNodeOptions, HighlightPath, Node, scenery } from '@/utils/scenery/imports';
 
 type SelfOptions = EmptySelfOptions;
 type GroupHighlightFromNodeOptions = HighlightFromNodeOptions;

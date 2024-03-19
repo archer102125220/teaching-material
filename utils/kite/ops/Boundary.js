@@ -7,14 +7,17 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import Ray2 from '../../dot/Ray2';
-import Vector2 from '../../dot/Vector2';
-import cleanArray from '../../phet-core/cleanArray';
-import Pool from '../../phet-core/Pool';
-import { kite, Subpath } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Ray2 from '@/utils/dot/Ray2';
+import Vector2 from '@/utils/dot/Vector2';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Pool from '@/utils/phet-core/Pool';
+import { kite, Subpath } from '@/utils/kite/imports';
 
 let globaId = 0;
+// if (typeof window.globaId !== 'number') {
+//   window.globaId = 0;
+// }
 
 class Boundary {
   /**
@@ -24,13 +27,14 @@ class Boundary {
    *
    * @param {Array.<HalfEdge>} halfEdges
    */
-  constructor( halfEdges ) {
+  constructor(halfEdges) {
     // @public {number}
     this.id = ++globaId;
+    // this.id = ++window.globaId;
 
     // NOTE: most object properties are declared/documented in the initialize method. Please look there for most
     // definitions.
-    this.initialize( halfEdges );
+    this.initialize(halfEdges);
   }
 
   /**
@@ -41,7 +45,7 @@ class Boundary {
    * @param {Array.<HalfEdge>} halfEdges
    * @returns {Boundary} - This reference for chaining
    */
-  initialize( halfEdges ) {
+  initialize(halfEdges) {
     // @public {Array.<HalfEdge>}
     this.halfEdges = halfEdges;
 
@@ -52,7 +56,7 @@ class Boundary {
     this.bounds = this.computeBounds();
 
     // @public {Array.<Boundary>}
-    this.childBoundaries = cleanArray( this.childBoundaries );
+    this.childBoundaries = cleanArray(this.childBoundaries);
 
     return this;
   }
@@ -67,10 +71,10 @@ class Boundary {
     return {
       type: 'Boundary',
       id: this.id,
-      halfEdges: this.halfEdges.map( halfEdge => halfEdge.id ),
+      halfEdges: this.halfEdges.map((halfEdge) => halfEdge.id),
       signedArea: this.signedArea,
-      bounds: Bounds2.Bounds2IO.toStateObject( this.bounds ),
-      childBoundaries: this.childBoundaries.map( boundary => boundary.id )
+      bounds: Bounds2.Bounds2IO.toStateObject(this.bounds),
+      childBoundaries: this.childBoundaries.map((boundary) => boundary.id)
     };
   }
 
@@ -81,7 +85,7 @@ class Boundary {
    */
   dispose() {
     this.halfEdges = [];
-    cleanArray( this.childBoundaries );
+    cleanArray(this.childBoundaries);
     this.freeToPool();
   }
 
@@ -109,8 +113,8 @@ class Boundary {
    */
   computeSignedArea() {
     let signedArea = 0;
-    for ( let i = 0; i < this.halfEdges.length; i++ ) {
-      signedArea += this.halfEdges[ i ].signedAreaFragment;
+    for (let i = 0; i < this.halfEdges.length; i++) {
+      signedArea += this.halfEdges[i].signedAreaFragment;
     }
     return signedArea;
   }
@@ -124,8 +128,8 @@ class Boundary {
   computeBounds() {
     const bounds = Bounds2.NOTHING.copy();
 
-    for ( let i = 0; i < this.halfEdges.length; i++ ) {
-      bounds.includeBounds( this.halfEdges[ i ].edge.segment.getBounds() );
+    for (let i = 0; i < this.halfEdges.length; i++) {
+      bounds.includeBounds(this.halfEdges[i].edge.segment.getBounds());
     }
     return bounds;
   }
@@ -142,46 +146,60 @@ class Boundary {
    * @param {Transform3} transform - Transform used because we want the inverse also.
    * @returns {Vector2}
    */
-  computeExtremePoint( transform ) {
-    window.assert && window.assert( this.halfEdges.length > 0, 'There is no extreme point if we have no edges' );
+  computeExtremePoint(transform) {
+    window.assert &&
+      window.assert(
+        this.halfEdges.length > 0,
+        'There is no extreme point if we have no edges'
+      );
 
     // Transform all of the segments into the new transformed coordinate space.
     const transformedSegments = [];
-    for ( let i = 0; i < this.halfEdges.length; i++ ) {
-      transformedSegments.push( this.halfEdges[ i ].edge.segment.transformed( transform.getMatrix() ) );
+    for (let i = 0; i < this.halfEdges.length; i++) {
+      transformedSegments.push(
+        this.halfEdges[i].edge.segment.transformed(transform.getMatrix())
+      );
     }
 
     // Find the bounds of the entire transformed boundary
     const transformedBounds = Bounds2.NOTHING.copy();
-    for ( let i = 0; i < transformedSegments.length; i++ ) {
-      transformedBounds.includeBounds( transformedSegments[ i ].getBounds() );
+    for (let i = 0; i < transformedSegments.length; i++) {
+      transformedBounds.includeBounds(transformedSegments[i].getBounds());
     }
 
-    for ( let i = 0; i < transformedSegments.length; i++ ) {
-      const segment = transformedSegments[ i ];
+    // console.log({ transform, transformedSegments, transformedBounds });
+
+    for (let i = 0; i < transformedSegments.length; i++) {
+      const segment = transformedSegments[i];
+      // console.log(segment.getBounds().top === transformedBounds.top);
+      // console.log({
+      //   segment,
+      //   'segment.getBounds()': segment.getBounds(),
+      //   transformedBounds
+      // });
 
       // See if this is one of our potential segments whose bounds have the minimal y value. This indicates at least
       // one point on this segment will be a minimal-y point.
-      if ( segment.getBounds().top === transformedBounds.top ) {
+      if (segment.getBounds().top === transformedBounds.top) {
         // Pick a point with values that guarantees any point will have a smaller y value.
-        let minimalPoint = new Vector2( 0, Number.POSITIVE_INFINITY );
+        let minimalPoint = new Vector2(0, Number.POSITIVE_INFINITY);
 
         // Grab parametric t-values for where our segment has extreme points, and adds the end points (which are
         // candidates). One of the points at these values should be our minimal point.
-        const tValues = [ 0, 1 ].concat( segment.getInteriorExtremaTs() );
-        for ( let j = 0; j < tValues.length; j++ ) {
-          const point = segment.positionAt( tValues[ j ] );
-          if ( point.y < minimalPoint.y ) {
+        const tValues = [0, 1].concat(segment.getInteriorExtremaTs());
+        for (let j = 0; j < tValues.length; j++) {
+          const point = segment.positionAt(tValues[j]);
+          if (point.y < minimalPoint.y) {
             minimalPoint = point;
           }
         }
 
         // Transform this minimal point back into our (non-transformed) boundary's coordinate space.
-        return transform.inversePosition2( minimalPoint );
+        return transform.inversePosition2(minimalPoint);
       }
     }
 
-    throw new Error( 'Should not reach here if we have segments' );
+    throw new Error('Should not reach here if we have segments');
   }
 
   /**
@@ -201,10 +219,15 @@ class Boundary {
    * @param {Transform3} transform
    * @returns {Ray2}
    */
-  computeExtremeRay( transform ) {
-    const extremePoint = this.computeExtremePoint( transform );
-    const orientation = transform.inverseDelta2( new Vector2( 0, -1 ) ).normalized();
-    return new Ray2( extremePoint.plus( orientation.timesScalar( 1e-4 ) ), orientation );
+  computeExtremeRay(transform) {
+    const extremePoint = this.computeExtremePoint(transform);
+    const orientation = transform
+      .inverseDelta2(new Vector2(0, -1))
+      .normalized();
+    return new Ray2(
+      extremePoint.plus(orientation.timesScalar(1e-4)),
+      orientation
+    );
   }
 
   /**
@@ -214,9 +237,9 @@ class Boundary {
    * @param {HalfEdge} halfEdge
    * @returns {boolean}
    */
-  hasHalfEdge( halfEdge ) {
-    for ( let i = 0; i < this.halfEdges.length; i++ ) {
-      if ( this.halfEdges[ i ] === halfEdge ) {
+  hasHalfEdge(halfEdge) {
+    for (let i = 0; i < this.halfEdges.length; i++) {
+      if (this.halfEdges[i] === halfEdge) {
         return true;
       }
     }
@@ -231,21 +254,21 @@ class Boundary {
    */
   toSubpath() {
     const segments = [];
-    for ( let i = 0; i < this.halfEdges.length; i++ ) {
-      segments.push( this.halfEdges[ i ].getDirectionalSegment() );
+    for (let i = 0; i < this.halfEdges.length; i++) {
+      segments.push(this.halfEdges[i].getDirectionalSegment());
     }
-    return new Subpath( segments, null, true );
+    return new Subpath(segments, null, true);
   }
 
   // @public
   freeToPool() {
-    Boundary.pool.freeToPool( this );
+    Boundary.pool.freeToPool(this);
   }
 
   // @public
-  static pool = new Pool( Boundary );
+  static pool = new Pool(Boundary);
 }
 
-kite.register( 'Boundary', Boundary );
+kite.register('Boundary', Boundary);
 
 export default Boundary;

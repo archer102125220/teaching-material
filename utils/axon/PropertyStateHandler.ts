@@ -11,13 +11,13 @@
 
 import _ from 'lodash';
 
-import Tandem from '../tandem/Tandem';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import axon from './axon';
-import PropertyStatePhase from './PropertyStatePhase';
-import ReadOnlyProperty from './ReadOnlyProperty';
-import { type PhetioID } from '../tandem/TandemConstants';
-import { type TPhetioStateEngine } from '../tandem/TPhetioStateEngine';
+import Tandem from '@/utils/tandem/Tandem';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import axon from '@/utils/axon/axon';
+import PropertyStatePhase from '@/utils/axon/PropertyStatePhase';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import { type PhetioID } from '@/utils/tandem/TandemConstants';
+import { type TPhetioStateEngine } from '@/utils/tandem/TPhetioStateEngine';
 
 type PhaseMap = {
   beforePhase: PropertyStatePhase;

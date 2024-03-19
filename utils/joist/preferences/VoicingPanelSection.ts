@@ -6,36 +6,36 @@
  * @author Jesse Greenberg
  */
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import NumberProperty from '../../axon/NumberProperty';
-import Property from '../../axon/Property';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import Dimension2 from '../../dot/Dimension2';
-import Range from '../../dot/Range';
-import Utils from '../../dot/Utils';
-import merge from '../../phet-core/merge';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../phet-core/optionize';
-import NumberControl from '../../scenery-phet/NumberControl';
-import PhetFont from '../../scenery-phet/PhetFont';
-import { HighlightFromNode, Node, PressListener, Text, VBox, voicingManager, VoicingText } from '../../scenery/imports';
-import Checkbox from '../../sun/Checkbox';
-import ComboBox, { type ComboBoxItem, type ComboBoxOptions } from '../../sun/ComboBox';
-import ExpandCollapseButton from '../../sun/ExpandCollapseButton';
-import HSlider from '../../sun/HSlider';
-import Tandem from '../../tandem/Tandem';
-import Utterance from '../../utterance-queue/Utterance';
-import joist from '../joist';
-import JoistStrings from '../JoistStrings';
-import PreferencesDialog from './PreferencesDialog';
-import { type AudioModel } from './PreferencesModel';
-import PreferencesPanelSection, { type PreferencesPanelSectionOptions } from './PreferencesPanelSection';
-import PreferencesControl from './PreferencesControl';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import Property from '@/utils/axon/Property';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Dimension2 from '@/utils/dot/Dimension2';
+import Range from '@/utils/dot/Range';
+import Utils from '@/utils/dot/Utils';
+import merge from '@/utils/phet-core/merge';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import NumberControl from '@/utils/scenery-phet/NumberControl';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { HighlightFromNode, Node, PressListener, Text, VBox, voicingManager, VoicingText } from '@/utils/scenery/imports';
+import Checkbox from '@/utils/sun/Checkbox';
+import ComboBox, { type ComboBoxItem, type ComboBoxOptions } from '@/utils/sun/ComboBox';
+import ExpandCollapseButton from '@/utils/sun/ExpandCollapseButton';
+import HSlider from '@/utils/sun/HSlider';
+import Tandem from '@/utils/tandem/Tandem';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import { type AudioModel } from '@/utils/joist/preferences/PreferencesModel';
+import PreferencesPanelSection, { type PreferencesPanelSectionOptions } from '@/utils/joist/preferences/PreferencesPanelSection';
+import PreferencesControl from '@/utils/joist/preferences/PreferencesControl';
 import localeProperty, { type Locale } from '@/i18n/joist/localeProperty';
-import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
-import PreferencesDialogConstants from './PreferencesDialogConstants';
-import PatternStringProperty from '../../axon/PatternStringProperty';
-import DerivedProperty from '../../axon/DerivedProperty';
-import type Disposable from '../../axon/Disposable';
+import ToggleSwitch, { type ToggleSwitchOptions } from '@/utils/sun/ToggleSwitch';
+import PreferencesDialogConstants from '@/utils/joist/preferences/PreferencesDialogConstants';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type Disposable from '@/utils/axon/Disposable';
 
 // constants
 // none of the Voicing strings or feature is translatable yet, all strings in this file

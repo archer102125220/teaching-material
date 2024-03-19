@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import { Leaf, Node, type NodeOptions, scenery } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import { Leaf, Node, type NodeOptions, scenery } from '@/utils/scenery/imports';
 
 export type SpacerOptions = NodeOptions;
 

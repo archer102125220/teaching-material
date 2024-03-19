@@ -18,8 +18,8 @@
 
 import _ from 'lodash';
 
-import axon from './axon';
-import type TReadOnlyProperty from './TReadOnlyProperty';
+import axon from '@/utils/axon/axon';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 // Shorthand to make the type definitions more legible
 type ROP<T> = TReadOnlyProperty<T>;

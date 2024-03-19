@@ -8,9 +8,9 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import EnumerationDeprecated from '../../../../phet-core/js/EnumerationDeprecated.js';
-import { KeyboardUtils } from '../../../../scenery/js/imports.js';
-import sceneryPhet from '../../sceneryPhet.js';
+import EnumerationDeprecated from '@/utils/phet-core/EnumerationDeprecated';
+import { KeyboardUtils } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 // It is important that the key and value are the same, so that either way you can access the values of the enum.
 const DirectionEnum = EnumerationDeprecated.byKeys( [

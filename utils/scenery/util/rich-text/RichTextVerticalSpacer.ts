@@ -5,9 +5,9 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-import Bounds2 from '../../../dot/Bounds2';
-import Pool, { type TPoolable } from '../../../phet-core/Pool';
-import { Node, RichTextCleanable, scenery } from '../../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
+import { Node, RichTextCleanable, scenery } from '@/utils/scenery/imports';
 
 class RichTextVerticalSpacer extends RichTextCleanable(Node) implements TPoolable {
   public constructor(height: number) {

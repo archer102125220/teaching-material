@@ -8,15 +8,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../axon/BooleanProperty';
-import StringUtils from '../phetcommon/util/StringUtils';
-import utteranceQueueNamespace from './utteranceQueueNamespace';
-import ResponsePacket, { type SpeakableNullableResolvedOptions } from './ResponsePacket';
-import ResponsePatternCollection from './ResponsePatternCollection';
-import Property from '../axon/Property';
-import { optionize3 } from '../phet-core/optionize';
-import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
-import type PickRequired from '../phet-core/types/PickRequired';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
+import ResponsePacket, { type SpeakableNullableResolvedOptions } from '@/utils/utterance-queue/ResponsePacket';
+import ResponsePatternCollection from '@/utils/utterance-queue/ResponsePatternCollection';
+import Property from '@/utils/axon/Property';
+import { optionize3 } from '@/utils/phet-core/optionize';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 type ResponseCollectorOptions = PhetioObjectOptions & PickRequired<PhetioObjectOptions, 'tandem'>;
 

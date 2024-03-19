@@ -7,15 +7,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import IOType from '../../tandem/types/IOType';
-import StringIO from '../../tandem/types/StringIO';
-import VoidIO from '../../tandem/types/VoidIO';
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, type TImageDrawable, Imageable, type ImageableImage, type ImageableOptions, ImageCanvasDrawable, ImageDOMDrawable, ImageSVGDrawable, ImageWebGLDrawable, Instance, Node, type NodeOptions, Renderer, scenery, SpriteSheet, SVGSelfDrawable, WebGLSelfDrawable } from '../imports';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../phet-core/optionize';
+import Bounds2 from '@/utils/dot/Bounds2';
+import IOType from '@/utils/tandem/types/IOType';
+import StringIO from '@/utils/tandem/types/StringIO';
+import VoidIO from '@/utils/tandem/types/VoidIO';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, type TImageDrawable, Imageable, type ImageableImage, type ImageableOptions, ImageCanvasDrawable, ImageDOMDrawable, ImageSVGDrawable, ImageWebGLDrawable, Instance, Node, type NodeOptions, Renderer, scenery, SpriteSheet, SVGSelfDrawable, WebGLSelfDrawable } from '@/utils/scenery/imports';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
 
 
 // Image-specific options that can be passed in the constructor or mutate() call.

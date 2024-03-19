@@ -6,9 +6,9 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import axon from './axon';
-import { type ObservableArray } from './createObservableArray';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
+import axon from '@/utils/axon/axon';
+import { type ObservableArray } from '@/utils/axon/createObservableArray';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 /**
  * @typedef {Array} ObservableArrayDef

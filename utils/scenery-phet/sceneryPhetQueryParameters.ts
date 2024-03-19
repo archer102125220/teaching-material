@@ -6,7 +6,7 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import sceneryPhet from './sceneryPhet';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 const sceneryPhetQueryParameters = QueryStringMachine.getAll({
 

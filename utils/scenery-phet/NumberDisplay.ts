@@ -6,24 +6,26 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../axon/DerivedProperty';
-import TinyProperty from '../axon/TinyProperty';
-import type TProperty from '../axon/TProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Range from '../dot/Range';
-import Utils from '../dot/Utils';
-import optionize, { combineOptions } from '../phet-core/optionize';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import StringUtils from '../phetcommon/util/StringUtils';
-import { Font, ManualConstraint, Node, type NodeOptions, Rectangle, RichText, type RichTextOptions, Text, type TextOptions, type TPaint } from '../scenery/imports';
-import SunConstants from '../sun/SunConstants';
-import IOType from '../tandem/types/IOType';
-import MathSymbols from './MathSymbols';
-import PhetFont from './PhetFont';
-import sceneryPhet from './sceneryPhet';
-import Tandem from '../tandem/Tandem';
-import StringIO from '../tandem/types/StringIO';
-import Vector2 from '../dot/Vector2';
+import _ from 'lodash';
+
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Range from '@/utils/dot/Range';
+import Utils from '@/utils/dot/Utils';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import { Font, ManualConstraint, Node, type NodeOptions, Rectangle, RichText, type RichTextOptions, Text, type TextOptions, type TPaint } from '@/utils/scenery/imports';
+import SunConstants from '@/utils/sun/SunConstants';
+import IOType from '@/utils/tandem/types/IOType';
+import MathSymbols from '@/utils/scenery-phet/MathSymbols';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import Tandem from '@/utils/tandem/Tandem';
+import StringIO from '@/utils/tandem/types/StringIO';
+import Vector2 from '@/utils/dot/Vector2';
 
 // constants
 const DEFAULT_FONT = new PhetFont(20);
@@ -133,7 +135,7 @@ export default class NumberDisplay extends Node {
     }, providedOptions);
 
     // valuePattern|decimalPlaces is mutually exclusive with numberFormatter
-    if (assert) {
+    if (window.assert) {
       const numberFormatterProvided = !!options.numberFormatter;
       const decimalPlacesProvided = options.decimalPlaces !== DEFAULT_DECIMAL_PLACES;
       const valuePatternProvided = options.valuePattern !== SunConstants.VALUE_NAMED_PLACEHOLDER;

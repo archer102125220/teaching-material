@@ -7,14 +7,14 @@
  * @author Martin Veillette
  */
 
-import DerivedProperty from '../../../axon/DerivedProperty';
-import Vector2 from '../../../dot/Vector2';
-import geometricOptics from '../../geometricOptics';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import OpticalObjectChoice, { type ObjectHTMLImageElements } from './OpticalObjectChoice';
-import EnumerationProperty from '../../../axon/EnumerationProperty';
-import HTMLImageElementObject, { type HTMLImageElementObjectOptions } from './HTMLImageElementObject';
-import type PickRequired from '../../../phet-core/types/PickRequired';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import geometricOptics from '@/utils/geometric-optics//geometricOptics';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import OpticalObjectChoice, { type ObjectHTMLImageElements } from '@/utils/geometric-optics/common/model/OpticalObjectChoice';
+import EnumerationProperty from '@/utils/axon/EnumerationProperty';
+import HTMLImageElementObject, { type HTMLImageElementObjectOptions } from '@/utils/geometric-optics/common/model/HTMLImageElementObject';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 // x should be 1/2 of PNG file width. y should be the tip of the pencil. +x right, +y down.
 const ORIGIN_OFFSET = new Vector2(68.5, 100);

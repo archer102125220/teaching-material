@@ -7,12 +7,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Tandem from '../../../tandem/Tandem';
-import geometricOptics from '../../geometricOptics';
-import GOQueryParameters from '../GOQueryParameters';
-import { type FocalLengthModelType, FocalLengthModelTypeValues } from './FocalLengthModelType';
-import BooleanProperty from '../../../axon/BooleanProperty';
-import StringUnionProperty from '../../../axon/StringUnionProperty';
+import Tandem from '@/utils/tandem/Tandem';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
+import { type FocalLengthModelType, FocalLengthModelTypeValues } from '@/utils/geometric-optics/common/model/FocalLengthModelType';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import StringUnionProperty from '@/utils/axon/StringUnionProperty';
 
 const GOPreferences = {
 

@@ -11,10 +11,10 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import optionize from '../phet-core/optionize';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import { Circle, Color, Node, type NodeOptions, PaintColorProperty, Path, Rectangle } from '../scenery/imports';
-import sceneryPhet from './sceneryPhet';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { Circle, Color, Node, type NodeOptions, PaintColorProperty, Path, Rectangle } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type SelfOptions = {
 

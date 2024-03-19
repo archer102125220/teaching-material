@@ -6,8 +6,12 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import { CanvasContextWrapper, Font, scenery, svgns, Utils } from '../imports';
+import $ from '@/utils/sherpa/lib/jquery-2.1.0';
+
+import Bounds2 from '@/utils/dot/Bounds2';
+import { CanvasContextWrapper, Font, scenery, svgns, Utils } from '@/utils/scenery/imports';
+
+// const $ = require('@/utils/sherpa/lib/jquery-2.1.0');
 
 // @private {string} - ID for a container for our SVG test element (determined to find the size of text elements with SVG)
 const TEXT_SIZE_CONTAINER_ID = 'sceneryTextSizeContainer';
@@ -41,11 +45,14 @@ const TextBounds = {
    */
   approximateSVGBounds(font, renderedText) {
     window.assert && window.assert(font instanceof Font, 'Font required');
-    window.assert && window.assert(typeof renderedText === 'string', 'renderedText required');
+    window.assert &&
+      window.assert(typeof renderedText === 'string', 'renderedText required');
 
     if (!svgTextSizeContainer.parentNode) {
-      if (document.body) {
-        document.body.appendChild(svgTextSizeContainer);
+      if (window.SIM_DISPLAY?.domElement?.parentNode || document.body) {
+        (
+          window.SIM_DISPLAY?.domElement?.parentNode || document.body
+        ).appendChild(svgTextSizeContainer);
       } else {
         throw new Error(
           'No document.body and trying to get approximate SVG bounds of a Text node'
@@ -206,7 +213,8 @@ const TextBounds = {
    */
   approximateCanvasWidth(font, renderedText) {
     window.assert && window.assert(font instanceof Font, 'Font required');
-    window.assert && window.assert(typeof renderedText === 'string', 'renderedText required');
+    window.assert &&
+      window.assert(typeof renderedText === 'string', 'renderedText required');
 
     const context = scenery.scratchContext;
     context.font = font.toCSS();
@@ -228,7 +236,8 @@ const TextBounds = {
    */
   approximateHybridBounds(font, renderedText) {
     window.assert && window.assert(font instanceof Font, 'Font required');
-    window.assert && window.assert(typeof renderedText === 'string', 'renderedText required');
+    window.assert &&
+      window.assert(typeof renderedText === 'string', 'renderedText required');
 
     const verticalBounds = TextBounds.getVerticalBounds(font);
 
@@ -288,7 +297,9 @@ const TextBounds = {
     div.appendChild(span);
     div.appendChild(fakeImage);
 
-    document.body.appendChild(div);
+    (window.SIM_DISPLAY?.domElement?.parentNode || document.body).appendChild(
+      div
+    );
     const rect = span.getBoundingClientRect();
     const divRect = div.getBoundingClientRect();
     // add 1 pixel to rect.right to prevent HTML text wrapping
@@ -298,7 +309,9 @@ const TextBounds = {
       rect.right + 1,
       rect.bottom - maxHeight
     ).shiftedXY(-divRect.left, -divRect.top);
-    document.body.removeChild(div);
+    (window.SIM_DISPLAY?.domElement?.parentNode || document.body).removeChild(
+      div
+    );
 
     return result;
   },
@@ -331,14 +344,18 @@ const TextBounds = {
     div.setAttribute('direction', 'ltr');
     div.appendChild(element);
 
-    document.body.appendChild(div);
+    (window.SIM_DISPLAY?.domElement?.parentNode || document.body).appendChild(
+      div
+    );
     const bounds = new Bounds2(
       div.offsetLeft,
       div.offsetTop,
       div.offsetLeft + div.offsetWidth + 1,
       div.offsetTop + div.offsetHeight + 1
     );
-    document.body.removeChild(div);
+    (window.SIM_DISPLAY?.domElement?.parentNode || document.body).removeChild(
+      div
+    );
 
     // Compensate for the baseline alignment
     const verticalBounds = TextBounds.getVerticalBounds(font);
@@ -355,7 +372,8 @@ const TextBounds = {
    */
   setSVGTextAttributes(textElement, font, renderedText) {
     window.assert && window.assert(font instanceof Font, 'Font required');
-    window.assert && window.assert(typeof renderedText === 'string', 'renderedText required');
+    window.assert &&
+      window.assert(typeof renderedText === 'string', 'renderedText required');
 
     textElement.setAttribute('direction', 'ltr');
     textElement.setAttribute('font-family', font.getFamily());

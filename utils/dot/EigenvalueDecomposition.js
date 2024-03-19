@@ -21,8 +21,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import dot from './dot';
-import Matrix from './Matrix';
+import dot from '@/utils/dot/dot';
+import Matrix from '@/utils/dot/Matrix';
 
 const ArrayType = window.Float64Array || Array;
 

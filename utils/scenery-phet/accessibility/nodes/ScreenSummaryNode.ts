@@ -11,10 +11,10 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import StringUtils from '../../../phetcommon/util/StringUtils';
-import { Node } from '../../../scenery/imports';
-import sceneryPhet from '../../sceneryPhet';
-import SceneryPhetStrings from '../SceneryPhetStrings';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import { Node } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/accessibility/SceneryPhetStrings';
 
 export default class ScreenSummaryNode extends Node {
 

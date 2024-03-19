@@ -6,13 +6,13 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import optionize from '../../../../phet-core/js/optionize.js';
-import { HBox, RichText } from '../../../../scenery/js/imports.js';
-import Panel, { PanelOptions } from '../../../../sun/js/Panel.js';
-import TextKeyNode from '../../keyboard/TextKeyNode.js';
-import PhetFont from '../../PhetFont.js';
-import sceneryPhet from '../../sceneryPhet.js';
-import SceneryPhetStrings from '../../SceneryPhetStrings.js';
+import optionize from '@/utils/phet-core/optionize';
+import { HBox, RichText } from '@/utils/scenery/imports';
+import Panel, { type PanelOptions } from '@/utils/sun/Panel';
+import TextKeyNode from '@/utils/scenery-phet/keyboard/TextKeyNode';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
 
 type SelfOptions = {
 
@@ -24,9 +24,9 @@ export type GrabReleaseCueNodeOptions = SelfOptions & PanelOptions;
 
 export default class GrabReleaseCueNode extends Panel {
 
-  public constructor( providedOptions?: GrabReleaseCueNodeOptions ) {
+  public constructor(providedOptions?: GrabReleaseCueNodeOptions) {
 
-    const options = optionize<GrabReleaseCueNodeOptions, SelfOptions, PanelOptions>()( {
+    const options = optionize<GrabReleaseCueNodeOptions, SelfOptions, PanelOptions>()({
 
       // SelfOptions
       spaceKeyWidth: 50, // this space key is wider than default space key
@@ -38,26 +38,26 @@ export default class GrabReleaseCueNode extends Panel {
       xMargin: 15,
       yMargin: 5,
       cornerRadius: 0
-    }, providedOptions );
+    }, providedOptions);
 
 
     // Create the help content for the space key to pick up the draggable item
-    const spaceKeyNode = TextKeyNode.space( {
+    const spaceKeyNode = TextKeyNode.space({
       keyHeight: options.keyHeight,
       minKeyWidth: options.spaceKeyWidth
-    } );
-    const spaceLabelText = new RichText( SceneryPhetStrings.key.toGrabOrReleaseStringProperty, {
+    });
+    const spaceLabelText = new RichText(SceneryPhetStrings.key.toGrabOrReleaseStringProperty, {
       maxWidth: 200,
-      font: new PhetFont( 12 )
-    } );
-    const spaceKeyHBox = new HBox( {
-      children: [ spaceKeyNode, spaceLabelText ],
+      font: new PhetFont(12)
+    });
+    const spaceKeyHBox = new HBox({
+      children: [spaceKeyNode, spaceLabelText],
       spacing: 10
-    } );
+    });
 
     // rectangle containing the content, not visible until focused the first time
-    super( spaceKeyHBox, options );
+    super(spaceKeyHBox, options);
   }
 }
 
-sceneryPhet.register( 'GrabReleaseCueNode', GrabReleaseCueNode );
+sceneryPhet.register('GrabReleaseCueNode', GrabReleaseCueNode);

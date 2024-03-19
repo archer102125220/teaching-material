@@ -7,10 +7,10 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import geometricOptics from '../../../geometricOptics';
-import type PickRequired from '../../../../phet-core/types/PickRequired';
-import { type TColor } from '../../../../scenery/imports';
-import GOTool, { type GOToolOptions } from './GOTool';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { type TColor } from '@/utils/scenery/imports';
+import GOTool, { type GOToolOptions } from '@/utils/geometric-optics/common/model/tools/GOTool';
 
 type SelfOptions = {
   fill: TColor;

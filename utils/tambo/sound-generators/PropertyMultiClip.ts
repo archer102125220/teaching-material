@@ -6,11 +6,11 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import Property from '../../../axon/js/Property.js';
-import tambo from '../tambo.js';
-import MultiClip, { MultiClipOptions } from './MultiClip.js';
-import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import optionize from '../../../phet-core/js/optionize.js';
+import Property from '@/utils/axon/Property';
+import tambo from '@/utils/tambo/tambo';
+import MultiClip, { type MultiClipOptions } from '@/utils/tambo/sound-generators/MultiClip';
+import WrappedAudioBuffer from '@/utils/tambo/WrappedAudioBuffer';
+import optionize from '@/utils/phet-core/optionize';
 
 type SelfOptions = {
 
@@ -31,25 +31,25 @@ class PropertyMultiClip<T> extends MultiClip<T> {
    *                          between values and sounds.
    * @param [providedOptions]
    */
-  public constructor( property: Property<T>, valueToSoundMap: Map<T, WrappedAudioBuffer>, providedOptions?: PropertyMultiClipOptions ) {
+  public constructor(property: Property<T>, valueToSoundMap: Map<T, WrappedAudioBuffer>, providedOptions?: PropertyMultiClipOptions) {
 
-    const options = optionize<PropertyMultiClipOptions, SelfOptions, MultiClipOptions>()( {
+    const options = optionize<PropertyMultiClipOptions, SelfOptions, MultiClipOptions>()({
       linkLazily: true
-    }, providedOptions );
+    }, providedOptions);
 
-    super( valueToSoundMap, options );
+    super(valueToSoundMap, options);
 
-    const playSoundForValue = ( value: T ) => { this.playAssociatedSound( value ); };
+    const playSoundForValue = (value: T) => { this.playAssociatedSound(value); };
 
-    if ( options.linkLazily ) {
-      property.lazyLink( playSoundForValue );
+    if (options.linkLazily) {
+      property.lazyLink(playSoundForValue);
     }
     else {
-      property.link( playSoundForValue );
+      property.link(playSoundForValue);
     }
 
     // dispose function
-    this.disposePropertyMultiClip = () => { property.unlink( playSoundForValue ); };
+    this.disposePropertyMultiClip = () => { property.unlink(playSoundForValue); };
   }
 
   /**
@@ -60,6 +60,6 @@ class PropertyMultiClip<T> extends MultiClip<T> {
   }
 }
 
-tambo.register( 'PropertyMultiClip', PropertyMultiClip );
+tambo.register('PropertyMultiClip', PropertyMultiClip);
 
 export default PropertyMultiClip;

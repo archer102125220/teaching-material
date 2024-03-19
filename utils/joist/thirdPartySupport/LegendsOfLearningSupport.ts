@@ -9,8 +9,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import joist from '../joist';
-import Sim from '../Sim';
+import joist from '@/utils/joist/joist';
+import Sim from '@/utils/joist/Sim';
 
 class LegendsOfLearningSupport {
 

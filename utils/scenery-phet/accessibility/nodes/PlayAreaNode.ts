@@ -9,10 +9,10 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import { type EmptySelfOptions } from '../../../phet-core/optionize';
-import sceneryPhet from '../../sceneryPhet';
-import SceneryPhetStrings from '../SceneryPhetStrings';
-import PDOMSectionNode, { type PDOMSectionNodeOptions } from '../PDOMSectionNode';
+import { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/accessibility/SceneryPhetStrings';
+import PDOMSectionNode, { type PDOMSectionNodeOptions } from '@/utils/scenery-phet/accessibility/PDOMSectionNode';
 
 type SelfOptions = EmptySelfOptions;
 export type PlayAreaNodeOptions = SelfOptions & PDOMSectionNodeOptions;

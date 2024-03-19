@@ -8,8 +8,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Vector2 from '../../dot/Vector2';
-import { Pointer, scenery } from '../imports';
+import Vector2 from '@/utils/dot/Vector2';
+import { Pointer, scenery } from '@/utils/scenery/imports';
 
 export default class Touch extends Pointer {
 

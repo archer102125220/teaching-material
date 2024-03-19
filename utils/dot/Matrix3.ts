@@ -6,18 +6,18 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import EnumerationIO from '../tandem/types/EnumerationIO';
-import ArrayIO from '../tandem/types/ArrayIO';
-import IOType from '../tandem/types/IOType';
-import NumberIO from '../tandem/types/NumberIO';
-import dot from './dot';
-import Matrix4 from './Matrix4';
-import toSVGNumber from './toSVGNumber';
-import Vector2 from './Vector2';
-import Vector3 from './Vector3';
-import EnumerationValue from '../phet-core/EnumerationValue';
-import Enumeration from '../phet-core/Enumeration';
-import Pool, { type TPoolable } from '../phet-core/Pool';
+import EnumerationIO from '@/utils/tandem/types/EnumerationIO';
+import ArrayIO from '@/utils/tandem/types/ArrayIO';
+import IOType from '@/utils/tandem/types/IOType';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import dot from '@/utils/dot/dot';
+import Matrix4 from '@/utils/dot/Matrix4';
+import toSVGNumber from '@/utils/dot/toSVGNumber';
+import Vector2 from '@/utils/dot/Vector2';
+import Vector3 from '@/utils/dot/Vector3';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
 
 export class Matrix3Type extends EnumerationValue {
   public static readonly OTHER = new Matrix3Type();
@@ -710,7 +710,7 @@ export default class Matrix3 implements TPoolable {
    * Makes this matrix effectively immutable to the normal methods (except direct setters?)
    */
   public makeImmutable(): this {
-    if (assert) {
+    if (window.assert) {
       this.rowMajor = () => {
         throw new Error('Cannot modify immutable matrix');
       };
@@ -1475,9 +1475,9 @@ export default class Matrix3 implements TPoolable {
     return matrix;
   }
 
-  public static IDENTITY: Matrix3; // eslint-disable-line uppercase-statics-should-be-readonly
-  public static X_REFLECTION: Matrix3; // eslint-disable-line uppercase-statics-should-be-readonly
-  public static Y_REFLECTION: Matrix3; // eslint-disable-line uppercase-statics-should-be-readonly
+  public static IDENTITY: Matrix3;
+  public static X_REFLECTION: Matrix3;
+  public static Y_REFLECTION: Matrix3;
   public static Matrix3IO: IOType;
 }
 

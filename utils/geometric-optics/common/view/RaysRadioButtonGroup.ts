@@ -7,18 +7,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Text } from '../../../scenery/imports';
-import VerticalAquaRadioButtonGroup, { type VerticalAquaRadioButtonGroupOptions } from '../../../sun/VerticalAquaRadioButtonGroup';
-import geometricOptics from '../../geometricOptics';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings';
-import GOConstants from '../GOConstants';
-import { type RaysType } from '../model/RaysType';
-import { type AquaRadioButtonGroupItem } from '../../../sun/AquaRadioButtonGroup';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import Tandem from '../../../tandem/Tandem';
-import Property from '../../../axon/Property';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
+import { Text } from '@/utils/scenery/imports';
+import VerticalAquaRadioButtonGroup, { type VerticalAquaRadioButtonGroupOptions } from '@/utils/sun/VerticalAquaRadioButtonGroup';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import { type AquaRadioButtonGroupItem } from '@/utils/sun/AquaRadioButtonGroup';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import Tandem from '@/utils/tandem/Tandem';
+import Property from '@/utils/axon/Property';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 type SelfOptions = EmptySelfOptions;
 

@@ -14,25 +14,27 @@
  * @author Jonathan Olson (PhET Interactive Simulations)
  */
 
-import PhetioAction from '../tandem/PhetioAction';
-import Emitter from '../axon/Emitter';
-import Dimension2 from '../dot/Dimension2';
-import Utils from '../dot/Utils';
-import Vector2 from '../dot/Vector2';
-import { Shape } from '../kite/imports';
-import optionize from '../phet-core/optionize';
-import { DragListener, LinearGradient, Node, type NodeOptions, type PDOMValueType, Rectangle, SceneryConstants, type TPaint, Voicing, type VoicingOptions } from '../scenery/imports';
-import EventType from '../tandem/EventType';
-import PhetioObject from '../tandem/PhetioObject';
-import Tandem from '../tandem/Tandem';
-import sun from './sun';
-import type TSoundPlayer from '../tambo/TSoundPlayer';
-import switchToLeftSoundPlayer from '../tambo/shared-sound-players/switchToLeftSoundPlayer';
-import switchToRightSoundPlayer from '../tambo/shared-sound-players/switchToRightSoundPlayer';
-import Property from '../axon/Property';
-import type TEmitter from '../axon/TEmitter';
-import assertMutuallyExclusiveOptions from '../phet-core/assertMutuallyExclusiveOptions';
-import Utterance, { type TAlertable } from '../utterance-queue/Utterance';
+import _ from 'lodash';
+
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import Emitter from '@/utils/axon/Emitter';
+import Dimension2 from '@/utils/dot/Dimension2';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import { DragListener, LinearGradient, Node, type NodeOptions, type PDOMValueType, Rectangle, SceneryConstants, type TPaint, Voicing, type VoicingOptions } from '@/utils/scenery/imports';
+import EventType from '@/utils/tandem/EventType';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import switchToLeftSoundPlayer from '@/utils/tambo/shared-sound-players/switchToLeftSoundPlayer';
+import switchToRightSoundPlayer from '@/utils/tambo/shared-sound-players/switchToRightSoundPlayer';
+import Property from '@/utils/axon/Property';
+import type TEmitter from '@/utils/axon/TEmitter';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import Utterance, { type TAlertable } from '@/utils/utterance-queue/Utterance';
 
 // constants
 const DEFAULT_SIZE = new Dimension2(60, 30);

@@ -9,10 +9,10 @@
 
 import _ from 'lodash';
 
-import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType';
-import StateSchema from './StateSchema';
-import ValueIO from './ValueIO';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
+import StateSchema from '@/utils/tandem/types/StateSchema';
+import ValueIO from '@/utils/tandem/types/ValueIO';
 
 const BooleanIO = new IOType<boolean, boolean>( 'BooleanIO', {
   supertype: ValueIO,

@@ -6,18 +6,18 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Multilink from '../axon/Multilink';
-import { Shape } from '../kite/imports';
-import optionize from '../phet-core/optionize';
-import type PickRequired from '../phet-core/types/PickRequired';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import { Color, HighlightPath, Node, type NodeOptions, PressListener, SceneryConstants, Voicing, type VoicingOptions } from '../scenery/imports';
-import ButtonInteractionState from '../sun/buttons/ButtonInteractionState';
-import PushButtonInteractionStateProperty from '../sun/buttons/PushButtonInteractionStateProperty';
-import PushButtonModel from '../sun/buttons/PushButtonModel';
-import HighlightNode from './HighlightNode';
-import joist from './joist';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Multilink from '@/utils/axon/Multilink';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { Color, HighlightPath, Node, type NodeOptions, PressListener, SceneryConstants, Voicing, type VoicingOptions } from '@/utils/scenery/imports';
+import ButtonInteractionState from '@/utils/sun/buttons/ButtonInteractionState';
+import PushButtonInteractionStateProperty from '@/utils/sun/buttons/PushButtonInteractionStateProperty';
+import PushButtonModel from '@/utils/sun/buttons/PushButtonModel';
+import HighlightNode from '@/utils/joist/HighlightNode';
+import joist from '@/utils/joist/joist';
 
 type SelfOptions = {
   highlightExtensionWidth?: number;

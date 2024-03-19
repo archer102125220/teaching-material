@@ -11,7 +11,7 @@
  */
 import _ from 'lodash';
 
-import { scenery } from '../imports';
+import { scenery } from '@/utils/scenery/imports';
 
 // now it's a namespace
 const Renderer = {};
@@ -177,7 +177,7 @@ Renderer.createSelfDrawable = function (
   }
 
   // Check to make sure that all of the drawables have the required mark-dirty methods available.
-  if (assert) {
+  if (window.assert) {
     _.each(node.drawableMarkFlags, (flag) => {
       const methodName = `markDirty${flag[0].toUpperCase()}${flag.slice(1)}`;
       assert(

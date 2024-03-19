@@ -48,19 +48,19 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import sceneryPhet from '../../../sceneryPhet';
-import optionize from '../../../../phet-core/optionize';
-import Property from '../../../../axon/Property';
-import Tandem from '../../../../tandem/Tandem';
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import BooleanProperty from '../../../../axon/BooleanProperty';
-import DerivedProperty from '../../../../axon/DerivedProperty';
-import PhetioObject, { type PhetioObjectOptions } from '../../../../tandem/PhetioObject';
-import type TProperty from '../../../../axon/TProperty';
-import EnabledComponent, { type EnabledComponentOptions } from '../../../../axon/EnabledComponent';
-import IOType from '../../../../tandem/types/IOType';
-import ReferenceIO from '../../../../tandem/types/ReferenceIO';
-import NullableIO from '../../../../tandem/types/NullableIO';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import optionize from '@/utils/phet-core/optionize';
+import Property from '@/utils/axon/Property';
+import Tandem from '@/utils/tandem/Tandem';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import type TProperty from '@/utils/axon/TProperty';
+import EnabledComponent, { type EnabledComponentOptions } from '@/utils/axon/EnabledComponent';
+import IOType from '@/utils/tandem/types/IOType';
+import ReferenceIO from '@/utils/tandem/types/ReferenceIO';
+import NullableIO from '@/utils/tandem/types/NullableIO';
 
 type SelfOptions<ItemModel> = {
 

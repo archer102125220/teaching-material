@@ -8,8 +8,8 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import getGlobal from './getGlobal';
-import phetCore from './phetCore';
+import getGlobal from '@/utils/phet-core/getGlobal';
+import phetCore from '@/utils/phet-core/phetCore';
 
 /**
  * @param globalString - the name of the global

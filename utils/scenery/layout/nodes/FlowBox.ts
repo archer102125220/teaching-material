@@ -36,10 +36,10 @@
 
 import _ from 'lodash';
 
-import optionize from '../../../phet-core/optionize';
-import Orientation from '../../../phet-core/Orientation';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import { FLOW_CONSTRAINT_OPTION_KEYS, FlowCell, FlowConstraint, type FlowConstraintOptions, type HorizontalLayoutAlign, type HorizontalLayoutJustification, LAYOUT_NODE_OPTION_KEYS, LayoutAlign, LayoutNode, type LayoutNodeOptions, type LayoutOrientation, MarginLayoutCell, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery, SceneryConstants, SIZABLE_OPTION_KEYS, type VerticalLayoutAlign, type VerticalLayoutJustification } from '../../imports';
+import optionize from '@/utils/phet-core/optionize';
+import Orientation from '@/utils/phet-core/Orientation';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { FLOW_CONSTRAINT_OPTION_KEYS, FlowCell, FlowConstraint, type FlowConstraintOptions, type HorizontalLayoutAlign, type HorizontalLayoutJustification, LAYOUT_NODE_OPTION_KEYS, LayoutAlign, LayoutNode, type LayoutNodeOptions, type LayoutOrientation, MarginLayoutCell, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery, SceneryConstants, SIZABLE_OPTION_KEYS, type VerticalLayoutAlign, type VerticalLayoutJustification } from '@/utils/scenery/imports';
 
 // FlowBox-specific options that can be passed in the constructor or mutate() call.
 const FLOWBOX_OPTION_KEYS = [

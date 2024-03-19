@@ -9,18 +9,18 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import optionize, { combineOptions } from '../../../phet-core/optionize';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import { type AlignBoxOptions, AlignGroup, HBox, Node, type PDOMValueType, RichText, type RichTextOptions, Text, VBox, type VBoxOptions } from '../../../scenery/imports';
-import { type VoicingResponse } from '../../../utterance-queue/ResponsePacket';
-import PhetFont from '../../PhetFont';
-import sceneryPhet from '../../sceneryPhet';
-import SceneryPhetStrings from '../../SceneryPhetStrings';
-import LetterKeyNode from '../LetterKeyNode';
-import TextKeyNode from '../TextKeyNode';
-import KeyboardHelpIconFactory from './KeyboardHelpIconFactory';
-import KeyboardHelpSection from './KeyboardHelpSection';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { type AlignBoxOptions, AlignGroup, HBox, Node, type PDOMValueType, RichText, type RichTextOptions, Text, VBox, type VBoxOptions } from '@/utils/scenery/imports';
+import { type VoicingResponse } from '@/utils/utterance-queue/ResponsePacket';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import LetterKeyNode from '@/utils/scenery-phet/keyboard/LetterKeyNode';
+import TextKeyNode from '@/utils/scenery-phet/keyboard/TextKeyNode';
+import KeyboardHelpIconFactory from '@/utils/scenery-phet/keyboard/help/KeyboardHelpIconFactory';
+import KeyboardHelpSection from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSection';
 
 // text fonts and max widths
 const LABEL_FONT = new PhetFont(16);

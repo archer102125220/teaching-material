@@ -8,17 +8,17 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import BackgroundNode, { type BackgroundNodeOptions } from '../../../../scenery-phet/BackgroundNode';
-import Vector2 from '../../../../dot/Vector2';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import { RichText } from '../../../../scenery/imports';
-import geometricOptics from '../../../geometricOptics';
-import GOColors from '../../GOColors';
-import GOConstants from '../../GOConstants';
-import optionize from '../../../../phet-core/optionize';
-import type PickRequired from '../../../../phet-core/types/PickRequired';
-import Multilink from '../../../../axon/Multilink';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import BackgroundNode, { type BackgroundNodeOptions } from '@/utils/scenery-phet/BackgroundNode';
+import Vector2 from '@/utils/dot/Vector2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { RichText } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import Multilink from '@/utils/axon/Multilink';
 
 
 type XAlign = 'left' | 'center' | 'right';

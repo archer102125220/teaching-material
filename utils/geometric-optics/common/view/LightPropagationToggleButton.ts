@@ -7,16 +7,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import SceneryPhetConstants from '../../../scenery-phet/SceneryPhetConstants';
-import { Image } from '../../../scenery/imports';
-import BooleanRoundToggleButton, { type BooleanRoundToggleButtonOptions } from '../../../sun/buttons/BooleanRoundToggleButton';
+import SceneryPhetConstants from '@/utils/scenery-phet/SceneryPhetConstants';
+import { Image } from '@/utils/scenery/imports';
+import BooleanRoundToggleButton, { type BooleanRoundToggleButtonOptions } from '@/utils/sun/buttons/BooleanRoundToggleButton';
 import lightPropagationOffIcon_png from '@/assets/images/geometric-optics/lightPropagationOffIcon_png';
 import lightPropagationOnIcon_png from '@/assets/images/geometric-optics/lightPropagationOnIcon_png';
-import geometricOptics from '../../geometricOptics';
-import GOColors from '../GOColors';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import Property from '../../../axon/Property';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import Property from '@/utils/axon/Property';
 
 type SelfOptions = EmptySelfOptions;
 

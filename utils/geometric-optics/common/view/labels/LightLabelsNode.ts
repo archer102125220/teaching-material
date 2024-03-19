@@ -6,20 +6,20 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../../../../axon/DerivedProperty';
-import Vector2 from '../../../../dot/Vector2';
-import geometricOptics from '../../../geometricOptics';
-import GeometricOpticsStrings from '../../../GeometricOpticsStrings';
-import LabelNode from './LabelNode';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import Bounds2 from '../../../../dot/Bounds2';
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import GOLabelsNode, { type GOSceneLabelsNodeOptions } from './GOLabelsNode';
-import LightObject from '../../model/LightObject';
-import OpticalObjectLabelNode, { type OpticalObjectLabelNodeOptions } from './OpticalObjectLabelNode';
-import LightSceneNode from '../LightSceneNode';
-import { type GOSimOptions } from '../../../GOSim';
-import type PickRequired from '../../../../phet-core/types/PickRequired';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import LabelNode from '@/utils/geometric-optics/common/view/labels/LabelNode';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import GOLabelsNode, { type GOSceneLabelsNodeOptions } from '@/utils/geometric-optics/common/view/labels/GOLabelsNode';
+import LightObject from '@/utils/geometric-optics/common/model/LightObject';
+import OpticalObjectLabelNode, { type OpticalObjectLabelNodeOptions } from '@/utils/geometric-optics/common/view/labels/OpticalObjectLabelNode';
+import LightSceneNode from '@/utils/geometric-optics/common/view/LightSceneNode';
+import { type GOSimOptions } from '@/utils/geometric-optics/GOSim';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 type SelfOptions = PickRequired<GOSimOptions, 'isBasicsVersion'>;
 

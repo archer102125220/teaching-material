@@ -12,19 +12,19 @@
  * @author Chris Klusendorf
  */
 
-import BooleanProperty from '../axon/BooleanProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Vector2 from '../dot/Vector2';
-import { Shape } from '../kite/imports';
-import optionize from '../phet-core/optionize';
-import type PickRequired from '../phet-core/types/PickRequired';
-import { Color, Node, Path, Rectangle, voicingManager } from '../scenery/imports';
-import ToggleNode from '../sun/ToggleNode';
-import ActivationUtterance from '../utterance-queue/ActivationUtterance';
-import audioManager from './audioManager';
-import joist from './joist';
-import JoistButton, { type JoistButtonOptions } from './JoistButton';
-import JoistStrings from './JoistStrings';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { Color, Node, Path, Rectangle, voicingManager } from '@/utils/scenery/imports';
+import ToggleNode from '@/utils/sun/ToggleNode';
+import ActivationUtterance from '@/utils/utterance-queue/ActivationUtterance';
+import audioManager from '@/utils/joist/audioManager';
+import joist from '@/utils/joist/joist';
+import JoistButton, { type JoistButtonOptions } from '@/utils/joist/JoistButton';
+import JoistStrings from '@/utils/joist/JoistStrings';
 
 // constants for node background
 const NODE_HEIGHT = 22.0;

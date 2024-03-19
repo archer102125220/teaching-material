@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { Shape } from '../../kite/imports';
-import { Display, type TOverlay, Node, scenery, svgns } from '../imports';
+import { Shape } from '@/utils/kite/imports';
+import { Display, type TOverlay, Node, scenery, svgns } from '@/utils/scenery/imports';
 
 export default abstract class ShapeBasedOverlay implements TOverlay {
 
@@ -25,6 +25,7 @@ export default abstract class ShapeBasedOverlay implements TOverlay {
     svg.setAttribute('class', name);
     svg.style.top = '0';
     svg.style.left = '0';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     svg.style['pointer-events'] = 'none';
     this.svg = svg;

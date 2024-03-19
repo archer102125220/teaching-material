@@ -6,12 +6,12 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import { Shape } from '../../kite/imports';
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { CanvasContextWrapper, CanvasSelfDrawable, Instance, type TPathDrawable, Node, type NodeOptions, Paint, Paintable, PAINTABLE_DRAWABLE_MARK_FLAGS, PAINTABLE_OPTION_KEYS, type PaintableOptions, PathCanvasDrawable, PathSVGDrawable, Renderer, scenery, SVGSelfDrawable } from '../imports';
-import optionize, { combineOptions } from '../../phet-core/optionize';
+import Bounds2 from '@/utils/dot/Bounds2';
+import { Shape } from '@/utils/kite/imports';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { CanvasContextWrapper, CanvasSelfDrawable, Instance, type TPathDrawable, Node, type NodeOptions, Paint, Paintable, PAINTABLE_DRAWABLE_MARK_FLAGS, PAINTABLE_OPTION_KEYS, type PaintableOptions, PathCanvasDrawable, PathSVGDrawable, Renderer, scenery, SVGSelfDrawable } from '@/utils/scenery/imports';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
 
 const PATH_OPTION_KEYS = [
   'boundsMethod',
@@ -270,6 +270,8 @@ export default class Path extends Paintable(Node) {
    * @returns - Whether the self bounds changed.
    */
   protected override updateSelfBounds(): boolean {
+    // console.log('Path.updateSelfBounds');
+    // console.trace();
     const selfBounds = this.hasShape() ? this.computeShapeBounds() : Bounds2.NOTHING;
     const changed = !selfBounds.equals(this.selfBoundsProperty._value);
     if (changed) {
@@ -310,6 +312,7 @@ export default class Path extends Paintable(Node) {
    * stroke applied to the Path.
    */
   public computeShapeBounds(): Bounds2 {
+    console.log('Path.computeShapeBounds');
     const shape = this.getShape();
     // boundsMethod: 'none' will return no bounds
     if (this._boundsMethod === 'none' || !shape) {
@@ -494,6 +497,7 @@ export default class Path extends Paintable(Node) {
    * only applies when we have a pattern or gradient (e.g. subtypes of Paint).
    */
   private requiresSVGBoundsWorkaround(): boolean {
+    console.log('Path.requiresSVGBoundsWorkaround');
     if (!this._stroke || !(this._stroke instanceof Paint) || !this.hasShape()) {
       return false;
     }

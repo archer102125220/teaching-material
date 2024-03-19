@@ -6,9 +6,9 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import Vector2 from '../../../../dot/Vector2';
-import geometricOptics from '../../../geometricOptics';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
 
 export default class ToolJumpPoint {
 

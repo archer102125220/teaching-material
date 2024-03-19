@@ -8,12 +8,12 @@
 
 import _ from 'lodash';
 
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { LineStyles, Shape } from '../../kite/imports';
-import snapshotEquals from '../tests/snapshotEquals';
-import Node from './Node';
-import Path from './Path';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { LineStyles, Shape } from '@/utils/kite/imports';
+import snapshotEquals from '@/utils/scenery/tests/snapshotEquals';
+import Node from '@/utils/scenery/nodes/Node';
+import Path from '@/utils/scenery/nodes/Path';
 
 QUnit.module('Shape');
 

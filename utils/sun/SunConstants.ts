@@ -6,7 +6,7 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import sun from './sun';
+import sun from '@/utils/sun/sun';
 
 const SunConstants = {
 

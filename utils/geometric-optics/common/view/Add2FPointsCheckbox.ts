@@ -7,15 +7,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Property from '../../../axon/Property';
-import PreferencesDialog from '../../../joist/preferences/PreferencesDialog';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import { Text } from '../../../scenery/imports';
-import Checkbox, { type CheckboxOptions } from '../../../sun/Checkbox';
-import geometricOptics from '../../geometricOptics';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings';
-import GOConstants from '../GOConstants';
+import Property from '@/utils/axon/Property';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { Text } from '@/utils/scenery/imports';
+import Checkbox, { type CheckboxOptions } from '@/utils/sun/Checkbox';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
 
 type SelfOptions = EmptySelfOptions;
 

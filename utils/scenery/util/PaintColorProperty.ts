@@ -35,9 +35,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Property, { type PropertyOptions } from '../../axon/Property';
-import optionize from '../../phet-core/optionize';
-import { Color, type TPaint, PaintDef, PaintObserver, scenery } from '../imports';
+import Property, { type PropertyOptions } from '@/utils/axon/Property';
+import optionize from '@/utils/phet-core/optionize';
+import { Color, type TPaint, PaintDef, PaintObserver, scenery } from '@/utils/scenery/imports';
 
 type SelfOptions = {
   // 0 applies no change. Positive numbers brighten the color up to 1 (white). Negative numbers darken

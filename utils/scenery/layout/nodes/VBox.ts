@@ -6,9 +6,9 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
-import { FlowBox, type FlowBoxOptions, scenery, Node, VSeparator } from '../../imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { FlowBox, type FlowBoxOptions, scenery, Node, VSeparator } from '@/utils/scenery/imports';
 
 type SelfOptions = EmptySelfOptions;
 export type VBoxOptions = StrictOmit<FlowBoxOptions, 'orientation'>;

@@ -5,9 +5,9 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import BasicActionsKeyboardHelpSection from '../scenery-phet/keyboard/help/BasicActionsKeyboardHelpSection';
-import { Node } from '../scenery/imports';
-import joist from './joist';
+import BasicActionsKeyboardHelpSection from '@/utils/scenery-phet/keyboard/help/BasicActionsKeyboardHelpSection';
+import { Node } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
 
 class HomeScreenKeyboardHelpContent extends Node {
   public constructor() {

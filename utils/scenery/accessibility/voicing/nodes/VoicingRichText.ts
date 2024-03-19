@@ -7,10 +7,10 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/optionize';
-import { ReadingBlock, ReadingBlockHighlight, type ReadingBlockOptions, RichText, type RichTextOptions, scenery } from '../../../imports';
-import type StrictOmit from '../../../../phet-core/types/StrictOmit';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { ReadingBlock, ReadingBlockHighlight, type ReadingBlockOptions, RichText, type RichTextOptions, scenery } from '@/utils/scenery/imports';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 
 type SelfOptions = EmptySelfOptions;
 

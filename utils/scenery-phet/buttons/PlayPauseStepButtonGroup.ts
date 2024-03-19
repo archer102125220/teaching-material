@@ -10,21 +10,21 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import SceneryPhetConstants from '../SceneryPhetConstants.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import PlayPauseButton, { PlayPauseButtonOptions } from './PlayPauseButton.js';
-import StepBackwardButton, { StepBackwardButtonOptions } from './StepBackwardButton.js';
-import StepForwardButton, { StepForwardButtonOptions } from './StepForwardButton.js';
-import sceneryPhet from '../sceneryPhet.js';
-import { HBox, HBoxOptions } from '../../../scenery/js/imports.js';
-import optionize, { combineOptions } from '../../../phet-core/js/optionize.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import DerivedProperty from '../../../axon/js/DerivedProperty.js';
-import BooleanIO from '../../../tandem/js/types/BooleanIO.js';
-import Vector2 from '../../../dot/js/Vector2.js';
-import Property from '../../../axon/js/Property.js';
-import SceneryPhetStrings from '../SceneryPhetStrings.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import SceneryPhetConstants from '@/utils/scenery-phet/SceneryPhetConstants';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import PlayPauseButton, { type PlayPauseButtonOptions } from '@/utils/scenery-phet/buttons/PlayPauseButton';
+import StepBackwardButton, { type StepBackwardButtonOptions } from '@/utils/scenery-phet/buttons/StepBackwardButton';
+import StepForwardButton, { type StepForwardButtonOptions } from '@/utils/scenery-phet/buttons/StepForwardButton';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import { HBox, type HBoxOptions } from '@/utils/scenery/imports';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import Tandem from '@/utils/tandem/Tandem';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import BooleanIO from '@/utils/tandem/types/BooleanIO';
+import Vector2 from '@/utils/dot/Vector2';
+import Property from '@/utils/axon/Property';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 const DEFAULT_STEP_BUTTON_RADIUS = 15;
 const DEFAULT_STEP_BUTTON_TOUCH_AREA_DILATION = 5;
@@ -57,9 +57,9 @@ export default class PlayPauseStepButtonGroup extends HBox {
   private readonly playPauseButton: PlayPauseButton;
   private readonly disposePlayPauseStepButtonGroup: () => void;
 
-  public constructor( isPlayingProperty: Property<boolean>, providedOptions?: PlayPauseStepButtonGroupOptions ) {
+  public constructor(isPlayingProperty: Property<boolean>, providedOptions?: PlayPauseStepButtonGroupOptions) {
 
-    const options = optionize<PlayPauseStepButtonGroupOptions, SelfOptions, HBoxOptions>()( {
+    const options = optionize<PlayPauseStepButtonGroupOptions, SelfOptions, HBoxOptions>()({
 
       // {boolean} - if true, a StepForwardButton is included in the button group
       includeStepForwardButton: true,
@@ -100,24 +100,23 @@ export default class PlayPauseStepButtonGroup extends HBox {
       appendDescription: true,
       playingDescription: SceneryPhetStrings.a11y.playPauseStepButtonGroup.playingDescriptionStringProperty,
       pausedDescription: SceneryPhetStrings.a11y.playPauseStepButtonGroup.pausedDescriptionStringProperty
-    }, providedOptions );
+    }, providedOptions);
 
     // by default, the step buttons are enabled when isPlayingProperty is false, but only create a PhET-iO instrumented
     // Property if it is going to be used
-    if ( ( !options.stepForwardButtonOptions.enabledProperty ) || ( !options.stepBackwardButtonOptions.enabledProperty ) ) {
+    if ((!options.stepForwardButtonOptions.enabledProperty) || (!options.stepBackwardButtonOptions.enabledProperty)) {
 
       // This is clearer than having the variable names match exactly. Opt out below
-      // eslint-disable-next-line tandem-name-should-match
-      const defaultEnabledProperty = DerivedProperty.not( isPlayingProperty, {
-        tandem: options.tandem.createTandem( 'enabledProperty' ),
+      const defaultEnabledProperty = DerivedProperty.not(isPlayingProperty, {
+        tandem: options.tandem.createTandem('enabledProperty'),
         phetioValueType: BooleanIO
-      } );
+      });
 
-      if ( !options.stepForwardButtonOptions.enabledProperty ) {
+      if (!options.stepForwardButtonOptions.enabledProperty) {
 
         options.stepForwardButtonOptions.enabledProperty = defaultEnabledProperty;
       }
-      if ( !options.stepBackwardButtonOptions.enabledProperty ) {
+      if (!options.stepBackwardButtonOptions.enabledProperty) {
 
         options.stepBackwardButtonOptions.enabledProperty = defaultEnabledProperty;
       }
@@ -125,47 +124,47 @@ export default class PlayPauseStepButtonGroup extends HBox {
 
     const children = [];
 
-    const playPauseButton = new PlayPauseButton( isPlayingProperty,
-      combineOptions<PlayPauseButtonOptions>( {
-        tandem: options.tandem.createTandem( 'playPauseButton' ),
+    const playPauseButton = new PlayPauseButton(isPlayingProperty,
+      combineOptions<PlayPauseButtonOptions>({
+        tandem: options.tandem.createTandem('playPauseButton'),
         phetioDocumentation: 'Button to control the animation in the simulation. This will also stop the model from stepping.'
-      }, options.playPauseButtonOptions ) );
-    children.push( playPauseButton );
+      }, options.playPauseButtonOptions));
+    children.push(playPauseButton);
 
     let stepForwardButton: StepForwardButton | null = null;
-    if ( options.includeStepForwardButton ) {
+    if (options.includeStepForwardButton) {
       stepForwardButton = new StepForwardButton(
-        combineOptions<StepForwardButtonOptions>( {
-          tandem: options.tandem.createTandem( 'stepForwardButton' ),
+        combineOptions<StepForwardButtonOptions>({
+          tandem: options.tandem.createTandem('stepForwardButton'),
           phetioDocumentation: 'Progress the simulation a single model step forwards.'
-        }, options.stepForwardButtonOptions ) );
-      children.push( stepForwardButton );
+        }, options.stepForwardButtonOptions));
+      children.push(stepForwardButton);
     }
 
     let stepBackwardButton: StepBackwardButton | null = null;
-    if ( options.includeStepBackwardButton ) {
+    if (options.includeStepBackwardButton) {
       stepBackwardButton = new StepBackwardButton(
-        combineOptions<StepBackwardButtonOptions>( {
+        combineOptions<StepBackwardButtonOptions>({
           phetioDocumentation: 'Progress the simulation a single model step backwards.',
-          tandem: options.tandem.createTandem( 'stepBackwardButton' )
-        }, options.stepBackwardButtonOptions ) );
-      children.unshift( stepBackwardButton );
+          tandem: options.tandem.createTandem('stepBackwardButton')
+        }, options.stepBackwardButtonOptions));
+      children.unshift(stepBackwardButton);
     }
 
     options.spacing = options.playPauseStepXSpacing;
     options.children = children;
 
-    super( options );
+    super(options);
 
     this.playPauseButton = playPauseButton;
 
-    const playingListener = ( playing: boolean ) => {
+    const playingListener = (playing: boolean) => {
       this.descriptionContent = playing ? options.playingDescription : options.pausedDescription;
     };
-    isPlayingProperty.link( playingListener );
+    isPlayingProperty.link(playingListener);
 
     this.disposePlayPauseStepButtonGroup = () => {
-      isPlayingProperty.unlink( playingListener );
+      isPlayingProperty.unlink(playingListener);
 
       playPauseButton.dispose();
       stepForwardButton && stepForwardButton.dispose();
@@ -186,4 +185,4 @@ export default class PlayPauseStepButtonGroup extends HBox {
   }
 }
 
-sceneryPhet.register( 'PlayPauseStepButtonGroup', PlayPauseStepButtonGroup );
+sceneryPhet.register('PlayPauseStepButtonGroup', PlayPauseStepButtonGroup);

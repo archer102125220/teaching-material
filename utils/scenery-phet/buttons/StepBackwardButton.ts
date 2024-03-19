@@ -6,11 +6,11 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import stepBackwardSoundPlayer from '../../../tambo/js/shared-sound-players/stepBackwardSoundPlayer.js';
-import sceneryPhet from '../sceneryPhet.js';
-import StepButton, { StepButtonOptions } from './StepButton.js';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import stepBackwardSoundPlayer from '@/utils/tambo/shared-sound-players/stepBackwardSoundPlayer';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import StepButton, { type StepButtonOptions } from '@/utils/scenery-phet/buttons/StepButton';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -18,17 +18,17 @@ export type StepBackwardButtonOptions = SelfOptions & StrictOmit<StepButtonOptio
 
 export default class StepBackwardButton extends StepButton {
 
-  public constructor( providedOptions?: StepBackwardButtonOptions ) {
+  public constructor(providedOptions?: StepBackwardButtonOptions) {
 
-    const options = optionize<StepBackwardButtonOptions, SelfOptions, StepButtonOptions>()( {
+    const options = optionize<StepBackwardButtonOptions, SelfOptions, StepButtonOptions>()({
 
       // StepButtonOptions
       direction: 'backward',
       soundPlayer: stepBackwardSoundPlayer
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
   }
 }
 
-sceneryPhet.register( 'StepBackwardButton', StepBackwardButton );
+sceneryPhet.register('StepBackwardButton', StepBackwardButton);

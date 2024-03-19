@@ -11,6 +11,13 @@ import QUnit from 'qunit';
 import QueryStringMachine from '@/utils/query-string-machine/QueryStringMachine';
 // import Tandem from '../../tandem/Tandem';
 
+if (
+  typeof window === 'object' &&
+  typeof window.QueryStringMachine !== 'object'
+) {
+  window.QueryStringMachine = QueryStringMachine;
+}
+
 const qunitStart = () => {
   const start = () => {
     // Uncomment for a debugger whenever a test fails
@@ -22,7 +29,7 @@ const qunitStart = () => {
         if (!context.result) {
           debugger;
         }
-      }); // eslint-disable-line no-debugger
+      });
     }
 
     // if (Tandem.PHET_IO_ENABLED) {
@@ -41,7 +48,7 @@ const qunitStart = () => {
   };
 
   // When running in the puppeteer harness, we need the opportunity to wire up listeners before QUnit begins.
-  if (QueryStringMachine.containsKey('qunitHooks')) {
+  if (window.QueryStringMachine.containsKey('qunitHooks')) {
     window.qunitLaunchAfterHooks = start;
   } else {
     start();

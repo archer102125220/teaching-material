@@ -7,18 +7,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../../../axon/DerivedProperty';
-import Bounds2 from '../../../dot/Bounds2';
-import geometricOptics from '../../geometricOptics';
-import Lens from '../../lens/model/Lens';
-import Optic from './Optic';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import OpticalImage, { type OpticalImageOptions } from './OpticalImage';
-import FramedObject from './FramedObject';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import GOConstants from '../GOConstants';
-import NumberIO from '../../../tandem/types/NumberIO';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import OpticalImage, { type OpticalImageOptions } from '@/utils/geometric-optics/common/model/OpticalImage';
+import FramedObject from '@/utils/geometric-optics/common/model/FramedObject';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import NumberIO from '@/utils/tandem/types/NumberIO';
 
 type FramedImageOptions = PickOptional<OpticalImageOptions, 'opticalObjectPositionProperty'> &
   PickRequired<OpticalImageOptions, 'tandem' | 'phetioDocumentation'>;

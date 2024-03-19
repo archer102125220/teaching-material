@@ -14,66 +14,70 @@
  */
 
 import _ from 'lodash';
+import $ from '@/utils/sherpa/lib/jquery-2.1.0';
 
-import animationFrameTimer from '../axon/animationFrameTimer';
-import BooleanProperty from '../axon/BooleanProperty';
-import createObservableArray from '../axon/createObservableArray';
-import DerivedProperty from '../axon/DerivedProperty';
-import Emitter from '../axon/Emitter';
-import NumberProperty from '../axon/NumberProperty';
-import Property from '../axon/Property';
-import stepTimer from '../axon/stepTimer';
-import LocalizedStringProperty from '../chipper/LocalizedStringProperty';
-import Bounds2 from '../dot/Bounds2';
-import Dimension2 from '../dot/Dimension2';
-import Random from '../dot/Random';
-import DotUtils from '../dot/Utils'; // eslint-disable-line default-import-match-filename
-import platform from '../phet-core/platform';
-import optionize from '../phet-core/optionize';
-import StringUtils from '../phetcommon/util/StringUtils';
-import BarrierRectangle from '../scenery-phet/BarrierRectangle';
-import { animatedPanZoomSingleton, Color, globalKeyStateTracker, Node, Utils, voicingManager, voicingUtteranceQueue } from '../scenery/imports';
-import '../sherpa/lib/game-up-camera-1.0.0';
-import soundManager from '../tambo/soundManager';
-import PhetioAction from '../tandem/PhetioAction';
-import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
-import Tandem from '../tandem/Tandem';
-import NumberIO from '../tandem/types/NumberIO';
-import audioManager from './audioManager';
-import Heartbeat from './Heartbeat';
-import Helper from './Helper';
-import HomeScreen from './HomeScreen';
-import HomeScreenView from './HomeScreenView';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
-import LookAndFeel from './LookAndFeel';
-import MemoryMonitor from './MemoryMonitor';
-import NavigationBar from './NavigationBar';
-import packageJSON from './packageJSON';
-import PreferencesModel from './preferences/PreferencesModel';
-import Profiler from './Profiler';
-import QueryParametersWarningDialog from './QueryParametersWarningDialog';
-import Screen, { type AnyScreen } from './Screen';
-import ScreenSelectionSoundGenerator from './ScreenSelectionSoundGenerator';
-import ScreenshotGenerator from './ScreenshotGenerator';
-import selectScreens from './selectScreens';
-import SimDisplay, { type SimDisplayOptions } from './SimDisplay';
-import SimInfo from './SimInfo';
-import LegendsOfLearningSupport from './thirdPartySupport/LegendsOfLearningSupport';
-import Toolbar from './toolbar/Toolbar';
-import updateCheck from './updateCheck';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import { type CreditsData } from './CreditsNode';
-import { type PopupableNode } from '../sun/Popupable';
-import type PickOptional from '../phet-core/types/PickOptional';
-import Multilink from '../axon/Multilink';
-import ReadOnlyProperty from '../axon/ReadOnlyProperty';
-import Combination from '../dot/Combination';
-import Permutation from '../dot/Permutation';
-import ArrayIO from '../tandem/types/ArrayIO';
+import animationFrameTimer from '@/utils/axon/animationFrameTimer';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import createObservableArray from '@/utils/axon/createObservableArray';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Emitter from '@/utils/axon/Emitter';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import Property from '@/utils/axon/Property';
+import stepTimer from '@/utils/axon/stepTimer';
+import LocalizedStringProperty from '@/utils/chipper/LocalizedStringProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Dimension2 from '@/utils/dot/Dimension2';
+import Random from '@/utils/dot/Random';
+import DotUtils from '@/utils/dot/Utils';
+import platform from '@/utils/phet-core/platform';
+import optionize from '@/utils/phet-core/optionize';
+import StringUtils from '@/utils/phetcommon/util/StringUtils';
+import BarrierRectangle from '@/utils/scenery-phet/BarrierRectangle';
+import { animatedPanZoomSingleton, Color, globalKeyStateTracker, Node, Utils, voicingManager, voicingUtteranceQueue } from '@/utils/scenery/imports';
+import '@/utils/sherpa/lib/game-up-camera-1.0.0';
+import soundManager from '@/utils/tambo/soundManager';
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import audioManager from '@/utils/joist/audioManager';
+import Heartbeat from '@/utils/joist/Heartbeat';
+import Helper from '@/utils/joist/Helper';
+import HomeScreen from '@/utils/joist/HomeScreen';
+import HomeScreenView from '@/utils/joist/HomeScreenView';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import LookAndFeel from '@/utils/joist/LookAndFeel';
+import MemoryMonitor from '@/utils/joist/MemoryMonitor';
+import NavigationBar from '@/utils/joist/NavigationBar';
+import packageJSON from '@/utils/joist/packageJSON';
+import PreferencesModel from '@/utils/joist/preferences/PreferencesModel';
+import Profiler from '@/utils/joist/Profiler';
+import QueryParametersWarningDialog from '@/utils/joist/QueryParametersWarningDialog';
+import Screen, { type AnyScreen } from '@/utils/joist/Screen';
+import ScreenSelectionSoundGenerator from '@/utils/joist/ScreenSelectionSoundGenerator';
+import ScreenshotGenerator from '@/utils/joist/ScreenshotGenerator';
+import selectScreens from '@/utils/joist/selectScreens';
+import SimDisplay, { type SimDisplayOptions } from '@/utils/joist/SimDisplay';
+import SimInfo from '@/utils/joist/SimInfo';
+import LegendsOfLearningSupport from '@/utils/joist/thirdPartySupport/LegendsOfLearningSupport';
+import Toolbar from '@/utils/joist/toolbar/Toolbar';
+import updateCheck from '@/utils/joist/updateCheck';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { type CreditsData } from '@/utils/joist/CreditsNode';
+import { type PopupableNode } from '@/utils/sun/Popupable';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import Multilink from '@/utils/axon/Multilink';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import Combination from '@/utils/dot/Combination';
+import Permutation from '@/utils/dot/Permutation';
+import ArrayIO from '@/utils/tandem/types/ArrayIO';
 import { type Locale } from '@/i18n/joist/localeProperty';
-import isSettingPhetioStateProperty from '../tandem/isSettingPhetioStateProperty';
-import StringIO from '../tandem/types/StringIO';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
+import StringIO from '@/utils/tandem/types/StringIO';
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+// const $ = require('@/utils/sherpa/lib/jquery-2.1.0');
 
 // constants
 const PROGRESS_BAR_WIDTH = 273;
@@ -866,12 +870,9 @@ export default class Sim extends PhetioObject {
 
   private resizeToWindow(): void {
     this.resizePending = false;
-    // eslint-disable-next-line bad-sim-text
     // this.resize( window.innerWidth, window.innerHeight );
 
-    // eslint-disable-next-line bad-sim-text
     const width = this.display?.domElement?.parentElement?.clientWidth || window.innerWidth;
-    // eslint-disable-next-line bad-sim-text
     const height = this.display?.domElement?.parentElement?.clientHeight || window.innerHeight;
     this.resize(width, height);
   }
@@ -952,13 +953,13 @@ export default class Sim extends PhetioObject {
               // instrumented element in phetioEngine.phetioObjectAdded()) can clear out before beginning playback.
               if (phet.joist.playbackModeEnabledProperty.value) {
                 let beforeCounts = null;
-                if (assert) {
+                if (window.assert) {
                   beforeCounts = Array.from(Random.allRandomInstances).map(n => n.numberOfCalls);
                 }
 
                 stepTimer.emit(0);
 
-                if (assert) {
+                if (window.assert) {
                   const afterCounts = Array.from(Random.allRandomInstances).map(n => n.numberOfCalls);
                   window.assert && window.assert(_.isEqual(beforeCounts, afterCounts),
                     `Random was called more times in the playback sim on startup, before: ${beforeCounts}, after: ${afterCounts}`);

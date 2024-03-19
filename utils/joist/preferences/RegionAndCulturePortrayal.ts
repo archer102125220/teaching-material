@@ -65,16 +65,16 @@
 
 import _ from 'lodash';
 
-import joist from '../joist';
-import LocalizedStringProperty from '../../chipper/LocalizedStringProperty';
-import PhetioObject, { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import IOType from '../../tandem/types/IOType';
-import ReferenceIO, { type ReferenceIOState } from '../../tandem/types/ReferenceIO';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import Property from '../../axon/Property';
-import Tandem from '../../tandem/Tandem';
-import packageJSON from '../packageJSON';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
+import joist from '@/utils/joist/joist';
+import LocalizedStringProperty from '@/utils/chipper/LocalizedStringProperty';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import IOType from '@/utils/tandem/types/IOType';
+import ReferenceIO, { type ReferenceIOState } from '@/utils/tandem/types/ReferenceIO';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import Property from '@/utils/axon/Property';
+import Tandem from '@/utils/tandem/Tandem';
+import packageJSON from '@/utils/joist/packageJSON';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 
 type SelfOptions = EmptySelfOptions;
 type ParentOptions = StrictOmit<PhetioObjectOptions, 'tandem' | 'phetioState'>;

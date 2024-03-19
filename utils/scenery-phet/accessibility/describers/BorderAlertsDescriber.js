@@ -7,15 +7,15 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import Property from '../../../axon/Property';
-import Bounds2 from '../../../dot/Bounds2';
-import merge from '../../../phet-core/merge';
-import { KeyboardUtils } from '../../../scenery/imports';
-import ResponsePacket from '../../../utterance-queue/ResponsePacket';
-import Utterance from '../../../utterance-queue/Utterance';
-import sceneryPhet from '../../sceneryPhet';
-import SceneryPhetStrings from '../../SceneryPhetStrings';
-import DirectionEnum from './DirectionEnum';
+import Property from '@/utils/axon/Property';
+import Bounds2 from '@/utils/dot/Bounds2';
+import merge from '@/utils/phet-core/merge';
+import { KeyboardUtils } from '@/utils/scenery/imports';
+import ResponsePacket from '@/utils/utterance-queue/ResponsePacket';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import DirectionEnum from '@/utils/scenery-phet/accessibility/describers/DirectionEnum';
 
 // constants
 const leftBorderAlertString =
@@ -108,9 +108,9 @@ class BorderAlertsDescriber {
       if (alert instanceof Utterance) {
         this[direction] = alert;
       } else {
-        assert &&
+        window.assert &&
           utteranceOptions &&
-          assert(
+          window.assert(
             !utteranceOptions.alert,
             ' setDirectionUtterance sets its own alert'
           );
@@ -180,8 +180,8 @@ class BorderAlertsDescriber {
 
     // Then we are potentially going to alert
     if (alertDirection) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           DirectionEnum.isRelativeDirection(alertDirection),
           `unsupported direction: ${alertDirection}`
         );

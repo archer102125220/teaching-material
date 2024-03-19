@@ -6,18 +6,18 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Property from '../axon/Property';
-import ReadOnlyProperty from '../axon/ReadOnlyProperty';
-import optionize from '../phet-core/optionize';
-import { Color, Node } from '../scenery/imports';
-import HomeScreenKeyboardHelpContent from './HomeScreenKeyboardHelpContent';
-import HomeScreenModel from './HomeScreenModel';
-import HomeScreenView from './HomeScreenView';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
-import Screen, { type ScreenOptions } from './Screen';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Property from '@/utils/axon/Property';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import optionize from '@/utils/phet-core/optionize';
+import { Color, Node } from '@/utils/scenery/imports';
+import HomeScreenKeyboardHelpContent from '@/utils/joist/HomeScreenKeyboardHelpContent';
+import HomeScreenModel from '@/utils/joist/HomeScreenModel';
+import HomeScreenView from '@/utils/joist/HomeScreenView';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import Screen, { type ScreenOptions } from '@/utils/joist/Screen';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 // constants
 const homeStringProperty = JoistStrings.a11y.homeStringProperty;

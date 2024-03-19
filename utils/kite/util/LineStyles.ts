@@ -10,10 +10,10 @@
 
 import _ from 'lodash';
 
-import Utils from '../../dot/Utils';
-import Vector2 from '../../dot/Vector2';
-import merge from '../../phet-core/merge';
-import { Arc, kite, Line, Segment } from '../imports';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import merge from '@/utils/phet-core/merge';
+import { Arc, kite, Line, Segment } from '@/utils/kite/imports';
 
 // constants
 const lineLineIntersection = Utils.lineLineIntersection;

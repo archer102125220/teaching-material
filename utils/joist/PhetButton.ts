@@ -8,21 +8,21 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Multilink from '../axon/Multilink';
-import type TBrand from '../brand/TBrand';
-import { AriaHasPopUpMutator, Color, Image, Line, Node } from '../scenery/imports';
-import pushButtonSoundPlayer from '../tambo/shared-sound-players/pushButtonSoundPlayer';
-import Tandem from '../tandem/Tandem';
-import IOType from '../tandem/types/IOType';
-import joist from './joist';
-import JoistButton from './JoistButton';
-import JoistStrings from './JoistStrings';
-import KebabMenuIcon from './KebabMenuIcon';
-import PhetMenu from './PhetMenu';
-import Sim from './Sim';
-import updateCheck from './updateCheck';
-import UpdateState from './UpdateState';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Multilink from '@/utils/axon/Multilink';
+import type TBrand from '@/utils/brand/TBrand';
+import { AriaHasPopUpMutator, Color, Image, Line, Node } from '@/utils/scenery/imports';
+import pushButtonSoundPlayer from '@/utils/tambo/shared-sound-players/pushButtonSoundPlayer';
+import Tandem from '@/utils/tandem/Tandem';
+import IOType from '@/utils/tandem/types/IOType';
+import joist from '@/utils/joist/joist';
+import JoistButton from '@/utils/joist/JoistButton';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import KebabMenuIcon from '@/utils/joist/KebabMenuIcon';
+import PhetMenu from '@/utils/joist/PhetMenu';
+import Sim from '@/utils/joist/Sim';
+import updateCheck from '@/utils/joist/updateCheck';
+import UpdateState from '@/utils/joist/UpdateState';
 
 // Accommodate logos of any height by scaling them down proportionately.
 // The primary logo is 108px high and we have been scaling it at 0.28 to make it look good even on higher resolution

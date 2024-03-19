@@ -4,9 +4,9 @@
  * Auto-generated from modulify, DO NOT manually modify.
  */
 /* eslint-disable */
-import getStringModule from '../chipper/getStringModule';
-import type LocalizedStringProperty from '../chipper/LocalizedStringProperty';
-import sun from './sun';
+import getStringModule from '@/utils/chipper/getStringModule';
+import type LocalizedStringProperty from '@/utils/chipper/LocalizedStringProperty';
+import sun from '@/utils/sun/sun';
 
 type StringsType = {
   'sun': {

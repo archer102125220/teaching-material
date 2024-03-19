@@ -11,15 +11,15 @@
 
 import _ from 'lodash';
 
-import CallbackTimer from '../../axon/CallbackTimer';
-import Emitter from '../../axon/Emitter';
-import type TEmitter from '../../axon/TEmitter';
-import optionize from '../../phet-core/optionize';
-import EventType from '../../tandem/EventType';
-import PhetioObject from '../../tandem/PhetioObject';
-import Tandem from '../../tandem/Tandem';
-import NullableIO from '../../tandem/types/NullableIO';
-import { type TInputListener, Node, PressListener, type PressListenerOptions, scenery, SceneryEvent } from '../imports';
+import CallbackTimer from '@/utils/axon/CallbackTimer';
+import Emitter from '@/utils/axon/Emitter';
+import type TEmitter from '@/utils/axon/TEmitter';
+import optionize from '@/utils/phet-core/optionize';
+import EventType from '@/utils/tandem/EventType';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import { type TInputListener, Node, PressListener, type PressListenerOptions, scenery, SceneryEvent } from '@/utils/scenery/imports';
 
 type SelfOptions = {
   // Called as fire() when the button is fired.

@@ -10,14 +10,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { VBox, type VBoxOptions } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import optionize from '../../../phet-core/optionize';
-import FocalLengthModelTypeControl from './FocalLengthModelTypeControl';
-import GOPreferences from '../model/GOPreferences';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import { type GOSimOptions } from '../../GOSim';
-import Add2FPointsCheckbox from './Add2FPointsCheckbox';
+import { VBox, type VBoxOptions } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import optionize from '@/utils/phet-core/optionize';
+import FocalLengthModelTypeControl from '@/utils/geometric-optics/common/view/FocalLengthModelTypeControl';
+import GOPreferences from '@/utils/geometric-optics/common/model/GOPreferences';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { type GOSimOptions } from '@/utils/geometric-optics/GOSim';
+import Add2FPointsCheckbox from '@/utils/geometric-optics/common/view/Add2FPointsCheckbox';
 
 type SelfOptions = PickRequired<GOSimOptions, 'isBasicsVersion'>;
 

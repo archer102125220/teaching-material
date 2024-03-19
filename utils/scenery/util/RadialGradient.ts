@@ -10,9 +10,9 @@
 
 import _ from 'lodash';
 
-import Vector2 from '../../dot/Vector2';
-import platform from '../../phet-core/platform';
-import { ColorDef, Gradient, type GradientStop, scenery, SVGBlock, SVGRadialGradient, type TColor } from '../imports';
+import Vector2 from '@/utils/dot/Vector2';
+import platform from '@/utils/phet-core/platform';
+import { ColorDef, Gradient, type GradientStop, scenery, SVGBlock, SVGRadialGradient, type TColor } from '@/utils/scenery/imports';
 
 export default class RadialGradient extends Gradient {
 

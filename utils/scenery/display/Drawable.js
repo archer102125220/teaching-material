@@ -53,8 +53,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyProperty from '../../axon/TinyProperty';
-import { Block, Renderer, scenery } from '../imports';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import { Block, Renderer, scenery } from '@/utils/scenery/imports';
 
 let globalId = 1;
 

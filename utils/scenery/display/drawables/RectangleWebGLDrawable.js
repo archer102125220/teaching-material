@@ -6,16 +6,16 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ReadOnlyProperty from '../../../axon/ReadOnlyProperty';
-import Vector2 from '../../../dot/Vector2';
-import Poolable from '../../../phet-core/Poolable';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import Poolable from '@/utils/phet-core/Poolable';
 import {
   Color,
   RectangleStatefulDrawable,
   Renderer,
   scenery,
   WebGLSelfDrawable
-} from '../../imports';
+} from '@/utils/scenery/imports';
 
 const scratchColor = new Color('transparent');
 

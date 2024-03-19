@@ -7,7 +7,7 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { InteractiveHighlighting, type InteractiveHighlightingOptions, Node, type NodeOptions, scenery } from '../../../imports';
+import { InteractiveHighlighting, type InteractiveHighlightingOptions, Node, type NodeOptions, scenery } from '@/utils/scenery/imports';
 
 export type InteractiveHighlightingNodeOptions = InteractiveHighlightingOptions & NodeOptions;
 

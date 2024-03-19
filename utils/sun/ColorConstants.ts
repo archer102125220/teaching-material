@@ -6,7 +6,7 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import { Color } from '../scenery/imports';
+import { Color } from '@/utils/scenery/imports';
 
 const ColorConstants = {
 

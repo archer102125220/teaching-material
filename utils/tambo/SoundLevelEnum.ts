@@ -6,9 +6,9 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import Enumeration from '../phet-core/Enumeration';
-import EnumerationValue from '../phet-core/EnumerationValue';
-import tambo from './tambo';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import tambo from '@/utils/tambo/tambo';
 
 class SoundScope extends EnumerationValue {
   public static readonly BASIC = new SoundScope();

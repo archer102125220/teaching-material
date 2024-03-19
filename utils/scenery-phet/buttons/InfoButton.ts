@@ -6,13 +6,13 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import InstanceRegistry from '../../phet-core/documentation/InstanceRegistry';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import optionize from '../../phet-core/optionize';
-import { type TColor, Path } from '../../scenery/imports';
-import infoCircleSolidShape from '../../sherpa/fontawesome-5/infoCircleSolidShape';
-import RoundPushButton, { type RoundPushButtonOptions } from '../../sun/buttons/RoundPushButton';
-import sceneryPhet from '../sceneryPhet';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize from '@/utils/phet-core/optionize';
+import { type TColor, Path } from '@/utils/scenery/imports';
+import infoCircleSolidShape from '@/utils/sherpa/fontawesome-5/infoCircleSolidShape';
+import RoundPushButton, { type RoundPushButtonOptions } from '@/utils/sun/buttons/RoundPushButton';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type SelfOptions = {
   iconFill?: TColor;

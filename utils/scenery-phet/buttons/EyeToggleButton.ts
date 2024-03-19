@@ -6,15 +6,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import InstanceRegistry from '../../phet-core/documentation/InstanceRegistry';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import { Node, Path } from '../../scenery/imports';
-import eyeSlashSolidShape from '../../sherpa/fontawesome-5/eyeSlashSolidShape';
-import eyeSolidShape from '../../sherpa/fontawesome-5/eyeSolidShape';
-import RectangularToggleButton, { type RectangularToggleButtonOptions } from '../../sun/buttons/RectangularToggleButton';
-import sceneryPhet from '../sceneryPhet';
-import Property from '../../axon/Property';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { Node, Path } from '@/utils/scenery/imports';
+import eyeSlashSolidShape from '@/utils/sherpa/fontawesome-5/eyeSlashSolidShape';
+import eyeSolidShape from '@/utils/sherpa/fontawesome-5/eyeSolidShape';
+import RectangularToggleButton, { type RectangularToggleButtonOptions } from '@/utils/sun/buttons/RectangularToggleButton';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import Property from '@/utils/axon/Property';
 
 type SelfOptions = EmptySelfOptions;
 

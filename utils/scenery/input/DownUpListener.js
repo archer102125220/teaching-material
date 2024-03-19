@@ -6,10 +6,10 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import deprecationWarning from '../../phet-core/deprecationWarning';
-import merge from '../../phet-core/merge';
-import PhetioObject from '../../tandem/PhetioObject';
-import { EventContext, Mouse, scenery, SceneryEvent, Trail } from '../imports';
+import deprecationWarning from '@/utils/phet-core/deprecationWarning';
+import merge from '@/utils/phet-core/merge';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import { EventContext, Mouse, scenery, SceneryEvent, Trail } from '@/utils/scenery/imports';
 
 /**
  * @deprecated - use PressListener instead

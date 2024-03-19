@@ -13,9 +13,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import dot from './dot';
-import Utils from './Utils';
-import Vector2 from './Vector2';
+import _ from 'lodash';
+
+import dot from '@/utils/dot/dot';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
 
 class CompletePiecewiseLinearFunction {
 

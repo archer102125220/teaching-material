@@ -7,8 +7,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Poolable from '../../../phet-core/Poolable';
-import { Renderer, scenery, WebGLNode, WebGLSelfDrawable } from '../../imports';
+import Poolable from '@/utils/phet-core/Poolable';
+import { Renderer, scenery, WebGLNode, WebGLSelfDrawable } from '@/utils/scenery/imports';
 
 class WebGLNodeDrawable extends WebGLSelfDrawable {
   /**

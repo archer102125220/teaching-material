@@ -7,10 +7,10 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Property from '../axon/Property';
-import Tandem from './Tandem';
-import tandemNamespace from './tandemNamespace';
-import StringIO from './types/StringIO';
+import Property from '@/utils/axon/Property';
+import Tandem from '@/utils/tandem/Tandem';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import StringIO from '@/utils/tandem/types/StringIO';
 
 export const PhetioElementSelectionValues = [
   'view', // Select the view element under the mouse

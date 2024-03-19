@@ -9,31 +9,31 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Multilink from '../axon/Multilink';
-import Bounds2 from '../dot/Bounds2';
-import ScreenView from '../joist/ScreenView';
-import Sim from '../joist/Sim';
-import getGlobal from '../phet-core/getGlobal';
-import optionize from '../phet-core/optionize';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import CloseButton from '../scenery-phet/buttons/CloseButton';
-import { AlignBox, FocusManager, FullScreen, HBox, KeyboardListener, Node, PDOMPeer, PDOMUtils, type TColor, VBox, voicingManager } from '../scenery/imports';
-import type TSoundPlayer from '../tambo/TSoundPlayer';
-import generalCloseSoundPlayer from '../tambo/shared-sound-players/generalCloseSoundPlayer';
-import generalOpenSoundPlayer from '../tambo/shared-sound-players/generalOpenSoundPlayer';
-import nullSoundPlayer from '../tambo/shared-sound-players/nullSoundPlayer';
-import Tandem from '../tandem/Tandem';
-import DynamicMarkerIO from '../tandem/types/DynamicMarkerIO';
-import IOType from '../tandem/types/IOType';
-import Utterance from '../utterance-queue/Utterance';
-import ButtonNode from './buttons/ButtonNode';
-import Panel, { type PanelOptions } from './Panel';
-import Popupable, { type PopupableOptions } from './Popupable';
-import sun from './sun';
-import SunStrings from './SunStrings';
-import TinyProperty from '../axon/TinyProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import PatternStringProperty from '../axon/PatternStringProperty';
+import Multilink from '@/utils/axon/Multilink';
+import Bounds2 from '@/utils/dot/Bounds2';
+import ScreenView from '@/utils/joist/ScreenView';
+import Sim from '@/utils/joist/Sim';
+import getGlobal from '@/utils/phet-core/getGlobal';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import CloseButton from '@/utils/scenery-phet/buttons/CloseButton';
+import { AlignBox, FocusManager, FullScreen, HBox, KeyboardListener, Node, PDOMPeer, PDOMUtils, type TColor, VBox, voicingManager } from '@/utils/scenery/imports';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import generalCloseSoundPlayer from '@/utils/tambo/shared-sound-players/generalCloseSoundPlayer';
+import generalOpenSoundPlayer from '@/utils/tambo/shared-sound-players/generalOpenSoundPlayer';
+import nullSoundPlayer from '@/utils/tambo/shared-sound-players/nullSoundPlayer';
+import Tandem from '@/utils/tandem/Tandem';
+import DynamicMarkerIO from '@/utils/tandem/types/DynamicMarkerIO';
+import IOType from '@/utils/tandem/types/IOType';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import ButtonNode from '@/utils/sun/buttons/ButtonNode';
+import Panel, { type PanelOptions } from '@/utils/sun/Panel';
+import Popupable, { type PopupableOptions } from '@/utils/sun/Popupable';
+import sun from '@/utils/sun/sun';
+import SunStrings from '@/utils/sun/SunStrings';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
 
 // see SelfOptions.titleAlign
 type DialogTitleAlign = 'left' | 'right' | 'center';

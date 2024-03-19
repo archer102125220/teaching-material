@@ -6,14 +6,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Matrix3 from '../../../dot/Matrix3';
-import Poolable from '../../../phet-core/Poolable';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Poolable from '@/utils/phet-core/Poolable';
 import {
   DOMSelfDrawable,
   scenery,
   TextStatefulDrawable,
   Utils
-} from '../../imports';
+} from '@/utils/scenery/imports';
 
 // TODO: change this based on memory and performance characteristics of the platform https://github.com/phetsims/scenery/issues/1581
 const keepDOMTextElements = true; // whether we should pool DOM elements for the DOM rendering states, or whether we should free them when possible for memory

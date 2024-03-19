@@ -10,9 +10,9 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Ray2 from '../../../dot/Ray2';
-import Vector2 from '../../../dot/Vector2';
-import geometricOptics from '../../geometricOptics';
+import Ray2 from '@/utils/dot/Ray2';
+import Vector2 from '@/utils/dot/Vector2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
 
 export default class GORay extends Ray2 {
 

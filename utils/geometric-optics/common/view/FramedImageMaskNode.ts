@@ -10,12 +10,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Shape } from '../../../kite/imports';
-import geometricOptics from '../../geometricOptics';
-import Matrix3 from '../../../dot/Matrix3';
-import { Node, Path } from '../../../scenery/imports';
-import GOColors from '../GOColors';
-import GOQueryParameters from '../GOQueryParameters';
+import { Shape } from '@/utils/kite/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Matrix3 from '@/utils/dot/Matrix3';
+import { Node, Path } from '@/utils/scenery/imports';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
 
 export default class FramedImageMaskNode extends Node {
 

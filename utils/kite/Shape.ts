@@ -20,17 +20,15 @@
 
 import _ from 'lodash';
 
-import TinyEmitter from '../axon/TinyEmitter';
-import Bounds2 from '../dot/Bounds2';
-import dotRandom from '../dot/dotRandom';
-import Matrix3 from '../dot/Matrix3';
-import Ray2 from '../dot/Ray2';
-import Vector2 from '../dot/Vector2';
-import optionize, { combineOptions } from '../phet-core/optionize';
-// @ts-expect-error
-import { Arc, ClosestToPointResult, Cubic, EllipticalArc, Graph, kite, Line, LineStyles, PiecewiseLinearOptions, Quadratic, RayIntersection, Segment, Subpath, svgNumber, svgPath } from './imports';
-// @ts-expect-error
-import { SerializedSubpath } from './util/Subpath';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import Bounds2 from '@/utils/dot/Bounds2';
+import dotRandom from '@/utils/dot/dotRandom';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Ray2 from '@/utils/dot/Ray2';
+import Vector2 from '@/utils/dot/Vector2';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import { Arc, type ClosestToPointResult, Cubic, EllipticalArc, Graph, kite, Line, LineStyles, type PiecewiseLinearOptions, Quadratic, RayIntersection, Segment, Subpath, svgNumber, svgPath } from '@/utils/kite/imports';
+import { type SerializedSubpath } from '@/utils/kite/util/Subpath';
 
 // (We can't get joist's random reference here)
 const randomSource = Math.random;
@@ -1785,6 +1783,7 @@ class Shape implements CanApplyParsedSVG {
   public static rectangle(x: number, y: number, width: number, height: number): Shape {
     return new Shape().rect(x, y, width, height);
   }
+
   public static rect = Shape.rectangle;
 
   /**
@@ -1793,6 +1792,7 @@ class Shape implements CanApplyParsedSVG {
   public static roundRect(x: number, y: number, width: number, height: number, arcw: number, arch: number): Shape {
     return new Shape().roundRect(x, y, width, height, arcw, arch);
   }
+
   public static roundRectangle = Shape.roundRect;
 
   /**
@@ -2035,9 +2035,9 @@ class Shape implements CanApplyParsedSVG {
    * Returns a new Shape constructed by appending a list of segments together.
    */
   public static segments(segments: Segment[], closed?: boolean): Shape {
-    if (assert) {
+    if (window.assert) {
       for (let i = 1; i < segments.length; i++) {
-        assert(segments[i - 1].end.equalsEpsilon(segments[i].start, 1e-6), 'Mismatched start/end');
+        window.assert(segments[i - 1].end.equalsEpsilon(segments[i].start, 1e-6), 'Mismatched start/end');
       }
     }
 

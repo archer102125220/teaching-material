@@ -9,12 +9,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Vector2 from '../../../dot/Vector2';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { Circle, Node, Rectangle, type TColor } from '../../../scenery/imports';
-import GOColors from '../../common/GOColors';
-import geometricOptics from '../../geometricOptics';
-import Guide from '../model/Guide';
+import Vector2 from '@/utils/dot/Vector2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { Circle, Node, Rectangle, type TColor } from '@/utils/scenery/imports';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Guide from '@/utils/geometric-optics/common/model/Guide';
 
 // constants, in view coordinates
 const FULCRUM_RADIUS = 5;

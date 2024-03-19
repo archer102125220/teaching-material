@@ -8,7 +8,7 @@
  * @author Jesse Greenberg
  */
 
-import { AnimatedPanZoomListener, Node, type PanZoomListenerOptions, scenery } from '../imports';
+import { AnimatedPanZoomListener, Node, type PanZoomListenerOptions, scenery } from '@/utils/scenery/imports';
 
 class AnimatedPanZoomSingleton {
 

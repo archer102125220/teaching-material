@@ -8,14 +8,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import InstanceRegistry from '../../../phet-core/js/documentation/InstanceRegistry.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import { TColor, Node, Path } from '../../../scenery/js/imports.js';
-import trashAltRegularShape from '../../../sherpa/js/fontawesome-5/trashAltRegularShape.js';
-import RectangularPushButton, { RectangularPushButtonOptions } from '../../../sun/js/buttons/RectangularPushButton.js';
-import CurvedArrowShape from '../CurvedArrowShape.js';
-import sceneryPhet from '../sceneryPhet.js';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize from '@/utils/phet-core/optionize';
+import { type TColor, Node, Path } from '@/utils/scenery/imports';
+import trashAltRegularShape from '@/utils/sherpa/fontawesome-5/trashAltRegularShape';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
+import CurvedArrowShape from '@/utils/scenery-phet/CurvedArrowShape';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type SelfOptions = {
   arrowColor?: TColor;
@@ -26,42 +26,42 @@ export type MoveToTrashButtonOptions = SelfOptions & StrictOmit<RectangularPushB
 
 export default class MoveToTrashButton extends RectangularPushButton {
 
-  public constructor( providedOptions?: MoveToTrashButtonOptions ) {
+  public constructor(providedOptions?: MoveToTrashButtonOptions) {
 
-    const options = optionize<MoveToTrashButtonOptions, SelfOptions, RectangularPushButtonOptions>()( {
+    const options = optionize<MoveToTrashButtonOptions, SelfOptions, RectangularPushButtonOptions>()({
 
       // MoveToTrashButtonOptions
       arrowColor: 'black',
 
       iconScale: 0.46
-    }, providedOptions );
+    }, providedOptions);
 
-    const trashNode = new Path( trashAltRegularShape, {
+    const trashNode = new Path(trashAltRegularShape, {
       fill: 'black',
       scale: 0.08
-    } );
+    });
 
-    const arrowShape = new CurvedArrowShape( 10, -0.9 * Math.PI, -0.2 * Math.PI, {
+    const arrowShape = new CurvedArrowShape(10, -0.9 * Math.PI, -0.2 * Math.PI, {
       headWidth: 12,
       tailWidth: 4
-    } );
+    });
 
-    const arrowPath = new Path( arrowShape, {
+    const arrowPath = new Path(arrowShape, {
       fill: options.arrowColor,
-      right: trashNode.left + ( 0.75 * trashNode.width ), // a bit to the left of center
+      right: trashNode.left + (0.75 * trashNode.width), // a bit to the left of center
       bottom: trashNode.top
-    } );
+    });
 
-    options.content = new Node( {
-      children: [ trashNode, arrowPath ],
+    options.content = new Node({
+      children: [trashNode, arrowPath],
       scale: options.iconScale
-    } );
+    });
 
-    super( options );
+    super(options);
 
     // support for binder documentation, stripped out in builds and only runs when ?binder is specified
-    assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL( 'scenery-phet', 'MoveToTrashButton', this );
+    assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL('scenery-phet', 'MoveToTrashButton', this);
   }
 }
 
-sceneryPhet.register( 'MoveToTrashButton', MoveToTrashButton );
+sceneryPhet.register('MoveToTrashButton', MoveToTrashButton);

@@ -6,14 +6,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import BooleanProperty from '../../../../axon/BooleanProperty';
-import Property from '../../../../axon/Property';
-import Vector2 from '../../../../dot/Vector2';
-import Vector2Property from '../../../../dot/Vector2Property';
-import PhetioObject, { type PhetioObjectOptions } from '../../../../tandem/PhetioObject';
-import geometricOptics from '../../../geometricOptics';
-import type PickRequired from '../../../../phet-core/types/PickRequired';
-import optionize, { type EmptySelfOptions } from '../../../../phet-core/optionize';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import Property from '@/utils/axon/Property';
+import Vector2 from '@/utils/dot/Vector2';
+import Vector2Property from '@/utils/dot/Vector2Property';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
 
 type SelfOptions = EmptySelfOptions;
 

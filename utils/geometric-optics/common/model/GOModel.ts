@@ -6,29 +6,29 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Disposable from '../../../axon/Disposable';
-import EnumerationProperty from '../../../axon/EnumerationProperty';
-import Property from '../../../axon/Property';
-import geometricOptics from '../../geometricOptics';
-import GOConstants from '../GOConstants';
-import Optic from './Optic';
-import { type RaysType, RaysTypeValues } from './RaysType';
-import GORuler from './tools/GORuler';
-import Vector2 from '../../../dot/Vector2';
-import FramedScene from './FramedScene';
-import OpticalObjectChoice from './OpticalObjectChoice';
-import ArrowScene from './ArrowScene';
-import LightScene from './LightScene';
-import GOScene from './GOScene';
-import Lens from '../../lens/model/Lens';
-import BooleanProperty from '../../../axon/BooleanProperty';
-import { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import optionize from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import PositionMarker from './tools/PositionMarker';
-import GOColors from '../GOColors';
-import StringUnionProperty from '../../../axon/StringUnionProperty';
-import type TModel from '../../../joist/TModel';
+import Disposable from '@/utils/axon/Disposable';
+import EnumerationProperty from '@/utils/axon/EnumerationProperty';
+import Property from '@/utils/axon/Property';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import { type RaysType, RaysTypeValues } from '@/utils/geometric-optics/common/model/RaysType';
+import GORuler from '@/utils/geometric-optics/common/model/tools/GORuler';
+import Vector2 from '@/utils/dot/Vector2';
+import FramedScene from '@/utils/geometric-optics/common/model/FramedScene';
+import OpticalObjectChoice from '@/utils/geometric-optics/common/model/OpticalObjectChoice';
+import ArrowScene from '@/utils/geometric-optics/common/model/ArrowScene';
+import LightScene from '@/utils/geometric-optics/common/model/LightScene';
+import GOScene from '@/utils/geometric-optics/common/model/GOScene';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import PositionMarker from '@/utils/geometric-optics/common/model/tools/PositionMarker';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import StringUnionProperty from '@/utils/axon/StringUnionProperty';
+import type TModel from '@/utils/joist/TModel';
 
 type SelfOptions = {
 

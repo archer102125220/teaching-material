@@ -6,8 +6,8 @@
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
-import Pool, { type TPoolable } from '../../../phet-core/Pool';
-import { Node, RichTextCleanable, RichTextLeaf, RichTextNode, scenery } from '../../imports';
+import Pool, { type TPoolable } from '@/utils/phet-core/Pool';
+import { Node, RichTextCleanable, RichTextLeaf, RichTextNode, scenery } from '@/utils/scenery/imports';
 
 export default class RichTextElement extends RichTextCleanable(Node) implements TPoolable {
 

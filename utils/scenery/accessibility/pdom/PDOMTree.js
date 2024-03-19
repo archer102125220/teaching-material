@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import arrayDifference from '../../../phet-core/arrayDifference';
+import arrayDifference from '@/utils/phet-core/arrayDifference';
 import {
   BrowserEvents,
   FocusManager,
@@ -15,7 +15,7 @@ import {
   PDOMInstance,
   scenery,
   Trail
-} from '../../imports';
+} from '@/utils/scenery/imports';
 
 const PDOMTree = {
   /**
@@ -138,7 +138,7 @@ const PDOMTree = {
     let j;
 
     // Check some initial conditions
-    if (assert) {
+    if (window.assert) {
       for (i = 0; i < removedItems; i++) {
         assert(
           removedItems[i] === null || removedItems[i]._pdomParent === node,
@@ -604,7 +604,7 @@ const PDOMTree = {
    * @param {Node} node
    */
   auditNodeForPDOMCycles(node) {
-    if (assert) {
+    if (window.assert) {
       const trail = new Trail(node);
 
       (function recursiveSearch() {

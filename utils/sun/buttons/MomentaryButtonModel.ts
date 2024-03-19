@@ -6,12 +6,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TProperty from '../../axon/TProperty';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import PhetioObject from '../../tandem/PhetioObject';
-import Tandem from '../../tandem/Tandem';
-import sun from '../sun';
-import ButtonModel, { type ButtonModelOptions } from './ButtonModel';
+import type TProperty from '@/utils/axon/TProperty';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import ButtonModel, { type ButtonModelOptions } from '@/utils/sun/buttons/ButtonModel';
 
 type SelfOptions = EmptySelfOptions;
 

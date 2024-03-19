@@ -6,7 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import dot from './dot';
+import _ from 'lodash';
+
+import dot from '@/utils/dot/dot';
 
 class Combination {
 

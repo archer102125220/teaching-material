@@ -9,14 +9,14 @@
 
 // import _ from 'lodash';
 
-import Matrix3 from '../../dot/Matrix3';
-import Bounds2 from '../../dot/Bounds2';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
-import inheritance from '../../phet-core/inheritance';
-import { CanvasContextWrapper, CanvasNode, Circle, Color, Display, DOM, Gradient, Image, Line, LinearGradient, Node, Paint, PAINTABLE_DEFAULT_OPTIONS, Path, Pattern, RadialGradient, Rectangle, scenery, Text, WebGLNode } from '../imports';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import inheritance from '@/utils/phet-core/inheritance';
+import { CanvasContextWrapper, CanvasNode, Circle, Color, Display, DOM, Gradient, Image, Line, LinearGradient, Node, Paint, PAINTABLE_DEFAULT_OPTIONS, Path, Pattern, RadialGradient, Rectangle, scenery, Text, WebGLNode } from '@/utils/scenery/imports';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 const scenerySerialize = (value: unknown): IntentionalAny => {
   if (value instanceof Vector2) {
@@ -145,8 +145,10 @@ const scenerySerialize = (value: unknown): IntentionalAny => {
       'webglScale',
       'preventFit'
     ].forEach(simpleKey => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       if (node[simpleKey] !== Node.DEFAULT_NODE_OPTIONS[simpleKey]) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         options[simpleKey] = node[simpleKey];
       }
@@ -162,8 +164,10 @@ const scenerySerialize = (value: unknown): IntentionalAny => {
     ].forEach(simpleKey => {
 
       // All default to null
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       if (node[simpleKey] !== null) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         options[simpleKey] = node[simpleKey];
       }
@@ -176,8 +180,10 @@ const scenerySerialize = (value: unknown): IntentionalAny => {
       'mouseArea',
       'touchArea'
     ].forEach(serializedKey => {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       if (node[serializedKey] !== Node.DEFAULT_NODE_OPTIONS[serializedKey]) {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         setup[serializedKey] = scenerySerialize(node[serializedKey]);
       }
@@ -255,8 +261,10 @@ const scenerySerialize = (value: unknown): IntentionalAny => {
         'mipmapInitialLevel',
         'mipmapMaxLevel'
       ].forEach(simpleKey => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         if (node[simpleKey] !== Image.DEFAULT_IMAGE_OPTIONS[simpleKey]) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           options[simpleKey] = node[simpleKey];
         }
@@ -339,8 +347,10 @@ const scenerySerialize = (value: unknown): IntentionalAny => {
         'lineDashOffset',
         'miterLimit'
       ].forEach(simpleKey => {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         if (node[simpleKey] !== PAINTABLE_DEFAULT_OPTIONS[simpleKey]) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           options[simpleKey] = node[simpleKey];
         }

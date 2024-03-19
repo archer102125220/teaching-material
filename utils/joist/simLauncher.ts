@@ -7,10 +7,12 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import asyncLoader from '../phet-core/asyncLoader';
+import Initializer from '@/utils/Initializer';
+
+import asyncLoader from '@/utils/phet-core/asyncLoader';
 // import { PhetioEngine } from '../../phet-io/js/phetioEngine';
-import Tandem from '../tandem/Tandem';
-import joist from './joist';
+import Tandem from '@/utils/tandem/Tandem';
+import joist from '@/utils/joist/joist';
 
 // See below for dynamic imports, which must be locked.
 // let phetioEngine: PhetioEngine | null = null;
@@ -38,7 +40,7 @@ import( /* webpackMode: "eager" */ '@/utils/brand/adapted-from-phet/Brand')
 
 const unlockLaunch = asyncLoader.createLock({ name: 'launch' });
 
-class SimLauncher {
+export class SimLauncher {
 
   private launchComplete: boolean; // Marked as true when simLauncher has finished its work cycle and control is given over to the simulation to finish initialization.
 
@@ -95,13 +97,16 @@ class SimLauncher {
       }
     });
     unlockLaunch();
+    if (typeof Initializer.simLauncherUnlockLaunch === 'function') {
+      Initializer.simLauncherUnlockLaunch();
+    }
 
     // Signify that the simLauncher was called, see https://github.com/phetsims/joist/issues/142
     window.phet.joist.launchCalled = true;
   }
 }
 
-const simLauncher = new SimLauncher();
+export const simLauncher = new SimLauncher();
 
 joist.register('simLauncher', simLauncher);
 

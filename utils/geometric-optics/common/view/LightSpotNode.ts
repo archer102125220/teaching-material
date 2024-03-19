@@ -8,19 +8,19 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Utils from '../../../dot/Utils';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { Node, type NodeOptions, Path } from '../../../scenery/imports';
-import GOColors from '../../common/GOColors';
-import geometricOptics from '../../geometricOptics';
-import LightSpot from '../model/LightSpot';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import GOConstants from '../GOConstants';
-import ProjectionScreen from '../model/ProjectionScreen';
-import GOQueryParameters from '../GOQueryParameters';
-import { Shape } from '../../../kite/imports';
-import Multilink from '../../../axon/Multilink';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import Utils from '@/utils/dot/Utils';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { Node, type NodeOptions, Path } from '@/utils/scenery/imports';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import LightSpot from '@/utils/geometric-optics/common/model/LightSpot';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import ProjectionScreen from '@/utils/geometric-optics/common/model/ProjectionScreen';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
+import { Shape } from '@/utils/kite/imports';
+import Multilink from '@/utils/axon/Multilink';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
 
 type SelfOptions = EmptySelfOptions;
 

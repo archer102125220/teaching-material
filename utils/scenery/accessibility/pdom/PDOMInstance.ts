@@ -29,12 +29,12 @@
 
 import _ from 'lodash';
 
-import dotRandom from '../../../dot/dotRandom';
-import cleanArray from '../../../phet-core/cleanArray';
-import Enumeration from '../../../phet-core/Enumeration';
-import EnumerationValue from '../../../phet-core/EnumerationValue';
-import Pool from '../../../phet-core/Pool';
-import { Display, FocusManager, Node, PDOMPeer, PDOMUtils, scenery, Trail, TransformTracker } from '../../imports';
+import dotRandom from '@/utils/dot/dotRandom';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import Pool from '@/utils/phet-core/Pool';
+import { Display, FocusManager, Node, PDOMPeer, PDOMUtils, scenery, Trail, TransformTracker } from '@/utils/scenery/imports';
 
 // PDOMInstances support two different styles of unique IDs, each with their own tradeoffs, https://github.com/phetsims/phet-io/issues/1851
 class PDOMUniqueIdStrategy extends EnumerationValue {
@@ -63,6 +63,7 @@ class PDOMInstance {
   // unique ID
   private id!: number;
 
+  // eslint-disable-next-line no-use-before-define
   public parent!: PDOMInstance | null;
 
   // {Display}
@@ -71,6 +72,7 @@ class PDOMInstance {
   public trail!: Trail | null;
   public isRootInstance!: boolean;
   public node!: Node | null;
+  // eslint-disable-next-line no-use-before-define
   public children!: PDOMInstance[];
   public peer!: PDOMPeer | null;
 
@@ -539,11 +541,11 @@ class PDOMInstance {
       }
     }
 
-    if (assert) {
+    if (window.assert) {
       const desiredOrder = _.flatten(this.children.map(child => child.peer!.topLevelElements!));
 
       // Verify the order
-      assert(_.every(desiredOrder, (desiredElement, index) => primarySibling.children[index] === desiredElement));
+      window.assert(_.every(desiredOrder, (desiredElement, index) => primarySibling.children[index] === desiredElement));
     }
 
     if (UNIQUE_ID_STRATEGY === PDOMUniqueIdStrategy.INDICES) {
@@ -798,6 +800,7 @@ class PDOMInstance {
     return {
       node: null,
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       children: createFakeTree(rootNode)
     };

@@ -12,17 +12,14 @@
 
 import _ from 'lodash';
 
-// @ts-expect-error
-import TEmitter from '../../axon/TEmitter';
-import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
-import TinyEmitter from '../../axon/TinyEmitter';
-import Utils from '../../dot/Utils';
-import IOType from '../../tandem/types/IOType';
-import NumberIO from '../../tandem/types/NumberIO';
-// @ts-expect-error
-import { TPaint, scenery } from '../imports';
-// @ts-expect-error
-import TColor from './TColor';
+import type TEmitter from '@/utils/axon/TEmitter';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import Utils from '@/utils/dot/Utils';
+import IOType from '@/utils/tandem/types/IOType';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import { type TPaint, scenery } from '@/utils/scenery/imports';
+import type TColor from '@/utils/scenery/util/TColor';
 
 // constants
 const clamp = Utils.clamp;
@@ -374,7 +371,7 @@ export default class Color {
    * Allow setting this Color to be immutable when assertions are disabled. any change will throw an error
    */
   public setImmutable(): this {
-    if (assert) {
+    if (window.assert) {
       this.immutable = true;
     }
 
@@ -643,12 +640,12 @@ export default class Color {
   }
 
   public static checkPaintString(cssString: string): void {
-    if (assert) {
+    if (window.assert) {
       try {
         scratchColor.setCSS(cssString);
       }
       catch (e) {
-        assert(false, `The CSS string is an invalid color: ${cssString}`);
+        window.assert(false, `The CSS string is an invalid color: ${cssString}`);
       }
     }
   }
@@ -997,20 +994,20 @@ export default class Color {
     yellowgreen: '9acd32'
   };
 
-  public static BLACK: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static BLUE: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static CYAN: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static DARK_GRAY: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static GRAY: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static GREEN: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static LIGHT_GRAY: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static MAGENTA: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static ORANGE: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static PINK: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static RED: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static WHITE: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static YELLOW: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
-  public static TRANSPARENT: Color;  // eslint-disable-line uppercase-statics-should-be-readonly
+  public static BLACK: Color;
+  public static BLUE: Color;
+  public static CYAN: Color;
+  public static DARK_GRAY: Color;
+  public static GRAY: Color;
+  public static GREEN: Color;
+  public static LIGHT_GRAY: Color;
+  public static MAGENTA: Color;
+  public static ORANGE: Color;
+  public static PINK: Color;
+  public static RED: Color;
+  public static WHITE: Color;
+  public static YELLOW: Color;
+  public static TRANSPARENT: Color;
 
   public static black: Color;
   public static blue: Color;

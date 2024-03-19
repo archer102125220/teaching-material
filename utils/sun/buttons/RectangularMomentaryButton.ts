@@ -10,14 +10,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import TProperty from '../../../axon/js/TProperty.js';
-import InstanceRegistry from '../../../phet-core/js/documentation/InstanceRegistry.js';
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import Tandem from '../../../tandem/js/Tandem.js';
-import sun from '../sun.js';
-import MomentaryButtonInteractionStateProperty from './MomentaryButtonInteractionStateProperty.js';
-import MomentaryButtonModel from './MomentaryButtonModel.js';
-import RectangularButton, { RectangularButtonOptions } from './RectangularButton.js';
+import type TProperty from '@/utils/axon/TProperty.js';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry.js';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize.js';
+import Tandem from '@/utils/tandem/Tandem.js';
+import sun from '@/utils/sun/sun.js';
+import MomentaryButtonInteractionStateProperty from '@/utils/sun/buttons/MomentaryButtonInteractionStateProperty.js';
+import MomentaryButtonModel from '@/utils/sun/buttons/MomentaryButtonModel.js';
+import RectangularButton, { type RectangularButtonOptions } from '@/utils/sun/buttons/RectangularButton.js';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -33,24 +33,24 @@ export default class RectangularMomentaryButton<T> extends RectangularButton {
    * @param valueOn - value when the button is in the on state
    * @param [providedOptions?]
    */
-  public constructor( property: TProperty<T>, valueOff: T, valueOn: T, providedOptions?: RectangularMomentaryButtonOptions ) {
+  public constructor(property: TProperty<T>, valueOff: T, valueOn: T, providedOptions?: RectangularMomentaryButtonOptions) {
 
-    const options = optionize<RectangularMomentaryButtonOptions, SelfOptions, RectangularButtonOptions>()( {
+    const options = optionize<RectangularMomentaryButtonOptions, SelfOptions, RectangularButtonOptions>()({
       tandem: Tandem.REQUIRED,
       tandemNameSuffix: 'Button'
-    }, providedOptions );
+    }, providedOptions);
 
     // Note it shares a tandem with this, so the emitter will be instrumented as a child of the button
-    const buttonModel = new MomentaryButtonModel( valueOff, valueOn, property, options );
+    const buttonModel = new MomentaryButtonModel(valueOff, valueOn, property, options);
 
-    super( buttonModel, new MomentaryButtonInteractionStateProperty( buttonModel ), options );
+    super(buttonModel, new MomentaryButtonInteractionStateProperty(buttonModel), options);
 
     this.disposeRectangularMomentaryButton = () => {
       buttonModel.dispose();
     };
 
     // support for binder documentation, stripped out in builds and only runs when ?binder is specified
-    assert && phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL( 'sun', 'RectangularMomentaryButton', this );
+    assert && phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL('sun', 'RectangularMomentaryButton', this);
   }
 
   public override dispose(): void {
@@ -59,4 +59,4 @@ export default class RectangularMomentaryButton<T> extends RectangularButton {
   }
 }
 
-sun.register( 'RectangularMomentaryButton', RectangularMomentaryButton );
+sun.register('RectangularMomentaryButton', RectangularMomentaryButton);

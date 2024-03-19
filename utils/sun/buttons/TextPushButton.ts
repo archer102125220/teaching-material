@@ -6,13 +6,13 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import optionize, { combineOptions } from '../../phet-core/optionize';
-import { Font, Text, type TextOptions, type TPaint } from '../../scenery/imports';
-import Tandem from '../../tandem/Tandem';
-import sun from '../sun';
-import RectangularPushButton, { type RectangularPushButtonOptions } from './RectangularPushButton';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import { Font, Text, type TextOptions, type TPaint } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 type SelfOptions = {
   font?: Font;

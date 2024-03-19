@@ -7,20 +7,20 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import geometricOptics from '../../geometricOptics';
-import Vector2 from '../../../dot/Vector2';
-import { type RaysType } from './RaysType';
-import LightRays from './LightRays';
-import ProjectionScreen from './ProjectionScreen';
-import LightSpot from './LightSpot';
-import LightObject from './LightObject';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Vector2 from '@/utils/dot/Vector2';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import LightRays from '@/utils/geometric-optics/common/model/LightRays';
+import ProjectionScreen from '@/utils/geometric-optics/common/model/ProjectionScreen';
+import LightSpot from '@/utils/geometric-optics/common/model/LightSpot';
+import LightObject from '@/utils/geometric-optics/common/model/LightObject';
 import light1_png from '@/assets/images/geometric-optics/light1_png';
 import light2_png from '@/assets/images/geometric-optics/light2_png';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import OpticalImage from './OpticalImage';
-import GOScene, { type GOSceneOptions } from './GOScene';
-import Lens from '../../lens/model/Lens';
-import type PickRequired from '../../../phet-core/types/PickRequired';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import OpticalImage from '@/utils/geometric-optics/common/model/OpticalImage';
+import GOScene, { type GOSceneOptions } from '@/utils/geometric-optics/common/model/GOScene';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 type SelfOptions = {
 

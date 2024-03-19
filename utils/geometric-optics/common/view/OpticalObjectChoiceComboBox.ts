@@ -7,14 +7,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import EnumerationProperty from '../../../axon/EnumerationProperty';
-import { AlignBox, AlignGroup, HBox, Image, Node, type NodeTranslationOptions, Text } from '../../../scenery/imports';
-import ComboBox, { type ComboBoxItem, type ComboBoxOptions } from '../../../sun/ComboBox';
-import geometricOptics from '../../geometricOptics';
-import GOConstants from '../GOConstants';
-import OpticalObjectChoice from '../model/OpticalObjectChoice';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import EnumerationProperty from '@/utils/axon/EnumerationProperty';
+import { AlignBox, AlignGroup, HBox, Image, Node, type NodeTranslationOptions, Text } from '@/utils/scenery/imports';
+import ComboBox, { type ComboBoxItem, type ComboBoxOptions } from '@/utils/sun/ComboBox';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import OpticalObjectChoice from '@/utils/geometric-optics/common/model/OpticalObjectChoice';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
 
 type SelfOptions = EmptySelfOptions;
 

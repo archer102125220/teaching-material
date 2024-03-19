@@ -17,8 +17,8 @@
 
 import _ from 'lodash';
 
-import { optionize3 } from '../phet-core/optionize';
-import utteranceQueueNamespace from './utteranceQueueNamespace';
+import { optionize3 } from '@/utils/phet-core/optionize';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
 
 // constants
 const NAME_KEY = 'NAME';

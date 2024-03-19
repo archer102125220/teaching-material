@@ -8,9 +8,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import { SceneryEvent } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { SceneryEvent } from '@/utils/scenery/imports';
 
 export type SceneryListenerFunction<T extends Event = Event> = (event: SceneryEvent<T>) => void;
 

@@ -8,7 +8,7 @@
 
 import _ from 'lodash';
 
-import { KeyboardUtils, scenery } from '../imports';
+import { KeyboardUtils, scenery } from '@/utils/scenery/imports';
 
 const KeyboardZoomUtils = {
 

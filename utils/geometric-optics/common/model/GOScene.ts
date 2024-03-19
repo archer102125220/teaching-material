@@ -6,16 +6,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Range from '../../../dot/Range';
-import geometricOptics from '../../geometricOptics';
-import Optic from './Optic';
-import NumberProperty from '../../../axon/NumberProperty';
-import PhetioObject, { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import Guides from './Guides';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Vector2 from '../../../dot/Vector2';
+import Range from '@/utils/dot/Range';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import Guides from '@/utils/geometric-optics/common/model/Guides';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Vector2 from '@/utils/dot/Vector2';
 
 // How long the animation of light rays lasts, in seconds
 const RAYS_ANIMATION_DURATION = 10;

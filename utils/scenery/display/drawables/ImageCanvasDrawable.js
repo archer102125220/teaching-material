@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../phet-core/Poolable';
-import { CanvasSelfDrawable, Imageable, scenery } from '../../imports';
+import Poolable from '@/utils/phet-core/Poolable';
+import { CanvasSelfDrawable, Imageable, scenery } from '@/utils/scenery/imports';
 
 class ImageCanvasDrawable extends CanvasSelfDrawable {
   /**

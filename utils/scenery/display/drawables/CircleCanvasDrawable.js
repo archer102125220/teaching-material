@@ -6,13 +6,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Poolable from '../../../phet-core/Poolable';
+import Poolable from '@/utils/phet-core/Poolable';
 import {
   CanvasSelfDrawable,
   Node,
   PaintableStatelessDrawable,
   scenery
-} from '../../imports';
+} from '@/utils/scenery/imports';
 
 class CircleCanvasDrawable extends PaintableStatelessDrawable(
   CanvasSelfDrawable

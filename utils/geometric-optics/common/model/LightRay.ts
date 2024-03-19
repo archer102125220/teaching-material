@@ -10,16 +10,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Vector2 from '../../../dot/Vector2';
-import { RayIntersection } from '../../../kite/imports';
-import geometricOptics from '../../geometricOptics';
-import Lens from '../../lens/model/Lens';
-import ProjectionScreen from './ProjectionScreen';
-import Mirror from '../../mirror/model/Mirror';
-import GOQueryParameters from '../GOQueryParameters';
-import Optic from './Optic';
-import GORay from './GORay';
-import { type RaysType } from './RaysType';
+import Vector2 from '@/utils/dot/Vector2';
+import { RayIntersection } from '@/utils/kite/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
+import ProjectionScreen from '@/utils/geometric-optics/common/model/ProjectionScreen';
+import Mirror from '@/utils/geometric-optics/mirror/model/Mirror';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import GORay from '@/utils/geometric-optics/common/model/GORay';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
 
 export type LightRaySegment = {
   startPoint: Vector2;
@@ -221,7 +221,7 @@ function getRealRays(initialRay: GORay, firstPoint: Vector2 | null, optic: Optic
       rays.push(getTransmittedRay(firstPoint, opticalImagePosition, optic));
     }
     else {
-      window.assert && window.assert(optic instanceof Lens); // eslint-disable-line no-simple-type-checking-assertions
+      window.assert && window.assert(optic instanceof Lens);
       const lens = optic as Lens;
 
       // find bisecting point of the lens, used to determine outgoing ray

@@ -5,8 +5,8 @@
  *
  * @author Sam Reid (PhET Interactive Simulations)
  */
-import Tandem from '../tandem/Tandem';
-import { Node } from '../scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import { Node } from '@/utils/scenery/imports';
 
 type GroupItemOptions<T extends Node = Node> = {
   createNode: (contentTandem: Tandem) => T;

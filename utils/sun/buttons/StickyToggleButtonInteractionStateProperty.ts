@@ -6,10 +6,10 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import { DerivedProperty5 } from '../../../axon/js/DerivedProperty.js';
-import sun from '../sun.js';
-import ButtonInteractionState from './ButtonInteractionState.js';
-import StickyToggleButtonModel from './StickyToggleButtonModel.js';
+import { DerivedProperty5 } from '@/utils/axon/DerivedProperty.js';
+import sun from '@/utils/sun/sun.js';
+import ButtonInteractionState from '@/utils/sun/buttons/ButtonInteractionState.js';
+import StickyToggleButtonModel from '@/utils/sun/buttons/StickyToggleButtonModel.js';
 
 export default class StickyToggleButtonInteractionStateProperty<T> extends DerivedProperty5<ButtonInteractionState, boolean, boolean, boolean, boolean, T> {
   public constructor( buttonModel: StickyToggleButtonModel<T> ) {

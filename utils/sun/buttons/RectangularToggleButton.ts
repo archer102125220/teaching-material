@@ -8,16 +8,16 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import optionize from '../../phet-core/optionize';
-import toggleOffSoundPlayer from '../../tambo/shared-sound-players/toggleOffSoundPlayer';
-import toggleOnSoundPlayer from '../../tambo/shared-sound-players/toggleOnSoundPlayer';
-import type TSoundPlayer from '../../tambo/TSoundPlayer';
-import Tandem from '../../tandem/Tandem';
-import sun from '../sun';
-import RectangularButton, { type RectangularButtonOptions } from './RectangularButton';
-import ToggleButtonInteractionStateProperty from './ToggleButtonInteractionStateProperty';
-import ToggleButtonModel from './ToggleButtonModel';
-import Property from '../../axon/Property';
+import optionize from '@/utils/phet-core/optionize';
+import toggleOffSoundPlayer from '@/utils/tambo/shared-sound-players/toggleOffSoundPlayer';
+import toggleOnSoundPlayer from '@/utils/tambo/shared-sound-players/toggleOnSoundPlayer';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import RectangularButton, { type RectangularButtonOptions } from '@/utils/sun/buttons/RectangularButton';
+import ToggleButtonInteractionStateProperty from '@/utils/sun/buttons/ToggleButtonInteractionStateProperty';
+import ToggleButtonModel from '@/utils/sun/buttons/ToggleButtonModel';
+import Property from '@/utils/axon/Property';
 
 type SelfOptions = {
 

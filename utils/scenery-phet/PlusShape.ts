@@ -6,9 +6,9 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Dimension2 from '../dot/Dimension2';
-import { Shape } from '../kite/imports';
-import sceneryPhet from './sceneryPhet';
+import Dimension2 from '@/utils/dot/Dimension2';
+import { Shape } from '@/utils/kite/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 export default class PlusShape extends Shape {
 

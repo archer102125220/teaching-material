@@ -8,11 +8,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyProperty from '../../axon/TinyProperty';
-import memoize from '../../phet-core/memoize';
-import { DelayedMutate, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery } from '../imports';
-import type Constructor from '../../phet-core/types/Constructor';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import memoize from '@/utils/phet-core/memoize';
+import { DelayedMutate, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery } from '@/utils/scenery/imports';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 // Position changes smaller than this will be ignored
 const CHANGE_POSITION_THRESHOLD = 1e-9;
@@ -191,7 +191,7 @@ const HeightSizable = memoize(<SuperType extends Constructor<Node>>(type: SuperT
     public override get extendsHeightSizable(): boolean { return true; }
 
     public validateLocalPreferredHeight(): void {
-      if (assert) {
+      if (window.assert) {
         const currentHeight = this.localHeight;
         const effectiveMinimumHeight = this.localMinimumHeight === null ? currentHeight : this.localMinimumHeight;
         const idealHeight = this.localPreferredHeight === null ? effectiveMinimumHeight : this.localPreferredHeight;

@@ -6,12 +6,13 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
+import _ from 'lodash';
 
-import { HBox, HBoxOptions, Node, Rectangle } from '../../../../../scenery/js/imports.js';
-import TriangleNode, { TriangleNodeOptions } from '../../../TriangleNode.js';
-import optionize, { combineOptions } from '../../../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../../../phet-core/js/types/StrictOmit.js';
-import sceneryPhet from '../../../sceneryPhet.js';
+import { HBox, type HBoxOptions, Node, Rectangle } from '@/utils/scenery/imports';
+import TriangleNode, { type TriangleNodeOptions } from '@/utils/scenery-phet/TriangleNode';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type SelfOptions = {
   numberOfDashes: number;
@@ -25,45 +26,45 @@ type SortCueArrowNodeOptions = SelfOptions & StrictOmit<HBoxOptions, 'children'>
 
 export default class SortCueArrowNode extends HBox {
 
-  public constructor( providedOptions: SortCueArrowNodeOptions ) {
+  public constructor(providedOptions: SortCueArrowNodeOptions) {
 
-    const options = optionize<SortCueArrowNodeOptions, SelfOptions, HBoxOptions>()( {
+    const options = optionize<SortCueArrowNodeOptions, SelfOptions, HBoxOptions>()({
       dashHeight: 2,
       dashWidth: 2,
       triangleNodeOptions: {},
 
       isDisposable: false
-    }, providedOptions );
+    }, providedOptions);
 
-    const createArrowHead = ( pointDirection: 'right' | 'left' ) => {
+    const createArrowHead = (pointDirection: 'right' | 'left') => {
 
-      const triangleNodeOptions = combineOptions<TriangleNodeOptions>( {
-        pointDirection: pointDirection,
+      const triangleNodeOptions = combineOptions<TriangleNodeOptions>({
+        pointDirection,
         triangleWidth: 6,
         triangleHeight: 5,
         fill: 'black'
-      }, options.triangleNodeOptions );
+      }, options.triangleNodeOptions);
 
-      return new TriangleNode( triangleNodeOptions );
+      return new TriangleNode(triangleNodeOptions);
     };
 
     const dashes: Node[] = [];
 
-    _.times( options.numberOfDashes, () => {
-      dashes.push( new Rectangle( 0, 0, options.dashWidth, options.dashHeight, { fill: 'black' } ) );
-    } );
+    _.times(options.numberOfDashes, () => {
+      dashes.push(new Rectangle(0, 0, options.dashWidth, options.dashHeight, { fill: 'black' }));
+    });
 
-    const superOptions = combineOptions<HBoxOptions>( {
+    const superOptions = combineOptions<HBoxOptions>({
       children: [
-        ...( options.doubleHead ? [ createArrowHead( 'left' ) ] : [] ),
+        ...(options.doubleHead ? [createArrowHead('left')] : []),
         ...dashes,
-        createArrowHead( 'right' )
+        createArrowHead('right')
       ],
       spacing: 2
-    }, providedOptions );
+    }, providedOptions);
 
-    super( superOptions );
+    super(superOptions);
   }
 }
 
-sceneryPhet.register( 'SortCueArrowNode', SortCueArrowNode );
+sceneryPhet.register('SortCueArrowNode', SortCueArrowNode);

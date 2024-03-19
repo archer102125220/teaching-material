@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import dotRandom from '../../dot/dotRandom';
-import { Display, scenery, svgns, type TOverlay } from '../imports';
+import dotRandom from '@/utils/dot/dotRandom';
+import { Display, scenery, svgns, type TOverlay } from '@/utils/scenery/imports';
 
 export default class SafariWorkaroundOverlay implements TOverlay {
 
@@ -26,6 +26,7 @@ export default class SafariWorkaroundOverlay implements TOverlay {
     svg.setAttribute('class', 'safari-workaround');
     svg.style.top = '0';
     svg.style.left = '0';
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
     svg.style['pointer-events'] = 'none';
 

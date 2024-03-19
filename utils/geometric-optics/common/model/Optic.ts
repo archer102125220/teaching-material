@@ -7,30 +7,30 @@
  * @author Martin Veillette
  */
 
-import StringUnionProperty from '../../../axon/StringUnionProperty';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import NumberProperty from '../../../axon/NumberProperty';
-import Matrix3 from '../../../dot/Matrix3';
-import Vector2 from '../../../dot/Vector2';
-import { Shape } from '../../../kite/imports';
-import NumberIO from '../../../tandem/types/NumberIO';
-import geometricOptics from '../../geometricOptics';
-import type OpticShapes from './OpticShapes';
-import { type OpticSurfaceType } from './OpticSurfaceType';
-import Property from '../../../axon/Property';
-import ReadOnlyProperty from '../../../axon/ReadOnlyProperty';
-import Vector2Property from '../../../dot/Vector2Property';
-import Bounds2 from '../../../dot/Bounds2';
-import Range from '../../../dot/Range';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import { type RaysType } from './RaysType';
-import PhetioObject, { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import GOPreferences from './GOPreferences';
-import DirectFocalLengthModel, { type DirectFocalLengthModelOptions } from './DirectFocalLengthModel';
-import IndirectFocalLengthModel, { type IndirectFocalLengthModelOptions } from './IndirectFocalLengthModel';
-import optionize from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import type PickOptional from '../../../phet-core/types/PickOptional';
+import StringUnionProperty from '@/utils/axon/StringUnionProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import type OpticShapes from '@/utils/geometric-optics/common/model/OpticShapes';
+import { type OpticSurfaceType } from '@/utils/geometric-optics/common/model/OpticSurfaceType';
+import Property from '@/utils/axon/Property';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import Vector2Property from '@/utils/dot/Vector2Property';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Range from '@/utils/dot/Range';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import GOPreferences from '@/utils/geometric-optics/common/model/GOPreferences';
+import DirectFocalLengthModel, { type DirectFocalLengthModelOptions } from '@/utils/geometric-optics/common/model/DirectFocalLengthModel';
+import IndirectFocalLengthModel, { type IndirectFocalLengthModelOptions } from '@/utils/geometric-optics/common/model/IndirectFocalLengthModel';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
 
 
 // A flat mirror has infinite focal length and ROC. We approximate a flat mirror as a convex mirror with very-large

@@ -12,15 +12,15 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import tambo from '../tambo.js';
-import SoundClip, { SoundClipOptions } from './SoundClip.js';
-import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import Range from '../../../dot/js/Range.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
-import soundConstants from '../soundConstants.js';
+import tambo from '@/utils/tambo/tambo';
+import SoundClip, { type SoundClipOptions } from '@/utils/tambo/sound-generators/SoundClip';
+import WrappedAudioBuffer from '@/utils/tambo/WrappedAudioBuffer';
+import optionize from '@/utils/phet-core/optionize';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import Range from '@/utils/dot/Range';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
+import soundConstants from '@/utils/tambo/soundConstants';
 
 type SelfOptions = {
 
@@ -75,17 +75,17 @@ class ContinuousPropertySoundGenerator extends SoundClip {
    * @param range - the range of values that the provided property can take on
    * @param [providedOptions]
    */
-  public constructor( property: TReadOnlyProperty<number>,
-                      sound: WrappedAudioBuffer,
-                      range: Range,
-                      providedOptions?: ContinuousPropertySoundGeneratorOptions ) {
+  public constructor(property: TReadOnlyProperty<number>,
+    sound: WrappedAudioBuffer,
+    range: Range,
+    providedOptions?: ContinuousPropertySoundGeneratorOptions) {
 
     window.assert && window.assert(
       !providedOptions || !providedOptions.loop,
       'loop option should be supplied by ContinuousPropertySoundGenerator'
     );
 
-    const options = optionize<ContinuousPropertySoundGeneratorOptions, SelfOptions, SoundClipOptions>()( {
+    const options = optionize<ContinuousPropertySoundGeneratorOptions, SelfOptions, SoundClipOptions>()({
       initialOutputLevel: 0.7,
       loop: true,
       trimSilence: true,
@@ -96,9 +96,9 @@ class ContinuousPropertySoundGenerator extends SoundClip {
       playbackRateCenterOffset: 0,
       resetInProgressProperty: null,
       stopOnDisabled: false
-    }, providedOptions );
+    }, providedOptions);
 
-    super( sound, options );
+    super(sound, options);
 
     this.fadeTime = options.fadeTime;
     this.delayBeforeStop = options.delayBeforeStop;
@@ -106,22 +106,22 @@ class ContinuousPropertySoundGenerator extends SoundClip {
     this.remainingFadeTime = 0;
 
     // start with the output level at zero so that the initial sound generation has a bit of fade in
-    this.setOutputLevel( 0, 0 );
+    this.setOutputLevel(0, 0);
 
     // function for starting the sound or adjusting the volume
-    const listener = ( value: number ) => {
+    const listener = (value: number) => {
 
       // Update the sound generation when the value changes.
-      if ( !options.resetInProgressProperty || !options.resetInProgressProperty.value ) {
+      if (!options.resetInProgressProperty || !options.resetInProgressProperty.value) {
 
         // calculate the playback rate
-        const normalizedValue = Math.log( value / range.min ) / Math.log( range.max / range.min );
-        const playbackRate = Math.pow( 2, ( normalizedValue - 0.5 ) * options.playbackRateSpanOctaves ) +
-                             options.playbackRateCenterOffset;
+        const normalizedValue = Math.log(value / range.min) / Math.log(range.max / range.min);
+        const playbackRate = Math.pow(2, (normalizedValue - 0.5) * options.playbackRateSpanOctaves) +
+          options.playbackRateCenterOffset;
 
-        this.setPlaybackRate( playbackRate );
-        this.setOutputLevel( this.nonFadedOutputLevel );
-        if ( !this.isPlaying && !isSettingPhetioStateProperty.value ) {
+        this.setPlaybackRate(playbackRate);
+        this.setOutputLevel(this.nonFadedOutputLevel);
+        if (!this.isPlaying && !isSettingPhetioStateProperty.value) {
           this.play();
         }
 
@@ -129,16 +129,16 @@ class ContinuousPropertySoundGenerator extends SoundClip {
         this.remainingFadeTime = options.fadeStartDelay + options.fadeTime + this.delayBeforeStop;
       }
     };
-    property.lazyLink( listener );
+    property.lazyLink(listener);
 
-    if ( options.stopOnDisabled ) {
-      this.fullyEnabledProperty.lazyLink( enabled => {
-        !enabled && this.stop( soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME );
-      } );
+    if (options.stopOnDisabled) {
+      this.fullyEnabledProperty.lazyLink(enabled => {
+        !enabled && this.stop(soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME);
+      });
     }
 
     // dispose function
-    this.disposeContinuousPropertySoundGenerator = () => property.unlink( listener );
+    this.disposeContinuousPropertySoundGenerator = () => property.unlink(listener);
   }
 
   public override dispose(): void {
@@ -150,20 +150,20 @@ class ContinuousPropertySoundGenerator extends SoundClip {
    * Step this sound generator, used for fading out the sound in the absence of change.
    * @param dt - change in time (i.e. delta time) in seconds
    */
-  public step( dt: number ): void {
-    if ( this.remainingFadeTime > 0 ) {
-      this.remainingFadeTime = Math.max( this.remainingFadeTime - dt, 0 );
+  public step(dt: number): void {
+    if (this.remainingFadeTime > 0) {
+      this.remainingFadeTime = Math.max(this.remainingFadeTime - dt, 0);
 
-      if ( ( this.remainingFadeTime < this.fadeTime + this.delayBeforeStop ) && this.outputLevel > 0 ) {
+      if ((this.remainingFadeTime < this.fadeTime + this.delayBeforeStop) && this.outputLevel > 0) {
 
         // the sound is fading out, adjust the output level
-        const outputLevel = Math.max( ( this.remainingFadeTime - this.delayBeforeStop ) / this.fadeTime, 0 );
-        this.setOutputLevel( outputLevel * this.nonFadedOutputLevel );
+        const outputLevel = Math.max((this.remainingFadeTime - this.delayBeforeStop) / this.fadeTime, 0);
+        this.setOutputLevel(outputLevel * this.nonFadedOutputLevel);
       }
 
       // fade out complete, stop playback
-      if ( this.remainingFadeTime === 0 && this.isPlaying ) {
-        this.stop( 0 );
+      if (this.remainingFadeTime === 0 && this.isPlaying) {
+        this.stop(0);
       }
     }
   }
@@ -172,11 +172,11 @@ class ContinuousPropertySoundGenerator extends SoundClip {
    * stop any in-progress sound generation
    */
   public reset(): void {
-    this.stop( 0 );
+    this.stop(0);
     this.remainingFadeTime = 0;
   }
 }
 
-tambo.register( 'ContinuousPropertySoundGenerator', ContinuousPropertySoundGenerator );
+tambo.register('ContinuousPropertySoundGenerator', ContinuousPropertySoundGenerator);
 
 export default ContinuousPropertySoundGenerator;

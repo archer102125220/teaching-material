@@ -7,12 +7,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Vector2 from '../../../../dot/Vector2';
-import optionize from '../../../../phet-core/optionize';
-import { DragListener, InteractiveHighlighting, Node, type NodeOptions, type PressListenerEvent } from '../../../../scenery/imports';
-import geometricOptics from '../../../geometricOptics';
-import GOTool from '../../model/tools/GOTool';
-import GOToolNode from './GOToolNode';
+import Vector2 from '@/utils/dot/Vector2';
+import optionize from '@/utils/phet-core/optionize';
+import { DragListener, InteractiveHighlighting, Node, type NodeOptions, type PressListenerEvent } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOTool from '@/utils/geometric-optics/common/model/tools/GOTool';
+import GOToolNode from '@/utils/geometric-optics/common/view/tools/GOToolNode';
 
 type SelfOptions = {
   touchAreaDilationX?: number;

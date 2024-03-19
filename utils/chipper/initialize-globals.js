@@ -31,11 +31,17 @@
  */
 
 import _ from 'lodash';
-// import '@/utils/sherpa/lib/jquery-2.1.0';
 
-import '@/utils/query-string-machine/QueryStringMachine';
+import QueryStringMachine from '@/utils/query-string-machine/QueryStringMachine';
 
-(function () {
+if (
+  typeof window === 'object' &&
+  typeof window.QueryStringMachine !== 'object'
+) {
+  window.QueryStringMachine = QueryStringMachine;
+}
+
+export function initializeGlobals() {
   window.assert &&
     window.assert(
       window.QueryStringMachine,
@@ -497,7 +503,7 @@ import '@/utils/query-string-machine/QueryStringMachine';
      */
     randomSeed: {
       type: 'number',
-      defaultValue: Math.random() 
+      defaultValue: Math.random()
     },
 
     // This query parameter sets the default region and culture portrayal for the sim. This changes the artwork for
@@ -1072,7 +1078,7 @@ import '@/utils/query-string-machine/QueryStringMachine';
   window.phet.chipper.makeEverythingSlow = function () {
     window.setInterval(() => {
       sleep(64);
-    }, 16); 
+    }, 16);
   };
   window.phet.chipper.makeRandomSlowness = function () {
     window.setInterval(
@@ -1080,7 +1086,7 @@ import '@/utils/query-string-machine/QueryStringMachine';
         sleep(Math.ceil(100 + Math.random() * 200));
       },
       Math.ceil(100 + Math.random() * 200)
-    ); 
+    );
   };
 
   // Are we running a built html file?
@@ -1275,4 +1281,8 @@ import '@/utils/query-string-machine/QueryStringMachine';
       });
     }
   })();
-})();
+}
+
+// initializeGlobals();
+
+export default initializeGlobals;

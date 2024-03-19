@@ -6,13 +6,13 @@
  * @author Jonathan Olson <jonathan.olson>
  */
 
-import DynamicProperty from '../axon/DynamicProperty';
+import DynamicProperty from '@/utils/axon/DynamicProperty';
 import localeProperty, { type Locale } from '@/i18n/joist/localeProperty';
-import Tandem from '../tandem/Tandem';
-import StringIO from '../tandem/types/StringIO';
-import chipper from './chipper';
-import TandemConstants from '../tandem/TandemConstants';
-import LocalizedString from './LocalizedString';
+import Tandem from '@/utils/tandem/Tandem';
+import StringIO from '@/utils/tandem/types/StringIO';
+import chipper from '@/utils/chipper/chipper';
+import TandemConstants from '@/utils/tandem/TandemConstants';
+import LocalizedString from '@/utils/chipper/LocalizedString';
 
 class LocalizedStringProperty extends DynamicProperty<string, string, Locale> {
 

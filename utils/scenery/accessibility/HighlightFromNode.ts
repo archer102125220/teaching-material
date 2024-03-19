@@ -10,12 +10,12 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import type TProperty from '../../axon/TProperty';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Bounds2 from '../../dot/Bounds2';
-import { Shape } from '../../kite/imports';
-import optionize from '../../phet-core/optionize';
-import { HighlightPath, type HighlightPathOptions, Node, scenery } from '../imports';
+import type TProperty from '@/utils/axon/TProperty';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Bounds2 from '@/utils/dot/Bounds2';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import { HighlightPath, type HighlightPathOptions, Node, scenery } from '@/utils/scenery/imports';
 
 type SelfOptions = {
 

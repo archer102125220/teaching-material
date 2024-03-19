@@ -7,18 +7,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { Node, type NodeOptions, Path } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import GOColors from '../../common/GOColors';
-import Mirror from '../model/Mirror';
-import MirrorShapes from '../model/MirrorShapes';
-import { type OpticSurfaceType } from '../../common/model/OpticSurfaceType';
-import Matrix3 from '../../../dot/Matrix3';
-import GOQueryParameters from '../../common/GOQueryParameters';
-import OriginNode from '../../common/view/OriginNode';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { Node, type NodeOptions, Path } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import Mirror from '@/utils/geometric-optics/mirror/model/Mirror';
+import MirrorShapes from '@/utils/geometric-optics/mirror/model/MirrorShapes';
+import { type OpticSurfaceType } from '@/utils/geometric-optics/common/model/OpticSurfaceType';
+import Matrix3 from '@/utils/dot/Matrix3';
+import GOQueryParameters from '@/utils/geometric-optics/common/GOQueryParameters';
+import OriginNode from '@/utils/geometric-optics/common/view/OriginNode';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 // constants
 const FILL_PROPERTY = GOColors.mirrorBackingColorProperty;

@@ -21,19 +21,21 @@
  * @author Michael Barlow (PhET Interactive Simulations)
  */
 
-import CallbackTimer, { type CallbackTimerCallback } from '../../axon/CallbackTimer';
-import Emitter from '../../axon/Emitter';
-import validate from '../../axon/validate';
-import assertHasProperties from '../../phet-core/assertHasProperties';
-import type Constructor from '../../phet-core/types/Constructor';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
-import { combineOptions } from '../../phet-core/optionize';
-import Orientation from '../../phet-core/Orientation';
-import { DelayedMutate, KeyboardUtils, Node, SceneryEvent, type TInputListener } from '../../scenery/imports';
-import sun from '../sun';
-import SunStrings from '../SunStrings';
-import AccessibleValueHandler, { type AccessibleValueHandlerOptions } from './AccessibleValueHandler';
-import type TEmitter from '../../axon/TEmitter';
+import _ from 'lodash';
+
+import CallbackTimer, { type CallbackTimerCallback } from '@/utils/axon/CallbackTimer';
+import Emitter from '@/utils/axon/Emitter';
+import validate from '@/utils/axon/validate';
+import assertHasProperties from '@/utils/phet-core/assertHasProperties';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import { combineOptions } from '@/utils/phet-core/optionize';
+import Orientation from '@/utils/phet-core/Orientation';
+import { DelayedMutate, KeyboardUtils, Node, SceneryEvent, type TInputListener } from '@/utils/scenery/imports';
+import sun from '@/utils/sun/sun';
+import SunStrings from '@/utils/sun/SunStrings';
+import AccessibleValueHandler, { type AccessibleValueHandlerOptions } from '@/utils/sun/accessibility/AccessibleValueHandler';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 const ACCESSIBLE_NUMBER_SPINNER_OPTIONS = [
   'timerDelay',

@@ -10,19 +10,19 @@
 
 import _ from 'lodash';
 
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Utils from '../../dot/Utils';
-import Vector2 from '../../dot/Vector2';
-import platform from '../../phet-core/platform';
-import EventType from '../../tandem/EventType';
-import isSettingPhetioStateProperty from '../../tandem/isSettingPhetioStateProperty';
-import PhetioAction from '../../tandem/PhetioAction';
-import { EventIO, Focus, FocusManager, globalKeyStateTracker, Intent, KeyboardDragListener, KeyboardUtils, KeyboardZoomUtils, KeyStateTracker, type LimitPanDirection, Mouse, MultiListenerPress, Node, PanZoomListener, type PanZoomListenerOptions, PDOMPointer, PDOMUtils, Pointer, PressListener, scenery, SceneryEvent, Trail, TransformTracker } from '../imports';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import Tandem from '../../tandem/Tandem';
-import BooleanProperty from '../../axon/BooleanProperty';
-import { type PropertyLinkListener } from '../../axon/TReadOnlyProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import platform from '@/utils/phet-core/platform';
+import EventType from '@/utils/tandem/EventType';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import { EventIO, Focus, FocusManager, globalKeyStateTracker, Intent, KeyboardDragListener, KeyboardUtils, KeyboardZoomUtils, KeyStateTracker, type LimitPanDirection, Mouse, MultiListenerPress, Node, PanZoomListener, type PanZoomListenerOptions, PDOMPointer, PDOMUtils, Pointer, PressListener, scenery, SceneryEvent, Trail, TransformTracker } from '@/utils/scenery/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import Tandem from '@/utils/tandem/Tandem';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import { type PropertyLinkListener } from '@/utils/axon/TReadOnlyProperty';
 
 // constants
 const MOVE_CURSOR = 'all-scroll';
@@ -1342,11 +1342,23 @@ class KeyPress {
 
       // no focusable element in the Display so try to zoom into the first focusable element
       const firstFocusable = PDOMUtils.getNextFocusable();
-      if (firstFocusable !== document.body) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      if (firstFocusable !== (window.SIM_DISPLAY?.domElement?.parentNode || document.body)) {
 
         // if not the body, focused node should be contained by the body - error loudly if the browser reports
         // that this is not the case
-        window.assert && window.assert(document.body.contains(firstFocusable), 'focusable should be attached to the body');
+        // window.assert && window.assert(document.body.contains(firstFocusable), 'focusable should be attached to the body');
+
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-expect-error
+        if (typeof window.SIM_DISPLAY?.domElement?.contains === 'function') {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          window.assert && window.assert(window.SIM_DISPLAY.domElement.contains(firstFocusable), 'focusable should be attached to the body');
+        } else {
+          window.assert && window.assert(document.body.contains(firstFocusable), 'focusable should be attached to the body');
+        }
 
         // assumes that focusable DOM elements are correctly positioned, which should be the case - an alternative
         // could be to use Displat.getTrailFromPDOMIndicesString(), but that function requires information that is not

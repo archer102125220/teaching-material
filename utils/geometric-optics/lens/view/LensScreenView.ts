@@ -6,16 +6,16 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Bounds2 from '../../../dot/Bounds2';
-import Vector2 from '../../../dot/Vector2';
-import Tandem from '../../../tandem/Tandem';
-import GOScreenView, { type GOScreenViewOptions } from '../../common/view/GOScreenView';
-import geometricOptics from '../../geometricOptics';
-import LensModel from '../model/LensModel';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import LensNode from './LensNode';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Vector2 from '@/utils/dot/Vector2';
+import Tandem from '@/utils/tandem/Tandem';
+import GOScreenView, { type GOScreenViewOptions } from '@/utils/geometric-optics/common/view/GOScreenView';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import LensModel from '@/utils/geometric-optics/lens/model/LensModel';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import LensNode from '@/utils/geometric-optics/lens/view/LensNode';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 type SelfOptions = EmptySelfOptions;
 

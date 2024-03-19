@@ -5,43 +5,45 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import animationFrameTimer from '../axon/animationFrameTimer';
-import DerivedProperty from '../axon/DerivedProperty';
-import MappedProperty from '../axon/MappedProperty';
-import TinyProperty from '../axon/TinyProperty';
-import Bounds2 from '../dot/Bounds2';
-import Dimension2 from '../dot/Dimension2';
-import Utils from '../dot/Utils';
-import Vector2 from '../dot/Vector2';
-import MeasuringTapeNode from '../scenery-phet/MeasuringTapeNode';
-import PhetFont from '../scenery-phet/PhetFont';
-import { CanvasNode, Circle, Color, Display, DOM, DragListener, FireListener, FlowBox, Font, type GradientStop, GridBox, HBox, Image, LayoutNode, Line, LinearGradient, extendsHeightSizable, extendsWidthSizable, Node, type NodeOptions, NodePattern, Paint, Path, Pattern, PDOMInstance, PressListener, RadialGradient, Rectangle, RichText, type RichTextOptions, SceneryEvent, Spacer, type TColor, Text, type TextOptions, type TPaint, Trail, VBox, HSeparator, WebGLNode } from '../scenery/imports';
-import Panel from '../sun/Panel';
-import AquaRadioButtonGroup from '../sun/AquaRadioButtonGroup';
-import Tandem from '../tandem/Tandem';
-import joist from './joist';
-import Sim from './Sim';
-import SimDisplay from './SimDisplay';
-import BooleanProperty from '../axon/BooleanProperty';
-import Checkbox, { type CheckboxOptions } from '../sun/Checkbox';
-import ScreenView from './ScreenView';
-import type TProperty from '../axon/TProperty';
-import inheritance from '../phet-core/inheritance';
-import Property from '../axon/Property';
-import ReadOnlyProperty from '../axon/ReadOnlyProperty';
-import Matrix3 from '../dot/Matrix3';
-import EnumerationValue from '../phet-core/EnumerationValue';
-import Enumeration from '../phet-core/Enumeration';
-import EnumerationProperty from '../axon/EnumerationProperty';
-import merge from '../phet-core/merge';
-import { Shape } from '../kite/imports';
-import RectangularPushButton from '../sun/buttons/RectangularPushButton';
-import ExpandCollapseButton from '../sun/ExpandCollapseButton';
-import createObservableArray, { type ObservableArray } from '../axon/createObservableArray';
-import optionize from '../phet-core/optionize';
-import Multilink from '../axon/Multilink';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
+import _ from 'lodash';
+
+import animationFrameTimer from '@/utils/axon/animationFrameTimer';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import MappedProperty from '@/utils/axon/MappedProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Dimension2 from '@/utils/dot/Dimension2';
+import Utils from '@/utils/dot/Utils';
+import Vector2 from '@/utils/dot/Vector2';
+import MeasuringTapeNode from '@/utils/scenery-phet/MeasuringTapeNode';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { CanvasNode, Circle, Color, Display, DOM, DragListener, FireListener, FlowBox, Font, type GradientStop, GridBox, HBox, Image, LayoutNode, Line, LinearGradient, extendsHeightSizable, extendsWidthSizable, Node, type NodeOptions, NodePattern, Paint, Path, Pattern, PDOMInstance, PressListener, RadialGradient, Rectangle, RichText, type RichTextOptions, SceneryEvent, Spacer, type TColor, Text, type TextOptions, type TPaint, Trail, VBox, HSeparator, WebGLNode } from '@/utils/scenery/imports';
+import Panel from '@/utils/sun/Panel';
+import AquaRadioButtonGroup from '@/utils/sun/AquaRadioButtonGroup';
+import Tandem from '@/utils/tandem/Tandem';
+import joist from '@/utils/joist/joist';
+import Sim from '@/utils/joist/Sim';
+import SimDisplay from '@/utils/joist/SimDisplay';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import Checkbox, { type CheckboxOptions } from '@/utils/sun/Checkbox';
+import ScreenView from '@/utils/joist/ScreenView';
+import type TProperty from '@/utils/axon/TProperty';
+import inheritance from '@/utils/phet-core/inheritance';
+import Property from '@/utils/axon/Property';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import Matrix3 from '@/utils/dot/Matrix3';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationProperty from '@/utils/axon/EnumerationProperty';
+import merge from '@/utils/phet-core/merge';
+import { Shape } from '@/utils/kite/imports';
+import RectangularPushButton from '@/utils/sun/buttons/RectangularPushButton';
+import ExpandCollapseButton from '@/utils/sun/ExpandCollapseButton';
+import createObservableArray, { type ObservableArray } from '@/utils/axon/createObservableArray';
+import optionize from '@/utils/phet-core/optionize';
+import Multilink from '@/utils/axon/Multilink';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 const round = (n: number, places = 2) => Utils.toFixed(n, places);
 
@@ -807,8 +809,13 @@ export default class Helper {
         sim.dimensionProperty.link(resizeListener);
         animationFrameTimer.addListener(frameListener);
 
-        document.body.appendChild(this.helperDisplay.domElement);
-        this.helperDisplay.domElement.style.zIndex = '10000';
+        // document.body.appendChild(this.helperDisplay.domElement);
+        if (typeof simDisplay.domElement?.parentNode?.appendChild === 'function') {
+          simDisplay.domElement.parentNode.appendChild(this.helperDisplay.domElement);
+        } else {
+          document.body.appendChild(this.helperDisplay.domElement);
+        }
+        // this.helperDisplay.domElement.style.zIndex = '10000';
 
         const onLocationEvent = (event: SceneryEvent<TouchEvent | PointerEvent | MouseEvent>) => {
           this.pointerPositionProperty.value = event.pointer.point;

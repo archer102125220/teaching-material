@@ -125,25 +125,25 @@
 
 import _ from 'lodash';
 
-import TinyEmitter from '../../../axon/TinyEmitter';
-import validate from '../../../axon/validate';
-import Validation from '../../../axon/Validation';
-import { Shape } from '../../../kite/imports';
-import arrayDifference from '../../../phet-core/arrayDifference';
-import PhetioObject, { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import UtteranceQueue from '../../../utterance-queue/UtteranceQueue';
-import { type TAlertable } from '../../../utterance-queue/Utterance';
-import { Node, PDOMDisplaysInfo, PDOMInstance, PDOMPeer, PDOMTree, PDOMUtils, scenery, Trail } from '../../imports';
-import { type Highlight } from '../../overlays/HighlightOverlay';
-import optionize from '../../../phet-core/optionize';
-import Tandem from '../../../tandem/Tandem';
-import type TEmitter from '../../../axon/TEmitter';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import { isTReadOnlyProperty } from '../../../axon/TReadOnlyProperty';
-import ReadOnlyProperty from '../../../axon/ReadOnlyProperty';
-import type TProperty from '../../../axon/TProperty';
-import isSettingPhetioStateProperty from '../../../tandem/isSettingPhetioStateProperty';
-import Bounds2 from '../../../dot/Bounds2';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import validate from '@/utils/axon/validate';
+import Validation from '@/utils/axon/Validation';
+import { Shape } from '@/utils/kite/imports';
+import arrayDifference from '@/utils/phet-core/arrayDifference';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import UtteranceQueue from '@/utils/utterance-queue/UtteranceQueue';
+import { type TAlertable } from '@/utils/utterance-queue/Utterance';
+import { Node, PDOMDisplaysInfo, PDOMInstance, PDOMPeer, PDOMTree, PDOMUtils, scenery, Trail } from '@/utils/scenery/imports';
+import { type Highlight } from '@/utils/scenery/overlays/HighlightOverlay';
+import optionize from '@/utils/phet-core/optionize';
+import Tandem from '@/utils/tandem/Tandem';
+import type TEmitter from '@/utils/axon/TEmitter';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { isTReadOnlyProperty } from '@/utils/axon/TReadOnlyProperty';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
 
 const INPUT_TAG = PDOMUtils.TAGS.INPUT;
 const P_TAG = PDOMUtils.TAGS.P;
@@ -1686,7 +1686,7 @@ export default class ParallelDOM extends PhetioObject {
       if (this._focusHighlightLayerable) {
 
         // if focus highlight is layerable, it must be a node in the scene graph
-        window.assert && window.assert(focusHighlight instanceof Node); // eslint-disable-line no-simple-type-checking-assertions
+        window.assert && window.assert(focusHighlight instanceof Node);
 
         // the highlight starts off invisible, HighlightOverlay will make it visible when this Node has DOM focus
         (focusHighlight as Node).visible = false;
@@ -1772,8 +1772,8 @@ export default class ParallelDOM extends PhetioObject {
     let i;
 
     // validation if assert is enabled
-    if (assert) {
-      assert(Array.isArray(ariaLabelledbyAssociations));
+    if (window.assert) {
+      window.assert(Array.isArray(ariaLabelledbyAssociations));
       for (i = 0; i < ariaLabelledbyAssociations.length; i++) {
         associationObject = ariaLabelledbyAssociations[i];
       }
@@ -1896,8 +1896,8 @@ export default class ParallelDOM extends PhetioObject {
 
   public setAriaDescribedbyAssociations(ariaDescribedbyAssociations: Association[]): void {
     let associationObject;
-    if (assert) {
-      assert(Array.isArray(ariaDescribedbyAssociations));
+    if (window.assert) {
+      window.assert(Array.isArray(ariaDescribedbyAssociations));
       for (let j = 0; j < ariaDescribedbyAssociations.length; j++) {
         associationObject = ariaDescribedbyAssociations[j];
       }
@@ -2030,8 +2030,8 @@ export default class ParallelDOM extends PhetioObject {
   public setActiveDescendantAssociations(activeDescendantAssociations: Association[]): void {
 
     let associationObject;
-    if (assert) {
-      assert(Array.isArray(activeDescendantAssociations));
+    if (window.assert) {
+      window.assert(Array.isArray(activeDescendantAssociations));
       for (let j = 0; j < activeDescendantAssociations.length; j++) {
         associationObject = activeDescendantAssociations[j];
       }
@@ -3008,6 +3008,7 @@ export default class ParallelDOM extends PhetioObject {
       pruneStack = pruneStack.concat(arrayPDOMOrder as Node[]);
 
       // Visiting trails to ordered nodes.
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       _.each(arrayPDOMOrder, (descendant: Node) => {
         // Find all descendant references to the node.

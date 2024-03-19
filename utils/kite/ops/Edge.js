@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Pool from '../../phet-core/Pool';
-import { HalfEdge, kite, Line, Segment, Vertex } from '../imports';
+import Pool from '@/utils/phet-core/Pool';
+import { HalfEdge, kite, Line, Segment, Vertex } from '@/utils/kite/imports';
 
 let globaId = 0;
 

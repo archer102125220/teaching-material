@@ -1,11 +1,11 @@
 // Copyright 2021-2022, University of Colorado Boulder
 
 
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import type TReadOnlyProperty from './TReadOnlyProperty';
-import ReadOnlyProperty from './ReadOnlyProperty';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import TinyProperty from './TinyProperty';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import TinyProperty from '@/utils/axon/TinyProperty';
 
 /**
  * A simple Property/TinyProperty like interface

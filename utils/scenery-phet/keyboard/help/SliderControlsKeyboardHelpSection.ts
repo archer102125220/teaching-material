@@ -6,20 +6,20 @@
  * @author Jesse Greenberg
  */
 
-import PatternStringProperty from '../../../axon/PatternStringProperty';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import Enumeration from '../../../phet-core/Enumeration';
-import EnumerationValue from '../../../phet-core/EnumerationValue';
-import optionize from '../../../phet-core/optionize';
-import { HBox } from '../../../scenery/imports';
-import sceneryPhet from '../../sceneryPhet';
-import SceneryPhetStrings from '../../SceneryPhetStrings';
-import TextKeyNode from '../TextKeyNode';
-import KeyboardHelpIconFactory from './KeyboardHelpIconFactory';
-import KeyboardHelpSection, { type KeyboardHelpSectionOptions } from './KeyboardHelpSection';
-import KeyboardHelpSectionRow from './KeyboardHelpSectionRow';
-import Tandem from '../../../tandem/Tandem';
-import assertMutuallyExclusiveOptions from '../../../phet-core/assertMutuallyExclusiveOptions';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Enumeration from '@/utils/phet-core/Enumeration';
+import EnumerationValue from '@/utils/phet-core/EnumerationValue';
+import optionize from '@/utils/phet-core/optionize';
+import { HBox } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import TextKeyNode from '@/utils/scenery-phet/keyboard/TextKeyNode';
+import KeyboardHelpIconFactory from '@/utils/scenery-phet/keyboard/help/KeyboardHelpIconFactory';
+import KeyboardHelpSection, { type KeyboardHelpSectionOptions } from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSection';
+import KeyboardHelpSectionRow from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSectionRow';
+import Tandem from '@/utils/tandem/Tandem';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
 
 // Configurations of arrow keys that can be displayed for 'Move between items in a group'
 class ArrowKeyIconDisplay extends EnumerationValue {

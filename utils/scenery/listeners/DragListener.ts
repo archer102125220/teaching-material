@@ -68,19 +68,19 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import PhetioAction from '../../tandem/PhetioAction';
-import type TProperty from '../../axon/TProperty';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import Bounds2 from '../../dot/Bounds2';
-import Transform3 from '../../dot/Transform3';
-import Vector2 from '../../dot/Vector2';
-import optionize from '../../phet-core/optionize';
-import type RequiredOption from '../../phet-core/types/RequiredOption';
-import EventType from '../../tandem/EventType';
-import PhetioObject from '../../tandem/PhetioObject';
-import Tandem from '../../tandem/Tandem';
-import { Node, Pointer, type PressedPressListener, PressListener, type PressListenerCallback, type PressListenerEvent, type PressListenerNullableCallback, type PressListenerOptions, scenery, SceneryEvent, type TInputListener, TransformTracker } from '../imports';
-import Property from '../../axon/Property';
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Transform3 from '@/utils/dot/Transform3';
+import Vector2 from '@/utils/dot/Vector2';
+import optionize from '@/utils/phet-core/optionize';
+import type RequiredOption from '@/utils/phet-core/types/RequiredOption';
+import EventType from '@/utils/tandem/EventType';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import { Node, Pointer, type PressedPressListener, PressListener, type PressListenerCallback, type PressListenerEvent, type PressListenerNullableCallback, type PressListenerOptions, scenery, SceneryEvent, type TInputListener, TransformTracker } from '@/utils/scenery/imports';
+import Property from '@/utils/axon/Property';
 
 // Scratch vectors used to prevent allocations
 const scratchVector2A = new Vector2(0, 0);
@@ -317,12 +317,12 @@ export default class DragListener extends PressListener implements TInputListene
    * @returns success - Returns whether the press was actually started
    */
   public override press(event: PressListenerEvent, targetNode?: Node, callback?: () => void): boolean {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener press');
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener('DragListener press');
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     const success = super.press(event, targetNode, () => {
-      sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener successful press');
-      sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+      window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener('DragListener successful press');
+      window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
       window.assert && window.assert(isPressedListener(this));
       const pressedListener = this as PressedDragListener;
@@ -353,10 +353,10 @@ export default class DragListener extends PressListener implements TInputListene
 
       callback && callback();
 
-      sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+      window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
     });
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
 
     return success;
   }
@@ -371,8 +371,8 @@ export default class DragListener extends PressListener implements TInputListene
    * @param [callback] - called at the end of the release
    */
   public override release(event?: PressListenerEvent, callback?: () => void): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener release');
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener('DragListener release');
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     super.release(event, () => {
       this.detachTransformTracker();
@@ -383,7 +383,7 @@ export default class DragListener extends PressListener implements TInputListene
       callback && callback();
     });
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -403,12 +403,12 @@ export default class DragListener extends PressListener implements TInputListene
    * (scenery-internal) (part of the scenery listener API)
    */
   public override click(event: SceneryEvent<MouseEvent>, callback?: () => void): boolean {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener click');
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener('DragListener click');
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     const success = super.click(event, () => {
-      sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener successful press');
-      sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+      window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener('DragListener successful press');
+      window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
       // notify that we have started a change
       this._start && this._start(event, this as PressedDragListener);
@@ -418,10 +418,10 @@ export default class DragListener extends PressListener implements TInputListene
       // notify that we have finished a 'drag' activation through click
       this._end && this._end(event, this as PressedDragListener);
 
-      sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+      window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
     });
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
 
     return success;
   }
@@ -441,12 +441,12 @@ export default class DragListener extends PressListener implements TInputListene
       return;
     }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener drag');
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener('DragListener drag');
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     this._dragAction.execute(event);
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -455,14 +455,14 @@ export default class DragListener extends PressListener implements TInputListene
    * Should be safe to be called externally with an event.
    */
   public tryTouchSnag(event: PressListenerEvent): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener tryTouchSnag');
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener('DragListener tryTouchSnag');
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     if (this._allowTouchSnag && (!this.attach || !event.pointer.isAttached())) {
       this.press(event);
     }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -522,7 +522,7 @@ export default class DragListener extends PressListener implements TInputListene
     const pressedListener = this as PressedDragListener;
 
     let referenceResult: Vector2 | undefined;
-    if (assert) {
+    if (window.assert) {
       referenceResult = pressedListener.pressedTrail.globalToParentPoint(globalPoint);
     }
     pressedListener.pressedTrail.getParentTransform().getInverse().multiplyVector2(globalPoint);
@@ -542,7 +542,7 @@ export default class DragListener extends PressListener implements TInputListene
     const pressedListener = this as PressedDragListener;
 
     let referenceResult: Vector2;
-    if (assert) {
+    if (window.assert) {
       referenceResult = pressedListener.pressedTrail.lastNode().parentToLocalPoint(parentPoint);
     }
     pressedListener.pressedTrail.lastNode().getTransform().getInverse().multiplyVector2(parentPoint);
@@ -562,7 +562,7 @@ export default class DragListener extends PressListener implements TInputListene
     const pressedListener = this as PressedDragListener;
 
     let referenceResult: Vector2;
-    if (assert) {
+    if (window.assert) {
       referenceResult = pressedListener.pressedTrail.lastNode().localToParentPoint(localPoint);
     }
     pressedListener.pressedTrail.lastNode().getMatrix().multiplyVector2(localPoint);
@@ -656,8 +656,8 @@ export default class DragListener extends PressListener implements TInputListene
    * itself).
    */
   public reposition(globalPoint: Vector2): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener reposition');
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener('DragListener reposition');
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     window.assert && window.assert(isPressedListener(this));
     const pressedListener = this as PressedDragListener;
@@ -687,7 +687,7 @@ export default class DragListener extends PressListener implements TInputListene
       this._positionProperty.value = this._modelPoint.copy(); // Include an extra reference so that it will change.
     }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -806,8 +806,8 @@ export default class DragListener extends PressListener implements TInputListene
    * Disposes the listener, releasing references. It should not be used after this.
    */
   public override dispose(): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener('DragListener dispose');
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener('DragListener dispose');
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     this._dragAction.dispose();
 
@@ -815,7 +815,7 @@ export default class DragListener extends PressListener implements TInputListene
 
     super.dispose();
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**

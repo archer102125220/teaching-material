@@ -7,15 +7,17 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import InstanceRegistry from '../../phet-core/documentation/InstanceRegistry';
-import pushButtonSoundPlayer from '../../tambo/shared-sound-players/pushButtonSoundPlayer';
-import Tandem from '../../tandem/Tandem';
-import sun from '../sun';
-import PushButtonInteractionStateProperty from './PushButtonInteractionStateProperty';
-import PushButtonModel, { type PushButtonListener, type PushButtonModelOptions } from './PushButtonModel';
-import RoundButton, { type RoundButtonOptions } from './RoundButton';
-import optionize from '../../phet-core/optionize';
-import type TSoundPlayer from '../../tambo/TSoundPlayer';
+import _ from 'lodash';
+
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import pushButtonSoundPlayer from '@/utils/tambo/shared-sound-players/pushButtonSoundPlayer';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import PushButtonInteractionStateProperty from '@/utils/sun/buttons/PushButtonInteractionStateProperty';
+import PushButtonModel, { type PushButtonListener, type PushButtonModelOptions } from '@/utils/sun/buttons/PushButtonModel';
+import RoundButton, { type RoundButtonOptions } from '@/utils/sun/buttons/RoundButton';
+import optionize from '@/utils/phet-core/optionize';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
 
 type SelfOptions = {
   soundPlayer?: TSoundPlayer;

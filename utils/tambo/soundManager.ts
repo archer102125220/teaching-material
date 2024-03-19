@@ -15,24 +15,26 @@
  *  @author John Blanco (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../axon/BooleanProperty';
-import Utils from '../dot/Utils';
-import { Display, DisplayedProperty, Node } from '../scenery/imports';
-import PhetioObject from '../tandem/PhetioObject';
-import Tandem from '../tandem/Tandem';
+import _ from 'lodash';
+
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import Utils from '@/utils/dot/Utils';
+import { Display, DisplayedProperty, Node } from '@/utils/scenery/imports';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
 import emptyApartmentBedroom06Resampled_mp3 from '@/assets/sounds/tambo/emptyApartmentBedroom06Resampled_mp3';
-import audioContextStateChangeMonitor from './audioContextStateChangeMonitor';
-import phetAudioContext from './phetAudioContext';
-import soundConstants from './soundConstants';
-import SoundLevelEnum from './SoundLevelEnum';
-import tambo from './tambo';
-import SoundGenerator from './sound-generators/SoundGenerator';
-import optionize from '../phet-core/optionize';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import type { PropertyLinkListener } from '../axon/TReadOnlyProperty';
-import Multilink from '../axon/Multilink';
-import arrayRemove from '../phet-core/arrayRemove';
-import createObservableArray, { type ObservableArray } from '../axon/createObservableArray';
+import audioContextStateChangeMonitor from '@/utils/tambo/audioContextStateChangeMonitor';
+import phetAudioContext from '@/utils/tambo/phetAudioContext';
+import soundConstants from '@/utils/tambo/soundConstants';
+import SoundLevelEnum from '@/utils/tambo/SoundLevelEnum';
+import tambo from '@/utils/tambo/tambo';
+import SoundGenerator from '@/utils/tambo/sound-generators/SoundGenerator';
+import optionize from '@/utils/phet-core/optionize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type { PropertyLinkListener } from '@/utils/axon/TReadOnlyProperty';
+import Multilink from '@/utils/axon/Multilink';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import createObservableArray, { type ObservableArray } from '@/utils/axon/createObservableArray';
 
 // constants
 const AUDIO_DUCKING_LEVEL = 0.15; // gain value to use for the ducking gain node when ducking is active

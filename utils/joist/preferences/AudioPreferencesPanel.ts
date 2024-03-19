@@ -6,22 +6,22 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { HBox, Text, VBox, type VBoxOptions } from '../../scenery/imports';
-import joist from '../joist';
-import JoistStrings from '../JoistStrings';
-import PreferencesDialog from './PreferencesDialog';
-import { type AudioModel } from './PreferencesModel';
-import PreferencesControl from './PreferencesControl';
-import SoundPanelSection from './SoundPanelSection';
-import VoicingPanelSection from './VoicingPanelSection';
-import PreferencesPanelSection from './PreferencesPanelSection';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import PreferencesPanel, { type PreferencesPanelOptions } from './PreferencesPanel';
-import PreferencesType from './PreferencesType';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
-import { combineOptions } from '../../phet-core/optionize';
-import PreferencesDialogConstants from './PreferencesDialogConstants';
+import { HBox, Text, VBox, type VBoxOptions } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import { type AudioModel } from '@/utils/joist/preferences/PreferencesModel';
+import PreferencesControl from '@/utils/joist/preferences/PreferencesControl';
+import SoundPanelSection from '@/utils/joist/preferences/SoundPanelSection';
+import VoicingPanelSection from '@/utils/joist/preferences/VoicingPanelSection';
+import PreferencesPanelSection from '@/utils/joist/preferences/PreferencesPanelSection';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import PreferencesPanel, { type PreferencesPanelOptions } from '@/utils/joist/preferences/PreferencesPanel';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import ToggleSwitch, { type ToggleSwitchOptions } from '@/utils/sun/ToggleSwitch';
+import { combineOptions } from '@/utils/phet-core/optionize';
+import PreferencesDialogConstants from '@/utils/joist/preferences/PreferencesDialogConstants';
 
 // constants
 const audioFeaturesStringProperty = JoistStrings.preferences.tabs.audio.audioFeatures.titleStringProperty;

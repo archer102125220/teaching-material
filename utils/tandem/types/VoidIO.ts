@@ -7,8 +7,8 @@
  * @author Andrew Adare (PhET Interactive Simulations)
  */
 
-import tandemNamespace from '../tandemNamespace';
-import IOType from './IOType';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import IOType from '@/utils/tandem/types/IOType';
 
 /**
  * We sometimes use VoidIO as a workaround to indicate that an argument is passed in the simulation side, but

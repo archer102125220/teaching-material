@@ -4,8 +4,8 @@
 // Returns branding information for the simulations, see https://github.com/phetsims/brand/issues/1
 
 
-import brand from '../brand';
-import type TBrand from '../TBrand';
+import brand from '@/utils/brand/brand';
+import type TBrand from '@/utils/brand/TBrand';
 import logoOnWhite_png from '@/assets/images/brand/logoOnWhite_png';
 import logo_png from '@/assets/images/brand/logo_png';
 

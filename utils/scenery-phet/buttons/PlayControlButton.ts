@@ -7,17 +7,17 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Property from '../../axon/Property';
-import optionize from '../../phet-core/optionize';
-import { Circle, KeyboardListener, Node, Path, type PDOMValueType } from '../../scenery/imports';
-import BooleanRoundToggleButton, { type BooleanRoundToggleButtonOptions } from '../../sun/buttons/BooleanRoundToggleButton';
-import type TSoundPlayer from '../../tambo/TSoundPlayer';
-import pauseSoundPlayer from '../../tambo/shared-sound-players/pauseSoundPlayer';
-import playSoundPlayer from '../../tambo/shared-sound-players/playSoundPlayer';
-import PlayIconShape from '../PlayIconShape';
-import sceneryPhet from '../sceneryPhet';
-import SceneryPhetConstants from '../SceneryPhetConstants';
-import SceneryPhetStrings from '../SceneryPhetStrings';
+import Property from '@/utils/axon/Property';
+import optionize from '@/utils/phet-core/optionize';
+import { Circle, KeyboardListener, Node, Path, type PDOMValueType } from '@/utils/scenery/imports';
+import BooleanRoundToggleButton, { type BooleanRoundToggleButtonOptions } from '@/utils/sun/buttons/BooleanRoundToggleButton';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import pauseSoundPlayer from '@/utils/tambo/shared-sound-players/pauseSoundPlayer';
+import playSoundPlayer from '@/utils/tambo/shared-sound-players/playSoundPlayer';
+import PlayIconShape from '@/utils/scenery-phet/PlayIconShape';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetConstants from '@/utils/scenery-phet/SceneryPhetConstants';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
 
 type SelfOptions = {
 

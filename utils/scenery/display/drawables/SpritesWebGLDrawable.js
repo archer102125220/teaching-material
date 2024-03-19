@@ -6,17 +6,17 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import animationFrameTimer from '../../../axon/animationFrameTimer';
-import Vector2 from '../../../dot/Vector2';
-import platform from '../../../phet-core/platform';
-import Poolable from '../../../phet-core/Poolable';
+import animationFrameTimer from '@/utils/axon/animationFrameTimer';
+import Vector2 from '@/utils/dot/Vector2';
+import platform from '@/utils/phet-core/platform';
+import Poolable from '@/utils/phet-core/Poolable';
 import {
   Renderer,
   scenery,
   ShaderProgram,
   SpriteSheet,
   WebGLSelfDrawable
-} from '../../imports';
+} from '@/utils/scenery/imports';
 
 // constants
 const COMPONENTS = 5; // { X Y U V A }

@@ -7,14 +7,14 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Vector2 from '../../../dot/Vector2';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { Circle, Node, type NodeOptions } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import GOColors from '../GOColors';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import ReadOnlyProperty from '../../../axon/ReadOnlyProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { Circle, Node, type NodeOptions } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
 
 type SelfOptions = EmptySelfOptions;
 

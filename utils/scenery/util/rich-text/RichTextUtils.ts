@@ -8,7 +8,7 @@
 
 import _ from 'lodash';
 
-import { scenery, Text } from '../../imports';
+import { scenery, Text } from '@/utils/scenery/imports';
 
 // Types for Himalaya
 export type HimalayaAttribute = {

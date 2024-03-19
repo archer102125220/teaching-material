@@ -12,20 +12,7 @@
  * @author Sam Reid (PhET Interactive Simulations)
  * @author Chris Malley (PixelZoom, Inc.)
  */
-(function (root, factory) {
-  if (typeof window.define === 'function' && window.define.amd) {
-    // AMD. Register as an anonymous module.
-    window.define([], factory);
-  } else if (typeof module === 'object' && module.exports) {
-    // Node. Does not work with strict CommonJS, but
-    // only CommonJS-like environments that support module.exports,
-    // like Node.
-    module.exports = factory();
-  } else {
-    // Browser globals (root is window)
-    root.QueryStringMachine = factory();
-  }
-})(this || window, () => {
+export function createQueryStringMachine() {
   // Default string that splits array strings
   const DEFAULT_SEPARATOR = ',';
 
@@ -947,4 +934,8 @@
 
     return QueryStringMachine;
   })();
-});
+}
+
+export const QueryStringMachine = createQueryStringMachine();
+
+export default QueryStringMachine;

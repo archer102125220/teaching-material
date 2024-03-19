@@ -8,29 +8,29 @@
 
 import _ from 'lodash';
 
-import PhetioObject, { type PhetioObjectOptions } from '../tandem/PhetioObject';
-import Tandem, { DYNAMIC_ARCHETYPE_NAME } from '../tandem/Tandem';
-import ArrayIO from '../tandem/types/ArrayIO';
-import FunctionIO from '../tandem/types/FunctionIO';
-import IOType from '../tandem/types/IOType';
-import NullableIO from '../tandem/types/NullableIO';
-import StringIO from '../tandem/types/StringIO';
-import VoidIO from '../tandem/types/VoidIO';
-import propertyStateHandlerSingleton from './propertyStateHandlerSingleton';
-import PropertyStatePhase from './PropertyStatePhase';
-import TinyProperty from './TinyProperty';
-import units from './units';
-import validate from './validate';
-import type TReadOnlyProperty from './TReadOnlyProperty';
-import type { PropertyLazyLinkListener, PropertyLinkListener, PropertyListener } from './TReadOnlyProperty';
-import optionize from '../phet-core/optionize';
-import Validation, { type Validator } from './Validation';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import axon from './axon';
-import isClearingPhetioDynamicElementsProperty from '../tandem/isClearingPhetioDynamicElementsProperty';
-import isPhetioStateEngineManagingPropertyValuesProperty from '../tandem/isPhetioStateEngineManagingPropertyValuesProperty';
-import IOTypeCache from '../tandem/IOTypeCache';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import Tandem, { DYNAMIC_ARCHETYPE_NAME } from '@/utils/tandem/Tandem';
+import ArrayIO from '@/utils/tandem/types/ArrayIO';
+import FunctionIO from '@/utils/tandem/types/FunctionIO';
+import IOType from '@/utils/tandem/types/IOType';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import StringIO from '@/utils/tandem/types/StringIO';
+import VoidIO from '@/utils/tandem/types/VoidIO';
+import propertyStateHandlerSingleton from '@/utils/axon/propertyStateHandlerSingleton';
+import PropertyStatePhase from '@/utils/axon/PropertyStatePhase';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import units from '@/utils/axon/units';
+import validate from '@/utils/axon/validate';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type { PropertyLazyLinkListener, PropertyLinkListener, PropertyListener } from '@/utils/axon/TReadOnlyProperty';
+import optionize from '@/utils/phet-core/optionize';
+import Validation, { type Validator } from '@/utils/axon/Validation';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import axon from '@/utils/axon/axon';
+import isClearingPhetioDynamicElementsProperty from '@/utils/tandem/isClearingPhetioDynamicElementsProperty';
+import isPhetioStateEngineManagingPropertyValuesProperty from '@/utils/tandem/isPhetioStateEngineManagingPropertyValuesProperty';
+import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
 // constants
 const VALIDATE_OPTIONS_FALSE = { validateValidator: false };
@@ -218,7 +218,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
     }
 
     // Assertions regarding value validation
-    if (assert) {
+    if (window.assert) {
 
       Validation.validateValidator(this.valueValidator);
 

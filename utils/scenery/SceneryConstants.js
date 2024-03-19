@@ -6,10 +6,9 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { scenery } from './imports';
+import { scenery } from '@/utils/scenery/imports';
 
 const SceneryConstants = {
-
   // Opacity that is typically applied to a UI component in its disabled state, to make it look grayed out.
   // This was moved here from SunConstants because it's needed by FlowBox.
   // See https://github.com/phetsims/scenery/issues/1153
@@ -24,5 +23,5 @@ const SceneryConstants = {
   PROJECTOR_COLOR_PROFILE: 'projector'
 };
 
-scenery.register( 'SceneryConstants', SceneryConstants );
+scenery.register('SceneryConstants', SceneryConstants);
 export default SceneryConstants;

@@ -8,18 +8,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import CallbackTimer from '../../axon/CallbackTimer';
-import Emitter from '../../axon/Emitter';
-import type TEmitter from '../../axon/TEmitter';
-import Property from '../../axon/Property';
-import optionize from '../../phet-core/optionize';
-import EventType from '../../tandem/EventType';
-import PhetioObject from '../../tandem/PhetioObject';
-import Tandem from '../../tandem/Tandem';
-import sun from '../sun';
-import ButtonModel, { type ButtonModelOptions } from './ButtonModel';
-import { SceneryEvent } from '../../scenery/imports';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import CallbackTimer from '@/utils/axon/CallbackTimer';
+import Emitter from '@/utils/axon/Emitter';
+import type TEmitter from '@/utils/axon/TEmitter';
+import Property from '@/utils/axon/Property';
+import optionize from '@/utils/phet-core/optionize';
+import EventType from '@/utils/tandem/EventType';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import ButtonModel, { type ButtonModelOptions } from '@/utils/sun/buttons/ButtonModel';
+import { SceneryEvent } from '@/utils/scenery/imports';
 
 export type PushButtonListener = () => void;
 

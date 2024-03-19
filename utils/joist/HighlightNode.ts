@@ -7,9 +7,9 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import optionize from '../phet-core/optionize';
-import { Color, HBox, type HBoxOptions, type TColor, LinearGradient, Rectangle } from '../scenery/imports';
-import joist from './joist';
+import optionize from '@/utils/phet-core/optionize';
+import { Color, HBox, type HBoxOptions, type TColor, LinearGradient, Rectangle } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
 
 type SelfOptions = {
   highlightWidth?: number;

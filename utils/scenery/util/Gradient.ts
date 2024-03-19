@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import ReadOnlyProperty from '../../axon/ReadOnlyProperty';
-import cleanArray from '../../phet-core/cleanArray';
-import { Color, type TColor, Paint, scenery } from '../imports';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import { Color, type TColor, Paint, scenery } from '@/utils/scenery/imports';
 
 export type GradientStop = {
   ratio: number;

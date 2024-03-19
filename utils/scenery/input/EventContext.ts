@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import IOType from '../../tandem/types/IOType';
-import { scenery, EventIO, Input } from '../imports';
+import IOType from '@/utils/tandem/types/IOType';
+import { scenery, EventIO, Input } from '@/utils/scenery/imports';
 
 export default class EventContext<out DOMEvent extends Event = Event> {
 

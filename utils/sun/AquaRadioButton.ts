@@ -6,17 +6,17 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TProperty from '../axon/TProperty';
-import Emitter from '../axon/Emitter';
-import InstanceRegistry from '../phet-core/documentation/InstanceRegistry';
-import optionize from '../phet-core/optionize';
-import { Circle, FireListener, isWidthSizable, LayoutConstraint, Node, type NodeOptions, Rectangle, SceneryConstants, type TPaint, Voicing, type VoicingOptions, WidthSizable } from '../scenery/imports';
-import type TSoundPlayer from '../tambo/TSoundPlayer';
-import multiSelectionSoundPlayerFactory from '../tambo/multiSelectionSoundPlayerFactory';
-import Tandem from '../tandem/Tandem';
-import sun from './sun';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import type TEmitter from '../axon/TEmitter';
+import type TProperty from '@/utils/axon/TProperty';
+import Emitter from '@/utils/axon/Emitter';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize from '@/utils/phet-core/optionize';
+import { Circle, FireListener, isWidthSizable, LayoutConstraint, Node, type NodeOptions, Rectangle, SceneryConstants, type TPaint, Voicing, type VoicingOptions, WidthSizable } from '@/utils/scenery/imports';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import multiSelectionSoundPlayerFactory from '@/utils/tambo/multiSelectionSoundPlayerFactory';
+import Tandem from '@/utils/tandem/Tandem';
+import sun from '@/utils/sun/sun';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import type TEmitter from '@/utils/axon/TEmitter';
 
 type SelfOptions = {
 

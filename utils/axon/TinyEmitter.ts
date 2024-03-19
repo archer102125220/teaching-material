@@ -9,12 +9,12 @@
 
 import _ from 'lodash';
 
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import axon from './axon';
-import type TEmitter from './TEmitter';
-import type { TEmitterListener, TEmitterParameter } from './TEmitter';
-import Random from '../dot/Random';
-import dotRandom from '../dot/dotRandom';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import axon from '@/utils/axon/axon';
+import type TEmitter from '@/utils/axon/TEmitter';
+import type { TEmitterListener, TEmitterParameter } from '@/utils/axon/TEmitter';
+import Random from '@/utils/dot/Random';
+import dotRandom from '@/utils/dot/dotRandom';
 
 // constants
 const listenerOrder = _.hasIn(window, 'phet.chipper.queryParameters') && phet.chipper.queryParameters.listenerOrder;
@@ -79,7 +79,7 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
     this.emitContexts = [];
 
     // for production memory concerns; no need to keep this around.
-    if (assert) {
+    if (window.assert) {
       this.isDisposed = false;
     }
   }
@@ -90,7 +90,7 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
   public dispose(): void {
     this.removeAllListeners();
 
-    if (assert) {
+    if (window.assert) {
       this.isDisposed = true;
     }
   }

@@ -7,13 +7,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import optionize from '../../phet-core/optionize';
-import { CanvasContextWrapper, CanvasSelfDrawable, Instance, Node, type NodeOptions, Renderer, scenery, Sprite, SpriteInstance, SpritesCanvasDrawable, SpritesWebGLDrawable, WebGLSelfDrawable } from '../imports';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import optionize from '@/utils/phet-core/optionize';
+import { CanvasContextWrapper, CanvasSelfDrawable, Instance, Node, type NodeOptions, Renderer, scenery, Sprite, SpriteInstance, SpritesCanvasDrawable, SpritesWebGLDrawable, WebGLSelfDrawable } from '@/utils/scenery/imports';
 
 type SelfOptions = {
   // Provide a fixed set of Sprite objects that will be used for this node. Currently, it cannot be modified after

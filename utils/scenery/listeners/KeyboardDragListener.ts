@@ -22,25 +22,25 @@
 
 import _ from 'lodash';
 
-import PhetioAction from '../../tandem/PhetioAction';
-import EnabledComponent, { type EnabledComponentOptions } from '../../axon/EnabledComponent';
-import Emitter from '../../axon/Emitter';
-import Property from '../../axon/Property';
-import stepTimer from '../../axon/stepTimer';
-import Bounds2 from '../../dot/Bounds2';
-import Transform3 from '../../dot/Transform3';
-import Vector2 from '../../dot/Vector2';
-import platform from '../../phet-core/platform';
-import EventType from '../../tandem/EventType';
-import Tandem from '../../tandem/Tandem';
-import { KeyboardUtils, Node, PDOMPointer, scenery, SceneryEvent, type TInputListener } from '../imports';
-import type TProperty from '../../axon/TProperty';
-import optionize from '../../phet-core/optionize';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import type TEmitter from '../../axon/TEmitter';
-import assertMutuallyExclusiveOptions from '../../phet-core/assertMutuallyExclusiveOptions';
-import { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import BooleanProperty from '../../axon/BooleanProperty';
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import EnabledComponent, { type EnabledComponentOptions } from '@/utils/axon/EnabledComponent';
+import Emitter from '@/utils/axon/Emitter';
+import Property from '@/utils/axon/Property';
+import stepTimer from '@/utils/axon/stepTimer';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Transform3 from '@/utils/dot/Transform3';
+import Vector2 from '@/utils/dot/Vector2';
+import platform from '@/utils/phet-core/platform';
+import EventType from '@/utils/tandem/EventType';
+import Tandem from '@/utils/tandem/Tandem';
+import { KeyboardUtils, Node, PDOMPointer, scenery, SceneryEvent, type TInputListener } from '@/utils/scenery/imports';
+import type TProperty from '@/utils/axon/TProperty';
+import optionize from '@/utils/phet-core/optionize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type TEmitter from '@/utils/axon/TEmitter';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
 
 type PressedKeyTiming = {
 

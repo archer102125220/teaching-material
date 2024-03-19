@@ -8,8 +8,8 @@
 
 import _ from 'lodash';
 
-import optionize from '../../phet-core/optionize';
-import { scenery, Utils } from '../imports';
+import optionize from '@/utils/phet-core/optionize';
+import { scenery, Utils } from '@/utils/scenery/imports';
 
 export type ShaderProgramOptions = {
   // (vertex) attribute names in the shader source

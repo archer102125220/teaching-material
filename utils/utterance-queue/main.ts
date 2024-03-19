@@ -8,20 +8,20 @@
  *@author Taylor Want (PhET Interactive Simulations)
  */
 
-import './ActivationUtterance.js';
-import './Announcer.js';
-import './AriaLiveAnnouncer.js';
-import './responseCollector.js';
-import './ResponsePacket.js';
-import './ResponsePatternCollection.js';
-import './SpeechSynthesisAnnouncer.js';
-import './SpeechSynthesisParentPolyfill.js';
-import './Utterance.js';
-import './UtteranceQueue.js';
-import './utteranceQueueNamespace.js';
-import './UtteranceWrapper.js';
-import './ValueChangeUtterance.js';
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
+import '@/utils/utterance-queue/ActivationUtterance';
+import '@/utils/utterance-queue/Announcer';
+import '@/utils/utterance-queue/AriaLiveAnnouncer';
+import '@/utils/utterance-queue/responseCollector';
+import '@/utils/utterance-queue/ResponsePacket';
+import '@/utils/utterance-queue/ResponsePatternCollection';
+import '@/utils/utterance-queue/SpeechSynthesisAnnouncer';
+import '@/utils/utterance-queue/SpeechSynthesisParentPolyfill';
+import '@/utils/utterance-queue/Utterance';
+import '@/utils/utterance-queue/UtteranceQueue';
+import '@/utils/utterance-queue/utteranceQueueNamespace';
+import '@/utils/utterance-queue/UtteranceWrapper';
+import '@/utils/utterance-queue/ValueChangeUtterance';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
 
 // note: we don't need any of the other parts, we just need to specify them as dependencies so they fill in the scenery namespace
 export default utteranceQueueNamespace;

@@ -9,11 +9,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyEmitter from '../axon/TinyEmitter';
-import dot from './dot';
-import Matrix3 from './Matrix3';
-import Ray2 from './Ray2';
-import Vector2 from './Vector2';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
+import dot from '@/utils/dot/dot';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Ray2 from '@/utils/dot/Ray2';
+import Vector2 from '@/utils/dot/Vector2';
 
 const scratchMatrix = new Matrix3();
 
@@ -24,7 +24,7 @@ class Transform3 {
    *
    * @param {Matrix3} [matrix]
    */
-  constructor( matrix ) {
+  constructor(matrix) {
     // @private {Matrix3} - The primary matrix used for the transform
     this.matrix = Matrix3.IDENTITY.copy();
 
@@ -49,15 +49,14 @@ class Transform3 {
     // @public {TinyEmitter}
     this.changeEmitter = new TinyEmitter();
 
-    if ( matrix ) {
-      this.setMatrix( matrix );
+    if (matrix) {
+      this.setMatrix(matrix);
     }
   }
 
-
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * mutators
-   *---------------------------------------------------------------------------*/
+   *--------------------------------------------------------------------------- */
 
   /**
    * Sets the value of the primary matrix directly from a Matrix3. Does not change the Matrix3 instance.
@@ -65,10 +64,9 @@ class Transform3 {
    *
    * @param {Matrix3} matrix
    */
-  setMatrix( matrix ) {
-
+  setMatrix(matrix) {
     // copy the matrix over to our matrix
-    this.matrix.set( matrix );
+    this.matrix.set(matrix);
 
     // set flags and notify
     this.invalidate();
@@ -79,9 +77,10 @@ class Transform3 {
    * @param {Matrix} matrix
    * @protected
    */
-  validateMatrix( matrix ) {
-    window.assert && window.assert( matrix instanceof Matrix3, 'matrix was incorrect type' );
-    window.assert && window.assert( matrix.isFinite(), 'matrix must be finite' );
+  validateMatrix(matrix) {
+    window.assert &&
+      window.assert(matrix instanceof Matrix3, 'matrix was incorrect type');
+    window.assert && window.assert(matrix.isFinite(), 'matrix must be finite');
   }
 
   /**
@@ -90,9 +89,8 @@ class Transform3 {
    * @private
    */
   invalidate() {
-
     // sanity check
-    assert && this.validateMatrix( this.matrix );
+    window.assert && this.validateMatrix(this.matrix);
 
     // dependent matrices now invalid
     this.inverseValid = false;
@@ -108,14 +106,14 @@ class Transform3 {
    *
    * @param {Matrix3} matrix
    */
-  prepend( matrix ) {
-    assert && this.validateMatrix( matrix );
+  prepend(matrix) {
+    window.assert && this.validateMatrix(matrix);
 
     // In the absence of a prepend-multiply function in Matrix3, copy over to a scratch matrix instead
     // TODO: implement a prepend-multiply directly in Matrix3 for a performance increase https://github.com/phetsims/dot/issues/96
-    scratchMatrix.set( this.matrix );
-    this.matrix.set( matrix );
-    this.matrix.multiplyMatrix( scratchMatrix );
+    scratchMatrix.set(this.matrix);
+    this.matrix.set(matrix);
+    this.matrix.multiplyMatrix(scratchMatrix);
 
     // set flags and notify
     this.invalidate();
@@ -128,13 +126,19 @@ class Transform3 {
    * @param {number} x -  x-coordinate
    * @param {number} y -  y-coordinate
    */
-  prependTranslation( x, y ) {
+  prependTranslation(x, y) {
     // See scenery#119 for more details on the need.
 
-    window.assert && window.assert( typeof x === 'number' && typeof y === 'number' && isFinite( x ) && isFinite( y ),
-      'Attempted to prepend non-finite or non-number (x,y) to the transform' );
+    window.assert &&
+      window.assert(
+        typeof x === 'number' &&
+          typeof y === 'number' &&
+          isFinite(x) &&
+          isFinite(y),
+        'Attempted to prepend non-finite or non-number (x,y) to the transform'
+      );
 
-    this.matrix.prependTranslation( x, y );
+    this.matrix.prependTranslation(x, y);
 
     // set flags and notify
     this.invalidate();
@@ -146,10 +150,10 @@ class Transform3 {
    *
    * @param {Matrix3} matrix
    */
-  append( matrix ) {
-    assert && this.validateMatrix( matrix );
+  append(matrix) {
+    window.assert && this.validateMatrix(matrix);
 
-    this.matrix.multiplyMatrix( matrix );
+    this.matrix.multiplyMatrix(matrix);
 
     // set flags and notify
     this.invalidate();
@@ -161,8 +165,8 @@ class Transform3 {
    *
    * @param {Transform3} transform
    */
-  prependTransform( transform ) {
-    this.prepend( transform.matrix );
+  prependTransform(transform) {
+    this.prepend(transform.matrix);
   }
 
   /**
@@ -171,8 +175,8 @@ class Transform3 {
    *
    * @param {Transform3} transform
    */
-  appendTransform( transform ) {
-    this.append( transform.matrix );
+  appendTransform(transform) {
+    this.append(transform.matrix);
   }
 
   /**
@@ -181,13 +185,20 @@ class Transform3 {
    *
    * @param {CanvasRenderingContext2D} context
    */
-  applyToCanvasContext( context ) {
-    context.setTransform( this.matrix.m00(), this.matrix.m10(), this.matrix.m01(), this.matrix.m11(), this.matrix.m02(), this.matrix.m12() );
+  applyToCanvasContext(context) {
+    context.setTransform(
+      this.matrix.m00(),
+      this.matrix.m10(),
+      this.matrix.m01(),
+      this.matrix.m11(),
+      this.matrix.m02(),
+      this.matrix.m12()
+    );
   }
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * getters
-   *---------------------------------------------------------------------------*/
+   *--------------------------------------------------------------------------- */
 
   /**
    * Creates a copy of this transform.
@@ -196,7 +207,7 @@ class Transform3 {
    * @returns {Transform3}
    */
   copy() {
-    const transform = new Transform3( this.matrix );
+    const transform = new Transform3(this.matrix);
 
     transform.inverse = this.inverse;
     transform.matrixTransposed = this.matrixTransposed;
@@ -224,10 +235,10 @@ class Transform3 {
    * @returns {Matrix3}
    */
   getInverse() {
-    if ( !this.inverseValid ) {
+    if (!this.inverseValid) {
       this.inverseValid = true;
 
-      this.inverse.set( this.matrix );
+      this.inverse.set(this.matrix);
       this.inverse.invert();
     }
     return this.inverse;
@@ -240,10 +251,10 @@ class Transform3 {
    * @returns {Matrix3}
    */
   getMatrixTransposed() {
-    if ( !this.transposeValid ) {
+    if (!this.transposeValid) {
       this.transposeValid = true;
 
-      this.matrixTransposed.set( this.matrix );
+      this.matrixTransposed.set(this.matrix);
       this.matrixTransposed.transpose();
     }
     return this.matrixTransposed;
@@ -256,10 +267,10 @@ class Transform3 {
    * @returns {Matrix3}
    */
   getInverseTransposed() {
-    if ( !this.inverseTransposeValid ) {
+    if (!this.inverseTransposeValid) {
       this.inverseTransposeValid = true;
 
-      this.inverseTransposed.set( this.getInverse() ); // triggers inverse to be valid
+      this.inverseTransposed.set(this.getInverse()); // triggers inverse to be valid
       this.inverseTransposed.transpose();
     }
     return this.inverseTransposed;
@@ -286,9 +297,9 @@ class Transform3 {
     return this.matrix.isFinite();
   }
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * forward transforms (for Vector2 or scalar)
-   *---------------------------------------------------------------------------*/
+   *--------------------------------------------------------------------------- */
 
   /**
    * Transforms a 2-dimensional vector like it is a point with a position (translation is applied).
@@ -299,8 +310,8 @@ class Transform3 {
    * @param {Vector2} v
    * @returns {Vector2}
    */
-  transformPosition2( v ) {
-    return this.matrix.timesVector2( v );
+  transformPosition2(v) {
+    return this.matrix.timesVector2(v);
   }
 
   /**
@@ -313,10 +324,13 @@ class Transform3 {
    * @param {Vector2} v
    * @returns {Vector2}
    */
-  transformDelta2( v ) {
+  transformDelta2(v) {
     const m = this.getMatrix();
     // m . v - m . Vector2.ZERO
-    return new Vector2( m.m00() * v.x + m.m01() * v.y, m.m10() * v.x + m.m11() * v.y );
+    return new Vector2(
+      m.m00() * v.x + m.m01() * v.y,
+      m.m10() * v.x + m.m11() * v.y
+    );
   }
 
   /**
@@ -331,8 +345,8 @@ class Transform3 {
    * @param {Vector2} v
    * @returns {Vector2}
    */
-  transformNormal2( v ) {
-    return this.getInverse().timesTransposeVector2( v ).normalize();
+  transformNormal2(v) {
+    return this.getInverse().timesTransposeVector2(v).normalize();
   }
 
   /**
@@ -343,9 +357,13 @@ class Transform3 {
    * @param {number} x
    * @returns {number}
    */
-  transformX( x ) {
+  transformX(x) {
     const m = this.getMatrix();
-    window.assert && window.assert( !m.m01(), 'Transforming an X value with a rotation/shear is ill-defined' );
+    window.assert &&
+      window.assert(
+        !m.m01(),
+        'Transforming an X value with a rotation/shear is ill-defined'
+      );
     return m.m00() * x + m.m02();
   }
 
@@ -357,9 +375,13 @@ class Transform3 {
    * @param {number} y
    * @returns {number}
    */
-  transformY( y ) {
+  transformY(y) {
     const m = this.getMatrix();
-    window.assert && window.assert( !m.m10(), 'Transforming a Y value with a rotation/shear is ill-defined' );
+    window.assert &&
+      window.assert(
+        !m.m10(),
+        'Transforming a Y value with a rotation/shear is ill-defined'
+      );
     return m.m11() * y + m.m12();
   }
 
@@ -371,7 +393,7 @@ class Transform3 {
    * @param {number} x
    * @returns {number}
    */
-  transformDeltaX( x ) {
+  transformDeltaX(x) {
     const m = this.getMatrix();
     // same as this.transformDelta2( new Vector2( x, 0 ) ).x;
     return m.m00() * x;
@@ -385,7 +407,7 @@ class Transform3 {
    * @param {number} y
    * @returns {number}
    */
-  transformDeltaY( y ) {
+  transformDeltaY(y) {
     const m = this.getMatrix();
     // same as this.transformDelta2( new Vector2( 0, y ) ).y;
     return m.m11() * y;
@@ -402,8 +424,8 @@ class Transform3 {
    * @param {Bounds2} bounds
    * @returns {Bounds2}
    */
-  transformBounds2( bounds ) {
-    return bounds.transformed( this.matrix );
+  transformBounds2(bounds) {
+    return bounds.transformed(this.matrix);
   }
 
   /**
@@ -413,8 +435,8 @@ class Transform3 {
    * @param {Shape} shape
    * @returns {Shape}
    */
-  transformShape( shape ) {
-    return shape.transformed( this.matrix );
+  transformShape(shape) {
+    return shape.transformed(this.matrix);
   }
 
   /**
@@ -424,13 +446,16 @@ class Transform3 {
    * @param {Ray2} ray
    * @returns {Ray2}
    */
-  transformRay2( ray ) {
-    return new Ray2( this.transformPosition2( ray.position ), this.transformDelta2( ray.direction ).normalized() );
+  transformRay2(ray) {
+    return new Ray2(
+      this.transformPosition2(ray.position),
+      this.transformDelta2(ray.direction).normalized()
+    );
   }
 
-  /*---------------------------------------------------------------------------*
+  /* ---------------------------------------------------------------------------*
    * inverse transforms (for Vector2 or scalar)
-   *---------------------------------------------------------------------------*/
+   *--------------------------------------------------------------------------- */
 
   /**
    * Transforms a 2-dimensional vector by the inverse of our transform like it is a point with a position (translation is applied).
@@ -443,8 +468,8 @@ class Transform3 {
    * @param {Vector2} v
    * @returns {Vector2}
    */
-  inversePosition2( v ) {
-    return this.getInverse().timesVector2( v );
+  inversePosition2(v) {
+    return this.getInverse().timesVector2(v);
   }
 
   /**
@@ -459,10 +484,13 @@ class Transform3 {
    * @param {Vector2} v
    * @returns {Vector2}
    */
-  inverseDelta2( v ) {
+  inverseDelta2(v) {
     const m = this.getInverse();
     // m . v - m . Vector2.ZERO
-    return new Vector2( m.m00() * v.x + m.m01() * v.y, m.m10() * v.x + m.m11() * v.y );
+    return new Vector2(
+      m.m00() * v.x + m.m01() * v.y,
+      m.m10() * v.x + m.m11() * v.y
+    );
   }
 
   /**
@@ -479,8 +507,8 @@ class Transform3 {
    * @param {Vector2} v
    * @returns {Vector2}
    */
-  inverseNormal2( v ) {
-    return this.matrix.timesTransposeVector2( v ).normalize();
+  inverseNormal2(v) {
+    return this.matrix.timesTransposeVector2(v).normalize();
   }
 
   /**
@@ -493,9 +521,13 @@ class Transform3 {
    * @param {number} x
    * @returns {number}
    */
-  inverseX( x ) {
+  inverseX(x) {
     const m = this.getInverse();
-    window.assert && window.assert( !m.m01(), 'Inverting an X value with a rotation/shear is ill-defined' );
+    window.assert &&
+      window.assert(
+        !m.m01(),
+        'Inverting an X value with a rotation/shear is ill-defined'
+      );
     return m.m00() * x + m.m02();
   }
 
@@ -509,9 +541,13 @@ class Transform3 {
    * @param {number} y
    * @returns {number}
    */
-  inverseY( y ) {
+  inverseY(y) {
     const m = this.getInverse();
-    window.assert && window.assert( !m.m10(), 'Inverting a Y value with a rotation/shear is ill-defined' );
+    window.assert &&
+      window.assert(
+        !m.m10(),
+        'Inverting a Y value with a rotation/shear is ill-defined'
+      );
     return m.m11() * y + m.m12();
   }
 
@@ -525,9 +561,13 @@ class Transform3 {
    * @param {number} x
    * @returns {number}
    */
-  inverseDeltaX( x ) {
+  inverseDeltaX(x) {
     const m = this.getInverse();
-    window.assert && window.assert( !m.m01(), 'Inverting an X value with a rotation/shear is ill-defined' );
+    window.assert &&
+      window.assert(
+        !m.m01(),
+        'Inverting an X value with a rotation/shear is ill-defined'
+      );
     // same as this.inverseDelta2( new Vector2( x, 0 ) ).x;
     return m.m00() * x;
   }
@@ -542,9 +582,13 @@ class Transform3 {
    * @param {number} y
    * @returns {number}
    */
-  inverseDeltaY( y ) {
+  inverseDeltaY(y) {
     const m = this.getInverse();
-    window.assert && window.assert( !m.m10(), 'Inverting a Y value with a rotation/shear is ill-defined' );
+    window.assert &&
+      window.assert(
+        !m.m10(),
+        'Inverting a Y value with a rotation/shear is ill-defined'
+      );
     // same as this.inverseDelta2( new Vector2( 0, y ) ).y;
     return m.m11() * y;
   }
@@ -560,8 +604,8 @@ class Transform3 {
    * @param {Bounds2} bounds
    * @returns {Bounds2}
    */
-  inverseBounds2( bounds ) {
-    return bounds.transformed( this.getInverse() );
+  inverseBounds2(bounds) {
+    return bounds.transformed(this.getInverse());
   }
 
   /**
@@ -573,8 +617,8 @@ class Transform3 {
    * @param {Shape} shape
    * @returns {Shape}
    */
-  inverseShape( shape ) {
-    return shape.transformed( this.getInverse() );
+  inverseShape(shape) {
+    return shape.transformed(this.getInverse());
   }
 
   /**
@@ -586,11 +630,14 @@ class Transform3 {
    * @param {Ray2} ray
    * @returns {Ray2}
    */
-  inverseRay2( ray ) {
-    return new Ray2( this.inversePosition2( ray.position ), this.inverseDelta2( ray.direction ).normalized() );
+  inverseRay2(ray) {
+    return new Ray2(
+      this.inversePosition2(ray.position),
+      this.inverseDelta2(ray.direction).normalized()
+    );
   }
 }
 
-dot.register( 'Transform3', Transform3 );
+dot.register('Transform3', Transform3);
 
 export default Transform3;

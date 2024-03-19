@@ -2,7 +2,7 @@
 
 // @author Jonathan Olson <jonathan.olson@colorado.edu>
 
-import Namespace from '../phet-core/Namespace';
+import Namespace from '@/utils/phet-core/Namespace';
 
 const dot = new Namespace( 'dot' );
 

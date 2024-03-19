@@ -18,24 +18,24 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../axon/DerivedProperty';
-import ReadOnlyProperty from '../axon/ReadOnlyProperty';
-import TinyProperty from '../axon/TinyProperty';
-import DynamicProperty, { type DynamicPropertyOptions } from '../axon/DynamicProperty';
-import NumberProperty from '../axon/NumberProperty';
-import optionize from '../phet-core/optionize';
-import IOType from '../tandem/types/IOType';
-import StringIO from '../tandem/types/StringIO';
-import responseCollector from './responseCollector';
-import ResponsePacket, { type ResolvedResponse } from './ResponsePacket';
-import utteranceQueueNamespace from './utteranceQueueNamespace';
-import type TProperty from '../axon/TProperty';
-import NullableIO from '../tandem/types/NullableIO';
-import NumberIO from '../tandem/types/NumberIO';
-import OrIO from '../tandem/types/OrIO';
-import Property from '../axon/Property';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Disposable, { type DisposableOptions } from '../axon/Disposable';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import DynamicProperty, { type DynamicPropertyOptions } from '@/utils/axon/DynamicProperty';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import optionize from '@/utils/phet-core/optionize';
+import IOType from '@/utils/tandem/types/IOType';
+import StringIO from '@/utils/tandem/types/StringIO';
+import responseCollector from '@/utils/utterance-queue/responseCollector';
+import ResponsePacket, { type ResolvedResponse } from '@/utils/utterance-queue/ResponsePacket';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
+import type TProperty from '@/utils/axon/TProperty';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import OrIO from '@/utils/tandem/types/OrIO';
+import Property from '@/utils/axon/Property';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Disposable, { type DisposableOptions } from '@/utils/axon/Disposable';
 
 // constants
 const DEFAULT_PRIORITY = 1;

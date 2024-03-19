@@ -8,20 +8,20 @@
  * @author Martin Veillette
  */
 
-import geometricOptics from '../../geometricOptics';
-import Optic from './Optic';
-import FramedObject from './FramedObject';
-import FramedImage from './FramedImage';
-import Vector2 from '../../../dot/Vector2';
-import { type RaysType } from './RaysType';
-import LightRays from './LightRays';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import OpticalObjectChoice from './OpticalObjectChoice';
-import EnumerationProperty from '../../../axon/EnumerationProperty';
-import Lens from '../../lens/model/Lens';
-import SecondPoint from './SecondPoint';
-import GOScene, { type GOSceneOptions } from './GOScene';
-import type PickRequired from '../../../phet-core/types/PickRequired';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import FramedObject from '@/utils/geometric-optics/common/model/FramedObject';
+import FramedImage from '@/utils/geometric-optics/common/model/FramedImage';
+import Vector2 from '@/utils/dot/Vector2';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
+import LightRays from '@/utils/geometric-optics/common/model/LightRays';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import OpticalObjectChoice from '@/utils/geometric-optics/common/model/OpticalObjectChoice';
+import EnumerationProperty from '@/utils/axon/EnumerationProperty';
+import Lens from '@/utils/geometric-optics/lens/model/Lens';
+import SecondPoint from '@/utils/geometric-optics/common/model/SecondPoint';
+import GOScene, { type GOSceneOptions } from '@/utils/geometric-optics/common/model/GOScene';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 type SelfOptions = {
 

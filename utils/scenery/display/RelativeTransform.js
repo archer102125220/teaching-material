@@ -86,9 +86,9 @@
 
 import _ from 'lodash';
 
-import Matrix3 from '../../dot/Matrix3';
-import cleanArray from '../../phet-core/cleanArray';
-import { scenery } from '../imports';
+import Matrix3 from '@/utils/dot/Matrix3';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import { scenery } from '@/utils/scenery/imports';
 
 class RelativeTransform {
   /**

@@ -8,15 +8,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Matrix3 from '../../dot/Matrix3';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import InstanceRegistry from '../../phet-core/documentation/InstanceRegistry';
-import optionize from '../../phet-core/optionize';
-import { type TColor, Path } from '../../scenery/imports';
-import RoundPushButton, { type RoundPushButtonOptions } from '../../sun/buttons/RoundPushButton';
-import Tandem from '../../tandem/Tandem';
-import ResetShape from '../ResetShape';
-import sceneryPhet from '../sceneryPhet';
+import Matrix3 from '@/utils/dot/Matrix3';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize from '@/utils/phet-core/optionize';
+import { type TColor, Path } from '@/utils/scenery/imports';
+import RoundPushButton, { type RoundPushButtonOptions } from '@/utils/sun/buttons/RoundPushButton';
+import Tandem from '@/utils/tandem/Tandem';
+import ResetShape from '@/utils/scenery-phet/ResetShape';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type SelfOptions = {
   radius?: number;

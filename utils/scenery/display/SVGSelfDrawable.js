@@ -15,7 +15,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { PaintSVGState, scenery, SelfDrawable } from '../imports';
+import { PaintSVGState, scenery, SelfDrawable } from '@/utils/scenery/imports';
 
 class SVGSelfDrawable extends SelfDrawable {
   /**

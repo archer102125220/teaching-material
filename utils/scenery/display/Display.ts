@@ -52,24 +52,24 @@
 
 import _ from 'lodash';
 
-import Emitter from '../../axon/Emitter';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import type TProperty from '../../axon/TProperty';
-import stepTimer from '../../axon/stepTimer';
-import TinyProperty from '../../axon/TinyProperty';
-import Bounds2 from '../../dot/Bounds2';
-import Dimension2 from '../../dot/Dimension2';
-import { Matrix3Type } from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import escapeHTML from '../../phet-core/escapeHTML';
-import optionize from '../../phet-core/optionize';
-import platform from '../../phet-core/platform';
-import PhetioObject, { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import AriaLiveAnnouncer from '../../utterance-queue/AriaLiveAnnouncer';
-import UtteranceQueue from '../../utterance-queue/UtteranceQueue';
-import { BackboneDrawable, Block, CanvasBlock, CanvasNodeBoundsOverlay, ChangeInterval, Color, DOMBlock, DOMDrawable, Drawable, Features, FittedBlockBoundsOverlay, FocusManager, FullScreen, globalKeyStateTracker, HighlightOverlay, HitAreaOverlay, Input, type InputOptions, Instance, KeyboardUtils, Node, PDOMInstance, PDOMSiblingStyle, PDOMTree, PDOMUtils, Pointer, PointerAreaOverlay, PointerOverlay, Renderer, scenery, SceneryEvent, scenerySerialize, SelfDrawable, type TInputListener, type TOverlay, Trail, Utils, WebGLBlock } from '../imports';
-import type TEmitter from '../../axon/TEmitter';
-import SafariWorkaroundOverlay from '../overlays/SafariWorkaroundOverlay';
+import Emitter from '@/utils/axon/Emitter';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import type TProperty from '@/utils/axon/TProperty';
+import stepTimer from '@/utils/axon/stepTimer';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Dimension2 from '@/utils/dot/Dimension2';
+import { Matrix3Type } from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import escapeHTML from '@/utils/phet-core/escapeHTML';
+import optionize from '@/utils/phet-core/optionize';
+import platform from '@/utils/phet-core/platform';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import AriaLiveAnnouncer from '@/utils/utterance-queue/AriaLiveAnnouncer';
+import UtteranceQueue from '@/utils/utterance-queue/UtteranceQueue';
+import { BackboneDrawable, Block, CanvasBlock, CanvasNodeBoundsOverlay, ChangeInterval, Color, DOMBlock, DOMDrawable, Drawable, Features, FittedBlockBoundsOverlay, FocusManager, FullScreen, globalKeyStateTracker, HighlightOverlay, HitAreaOverlay, Input, type InputOptions, Instance, KeyboardUtils, Node, PDOMInstance, PDOMSiblingStyle, PDOMTree, PDOMUtils, Pointer, PointerAreaOverlay, PointerOverlay, Renderer, scenery, SceneryEvent, scenerySerialize, SelfDrawable, type TInputListener, type TOverlay, Trail, Utils, WebGLBlock } from '@/utils/scenery/imports';
+import type TEmitter from '@/utils/axon/TEmitter';
+import SafariWorkaroundOverlay from '@/utils/scenery/overlays/SafariWorkaroundOverlay';
 
 type SelfOptions = {
   // Initial (or override) display width
@@ -449,7 +449,7 @@ export default class Display {
     this._canvasAreaBoundsOverlay = null;
     this._fittedBlockBoundsOverlay = null;
 
-    if (assert) {
+    if (window.assert) {
       this._isPainting = false;
       this._isDisposing = false;
       this._isDisposed = false;
@@ -530,7 +530,7 @@ export default class Display {
       this.perfDrawableNewIntervalCount = 0;
     }
 
-    if (assert) {
+    if (window.assert) {
       Display.assertSubtreeDisposed(this._rootNode);
     }
 
@@ -628,7 +628,7 @@ export default class Display {
 
     if (assertSlow) { this._baseInstance!.audit(this._frameId, false); }
 
-    if (assert) {
+    if (window.assert) {
       assert(!this._isPainting, 'Display was already updating paint, may have thrown an error on the last update');
       this._isPainting = true;
     }
@@ -640,7 +640,7 @@ export default class Display {
     this._rootBackbone!.update();
     sceneryLog && sceneryLog.Display && sceneryLog.pop();
 
-    if (assert) {
+    if (window.assert) {
       this._isPainting = false;
     }
 
@@ -1106,7 +1106,13 @@ export default class Display {
     // full window, we can apply the workaround of controlling the body's style.
     // See https://github.com/phetsims/scenery/issues/983
     if (this._assumeFullWindow) {
-      document.body.style.cursor = cursor;
+      // document.body.style.cursor = cursor;
+
+      if (typeof this._domElement?.parentNode?.appendChild === 'function') {
+        this._domElement.parentNode.style.cursor = cursor;
+      } else {
+        document.body.style.cursor = cursor;
+      }
     }
   }
 
@@ -1145,8 +1151,16 @@ export default class Display {
 
       // prevent any default zooming behavior from a trackpad on IE11 and Edge, all should be handled by scenery - must
       // be on the body, doesn't prevent behavior if on the display div
-      // @ts-expect-error legacy
-      document.body.style.msContentZooming = 'none';
+
+      // // @ts-expect-error legacy
+      // document.body.style.msContentZooming = 'none';
+
+      if (typeof this.domElement?.parentNode?.appendChild === 'function') {
+        this.domElement.parentNode.style.msContentZooming = 'none';
+      } else {
+        // @ts-expect-error legacy
+        document.body.style.msContentZooming = 'none';
+      }
 
       // some css hacks (inspired from https://github.com/EightMedia/hammer.js/blob/master/hammer.js).
       // modified to only apply the proper prefixed version instead of spamming all of them, and doesn't use jQuery.
@@ -1845,8 +1859,14 @@ export default class Display {
     iframe.style.position = 'absolute';
     iframe.style.left = '0';
     iframe.style.top = '0';
-    iframe.style.zIndex = '10000';
-    document.body.appendChild(iframe);
+    // iframe.style.zIndex = '10000';
+    // document.body.appendChild(iframe);
+    iframe.style.zIndex = typeof this.domElement?.parentNode?.appendChild === 'function' ? '10' : '10000';
+    if (typeof this.domElement?.parentNode?.appendChild === 'function') {
+      this.domElement.parentNode.appendChild(iframe);
+    } else {
+      document.body.appendChild(iframe);
+    }
 
     iframe.contentWindow!.document.open();
     iframe.contentWindow!.document.write(this.getDebugHTML());
@@ -1858,16 +1878,30 @@ export default class Display {
     closeButton.style.position = 'absolute';
     closeButton.style.top = '0';
     closeButton.style.right = '0';
-    closeButton.style.zIndex = '10001';
-    document.body.appendChild(closeButton);
+    // closeButton.style.zIndex = '10001';
+    // document.body.appendChild(closeButton);
+    closeButton.style.zIndex = typeof this.domElement?.parentNode?.appendChild === 'function' ? '11' : '10001';
+    if (typeof this.domElement?.parentNode?.appendChild === 'function') {
+      this.domElement.parentNode.appendChild(closeButton);
+    } else {
+      document.body.appendChild(closeButton);
+    }
 
     closeButton.textContent = 'close';
 
     // A normal 'click' event listener doesn't seem to be working. This is less-than-ideal.
     ['pointerdown', 'click', 'touchdown'].forEach(eventType => {
       closeButton.addEventListener(eventType, () => {
-        document.body.removeChild(iframe);
-        document.body.removeChild(closeButton);
+        // document.body.removeChild(iframe);
+        // document.body.removeChild(closeButton);
+
+        if (typeof this.domElement?.parentNode?.removeChild === 'function') {
+          this.domElement.parentNode.removeChild(iframe);
+          this.domElement.parentNode.removeChild(closeButton);
+        } else {
+          document.body.removeChild(iframe);
+          document.body.removeChild(closeButton);
+        }
       }, true);
     });
   }
@@ -2098,7 +2132,7 @@ export default class Display {
    * TODO: this dispose function is not complete. https://github.com/phetsims/scenery/issues/1581
    */
   public dispose(): void {
-    if (assert) {
+    if (window.assert) {
       assert(!this._isDisposing);
       assert(!this._isDisposed);
 
@@ -2128,7 +2162,7 @@ export default class Display {
 
     this.focusManager && this.focusManager.dispose();
 
-    if (assert) {
+    if (window.assert) {
       this._isDisposing = false;
       this._isDisposed = true;
     }
@@ -2187,7 +2221,7 @@ export default class Display {
   private static assertSubtreeDisposed(node: Node): void {
     window.assert && window.assert(!node.isDisposed, 'Disposed nodes should not be included in a scene graph to display.');
 
-    if (assert) {
+    if (window.assert) {
       for (let i = 0; i < node.children.length; i++) {
         Display.assertSubtreeDisposed(node.children[i]);
       }

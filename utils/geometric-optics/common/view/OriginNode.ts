@@ -6,8 +6,8 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { Circle } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
+import { Circle } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
 
 export default class OriginNode extends Circle {
   public constructor() {

@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 // Copyright 2022-2023, University of Colorado Boulder
 
 /**
@@ -13,10 +14,10 @@
 
 import _ from 'lodash';
 
-import arrayRemove from '../../phet-core/arrayRemove';
-import cleanArray from '../../phet-core/cleanArray';
-import Pool from '../../phet-core/Pool';
-import { Edge, kite } from '../imports';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import Pool from '@/utils/phet-core/Pool';
+import { Edge, kite } from '@/utils/kite/imports';
 
 let globalId = 1;
 const scratchArray: Edge[] = [];
@@ -188,8 +189,10 @@ class SegmentNode<T> {
       // Do an interruptable iteration
       for (let i = 0; i < this.items.length; i++) {
         const item = this.items[i];
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
         if (!item.internalData?.segmentId || item.internalData?.segmentId < id) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
           item.internalData.segmentId = id;
           abort = interruptableCallback(item);
@@ -378,6 +381,7 @@ class SegmentNode<T> {
           grandparent.fixRedBlack(tree);
         }
         else {
+          // eslint-disable-next-line no-lonely-if
           if (parent === grandparent.left) {
             if (this === parent.right) {
               // case 2
@@ -394,6 +398,7 @@ class SegmentNode<T> {
             }
           }
           else {
+            // eslint-disable-next-line no-lonely-if
             if (this === parent.left) {
               // case 2
               parent.rightRotate(tree);
@@ -515,40 +520,40 @@ class SegmentNode<T> {
    * @param presentItems - Edges that were present in ancestors
    */
   public audit(epsilon: number, allItems: Set<T>, presentItems: T[] = []): void {
-    if (assert) {
+    if (window.assert) {
       for (const item of presentItems) {
-        assert(!this.items.includes(item));
+        window.assert(!this.items.includes(item));
       }
       for (const item of this.items) {
         // Containment check, this node should be fully contained
-        assert(this.tree.getMinX(item, epsilon) <= this.min);
-        assert(this.tree.getMaxX(item, epsilon) >= this.max);
+        window.assert(this.tree.getMinX(item, epsilon) <= this.min);
+        window.assert(this.tree.getMaxX(item, epsilon) >= this.max);
       }
       for (const item of presentItems) {
         if (this.tree.getMinX(item, epsilon) <= this.min && this.tree.getMaxX(item, epsilon) >= this.max) {
-          assert(allItems.has(item) || this.items.includes(item));
+          window.assert(allItems.has(item) || this.items.includes(item));
         }
       }
 
-      assert(this.hasChildren() === (this.left !== null));
-      assert(this.hasChildren() === (this.right !== null));
-      assert(this.hasChildren() === (this.splitValue !== null));
-      assert(this.min < this.max);
+      window.assert(this.hasChildren() === (this.left !== null));
+      window.assert(this.hasChildren() === (this.right !== null));
+      window.assert(this.hasChildren() === (this.splitValue !== null));
+      window.assert(this.min < this.max);
 
       if (this.parent) {
-        assert(this.parent.hasChild(this));
-        assert(this.isBlack || this.parent.isBlack);
+        window.assert(this.parent.hasChild(this));
+        window.assert(this.isBlack || this.parent.isBlack);
       }
       if (this.hasChildren()) {
-        assert(this.left!.parent === this);
-        assert(this.right!.parent === this);
-        assert(this.min === this.left!.min);
-        assert(this.max === this.right!.max);
-        assert(this.splitValue === this.left!.max);
-        assert(this.splitValue === this.right!.min);
+        window.assert(this.left!.parent === this);
+        window.assert(this.right!.parent === this);
+        window.assert(this.min === this.left!.min);
+        window.assert(this.max === this.right!.max);
+        window.assert(this.splitValue === this.left!.max);
+        window.assert(this.splitValue === this.right!.min);
 
         for (const item of this.left!.items) {
-          assert(!this.right!.items.includes(item), 'We shouldn\'t have two children with the same item');
+          window.assert(!this.right!.items.includes(item), 'We shouldn\'t have two children with the same item');
         }
 
         const childPresentItems = [...presentItems, ...this.items];

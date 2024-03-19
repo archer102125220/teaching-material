@@ -4,9 +4,9 @@
  * Auto-generated from modulify, DO NOT manually modify.
  */
 /* eslint-disable */
-import getStringModule from '../chipper/getStringModule';
-import type LocalizedStringProperty from '../chipper/LocalizedStringProperty';
-import sceneryPhet from './sceneryPhet';
+import getStringModule from '@/utils/chipper/getStringModule';
+import type LocalizedStringProperty from '@/utils/chipper/LocalizedStringProperty';
+import sceneryPhet from '@/utils/sun/sceneryPhet';
 
 type StringsType = {
   'scenery-phet': {

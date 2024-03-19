@@ -8,22 +8,22 @@
  * @author Martin Veillette
  */
 
-import DerivedProperty from '../../../axon/DerivedProperty';
-import Bounds2 from '../../../dot/Bounds2';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { DragListener, HighlightFromNode, Image, KeyboardDragListener, type KeyboardDragListenerOptions, Node } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import Vector2 from '../../../dot/Vector2';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import GOConstants from '../GOConstants';
-import { combineOptions } from '../../../phet-core/optionize';
-import HTMLImageElementObject from '../model/HTMLImageElementObject';
-import type TProperty from '../../../axon/TProperty';
-import stepTimer from '../../../axon/stepTimer';
-import { type ObjectDragMode } from './ObjectDragMode';
-import OpticalObjectNode, { type OpticalObjectNodeOptions } from './OpticalObjectNode';
-import Multilink from '../../../axon/Multilink';
-import isSettingPhetioStateProperty from '../../../tandem/isSettingPhetioStateProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { DragListener, HighlightFromNode, Image, KeyboardDragListener, type KeyboardDragListenerOptions, Node } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import Vector2 from '@/utils/dot/Vector2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import { combineOptions } from '@/utils/phet-core/optionize';
+import HTMLImageElementObject from '@/utils/geometric-optics/common/model/HTMLImageElementObject';
+import type TProperty from '@/utils/axon/TProperty';
+import stepTimer from '@/utils/axon/stepTimer';
+import { type ObjectDragMode } from '@/utils/geometric-optics/common/view/ObjectDragMode';
+import OpticalObjectNode, { type OpticalObjectNodeOptions } from '@/utils/geometric-optics/common/view/OpticalObjectNode';
+import Multilink from '@/utils/axon/Multilink';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
 
 export type HTMLImageElementObjectNodeOptions = OpticalObjectNodeOptions;
 

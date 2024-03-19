@@ -7,17 +7,17 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Screen, { type ScreenOptions } from '../../joist/Screen';
-import ScreenIcon from '../../joist/ScreenIcon';
-import GOColors from '../common/GOColors';
-import geometricOptics from '../geometricOptics';
-import GeometricOpticsStrings from '../GeometricOpticsStrings';
-import LensModel from './model/LensModel';
-import LensNode from './view/LensNode';
-import LensScreenView from './view/LensScreenView';
-import optionize from '../../phet-core/optionize';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import { type GOSimOptions } from '../GOSim';
+import Screen, { type ScreenOptions } from '@/utils/joist/Screen';
+import ScreenIcon from '@/utils/joist/ScreenIcon';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import LensModel from '@/utils/geometric-optics/lens/model/LensModel';
+import LensNode from '@/utils/geometric-optics/lens/view/LensNode';
+import LensScreenView from '@/utils/geometric-optics/lens/view/LensScreenView';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import { type GOSimOptions } from '@/utils/geometric-optics/GOSim';
 
 type SelfOptions = PickRequired<GOSimOptions, 'isBasicsVersion'>;
 

@@ -6,12 +6,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import optionize from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import { Path, PathOptions } from '../../../scenery/js/imports.js';
-import trashAltRegularShape from '../../../sherpa/js/fontawesome-5/trashAltRegularShape.js';
-import RectangularPushButton, { RectangularPushButtonOptions } from '../../../sun/js/buttons/RectangularPushButton.js';
-import sceneryPhet from '../sceneryPhet.js';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { Path, type PathOptions } from '@/utils/scenery/imports';
+import trashAltRegularShape from '@/utils/sherpa/fontawesome-5/trashAltRegularShape';
+import RectangularPushButton, { type RectangularPushButtonOptions } from '@/utils/sun/buttons/RectangularPushButton';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type SelfOptions = {
   iconOptions?: PathOptions; // nested options for customizing the trash icon
@@ -21,19 +21,19 @@ export type TrashButtonOptions = SelfOptions & StrictOmit<RectangularPushButtonO
 
 export default class TrashButton extends RectangularPushButton {
 
-  public constructor( providedOptions?: TrashButtonOptions ) {
+  public constructor(providedOptions?: TrashButtonOptions) {
 
-    const options = optionize<TrashButtonOptions, SelfOptions, RectangularPushButtonOptions>()( {
+    const options = optionize<TrashButtonOptions, SelfOptions, RectangularPushButtonOptions>()({
       iconOptions: {
         scale: 0.05,
         fill: 'black'
       }
-    }, providedOptions );
+    }, providedOptions);
 
-    options.content = new Path( trashAltRegularShape, options.iconOptions );
+    options.content = new Path(trashAltRegularShape, options.iconOptions);
 
-    super( options );
+    super(options);
   }
 }
 
-sceneryPhet.register( 'TrashButton', TrashButton );
+sceneryPhet.register('TrashButton', TrashButton);

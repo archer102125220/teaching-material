@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import detectPrefix from '../../phet-core/detectPrefix';
-import { scenery } from '../imports';
+import detectPrefix from '@/utils/phet-core/detectPrefix';
+import { scenery } from '@/utils/scenery/imports';
 
 const Features = {};
 scenery.register( 'Features', Features );

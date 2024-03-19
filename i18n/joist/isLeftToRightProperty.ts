@@ -10,7 +10,7 @@
 import DerivedProperty from '@/utils/axon/DerivedProperty';
 import localeInfoModule from '@/assets/chipper/localeInfoModule';
 import joist from '@/utils/joist/joist';
-import localeProperty from './localeProperty';
+import localeProperty from '@/i18n/joist/localeProperty';
 
 const isLeftToRightProperty = new DerivedProperty([localeProperty], locale => {
   return localeInfoModule[locale].direction === 'ltr';

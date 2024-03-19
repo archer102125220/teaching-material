@@ -7,13 +7,13 @@
  * @author Martin Veillette
  */
 
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { Line, type LineOptions, Node, type NodeOptions } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import { type LightRaySegment } from '../model/LightRay';
-import LightRays from '../model/LightRays';
-import type PickOptional from '../../../phet-core/types/PickOptional';
-import optionize, { type EmptySelfOptions } from '../../../phet-core/optionize';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { Line, type LineOptions, Node, type NodeOptions } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import { type LightRaySegment } from '@/utils/geometric-optics/common/model/LightRay';
+import LightRays from '@/utils/geometric-optics/common/model/LightRays';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
 
 type SelfOptions = EmptySelfOptions;
 

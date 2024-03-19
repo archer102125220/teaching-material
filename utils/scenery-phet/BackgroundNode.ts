@@ -7,10 +7,10 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import optionize from '../phet-core/optionize';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import { Node, type NodeOptions, Rectangle, type RectangleOptions } from '../scenery/imports';
-import sceneryPhet from './sceneryPhet';
+import optionize from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { Node, type NodeOptions, Rectangle, type RectangleOptions } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 type SelfOptions = {
   xMargin?: number; // set the x margin between the Node content and background edge

@@ -6,9 +6,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../dot/toSVGNumber';
-import platform from '../../phet-core/platform';
-import { CanvasContextWrapper, Filter, scenery, Utils } from '../imports';
+import toSVGNumber from '@/utils/dot/toSVGNumber';
+import platform from '@/utils/phet-core/platform';
+import { CanvasContextWrapper, Filter, scenery, Utils } from '@/utils/scenery/imports';
 
 const isImageDataSupported = Utils.supportsImageDataCanvasFilter();
 const useFakeGamma = platform.chromium;

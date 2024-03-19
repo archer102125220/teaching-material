@@ -9,15 +9,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Bounds2 from '../../../../dot/js/Bounds2.js';
-import ModelViewTransform2 from '../../../../phetcommon/js/view/ModelViewTransform2.js';
-import geometricOptics from '../../geometricOptics.js';
-import FramedObject from '../model/FramedObject.js';
-import Vector2 from '../../../../dot/js/Vector2.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import HTMLImageElementObjectNode, { HTMLImageElementObjectNodeOptions } from './HTMLImageElementObjectNode.js';
-import { ObjectDragMode } from './ObjectDragMode.js';
-import TProperty from '../../../../axon/js/TProperty.js';
+import Bounds2 from '@/utils/dot/Bounds2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import FramedObject from '@/utils/geometric-optics/common/model/FramedObject';
+import Vector2 from '@/utils/dot/Vector2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import HTMLImageElementObjectNode, { type HTMLImageElementObjectNodeOptions } from '@/utils/geometric-optics/common/view/HTMLImageElementObjectNode.js';
+import { type ObjectDragMode } from '@/utils/geometric-optics/common/view/ObjectDragMode';
+import type TProperty from '@/utils/axon/TProperty';
 
 type FramedObjectNodeOptions = HTMLImageElementObjectNodeOptions;
 
@@ -32,17 +32,17 @@ export default class FramedObjectNode extends HTMLImageElementObjectNode {
    * @param wasDraggedProperty - was this framed object dragged?
    * @param providedOptions
    */
-  public constructor( framedObject: FramedObject,
-                      sceneBoundsProperty: TReadOnlyProperty<Bounds2>,
-                      opticPositionProperty: TReadOnlyProperty<Vector2>,
-                      modelViewTransform: ModelViewTransform2,
-                      objectDragModeProperty: TReadOnlyProperty<ObjectDragMode>,
-                      wasDraggedProperty: TProperty<boolean>,
-                      providedOptions: FramedObjectNodeOptions ) {
+  public constructor(framedObject: FramedObject,
+    sceneBoundsProperty: TReadOnlyProperty<Bounds2>,
+    opticPositionProperty: TReadOnlyProperty<Vector2>,
+    modelViewTransform: ModelViewTransform2,
+    objectDragModeProperty: TReadOnlyProperty<ObjectDragMode>,
+    wasDraggedProperty: TProperty<boolean>,
+    providedOptions: FramedObjectNodeOptions) {
 
-    super( framedObject, sceneBoundsProperty, opticPositionProperty, modelViewTransform, objectDragModeProperty,
-      wasDraggedProperty, providedOptions );
+    super(framedObject, sceneBoundsProperty, opticPositionProperty, modelViewTransform, objectDragModeProperty,
+      wasDraggedProperty, providedOptions);
   }
 }
 
-geometricOptics.register( 'FramedObjectNode', FramedObjectNode );
+geometricOptics.register('FramedObjectNode', FramedObjectNode);

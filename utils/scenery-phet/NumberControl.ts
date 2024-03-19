@@ -10,30 +10,32 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import DerivedProperty from '../axon/DerivedProperty';
-import Property from '../axon/Property';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Dimension2 from '../dot/Dimension2';
-import Range from '../dot/Range';
-import Utils from '../dot/Utils';
-import InstanceRegistry from '../phet-core/documentation/InstanceRegistry';
-import optionize, { combineOptions } from '../phet-core/optionize';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import type PickOptional from '../phet-core/types/PickOptional';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import { AlignBox, extendsWidthSizable, Font, HBox, isWidthSizable, Node, type NodeOptions, PaintColorProperty, Text, type TextOptions, VBox, WidthSizable } from '../scenery/imports';
-import ArrowButton, { type ArrowButtonOptions } from '../sun/buttons/ArrowButton';
-import HSlider from '../sun/HSlider';
-import Slider, { type SliderOptions } from '../sun/Slider';
-import nullSoundPlayer from '../tambo/shared-sound-players/nullSoundPlayer';
-import ValueChangeSoundPlayer, { type ValueChangeSoundPlayerOptions } from '../tambo/sound-generators/ValueChangeSoundPlayer';
-import Tandem from '../tandem/Tandem';
-import IOType from '../tandem/types/IOType';
-import NumberDisplay, { type NumberDisplayOptions } from './NumberDisplay';
-import PhetFont from './PhetFont';
-import sceneryPhet from './sceneryPhet';
-import type PhetioProperty from '../axon/PhetioProperty';
-import Orientation from '../phet-core/Orientation';
+import _ from 'lodash';
+
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Property from '@/utils/axon/Property';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Dimension2 from '@/utils/dot/Dimension2';
+import Range from '@/utils/dot/Range';
+import Utils from '@/utils/dot/Utils';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type PickOptional from '@/utils/phet-core/types/PickOptional';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import { AlignBox, extendsWidthSizable, Font, HBox, isWidthSizable, Node, type NodeOptions, PaintColorProperty, Text, type TextOptions, VBox, WidthSizable } from '@/utils/scenery/imports';
+import ArrowButton, { type ArrowButtonOptions } from '@/utils/sun/buttons/ArrowButton';
+import HSlider from '@/utils/sun/HSlider';
+import Slider, { type SliderOptions } from '@/utils/sun/Slider';
+import nullSoundPlayer from '@/utils/tambo/shared-sound-players/nullSoundPlayer';
+import ValueChangeSoundPlayer, { type ValueChangeSoundPlayerOptions } from '@/utils/tambo/sound-generators/ValueChangeSoundPlayer';
+import Tandem from '@/utils/tandem/Tandem';
+import IOType from '@/utils/tandem/types/IOType';
+import NumberDisplay, { type NumberDisplayOptions } from '@/utils/scenery-phet/NumberDisplay';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import type PhetioProperty from '@/utils/axon/PhetioProperty';
+import Orientation from '@/utils/phet-core/Orientation';
 
 // constants
 const SPECIFIC_COMPONENT_CALLBACK_OPTIONS = [

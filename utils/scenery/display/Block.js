@@ -10,8 +10,8 @@
 
 import _ from 'lodash';
 
-import cleanArray from '../../phet-core/cleanArray';
-import { Drawable, scenery } from '../imports';
+import cleanArray from '@/utils/phet-core/cleanArray';
+import { Drawable, scenery } from '@/utils/scenery/imports';
 
 class Block extends Drawable {
   /**

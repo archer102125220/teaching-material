@@ -23,23 +23,23 @@
 
 import _ from 'lodash';
 
-import PhetioAction from '../../tandem/PhetioAction';
-import BooleanProperty from '../../axon/BooleanProperty';
-import DerivedProperty from '../../axon/DerivedProperty';
-import EnabledComponent, { type EnabledComponentOptions } from '../../axon/EnabledComponent';
-import createObservableArray, { type ObservableArray } from '../../axon/createObservableArray';
-import stepTimer from '../../axon/stepTimer';
-import optionize from '../../phet-core/optionize';
-import type WithoutNull from '../../phet-core/types/WithoutNull';
-import EventType from '../../tandem/EventType';
-import PhetioObject from '../../tandem/PhetioObject';
-import Tandem from '../../tandem/Tandem';
-import NullableIO from '../../tandem/types/NullableIO';
-import { Display, Mouse, Node, Pointer, scenery, SceneryEvent, type TInputListener, Trail } from '../imports';
-import type TProperty from '../../axon/TProperty';
-import Bounds2 from '../../dot/Bounds2';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import EnabledComponent, { type EnabledComponentOptions } from '@/utils/axon/EnabledComponent';
+import createObservableArray, { type ObservableArray } from '@/utils/axon/createObservableArray';
+import stepTimer from '@/utils/axon/stepTimer';
+import optionize from '@/utils/phet-core/optionize';
+import type WithoutNull from '@/utils/phet-core/types/WithoutNull';
+import EventType from '@/utils/tandem/EventType';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import { Display, Mouse, Node, Pointer, scenery, SceneryEvent, type TInputListener, Trail } from '@/utils/scenery/imports';
+import type TProperty from '@/utils/axon/TProperty';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 // global
 let globalID = 0;
@@ -283,7 +283,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
 
     this._id = globalID++;
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} construction`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} construction`);
 
     this._mouseButton = options.mouseButton;
     this._a11yLooksPressedInterval = options.a11yLooksPressedInterval;
@@ -470,21 +470,21 @@ export default class PressListener extends EnabledComponent implements TInputLis
   public press(event: PressListenerEvent, targetNode?: Node, callback?: () => void): boolean {
     window.assert && window.assert(event, 'An event is required');
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} press`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} press`);
 
     if (!this.canPress(event)) {
-      sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} could not press`);
+      window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} could not press`);
       return false;
     }
 
     // Flush out a pending drag, so it happens before we press
     this.flushCollapsedDrag();
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} successful press`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} successful press`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
     this._pressAction.execute(event, targetNode || null, callback || null); // cannot pass undefined into execute call
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
 
     return true;
   }
@@ -501,15 +501,15 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * @param [callback] - called at the end of the release
    */
   public release(event?: PressListenerEvent, callback?: () => void): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} release`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} release`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     // Flush out a pending drag, so it happens before we release
     this.flushCollapsedDrag();
 
     this._releaseAction.execute(event || null, callback || null); // cannot pass undefined to execute call
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -520,14 +520,14 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * (scenery-internal, effectively protected)
    */
   public drag(event: PressListenerEvent): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} drag`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} drag`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     window.assert && window.assert(this.isPressed, 'Can only drag while pressed');
 
     this._dragListener(event, this);
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -539,8 +539,8 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * This can be called manually, but can also be called through node.interruptSubtreeInput().
    */
   public interrupt(): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} interrupt`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} interrupt`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     // handle pdom interrupt
     if (this.pdomClickingProperty.value) {
@@ -574,13 +574,13 @@ export default class PressListener extends EnabledComponent implements TInputLis
     else if (this.isPressed) {
 
       // handle pointer interrupt
-      sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} interrupting`);
+      window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} interrupting`);
       this.interrupted = true;
 
       this.release();
     }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -766,12 +766,12 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * NOTE: Do not call directly. See the press method instead.
    */
   public down(event: PressListenerEvent): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} down`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} down`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     this.press(event);
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -780,14 +780,14 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * NOTE: Do not call directly.
    */
   public up(event: PressListenerEvent): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} up`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} up`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     // Recalculate over/hovering Properties.
     this.invalidateOver();
     this.invalidateHovering();
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -796,12 +796,12 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * NOTE: Do not call directly.
    */
   public enter(event: PressListenerEvent): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} enter`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} enter`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     this.overPointers.push(event.pointer);
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -809,12 +809,12 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * in case a pointer listener gets interrupted and resumes movement over a target. (scenery-internal)
    */
   public move(event: PressListenerEvent): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} move`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} move`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     this.invalidateOver();
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -823,8 +823,8 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * NOTE: Do not call directly.
    */
   public exit(event: PressListenerEvent): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} exit`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} exit`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     // NOTE: We don't require the pointer to be included here, since we may have added the listener after the 'enter'
     // was fired. See https://github.com/phetsims/area-model-common/issues/159 for more details.
@@ -832,7 +832,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
       this.overPointers.remove(event.pointer);
     }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -841,8 +841,8 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * NOTE: Do not call directly.
    */
   public pointerUp(event: PressListenerEvent): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} pointer up`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} pointer up`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     // Since our callback can get queued up and THEN interrupted before this happens, we'll check to make sure we are
     // still pressed by the time we get here. If not pressed, then there is nothing to do.
@@ -853,7 +853,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
       this.release(event);
     }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -862,8 +862,8 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * NOTE: Do not call directly.
    */
   public pointerCancel(event: PressListenerEvent): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} pointer cancel`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} pointer cancel`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     // Since our callback can get queued up and THEN interrupted before this happens, we'll check to make sure we are
     // still pressed by the time we get here. If not pressed, then there is nothing to do.
@@ -874,7 +874,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
       this.interrupt(); // will mark as interrupted and release()
     }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -883,8 +883,8 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * NOTE: Do not call directly.
    */
   public pointerMove(event: PressListenerEvent): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} pointer move`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} pointer move`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     // Since our callback can get queued up and THEN interrupted before this happens, we'll check to make sure we are
     // still pressed by the time we get here. If not pressed, then there is nothing to do.
@@ -900,7 +900,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
       }
     }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -909,12 +909,12 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * NOTE: Do not call directly.
    */
   public pointerInterrupt(): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} pointer interrupt`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} pointer interrupt`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     this.interrupt();
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   /**
@@ -1015,8 +1015,8 @@ export default class PressListener extends EnabledComponent implements TInputLis
    * Disposes the listener, releasing references. It should not be used after this.
    */
   public override dispose(): void {
-    sceneryLog && sceneryLog.InputListener && sceneryLog.InputListener(`PressListener#${this._id} dispose`);
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.InputListener(`PressListener#${this._id} dispose`);
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.push();
 
     // We need to release references to any pointers that are over us.
     this.overPointers.clear();
@@ -1054,7 +1054,7 @@ export default class PressListener extends EnabledComponent implements TInputLis
 
     super.dispose();
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.InputListener && window.sceneryLog.pop();
   }
 
   public static phetioAPI = {

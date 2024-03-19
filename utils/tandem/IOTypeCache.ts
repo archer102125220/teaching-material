@@ -8,9 +8,9 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import type IOType from './types/IOType';
-import tandemNamespace from './tandemNamespace';
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
+import type IOType from '@/utils/tandem/types/IOType';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 
 // By default, the cache key is an IOType (like for a single parameter like PropertyIO)

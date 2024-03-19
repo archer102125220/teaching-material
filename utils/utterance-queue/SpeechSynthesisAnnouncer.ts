@@ -19,30 +19,30 @@
 
 import _ from 'lodash';
 
-import BooleanProperty from '../axon/BooleanProperty';
-import DerivedProperty from '../axon/DerivedProperty';
-import Emitter from '../axon/Emitter';
-import EnabledComponent from '../axon/EnabledComponent';
-import type TProperty from '../axon/TProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import NumberProperty from '../axon/NumberProperty';
-import Property from '../axon/Property';
-import Range from '../dot/Range';
-import optionize, { optionize3, type OptionizeDefaults } from '../phet-core/optionize';
-import stripEmbeddingMarks from '../phet-core/stripEmbeddingMarks';
-import Announcer, { type AnnouncerOptions } from '../utterance-queue/Announcer';
-import Utterance from '../utterance-queue/Utterance';
-import SpeechSynthesisParentPolyfill from './SpeechSynthesisParentPolyfill';
-import utteranceQueueNamespace from './utteranceQueueNamespace';
-import { type ResolvedResponse } from './ResponsePacket';
-import stepTimer from '../axon/stepTimer';
-import platform from '../phet-core/platform';
-import Multilink from '../axon/Multilink';
-import type TEmitter from '../axon/TEmitter';
-import IOType from '../tandem/types/IOType';
-import NullableIO from '../tandem/types/NullableIO';
-import validate from '../axon/validate';
-import Validation from '../axon/Validation';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import Emitter from '@/utils/axon/Emitter';
+import EnabledComponent from '@/utils/axon/EnabledComponent';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import Property from '@/utils/axon/Property';
+import Range from '@/utils/dot/Range';
+import optionize, { optionize3, type OptionizeDefaults } from '@/utils/phet-core/optionize';
+import stripEmbeddingMarks from '@/utils/phet-core/stripEmbeddingMarks';
+import Announcer, { type AnnouncerOptions } from '@/utils/utterance-queue/Announcer';
+import Utterance from '@/utils/utterance-queue/Utterance';
+import SpeechSynthesisParentPolyfill from '@/utils/utterance-queue/SpeechSynthesisParentPolyfill';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
+import { type ResolvedResponse } from '@/utils/utterance-queue/ResponsePacket';
+import stepTimer from '@/utils/axon/stepTimer';
+import platform from '@/utils/phet-core/platform';
+import Multilink from '@/utils/axon/Multilink';
+import type TEmitter from '@/utils/axon/TEmitter';
+import IOType from '@/utils/tandem/types/IOType';
+import NullableIO from '@/utils/tandem/types/NullableIO';
+import validate from '@/utils/axon/validate';
+import Validation from '@/utils/axon/Validation';
 import { type Locale } from '@/i18n/joist/localeProperty';
 
 // If a polyfill for SpeechSynthesis is requested, try to initialize it here before SpeechSynthesis usages. For

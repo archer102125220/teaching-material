@@ -6,9 +6,9 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import arrayRemove from '../phet-core/arrayRemove';
-import phetCore from './phetCore';
-import type IntentionalAny from './types/IntentionalAny';
+import arrayRemove from '@/utils/phet-core/arrayRemove';
+import phetCore from '@/utils/phet-core/phetCore';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 type AsyncLoaderListener = () => void;
 type AsyncLoaderLock = () => void;

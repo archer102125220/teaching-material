@@ -4,11 +4,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import '../../axon/js/main.js';
-import '../../dot/js/main.js';
-import '../../phet-core/js/main.js';
-import './main.js';
+// import '@/utils/axon/main';
+import '@/utils/dot/main';
+// import '@/utils/phet-core/main';
+import '@/utils/kite/main';
 
-if ( !window.hasOwnProperty( '_' ) ) {
-  throw new Error( 'Underscore/Lodash not found: _' );
+if (!window.hasOwnProperty('_')) {
+  throw new Error('Underscore/Lodash not found: _');
 }

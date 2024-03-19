@@ -6,26 +6,26 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import PhetioAction from '../tandem/PhetioAction';
-import validate from '../axon/validate';
-import { m3 } from '../dot/Matrix3';
-import InstanceRegistry from '../phet-core/documentation/InstanceRegistry';
-import { FireListener, isWidthSizable, LayoutConstraint, Node, type NodeOptions, Path, Rectangle, SceneryConstants, type TPaint, Voicing, type VoicingOptions, WidthSizable, type WidthSizableOptions } from '../scenery/imports';
-import checkEmptySolidShape from '../sherpa/fontawesome-4/checkEmptySolidShape';
-import checkSquareOSolidShape from '../sherpa/fontawesome-4/checkSquareOSolidShape';
-import checkboxCheckedSoundPlayer from '../tambo/shared-sound-players/checkboxCheckedSoundPlayer';
-import checkboxUncheckedSoundPlayer from '../tambo/shared-sound-players/checkboxUncheckedSoundPlayer';
-import EventType from '../tandem/EventType';
-import PhetioObject from '../tandem/PhetioObject';
-import Tandem from '../tandem/Tandem';
-import optionize from '../phet-core/optionize';
-import sun from './sun';
-import type TSoundPlayer from '../tambo/TSoundPlayer';
-import Utterance, { type TAlertable } from '../utterance-queue/Utterance';
-import Bounds2 from '../dot/Bounds2';
-import { Shape } from '../kite/imports';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import type PhetioProperty from '../axon/PhetioProperty';
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import validate from '@/utils/axon/validate';
+import { m3 } from '@/utils/dot/Matrix3';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import { FireListener, isWidthSizable, LayoutConstraint, Node, type NodeOptions, Path, Rectangle, SceneryConstants, type TPaint, Voicing, type VoicingOptions, WidthSizable, type WidthSizableOptions } from '@/utils/scenery/imports';
+import checkEmptySolidShape from '@/utils/sherpa/fontawesome-4/checkEmptySolidShape';
+import checkSquareOSolidShape from '@/utils/sherpa/fontawesome-4/checkSquareOSolidShape';
+import checkboxCheckedSoundPlayer from '@/utils/tambo/shared-sound-players/checkboxCheckedSoundPlayer';
+import checkboxUncheckedSoundPlayer from '@/utils/tambo/shared-sound-players/checkboxUncheckedSoundPlayer';
+import EventType from '@/utils/tandem/EventType';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import optionize from '@/utils/phet-core/optionize';
+import sun from '@/utils/sun/sun';
+import type TSoundPlayer from '@/utils/tambo/TSoundPlayer';
+import Utterance, { type TAlertable } from '@/utils/utterance-queue/Utterance';
+import Bounds2 from '@/utils/dot/Bounds2';
+import { Shape } from '@/utils/kite/imports';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import type PhetioProperty from '@/utils/axon/PhetioProperty';
 
 // constants
 const BOOLEAN_VALIDATOR = { valueType: 'boolean' };

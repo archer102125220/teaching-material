@@ -13,58 +13,60 @@
  * @author Marla Schulz (PhET Interactive Simulations)
  */
 
-import { animatedPanZoomSingleton, HighlightFromNode, HighlightPath, InteractiveHighlightingNode, KeyboardListener, Node, Path } from '../../../../../scenery/js/imports.js';
-import sceneryPhet from '../../../sceneryPhet.js';
-import Range from '../../../../../dot/js/Range.js';
-import Multilink from '../../../../../axon/js/Multilink.js';
-import GroupSortInteractionModel from '../model/GroupSortInteractionModel.js';
-import Emitter from '../../../../../axon/js/Emitter.js';
-import { Shape } from '../../../../../kite/js/imports.js';
-import optionize, { combineOptions } from '../../../../../phet-core/js/optionize.js';
-import TReadOnlyProperty from '../../../../../axon/js/TReadOnlyProperty.js';
-import SortCueArrowNode from './SortCueArrowNode.js';
-import Disposable, { DisposableOptions } from '../../../../../axon/js/Disposable.js';
-import GrabReleaseCueNode, { GrabReleaseCueNodeOptions } from '../../nodes/GrabReleaseCueNode.js';
-import StrictOmit from '../../../../../phet-core/js/types/StrictOmit.js';
+import _ from 'lodash';
+
+import { animatedPanZoomSingleton, HighlightFromNode, HighlightPath, InteractiveHighlightingNode, KeyboardListener, Node, Path } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import Range from '@/utils/dot/Range';
+import Multilink from '@/utils/axon/Multilink';
+import GroupSortInteractionModel from '@/utils/scenery-phet/model/GroupSortInteractionModel';
+import Emitter from '@/utils/axon/Emitter';
+import { Shape } from '@/utils/kite/imports';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import SortCueArrowNode from '@/utils/scenery-phet/accessibility/group-sort/view/SortCueArrowNode';
+import Disposable, { type DisposableOptions } from '@/utils/axon/Disposable';
+import GrabReleaseCueNode, { type GrabReleaseCueNodeOptions } from '@/utils/scenery-phet/accessibility/nodes/GrabReleaseCueNode';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 
 type SelfOptions<ItemModel, ItemNode extends Node> = {
 
   // Given the delta (difference from current value to new value), return the corresponding next group item model to be selected.
-  getNextSelectedGroupItem: ( delta: number, currentlySelectedGroupItem: ItemModel ) => ItemModel;
+  getNextSelectedGroupItem: (delta: number, currentlySelectedGroupItem: ItemModel) => ItemModel;
 
   // If GroupSortInteraction doesn't know what the selection should be, this function is called to set the default or
   // best guess selection. Return null to not supply a selection (no focus).
-  getGroupItemToSelect: ( () => ItemModel | null );
+  getGroupItemToSelect: (() => ItemModel | null);
 
   // Given a model item, return the corresponding node. Support 'null' as a way to support multiple scenes. If you
   // return null, it means that the provided itemModel is not associated with this view, and shouldn't be handled.
-  getNodeFromModelItem: ( model: ItemModel ) => ItemNode | null;
+  getNodeFromModelItem: (model: ItemModel) => ItemNode | null;
 
   // Given a model item, return the corresponding focus highlight node. Defaults to the implementation of getNodeFromModelItem.
   // Return null if no highlight should be shown for the selection (not recommended).
-  getHighlightNodeFromModelItem?: ( model: ItemModel ) => Node | null;
+  getHighlightNodeFromModelItem?: (model: ItemModel) => Node | null;
 
   // The available range for storing. This is the acceptable range for the valueProperty of ItemModel (see model.getGroupItemValue()).
   sortingRangeProperty: TReadOnlyProperty<Range>;
 
   // Do the sort operation, allowing for custom actions, must be implemented by all implementation, but likely just
   // should default to updating the "valueProperty" of the selected group item to the new value that is provided.
-  sortGroupItem: ( groupItem: ItemModel, newValue: number ) => void;
+  sortGroupItem: (groupItem: ItemModel, newValue: number) => void;
 
   // Callback called after a group item is sorted. Note that sorting may not have changed its value (like if at the boundary
   // trying to move past the range).
-  onSort?: ( groupItem: ItemModel, oldValue: number ) => void;
+  onSort?: (groupItem: ItemModel, oldValue: number) => void;
 
   // When the selected group item has been grabbed (into "sorting" state).
-  onGrab?: ( groupItem: ItemModel ) => void;
+  onGrab?: (groupItem: ItemModel) => void;
 
   // When the selected group item is released (back into "selecting" state).
-  onRelease?: ( groupItem: ItemModel ) => void;
+  onRelease?: (groupItem: ItemModel) => void;
 
   // If provided, listen to the number keys as well to sort the selected group item. Provide the value that the
   // number key maps to. A direct value, not a delta. If the function returns null, then no action takes place for the
   // input. If the option is set to null, then number keys will not be listened to for this interaction.
-  numberKeyMapper?: ( ( pressedKeys: string ) => ( number | null ) ) | null;
+  numberKeyMapper?: ((pressedKeys: string) => (number | null)) | null;
 
   // The value-change delta step size when selecting/sorting the group items.
   sortStep?: number;   // arrow keys or WASD
@@ -98,9 +100,9 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
   // Emitted when the sorting cue should be repositioned. Most likely because the selection has changed.
   public readonly positionSortCueNodeEmitter = new Emitter();
 
-  private readonly getNodeFromModelItem: ( model: ItemModel ) => ItemNode | null;
-  private readonly sortGroupItem: ( groupItem: ItemModel, newValue: number ) => void;
-  private readonly onSort: ( groupItem: ItemModel, oldValue: number ) => void;
+  private readonly getNodeFromModelItem: (model: ItemModel) => ItemNode | null;
+  private readonly sortGroupItem: (groupItem: ItemModel, newValue: number) => void;
+  private readonly onSort: (groupItem: ItemModel, oldValue: number) => void;
   private readonly sortingRangeProperty: TReadOnlyProperty<Range>;
   private readonly sortStep: number;
   private readonly shiftSortStep: number;
@@ -109,24 +111,24 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
   public constructor(
     protected readonly model: GroupSortInteractionModel<ItemModel>,
     primaryFocusedNode: Node,
-    providedOptions: GroupSortInteractionViewOptions<ItemModel, ItemNode> ) {
+    providedOptions: GroupSortInteractionViewOptions<ItemModel, ItemNode>) {
 
     const options = optionize<
       GroupSortInteractionViewOptions<ItemModel, ItemNode>,
       SelfOptions<ItemModel, ItemNode>,
-      ParentOptions>()( {
-      numberKeyMapper: null,
-      onSort: _.noop,
-      onGrab: _.noop,
-      onRelease: _.noop,
-      sortStep: 1,
-      shiftSortStep: 2,
-      pageSortStep: Math.ceil( providedOptions.sortingRangeProperty.value.getLength() / 5 ),
-      getHighlightNodeFromModelItem: providedOptions.getNodeFromModelItem,
-      grabReleaseCueOptions: {}
-    }, providedOptions );
+      ParentOptions>()({
+        numberKeyMapper: null,
+        onSort: _.noop,
+        onGrab: _.noop,
+        onRelease: _.noop,
+        sortStep: 1,
+        shiftSortStep: 2,
+        pageSortStep: Math.ceil(providedOptions.sortingRangeProperty.value.getLength() / 5),
+        getHighlightNodeFromModelItem: providedOptions.getNodeFromModelItem,
+        grabReleaseCueOptions: {}
+      }, providedOptions);
 
-    super( options );
+    super(options);
 
     this.getNodeFromModelItem = options.getNodeFromModelItem;
     this.sortGroupItem = options.sortGroupItem;
@@ -141,49 +143,49 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
     const isGroupItemKeyboardGrabbedProperty = this.model.isGroupItemKeyboardGrabbedProperty;
     const hasKeyboardGrabbedGroupItemProperty = this.model.hasKeyboardGrabbedGroupItemProperty;
 
-    const grabbedPropertyListener = ( grabbed: boolean ) => {
+    const grabbedPropertyListener = (grabbed: boolean) => {
       const selectedGroupItem = selectedGroupItemProperty.value;
-      if ( selectedGroupItem ) {
-        if ( grabbed ) {
-          options.onGrab( selectedGroupItem );
+      if (selectedGroupItem) {
+        if (grabbed) {
+          options.onGrab(selectedGroupItem);
         }
         else {
-          options.onRelease( selectedGroupItem );
+          options.onRelease(selectedGroupItem);
         }
       }
     };
-    isGroupItemKeyboardGrabbedProperty.lazyLink( grabbedPropertyListener );
+    isGroupItemKeyboardGrabbedProperty.lazyLink(grabbedPropertyListener);
 
     // If the new range doesn't include the current selection, reset back to the default heuristic.
-    const rangeListener = ( newRange: Range ) => {
+    const rangeListener = (newRange: Range) => {
       const selectedGroupItem = this.model.selectedGroupItemProperty.value;
-      if ( selectedGroupItem ) {
-        const currentValue = this.model.getGroupItemValue( selectedGroupItem );
-        if ( currentValue && !newRange.contains( currentValue ) ) {
+      if (selectedGroupItem) {
+        const currentValue = this.model.getGroupItemValue(selectedGroupItem);
+        if (currentValue && !newRange.contains(currentValue)) {
           this.model.selectedGroupItemProperty.value = options.getGroupItemToSelect();
         }
       }
     };
-    options.sortingRangeProperty.lazyLink( rangeListener );
-    this.disposeEmitter.addListener( () => {
-      isGroupItemKeyboardGrabbedProperty.unlink( grabbedPropertyListener );
-      options.sortingRangeProperty.unlink( rangeListener );
-    } );
+    options.sortingRangeProperty.lazyLink(rangeListener);
+    this.disposeEmitter.addListener(() => {
+      isGroupItemKeyboardGrabbedProperty.unlink(grabbedPropertyListener);
+      options.sortingRangeProperty.unlink(rangeListener);
+    });
 
     const focusListener = {
       focus: () => {
 
         // It's possible that getGroupItemToSelect's heuristic said that there is nothing to focus here
-        if ( selectedGroupItemProperty.value === null ) {
+        if (selectedGroupItemProperty.value === null) {
           selectedGroupItemProperty.value = options.getGroupItemToSelect();
         }
 
         isKeyboardFocusedProperty.value = true;
 
         // When the group receives keyboard focus, make sure that the selected group item is displayed
-        if ( selectedGroupItemProperty.value !== null ) {
-          const node = options.getNodeFromModelItem( selectedGroupItemProperty.value );
-          node && animatedPanZoomSingleton.listener.panToNode( node, true );
+        if (selectedGroupItemProperty.value !== null) {
+          const node = options.getNodeFromModelItem(selectedGroupItemProperty.value);
+          node && animatedPanZoomSingleton.listener.panToNode(node, true);
         }
       },
       blur: () => {
@@ -201,11 +203,11 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
     // When interactive highlights become active on the group, interaction with a mouse has begun while using
     // Interactive Highlighting. When that happens, clear the selection to prevent focus highlight flickering/thrashing.
     // See https://github.com/phetsims/center-and-variability/issues/557 and https://github.com/phetsims/scenery-phet/issues/815
-    if ( ( primaryFocusedNode as InteractiveHighlightingNode ).isInteractiveHighlighting ) {
+    if ((primaryFocusedNode as InteractiveHighlightingNode).isInteractiveHighlighting) {
       const asHighlightingNodeAlias = primaryFocusedNode as InteractiveHighlightingNode;
-      const interactiveHighlightingActiveListener = ( active: boolean ) => {
-        if ( active ) {
-          if ( model.selectedGroupItemProperty.value !== null ) {
+      const interactiveHighlightingActiveListener = (active: boolean) => {
+        if (active) {
+          if (model.selectedGroupItemProperty.value !== null) {
 
             // Release the selection if grabbed
             model.isGroupItemKeyboardGrabbedProperty.value = false;
@@ -219,63 +221,63 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
           isKeyboardFocusedProperty.value = false;
         }
       };
-      asHighlightingNodeAlias.isInteractiveHighlightActiveProperty.lazyLink( interactiveHighlightingActiveListener );
+      asHighlightingNodeAlias.isInteractiveHighlightActiveProperty.lazyLink(interactiveHighlightingActiveListener);
 
-      this.disposeEmitter.addListener( () => {
-        asHighlightingNodeAlias.isInteractiveHighlightActiveProperty.unlink( interactiveHighlightingActiveListener );
-      } );
+      this.disposeEmitter.addListener(() => {
+        asHighlightingNodeAlias.isInteractiveHighlightActiveProperty.unlink(interactiveHighlightingActiveListener);
+      });
     }
 
-    const updateFocusHighlight = new Multilink( [
-        selectedGroupItemProperty,
-        isGroupItemKeyboardGrabbedProperty
-      ],
-      ( selectedGroupItem, isGroupItemGrabbed ) => {
+    const updateFocusHighlight = new Multilink([
+      selectedGroupItemProperty,
+      isGroupItemKeyboardGrabbedProperty
+    ],
+      (selectedGroupItem, isGroupItemGrabbed) => {
         let focusHighlightSet = false;
-        if ( selectedGroupItem ) {
-          const node = options.getHighlightNodeFromModelItem( selectedGroupItem );
-          if ( node ) {
-            const focusForSelectedGroupItem = new HighlightFromNode( node, { dashed: isGroupItemGrabbed } );
+        if (selectedGroupItem) {
+          const node = options.getHighlightNodeFromModelItem(selectedGroupItem);
+          if (node) {
+            const focusForSelectedGroupItem = new HighlightFromNode(node, { dashed: isGroupItemGrabbed });
 
             // If available, set to the focused selection for this scene.
-            primaryFocusedNode.setFocusHighlight( focusForSelectedGroupItem );
+            primaryFocusedNode.setFocusHighlight(focusForSelectedGroupItem);
             focusHighlightSet = true;
           }
         }
 
         // If not set above, then actively hide it.
-        !focusHighlightSet && primaryFocusedNode.setFocusHighlight( 'invisible' );
+        !focusHighlightSet && primaryFocusedNode.setFocusHighlight('invisible');
 
-        if ( selectedGroupItem !== null ) {
+        if (selectedGroupItem !== null) {
           this.positionSortCueNodeEmitter.emit();
         }
       }
     );
 
     // "release" into selecting state when disabled
-    const enabledListener = ( enabled: boolean ) => {
-      if ( !enabled ) {
+    const enabledListener = (enabled: boolean) => {
+      if (!enabled) {
         hasKeyboardGrabbedGroupItemProperty.value = false;
       }
     };
-    this.model.enabledProperty.link( enabledListener );
-    this.disposeEmitter.addListener( () => {
-      this.model.enabledProperty.unlink( enabledListener );
-    } );
+    this.model.enabledProperty.link(enabledListener);
+    this.disposeEmitter.addListener(() => {
+      this.model.enabledProperty.unlink(enabledListener);
+    });
 
     // A KeyboardListener that changes the "sorting" vs "selecting" state of the interaction.
-    const grabReleaseKeyboardListener = new KeyboardListener( {
+    const grabReleaseKeyboardListener = new KeyboardListener({
       fireOnHold: true,
-      keys: [ 'enter', 'space', 'escape' ],
-      callback: ( event, keysPressed ) => {
-        if ( this.model.enabled && selectedGroupItemProperty.value !== null ) {
+      keys: ['enter', 'space', 'escape'],
+      callback: (event, keysPressed) => {
+        if (this.model.enabled && selectedGroupItemProperty.value !== null) {
 
           // Do the "Grab/release" action to switch to sorting or selecting
-          if ( keysPressed === 'enter' || keysPressed === 'space' ) {
+          if (keysPressed === 'enter' || keysPressed === 'space') {
             isGroupItemKeyboardGrabbedProperty.toggle();
             hasKeyboardGrabbedGroupItemProperty.value = true;
           }
-          else if ( isGroupItemKeyboardGrabbedProperty.value && keysPressed === 'escape' ) {
+          else if (isGroupItemKeyboardGrabbedProperty.value && keysPressed === 'escape') {
             isGroupItemKeyboardGrabbedProperty.value = false;
           }
 
@@ -283,123 +285,123 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
           isKeyboardFocusedProperty.value = true;
         }
       }
-    } );
+    });
 
-    const deltaKeyboardListener = new KeyboardListener( {
+    const deltaKeyboardListener = new KeyboardListener({
       fireOnHold: true,
       keys: sortingKeys,
-      callback: ( event, keysPressed ) => {
+      callback: (event, keysPressed) => {
 
-        if ( selectedGroupItemProperty.value !== null ) {
+        if (selectedGroupItemProperty.value !== null) {
 
           const groupItem = selectedGroupItemProperty.value;
-          const oldValue = this.model.getGroupItemValue( groupItem )!;
-          window.assert && window.assert( oldValue !== null, 'We should have a group item when responding to input?' );
+          const oldValue = this.model.getGroupItemValue(groupItem)!;
+          window.assert && window.assert(oldValue !== null, 'We should have a group item when responding to input?');
 
           // Sorting an item
-          if ( isGroupItemKeyboardGrabbedProperty.value ) {
+          if (isGroupItemKeyboardGrabbedProperty.value) {
 
             // Don't do any sorting when disabled
             // For these keys, the item will move by a particular delta
-            if ( this.model.enabled && sortingKeys.includes( keysPressed ) ) {
-              const delta = this.getDeltaForKey( keysPressed )!;
-              window.assert && window.assert( delta !== null, 'should be a supported key' );
+            if (this.model.enabled && sortingKeys.includes(keysPressed)) {
+              const delta = this.getDeltaForKey(keysPressed)!;
+              window.assert && window.assert(delta !== null, 'should be a supported key');
               const newValue = oldValue + delta;
-              this.onSortedValue( groupItem, newValue, oldValue );
+              this.onSortedValue(groupItem, newValue, oldValue);
             }
           }
           else {
             // Selecting an item
-            const unclampedDelta = this.getDeltaForKey( keysPressed );
-            if ( unclampedDelta !== null ) {
+            const unclampedDelta = this.getDeltaForKey(keysPressed);
+            if (unclampedDelta !== null) {
               this.model.hasKeyboardSelectedGroupItemProperty.value = true;
 
-              const clampedDelta = this.sortingRangeProperty.value.clampDelta( oldValue, unclampedDelta );
-              selectedGroupItemProperty.value = options.getNextSelectedGroupItem( clampedDelta, groupItem );
+              const clampedDelta = this.sortingRangeProperty.value.clampDelta(oldValue, unclampedDelta);
+              selectedGroupItemProperty.value = options.getNextSelectedGroupItem(clampedDelta, groupItem);
             }
           }
-          this.onGroupItemChange( groupItem );
+          this.onGroupItemChange(groupItem);
         }
       }
-    } );
+    });
 
-    if ( options.numberKeyMapper ) {
-      const numbersKeyboardListener = new KeyboardListener( {
+    if (options.numberKeyMapper) {
+      const numbersKeyboardListener = new KeyboardListener({
         fireOnHold: true,
-        keys: [ '1', '2', '3', '4', '5', '6', '7', '8', '9', '0' ],
-        callback: ( event, keysPressed ) => {
-          if ( selectedGroupItemProperty.value !== null && isGroupItemKeyboardGrabbedProperty.value &&
-               isSingleDigit( keysPressed ) ) {
+        keys: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'],
+        callback: (event, keysPressed) => {
+          if (selectedGroupItemProperty.value !== null && isGroupItemKeyboardGrabbedProperty.value &&
+            isSingleDigit(keysPressed)) {
 
             const groupItem = selectedGroupItemProperty.value;
-            const oldValue = this.model.getGroupItemValue( groupItem )!;
-            window.assert && window.assert( oldValue !== null, 'We should have a group item when responding to input?' );
-            window.assert && window.assert( isSingleDigit( keysPressed ), 'sanity check on numbers for keyboard listener' );
+            const oldValue = this.model.getGroupItemValue(groupItem)!;
+            window.assert && window.assert(oldValue !== null, 'We should have a group item when responding to input?');
+            window.assert && window.assert(isSingleDigit(keysPressed), 'sanity check on numbers for keyboard listener');
 
-            const mappedValue = options.numberKeyMapper!( keysPressed );
-            if ( mappedValue ) {
-              this.onSortedValue( groupItem, mappedValue, oldValue );
-              this.onGroupItemChange( groupItem );
+            const mappedValue = options.numberKeyMapper!(keysPressed);
+            if (mappedValue) {
+              this.onSortedValue(groupItem, mappedValue, oldValue);
+              this.onGroupItemChange(groupItem);
             }
           }
         }
-      } );
-      primaryFocusedNode.addInputListener( numbersKeyboardListener );
-      this.disposeEmitter.addListener( () => {
-        primaryFocusedNode.removeInputListener( numbersKeyboardListener );
+      });
+      primaryFocusedNode.addInputListener(numbersKeyboardListener);
+      this.disposeEmitter.addListener(() => {
+        primaryFocusedNode.removeInputListener(numbersKeyboardListener);
         numbersKeyboardListener.dispose();
-      } );
+      });
     }
 
-    const defaultGroupShape = primaryFocusedNode.visibleBounds.isFinite() ? Shape.bounds( primaryFocusedNode.visibleBounds ) : null;
+    const defaultGroupShape = primaryFocusedNode.visibleBounds.isFinite() ? Shape.bounds(primaryFocusedNode.visibleBounds) : null;
 
     // Set the outer group focus highlight to surround the entire area where group items are located.
-    this.groupSortGroupFocusHighlightPath = new HighlightPath( defaultGroupShape, {
+    this.groupSortGroupFocusHighlightPath = new HighlightPath(defaultGroupShape, {
       outerStroke: HighlightPath.OUTER_LIGHT_GROUP_FOCUS_COLOR,
       innerStroke: HighlightPath.INNER_LIGHT_GROUP_FOCUS_COLOR,
       outerLineWidth: HighlightPath.GROUP_OUTER_LINE_WIDTH,
       innerLineWidth: HighlightPath.GROUP_INNER_LINE_WIDTH
-    } );
+    });
 
-    this.grabReleaseCueNode = new GrabReleaseCueNode( combineOptions<GrabReleaseCueNodeOptions>( {
+    this.grabReleaseCueNode = new GrabReleaseCueNode(combineOptions<GrabReleaseCueNodeOptions>({
       visibleProperty: this.model.grabReleaseCueVisibleProperty
-    }, options.grabReleaseCueOptions ) );
-    this.groupSortGroupFocusHighlightPath.addChild( this.grabReleaseCueNode );
+    }, options.grabReleaseCueOptions));
+    this.groupSortGroupFocusHighlightPath.addChild(this.grabReleaseCueNode);
 
-    primaryFocusedNode.setGroupFocusHighlight( this.groupSortGroupFocusHighlightPath );
-    primaryFocusedNode.addInputListener( focusListener );
-    primaryFocusedNode.addInputListener( grabReleaseKeyboardListener );
-    primaryFocusedNode.addInputListener( deltaKeyboardListener );
+    primaryFocusedNode.setGroupFocusHighlight(this.groupSortGroupFocusHighlightPath);
+    primaryFocusedNode.addInputListener(focusListener);
+    primaryFocusedNode.addInputListener(grabReleaseKeyboardListener);
+    primaryFocusedNode.addInputListener(deltaKeyboardListener);
 
-    this.disposeEmitter.addListener( () => {
-      primaryFocusedNode.setGroupFocusHighlight( false );
-      primaryFocusedNode.setFocusHighlight( null );
-      primaryFocusedNode.removeInputListener( deltaKeyboardListener );
-      primaryFocusedNode.removeInputListener( grabReleaseKeyboardListener );
-      primaryFocusedNode.removeInputListener( focusListener );
+    this.disposeEmitter.addListener(() => {
+      primaryFocusedNode.setGroupFocusHighlight(false);
+      primaryFocusedNode.setFocusHighlight(null);
+      primaryFocusedNode.removeInputListener(deltaKeyboardListener);
+      primaryFocusedNode.removeInputListener(grabReleaseKeyboardListener);
+      primaryFocusedNode.removeInputListener(focusListener);
       updateFocusHighlight.dispose();
       deltaKeyboardListener.dispose();
-      grabReleaseKeyboardListener.dispose;
-    } );
+      // grabReleaseKeyboardListener.dispose;
+    });
   }
 
   // By "change" we mean sort or selection.
-  private onGroupItemChange( newGroupItem: ItemModel ): void {
+  private onGroupItemChange(newGroupItem: ItemModel): void {
     // When using keyboard input, make sure that the selected group item is still displayed by panning to keep it
     // in view. `panToCenter` is false because centering the group item in the screen is too much movement.
-    const node = this.getNodeFromModelItem( newGroupItem );
-    node && animatedPanZoomSingleton.listener.panToNode( node, false );
+    const node = this.getNodeFromModelItem(newGroupItem);
+    node && animatedPanZoomSingleton.listener.panToNode(node, false);
 
     // Reset to true from keyboard input, in case mouse/touch input set to false during the keyboard interaction.
     this.model.isKeyboardFocusedProperty.value = true;
   }
 
   // Conduct the sorting of a value
-  private onSortedValue( groupItem: ItemModel, value: number, oldValue: number ): void {
-    window.assert && window.assert( value !== null, 'We should have a value for the group item by the end of the listener.' );
+  private onSortedValue(groupItem: ItemModel, value: number, oldValue: number): void {
+    window.assert && window.assert(value !== null, 'We should have a value for the group item by the end of the listener.');
 
-    this.sortGroupItem( groupItem, this.sortingRangeProperty.value.constrainValue( value ) );
-    this.onSort( groupItem, oldValue );
+    this.sortGroupItem(groupItem, this.sortingRangeProperty.value.constrainValue(value));
+    this.onSort(groupItem, oldValue);
     this.model.hasKeyboardSortedGroupItemProperty.value = true;
   }
 
@@ -407,17 +409,17 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
    * Get the delta to change the value given what key was pressed. The returned delta may not result in a value in range,
    * please constrain value from range or provide your own defensive measures to this delta.
    */
-  private getDeltaForKey( key: string ): number | null {
+  private getDeltaForKey(key: string): number | null {
     const fullRange = this.sortingRangeProperty.value.getLength();
     return key === 'home' ? -fullRange :
-           key === 'end' ? fullRange :
-           key === 'pageDown' ? -this.pageSortStep :
-           key === 'pageUp' ? this.pageSortStep :
-           [ 'arrowLeft', 'a', 'arrowDown', 's' ].includes( key ) ? -this.sortStep :
-           [ 'arrowRight', 'd', 'arrowUp', 'w' ].includes( key ) ? this.sortStep :
-           [ 'shift+arrowLeft', 'shift+a', 'shift+arrowDown', 'shift+s' ].includes( key ) ? -this.shiftSortStep :
-           [ 'shift+arrowRight', 'shift+d', 'shift+arrowUp', 'shift+w' ].includes( key ) ? this.shiftSortStep :
-           null;
+      key === 'end' ? fullRange :
+        key === 'pageDown' ? -this.pageSortStep :
+          key === 'pageUp' ? this.pageSortStep :
+            ['arrowLeft', 'a', 'arrowDown', 's'].includes(key) ? -this.sortStep :
+              ['arrowRight', 'd', 'arrowUp', 'w'].includes(key) ? this.sortStep :
+                ['shift+arrowLeft', 'shift+a', 'shift+arrowDown', 'shift+s'].includes(key) ? -this.shiftSortStep :
+                  ['shift+arrowRight', 'shift+d', 'shift+arrowUp', 'shift+w'].includes(key) ? this.shiftSortStep :
+                    null;
   }
 
   public override dispose(): void {
@@ -431,8 +433,8 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
    * Use SortCueArrowNode to create a Node for the keyboard sorting cue. Can also be used as the mouse/touch cue
    * Node if desired.
    */
-  public static createSortCueNode( visibleProperty: TReadOnlyProperty<boolean>, scale = 1 ): SortCueArrowNode {
-    return new SortCueArrowNode( {
+  public static createSortCueNode(visibleProperty: TReadOnlyProperty<boolean>, scale = 1): SortCueArrowNode {
+    return new SortCueArrowNode({
       doubleHead: true,
       dashWidth: 3.5 * scale,
       dashHeight: 2.8 * scale,
@@ -442,8 +444,8 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
         triangleWidth: 12 * scale,
         triangleHeight: 11 * scale
       },
-      visibleProperty: visibleProperty
-    } );
+      visibleProperty
+    });
   }
 
   /**
@@ -453,12 +455,12 @@ export default class GroupSortInteractionView<ItemModel, ItemNode extends Node> 
   public static create<ItemModel, ItemNode extends Node>(
     model: GroupSortInteractionModel<ItemModel>,
     primaryFocusedNode: Node,
-    providedOptions: GroupSortInteractionViewOptions<ItemModel, ItemNode> ): GroupSortInteractionView<ItemModel, ItemNode> {
+    providedOptions: GroupSortInteractionViewOptions<ItemModel, ItemNode>): GroupSortInteractionView<ItemModel, ItemNode> {
 
-    return new GroupSortInteractionView<ItemModel, ItemNode>( model, primaryFocusedNode, providedOptions );
+    return new GroupSortInteractionView<ItemModel, ItemNode>(model, primaryFocusedNode, providedOptions);
   }
 }
 
-function isSingleDigit( key: string ): boolean { return /^\d$/.test( key );}
+function isSingleDigit(key: string): boolean { return /^\d$/.test(key); }
 
-sceneryPhet.register( 'GroupSortInteractionView', GroupSortInteractionView );
+sceneryPhet.register('GroupSortInteractionView', GroupSortInteractionView);

@@ -7,10 +7,10 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../phet-core/js/types/StrictOmit.js';
-import sceneryPhet from '../sceneryPhet.js';
-import StepButton, { StepButtonOptions } from './StepButton.js';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import StepButton, { type StepButtonOptions } from '@/utils/scenery-phet/buttons/StepButton';
 
 type SelfOptions = EmptySelfOptions;
 
@@ -18,16 +18,16 @@ export type StepForwardButtonOptions = SelfOptions & StrictOmit<StepButtonOption
 
 export default class StepForwardButton extends StepButton {
 
-  public constructor( providedOptions?: StepForwardButtonOptions ) {
+  public constructor(providedOptions?: StepForwardButtonOptions) {
 
-    const options = optionize<StepForwardButtonOptions, SelfOptions, StepButtonOptions>()( {
+    const options = optionize<StepForwardButtonOptions, SelfOptions, StepButtonOptions>()({
 
       // StepButtonOptions
       direction: 'forward'
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
   }
 }
 
-sceneryPhet.register( 'StepForwardButton', StepForwardButton );
+sceneryPhet.register('StepForwardButton', StepForwardButton);

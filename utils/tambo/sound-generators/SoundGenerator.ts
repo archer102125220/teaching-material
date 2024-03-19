@@ -7,19 +7,21 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import DerivedProperty from '../../axon/DerivedProperty';
-import createObservableArray, { type ObservableArray } from '../../axon/createObservableArray';
-import optionize from '../../phet-core/optionize';
-import Tandem from '../../tandem/Tandem';
-import phetAudioContext from '../phetAudioContext';
-import soundConstants from '../soundConstants';
-import tambo from '../tambo';
-import Property from '../../axon/Property';
-import type TProperty from '../../axon/TProperty';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import isSettingPhetioStateProperty from '../../tandem/isSettingPhetioStateProperty';
-import Disposable from '../../axon/Disposable';
+import _ from 'lodash';
+
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import createObservableArray, { type ObservableArray } from '@/utils/axon/createObservableArray';
+import optionize from '@/utils/phet-core/optionize';
+import Tandem from '@/utils/tandem/Tandem';
+import phetAudioContext from '@/utils/tambo/phetAudioContext';
+import soundConstants from '@/utils/tambo/soundConstants';
+import tambo from '@/utils/tambo/tambo';
+import Property from '@/utils/axon/Property';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
+import Disposable from '@/utils/axon/Disposable';
 
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;

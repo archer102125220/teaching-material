@@ -6,14 +6,14 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import type TProperty from '../axon/TProperty';
-import PhetFont from '../scenery-phet/PhetFont';
-import { allowLinksProperty, FireListener, ManualConstraint, Node, type NodeOptions, Path, Rectangle, SceneryEvent, Text, type TPaint, Voicing, type VoicingOptions, WidthSizable } from '../scenery/imports';
-import checkSolidShape from '../sherpa/fontawesome-5/checkSolidShape';
-import EventType from '../tandem/EventType';
-import sun from './sun';
-import optionize from '../phet-core/optionize';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { allowLinksProperty, FireListener, ManualConstraint, Node, type NodeOptions, Path, Rectangle, SceneryEvent, Text, type TPaint, Voicing, type VoicingOptions, WidthSizable } from '@/utils/scenery/imports';
+import checkSolidShape from '@/utils/sherpa/fontawesome-5/checkSolidShape';
+import EventType from '@/utils/tandem/EventType';
+import sun from '@/utils/sun/sun';
+import optionize from '@/utils/phet-core/optionize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 // the check mark used for toggle-able menu items
 const CHECK_MARK_NODE = new Path(checkSolidShape, {

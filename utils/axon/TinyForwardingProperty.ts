@@ -15,13 +15,13 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import axon from './axon';
-import Property from './Property';
-import ReadOnlyProperty from './ReadOnlyProperty';
-import TinyProperty, { type TinyPropertyOnBeforeNotify } from './TinyProperty';
-import type TProperty from './TProperty';
-import type TReadOnlyProperty from './TReadOnlyProperty';
-import { isTReadOnlyProperty, type PropertyLazyLinkListener } from './TReadOnlyProperty';
+import axon from '@/utils/axon/axon';
+import Property from '@/utils/axon/Property';
+import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
+import TinyProperty, { type TinyPropertyOnBeforeNotify } from '@/utils/axon/TinyProperty';
+import type TProperty from '@/utils/axon/TProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { isTReadOnlyProperty, type PropertyLazyLinkListener } from '@/utils/axon/TReadOnlyProperty';
 
 type NodeLike = {
   updateLinkedElementForProperty: <ValueType>(tandemName: string, oldProperty?: TProperty<ValueType> | null, newProperty?: TProperty<ValueType> | null) => void;
@@ -55,7 +55,7 @@ export default class TinyForwardingProperty<ValueType> extends TinyProperty<Valu
       this.targetPropertyInstrumented = targetPropertyInstrumented;
     }
 
-    if (assert) {
+    if (window.assert) {
       this.phetioInitialized = false;
     }
   }
@@ -218,7 +218,7 @@ export default class TinyForwardingProperty<ValueType> extends TinyProperty<Valu
       node.updateLinkedElementForProperty(tandemName, null, this.targetProperty);
     }
 
-    if (assert) {
+    if (window.assert) {
       this.phetioInitialized = true;
     }
   }

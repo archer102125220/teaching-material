@@ -7,15 +7,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../../axon/TReadOnlyProperty';
-import Vector2 from '../../../../dot/Vector2';
-import ModelViewTransform2 from '../../../../phetcommon/view/ModelViewTransform2';
-import RulerNode from '../../../../scenery-phet/RulerNode';
-import Tandem from '../../../../tandem/Tandem';
-import geometricOptics from '../../../geometricOptics';
-import GORuler from '../../model/tools/GORuler';
-import GORulerNode from './GORulerNode';
-import GOToolIcon from './GOToolIcon';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import RulerNode from '@/utils/scenery-phet/RulerNode';
+import Tandem from '@/utils/tandem/Tandem';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GORuler from '@/utils/geometric-optics/common/model/tools/GORuler';
+import GORulerNode from '@/utils/geometric-optics/common/view/tools/GORulerNode';
+import GOToolIcon from '@/utils/geometric-optics/common/view/tools/GOToolIcon';
 
 // constants
 const ICON_WIDTH = 48;

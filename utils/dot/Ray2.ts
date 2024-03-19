@@ -6,8 +6,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import dot from './dot';
-import Vector2 from './Vector2';
+import dot from '@/utils/dot/dot';
+import Vector2 from '@/utils/dot/Vector2';
 
 export default class Ray2 {
 
@@ -20,26 +20,26 @@ export default class Ray2 {
    * @param position - the ray's point of origin
    * @param direction - the ray's unit direction vector
    */
-  public constructor( position: Vector2, direction: Vector2 ) {
+  public constructor(position: Vector2, direction: Vector2) {
 
     this.position = position;
     this.direction = direction;
 
-    window.assert && window.assert( Math.abs( direction.magnitude - 1 ) < 0.01, 'the direction must be a unit vector' );
+    window.assert && window.assert(Math.abs(direction.magnitude - 1) < 0.01, 'the direction must be a unit vector');
   }
 
   /**
    * Returns a new Ray that has it origin shifted to a position given by an amount distance*this.direction.
    */
-  public shifted( distance: number ): Ray2 {
-    return new Ray2( this.pointAtDistance( distance ), this.direction );
+  public shifted(distance: number): Ray2 {
+    return new Ray2(this.pointAtDistance(distance), this.direction);
   }
 
   /**
    * Returns a position that is a distance 'distance' along the ray.
    */
-  public pointAtDistance( distance: number ): Vector2 {
-    return this.position.plus( this.direction.timesScalar( distance ) );
+  public pointAtDistance(distance: number): Vector2 {
+    return this.position.plus(this.direction.timesScalar(distance));
   }
 
   /**
@@ -50,4 +50,4 @@ export default class Ray2 {
   }
 }
 
-dot.register( 'Ray2', Ray2 );
+dot.register('Ray2', Ray2);

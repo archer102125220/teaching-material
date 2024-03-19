@@ -7,9 +7,9 @@
  *
  */
 
-import Dimension2 from '../../dot/Dimension2';
-import PhetFont from '../../scenery-phet/PhetFont';
-import Tandem from '../../tandem/Tandem';
+import Dimension2 from '@/utils/dot/Dimension2';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import Tandem from '@/utils/tandem/Tandem';
 
 const TITLE_FONT = new PhetFont({ weight: 'bold', size: 16 });
 const DESCRIPTION_FONT = new PhetFont(16);

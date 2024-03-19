@@ -9,13 +9,13 @@
 
 import _ from 'lodash';
 
-import Property from '../../axon/Property';
-import Bounds2 from '../../dot/Bounds2';
-import Matrix3 from '../../dot/Matrix3';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
-import { Circle, Color, DOM, Gradient, Image, Line, LinearGradient, type Mipmap, Node, Paint, Path, Pattern, RadialGradient, Rectangle, scenery, Text } from '../imports';
+import Property from '@/utils/axon/Property';
+import Bounds2 from '@/utils/dot/Bounds2';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import { Circle, Color, DOM, Gradient, Image, Line, LinearGradient, type Mipmap, Node, Paint, Path, Pattern, RadialGradient, Rectangle, scenery, Text } from '@/utils/scenery/imports';
 
 const sceneryDeserialize = (value: { type: string;[key: string]: IntentionalAny }): IntentionalAny => {
   const nodeTypes = [

@@ -7,74 +7,78 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Property from '../../axon/Property';
-import detectPrefix from '../../phet-core/detectPrefix';
-import detectPrefixEvent from '../../phet-core/detectPrefixEvent';
-import platform from '../../phet-core/platform';
-import { scenery } from '../imports';
+import Property from '@/utils/axon/Property';
+import detectPrefix from '@/utils/phet-core/detectPrefix';
+import detectPrefixEvent from '@/utils/phet-core/detectPrefixEvent';
+import platform from '@/utils/phet-core/platform';
+import { scenery } from '@/utils/scenery/imports';
 
 // get prefixed (and properly capitalized) property names
-const exitFullscreenPropertyName = detectPrefix( document, 'exitFullscreen' ) ||
-                                   detectPrefix( document, 'cancelFullScreen' ); // Firefox
-const fullscreenElementPropertyName = detectPrefix( document, 'fullscreenElement' ) ||
-                                      detectPrefix( document, 'fullScreenElement' ); // Firefox capitalization
-const fullscreenEnabledPropertyName = detectPrefix( document, 'fullscreenEnabled' ) ||
-                                      detectPrefix( document, 'fullScreenEnabled' ); // Firefox capitalization
-let fullscreenChangeEvent = detectPrefixEvent( document, 'fullscreenchange' );
+const exitFullscreenPropertyName =
+  detectPrefix(document, 'exitFullscreen') ||
+  detectPrefix(document, 'cancelFullScreen'); // Firefox
+const fullscreenElementPropertyName =
+  detectPrefix(document, 'fullscreenElement') ||
+  detectPrefix(document, 'fullScreenElement'); // Firefox capitalization
+const fullscreenEnabledPropertyName =
+  detectPrefix(document, 'fullscreenEnabled') ||
+  detectPrefix(document, 'fullScreenEnabled'); // Firefox capitalization
+let fullscreenChangeEvent = detectPrefixEvent(document, 'fullscreenchange');
 
 // required capitalization workaround for now
-if ( fullscreenChangeEvent === 'msfullscreenchange' ) {
+if (fullscreenChangeEvent === 'msfullscreenchange') {
   fullscreenChangeEvent = 'MSFullscreenChange';
 }
 
 const FullScreen = {
-
   // @public
   isFullScreen() {
-    return !!document[ fullscreenElementPropertyName ];
+    return !!document[fullscreenElementPropertyName];
   },
 
   // @public
   isFullScreenEnabled() {
-    return document[ fullscreenEnabledPropertyName ] && !platform.safari7;
+    return document[fullscreenEnabledPropertyName] && !platform.safari7;
   },
 
   /**
    * @public
    * @param {Display} display
    */
-  enterFullScreen( display ) {
-    const requestFullscreenPropertyName = detectPrefix( document.body, 'requestFullscreen' ) ||
-                                          detectPrefix( document.body, 'requestFullScreen' ); // Firefox capitalization
+  enterFullScreen(display) {
+    const requestFullscreenPropertyName =
+      detectPrefix(document.body, 'requestFullscreen') ||
+      detectPrefix(document.body, 'requestFullScreen'); // Firefox capitalization
 
-    display.domElement[ requestFullscreenPropertyName ] && display.domElement[ requestFullscreenPropertyName ]();
+    display.domElement[requestFullscreenPropertyName] &&
+      display.domElement[requestFullscreenPropertyName]();
   },
 
   // @public
   exitFullScreen() {
-    document[ exitFullscreenPropertyName ] && document[ exitFullscreenPropertyName ]();
+    document[exitFullscreenPropertyName] &&
+      document[exitFullscreenPropertyName]();
   },
 
   /**
    * @public
    * @param {Display} display
    */
-  toggleFullScreen( display ) {
-    if ( FullScreen.isFullScreen() ) {
+  toggleFullScreen(display) {
+    if (FullScreen.isFullScreen()) {
       FullScreen.exitFullScreen();
-    }
-    else {
-      FullScreen.enterFullScreen( display );
+    } else {
+      FullScreen.enterFullScreen(display);
     }
   },
 
-  isFullScreenProperty: new Property( false )
+  isFullScreenProperty: new Property(false)
 };
 
 // update isFullScreenProperty on potential changes
-document.addEventListener( fullscreenChangeEvent, evt => {
-  FullScreen.isFullScreenProperty.set( FullScreen.isFullScreen() );
-} );
+document.addEventListener(fullscreenChangeEvent, (evt) => {
+  FullScreen.isFullScreenProperty.set(FullScreen.isFullScreen());
+});
 
-scenery.register( 'FullScreen', FullScreen );
+scenery.register('FullScreen', FullScreen);
 export default FullScreen;

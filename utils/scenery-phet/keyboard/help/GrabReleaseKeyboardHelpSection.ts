@@ -6,17 +6,17 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import PatternStringProperty from '../../../../axon/js/PatternStringProperty.js';
-import TReadOnlyProperty from '../../../../axon/js/TReadOnlyProperty.js';
-import { combineOptions } from '../../../../phet-core/js/optionize.js';
-import StrictOmit from '../../../../phet-core/js/types/StrictOmit.js';
-import sceneryPhet from '../../sceneryPhet.js';
-import SceneryPhetStrings from '../../SceneryPhetStrings.js';
-import TextKeyNode from '../TextKeyNode.js';
-import KeyboardHelpIconFactory from './KeyboardHelpIconFactory.js';
-import KeyboardHelpSection, { KeyboardHelpSectionOptions } from './KeyboardHelpSection.js';
-import KeyboardHelpSectionRow from './KeyboardHelpSectionRow.js';
-import Tandem from '../../../../tandem/js/Tandem.js';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import { combineOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import TextKeyNode from '@/utils/scenery-phet/keyboard/TextKeyNode';
+import KeyboardHelpIconFactory from '@/utils/scenery-phet/keyboard/help/KeyboardHelpIconFactory';
+import KeyboardHelpSection, { type KeyboardHelpSectionOptions } from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSection';
+import KeyboardHelpSectionRow from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSectionRow';
+import Tandem from '@/utils/tandem/Tandem';
 
 type GrabReleaseKeyboardHelpSectionOptions = StrictOmit<KeyboardHelpSectionOptions, 'a11yContentTagName'>;
 
@@ -27,42 +27,42 @@ export default class GrabReleaseKeyboardHelpSection extends KeyboardHelpSection 
    * @param thingAsLowerCase - the item being grabbed, lower case as used in a sentence.
    * @param [providedOptions]
    */
-  public constructor( thingAsTitle: TReadOnlyProperty<string>, thingAsLowerCase: TReadOnlyProperty<string>,
-                      providedOptions?: GrabReleaseKeyboardHelpSectionOptions ) {
+  public constructor(thingAsTitle: TReadOnlyProperty<string>, thingAsLowerCase: TReadOnlyProperty<string>,
+    providedOptions?: GrabReleaseKeyboardHelpSectionOptions) {
 
-    const options = combineOptions<KeyboardHelpSectionOptions>( {
+    const options = combineOptions<KeyboardHelpSectionOptions>({
 
       // There is only a single paragraph for this section, no list needed in the PDOM
       a11yContentTagName: null
-    }, providedOptions );
+    }, providedOptions);
 
     // the visible heading string
-    const headingStringProperty = new PatternStringProperty( SceneryPhetStrings.keyboardHelpDialog.grabOrReleaseHeadingPatternStringProperty, {
+    const headingStringProperty = new PatternStringProperty(SceneryPhetStrings.keyboardHelpDialog.grabOrReleaseHeadingPatternStringProperty, {
       thing: thingAsTitle
-    }, { tandem: Tandem.OPT_OUT } );
+    }, { tandem: Tandem.OPT_OUT });
 
     // the visible label string
-    const labelStringProperty = new PatternStringProperty( SceneryPhetStrings.keyboardHelpDialog.grabOrReleaseLabelPatternStringProperty, {
+    const labelStringProperty = new PatternStringProperty(SceneryPhetStrings.keyboardHelpDialog.grabOrReleaseLabelPatternStringProperty, {
       thing: thingAsLowerCase
-    }, { tandem: Tandem.OPT_OUT } );
+    }, { tandem: Tandem.OPT_OUT });
 
     // the string for the PDOM
-    const descriptionStringProperty = new PatternStringProperty( SceneryPhetStrings.a11y.keyboardHelpDialog.grabOrReleaseDescriptionPatternStringProperty, {
+    const descriptionStringProperty = new PatternStringProperty(SceneryPhetStrings.a11y.keyboardHelpDialog.grabOrReleaseDescriptionPatternStringProperty, {
       thing: thingAsLowerCase
-    }, { tandem: Tandem.OPT_OUT } );
+    }, { tandem: Tandem.OPT_OUT });
 
     const spaceKeyNode = TextKeyNode.space();
     const enterKeyNode = TextKeyNode.enter();
-    const icons = KeyboardHelpIconFactory.iconOrIcon( spaceKeyNode, enterKeyNode );
-    const labelWithContentRow = KeyboardHelpSectionRow.labelWithIcon( labelStringProperty, icons, {
+    const icons = KeyboardHelpIconFactory.iconOrIcon(spaceKeyNode, enterKeyNode);
+    const labelWithContentRow = KeyboardHelpSectionRow.labelWithIcon(labelStringProperty, icons, {
       labelInnerContent: descriptionStringProperty,
       iconOptions: {
         tagName: 'p' // it is the only item, so it is 'p' rather than 'li'
       }
-    } );
+    });
 
-    super( headingStringProperty, [ labelWithContentRow ], options );
+    super(headingStringProperty, [labelWithContentRow], options);
   }
 }
 
-sceneryPhet.register( 'GrabReleaseKeyboardHelpSection', GrabReleaseKeyboardHelpSection );
+sceneryPhet.register('GrabReleaseKeyboardHelpSection', GrabReleaseKeyboardHelpSection);

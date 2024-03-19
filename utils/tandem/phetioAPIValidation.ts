@@ -31,11 +31,11 @@
  * @author Chris Klusendorf (PhET Interactive Simulations)
  */
 
-import Tandem, { DYNAMIC_ARCHETYPE_NAME } from './Tandem';
-import tandemNamespace from './tandemNamespace.js';
-import IOType from './types/IOType.js';
-import PhetioObject, { LinkedElement } from './PhetioObject.js';
-import { PhetioElementMetadata, PhetioID } from './TandemConstants.js';
+import Tandem, { DYNAMIC_ARCHETYPE_NAME } from '@/utils/tandem/Tandem';
+import tandemNamespace from '@/utils/tandem/tandemNamespace.js';
+import IOType from '@/utils/tandem/types/IOType.js';
+import PhetioObject, { LinkedElement } from '@/utils/tandem/PhetioObject.js';
+import { type PhetioElementMetadata, type PhetioID } from '@/utils/tandem/TandemConstants.js';
 
 // constants
 // The API-tracked and validated metadata keys
@@ -81,13 +81,13 @@ class PhetioAPIValidation {
    * Callback when the simulation is ready to go, and all static PhetioObjects have been created.
    */
   public onSimStarted(): void {
-    if ( this.enabled && phet.joist.sim.allScreensCreated ) {
+    if (this.enabled && phet.joist.sim.allScreensCreated) {
       this.validateOverridesFile();
       this.validatePreferencesModel();
     }
 
-    if ( phet.preloads.phetio.queryParameters.phetioPrintAPIProblems && this.apiMismatches ) {
-      console.log( 'PhET-iO API problems detected: ', this.apiMismatches );
+    if (phet.preloads.phetio.queryParameters.phetioPrintAPIProblems && this.apiMismatches) {
+      console.log('PhET-iO API problems detected: ', this.apiMismatches);
     }
 
     // After the overrides validation to support ?phetioPrintAPIProblems on errors with overrides.
@@ -99,89 +99,90 @@ class PhetioAPIValidation {
    * or from within studio, but phetioState: false so they are not captured with save states.
    */
   public validatePreferencesModel(): void {
-    Object.keys( phet.phetio.phetioEngine.phetioElementMap ).filter( key => key.includes( '.preferencesModel.' ) )
-      .forEach( preferencesKey => {
+    Object.keys(phet.phetio.phetioEngine.phetioElementMap).filter(key => key.includes('.preferencesModel.'))
+      .forEach(preferencesKey => {
 
-        let phetioObject = phet.phetio.phetioEngine.phetioElementMap[ preferencesKey ];
+        let phetioObject = phet.phetio.phetioEngine.phetioElementMap[preferencesKey];
 
-        while ( phetioObject instanceof LinkedElement ) {
+        while (phetioObject instanceof LinkedElement) {
           phetioObject = phetioObject.element;
         }
-        window.assert && window.assert( !phetioObject.phetioReadOnly, 'preferences model and its descendants should be phetioReadOnly: false, key=' + preferencesKey );
+        window.assert && window.assert(!phetioObject.phetioReadOnly, 'preferences model and its descendants should be phetioReadOnly: false, key=' + preferencesKey);
 
         // Audio manager, color profile property and localeProperty are supposed to be stateful. All other preferences
         // should be phetioState: false so they are not captured in the state
-        window.assert && window.assert( phetioObject.phetioState ===
-                          ( phetioObject.phetioID.endsWith( '.colorProfileProperty' ) ||
-                            phetioObject.phetioID.endsWith( '.audioEnabledProperty' ) ||
-                            phetioObject.phetioID.endsWith( '.localeProperty' ) ||
+        window.assert && window.assert(phetioObject.phetioState ===
+          (phetioObject.phetioID.endsWith('.colorProfileProperty') ||
+            phetioObject.phetioID.endsWith('.audioEnabledProperty') ||
+            phetioObject.phetioID.endsWith('.localeProperty') ||
 
-                            // Sim preferences should also be stateful
-                            preferencesKey.includes( '.simulationModel.' ) ),
-          'most preferences should be phetioState: false, key=' + preferencesKey );
-      } );
+            // Sim preferences should also be stateful
+            preferencesKey.includes('.simulationModel.')),
+          'most preferences should be phetioState: false, key=' + preferencesKey);
+      });
   }
 
   /**
    * Checks if a removed phetioObject is part of a Group
    */
-  public onPhetioObjectRemoved( phetioObject: PhetioObject ): void {
-    if ( !this.enabled ) {
+  public onPhetioObjectRemoved(phetioObject: PhetioObject): void {
+    if (!this.enabled) {
       return;
     }
 
     const phetioID = phetioObject.tandem.phetioID;
 
     // if it isn't dynamic, then it shouldn't be removed during the lifetime of the sim.
-    if ( !phetioObject.phetioDynamicElement ) {
-      this.assertAPIError( {
-        phetioID: phetioID,
+    if (!phetioObject.phetioDynamicElement) {
+      this.assertAPIError({
+        phetioID,
         ruleInViolation: '2. Any static, registered PhetioObject can never be deregistered.'
-      } );
+      });
     }
   }
 
   /**
    * Should be called from phetioEngine when a PhetioObject is added to the PhET-iO
    */
-  public onPhetioObjectAdded( phetioObject: PhetioObject ): void {
-    if ( !this.enabled ) {
+  public onPhetioObjectAdded(phetioObject: PhetioObject): void {
+    if (!this.enabled) {
       return;
     }
 
     const newPhetioType = phetioObject.phetioType;
-    const oldPhetioType = this.everyPhetioType[ newPhetioType.typeName ];
+    const oldPhetioType = this.everyPhetioType[newPhetioType.typeName];
 
-    if ( !oldPhetioType ) { // This may not be necessary, but may be helpful so that we don't overwrite if rule 10 is in violation
-      this.everyPhetioType[ newPhetioType.typeName ] = newPhetioType;
+    if (!oldPhetioType) { // This may not be necessary, but may be helpful so that we don't overwrite if rule 10 is in violation
+      this.everyPhetioType[newPhetioType.typeName] = newPhetioType;
     }
 
-    if ( this.simHasStarted ) {
+    if (this.simHasStarted) {
 
       // Here we need to kick this validation to the next frame to support construction in any order. Parent first, or
       // child first. Use namespace to avoid because timer is a PhetioObject.
-      phet.axon.animationFrameTimer.runOnNextTick( () => {
+      phet.axon.animationFrameTimer.runOnNextTick(() => {
 
         // The only instances that it's OK to create after startup are "dynamic instances" which are marked as such.
-        if ( !phetioObject.phetioDynamicElement ) {
-          this.assertAPIError( {
+        if (!phetioObject.phetioDynamicElement) {
+          this.assertAPIError({
             phetioID: phetioObject.tandem.phetioID,
             ruleInViolation: '1. After startup, only dynamic instances prescribed by the baseline file can be registered.'
-          } );
+          });
         }
         else {
 
           // Compare the dynamic element to the archetype if creating them this runtime. Don't check this if it has
           // already been disposed.
-          if ( phet.preloads.phetio.createArchetypes && !phetioObject.isDisposed ) {
+          // eslint-disable-next-line no-lonely-if
+          if (phet.preloads.phetio.createArchetypes && !phetioObject.isDisposed) {
             const archetypeID = phetioObject.tandem.getArchetypalPhetioID();
-            const archetypeMetadata = phet.phetio.phetioEngine.getPhetioElement( archetypeID ).getMetadata();
+            const archetypeMetadata = phet.phetio.phetioEngine.getPhetioElement(archetypeID).getMetadata();
 
             // Compare to the simulation-defined archetype
-            this.checkDynamicInstanceAgainstArchetype( phetioObject, archetypeMetadata, 'simulation archetype' );
+            this.checkDynamicInstanceAgainstArchetype(phetioObject, archetypeMetadata, 'simulation archetype');
           }
         }
-      } );
+      });
     }
   }
 
@@ -190,48 +191,46 @@ class PhetioAPIValidation {
     // import phetioEngine causes a cycle and cannot be used, hence we must use the namespace
     const entireBaseline = phet.phetio.phetioEngine.getPhetioElementsBaseline();
 
-    for ( const phetioID in window.phet.preloads.phetio.phetioElementsOverrides ) {
-      const isArchetype = phetioID.includes( DYNAMIC_ARCHETYPE_NAME );
-      if ( !phet.preloads.phetio.createArchetypes && !entireBaseline.hasOwnProperty( phetioID ) ) {
-        window.assert && window.assert( isArchetype, `phetioID missing from the baseline that was not an archetype: ${phetioID}` );
+    for (const phetioID in window.phet.preloads.phetio.phetioElementsOverrides) {
+      const isArchetype = phetioID.includes(DYNAMIC_ARCHETYPE_NAME);
+      if (!phet.preloads.phetio.createArchetypes && !entireBaseline.hasOwnProperty(phetioID)) {
+        window.assert && window.assert(isArchetype, `phetioID missing from the baseline that was not an archetype: ${phetioID}`);
+      }
+      else if (!entireBaseline.hasOwnProperty(phetioID)) {
+        this.assertAPIError({
+          phetioID,
+          ruleInViolation: '3. Any schema entries in the overrides file must exist in the baseline file.',
+          message: 'phetioID expected in the baseline file but does not exist'
+        });
       }
       else {
-        if ( !entireBaseline.hasOwnProperty( phetioID ) ) {
-          this.assertAPIError( {
-            phetioID: phetioID,
-            ruleInViolation: '3. Any schema entries in the overrides file must exist in the baseline file.',
-            message: 'phetioID expected in the baseline file but does not exist'
-          } );
+
+        const override = window.phet.preloads.phetio.phetioElementsOverrides[phetioID];
+        const baseline = entireBaseline[phetioID];
+
+        if (Object.keys(override).length === 0) {
+          this.assertAPIError({
+            phetioID,
+            ruleInViolation: '4. Any schema entries in the overrides file must be different from its baseline counterpart.',
+            message: 'no metadata keys found for this override.'
+          });
         }
-        else {
 
-          const override = window.phet.preloads.phetio.phetioElementsOverrides[ phetioID ];
-          const baseline = entireBaseline[ phetioID ];
-
-          if ( Object.keys( override ).length === 0 ) {
-            this.assertAPIError( {
-              phetioID: phetioID,
-              ruleInViolation: '4. Any schema entries in the overrides file must be different from its baseline counterpart.',
-              message: 'no metadata keys found for this override.'
-            } );
+        for (const metadataKey in override) {
+          if (!baseline.hasOwnProperty(metadataKey)) {
+            this.assertAPIError({
+              phetioID,
+              ruleInViolation: '8. Any schema entries in the overrides file must be different from its baseline counterpart.',
+              message: `phetioID metadata key not found in the baseline: ${metadataKey}`
+            });
           }
 
-          for ( const metadataKey in override ) {
-            if ( !baseline.hasOwnProperty( metadataKey ) ) {
-              this.assertAPIError( {
-                phetioID: phetioID,
-                ruleInViolation: '8. Any schema entries in the overrides file must be different from its baseline counterpart.',
-                message: `phetioID metadata key not found in the baseline: ${metadataKey}`
-              } );
-            }
-
-            if ( override[ metadataKey ] === baseline[ metadataKey ] ) {
-              this.assertAPIError( {
-                phetioID: phetioID,
-                ruleInViolation: '8. Any schema entries in the overrides file must be different from its baseline counterpart.',
-                message: 'phetioID metadata override value is the same as the corresponding metadata value in the baseline.'
-              } );
-            }
+          if (override[metadataKey] === baseline[metadataKey]) {
+            this.assertAPIError({
+              phetioID,
+              ruleInViolation: '8. Any schema entries in the overrides file must be different from its baseline counterpart.',
+              message: 'phetioID metadata override value is the same as the corresponding metadata value in the baseline.'
+            });
           }
         }
       }
@@ -241,16 +240,16 @@ class PhetioAPIValidation {
   /**
    * Assert out the failed API validation rule.
    */
-  private assertAPIError( apiErrorObject: APIMismatch ): void {
+  private assertAPIError(apiErrorObject: APIMismatch): void {
 
     const mismatchMessage = apiErrorObject.phetioID ? `${apiErrorObject.phetioID}:  ${apiErrorObject.ruleInViolation}` :
-                            `${apiErrorObject.ruleInViolation}`;
+      `${apiErrorObject.ruleInViolation}`;
 
-    this.apiMismatches.push( apiErrorObject );
+    this.apiMismatches.push(apiErrorObject);
 
     // If ?phetioPrintAPIProblems is present, then ignore assertions until the sim has started up.
-    if ( this.simHasStarted || !phet.preloads.phetio.queryParameters.phetioPrintAPIProblems ) {
-      window.assert && window.assert( false, `PhET-iO API error:\n${mismatchMessage}` );
+    if (this.simHasStarted || !phet.preloads.phetio.queryParameters.phetioPrintAPIProblems) {
+      window.assert && window.assert(false, `PhET-iO API error:\n${mismatchMessage}`);
     }
   }
 
@@ -258,28 +257,28 @@ class PhetioAPIValidation {
   /**
    * Compare a dynamic phetioObject's metadata to the expected metadata
    */
-  private checkDynamicInstanceAgainstArchetype( phetioObject: PhetioObject, archetypeMetadata: PhetioElementMetadata, source: string ): void {
+  private checkDynamicInstanceAgainstArchetype(phetioObject: PhetioObject, archetypeMetadata: PhetioElementMetadata, source: string): void {
     const actualMetadata = phetioObject.getMetadata();
-    KEYS_TO_CHECK.forEach( key => {
+    KEYS_TO_CHECK.forEach(key => {
 
       // These attributes are different for archetype vs actual
-      if ( key !== 'phetioDynamicElement' && key !== 'phetioArchetypePhetioID' && key !== 'phetioIsArchetype' ) {
+      if (key !== 'phetioDynamicElement' && key !== 'phetioArchetypePhetioID' && key !== 'phetioIsArchetype') {
 
         // @ts-expect-error - not sure how to be typesafe in the API files
-        if ( archetypeMetadata[ key ] !== actualMetadata[ key ] && phetioObject.tandem ) {
-          this.assertAPIError( {
+        if (archetypeMetadata[key] !== actualMetadata[key] && phetioObject.tandem) {
+          this.assertAPIError({
             phetioID: phetioObject.tandem.phetioID,
             ruleInViolation: '5. Dynamic element metadata should match the archetype in the API.',
-            source: source,
+            source,
             message: `mismatched metadata: ${key}`
-          } );
+          });
         }
       }
-    } );
+    });
   }
 }
 
 
 const phetioAPIValidation = new PhetioAPIValidation();
-tandemNamespace.register( 'phetioAPIValidation', phetioAPIValidation );
+tandemNamespace.register('phetioAPIValidation', phetioAPIValidation);
 export default phetioAPIValidation;

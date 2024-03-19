@@ -10,9 +10,9 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import toSVGNumber from '../../dot/toSVGNumber';
-import Vector2 from '../../dot/Vector2';
-import { ColorDef, Filter, type TColor, PaintDef, scenery } from '../imports';
+import toSVGNumber from '@/utils/dot/toSVGNumber';
+import Vector2 from '@/utils/dot/Vector2';
+import { ColorDef, Filter, type TColor, PaintDef, scenery } from '@/utils/scenery/imports';
 
 export default class DropShadow extends Filter {
 

@@ -6,11 +6,11 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../axon/DerivedProperty';
-import type TReadOnlyProperty from '../axon/TReadOnlyProperty';
-import Property from '../axon/Property';
-import { Color } from '../scenery/imports';
-import joist from './joist';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import Property from '@/utils/axon/Property';
+import { Color } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
 
 class LookAndFeel {
 

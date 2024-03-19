@@ -6,15 +6,15 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import BooleanProperty from '../../axon/BooleanProperty';
-import Vector2 from '../../dot/Vector2';
-import deprecationWarning from '../../phet-core/deprecationWarning';
-import merge from '../../phet-core/merge';
-import EventType from '../../tandem/EventType';
-import PhetioAction from '../../tandem/PhetioAction';
-import PhetioObject from '../../tandem/PhetioObject';
-import Tandem from '../../tandem/Tandem';
-import { Mouse, scenery, SceneryEvent } from '../imports';
+import BooleanProperty from '@/utils/axon/BooleanProperty';
+import Vector2 from '@/utils/dot/Vector2';
+import deprecationWarning from '@/utils/phet-core/deprecationWarning';
+import merge from '@/utils/phet-core/merge';
+import EventType from '@/utils/tandem/EventType';
+import PhetioAction from '@/utils/tandem/PhetioAction';
+import PhetioObject from '@/utils/tandem/PhetioObject';
+import Tandem from '@/utils/tandem/Tandem';
+import { Mouse, scenery, SceneryEvent } from '@/utils/scenery/imports';
 
 /**
  * @deprecated - please use DragListener for new code

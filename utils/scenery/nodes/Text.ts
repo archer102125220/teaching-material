@@ -8,22 +8,22 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import StringProperty, { type StringPropertyOptions } from '../../axon/StringProperty';
-import TinyForwardingProperty from '../../axon/TinyForwardingProperty';
-import escapeHTML from '../../phet-core/escapeHTML';
-import extendDefined from '../../phet-core/extendDefined';
-import platform from '../../phet-core/platform';
-import Tandem from '../../tandem/Tandem';
-import IOType from '../../tandem/types/IOType';
-import PhetioObject, { type PhetioObjectOptions } from '../../tandem/PhetioObject';
-import type TProperty from '../../axon/TProperty';
-import Matrix3 from '../../dot/Matrix3';
-import Bounds2 from '../../dot/Bounds2';
-import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, Font, type FontStretch, type FontStyle, type FontWeight, Instance, Node, type NodeOptions, Paintable, PAINTABLE_DRAWABLE_MARK_FLAGS, PAINTABLE_OPTION_KEYS, type PaintableOptions, Renderer, scenery, SVGSelfDrawable, TextBounds, TextCanvasDrawable, TextDOMDrawable, TextSVGDrawable, type TTextDrawable } from '../imports';
-import { type PropertyOptions } from '../../axon/Property';
-import { combineOptions } from '../../phet-core/optionize';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import phetioElementSelectionProperty from '../../tandem/phetioElementSelectionProperty';
+import StringProperty, { type StringPropertyOptions } from '@/utils/axon/StringProperty';
+import TinyForwardingProperty from '@/utils/axon/TinyForwardingProperty';
+import escapeHTML from '@/utils/phet-core/escapeHTML';
+import extendDefined from '@/utils/phet-core/extendDefined';
+import platform from '@/utils/phet-core/platform';
+import Tandem from '@/utils/tandem/Tandem';
+import IOType from '@/utils/tandem/types/IOType';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import type TProperty from '@/utils/axon/TProperty';
+import Matrix3 from '@/utils/dot/Matrix3';
+import Bounds2 from '@/utils/dot/Bounds2';
+import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, Font, type FontStretch, type FontStyle, type FontWeight, Instance, Node, type NodeOptions, Paintable, PAINTABLE_DRAWABLE_MARK_FLAGS, PAINTABLE_OPTION_KEYS, type PaintableOptions, Renderer, scenery, SVGSelfDrawable, TextBounds, TextCanvasDrawable, TextDOMDrawable, TextSVGDrawable, type TTextDrawable } from '@/utils/scenery/imports';
+import { type PropertyOptions } from '@/utils/axon/Property';
+import { combineOptions } from '@/utils/phet-core/optionize';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import phetioElementSelectionProperty from '@/utils/tandem/phetioElementSelectionProperty';
 
 const STRING_PROPERTY_NAME = 'stringProperty';
 

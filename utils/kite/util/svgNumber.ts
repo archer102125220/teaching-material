@@ -9,7 +9,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { kite } from '../imports';
+import { kite } from '@/utils/kite/imports';
 
 const svgNumber = (n: number): string => {
   return n.toFixed(20);

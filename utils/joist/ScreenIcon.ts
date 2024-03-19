@@ -8,12 +8,12 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import optionize from '../phet-core/optionize';
-import { Node, type NodeOptions, Rectangle, type TColor } from '../scenery/imports';
-import joist from './joist';
-import Screen from './Screen';
-import Dimension2 from '../dot/Dimension2';
-import type StrictOmit from '../phet-core/types/StrictOmit';
+import optionize from '@/utils/phet-core/optionize';
+import { Node, type NodeOptions, Rectangle, type TColor } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import Screen from '@/utils/joist/Screen';
+import Dimension2 from '@/utils/dot/Dimension2';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 
 type SelfOptions = {
   size?: Dimension2; // size of the background

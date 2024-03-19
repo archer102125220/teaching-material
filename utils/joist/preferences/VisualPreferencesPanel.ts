@@ -7,24 +7,24 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import merge from '../../phet-core/merge';
-import { Node, Text, VBox, VoicingText } from '../../scenery/imports';
-import joist from '../joist';
-import JoistStrings from '../JoistStrings';
-import PreferencesDialog from './PreferencesDialog';
-import PreferencesPanelSection from './PreferencesPanelSection';
-import PreferencesControl from './PreferencesControl';
-import { type VisualModel } from './PreferencesModel';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../phet-core/optionize';
-import ProjectorModeToggleSwitch from './ProjectorModeToggleSwitch';
-import Tandem from '../../tandem/Tandem';
-import PreferencesPanel, { type PreferencesPanelOptions } from './PreferencesPanel';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import PreferencesType from './PreferencesType';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import ToggleSwitch, { type ToggleSwitchOptions } from '../../sun/ToggleSwitch';
-import PreferencesDialogConstants from './PreferencesDialogConstants';
-import PatternStringProperty from '../../axon/PatternStringProperty';
+import merge from '@/utils/phet-core/merge';
+import { Node, Text, VBox, VoicingText } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import PreferencesPanelSection from '@/utils/joist/preferences/PreferencesPanelSection';
+import PreferencesControl from '@/utils/joist/preferences/PreferencesControl';
+import { type VisualModel } from '@/utils/joist/preferences/PreferencesModel';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import ProjectorModeToggleSwitch from '@/utils/joist/preferences/ProjectorModeToggleSwitch';
+import Tandem from '@/utils/tandem/Tandem';
+import PreferencesPanel, { type PreferencesPanelOptions } from '@/utils/joist/preferences/PreferencesPanel';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import ToggleSwitch, { type ToggleSwitchOptions } from '@/utils/sun/ToggleSwitch';
+import PreferencesDialogConstants from '@/utils/joist/preferences/PreferencesDialogConstants';
+import PatternStringProperty from '@/utils/axon/PatternStringProperty';
 
 // constants
 const interactiveHighlightsStringProperty = JoistStrings.preferences.tabs.visual.interactiveHighlightsStringProperty;

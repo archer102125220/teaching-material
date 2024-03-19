@@ -5,17 +5,17 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import sceneryPhet from '../sceneryPhet.js';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 export default class StringCasingPair {
 
   public readonly lowercase: string;
   public readonly capitalized: string;
 
-  public constructor( lowercase: string, capitalized: string ) {
+  public constructor(lowercase: string, capitalized: string) {
     this.lowercase = lowercase;
     this.capitalized = capitalized;
   }
 }
 
-sceneryPhet.register( 'StringCasingPair', StringCasingPair );
+sceneryPhet.register('StringCasingPair', StringCasingPair);

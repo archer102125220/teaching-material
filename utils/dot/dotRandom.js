@@ -9,8 +9,8 @@
 
 import _ from 'lodash';
 
-import dot from './dot';
-import Random from './Random';
+import dot from '@/utils/dot/dot';
+import Random from '@/utils/dot/Random';
 
 const dotRandom = new Random({
   seed: _.hasIn(window, 'phet.chipper.queryParameters.randomSeed')

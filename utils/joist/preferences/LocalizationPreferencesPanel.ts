@@ -10,21 +10,21 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import { Node, RichText, Text, VBox } from '../../scenery/imports';
-import joist from '../joist';
-import { type LocalizationModel } from './PreferencesModel';
-import PreferencesPanelSection from './PreferencesPanelSection';
-import RegionAndCultureComboBox from './RegionAndCultureComboBox';
-import LocalePanel from './LocalePanel';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import PreferencesDialog from './PreferencesDialog';
-import PreferencesPanel, { type PreferencesPanelOptions } from './PreferencesPanel';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
-import PreferencesType from './PreferencesType';
-import JoistStrings from '../JoistStrings';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import PreferencesDialogConstants from './PreferencesDialogConstants';
-import PreferencesControl from './PreferencesControl';
+import { Node, RichText, Text, VBox } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
+import { type LocalizationModel } from '@/utils/joist/preferences/PreferencesModel';
+import PreferencesPanelSection from '@/utils/joist/preferences/PreferencesPanelSection';
+import RegionAndCultureComboBox from '@/utils/joist/preferences/RegionAndCultureComboBox';
+import LocalePanel from '@/utils/joist/preferences/LocalePanel';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import PreferencesPanel, { type PreferencesPanelOptions } from '@/utils/joist/preferences/PreferencesPanel';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import PreferencesType from '@/utils/joist/preferences/PreferencesType';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import PreferencesDialogConstants from '@/utils/joist/preferences/PreferencesDialogConstants';
+import PreferencesControl from '@/utils/joist/preferences/PreferencesControl';
 
 // constants
 const localizationTitleStringProperty = JoistStrings.preferences.tabs.localization.titleStringProperty;

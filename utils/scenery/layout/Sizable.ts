@@ -7,12 +7,12 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import memoize from '../../phet-core/memoize';
-import { DelayedMutate, HEIGHT_SIZABLE_OPTION_KEYS, HeightSizable, type HeightSizableOptions, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery, WIDTH_SIZABLE_OPTION_KEYS, WidthSizable, type WidthSizableOptions } from '../imports';
-import type Constructor from '../../phet-core/types/Constructor';
-import Dimension2 from '../../dot/Dimension2';
-import assertMutuallyExclusiveOptions from '../../phet-core/assertMutuallyExclusiveOptions';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import memoize from '@/utils/phet-core/memoize';
+import { DelayedMutate, HEIGHT_SIZABLE_OPTION_KEYS, HeightSizable, type HeightSizableOptions, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery, WIDTH_SIZABLE_OPTION_KEYS, WidthSizable, type WidthSizableOptions } from '@/utils/scenery/imports';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import Dimension2 from '@/utils/dot/Dimension2';
+import assertMutuallyExclusiveOptions from '@/utils/phet-core/assertMutuallyExclusiveOptions';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 export const SIZABLE_SELF_OPTION_KEYS = [
   'preferredSize',
@@ -169,7 +169,7 @@ const Sizable = memoize(<SuperType extends Constructor<Node>>(type: SuperType) =
     public override get extendsSizable(): boolean { return true; }
 
     public validateLocalPreferredSize(): void {
-      if (assert) {
+      if (window.assert) {
         this.validateLocalPreferredWidth();
         this.validateLocalPreferredHeight();
       }

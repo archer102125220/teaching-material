@@ -7,8 +7,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import axon from './axon';
-import NumberProperty, { type NumberPropertyOptions } from './NumberProperty';
+import axon from '@/utils/axon/axon';
+import NumberProperty, { type NumberPropertyOptions } from '@/utils/axon/NumberProperty';
 
 type VarianceComputer = (value: number) => number;
 

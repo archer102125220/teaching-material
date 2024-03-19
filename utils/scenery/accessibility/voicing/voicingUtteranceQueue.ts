@@ -8,8 +8,8 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import UtteranceQueue from '../../../utterance-queue/UtteranceQueue';
-import { scenery, voicingManager } from '../../imports';
+import UtteranceQueue from '@/utils/utterance-queue/UtteranceQueue';
+import { scenery, voicingManager } from '@/utils/scenery/imports';
 
 const voicingUtteranceQueue = new UtteranceQueue(voicingManager, {
   featureSpecificAnnouncingControlPropertyName: 'voicingCanAnnounceProperty'

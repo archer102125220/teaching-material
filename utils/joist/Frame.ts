@@ -6,10 +6,10 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import Bounds2 from '../dot/Bounds2';
-import optionize from '../phet-core/optionize';
-import { LinearGradient, Node, Rectangle, type NodeOptions } from '../scenery/imports';
-import joist from './joist';
+import Bounds2 from '@/utils/dot/Bounds2';
+import optionize from '@/utils/phet-core/optionize';
+import { LinearGradient, Node, Rectangle, type NodeOptions } from '@/utils/scenery/imports';
+import joist from '@/utils/joist/joist';
 
 type SelfOptions = {
   xMargin1?: number;

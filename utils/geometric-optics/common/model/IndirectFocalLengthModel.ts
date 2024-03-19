@@ -8,18 +8,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import { type OpticSurfaceType } from './OpticSurfaceType';
-import type FocalLengthModel from './FocalLengthModel';
-import RangeWithValue from '../../../dot/RangeWithValue';
-import PhetioObject, { type PhetioObjectOptions } from '../../../tandem/PhetioObject';
-import NumberProperty from '../../../axon/NumberProperty';
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import DerivedProperty from '../../../axon/DerivedProperty';
-import geometricOptics from '../../geometricOptics';
-import NumberIO from '../../../tandem/types/NumberIO';
-import GOPreferences from './GOPreferences';
-import optionize from '../../../phet-core/optionize';
-import type PickRequired from '../../../phet-core/types/PickRequired';
+import { type OpticSurfaceType } from '@/utils/geometric-optics/common/model/OpticSurfaceType';
+import type FocalLengthModel from '@/utils/geometric-optics/common/model/FocalLengthModel';
+import RangeWithValue from '@/utils/dot/RangeWithValue';
+import PhetioObject, { type PhetioObjectOptions } from '@/utils/tandem/PhetioObject';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import DerivedProperty from '@/utils/axon/DerivedProperty';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import NumberIO from '@/utils/tandem/types/NumberIO';
+import GOPreferences from '@/utils/geometric-optics/common/model/GOPreferences';
+import optionize from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 type SelfOptions = {
   radiusOfCurvatureMagnitudeRange: RangeWithValue; // range of radiusOfCurvatureMagnitudeProperty

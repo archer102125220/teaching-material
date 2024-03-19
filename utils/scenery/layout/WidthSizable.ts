@@ -8,11 +8,11 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import TinyProperty from '../../axon/TinyProperty';
-import memoize from '../../phet-core/memoize';
-import { DelayedMutate, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery } from '../imports';
-import type Constructor from '../../phet-core/types/Constructor';
-import type IntentionalAny from '../../phet-core/types/IntentionalAny';
+import TinyProperty from '@/utils/axon/TinyProperty';
+import memoize from '@/utils/phet-core/memoize';
+import { DelayedMutate, Node, REQUIRES_BOUNDS_OPTION_KEYS, scenery } from '@/utils/scenery/imports';
+import type Constructor from '@/utils/phet-core/types/Constructor';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 // Position changes smaller than this will be ignored
 const CHANGE_POSITION_THRESHOLD = 1e-9;
@@ -192,13 +192,13 @@ const WidthSizable = memoize(<SuperType extends Constructor<Node>>(type: SuperTy
     public override get extendsWidthSizable(): boolean { return true; }
 
     public validateLocalPreferredWidth(): void {
-      if (assert) {
+      if (window.assert) {
         const currentWidth = this.localWidth;
         const effectiveMinimumWidth = this.localMinimumWidth === null ? currentWidth : this.localMinimumWidth;
         const idealWidth = this.localPreferredWidth === null ? effectiveMinimumWidth : this.localPreferredWidth;
 
         // Handle non-finite values with exact equality
-        assert(idealWidth === currentWidth || Math.abs(idealWidth - currentWidth) < 1e-7);
+        window.assert(idealWidth === currentWidth || Math.abs(idealWidth - currentWidth) < 1e-7);
       }
     }
 

@@ -10,7 +10,7 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import phetCore from './phetCore';
+import phetCore from '@/utils/phet-core/phetCore';
 
 const ua = navigator.userAgent;
 

@@ -8,15 +8,15 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import Property from '../../axon/Property';
-import InstanceRegistry from '../../phet-core/documentation/InstanceRegistry';
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import { Path } from '../../scenery/imports';
-import sceneryPhet from '../sceneryPhet';
-import SceneryPhetConstants from '../SceneryPhetConstants';
-import SceneryPhetStrings from '../SceneryPhetStrings';
-import StopIconShape from '../StopIconShape';
-import PlayControlButton, { type PlayControlButtonOptions } from './PlayControlButton';
+import Property from '@/utils/axon/Property';
+import InstanceRegistry from '@/utils/phet-core/documentation/InstanceRegistry';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { Path } from '@/utils/scenery/imports';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
+import SceneryPhetConstants from '@/utils/scenery-phet/SceneryPhetConstants';
+import SceneryPhetStrings from '@/utils/scenery-phet/SceneryPhetStrings';
+import StopIconShape from '@/utils/scenery-phet/StopIconShape';
+import PlayControlButton, { type PlayControlButtonOptions } from '@/utils/scenery-phet/buttons/PlayControlButton';
 
 type SelfOptions = EmptySelfOptions;
 

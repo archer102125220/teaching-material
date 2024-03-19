@@ -6,20 +6,20 @@
  * @author Jesse Greenberg
  */
 
-import Multilink from '../axon/Multilink';
-import Property from '../axon/Property';
-import optionize, { type EmptySelfOptions } from '../phet-core/optionize';
-import type PickRequired from '../phet-core/types/PickRequired';
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import KeyboardHelpSectionRow from '../scenery-phet/keyboard/help/KeyboardHelpSectionRow';
-import TextKeyNode from '../scenery-phet/keyboard/TextKeyNode';
-import PhetFont from '../scenery-phet/PhetFont';
-import { HBox, Node, type NodeOptions, PDOMPeer, ReadingBlock, type ReadingBlockOptions, VBox, VoicingText } from '../scenery/imports';
-import Dialog, { type DialogOptions } from '../sun/Dialog';
-import joist from './joist';
-import JoistStrings from './JoistStrings';
-import { type AnyScreen } from './Screen';
-import Tandem from '../tandem/Tandem';
+import Multilink from '@/utils/axon/Multilink';
+import Property from '@/utils/axon/Property';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import KeyboardHelpSectionRow from '@/utils/scenery-phet/keyboard/help/KeyboardHelpSectionRow';
+import TextKeyNode from '@/utils/scenery-phet/keyboard/TextKeyNode';
+import PhetFont from '@/utils/scenery-phet/PhetFont';
+import { HBox, Node, type NodeOptions, PDOMPeer, ReadingBlock, type ReadingBlockOptions, VBox, VoicingText } from '@/utils/scenery/imports';
+import Dialog, { type DialogOptions } from '@/utils/sun/Dialog';
+import joist from '@/utils/joist/joist';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import { type AnyScreen } from '@/utils/joist/Screen';
+import Tandem from '@/utils/tandem/Tandem';
 
 // constants
 const TITLE_MAX_WIDTH = 670;

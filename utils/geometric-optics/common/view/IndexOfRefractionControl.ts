@@ -6,15 +6,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import NumberControl, { type NumberControlOptions } from '../../../scenery-phet/NumberControl';
-import geometricOptics from '../../geometricOptics';
-import GeometricOpticsStrings from '../../GeometricOpticsStrings';
-import GOConstants from '../GOConstants';
-import Utils from '../../../dot/Utils';
-import NumberProperty from '../../../axon/NumberProperty';
-import type PickRequired from '../../../phet-core/types/PickRequired';
-import optionize, { combineOptions, type EmptySelfOptions } from '../../../phet-core/optionize';
-import type StrictOmit from '../../../phet-core/types/StrictOmit';
+import NumberControl, { type NumberControlOptions } from '@/utils/scenery-phet/NumberControl';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
+import GOConstants from '@/utils/geometric-optics/common/GOConstants';
+import Utils from '@/utils/dot/Utils';
+import NumberProperty from '@/utils/axon/NumberProperty';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import optionize, { combineOptions, type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 
 type SelfOptions = EmptySelfOptions;
 

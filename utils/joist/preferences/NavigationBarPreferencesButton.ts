@@ -6,19 +6,19 @@
  * @author Jesse Greenberg (PhET Interactive Simulations)
  */
 
-import optionize, { type EmptySelfOptions } from '../../phet-core/optionize';
-import { Color, Image } from '../../scenery/imports';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import { Color, Image } from '@/utils/scenery/imports';
 import preferencesIconOnWhite_png from '@/assets/images/joist/preferencesIconOnWhite_png'; // on a white navbar
 import preferencesIcon_png from '@/assets/images/joist/preferencesIcon_png'; // on a black navbar
-import Dialog from '../../sun/Dialog';
-import PhetioCapsule from '../../tandem/PhetioCapsule';
-import joist from '../joist';
-import JoistButton, { type JoistButtonOptions } from '../JoistButton';
-import JoistStrings from '../JoistStrings';
-import PreferencesDialog from './PreferencesDialog';
-import PreferencesModel from './PreferencesModel';
-import type PickRequired from '../../phet-core/types/PickRequired';
-import type TReadOnlyProperty from '../../axon/TReadOnlyProperty';
+import Dialog from '@/utils/sun/Dialog';
+import PhetioCapsule from '@/utils/tandem/PhetioCapsule';
+import joist from '@/utils/joist/joist';
+import JoistButton, { type JoistButtonOptions } from '@/utils/joist/JoistButton';
+import JoistStrings from '@/utils/joist/JoistStrings';
+import PreferencesDialog from '@/utils/joist/preferences/PreferencesDialog';
+import PreferencesModel from '@/utils/joist/preferences/PreferencesModel';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
 type SelfOptions = EmptySelfOptions;
 export type NavigationBarPreferencesButtonOptions = SelfOptions & PickRequired<JoistButtonOptions, 'tandem'> & Pick<JoistButtonOptions, 'pointerAreaDilationX' | 'pointerAreaDilationY'>;

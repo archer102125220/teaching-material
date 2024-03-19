@@ -12,12 +12,12 @@
 
 import _ from 'lodash';
 
-import Emitter from '../../axon/Emitter';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Vector2 from '../../dot/Vector2';
-import { Shape } from '../../kite/imports';
-import optionize, { combineOptions } from '../../phet-core/optionize';
-import { Color, type TPaint, Node, Path, type PathOptions, scenery, Trail } from '../imports';
+import Emitter from '@/utils/axon/Emitter';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Vector2 from '@/utils/dot/Vector2';
+import { Shape } from '@/utils/kite/imports';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import { Color, type TPaint, Node, Path, type PathOptions, scenery, Trail } from '@/utils/scenery/imports';
 
 // constants
 // default inner and outer strokes for the focus highlight

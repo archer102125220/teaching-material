@@ -12,7 +12,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { scenery, SelfDrawable } from '../imports';
+import { scenery, SelfDrawable } from '@/utils/scenery/imports';
 
 class DOMSelfDrawable extends SelfDrawable {
   /**

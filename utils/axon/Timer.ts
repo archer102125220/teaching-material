@@ -7,8 +7,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import axon from './axon';
-import TinyEmitter from './TinyEmitter';
+import axon from '@/utils/axon/axon';
+import TinyEmitter from '@/utils/axon/TinyEmitter';
 
 export type TimerListener = ( dt: number ) => void;
 

@@ -10,7 +10,7 @@
  *
  * @author Jesse Greenberg
  */
-import { Node, scenery } from '../../imports';
+import { Node, scenery } from '@/utils/scenery/imports';
 
 const AriaHasPopUpMutator = {
 
@@ -18,18 +18,18 @@ const AriaHasPopUpMutator = {
    * @param node - Node whose ParallelDOM.js fields will change
    * @param value - Valid value for aria-haspopup attribute, or false to remove the attribute
    */
-  mutateNode( node: Node, value: boolean | string ): void {
-    if ( value ) {
-      node.setPDOMAttribute( 'aria-haspopup', value );
+  mutateNode(node: Node, value: boolean | string): void {
+    if (value) {
+      node.setPDOMAttribute('aria-haspopup', value);
     }
     else {
-      window.assert && window.assert( node.hasPDOMAttribute( 'aria-haspopup' ), 'Set aria-haspopup once before removing it.' );
-      node.removePDOMAttribute( 'aria-haspopup' );
+      window.assert && window.assert(node.hasPDOMAttribute('aria-haspopup'), 'Set aria-haspopup once before removing it.');
+      node.removePDOMAttribute('aria-haspopup');
     }
 
     node.positionInPDOM = !!value;
   }
 };
 
-scenery.register( 'AriaHasPopUpMutator', AriaHasPopUpMutator );
+scenery.register('AriaHasPopUpMutator', AriaHasPopUpMutator);
 export default AriaHasPopUpMutator;

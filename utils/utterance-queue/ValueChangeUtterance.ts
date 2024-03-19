@@ -10,28 +10,28 @@
  * @author Jesse Greenberg
  */
 
-import deprecationWarning from '../../phet-core/js/deprecationWarning.js';
-import optionize, { EmptySelfOptions } from '../../phet-core/js/optionize.js';
-import Utterance, { UtteranceOptions } from './Utterance.js';
-import utteranceQueueNamespace from './utteranceQueueNamespace.js';
+import deprecationWarning from '@/utils/phet-core/deprecationWarning';
+import optionize, { type EmptySelfOptions } from '@/utils/phet-core/optionize';
+import Utterance, { type UtteranceOptions } from '@/utils/utterance-queue/Utterance';
+import utteranceQueueNamespace from '@/utils/utterance-queue/utteranceQueueNamespace';
 
 export type ValueChangeUtteranceOptions = UtteranceOptions;
 
 class ValueChangeUtterance extends Utterance {
 
-  public constructor( providedOptions?: ValueChangeUtteranceOptions ) {
-    deprecationWarning( 'Please use AccessibleValueHander.a11yCreateContextResponseAlert(), see https://github.com/phetsims/sun/issues/685' );
+  public constructor(providedOptions?: ValueChangeUtteranceOptions) {
+    deprecationWarning('Please use AccessibleValueHander.a11yCreateContextResponseAlert(), see https://github.com/phetsims/sun/issues/685');
 
-    const options = optionize<ValueChangeUtteranceOptions, EmptySelfOptions, UtteranceOptions>()( {
+    const options = optionize<ValueChangeUtteranceOptions, EmptySelfOptions, UtteranceOptions>()({
 
       // {number} - in ms, prevents VoiceOver from reading changes too frequently or interrupting the alert to read
       // aria-valuetext changes under typical user settings
       alertStableDelay: 1000
-    }, providedOptions );
+    }, providedOptions);
 
-    super( options );
+    super(options);
   }
 }
 
-utteranceQueueNamespace.register( 'ValueChangeUtterance', ValueChangeUtterance );
+utteranceQueueNamespace.register('ValueChangeUtterance', ValueChangeUtterance);
 export default ValueChangeUtterance;

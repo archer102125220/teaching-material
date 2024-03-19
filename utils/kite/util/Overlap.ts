@@ -6,7 +6,7 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import { kite } from '../imports';
+import { kite } from '@/utils/kite/imports';
 
 export default class Overlap {
 

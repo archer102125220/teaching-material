@@ -7,13 +7,13 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type TReadOnlyProperty from '../../../axon/TReadOnlyProperty';
-import ModelViewTransform2 from '../../../phetcommon/view/ModelViewTransform2';
-import { Node, Path } from '../../../scenery/imports';
-import geometricOptics from '../../geometricOptics';
-import GOColors from '../GOColors';
-import Optic from '../model/Optic';
-import { type RaysType } from '../model/RaysType';
+import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
+import ModelViewTransform2 from '@/utils/phetcommon/view/ModelViewTransform2';
+import { Node, Path } from '@/utils/scenery/imports';
+import geometricOptics from '@/utils/geometric-optics/geometricOptics';
+import GOColors from '@/utils/geometric-optics/common/GOColors';
+import Optic from '@/utils/geometric-optics/common/model/Optic';
+import { type RaysType } from '@/utils/geometric-optics/common/model/RaysType';
 
 export default class OpticVerticalAxisNode extends Node {
 

@@ -6,14 +6,14 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
-import Bounds2 from '../../dot/Bounds2';
-import type StrictOmit from '../../phet-core/types/StrictOmit';
-import Dimension2 from '../../dot/Dimension2';
-import { Shape } from '../../kite/imports';
-import Vector2 from '../../dot/Vector2';
-import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, Features, Gradient, Instance, type TRectangleDrawable, Path, type PathOptions, Pattern, RectangleCanvasDrawable, RectangleDOMDrawable, RectangleSVGDrawable, RectangleWebGLDrawable, Renderer, scenery, Sizable, type SizableOptions, SVGSelfDrawable, WebGLSelfDrawable } from '../imports';
-import Matrix3 from '../../dot/Matrix3';
-import { combineOptions } from '../../phet-core/optionize';
+import Bounds2 from '@/utils/dot/Bounds2';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import Dimension2 from '@/utils/dot/Dimension2';
+import { Shape } from '@/utils/kite/imports';
+import Vector2 from '@/utils/dot/Vector2';
+import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, Features, Gradient, Instance, type TRectangleDrawable, Path, type PathOptions, Pattern, RectangleCanvasDrawable, RectangleDOMDrawable, RectangleSVGDrawable, RectangleWebGLDrawable, Renderer, scenery, Sizable, type SizableOptions, SVGSelfDrawable, WebGLSelfDrawable } from '@/utils/scenery/imports';
+import Matrix3 from '@/utils/dot/Matrix3';
+import { combineOptions } from '@/utils/phet-core/optionize';
 
 const RECTANGLE_OPTION_KEYS = [
   'rectBounds', // {Bounds2} - Sets x/y/width/height based on bounds. See setRectBounds() for more documentation.
@@ -623,6 +623,7 @@ export default class Rectangle extends SuperType {
    * Computes the bounds of the Rectangle, including any applied stroke. Overridden for efficiency.
    */
   public override computeShapeBounds(): Bounds2 {
+    console.log('Rectangle.computeShapeBounds');
     let bounds = new Bounds2(this._rectX, this._rectY, this._rectX + this._rectWidth, this._rectY + this._rectHeight);
     if (this._stroke) {
       // since we are axis-aligned, any stroke will expand our bounds by a guaranteed set amount
@@ -757,6 +758,7 @@ export default class Rectangle extends SuperType {
    * @param bounds - Bounds to test, assumed to be in the local coordinate frame.
    */
   public override intersectsBoundsSelf(bounds: Bounds2): boolean {
+    console.log('Rectangle.intersectsBoundsSelf');
     return !this.computeShapeBounds().intersection(bounds).isEmpty();
   }
 

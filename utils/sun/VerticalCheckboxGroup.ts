@@ -7,15 +7,15 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import type StrictOmit from '../phet-core/types/StrictOmit';
-import optionize, { combineOptions } from '../phet-core/optionize';
-import { VBox, type VBoxOptions } from '../scenery/imports';
-import Tandem from '../tandem/Tandem';
-import Checkbox, { type CheckboxOptions } from './Checkbox';
-import sun from './sun';
-import type GroupItemOptions from './GroupItemOptions';
-import { getGroupItemNodes } from './GroupItemOptions';
-import type PhetioProperty from '../axon/PhetioProperty';
+import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
+import optionize, { combineOptions } from '@/utils/phet-core/optionize';
+import { VBox, type VBoxOptions } from '@/utils/scenery/imports';
+import Tandem from '@/utils/tandem/Tandem';
+import Checkbox, { type CheckboxOptions } from '@/utils/sun/Checkbox';
+import sun from '@/utils/sun/sun';
+import type GroupItemOptions from '@/utils/sun/GroupItemOptions';
+import { getGroupItemNodes } from '@/utils/sun/GroupItemOptions';
+import type PhetioProperty from '@/utils/axon/PhetioProperty';
 
 export type VerticalCheckboxGroupItem = {
   property: PhetioProperty<boolean>; // Property associated with the checkbox

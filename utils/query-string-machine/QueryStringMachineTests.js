@@ -10,6 +10,13 @@ import QUnit from 'qunit';
 
 import QueryStringMachine from '@/utils/query-string-machine/QueryStringMachine';
 
+if (
+  typeof window === 'object' &&
+  typeof window.QueryStringMachine !== 'object'
+) {
+  window.QueryStringMachine = QueryStringMachine;
+}
+
 QUnit.module('QueryStringMachine');
 
 // assert shadows window.assert
@@ -58,7 +65,7 @@ QUnit.test('basic tests', (assert) => {
   };
 
   window.assert.deepEqual(
-    QueryStringMachine.getAllForString(schemaMap, ''),
+    window.QueryStringMachine.getAllForString(schemaMap, ''),
     {
       height: 6,
       name: 'Larry',
@@ -71,7 +78,7 @@ QUnit.test('basic tests', (assert) => {
   );
 
   window.assert.deepEqual(
-    QueryStringMachine.getAllForString(schemaMap, '?height=7&isWebGL'),
+    window.QueryStringMachine.getAllForString(schemaMap, '?height=7&isWebGL'),
     {
       height: 7,
       name: 'Larry',
@@ -84,7 +91,7 @@ QUnit.test('basic tests', (assert) => {
   );
 
   window.assert.deepEqual(
-    QueryStringMachine.getAllForString(schemaMap, '?screens='),
+    window.QueryStringMachine.getAllForString(schemaMap, '?screens='),
     {
       height: 6,
       name: 'Larry',
@@ -97,7 +104,7 @@ QUnit.test('basic tests', (assert) => {
   );
 
   window.assert.deepEqual(
-    QueryStringMachine.getAllForString(
+    window.QueryStringMachine.getAllForString(
       schemaMap,
       '?height=7&isWebGL&custom=DEF'
     ),
@@ -113,7 +120,7 @@ QUnit.test('basic tests', (assert) => {
   );
 
   window.assert.deepEqual(
-    QueryStringMachine.getAllForString(
+    window.QueryStringMachine.getAllForString(
       schemaMap,
       '?isWebGL&screens=1,2,3,5&colors=yellow,orange,pink'
     ),
@@ -134,7 +141,7 @@ QUnit.test('basic tests', (assert) => {
     }
   };
   window.assert.deepEqual(
-    QueryStringMachine.getAllForString(flagSchema, '?flag'),
+    window.QueryStringMachine.getAllForString(flagSchema, '?flag'),
     {
       flag: true
     },
@@ -142,7 +149,7 @@ QUnit.test('basic tests', (assert) => {
   );
 
   window.assert.deepEqual(
-    QueryStringMachine.getAllForString(flagSchema, '?flag='),
+    window.QueryStringMachine.getAllForString(flagSchema, '?flag='),
     {
       flag: true
     },
@@ -150,17 +157,17 @@ QUnit.test('basic tests', (assert) => {
   );
 
   window.assert.throws(() => {
-    QueryStringMachine.getAllForString(flagSchema, '?flag=hello');
+    window.QueryStringMachine.getAllForString(flagSchema, '?flag=hello');
   }, 'Flags cannot have values');
 
   window.assert.throws(() => {
-    QueryStringMachine.getAllForString(flagSchema, '?flag=true');
+    window.QueryStringMachine.getAllForString(flagSchema, '?flag=true');
   }, 'Flags cannot have values');
 
   // Test that isValidValue is supported for arrays with a contrived check (element sum == 7).
   // With an input of [2,4,0], QSM should throw an error, and it should be caught here.
   window.assert.throws(() => {
-    QueryStringMachine.getAllForString(
+    window.QueryStringMachine.getAllForString(
       {
         numbers: {
           type: 'array',
@@ -180,7 +187,7 @@ QUnit.test('basic tests', (assert) => {
   }, 'Array error handling should catch exception');
 
   window.assert.throws(() => {
-    QueryStringMachine.getAllForString(
+    window.QueryStringMachine.getAllForString(
       {
         sim: {
           type: 'string'
@@ -191,7 +198,7 @@ QUnit.test('basic tests', (assert) => {
   }, 'Catch missing required query parameter');
 
   window.assert.deepEqual(
-    QueryStringMachine.getForString(
+    window.QueryStringMachine.getForString(
       'hello',
       {
         type: 'array',
@@ -212,7 +219,7 @@ QUnit.test('basic tests', (assert) => {
   );
 
   window.assert.throws(() => {
-    QueryStringMachine.getForString(
+    window.QueryStringMachine.getForString(
       'hello',
       {
         type: 'array',
@@ -231,7 +238,7 @@ QUnit.test('basic tests', (assert) => {
   }, 'Catch invalid value for array');
 
   window.assert.deepEqual(
-    QueryStringMachine.getForString(
+    window.QueryStringMachine.getForString(
       'screens',
       {
         type: 'array',
@@ -250,37 +257,37 @@ QUnit.test('basic tests', (assert) => {
 // Tests for our own deepEquals method
 QUnit.test('deepEquals', (assert) => {
   window.assert.equal(
-    QueryStringMachine.deepEquals(7, 7),
+    window.QueryStringMachine.deepEquals(7, 7),
     true,
     '7 should equal itself'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(7, 8),
+    window.QueryStringMachine.deepEquals(7, 8),
     false,
     '7 should not equal 8'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(7, '7'),
+    window.QueryStringMachine.deepEquals(7, '7'),
     false,
     '7 should not equal "7"'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals({ 0: 'A' }, 'A'),
+    window.QueryStringMachine.deepEquals({ 0: 'A' }, 'A'),
     false,
     'string tests'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(['hello', 7], ['hello', 7]),
+    window.QueryStringMachine.deepEquals(['hello', 7], ['hello', 7]),
     true,
     'array equality test'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(['hello', 7], ['hello', '7']),
+    window.QueryStringMachine.deepEquals(['hello', 7], ['hello', '7']),
     false,
     'array inequality test'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(
+    window.QueryStringMachine.deepEquals(
       ['hello', { hello: true }],
       ['hello', { hello: true }]
     ),
@@ -288,7 +295,7 @@ QUnit.test('deepEquals', (assert) => {
     'object in array inequality test'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(
+    window.QueryStringMachine.deepEquals(
       ['hello', { hello: true }],
       ['hello', { hello: false }]
     ),
@@ -296,7 +303,7 @@ QUnit.test('deepEquals', (assert) => {
     'object in array  inequality test'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(
+    window.QueryStringMachine.deepEquals(
       { x: [{ y: 'hello' }, true, 123, 'x'] },
       { x: [{ y: 'hello' }, true, 123, 'x'] }
     ),
@@ -304,7 +311,7 @@ QUnit.test('deepEquals', (assert) => {
     'object in array  inequality test'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(
+    window.QueryStringMachine.deepEquals(
       { x: [{ y: 'hello' }, true, 123, 'x'] },
       { x: [true, { y: 'hello' }, true, 123, 'x'] }
     ),
@@ -312,26 +319,30 @@ QUnit.test('deepEquals', (assert) => {
     'object in array  inequality test'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(
+    window.QueryStringMachine.deepEquals(
       { x: [{ y: 'hello' }, true, 123, 'x'] },
       { y: [{ y: 'hello' }, true, 123, 'x'] }
     ),
     false,
     'object in array  inequality test'
   );
-  window.assert.equal(QueryStringMachine.deepEquals(null, null), true, 'null null');
   window.assert.equal(
-    QueryStringMachine.deepEquals(null, undefined),
+    window.QueryStringMachine.deepEquals(null, null),
+    true,
+    'null null'
+  );
+  window.assert.equal(
+    window.QueryStringMachine.deepEquals(null, undefined),
     false,
     'null undefined'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(undefined, undefined),
+    window.QueryStringMachine.deepEquals(undefined, undefined),
     true,
     'undefined undefined'
   );
   window.assert.equal(
-    QueryStringMachine.deepEquals(
+    window.QueryStringMachine.deepEquals(
       () => {},
       () => {}
     ),
@@ -340,7 +351,7 @@ QUnit.test('deepEquals', (assert) => {
   );
   const f = function () {};
   window.assert.equal(
-    QueryStringMachine.deepEquals(f, f),
+    window.QueryStringMachine.deepEquals(f, f),
     true,
     'same reference function'
   );
@@ -348,47 +359,56 @@ QUnit.test('deepEquals', (assert) => {
 
 QUnit.test('removeKeyValuePair', (assert) => {
   window.assert.equal(
-    QueryStringMachine.removeKeyValuePair('?time=now', 'time'),
+    window.QueryStringMachine.removeKeyValuePair('?time=now', 'time'),
     '',
     'Remove single occurrence'
   );
   window.assert.equal(
-    QueryStringMachine.removeKeyValuePair('?time=now&place=here', 'time'),
+    window.QueryStringMachine.removeKeyValuePair(
+      '?time=now&place=here',
+      'time'
+    ),
     '?place=here',
     'Remove single occurrence but leave other'
   );
   window.assert.equal(
-    QueryStringMachine.removeKeyValuePair('?time=now&time=later', 'time'),
+    window.QueryStringMachine.removeKeyValuePair(
+      '?time=now&time=later',
+      'time'
+    ),
     '',
     'Remove multiple occurrences'
   );
   window.assert.equal(
-    QueryStringMachine.removeKeyValuePair('?time=now&time', 'time'),
+    window.QueryStringMachine.removeKeyValuePair('?time=now&time', 'time'),
     '',
     'Remove multiple occurrences, one with value'
   );
   window.assert.equal(
-    QueryStringMachine.removeKeyValuePair('?place=here&time=now', 'time'),
+    window.QueryStringMachine.removeKeyValuePair(
+      '?place=here&time=now',
+      'time'
+    ),
     '?place=here',
     'Different order'
   );
   window.assert.equal(
-    QueryStringMachine.removeKeyValuePair('?time&place', 'time'),
+    window.QueryStringMachine.removeKeyValuePair('?time&place', 'time'),
     '?place',
     'Remove with no values'
   );
   window.assert.equal(
-    QueryStringMachine.removeKeyValuePair('?place&time', 'time'),
+    window.QueryStringMachine.removeKeyValuePair('?place&time', 'time'),
     '?place',
     'Remove with no values'
   );
   window.assert.equal(
-    QueryStringMachine.removeKeyValuePair('?place&time', 'times'),
+    window.QueryStringMachine.removeKeyValuePair('?place&time', 'times'),
     '?place&time',
     'Key to remove not present'
   );
   window.assert.equal(
-    QueryStringMachine.removeKeyValuePair(
+    window.QueryStringMachine.removeKeyValuePair(
       '?sim=ohms-law&phetioValidation&phetioDebug=true',
       'fuzz'
     ),
@@ -396,14 +416,14 @@ QUnit.test('removeKeyValuePair', (assert) => {
     'Key to remove not present'
   );
   window.assert.equal(
-    QueryStringMachine.removeKeyValuePair('', 'fuzz'),
+    window.QueryStringMachine.removeKeyValuePair('', 'fuzz'),
     '',
     'No search present'
   );
 
   if (window.assert) {
     window.assert.throws(
-      () => QueryStringMachine.removeKeyValuePair('time=now', 'time'),
+      () => window.QueryStringMachine.removeKeyValuePair('time=now', 'time'),
       'Not removed if there is no question mark'
     );
   }
@@ -412,7 +432,7 @@ QUnit.test('removeKeyValuePair', (assert) => {
 QUnit.test('appendQueryString', (assert) => {
   const test = function (url, queryParameters, expected) {
     window.assert.equal(
-      QueryStringMachine.appendQueryString(url, queryParameters),
+      window.QueryStringMachine.appendQueryString(url, queryParameters),
       expected,
       `${url} + ${queryParameters} should be ok`
     );
@@ -458,7 +478,7 @@ QUnit.test('appendQueryString', (assert) => {
 QUnit.test('getSingleQueryParameterString', (assert) => {
   const test = function (url, key, expected) {
     window.assert.equal(
-      QueryStringMachine.getSingleQueryParameterString(key, url),
+      window.QueryStringMachine.getSingleQueryParameterString(key, url),
       expected,
       `${url} + ${key} should be equal`
     );
@@ -480,7 +500,7 @@ QUnit.test('getSingleQueryParameterString', (assert) => {
 });
 QUnit.test('public query parameters should be graceful', (assert) => {
   // clear any warnings from before this test
-  QueryStringMachine.warnings.length = 0;
+  window.QueryStringMachine.warnings.length = 0;
 
   const screensSchema = {
     type: 'array',
@@ -496,7 +516,7 @@ QUnit.test('public query parameters should be graceful', (assert) => {
     public: true
   };
 
-  let screens = QueryStringMachine.getForString(
+  let screens = window.QueryStringMachine.getForString(
     'screens',
     screensSchema,
     '?screens=1'
@@ -504,38 +524,38 @@ QUnit.test('public query parameters should be graceful', (assert) => {
   window.assert.ok(screens.length === 1);
   window.assert.ok(screens[0] === 1);
 
-  screens = QueryStringMachine.getForString(
+  screens = window.QueryStringMachine.getForString(
     'screens',
     screensSchema,
     '?screens=1.1'
   );
-  window.assert.ok(QueryStringMachine.warnings.length === 1);
+  window.assert.ok(window.QueryStringMachine.warnings.length === 1);
   window.assert.ok(screens === null, 'should have the default value');
-  screens = QueryStringMachine.getForString(
+  screens = window.QueryStringMachine.getForString(
     'screens',
     screensSchema,
     '?screens=54890,fd'
   );
-  window.assert.ok(QueryStringMachine.warnings.length === 2);
+  window.assert.ok(window.QueryStringMachine.warnings.length === 2);
   window.assert.ok(screens === null, 'should have the default value');
 
-  screens = QueryStringMachine.getForString(
+  screens = window.QueryStringMachine.getForString(
     'screens',
     screensSchema,
     '?screens=1,1,1'
   );
-  window.assert.ok(QueryStringMachine.warnings.length === 3);
+  window.assert.ok(window.QueryStringMachine.warnings.length === 3);
   window.assert.ok(screens === null, 'should have the default value');
 
   // should use the fallback
-  screens = QueryStringMachine.getForString(
+  screens = window.QueryStringMachine.getForString(
     'screens',
     screensSchema,
     '?screens=Hello1,1,Goose1'
   );
   window.assert.ok(screens === null, 'should have the default value');
 
-  QueryStringMachine.warnings.length = 0;
+  window.QueryStringMachine.warnings.length = 0;
 
   const otherScreensSchema = {
     type: 'array',
@@ -550,7 +570,7 @@ QUnit.test('public query parameters should be graceful', (assert) => {
     },
     public: true
   };
-  screens = QueryStringMachine.getForString(
+  screens = window.QueryStringMachine.getForString(
     'screens',
     otherScreensSchema,
     '?screens=first'
@@ -558,7 +578,7 @@ QUnit.test('public query parameters should be graceful', (assert) => {
   window.assert.ok(screens.length === 1);
   window.assert.ok(screens[0] === 'first');
 
-  screens = QueryStringMachine.getForString(
+  screens = window.QueryStringMachine.getForString(
     'screens',
     otherScreensSchema,
     '?screens=first,notFirst'
@@ -567,40 +587,44 @@ QUnit.test('public query parameters should be graceful', (assert) => {
   window.assert.ok(screens[0] === 'first');
   window.assert.ok(screens[1] === 'notFirst');
 
-  screens = QueryStringMachine.getForString(
+  screens = window.QueryStringMachine.getForString(
     'screens',
     otherScreensSchema,
     '?screens=firsfdt,notFisrst'
   );
-  window.assert.ok(QueryStringMachine.warnings.length === 1);
+  window.assert.ok(window.QueryStringMachine.warnings.length === 1);
   window.assert.ok(screens === null);
 
-  screens = QueryStringMachine.getForString(
+  screens = window.QueryStringMachine.getForString(
     'screens',
     otherScreensSchema,
     '?screens=firsfdt,1'
   );
-  window.assert.ok(QueryStringMachine.warnings.length === 2);
+  window.assert.ok(window.QueryStringMachine.warnings.length === 2);
   window.assert.ok(screens === null);
 
-  QueryStringMachine.warnings.length = 0;
+  window.QueryStringMachine.warnings.length = 0;
 
   const flagSchema = {
     type: 'flag',
     public: true
   };
 
-  let flag = QueryStringMachine.getForString('flag', flagSchema, '?flag=true');
+  let flag = window.QueryStringMachine.getForString(
+    'flag',
+    flagSchema,
+    '?flag=true'
+  );
   window.assert.ok(flag === true);
-  window.assert.ok(QueryStringMachine.warnings.length === 1);
+  window.assert.ok(window.QueryStringMachine.warnings.length === 1);
 
-  flag = QueryStringMachine.getForString('flag', flagSchema, '?flag=');
+  flag = window.QueryStringMachine.getForString('flag', flagSchema, '?flag=');
   window.assert.ok(flag === true);
-  window.assert.ok(QueryStringMachine.warnings.length === 1);
+  window.assert.ok(window.QueryStringMachine.warnings.length === 1);
 
-  flag = QueryStringMachine.getForString('flag', flagSchema, '?hello');
+  flag = window.QueryStringMachine.getForString('flag', flagSchema, '?hello');
   window.assert.ok(flag === false);
-  window.assert.ok(QueryStringMachine.warnings.length === 1);
+  window.assert.ok(window.QueryStringMachine.warnings.length === 1);
 
-  QueryStringMachine.warnings.length = 0;
+  window.QueryStringMachine.warnings.length = 0;
 });

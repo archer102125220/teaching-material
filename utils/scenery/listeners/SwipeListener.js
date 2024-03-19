@@ -18,8 +18,8 @@
  * @author Jesse Greenberg
  */
 
-import stepTimer from '../../axon/stepTimer';
-import { FocusManager, Intent, PDOMUtils, scenery } from '../imports';
+import stepTimer from '@/utils/axon/stepTimer';
+import { FocusManager, Intent, PDOMUtils, scenery } from '@/utils/scenery/imports';
 
 // constants
 // in seconds, amount of time to initiate a press and hold gesture - note, it must be at least this long
@@ -148,9 +148,13 @@ class SwipeListener {
             ) {
               return;
             }
-            PDOMUtils.getNextFocusable(document.body).focus();
+            PDOMUtils.getNextFocusable(
+              window.SIM_DISPLAY?.domElement?.parentNode || document.body
+            ).focus();
           } else {
-            PDOMUtils.getPreviousFocusable(document.body).focus();
+            PDOMUtils.getPreviousFocusable(
+              window.SIM_DISPLAY?.domElement?.parentNode || document.body
+            ).focus();
           }
         } else {
           // potentially a double tap
@@ -207,8 +211,8 @@ class SwipeListener {
       event.pointer.removeIntent(Intent.DRAG);
     }
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         event.pointer.attachedProperty.get(),
         'should be attached to the handle listener'
       );

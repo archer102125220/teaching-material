@@ -1,9 +1,9 @@
 /* eslint-disable no-use-before-define */
 // Copyright 2021-2024, University of Colorado Boulder
 
-import type IntentionalAny from '../phet-core/types/IntentionalAny';
-import type PickRequired from '../phet-core/types/PickRequired';
-import tandemNamespace from './tandemNamespace';
+import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
+import type PickRequired from '@/utils/phet-core/types/PickRequired';
+import tandemNamespace from '@/utils/tandem/tandemNamespace';
 
 /**
  * Factored-out constant values for use in Tandem.
