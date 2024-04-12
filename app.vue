@@ -32,29 +32,29 @@ const LAYOUT_SETTING = [
 
 const runtimeConfig = useRuntimeConfig();
 const GA_ID = runtimeConfig.public.GOOGLE_GA_ID;
-const headers = useRequestHeaders();
+// const headers = useRequestHeaders();
 const nuxtApp = useNuxtApp();
 const { $googleGAInit, $i18n, $dayjs, $store } = nuxtApp;
 const router = useRouter();
 const route = useRoute();
 const getRouteBaseName = useRouteBaseName();
-const switchLocalePath = useSwitchLocalePath();
-if (process.server) {
-  const lang = useCookie('___i18n_locale', {
-    default: () => ''
-  });
-  const _lang = headers?.['accept-language']
-    ?.split(';')?.[0]
-    ?.split(',')?.[0]
-    ?.split('-')?.[0];
-  if (lang.value !== _lang && lang.value === '') {
-    lang.value = _lang;
-    await navigateTo({
-      path: switchLocalePath(_lang),
-      query: route.query
-    });
-  }
-}
+// const switchLocalePath = useSwitchLocalePath();
+// if (process.server) {
+//   const lang = useCookie('___i18n_locale', {
+//     default: () => ''
+//   });
+//   const _lang = headers?.['accept-language']
+//     ?.split(';')?.[0]
+//     ?.split(',')?.[0]
+//     ?.split('-')?.[0];
+//   if (lang.value !== _lang && lang.value === '') {
+//     lang.value = _lang;
+//     await navigateTo({
+//       path: switchLocalePath(_lang),
+//       query: route.query
+//     });
+//   }
+// }
 useHead({
   titleTemplate: (titleChunk) => {
     return titleChunk
@@ -75,11 +75,11 @@ const messageState = computed(() => $store.system.messageState || {});
 const layoutName = computed(() => $store.system.layoutName);
 
 function handleLayoutName(newRoute) {
+  const href = newRoute.href || '';
   const newLayoutName = LAYOUT_SETTING.find(
     ({ path, exact, name }) =>
-      (exact === true
-        ? path === newRoute.href
-        : newRoute.href.includes(path)) || getRouteBaseName(newRoute) === name
+      (exact === true ? path === href : href.includes(path)) ||
+      getRouteBaseName(newRoute) === name
   )?.layout;
   $store.system.setIsIndexPage(getRouteBaseName(newRoute) === 'index');
   $store.system.setLayoutName(
