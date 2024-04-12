@@ -14,19 +14,21 @@ import asyncLoader from '@/utils/phet-core/asyncLoader';
 import Tandem from '@/utils/tandem/Tandem';
 import joist from '@/utils/joist/joist';
 
+console.log('joist/simLauncher.ts');
+
 // See below for dynamic imports, which must be locked.
 // let phetioEngine: PhetioEngine | null = null;
-// let phetioEngine: null = null;
+// let phetioEngine: any = null;
 
 const unlockBrand = asyncLoader.createLock({ name: 'brand' });
 // import( /* webpackMode: "eager" */ `../../brand/${window.phet.chipper.brand}/js/Brand.js`)
 //   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 //   .then(module => unlockBrand())
 //   .catch(err => console.log(err));
-import( /* webpackMode: "eager" */ '@/utils/brand/adapted-from-phet/Brand')
+import(/* webpackMode: "eager" */ '@/utils/brand/adapted-from-phet/Brand')
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  .then(module => unlockBrand())
-  .catch(err => console.log(err));
+  .then((module) => unlockBrand())
+  .catch((err) => console.log(err));
 
 // if (Tandem.PHET_IO_ENABLED) {
 //   const unlockPhetioEngine = asyncLoader.createLock({ name: 'phetioEngine' });
@@ -41,7 +43,6 @@ import( /* webpackMode: "eager" */ '@/utils/brand/adapted-from-phet/Brand')
 const unlockLaunch = asyncLoader.createLock({ name: 'launch' });
 
 export class SimLauncher {
-
   private launchComplete: boolean; // Marked as true when simLauncher has finished its work cycle and control is given over to the simulation to finish initialization.
 
   public constructor() {
@@ -56,13 +57,20 @@ export class SimLauncher {
    *                              content is loaded
    */
   public launch(callback: () => void): void {
-    window.assert && window.assert(!window.phet.joist.launchCalled, 'Tried to launch twice');
+    console.log('SimLauncher.launch');
+    window.assert &&
+      window.assert(!window.phet.joist.launchCalled, 'Tried to launch twice');
 
     // Add listener before unlocking the launch lock
     asyncLoader.addListener(() => {
-
+      console.log('SimLauncher.launch  asyncLoader.addListener');
       window.phet.joist.launchSimulation = () => {
-        window.assert && window.assert(!this.launchComplete, 'should not have completed launching the sim yet');
+        console.log('window.phet.joist.launchSimulation');
+        window.assert &&
+          window.assert(
+            !this.launchComplete,
+            'should not have completed launching the sim yet'
+          );
         this.launchComplete = true;
 
         // once launchSimulation has been called, the wrapper is ready to receive messages because any listeners it
@@ -80,19 +88,24 @@ export class SimLauncher {
       //   phetioEngine?.initialize(); // calls back to window.phet.joist.launchSimulation
       // }
 
-      if (phet.chipper.queryParameters.postMessageOnReady) {
-        window.parent && window.parent.postMessage(JSON.stringify({
-          type: 'ready',
-          url: window.location.href
-        }), '*');
+      if (window.phet.chipper.queryParameters.postMessageOnReady) {
+        window.parent &&
+          window.parent.postMessage(
+            JSON.stringify({
+              type: 'ready',
+              url: window.location.href
+            }),
+            '*'
+          );
       }
 
-      if ((Tandem.PHET_IO_ENABLED && !phet.preloads.phetio.queryParameters.phetioStandalone) ||
-        phet.chipper.queryParameters.playbackMode) {
-
+      if (
+        (Tandem.PHET_IO_ENABLED &&
+          !window.phet.preloads.phetio.queryParameters.phetioStandalone) ||
+        window.phet.chipper.queryParameters.playbackMode
+      ) {
         // Wait for phet-io to finish adding listeners. It will direct the launch from there.
-      }
-      else {
+      } else {
         window.phet.joist.launchSimulation();
       }
     });

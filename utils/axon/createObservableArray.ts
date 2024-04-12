@@ -147,12 +147,12 @@ const createObservableArray = <T>(providedOptions?: ObservableArrayOptions<T>): 
   // Verify that lengthProperty is updated before listeners are notified, but not when setting PhET-iO State,
   // This is because we cannot specify ordering dependencies between Properties and ObservableArrays,
   // TODO: Maybe this can be improved when we have better support for this in https://github.com/phetsims/phet-io/issues/1661
-  assert && elementAddedEmitter.addListener(() => {
+  window.assert && elementAddedEmitter.addListener(() => {
     if (!isSettingPhetioStateProperty.value) {
       window.assert && window.assert(lengthProperty.value === targetArray.length, 'lengthProperty out of sync while adding element');
     }
   });
-  assert && elementRemovedEmitter.addListener(() => {
+  window.assert && elementRemovedEmitter.addListener(() => {
     if (!isSettingPhetioStateProperty.value) {
       window.assert && window.assert(lengthProperty.value === targetArray.length, 'lengthProperty out of sync while removing element');
     }
@@ -411,8 +411,8 @@ const methods = {
     return count;
   },
   find: function (predicate: Predicate<any>, fromIndex?: number) {
-    assert && (fromIndex !== undefined) && assert(typeof fromIndex === 'number', 'fromIndex must be numeric, if provided');
-    assert && (typeof fromIndex === 'number') && assert(fromIndex >= 0 && fromIndex < (this as PrivateObservableArray<any>).length,
+    window.assert && (fromIndex !== undefined) && window.assert(typeof fromIndex === 'number', 'fromIndex must be numeric, if provided');
+    window.assert && (typeof fromIndex === 'number') && window.assert(fromIndex >= 0 && fromIndex < (this as PrivateObservableArray<any>).length,
       `fromIndex out of bounds: ${fromIndex}`);
     return _.find((this as PrivateObservableArray<any>), predicate, fromIndex);
   },

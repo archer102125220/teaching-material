@@ -178,6 +178,19 @@ class Boundary {
       //   transformedBounds
       // });
 
+      console.log({ 'this.id': this.id, this: this });
+      if (this.id === 2) {
+        alert(this.id);
+        console.log({ this: this });
+        console.log(segment.getBounds().top === transformedBounds.top);
+        console.log({
+          segment,
+          'segment.getBounds()': segment.getBounds(),
+          transformedBounds
+        });
+        console.trace();
+      }
+
       // See if this is one of our potential segments whose bounds have the minimal y value. This indicates at least
       // one point on this segment will be a minimal-y point.
       if (segment.getBounds().top === transformedBounds.top) {
@@ -199,7 +212,13 @@ class Boundary {
       }
     }
 
-    throw new Error('Should not reach here if we have segments');
+    // throw new Error('Should not reach here if we have segments');
+    console.error('Should not reach here if we have segments');
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        resolve(await this.computeExtremePoint(transform));
+      }, 10000);
+    });
   }
 
   /**
@@ -219,8 +238,9 @@ class Boundary {
    * @param {Transform3} transform
    * @returns {Ray2}
    */
-  computeExtremeRay(transform) {
-    const extremePoint = this.computeExtremePoint(transform);
+  async computeExtremeRay(transform) {
+    const extremePoint = await this.computeExtremePoint(transform);
+    console.log({ extremePoint });
     const orientation = transform
       .inverseDelta2(new Vector2(0, -1))
       .normalized();

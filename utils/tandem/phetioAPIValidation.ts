@@ -81,12 +81,12 @@ class PhetioAPIValidation {
    * Callback when the simulation is ready to go, and all static PhetioObjects have been created.
    */
   public onSimStarted(): void {
-    if (this.enabled && phet.joist.sim.allScreensCreated) {
+    if (this.enabled && window.phet.joist.sim.allScreensCreated) {
       this.validateOverridesFile();
       this.validatePreferencesModel();
     }
 
-    if (phet.preloads.phetio.queryParameters.phetioPrintAPIProblems && this.apiMismatches) {
+    if (window.phet.preloads.phetio.queryParameters.phetioPrintAPIProblems && this.apiMismatches) {
       console.log('PhET-iO API problems detected: ', this.apiMismatches);
     }
 
@@ -99,10 +99,10 @@ class PhetioAPIValidation {
    * or from within studio, but phetioState: false so they are not captured with save states.
    */
   public validatePreferencesModel(): void {
-    Object.keys(phet.phetio.phetioEngine.phetioElementMap).filter(key => key.includes('.preferencesModel.'))
+    Object.keys(window.phet.phetio.phetioEngine.phetioElementMap).filter(key => key.includes('.preferencesModel.'))
       .forEach(preferencesKey => {
 
-        let phetioObject = phet.phetio.phetioEngine.phetioElementMap[preferencesKey];
+        let phetioObject = window.phet.phetio.phetioEngine.phetioElementMap[preferencesKey];
 
         while (phetioObject instanceof LinkedElement) {
           phetioObject = phetioObject.element;
@@ -160,7 +160,7 @@ class PhetioAPIValidation {
 
       // Here we need to kick this validation to the next frame to support construction in any order. Parent first, or
       // child first. Use namespace to avoid because timer is a PhetioObject.
-      phet.axon.animationFrameTimer.runOnNextTick(() => {
+      window.phet.axon.animationFrameTimer.runOnNextTick(() => {
 
         // The only instances that it's OK to create after startup are "dynamic instances" which are marked as such.
         if (!phetioObject.phetioDynamicElement) {
@@ -174,9 +174,9 @@ class PhetioAPIValidation {
           // Compare the dynamic element to the archetype if creating them this runtime. Don't check this if it has
           // already been disposed.
           // eslint-disable-next-line no-lonely-if
-          if (phet.preloads.phetio.createArchetypes && !phetioObject.isDisposed) {
+          if (window.phet.preloads.phetio.createArchetypes && !phetioObject.isDisposed) {
             const archetypeID = phetioObject.tandem.getArchetypalPhetioID();
-            const archetypeMetadata = phet.phetio.phetioEngine.getPhetioElement(archetypeID).getMetadata();
+            const archetypeMetadata = window.phet.phetio.phetioEngine.getPhetioElement(archetypeID).getMetadata();
 
             // Compare to the simulation-defined archetype
             this.checkDynamicInstanceAgainstArchetype(phetioObject, archetypeMetadata, 'simulation archetype');
@@ -189,11 +189,11 @@ class PhetioAPIValidation {
   private validateOverridesFile(): void {
 
     // import phetioEngine causes a cycle and cannot be used, hence we must use the namespace
-    const entireBaseline = phet.phetio.phetioEngine.getPhetioElementsBaseline();
+    const entireBaseline = window.phet.phetio.phetioEngine.getPhetioElementsBaseline();
 
     for (const phetioID in window.phet.preloads.phetio.phetioElementsOverrides) {
       const isArchetype = phetioID.includes(DYNAMIC_ARCHETYPE_NAME);
-      if (!phet.preloads.phetio.createArchetypes && !entireBaseline.hasOwnProperty(phetioID)) {
+      if (!window.phet.preloads.phetio.createArchetypes && !entireBaseline.hasOwnProperty(phetioID)) {
         window.assert && window.assert(isArchetype, `phetioID missing from the baseline that was not an archetype: ${phetioID}`);
       }
       else if (!entireBaseline.hasOwnProperty(phetioID)) {
@@ -248,7 +248,7 @@ class PhetioAPIValidation {
     this.apiMismatches.push(apiErrorObject);
 
     // If ?phetioPrintAPIProblems is present, then ignore assertions until the sim has started up.
-    if (this.simHasStarted || !phet.preloads.phetio.queryParameters.phetioPrintAPIProblems) {
+    if (this.simHasStarted || !window.phet.preloads.phetio.queryParameters.phetioPrintAPIProblems) {
       window.assert && window.assert(false, `PhET-iO API error:\n${mismatchMessage}`);
     }
   }

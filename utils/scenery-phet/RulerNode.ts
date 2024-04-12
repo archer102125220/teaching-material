@@ -222,7 +222,7 @@ class RulerNode extends Node {
     };
 
     // support for binder documentation, stripped out in builds and only runs when ?binder is specified
-    assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL('scenery-phet', 'RulerNode', this);
+    window.assert && window.phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL('scenery-phet', 'RulerNode', this);
   }
 
   public override dispose(): void {

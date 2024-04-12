@@ -11,6 +11,8 @@
  * @author Agustín Vallejo (PhET Interactive Simulations)
  */
 
+console.log('phet-core/types/StrictOmit.ts');
+
 type StrictOmit<ObjectType, KeysType extends keyof ObjectType> = Pick<ObjectType, Exclude<keyof ObjectType, KeysType>>;
 
 // @ts-expect-error

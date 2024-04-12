@@ -180,7 +180,7 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
     validateIconSize(options.homeScreenIcon, MINIMUM_HOME_SCREEN_ICON_SIZE, HOME_SCREEN_ICON_ASPECT_RATIO, 'homeScreenIcon');
     validateIconSize(options.navigationBarIcon, MINIMUM_NAVBAR_ICON_SIZE, NAVBAR_ICON_ASPECT_RATIO, 'navigationBarIcon');
 
-    if (assert && this.isPhetioInstrumented()) {
+    if (window.assert && this.isPhetioInstrumented()) {
       window.assert && window.assert(_.endsWith(options.tandem.phetioID, Tandem.SCREEN_TANDEM_NAME_SUFFIX), 'Screen tandems should end with Screen suffix');
     }
 
@@ -207,6 +207,8 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
     this.showUnselectedHomeScreenIconFrame = options.showUnselectedHomeScreenIconFrame;
     this.showScreenIconFrameForNavigationBarFill = options.showScreenIconFrameForNavigationBarFill;
     this.createKeyboardHelpNode = options.createKeyboardHelpNode;
+
+    console.log({ 'this.nameProperty': this.nameProperty, screenNamePatternStringProperty });
 
     // may be null for single-screen simulations
     this.pdomDisplayNameProperty = new DerivedProperty([this.nameProperty, screenNamePatternStringProperty], name => {
@@ -251,7 +253,7 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
       this.descriptionContent = simScreenStringProperty; // fall back on generic name
     }
 
-    assert && this.activeProperty.lazyLink(() => {
+    window.assert && this.activeProperty.lazyLink(() => {
       window.assert && window.assert(this._view, 'isActive should not change before the Screen view has been initialized');
 
       // In phet-io mode, the state of a sim can be set without a deterministic order. The activeProperty could be
@@ -310,13 +312,13 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
     this._view.setVisible(false); // a Screen is invisible until selected
 
     // Show the home screen's layoutBounds
-    if (phet.chipper.queryParameters.dev) {
+    if (window.phet.chipper.queryParameters.dev) {
       this._view.addChild(devCreateLayoutBoundsNode(this._view.layoutBounds));
     }
 
     // For debugging, make it possible to see the visibleBounds.  This is not included with ?dev since
     // it should just be equal to what you see.
-    if (phet.chipper.queryParameters.showVisibleBounds) {
+    if (window.phet.chipper.queryParameters.showVisibleBounds) {
       this._view.addChild(devCreateVisibleBoundsNode(this._view));
     }
 
@@ -348,7 +350,7 @@ class Screen<M extends TModel, V extends ScreenView> extends PhetioObject {
         this._view!.setScreenSummaryIntroAndTitle(simName, pdomDisplayName, titleString, numberOfScreens > 1);
       });
 
-    assert && this._view.pdomAudit();
+    window.assert && this._view.pdomAudit();
   }
 }
 

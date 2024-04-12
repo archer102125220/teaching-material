@@ -71,7 +71,7 @@ export default class ProjectionScreen extends PhetioObject {
     });
 
     // Described clockwise, starting at left top, in model coordinates.
-    this.screenShape = new Shape()
+    this.screenShape = new Shape(undefined, undefined, 'screenShape')
       .moveTo(-SCREEN_WIDTH / 2, SCREEN_FAR_HEIGHT / 2)
       .lineTo(SCREEN_WIDTH / 2, SCREEN_NEAR_HEIGHT / 2)
       .lineTo(SCREEN_WIDTH / 2, -SCREEN_NEAR_HEIGHT / 2)

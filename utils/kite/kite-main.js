@@ -9,6 +9,6 @@ import '@/utils/dot/main';
 // import '@/utils/phet-core/main';
 import '@/utils/kite/main';
 
-if (!window.hasOwnProperty('_')) {
-  throw new Error('Underscore/Lodash not found: _');
-}
+// if (!window.hasOwnProperty('_')) {
+//   throw new Error('Underscore/Lodash not found: _');
+// }

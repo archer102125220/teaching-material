@@ -172,7 +172,7 @@ class Graph {
         (id) => halfEdgeMap[id]
       );
     });
-
+    console.log({ 'obj.boundaries': obj.boundaries });
     graph.boundaries = obj.boundaries.map((data) => {
       const boundary = Boundary.pool.create(
         data.halfEdges.map((id) => halfEdgeMap[id])
@@ -335,7 +335,7 @@ class Graph {
    * Simplifies edges/vertices, computes boundaries and faces (with the winding map).
    * @public
    */
-  computeSimplifiedFaces() {
+ async computeSimplifiedFaces() {
     // Before we find any intersections (self-intersection or between edges), we'll want to identify and fix up
     // any cases where there are an infinite number of intersections between edges (they are continuously
     // overlapping). For any overlap, we'll split it into one "overlap" edge and any remaining edges. After this
@@ -380,7 +380,7 @@ class Graph {
     // We need to determine which boundaries are holes for each face. This creates a "boundary tree" where the nodes
     // are boundaries. All connected components should be one face and its holes. The holes get stored on the
     // respective face.
-    this.computeBoundaryTree();
+   await this.computeBoundaryTree();
 
     // Compute the winding numbers of each face for each shapeId, to determine whether the input would have that
     // face "filled". It should then be ready for future processing.
@@ -431,7 +431,7 @@ class Graph {
    * This is a convenient way to "collapse" adjacent filled and unfilled faces together, and compute the curves and
    * holes properly, given a filled "normal" graph.
    */
-  createFilledSubGraph() {
+   createFilledSubGraph() {
     const graph = new Graph();
 
     const vertexMap = {}; // old id => newVertex
@@ -476,7 +476,7 @@ class Graph {
    *
    * @returns {Shape}
    */
-  facesToShape() {
+  facesToShape(shapeName = '') {
     const subpaths = [];
     for (let i = 0; i < this.faces.length; i++) {
       const face = this.faces[i];
@@ -487,7 +487,11 @@ class Graph {
         }
       }
     }
-    return new kite.Shape(subpaths);
+    return new kite.Shape(
+      subpaths,
+      undefined,
+      'facesToShapeShape:' + shapeName
+    );
   }
 
   /**
@@ -1535,6 +1539,7 @@ class Graph {
           break;
         }
       }
+      console.log({ boundaryHalfEdges });
       const boundary = Boundary.pool.create(boundaryHalfEdges);
       (boundary.signedArea > 0
         ? this.innerBoundaries
@@ -1555,7 +1560,7 @@ class Graph {
    *
    * This information is stored in the childBoundaries array of Boundary, and is then read out to set up faces.
    */
-  computeBoundaryTree() {
+ async computeBoundaryTree() {
     // TODO: detect "indeterminate" for robustness (and try new angles?) https://github.com/phetsims/kite/issues/76
     const unboundedHoles = []; // {Array.<Boundary>}
 
@@ -1567,7 +1572,7 @@ class Graph {
     for (let i = 0; i < this.outerBoundaries.length; i++) {
       const outerBoundary = this.outerBoundaries[i];
 
-      const ray = outerBoundary.computeExtremeRay(transform);
+      const ray = await outerBoundary.computeExtremeRay(transform);
 
       let closestEdge = null;
       let closestDistance = Number.POSITIVE_INFINITY;
@@ -1639,8 +1644,7 @@ class Graph {
 
         const forwardFace = forwardHalf.face;
         const reversedFace = reversedHalf.face;
-        window.assert &&
-          window.assert(forwardFace !== reversedFace);
+        window.assert && window.assert(forwardFace !== reversedFace);
 
         const solvedForward = forwardFace.windingMap !== null;
         const solvedReversed = reversedFace.windingMap !== null;
@@ -1845,12 +1849,12 @@ class Graph {
    * @param {function} windingMapFilter - See computeFaceInclusion for details on the format
    * @returns {Shape}
    */
-  static binaryResult(shapeA, shapeB, windingMapFilter) {
+  static async binaryResult(shapeA, shapeB, windingMapFilter) {
     const graph = new Graph();
     graph.addShape(0, shapeA);
     graph.addShape(1, shapeB);
 
-    graph.computeSimplifiedFaces();
+    await graph.computeSimplifiedFaces();
     graph.computeFaceInclusion(windingMapFilter);
     const subgraph = graph.createFilledSubGraph();
     const shape = subgraph.facesToShape();
@@ -1989,7 +1993,7 @@ class Graph {
    * @param {Object} [options]
    * @returns {Shape}
    */
-  static clipShape(clipAreaShape, shape, options) {
+  static clipShape(clipAreaShape, shape, options, shapeName = '') {
     let i;
     let j;
     let loop;
@@ -2065,7 +2069,7 @@ class Graph {
 
     graph.dispose();
 
-    return new kite.Shape(subpaths);
+    return new kite.Shape(subpaths, undefined, 'clipShapeShape:' + shapeName);
   }
 }
 

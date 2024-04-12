@@ -186,7 +186,7 @@ export default class Display {
   // controlling which forms of focus should be displayed in the HighlightOverlay.
   public focusManager: FocusManager;
 
-  // (phet-io,scenery) - Will be filled in with a phet.scenery.Input if event handling is enabled
+  // (phet-io,scenery) - Will be filled in with a window.phet.scenery.Input if event handling is enabled
   public _input: Input | null;
 
   // (scenery-internal) Whether accessibility is enabled for this particular display.
@@ -629,7 +629,7 @@ export default class Display {
     if (assertSlow) { this._baseInstance!.audit(this._frameId, false); }
 
     if (window.assert) {
-      assert(!this._isPainting, 'Display was already updating paint, may have thrown an error on the last update');
+      window.assert(!this._isPainting, 'Display was already updating paint, may have thrown an error on the last update');
       this._isPainting = true;
     }
 
@@ -1295,11 +1295,9 @@ export default class Display {
   public resizeOnWindowResize(): void {
     console.dir(this._domElement);
     const resizer = () => {
-      // eslint-disable-next-line bad-sim-text
       // this.setWidthHeight( window.innerWidth, window.innerHeight );
       console.dir(this._domElement?.parentElement);
 
-      // eslint-disable-next-line bad-sim-text
       console.log(this._domElement?.parentElement?.clientWidth || window.innerWidth, this._domElement?.parentElement?.clientHeight || window.innerHeight);
       this.setWidthHeight(this._domElement?.parentElement?.clientWidth || window.innerWidth, this._domElement?.parentElement?.clientHeight || window.innerHeight);
     };
@@ -2133,8 +2131,8 @@ export default class Display {
    */
   public dispose(): void {
     if (window.assert) {
-      assert(!this._isDisposing);
-      assert(!this._isDisposed);
+      window.assert(!this._isDisposing);
+      window.assert(!this._isDisposed);
 
       this._isDisposing = true;
     }

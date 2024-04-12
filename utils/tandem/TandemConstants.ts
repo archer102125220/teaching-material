@@ -5,6 +5,8 @@ import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 import type PickRequired from '@/utils/phet-core/types/PickRequired';
 import tandemNamespace from '@/utils/tandem/tandemNamespace';
 
+console.log('tandem/TandemConstants.ts');
+
 /**
  * Factored-out constant values for use in Tandem.
  *

@@ -15,6 +15,8 @@ import Screen from '@/utils/joist/Screen';
 import Dimension2 from '@/utils/dot/Dimension2';
 import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 
+console.log('joist/ScreenIcon.ts');
+
 type SelfOptions = {
   size?: Dimension2; // size of the background
   maxIconWidthProportion?: number; // max proportion of the background width occupied by iconNode, (0,1]
@@ -30,6 +32,7 @@ export default class ScreenIcon extends Node {
   private readonly disposeScreenIcon: () => void;
 
   public constructor(iconNode: Node, providedOptions?: ScreenIconOptions) {
+    console.log('ScreenIcon.constructor');
 
     const options = optionize<ScreenIconOptions, SelfOptions, NodeOptions>()({
 

@@ -104,6 +104,7 @@ export default class Path extends Paintable(Node) {
    *                             along-side options for Node
    */
   public constructor(shape: Shape | string | null, providedOptions?: PathOptions) {
+    // console.log('Path.constructor');
     window.assert && window.assert(providedOptions === undefined || Object.getPrototypeOf(providedOptions) === Object.prototype,
       'Extra prototype on Node options object is a code smell');
 
@@ -124,12 +125,15 @@ export default class Path extends Paintable(Node) {
     this._invalidShapeListener = this.invalidateShape.bind(this);
     this._invalidShapeListenerAttached = false;
 
+    this._mutatorKeys = [...PAINTABLE_OPTION_KEYS, ...PATH_OPTION_KEYS, ...Node.prototype._mutatorKeys];
+    this.drawableMarkFlags = [...Node.prototype.drawableMarkFlags, ...PAINTABLE_DRAWABLE_MARK_FLAGS, 'shape'];
+
     this.invalidateSupportedRenderers();
 
     this.mutate(options);
   }
 
-  public setShape(shape: Shape | string | null): this {
+  public async setShape(shape: Shape | string | null): Promise<this> {
     window.assert && window.assert(shape === null || typeof shape === 'string' || shape instanceof Shape,
       'A path\'s shape should either be null, a string, or a Shape');
 
@@ -143,7 +147,7 @@ export default class Path extends Paintable(Node) {
         // be content with setShape always invalidating the shape?
         shape = new Shape(shape);
       }
-      this._shape = shape;
+      this._shape = await shape;
       this.invalidateShape();
 
       // Add Shape invalidation listener if applicable
@@ -270,8 +274,8 @@ export default class Path extends Paintable(Node) {
    * @returns - Whether the self bounds changed.
    */
   protected override updateSelfBounds(): boolean {
-    // console.log('Path.updateSelfBounds');
-    // console.trace();
+    console.log('Path.updateSelfBounds');
+    console.trace();
     const selfBounds = this.hasShape() ? this.computeShapeBounds() : Bounds2.NOTHING;
     const changed = !selfBounds.equals(this.selfBoundsProperty._value);
     if (changed) {
@@ -525,6 +529,9 @@ export default class Path extends Paintable(Node) {
   }
 
   public override mutate(options?: PathOptions): this {
+    // console.log({ options, 'this._mutatorKeys': this._mutatorKeys });
+    // console.log('Path.mutate');
+    // console.trace();
     return super.mutate(options);
   }
 

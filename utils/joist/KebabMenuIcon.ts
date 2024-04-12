@@ -18,7 +18,7 @@ class KebabMenuIcon extends Path {
 
   public constructor(options?: PathOptions) {
 
-    const shape = new Shape();
+    const shape = new Shape(undefined, undefined, 'KebabMenuIcon constructor shape');
     for (let i = 0; i < 3; i++) {
       shape.circle(0, i * 3.543 * CIRCLE_RADIUS, CIRCLE_RADIUS); // args are: x, y, radius
     }

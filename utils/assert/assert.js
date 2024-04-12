@@ -74,4 +74,8 @@ export function createAssert() {
   };
 }
 
+if (typeof window === 'object') {
+  createAssert();
+}
+
 export default createAssert;

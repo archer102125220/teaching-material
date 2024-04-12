@@ -80,9 +80,9 @@ SceneryStyle.addRule(
 );
 
 const PDOMSiblingStyle = {
-  SIBLING_CLASS_NAME: SIBLING_CLASS_NAME,
-  ROOT_CLASS_NAME: ROOT_CLASS_NAME,
-  LIST_ITEM_CLASS_NAME: LIST_ITEM_CLASS_NAME
+  SIBLING_CLASS_NAME,
+  ROOT_CLASS_NAME,
+  LIST_ITEM_CLASS_NAME
 };
 
 scenery.register('PDOMSiblingStyle', PDOMSiblingStyle);

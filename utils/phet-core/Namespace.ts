@@ -9,6 +9,8 @@ import _ from 'lodash';
 
 import isHMR from '@/utils/phet-core/isHMR';
 
+console.log('phet-core/Namespace.ts');
+
 class Namespace {
   public readonly name: string;
 
@@ -27,7 +29,7 @@ class Namespace {
         /* TODO: Ideally we should always assert this, but in PhET-iO wrapper code, multiple built modules define the
            TODO: same namespace, this should be fixed in https://github.com/phetsims/phet-io-wrappers/issues/631 */
         const ignoreAssertion = !_.hasIn(window, 'phet.chipper.brand');
-        assert && !ignoreAssertion && assert(!window.phet[name], `namespace ${name} already exists`);
+        window.assert && !ignoreAssertion && window.assert(!window.phet[name], `namespace ${name} already exists`);
         window.phet[name] = this;
       }
     }

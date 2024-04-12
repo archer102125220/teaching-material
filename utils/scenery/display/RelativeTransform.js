@@ -168,13 +168,13 @@ class RelativeTransform {
    */
   addInstance(instance) {
     if (instance.stateless) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           !instance.relativeTransform.hasAncestorListenerNeed(),
           'We only track changes properly if stateless instances do not have needs'
         );
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           !instance.relativeTransform.hasAncestorComputeNeed(),
           'We only track changes properly if stateless instances do not have needs'
         );
@@ -275,8 +275,8 @@ class RelativeTransform {
 
     this.relativeChildrenListenersCount++;
     if (before !== this.hasAncestorListenerNeed()) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           !this.instance.isTransformed,
           'Should not be a change in need if we have the isTransformed flag'
         );
@@ -294,8 +294,8 @@ class RelativeTransform {
 
     this.relativeChildrenListenersCount--;
     if (before !== this.hasAncestorListenerNeed()) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           !this.instance.isTransformed,
           'Should not be a change in need if we have the isTransformed flag'
         );
@@ -401,8 +401,8 @@ class RelativeTransform {
 
     this.relativeChildrenPrecomputeCount++;
     if (before !== this.hasAncestorComputeNeed()) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           !this.instance.isTransformed,
           'Should not be a change in need if we have the isTransformed flag'
         );
@@ -420,8 +420,8 @@ class RelativeTransform {
 
     this.relativeChildrenPrecomputeCount--;
     if (before !== this.hasAncestorComputeNeed()) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           !this.instance.isTransformed,
           'Should not be a change in need if we have the isTransformed flag'
         );
@@ -597,12 +597,14 @@ class RelativeTransform {
     frameId,
     passTransform
   ) {
-    sceneryLog &&
-      sceneryLog.RelativeTransform &&
-      sceneryLog.RelativeTransform(
+    window.sceneryLog &&
+      window.sceneryLog.RelativeTransform &&
+      window.sceneryLog.RelativeTransform(
         `update/compute: ${this.toString()} ${ancestorWasDirty} => ${ancestorIsDirty}${passTransform ? ' passTransform' : ''}`
       );
-    sceneryLog && sceneryLog.RelativeTransform && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.RelativeTransform &&
+      window.sceneryLog.push();
 
     let len;
     let i;
@@ -644,7 +646,9 @@ class RelativeTransform {
           !hasSelfComputeNeed &&
           !hasSelfListenerNeed)
       ) {
-        sceneryLog && sceneryLog.RelativeTransform && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.RelativeTransform &&
+          window.sceneryLog.pop();
         return;
       }
 
@@ -681,7 +685,9 @@ class RelativeTransform {
       }
     }
 
-    sceneryLog && sceneryLog.RelativeTransform && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.RelativeTransform &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -734,7 +740,7 @@ class RelativeTransform {
       );
     }
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       // count verification for invariants
       let notifyRelativeCount = 0;
       let precomputeRelativeCount = 0;
@@ -748,16 +754,16 @@ class RelativeTransform {
           precomputeRelativeCount++;
         }
       }
-      assertSlow(
+      window.assertSlow(
         notifyRelativeCount === this.relativeChildrenListenersCount,
         'Relative listener count invariant'
       );
-      assertSlow(
+      window.assertSlow(
         precomputeRelativeCount === this.relativeChildrenPrecomputeCount,
         'Relative precompute count invariant'
       );
 
-      assertSlow(
+      window.assertSlow(
         !this.parent ||
           this.instance.isTransformed ||
           this.relativeChildDirtyFrame !== frameId ||
@@ -770,7 +776,7 @@ class RelativeTransform {
       // what is dirty. See https://github.com/phetsims/scenery/issues/512
       if (!allowValidationNotNeededChecks && !hasRelativeSelfDirty(this)) {
         const matrix = currentRelativeMatrix(this);
-        assertSlow(
+        window.assertSlow(
           matrix.equals(this.matrix),
           'If there is no relativeSelfDirty flag set here or in our' +
             ' ancestors, our matrix should be up-to-date'

@@ -1,10 +1,9 @@
 import asyncLoader from '@/utils/phet-core/asyncLoader';
 
-const utilsJsModules = import.meta.glob('@/utils/**/*.js');
-const utilsTsModules = import.meta.glob('@/utils/**/*.ts');
-
-const utilsModules = { ...utilsJsModules, ...utilsTsModules };
-console.log(utilsModules);
+// const utilsModules = {
+//   ...import.meta.glob('@/utils/**/*.js'),
+//   ...import.meta.glob('@/utils/**/*.ts')
+// };
 
 export class Initializer {
   constructor() {
@@ -19,11 +18,11 @@ export class Initializer {
   async initGeometricOptics() {
     this.resetState();
     // await this.NodeInit();
-    await this.simLauncherInit();
+    // await this.simLauncherInit();
 
-    await Promise.all(
-      Object.keys(utilsModules).map((key) => utilsModules[key]())
-    );
+    // await Promise.all(
+    //   Object.keys(utilsModules).map((key) => utilsModules[key]())
+    // );
   }
 
   async simLauncherInit() {

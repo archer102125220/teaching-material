@@ -116,7 +116,7 @@ window.assert && window.assert(regionAndCultureQueryParameter === null ||
 
 // The list of supported regions and cultures as defined in the `simFeatures` of the package.json.
 const simFeaturesSupportedRegionsAndCultures = packageJSON.phet?.simFeatures?.supportedRegionsAndCultures;
-assert && simFeaturesSupportedRegionsAndCultures && assert(_.every(simFeaturesSupportedRegionsAndCultures, isSupportedRegionAndCulture),
+window.assert && simFeaturesSupportedRegionsAndCultures && window.assert(_.every(simFeaturesSupportedRegionsAndCultures, isSupportedRegionAndCulture),
   `Invalid value in simFeatures.supportedRegionsAndCultures: ${simFeaturesSupportedRegionsAndCultures}. Check RegionAndCulturePortrayal.SUPPORTED_REGIONS_AND_CULTURES.`);
 
 
@@ -136,7 +136,7 @@ export default class RegionAndCulturePortrayal extends PhetioObject {
     }, providedOptions);
 
     super(options);
-    assert && this.tandem?.supplied && assert(SUPPORTED_REGIONS_AND_CULTURES.includes(this.tandem.name as RegionAndCultureID),
+    window.assert && this.tandem?.supplied && window.assert(SUPPORTED_REGIONS_AND_CULTURES.includes(this.tandem.name as RegionAndCultureID),
       `RegionAndCulturePortrayal should have a tandem name that matches its portrayal name: ${this.tandem.name}`);
 
     this.labelProperty = labelProperty;

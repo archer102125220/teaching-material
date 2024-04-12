@@ -10,6 +10,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+console.log('phet-core/RequiredKeys.ts');
+
 type RequiredKeys<T> = { [K in keyof T]-?: {} extends Pick<T, K> ? never : K }[keyof T]; // eslint-disable-line @typescript-eslint/ban-types
 
 

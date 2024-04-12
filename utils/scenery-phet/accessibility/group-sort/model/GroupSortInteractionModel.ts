@@ -146,7 +146,7 @@ export default class GroupSortInteractionModel<ItemModel> extends EnabledCompone
       phetioDocumentation: 'For PhET-iO internal use only. Tracks the current selection for the interaction. Null means there is no selection.'
     });
 
-    assert && this.selectedGroupItemProperty.lazyLink(selectedGroupItem => {
+    window.assert && this.selectedGroupItemProperty.lazyLink(selectedGroupItem => {
       // TODO: Turn this on! But we can't until reorganizeStack respects the selection first. Note! This can cause a very weird bug where while sorting, all soccer balls end up in the same stack when using the arrow keys. I believe it is because reorganize stack triggers a call to change the selection to a different ball (keeping it in the large stack) https://github.com/phetsims/soccer-common/issues/7
       // window.assert && window.assert( !this.isGroupItemKeyboardGrabbedProperty.value, 'should not change selection when sorting' );
 

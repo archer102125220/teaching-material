@@ -20,7 +20,7 @@ const PreferencesDialogConstants = {
     size: new Dimension2(36, 18),
     trackFillRight: '#64bd5a',
     // enabled:true by default, but disable if fuzzing when supporting voicing
-    enabled: !(phet.chipper.isFuzzEnabled() && phet.chipper.queryParameters.supportsVoicing),
+    enabled: !(window.phet.chipper.isFuzzEnabled() && window.phet.chipper.queryParameters.supportsVoicing),
 
 
     // voicing

@@ -36,6 +36,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+console.log('phet-core/isHMR.ts');
+
 let isHMR: boolean;
 
 try {

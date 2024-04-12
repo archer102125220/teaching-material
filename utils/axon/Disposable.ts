@@ -81,7 +81,7 @@ class Disposable {
   }
 
   public dispose(): void {
-    assert && !this._isDisposable && Disposable.assertNotDisposable();
+    window.assert && !this._isDisposable && Disposable.assertNotDisposable();
     window.assert && window.assert(!this._isDisposed, 'Disposable can only be disposed once');
     this._disposeEmitter.emit();
     this._disposeEmitter.dispose();
@@ -90,7 +90,6 @@ class Disposable {
 
   public static assertNotDisposable(): void {
 
-    // eslint-disable-next-line bad-sim-text
     window.assert && window.assert(false, 'dispose is not supported, exists for the lifetime of the sim');
   }
 }

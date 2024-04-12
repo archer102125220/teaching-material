@@ -70,7 +70,7 @@ class NavigationBarAudioToggleButton extends JoistButton {
       highlightCenterOffsetY: 0,
 
       // enabled:true by default, but disable if fuzzing when supporting voicing
-      enabled: !(phet.chipper.isFuzzEnabled() && phet.chipper.queryParameters.supportsVoicing),
+      enabled: !(window.phet.chipper.isFuzzEnabled() && window.phet.chipper.queryParameters.supportsVoicing),
 
       visiblePropertyOptions: { phetioFeatured: true },
       phetioFeatured: true,
@@ -93,7 +93,7 @@ class NavigationBarAudioToggleButton extends JoistButton {
 
     // create speaker for both sound on and sound off
     const speakerNode = new Path(
-      new Shape()
+      new Shape(undefined, undefined, 'speakerNode')
         .moveTo(SPEAKER_WIDTH, 0)
         .lineTo(SPEAKER_BACK_WIDTH, SPEAKER_BACK_Y_SPACE)
         .lineTo(CORNER_RADIUS, SPEAKER_BACK_Y_SPACE)
@@ -118,7 +118,7 @@ class NavigationBarAudioToggleButton extends JoistButton {
 
     // create X for sound off
     const soundOffX = new Path(
-      new Shape().moveTo(0, 0).lineTo(X_WIDTH, X_WIDTH).moveTo(0, X_WIDTH)
+      new Shape(undefined, undefined, 'soundOffX').moveTo(0, 0).lineTo(X_WIDTH, X_WIDTH).moveTo(0, X_WIDTH)
         .lineTo(X_WIDTH, 0),
       {
         stroke: 'black',
@@ -132,7 +132,7 @@ class NavigationBarAudioToggleButton extends JoistButton {
 
     // create curved lines for sound on
     const soundOnCurves = new Path(
-      new Shape()
+      new Shape(undefined, undefined, 'soundOnCurves')
         .arc(0, 0, MAX_CURVE_RADIUS, CURVE_ANGLE, NEG_CURVE_ANGLE, true)
         .moveToPoint(new Vector2(MED_CURVE_RADIUS, 0).rotated(CURVE_ANGLE))
         .arc(0, 0, MED_CURVE_RADIUS, CURVE_ANGLE, NEG_CURVE_ANGLE, true)

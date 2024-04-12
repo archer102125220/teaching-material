@@ -79,14 +79,14 @@ export default class MirrorShapes implements OpticShapes {
     const midRight = midLeft.plusXY(backingThickness, 0);
 
     // reflective coating on the front (left-facing) surface of the mirror, with zero area.
-    const reflectiveCoatingShape = new Shape()
+    const reflectiveCoatingShape = new Shape(undefined, undefined, 'reflectiveCoatingShape')
       .moveToPoint(topLeft)
       .quadraticCurveToPoint(midLeft, bottomLeft)
       .quadraticCurveToPoint(midLeft, topLeft)
       .close();
 
     // the mirror's backing, counterclockwise from top-left
-    const backingShape = new Shape()
+    const backingShape = new Shape(undefined, undefined, 'backingShape')
       .moveToPoint(topLeft)
       .quadraticCurveToPoint(midLeft, bottomLeft)
       .lineToPoint(bottomRight)

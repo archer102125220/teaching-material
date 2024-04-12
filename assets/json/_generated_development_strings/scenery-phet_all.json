@@ -22319,6 +22319,164 @@
     "ten": {
       "value": "ten"
     },
-    "a11y": {}
+    "a11y": {
+      "keyboardHelpDialog": {
+        "general": {
+          "tabDescription": {
+            "value": "Move to next item with Tab key."
+          },
+          "shiftTabDescription": {
+            "value": "Move to previous item with Shift plus Tab key."
+          },
+          "tabGroupDescription": {
+            "value": "Move to next item or group with Tab key."
+          },
+          "shiftTabGroupDescription": {
+            "value": "Move to previous item or group with Shift plus Tab key."
+          },
+          "pressButtonsDescription": {
+            "value": "Press buttons with Space or Enter keys."
+          },
+          "groupNavigationDescription": {
+            "value": "Move between items in a group with Left and Right arrow keys or Up and Down arrow keys."
+          },
+          "setValuesInKeypadDescription": {
+            "value": "Set values within keypad using number keys 0-9."
+          },
+          "exitDialogDescription": {
+            "value": "Exit a dialog with Escape key."
+          },
+          "toggleCheckboxesDescription": {
+            "value": "Toggle checkboxes with Space key."
+          },
+          "resetAllDescriptionPattern": {
+            "value": "Reset All with {{altOrOption}} plus R."
+          }
+        },
+        "slider": {
+          "orKeysPattern": {
+            "value": "{{leftRight}}, or {{upDown}}"
+          },
+          "leftRightArrowKeys": {
+            "value": "Left and Right arrow keys"
+          },
+          "upDownArrowKeys": {
+            "value": "Up and Down arrow keys"
+          },
+          "defaultStepsDescriptionPattern": {
+            "value": "{{verb}} {{slider}} with {{keys}}."
+          },
+          "shiftLeftRightArrowKeys": {
+            "value": "Shift plus Left or Right arrow key"
+          },
+          "shiftUpDownArrowKeys": {
+            "value": "Shift plus Up or Down arrow key"
+          },
+          "smallerStepsDescriptionPattern": {
+            "value": "{{verb}} in smaller steps with {{keys}}."
+          },
+          "largerStepsDescriptionPattern": {
+            "value": "{{verb}} in larger steps with Page Up or Page Down key."
+          },
+          "jumpToMinimumDescriptionPattern": {
+            "value": "Jump to {{minimum}} with Home key."
+          },
+          "jumpToMaximumDescriptionPattern": {
+            "value": "Jump to {{maximum}} with End key."
+          }
+        },
+        "grabOrReleaseDescriptionPattern": {
+          "value": "Grab or release {{thing}} with Space or Enter keys."
+        },
+        "comboBox": {
+          "popUpListPatternDescription": {
+            "value": "Pop up list of {{thingPlural}} with Space or Enter keys."
+          },
+          "moveThroughPatternDescription": {
+            "value": "Move through {{thingPlural}} with Up and Down arrow keys."
+          },
+          "chooseNewPatternDescription": {
+            "value": " Choose new {{thingSingular}} with Enter key."
+          },
+          "closeWithoutChangingDescription": {
+            "value": " Close list without changing with Escape key."
+          }
+        },
+        "draggableItems": {
+          "moveDescription": {
+            "value": "Move with arrow keys or W, A, S, or D keys."
+          },
+          "moveSlowerDescription": {
+            "value": "Move slower with shift plus arrow keys or W, A, S, or D keys."
+          }
+        },
+        "timingControls": {
+          "pauseOrPlayActionDescription": {
+            "value": "Pause or play action with alt key plus K."
+          }
+        }
+      },
+      "movementAlerter": {
+        "down": {
+          "value": "down"
+        },
+        "left": {
+          "value": "left"
+        },
+        "right": {
+          "value": "right"
+        },
+        "up": {
+          "value": "up"
+        },
+        "upAndToTheRight": {
+          "value": "up and to the right"
+        },
+        "upAndToTheLeft": {
+          "value": "up and to the left"
+        },
+        "downAndToTheRight": {
+          "value": "down and to the right"
+        },
+        "downAndToTheLeft": {
+          "value": "down and to the left"
+        },
+        "leftBorderAlert": {
+          "value": "At left edge"
+        },
+        "rightBorderAlert": {
+          "value": "At right edge"
+        },
+        "topBorderAlert": {
+          "value": "At top"
+        },
+        "bottomBorderAlert": {
+          "value": "At bottom"
+        }
+      },
+      "grabDrag": {
+        "grabPattern": {
+          "value": "Grab {{objectToGrab}}"
+        },
+        "movable": {
+          "value": "movable"
+        },
+        "button": {
+          "value": "button"
+        },
+        "defaultObjectToGrab": {
+          "value": "Object"
+        },
+        "released": {
+          "value": "Released."
+        },
+        "gestureHelpTextPattern": {
+          "value": "Double tap and hold to drag {{objectToGrab}}. Lift finger to release."
+        },
+        "spaceToGrabOrRelease": {
+          "value": "Space to Grab or Release."
+        }
+      }
+    }
   }
 }

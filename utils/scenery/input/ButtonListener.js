@@ -38,7 +38,7 @@ class ButtonListener extends DownUpListener {
    * fire: null        // Called on a state change to/from 'down' (depending on fireOnDown), as fire( event ). Called after the triggering up/over/down event.
    */
   constructor(options) {
-    assert &&
+    window.assert &&
       deprecationWarning(
         'ButtonListener is deprecated, please use FireListener instead'
       );
@@ -90,9 +90,9 @@ class ButtonListener extends DownUpListener {
    */
   setButtonState(event, state) {
     if (state !== this.buttonState) {
-      sceneryLog &&
-        sceneryLog.InputEvent &&
-        sceneryLog.InputEvent(
+      window.sceneryLog &&
+        window.sceneryLog.InputEvent &&
+        window.sceneryLog.InputEvent(
           `ButtonListener state change to ${state} from ${this.buttonState} for ${this.downTrail ? this.downTrail.toString() : this.downTrail}`
         );
       const oldState = this.buttonState;
@@ -134,9 +134,9 @@ class ButtonListener extends DownUpListener {
    * @param {SceneryEvent} event
    */
   enter(event) {
-    sceneryLog &&
-      sceneryLog.InputEvent &&
-      sceneryLog.InputEvent(
+    window.sceneryLog &&
+      window.sceneryLog.InputEvent &&
+      window.sceneryLog.InputEvent(
         `ButtonListener enter for ${this.downTrail ? this.downTrail.toString() : this.downTrail}`
       );
     this._overCount++;
@@ -151,13 +151,13 @@ class ButtonListener extends DownUpListener {
    * @param {SceneryEvent} event
    */
   exit(event) {
-    sceneryLog &&
-      sceneryLog.InputEvent &&
-      sceneryLog.InputEvent(
+    window.sceneryLog &&
+      window.sceneryLog.InputEvent &&
+      window.sceneryLog.InputEvent(
         `ButtonListener exit for ${this.downTrail ? this.downTrail.toString() : this.downTrail}`
       );
-    assert &&
-      assert(this._overCount > 0, 'Exit events not matched by an enter');
+    window.assert &&
+      window.assert(this._overCount > 0, 'Exit events not matched by an enter');
     this._overCount--;
     if (this._overCount === 0) {
       this.setButtonState(event, this.isDown ? 'out' : 'up');

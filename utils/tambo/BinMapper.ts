@@ -26,7 +26,7 @@ class BinMapper {
   public constructor(valueRange: Range, numBins: number, providedOptions?: BinMapperOptions) {
 
     // parameter checking
-    assert && assert(numBins > 0);
+    window.assert && window.assert(numBins > 0);
 
     const options = optionize<BinMapperOptions, BinMapperOptions>()({
       tolerateOutOfRangeValues: false
@@ -44,8 +44,8 @@ class BinMapper {
    */
   public mapToBin(value: number): number {
     if (!this.options.tolerateOutOfRangeValues) {
-      assert && assert(value <= this.maxValue);
-      assert && assert(value >= this.minValue);
+      window.assert && window.assert(value <= this.maxValue);
+      window.assert && window.assert(value >= this.minValue);
     }
 
     const proportion = (value - this.minValue) / (this.span);

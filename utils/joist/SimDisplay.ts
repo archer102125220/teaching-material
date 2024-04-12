@@ -73,11 +73,11 @@ export default class SimDisplay extends Display {
       allowSceneOverflow: false,
 
       // Indicate whether webgl is allowed to facilitate testing on non-webgl platforms, see https://github.com/phetsims/scenery/issues/289
-      allowWebGL: phet.chipper.queryParameters.webgl,
+      allowWebGL: window.phet.chipper.queryParameters.webgl,
       assumeFullWindow: true, // a bit faster if we can assume no coordinate translations are needed for the display.
 
       // pdom accessibility (interactive description)
-      accessibility: phet.chipper.queryParameters.supportsInteractiveDescription,
+      accessibility: window.phet.chipper.queryParameters.supportsInteractiveDescription,
 
       // phet-io
       tandem: Tandem.REQUIRED
@@ -91,13 +91,13 @@ export default class SimDisplay extends Display {
 
     // Supplied query parameters override options (but default values for non-supplied query parameters do not).
     if (QueryStringMachine.containsKey('webgl')) {
-      options.webgl = phet.chipper.queryParameters.webgl;
+      options.webgl = window.phet.chipper.queryParameters.webgl;
     }
 
     Utils.setWebGLEnabled(options.webgl);
 
     // override window.open with a semi-API-compatible function, so fuzzing doesn't open new windows.
-    if (phet.chipper.isFuzzEnabled()) {
+    if (window.phet.chipper.isFuzzEnabled()) {
 
       // @ts-expect-error - it isn't yet clear how to define objects to window just yet
       window.open = function () {
@@ -149,12 +149,12 @@ export default class SimDisplay extends Display {
     this.rootNode.addChild(this.simulationRoot);
 
     // Seeding by default a random value for reproducible fuzzes if desired
-    const fuzzerSeed = phet.chipper.queryParameters.randomSeed * Math.PI;
+    const fuzzerSeed = window.phet.chipper.queryParameters.randomSeed * Math.PI;
 
     this.inputFuzzer = new InputFuzzer(this, fuzzerSeed);
     this.keyboardFuzzer = new KeyboardFuzzer(this, fuzzerSeed);
 
-    this.supportsPanAndZoomProperty = new BooleanProperty(phet.chipper.queryParameters.supportsPanAndZoom, {
+    this.supportsPanAndZoomProperty = new BooleanProperty(window.phet.chipper.queryParameters.supportsPanAndZoom, {
       tandem: options.tandem.createTandem('supportsPanAndZoomProperty'),
       phetioFeatured: true
     });
@@ -162,7 +162,7 @@ export default class SimDisplay extends Display {
     this.domElement.id = 'sim';
     // console.log( this.domElement );
 
-    if (phet.chipper.queryParameters.supportsInteractiveDescription) {
+    if (window.phet.chipper.queryParameters.supportsInteractiveDescription) {
 
       // for now interactive description is only in English
       // NOTE: When translatable this will need to update with language, change to phet.chipper.local
@@ -171,20 +171,20 @@ export default class SimDisplay extends Display {
 
     this.highlightVisibilityController = new HighlightVisibilityController(this, options.preferencesModel);
 
-    if (phet.chipper.queryParameters.sceneryLog) {
+    if (window.phet.chipper.queryParameters.sceneryLog) {
 
       // @ts-expect-error - until scenery.js is converted to typescript, which is non-trivial (I tried)
-      scenery.enableLogging(phet.chipper.queryParameters.sceneryLog);
+      scenery.enableLogging(window.phet.chipper.queryParameters.sceneryLog);
     }
 
-    if (phet.chipper.queryParameters.sceneryStringLog) {
+    if (window.phet.chipper.queryParameters.sceneryStringLog) {
 
       // @ts-expect-error - until scenery.js is converted to typescript, which is non-trivial (I tried)
       scenery.switchLogToString();
     }
 
     // See https://github.com/phetsims/chipper/issues/1319
-    if (phet.chipper.queryParameters.stringTest === 'dynamic') {
+    if (window.phet.chipper.queryParameters.stringTest === 'dynamic') {
       const dynamicStringTest = new DynamicStringTest();
       window.addEventListener('keydown', event => dynamicStringTest.handleEvent(event));
     }
@@ -197,11 +197,11 @@ export default class SimDisplay extends Display {
     window.phet.joist.display = this; // make the display available for debugging
 
     // Pass through query parameters to scenery for showing supplemental information
-    this.setPointerDisplayVisible(phet.chipper.queryParameters.showPointers);
-    this.setPointerAreaDisplayVisible(phet.chipper.queryParameters.showPointerAreas);
-    this.setHitAreaDisplayVisible(phet.chipper.queryParameters.showHitAreas);
-    this.setCanvasNodeBoundsVisible(phet.chipper.queryParameters.showCanvasNodeBounds);
-    this.setFittedBlockBoundsVisible(phet.chipper.queryParameters.showFittedBlockBounds);
+    this.setPointerDisplayVisible(window.phet.chipper.queryParameters.showPointers);
+    this.setPointerAreaDisplayVisible(window.phet.chipper.queryParameters.showPointerAreas);
+    this.setHitAreaDisplayVisible(window.phet.chipper.queryParameters.showHitAreas);
+    this.setCanvasNodeBoundsVisible(window.phet.chipper.queryParameters.showCanvasNodeBounds);
+    this.setFittedBlockBoundsVisible(window.phet.chipper.queryParameters.showFittedBlockBounds);
 
     // magnification support - always initialized for consistent PhET-iO API, but only conditionally added to Display
     animatedPanZoomSingleton.initialize(this.simulationRoot, {
@@ -237,23 +237,23 @@ export default class SimDisplay extends Display {
   public fuzzInputEvents(): void {
 
     // If fuzz parameter is used then fuzzTouch and fuzzMouse events should be fired
-    const fuzzTouch = phet.chipper.queryParameters.fuzzTouch || phet.chipper.queryParameters.fuzz;
-    const fuzzMouse = phet.chipper.queryParameters.fuzzMouse || phet.chipper.queryParameters.fuzz;
+    const fuzzTouch = window.phet.chipper.queryParameters.fuzzTouch || window.phet.chipper.queryParameters.fuzz;
+    const fuzzMouse = window.phet.chipper.queryParameters.fuzzMouse || window.phet.chipper.queryParameters.fuzz;
 
     // fire or synthesize input events
     if (fuzzMouse || fuzzTouch) {
       this.inputFuzzer.fuzzEvents(
-        phet.chipper.queryParameters.fuzzRate,
+        window.phet.chipper.queryParameters.fuzzRate,
         fuzzMouse,
         fuzzTouch,
-        phet.chipper.queryParameters.fuzzPointers
+        window.phet.chipper.queryParameters.fuzzPointers
       );
     }
 
     // fire or synthesize keyboard input events
-    if (phet.chipper.queryParameters.fuzzBoard && document.hasFocus()) {
-      window.assert && window.assert(phet.chipper.queryParameters.supportsInteractiveDescription, 'fuzzBoard can only run with interactive description enabled.');
-      this.keyboardFuzzer.fuzzBoardEvents(phet.chipper.queryParameters.fuzzRate);
+    if (window.phet.chipper.queryParameters.fuzzBoard && document.hasFocus()) {
+      window.assert && window.assert(window.phet.chipper.queryParameters.supportsInteractiveDescription, 'fuzzBoard can only run with interactive description enabled.');
+      this.keyboardFuzzer.fuzzBoardEvents(window.phet.chipper.queryParameters.fuzzRate);
     }
   }
 

@@ -111,7 +111,7 @@ export class SimVersion {
     // @public {number|null}
     this.testNumber = testNumber;
 
-    // @public {string|null} - If provided, like '2015-06-12 16:05:03 UTC' (phet.chipper.buildTimestamp)
+    // @public {string|null} - If provided, like '2015-06-12 16:05:03 UTC' (window.phet.chipper.buildTimestamp)
     this.buildTimestamp = buildTimestamp;
   }
 
@@ -263,7 +263,7 @@ export class SimVersion {
    * @public
    *
    * @param {string} versionString - e.g. '1.0.0', '1.0.1-dev.3', etc.
-   * @param {string} [buildTimestamp] - Optional build timestamp, like '2015-06-12 16:05:03 UTC' (phet.chipper.buildTimestamp)
+   * @param {string} [buildTimestamp] - Optional build timestamp, like '2015-06-12 16:05:03 UTC' (window.phet.chipper.buildTimestamp)
    * @returns {SimVersion}
    */
   static parse(versionString, buildTimestamp) {

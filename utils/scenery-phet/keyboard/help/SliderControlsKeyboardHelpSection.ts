@@ -74,7 +74,7 @@ export default class SliderControlsKeyboardHelpSection extends KeyboardHelpSecti
 
     // If you provide a string for the verb or slider, it will be filled into the default pattern
     // for all rows so you cannot customize each row individually.
-    assert && assertMutuallyExclusiveOptions(providedOptions,
+    window.assert && assertMutuallyExclusiveOptions(providedOptions,
       ['verbStringProperty', 'sliderStringProperty'],
       ['adjustSliderStringProperty', 'adjustInSmallerStepsStringProperty', 'adjustInLargerStepsStringProperty']);
 

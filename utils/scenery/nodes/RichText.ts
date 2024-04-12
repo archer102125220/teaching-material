@@ -462,8 +462,8 @@ export default class RichText extends WidthSizable(Node) {
    * When called, will rebuild the node structure for this RichText
    */
   private rebuildRichText(): void {
-    assert && cleanArray(usedLinks);
-    assert && cleanArray(usedNodes);
+    window.assert && cleanArray(usedLinks);
+    window.assert && cleanArray(usedNodes);
 
     const hasDynamicWidth = this._lineWrap === 'stretch';
 
@@ -609,12 +609,12 @@ export default class RichText extends WidthSizable(Node) {
     if (window.assert) {
       if (this._links && this._links !== true) {
         Object.keys(this._links).forEach(link => {
-          assert && allowLinksProperty.value && !isStringTest && assert(usedLinks.includes(link), `Unused RichText link: ${link}`);
+          window.assert && allowLinksProperty.value && !isStringTest && window.assert(usedLinks.includes(link), `Unused RichText link: ${link}`);
         });
       }
       if (this._nodes) {
         Object.keys(this._nodes).forEach(node => {
-          assert && allowLinksProperty.value && !isStringTest && assert(usedNodes.includes(node), `Unused RichText node: ${node}`);
+          window.assert && allowLinksProperty.value && !isStringTest && window.assert(usedNodes.includes(node), `Unused RichText node: ${node}`);
         });
       }
     }
@@ -833,7 +833,7 @@ export default class RichText extends WidthSizable(Node) {
             ? `Could not find a matching item in RichText's nodes for ${referencedId}. It should be provided in the nodes option`
             : 'No id attribute provided for a given <node> element');
         if (referencedNode) {
-          assert && usedNodes.push(referencedId!);
+          window.assert && usedNodes.push(referencedId!);
           node = RichTextNode.pool.create(referencedNode);
 
           if (this._hasAddedLeafToLine && !node.fitsIn(widthAvailableWithSpacing)) {
@@ -875,8 +875,8 @@ export default class RichText extends WidthSizable(Node) {
 
       if (styleAttributeString) {
         const css = RichTextUtils.himalayaStyleStringToMap(styleAttributeString);
-        assert && Object.keys(css).forEach(key => {
-          assert!(_.includes(STYLE_KEYS, key), 'See supported style CSS keys');
+        window.assert && Object.keys(css).forEach(key => {
+          window.assert!(_.includes(STYLE_KEYS, key), 'See supported style CSS keys');
         });
 
         // Fill
@@ -905,7 +905,7 @@ export default class RichText extends WidthSizable(Node) {
           if (href.startsWith('{{') && href.indexOf('}}') === href.length - 2) {
             const linkName = href.slice(2, -2);
             href = this._links[linkName];
-            assert && usedLinks.push(linkName);
+            window.assert && usedLinks.push(linkName);
           }
           else {
             href = null;
@@ -1624,7 +1624,7 @@ export default class RichText extends WidthSizable(Node) {
 
   public override mutate(options?: RichTextOptions): this {
 
-    if (assert && options && options.hasOwnProperty('string') && options.hasOwnProperty(Text.STRING_PROPERTY_NAME) && options.stringProperty) {
+    if (window.assert && options && options.hasOwnProperty('string') && options.hasOwnProperty(Text.STRING_PROPERTY_NAME) && options.stringProperty) {
       window.assert && window.assert(options.stringProperty.value === options.string, 'If both string and stringProperty are provided, then values should match');
     }
 

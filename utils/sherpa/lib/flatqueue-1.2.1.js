@@ -76,4 +76,8 @@ export class FlatQueue {
   }
 }
 
+if (typeof window === 'object') {
+  window.FlatQueue = FlatQueue;
+}
+
 export default FlatQueue;

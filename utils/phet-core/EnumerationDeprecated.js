@@ -65,6 +65,8 @@ import deprecationWarning from '@/utils/phet-core/deprecationWarning';
 import merge from '@/utils/phet-core/merge';
 import phetCore from '@/utils/phet-core/phetCore';
 
+console.log('phet-core/EnumerationDeprecated.js');
+
 /**
  * @deprecated
  */

@@ -66,8 +66,8 @@ class Drawable {
    * @returns {Drawable} - for chaining
    */
   initialize(renderer) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !this.id || this.isDisposed,
         'If we previously existed, we need to have been disposed'
       );
@@ -75,9 +75,9 @@ class Drawable {
     // @public {number} - unique ID for drawables
     this.id = this.id || globalId++;
 
-    sceneryLog &&
-      sceneryLog.Drawable &&
-      sceneryLog.Drawable(
+    window.sceneryLog &&
+      window.sceneryLog.Drawable &&
+      window.sceneryLog.Drawable(
         `[${this.constructor.name}*] initialize ${this.toString()}`
       );
 
@@ -123,8 +123,8 @@ class Drawable {
     // @public {boolean} - whether we are to be removed from a block/backbone in our updateBlock() call
     this.pendingRemoval = false;
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !this.previousDrawable && !this.nextDrawable,
         'By cleaning (disposal or fresh creation), we should have disconnected from the linked list'
       );
@@ -227,9 +227,9 @@ class Drawable {
    * @param {BackboneDrawable} backboneInstance
    */
   setBlockBackbone(backboneInstance) {
-    sceneryLog &&
-      sceneryLog.Drawable &&
-      sceneryLog.Drawable(
+    window.sceneryLog &&
+      window.sceneryLog.Drawable &&
+      window.sceneryLog.Drawable(
         `[${this.constructor.name}*] setBlockBackbone ${this.toString()} with ${backboneInstance.toString()}`
       );
 
@@ -253,16 +253,16 @@ class Drawable {
    * @param {BackboneDrawable} backbone
    */
   notePendingAddition(display, block, backbone) {
-    sceneryLog &&
-      sceneryLog.Drawable &&
-      sceneryLog.Drawable(
+    window.sceneryLog &&
+      window.sceneryLog.Drawable &&
+      window.sceneryLog.Drawable(
         `[${this.constructor.name}*] notePendingAddition ${this.toString()} with ${block.toString()}, ${
           backbone ? backbone.toString() : '-'
         }`
       );
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         backbone !== undefined,
         'backbone can be either null or a backbone'
       );
@@ -285,9 +285,9 @@ class Drawable {
    * @param {Display} display
    */
   notePendingRemoval(display) {
-    sceneryLog &&
-      sceneryLog.Drawable &&
-      sceneryLog.Drawable(
+    window.sceneryLog &&
+      window.sceneryLog.Drawable &&
+      window.sceneryLog.Drawable(
         `[${this.constructor.name}*] notePendingRemoval ${this.toString()}`
       );
 
@@ -310,9 +310,9 @@ class Drawable {
    * @param {Block} block
    */
   notePendingMove(display, block) {
-    sceneryLog &&
-      sceneryLog.Drawable &&
-      sceneryLog.Drawable(
+    window.sceneryLog &&
+      window.sceneryLog.Drawable &&
+      window.sceneryLog.Drawable(
         `[${this.constructor.name}*] notePendingMove ${this.toString()} with ${block.toString()}`
       );
 
@@ -336,16 +336,16 @@ class Drawable {
    * @returns {boolean} - Whether we changed our block
    */
   updateBlock() {
-    sceneryLog &&
-      sceneryLog.Drawable &&
-      sceneryLog.Drawable(
+    window.sceneryLog &&
+      window.sceneryLog.Drawable &&
+      window.sceneryLog.Drawable(
         `[${this.constructor.name}*] updateBlock ${this.toString()} with add:${
           this.pendingAddition
         } remove:${this.pendingRemoval} old:${
           this.parentDrawable ? this.parentDrawable.toString() : '-'
         } new:${this.pendingParentDrawable ? this.pendingParentDrawable.toString() : '-'}`
       );
-    sceneryLog && sceneryLog.Drawable && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Drawable && window.sceneryLog.push();
 
     let changed = false;
 
@@ -359,9 +359,9 @@ class Drawable {
 
       if (changed) {
         if (this.pendingRemoval) {
-          sceneryLog &&
-            sceneryLog.Drawable &&
-            sceneryLog.Drawable(
+          window.sceneryLog &&
+            window.sceneryLog.Drawable &&
+            window.sceneryLog.Drawable(
               `removing from ${this.parentDrawable.toString()}`
             );
           this.parentDrawable.removeDrawable(this);
@@ -377,13 +377,17 @@ class Drawable {
         this.backbone = this.pendingBackbone;
 
         if (this.pendingAddition) {
-          sceneryLog &&
-            sceneryLog.Drawable &&
-            sceneryLog.Drawable(`adding to ${this.parentDrawable.toString()}`);
+          window.sceneryLog &&
+            window.sceneryLog.Drawable &&
+            window.sceneryLog.Drawable(
+              `adding to ${this.parentDrawable.toString()}`
+            );
           this.parentDrawable.addDrawable(this);
         }
       } else {
-        sceneryLog && sceneryLog.Drawable && sceneryLog.Drawable('unchanged');
+        window.sceneryLog &&
+          window.sceneryLog.Drawable &&
+          window.sceneryLog.Drawable('unchanged');
 
         if (this.pendingAddition && Renderer.isCanvas(this.renderer)) {
           this.parentDrawable.onPotentiallyMovedDrawable(this);
@@ -394,7 +398,7 @@ class Drawable {
       this.pendingRemoval = false;
     }
 
-    sceneryLog && sceneryLog.Drawable && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Drawable && window.sceneryLog.pop();
 
     return changed;
   }
@@ -477,14 +481,15 @@ class Drawable {
    * @param {*} 'We should not re-dispose drawables'
    */
   dispose() {
-    window.assert && window.assert(!this.isDisposed, 'We should not re-dispose drawables');
+    window.assert &&
+      window.assert(!this.isDisposed, 'We should not re-dispose drawables');
 
-    sceneryLog &&
-      sceneryLog.Drawable &&
-      sceneryLog.Drawable(
+    window.sceneryLog &&
+      window.sceneryLog.Drawable &&
+      window.sceneryLog.Drawable(
         `[${this.constructor.name}*] dispose ${this.toString()}`
       );
-    sceneryLog && sceneryLog.Drawable && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Drawable && window.sceneryLog.push();
 
     this.clean();
     this.isDisposed = true;
@@ -492,7 +497,7 @@ class Drawable {
     // for now
     this.freeToPool();
 
-    sceneryLog && sceneryLog.Drawable && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Drawable && window.sceneryLog.pop();
   }
 
   /**
@@ -504,54 +509,57 @@ class Drawable {
    * @param {boolean} allowDirty
    */
   audit(allowPendingBlock, allowPendingList, allowDirty) {
-    if (assertSlow) {
-      assertSlow &&
-        assertSlow(
+    if (window.assertSlow) {
+      window.assertSlow &&
+        window.assertSlow(
           !this.isDisposed,
           'If we are being audited, we assume we are in the drawable display tree, and we should not be marked as disposed'
         );
-      assertSlow &&
-        assertSlow(this.renderer, 'Should not have a 0 (no) renderer');
+      window.assertSlow &&
+        window.assertSlow(this.renderer, 'Should not have a 0 (no) renderer');
 
-      assertSlow &&
-        assertSlow(
+      window.assertSlow &&
+        window.assertSlow(
           !this.backbone || this.parentDrawable,
           'If we have a backbone reference, we must have a parentDrawable (our block)'
         );
 
       if (!allowPendingBlock) {
-        assertSlow && assertSlow(!this.pendingAddition);
-        assertSlow && assertSlow(!this.pendingRemoval);
-        assertSlow &&
-          assertSlow(
+        window.assertSlow && window.assertSlow(!this.pendingAddition);
+        window.assertSlow && window.assertSlow(!this.pendingRemoval);
+        window.assertSlow &&
+          window.assertSlow(
             this.parentDrawable === this.pendingParentDrawable,
             'Assure our parent and pending parent match, if we have updated blocks'
           );
-        assertSlow &&
-          assertSlow(
+        window.assertSlow &&
+          window.assertSlow(
             this.backbone === this.pendingBackbone,
             'Assure our backbone and pending backbone match, if we have updated blocks'
           );
       }
 
       if (!allowPendingList) {
-        assertSlow &&
-          assertSlow(
+        window.assertSlow &&
+          window.assertSlow(
             this.oldPreviousDrawable === this.previousDrawable,
             'Pending linked-list references should be cleared by now'
           );
-        assertSlow &&
-          assertSlow(
+        window.assertSlow &&
+          window.assertSlow(
             this.oldNextDrawable === this.nextDrawable,
             'Pending linked-list references should be cleared by now'
           );
-        assertSlow &&
-          assertSlow(!this.linksDirty, 'Links dirty flag should be clean');
+        window.assertSlow &&
+          window.assertSlow(
+            !this.linksDirty,
+            'Links dirty flag should be clean'
+          );
       }
 
       if (!allowDirty) {
-        assertSlow &&
-          assertSlow(
+        window.assertSlow &&
+          window.assertSlow(
             !this.dirty,
             'Should not be dirty at this phase, if we are in the drawable display tree'
           );

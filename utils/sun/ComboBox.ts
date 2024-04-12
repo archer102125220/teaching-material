@@ -199,7 +199,7 @@ export default class ComboBox<T> extends WidthSizable(Node) {
 
     window.assert && window.assert(_.uniqBy(items, (item: ComboBoxItem<T>) => item.value).length === items.length,
       'items must have unique values');
-    assert && items.forEach(item => {
+    window.assert && items.forEach(item => {
       window.assert && window.assert(!item.tandemName || item.tandemName.endsWith(ComboBox.ITEM_TANDEM_NAME_SUFFIX),
         `ComboBoxItem tandemName must end with '${ComboBox.ITEM_TANDEM_NAME_SUFFIX}': ${item.tandemName}`);
     });
@@ -257,7 +257,7 @@ export default class ComboBox<T> extends WidthSizable(Node) {
 
     const nodes = getGroupItemNodes(items, options.tandem.createTandem('items'));
 
-    assert && nodes.forEach(node => {
+    window.assert && nodes.forEach(node => {
       window.assert && window.assert(!node.hasPDOMContent, 'Accessibility is provided by ComboBoxItemNode and ' +
         'ComboBoxItem.a11yLabel. Additional PDOM content in the provided ' +
         'Node could break accessibility.');
@@ -358,7 +358,7 @@ export default class ComboBox<T> extends WidthSizable(Node) {
 
     this.mutate(options);
 
-    if (assert && Tandem.VALIDATION && this.isPhetioInstrumented()) {
+    if (window.assert && Tandem.VALIDATION && this.isPhetioInstrumented()) {
       items.forEach(item => {
         window.assert && window.assert(item.tandemName !== null, `PhET-iO instrumented ComboBoxes require ComboBoxItems to have tandemName: ${item.value}`);
       });
@@ -379,7 +379,7 @@ export default class ComboBox<T> extends WidthSizable(Node) {
         // The rest of the time, ignore this listener, so that the listbox remains popped up, and we test making
         // choices from the listbox. See https://github.com/phetsims/sun/issues/677 for the initial implementation,
         // and See https://github.com/phetsims/aqua/issues/136 for the probability value chosen.
-        if (!phet.chipper.isFuzzEnabled() || dotRandom.nextDouble() < 0.005) {
+        if (!window.phet.chipper.isFuzzEnabled() || dotRandom.nextDouble() < 0.005) {
 
           // Ignore if we click over the button, since the button will handle hiding the list.
           if (!(event.trail.containsNode(this.button) || event.trail.containsNode(this.listBox))) {
@@ -452,7 +452,7 @@ export default class ComboBox<T> extends WidthSizable(Node) {
     };
 
     // support for binder documentation, stripped out in builds and only runs when ?binder is specified
-    assert && phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL('sun', 'ComboBox', this);
+    window.assert && window.phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL('sun', 'ComboBox', this);
   }
 
   public override dispose(): void {

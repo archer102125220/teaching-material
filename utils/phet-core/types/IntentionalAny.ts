@@ -7,6 +7,8 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+console.log('phet-core/IntentionalAny.ts');
+
 type IntentionalAny = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 // @ts-expect-error

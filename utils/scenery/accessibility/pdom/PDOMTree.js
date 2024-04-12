@@ -26,12 +26,12 @@ const PDOMTree = {
    * @param {Node} child
    */
   addChild(parent, child) {
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(
         `addChild parent:n#${parent._id}, child:n#${child._id}`
       );
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.push();
 
     window.assert && window.assert(parent instanceof Node);
     window.assert && window.assert(child instanceof Node);
@@ -45,7 +45,7 @@ const PDOMTree = {
 
     PDOMTree.afterOp(focusedNode);
 
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.pop();
   },
 
   /**
@@ -56,12 +56,12 @@ const PDOMTree = {
    * @param {Node} child
    */
   removeChild(parent, child) {
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(
         `removeChild parent:n#${parent._id}, child:n#${child._id}`
       );
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.push();
 
     window.assert && window.assert(parent instanceof Node);
     window.assert && window.assert(child instanceof Node);
@@ -75,7 +75,7 @@ const PDOMTree = {
 
     PDOMTree.afterOp(focusedNode);
 
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.pop();
   },
 
   /**
@@ -85,10 +85,10 @@ const PDOMTree = {
    * @param {Node} node
    */
   childrenOrderChange(node) {
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(`childrenOrderChange node:n#${node._id}`);
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(`childrenOrderChange node:n#${node._id}`);
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.push();
 
     window.assert && window.assert(node instanceof Node);
     window.assert && window.assert(!node._rendererSummary.hasNoPDOM());
@@ -99,7 +99,7 @@ const PDOMTree = {
 
     PDOMTree.afterOp(focusedNode);
 
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.pop();
   },
 
   /**
@@ -111,12 +111,12 @@ const PDOMTree = {
    * @param {Array.<Node|null>|null} newOrder
    */
   pdomOrderChange(node, oldOrder, newOrder) {
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(
         `pdomOrderChange n#${node._id}: ${PDOMTree.debugOrder(oldOrder)},${PDOMTree.debugOrder(newOrder)}`
       );
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.push();
 
     window.assert && window.assert(node instanceof Node);
 
@@ -127,12 +127,14 @@ const PDOMTree = {
 
     arrayDifference(oldOrder || [], newOrder || [], removedItems, addedItems);
 
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(`removed: ${PDOMTree.debugOrder(removedItems)}`);
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(`added: ${PDOMTree.debugOrder(addedItems)}`);
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(
+        `removed: ${PDOMTree.debugOrder(removedItems)}`
+      );
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(`added: ${PDOMTree.debugOrder(addedItems)}`);
 
     let i;
     let j;
@@ -140,13 +142,13 @@ const PDOMTree = {
     // Check some initial conditions
     if (window.assert) {
       for (i = 0; i < removedItems; i++) {
-        assert(
+        window.assert(
           removedItems[i] === null || removedItems[i]._pdomParent === node,
           'Node should have had a pdomOrder'
         );
       }
       for (i = 0; i < addedItems; i++) {
-        assert(
+        window.assert(
           addedItems[i] === null || addedItems[i]._pdomParent === null,
           'Node is already specified in a pdomOrder'
         );
@@ -202,7 +204,7 @@ const PDOMTree = {
 
     PDOMTree.afterOp(focusedNode);
 
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.pop();
   },
 
   /**
@@ -212,10 +214,10 @@ const PDOMTree = {
    * @param {Node} node
    */
   pdomContentChange(node) {
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(`pdomContentChange n#${node._id}`);
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(`pdomContentChange n#${node._id}`);
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.push();
 
     window.assert && window.assert(node instanceof Node);
 
@@ -251,7 +253,7 @@ const PDOMTree = {
 
     PDOMTree.afterOp(focusedNode);
 
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.pop();
   },
 
   /**
@@ -284,24 +286,26 @@ const PDOMTree = {
    * @param {Array.<PartialPDOMTrail>} [pdomTrails] - Will be computed if needed
    */
   addTree(parent, child, pdomTrails) {
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(
         `addTree parent:n#${parent._id}, child:n#${child._id}`
       );
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.push();
 
-    assert && PDOMTree.auditNodeForPDOMCycles(parent);
+    window.assert && PDOMTree.auditNodeForPDOMCycles(parent);
 
     pdomTrails = pdomTrails || PDOMTree.findPDOMTrails(parent);
 
     for (let i = 0; i < pdomTrails.length; i++) {
-      sceneryLog &&
-        sceneryLog.PDOMTree &&
-        sceneryLog.PDOMTree(
+      window.sceneryLog &&
+        window.sceneryLog.PDOMTree &&
+        window.sceneryLog.PDOMTree(
           `trail: ${pdomTrails[i].trail.toString()} full:${pdomTrails[i].fullTrail.toString()} for ${pdomTrails[i].pdomInstance.toString()} root:${pdomTrails[i].isRoot}`
         );
-      sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.PDOMTree &&
+        window.sceneryLog.push();
 
       const partialTrail = pdomTrails[i];
       const parentInstance = partialTrail.pdomInstance;
@@ -317,10 +321,12 @@ const PDOMTree = {
 
       parentInstance.addConsecutiveInstances(childInstances);
 
-      sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.PDOMTree &&
+        window.sceneryLog.pop();
     }
 
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.pop();
   },
 
   /**
@@ -332,12 +338,12 @@ const PDOMTree = {
    * @param {Array.<PartialPDOMTrail>} [pdomTrails] - Will be computed if needed
    */
   removeTree(parent, child, pdomTrails) {
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(
         `removeTree parent:n#${parent._id}, child:n#${child._id}`
       );
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.push();
 
     pdomTrails = pdomTrails || PDOMTree.findPDOMTrails(parent);
 
@@ -350,7 +356,7 @@ const PDOMTree = {
       partialTrail.fullTrail.removeDescendant(child);
     }
 
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.pop();
   },
 
   /**
@@ -361,10 +367,10 @@ const PDOMTree = {
    * @param {Array.<PartialPDOMTrail>} [pdomTrails] - Will be computed if needed
    */
   reorder(node, pdomTrails) {
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(`reorder n#${node._id}`);
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(`reorder n#${node._id}`);
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.push();
 
     pdomTrails = pdomTrails || PDOMTree.findPDOMTrails(node);
 
@@ -375,7 +381,7 @@ const PDOMTree = {
       partialTrail.pdomInstance.sortChildren();
     }
 
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.pop();
   },
 
   /**
@@ -392,19 +398,19 @@ const PDOMTree = {
    * @returns {Array.<PDOMInstance>}
    */
   createTree(trail, display, parentInstance) {
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(
         `createTree ${trail.toString()} parent:${parentInstance ? parentInstance.toString() : 'null'}`
       );
-    sceneryLog && sceneryLog.PDOMTree && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.PDOMTree && window.sceneryLog.push();
 
     const node = trail.lastNode();
     const effectiveChildren = node.getEffectiveChildren();
 
-    sceneryLog &&
-      sceneryLog.PDOMTree &&
-      sceneryLog.PDOMTree(
+    window.sceneryLog &&
+      window.sceneryLog.PDOMTree &&
+      window.sceneryLog.PDOMTree(
         `effectiveChildren: ${PDOMTree.debugOrder(effectiveChildren)}`
       );
 
@@ -443,12 +449,16 @@ const PDOMTree = {
     if (instance) {
       instance.addConsecutiveInstances(childInstances);
 
-      sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.PDOMTree &&
+        window.sceneryLog.pop();
       return existed ? [] : [instance];
     }
     // Otherwise pass things forward so they can be added as children by the parentInstance
     else {
-      sceneryLog && sceneryLog.PDOMTree && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.PDOMTree &&
+        window.sceneryLog.pop();
       return childInstances;
     }
   },
@@ -544,7 +554,7 @@ const PDOMTree = {
    * @public
    */
   auditPDOMDisplays(node) {
-    if (assertSlow) {
+    if (window.assertSlow) {
       if (node._pdomDisplaysInfo.canHavePDOMDisplays()) {
         let i;
         const displays = [];
@@ -567,7 +577,7 @@ const PDOMTree = {
 
         const actualArray = node._pdomDisplaysInfo.pdomDisplays.slice();
         const expectedArray = displays.slice(); // slice helps in debugging
-        assertSlow(actualArray.length === expectedArray.length);
+        window.assertSlow(actualArray.length === expectedArray.length);
 
         for (i = 0; i < expectedArray.length; i++) {
           for (let j = 0; j < actualArray.length; j++) {
@@ -580,12 +590,12 @@ const PDOMTree = {
           }
         }
 
-        assertSlow(
+        window.assertSlow(
           actualArray.length === 0 && expectedArray.length === 0,
           'Mismatch with accessible pdom displays'
         );
       } else {
-        assertSlow(
+        window.assertSlow(
           node._pdomDisplaysInfo.pdomDisplays.length === 0,
           'Invisible/nonaccessible things should have no displays'
         );
@@ -610,7 +620,7 @@ const PDOMTree = {
       (function recursiveSearch() {
         const root = trail.rootNode();
 
-        assert(
+        window.assert(
           trail.length <= 1 || root !== node,
           `${
             'Accessible PDOM graph cycle detected. The combined scene-graph DAG with pdomOrder defining additional ' +

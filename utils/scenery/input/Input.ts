@@ -516,7 +516,7 @@ export default class Input extends PhetioObject {
     this.touchEndAction = new PhetioAction((id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>) => {
       const touch = this.findPointerById(id) as Touch | null;
       if (touch) {
-        window.assert && window.assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
+        window.assert && window.assert(touch instanceof Touch);
         this.upEvent<TouchEvent | PointerEvent>(touch, context, point);
         this.removePointer(touch);
       }
@@ -535,7 +535,7 @@ export default class Input extends PhetioObject {
     this.touchMoveAction = new PhetioAction((id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>) => {
       const touch = this.findPointerById(id) as Touch | null;
       if (touch) {
-        window.assert && window.assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
+        window.assert && window.assert(touch instanceof Touch);
         touch.move(point);
         this.moveEvent<TouchEvent | PointerEvent>(touch, context);
       }
@@ -555,7 +555,7 @@ export default class Input extends PhetioObject {
     this.touchCancelAction = new PhetioAction((id: number, point: Vector2, context: EventContext<TouchEvent | PointerEvent>) => {
       const touch = this.findPointerById(id) as Touch | null;
       if (touch) {
-        window.assert && window.assert(touch instanceof Touch); // eslint-disable-line no-simple-type-checking-assertions, bad-sim-text
+        window.assert && window.assert(touch instanceof Touch);
         this.cancelEvent<TouchEvent | PointerEvent>(touch, context, point);
         this.removePointer(touch);
       }
@@ -2030,7 +2030,7 @@ export default class Input extends PhetioObject {
           if (window.assert) {
             const target = eventObject.target as { id?: string } | undefined;
             if (target && target.id) {
-              assert(document.getElementById(target.id), 'target should exist in the PDOM to support playback.');
+              window.assert(document.getElementById(target.id), 'target should exist in the PDOM to support playback.');
             }
           }
 

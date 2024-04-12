@@ -60,8 +60,8 @@ const ReferenceIO = (parameterType: IOType): IOType => {
        */
       fromStateObject(stateObject: ReferenceIOState) {
         window.assert && window.assert(stateObject && typeof stateObject.phetioID === 'string', 'phetioID should be a string');
-        if (phet.phetio.phetioEngine.hasPhetioObject(stateObject.phetioID)) {
-          return phet.phetio.phetioEngine.getPhetioElement(stateObject.phetioID);
+        if (window.phet.phetio.phetioEngine.hasPhetioObject(stateObject.phetioID)) {
+          return window.phet.phetio.phetioEngine.getPhetioElement(stateObject.phetioID);
         }
         else {
           throw new CouldNotYetDeserializeError();

@@ -115,7 +115,7 @@ export default class PlayControlButton extends BooleanRoundToggleButton {
     // a listener that toggles the isPlayingProperty with hotkey Alt+K, regardless of where focus is in the document
     const keys = ['alt+k'] as const;
     let globalKeyboardListener: KeyboardListener<typeof keys> | null = null;
-    if (options.includeGlobalHotkey && phet.chipper.queryParameters.supportsInteractiveDescription) {
+    if (options.includeGlobalHotkey && window.phet.chipper.queryParameters.supportsInteractiveDescription) {
       globalKeyboardListener = new KeyboardListener({
         keys,
         global: true,

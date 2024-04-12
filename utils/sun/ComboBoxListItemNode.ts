@@ -96,7 +96,7 @@ export default class ComboBoxListItemNode<T> extends Voicing(Node) {
       options.comboBoxVoicingNameResponsePattern;
 
     // Don't test the contents of strings when ?stringTest is enabled
-    window.assert && window.assert(!!phet.chipper.queryParameters.stringTest ||
+    window.assert && window.assert(!!window.phet.chipper.queryParameters.stringTest ||
       // @ts-expect-error is a string now.
       options.comboBoxVoicingNameResponsePattern.includes('{{value}}'),
       'value needs to be filled in');

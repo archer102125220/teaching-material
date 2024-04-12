@@ -25,6 +25,8 @@ import StringIO from '@/utils/tandem/types/StringIO';
 import ArrayIO from '@/utils/tandem/types/ArrayIO';
 import IOTypeCache from '@/utils/tandem/IOTypeCache';
 
+console.log('axon/Emitter.ts');
+
 // By default, Emitters are not stateful
 const PHET_IO_STATE_DEFAULT = false;
 
@@ -52,7 +54,7 @@ export default class Emitter<T extends TEmitterParameter[] = []> extends PhetioD
    */
   public emit(...args: T): void {
     window.assert && window.assert(this.tinyEmitter instanceof TinyEmitter, 'Emitter should not emit until constructor complete');
-    assert && this.validateArguments(...args);
+    window.assert && this.validateArguments(...args);
 
     // Although this is not the idiomatic pattern (since it is guarded in the phetioStartEvent), this function is
     // called so many times that it is worth the optimization for PhET brand.

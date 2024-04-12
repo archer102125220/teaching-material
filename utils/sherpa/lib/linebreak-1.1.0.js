@@ -2085,4 +2085,8 @@ export const LineBreaker = initLineBreaker();
 
 // window.LineBreaker = LineBreaker;
 
+if (typeof window === 'object') {
+  window.LineBreaker = LineBreaker;
+}
+
 export default LineBreaker;

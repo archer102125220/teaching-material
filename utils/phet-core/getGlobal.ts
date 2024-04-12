@@ -13,7 +13,7 @@ import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
 /**
  * If the path exists on the window global, return it, otherwise returns null
- * @param path a path to global, such as 'phet.joist.sim'
+ * @param path a path to global, such as 'window.phet.joist.sim'
  */
 const getGlobal = (path: string): IntentionalAny | null => {
   window.assert && window.assert(path.trim() === path, 'path must be trimmed');

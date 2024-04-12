@@ -199,9 +199,9 @@ export default class PreferencesModel extends PhetioObject {
   public constructor(providedOptions: PreferencesModelOptions = {}) {
 
     // initialize-globals uses package.json to determine defaults for features enabled by the sim and those defaults
-    // can be overwritten by query parameter.  So phet.chipper.queryParameters contains an accurate representation of
+    // can be overwritten by query parameter.  So window.phet.chipper.queryParameters contains an accurate representation of
     // which features are required.
-    const phetFeaturesFromQueryParameters = phet.chipper.queryParameters;
+    const phetFeaturesFromQueryParameters = window.phet.chipper.queryParameters;
 
     // Multiple optionize calls + spread in one initialization site so that TypeScript has the correct type for nested
     // options immediately, and we don't need multiple variables to achieve it.
@@ -241,7 +241,7 @@ export default class PreferencesModel extends PhetioObject {
       }, providedOptions.inputOptions),
       localizationOptions: optionize<LocalizationPreferencesOptions, LocalizationPreferencesOptions, BaseModelType>()({
         tandemName: 'localizationModel',
-        supportsDynamicLocale: !!localeProperty.validValues && localeProperty.validValues.length > 1 && phet.chipper.queryParameters.supportsDynamicLocale,
+        supportsDynamicLocale: !!localeProperty.validValues && localeProperty.validValues.length > 1 && window.phet.chipper.queryParameters.supportsDynamicLocale,
         portrayals: [],
         customPreferences: [],
         includeLocalePanel: true
@@ -254,7 +254,7 @@ export default class PreferencesModel extends PhetioObject {
 
     const visualTandem = options.tandem.createTandem(VISUAL_MODEL_TANDEM);
     this.visualModel = merge({
-      interactiveHighlightsEnabledProperty: new BooleanProperty(phet.chipper.queryParameters.interactiveHighlightsInitiallyEnabled, {
+      interactiveHighlightsEnabledProperty: new BooleanProperty(window.phet.chipper.queryParameters.interactiveHighlightsInitiallyEnabled, {
         tandem: visualTandem.createTandem('interactiveHighlightsEnabledProperty'),
         phetioState: false
       }),
@@ -269,12 +269,12 @@ export default class PreferencesModel extends PhetioObject {
       (
         // Running with english locale OR an environment where locale switching is supported and
         // english is one of the available languages.
-        phet.chipper.locale.startsWith('en') ||
-        (phet.chipper.queryParameters.supportsDynamicLocale && _.some(localeProperty.validValues, value => value.startsWith('en')))
+        window.phet.chipper.locale.startsWith('en') ||
+        (window.phet.chipper.queryParameters.supportsDynamicLocale && _.some(localeProperty.validValues, value => value.startsWith('en')))
       );
 
     // Audio can be disabled explicitly via query parameter
-    const audioEnabled = phet.chipper.queryParameters.audio !== 'disabled';
+    const audioEnabled = window.phet.chipper.queryParameters.audio !== 'disabled';
 
     this.audioModel = {
       supportsVoicing: supportsVoicing && audioEnabled,
@@ -372,7 +372,7 @@ export default class PreferencesModel extends PhetioObject {
     // Since voicingManager in Scenery can not use initialize-globals, set the initial value for whether Voicing is
     // enabled here in the PreferencesModel.
     if (supportsVoicing) {
-      voicingManager.enabledProperty.value = phet.chipper.queryParameters.voicingInitiallyEnabled;
+      voicingManager.enabledProperty.value = window.phet.chipper.queryParameters.voicingInitiallyEnabled;
 
       // Voicing is only available in the 'en' locale currently. If the locale is changed away from English, Voicing is
       // disabled. The next time Voicing returns to 'en', Voicing will be enabled again.
@@ -399,7 +399,7 @@ export default class PreferencesModel extends PhetioObject {
       });
 
       // If initially enabled, then apply all responses on startup, can (and should) be overwritten by PreferencesStorage.
-      if (phet.chipper.queryParameters.voicingInitiallyEnabled) {
+      if (window.phet.chipper.queryParameters.voicingInitiallyEnabled) {
         responseCollector.objectResponsesEnabledProperty.value = true;
         responseCollector.contextResponsesEnabledProperty.value = true;
         responseCollector.hintResponsesEnabledProperty.value = true;
@@ -417,7 +417,7 @@ export default class PreferencesModel extends PhetioObject {
       }
     }
 
-    if (phet.chipper.queryParameters.printVoicingResponses) {
+    if (window.phet.chipper.queryParameters.printVoicingResponses) {
       voicingManager.startSpeakingEmitter.addListener(text => console.log(text));
     }
 

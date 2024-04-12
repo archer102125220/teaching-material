@@ -20,6 +20,8 @@ import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 import { Node } from '@/utils/scenery/imports';
 import GOKeyboardHelpContent from '@/utils/geometric-optics/common/view/GOKeyboardHelpContent';
 
+console.log('geometric-optics/GOSim.ts');
+
 type SelfOptions = {
 
   // Is this 'Geometric Optics: Basics', aka the 'Basics version' of the sim?

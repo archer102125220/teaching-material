@@ -38,6 +38,7 @@ export type HimalayaTextNode = {
 
 export const isHimalayaTextNode = (node: HimalayaNode): node is HimalayaTextNode => node.type.toLowerCase() === 'text';
 
+console.log('scenery/util/rich-text/RichTextUtils.ts');
 const RichTextUtils = {
   // We need to do some font-size tests, so we have a Text for that.
   scratchText: new Text(''),

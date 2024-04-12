@@ -10,4 +10,25 @@
 
 import Namespace from '@/utils/phet-core/Namespace';
 
-export default new Namespace( 'tandem' );
+console.log('tandem/tandemNamespace.ts');
+
+// import Tandem from '@/utils/tandem/Tandem';
+// import CouldNotYetDeserializeError from '@/utils/tandem/CouldNotYetDeserializeError';
+// import DescriptionRegistry from '@/utils/tandem/DescriptionRegistry';
+// import DynamicTandem from '@/utils/tandem/DynamicTandem';
+
+// export class TandemNamespace extends Namespace {
+//   public constructor() {
+//     super('tandem');
+//     this.register('Tandem', Tandem);
+//     this.register('CouldNotYetDeserializeError', CouldNotYetDeserializeError);
+//     this.register('DescriptionRegistry', DescriptionRegistry);
+//     this.register('DynamicTandem', DynamicTandem);
+//   }
+// }
+
+// export const tandemNamespace = new TandemNamespace();
+
+// export default tandemNamespace;
+
+export default new Namespace('tandem');

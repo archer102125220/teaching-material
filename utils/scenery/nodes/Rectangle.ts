@@ -11,7 +11,28 @@ import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 import Dimension2 from '@/utils/dot/Dimension2';
 import { Shape } from '@/utils/kite/imports';
 import Vector2 from '@/utils/dot/Vector2';
-import { CanvasContextWrapper, CanvasSelfDrawable, DOMSelfDrawable, Features, Gradient, Instance, type TRectangleDrawable, Path, type PathOptions, Pattern, RectangleCanvasDrawable, RectangleDOMDrawable, RectangleSVGDrawable, RectangleWebGLDrawable, Renderer, scenery, Sizable, type SizableOptions, SVGSelfDrawable, WebGLSelfDrawable } from '@/utils/scenery/imports';
+import {
+  CanvasContextWrapper,
+  CanvasSelfDrawable,
+  DOMSelfDrawable,
+  Features,
+  Gradient,
+  Instance,
+  type TRectangleDrawable,
+  Path,
+  type PathOptions,
+  Pattern,
+  RectangleCanvasDrawable,
+  RectangleDOMDrawable,
+  RectangleSVGDrawable,
+  RectangleWebGLDrawable,
+  Renderer,
+  scenery,
+  Sizable,
+  type SizableOptions,
+  SVGSelfDrawable,
+  WebGLSelfDrawable
+} from '@/utils/scenery/imports';
 import Matrix3 from '@/utils/dot/Matrix3';
 import { combineOptions } from '@/utils/phet-core/optionize';
 
@@ -101,11 +122,40 @@ export default class Rectangle extends SuperType {
    */
   public constructor(options?: RectangleOptions);
   public constructor(bounds: Bounds2, options?: RectangleOptions);
-  public constructor(bounds: Bounds2, cornerRadiusX: number, cornerRadiusY: number, options?: RectangleOptions);
-  public constructor(x: number, y: number, width: number, height: number, options?: RectangleOptions);
-  public constructor(x: number, y: number, width: number, height: number, cornerXRadius: number, cornerYRadius: number, options?: RectangleOptions);
-  public constructor(x?: number | Bounds2 | RectangleOptions, y?: number | RectangleOptions, width?: number, height?: number | RectangleOptions, cornerXRadius?: number | RectangleOptions, cornerYRadius?: number, providedOptions?: RectangleOptions) {
+  public constructor(
+    bounds: Bounds2,
+    cornerRadiusX: number,
+    cornerRadiusY: number,
+    options?: RectangleOptions
+  );
 
+  public constructor(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    options?: RectangleOptions
+  );
+
+  public constructor(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    cornerXRadius: number,
+    cornerYRadius: number,
+    options?: RectangleOptions
+  );
+
+  public constructor(
+    x?: number | Bounds2 | RectangleOptions,
+    y?: number | RectangleOptions,
+    width?: number,
+    height?: number | RectangleOptions,
+    cornerXRadius?: number | RectangleOptions,
+    cornerYRadius?: number,
+    providedOptions?: RectangleOptions
+  ) {
     // We'll want to default to sizable:false, but allow clients to pass in something conflicting like widthSizable:true
     // in the super mutate. To avoid the exclusive options, we isolate this out here.
     const initialOptions: RectangleOptions = {
@@ -127,44 +177,98 @@ export default class Rectangle extends SuperType {
       if (x instanceof Bounds2) {
         // new Rectangle( bounds2, { ... } )
         if (typeof y !== 'number') {
-          window.assert && window.assert(arguments.length === 1 || arguments.length === 2,
-            'new Rectangle( bounds, { ... } ) should only take one or two arguments');
-          window.assert && window.assert(y === undefined || typeof y === 'object',
-            'new Rectangle( bounds, { ... } ) second parameter should only ever be an options object');
-          window.assert && window.assert(y === undefined || Object.getPrototypeOf(y) === Object.prototype,
-            'Extra prototype on Node options object is a code smell');
+          window.assert &&
+            window.assert(
+              arguments.length === 1 || arguments.length === 2,
+              'new Rectangle( bounds, { ... } ) should only take one or two arguments'
+            );
+          window.assert &&
+            window.assert(
+              y === undefined || typeof y === 'object',
+              'new Rectangle( bounds, { ... } ) second parameter should only ever be an options object'
+            );
+          window.assert &&
+            window.assert(
+              y === undefined || Object.getPrototypeOf(y) === Object.prototype,
+              'Extra prototype on Node options object is a code smell'
+            );
 
-          if (assert && y) {
-            assert(y.rectWidth === undefined, 'Should not specify rectWidth in multiple ways');
-            assert(y.rectHeight === undefined, 'Should not specify rectHeight in multiple ways');
-            assert(y.rectBounds === undefined, 'Should not specify rectBounds in multiple ways');
+          if (window.assert && y) {
+            window.assert(
+              y.rectWidth === undefined,
+              'Should not specify rectWidth in multiple ways'
+            );
+            window.assert(
+              y.rectHeight === undefined,
+              'Should not specify rectHeight in multiple ways'
+            );
+            window.assert(
+              y.rectBounds === undefined,
+              'Should not specify rectBounds in multiple ways'
+            );
           }
-          options = combineOptions<RectangleOptions>(options, {
-            rectBounds: x
-          }, y); // Our options object would be at y
+          options = combineOptions<RectangleOptions>(
+            options,
+            {
+              rectBounds: x
+            },
+            y
+          ); // Our options object would be at y
         }
         // Rectangle( bounds2, cornerXRadius, cornerYRadius, { ... } )
         else {
-          window.assert && window.assert(arguments.length === 3 || arguments.length === 4,
-            'new Rectangle( bounds, cornerXRadius, cornerYRadius, { ... } ) should only take three or four arguments');
-          window.assert && window.assert(height === undefined || typeof height === 'object',
-            'new Rectangle( bounds, cornerXRadius, cornerYRadius, { ... } ) fourth parameter should only ever be an options object');
-          window.assert && window.assert(height === undefined || Object.getPrototypeOf(height) === Object.prototype,
-            'Extra prototype on Node options object is a code smell');
+          window.assert &&
+            window.assert(
+              arguments.length === 3 || arguments.length === 4,
+              'new Rectangle( bounds, cornerXRadius, cornerYRadius, { ... } ) should only take three or four arguments'
+            );
+          window.assert &&
+            window.assert(
+              height === undefined || typeof height === 'object',
+              'new Rectangle( bounds, cornerXRadius, cornerYRadius, { ... } ) fourth parameter should only ever be an options object'
+            );
+          window.assert &&
+            window.assert(
+              height === undefined ||
+                Object.getPrototypeOf(height) === Object.prototype,
+              'Extra prototype on Node options object is a code smell'
+            );
 
-          if (assert && height) {
-            assert((height as RectangleOptions).rectWidth === undefined, 'Should not specify rectWidth in multiple ways');
-            assert((height as RectangleOptions).rectHeight === undefined, 'Should not specify rectHeight in multiple ways');
-            assert((height as RectangleOptions).rectBounds === undefined, 'Should not specify rectBounds in multiple ways');
-            assert((height as RectangleOptions).cornerXRadius === undefined, 'Should not specify cornerXRadius in multiple ways');
-            assert((height as RectangleOptions).cornerYRadius === undefined, 'Should not specify cornerYRadius in multiple ways');
-            assert((height as RectangleOptions).cornerRadius === undefined, 'Should not specify cornerRadius in multiple ways');
+          if (window.assert && height) {
+            window.assert(
+              (height as RectangleOptions).rectWidth === undefined,
+              'Should not specify rectWidth in multiple ways'
+            );
+            window.assert(
+              (height as RectangleOptions).rectHeight === undefined,
+              'Should not specify rectHeight in multiple ways'
+            );
+            window.assert(
+              (height as RectangleOptions).rectBounds === undefined,
+              'Should not specify rectBounds in multiple ways'
+            );
+            window.assert(
+              (height as RectangleOptions).cornerXRadius === undefined,
+              'Should not specify cornerXRadius in multiple ways'
+            );
+            window.assert(
+              (height as RectangleOptions).cornerYRadius === undefined,
+              'Should not specify cornerYRadius in multiple ways'
+            );
+            window.assert(
+              (height as RectangleOptions).cornerRadius === undefined,
+              'Should not specify cornerRadius in multiple ways'
+            );
           }
-          options = combineOptions<RectangleOptions>(options, {
-            rectBounds: x,
-            cornerXRadius: y, // ignore Intellij warning, our cornerXRadius is the second parameter
-            cornerYRadius: width // ignore Intellij warning, our cornerYRadius is the third parameter
-          }, height as RectangleOptions | undefined); // Our options object would be at height
+          options = combineOptions<RectangleOptions>(
+            options,
+            {
+              rectBounds: x,
+              cornerXRadius: y, // ignore Intellij warning, our cornerXRadius is the second parameter
+              cornerYRadius: width // ignore Intellij warning, our cornerYRadius is the third parameter
+            },
+            height as RectangleOptions | undefined
+          ); // Our options object would be at height
         }
       }
       // allow new Rectangle( { rectX: x, rectY: y, rectWidth: width, rectHeight: height, ... } )
@@ -174,64 +278,138 @@ export default class Rectangle extends SuperType {
     }
     // new Rectangle( x, y, width, height, { ... } )
     else if (cornerYRadius === undefined) {
-      window.assert && window.assert(arguments.length === 4 || arguments.length === 5,
-        'new Rectangle( x, y, width, height, { ... } ) should only take four or five arguments');
-      window.assert && window.assert(cornerXRadius === undefined || typeof cornerXRadius === 'object',
-        'new Rectangle( x, y, width, height, { ... } ) fifth parameter should only ever be an options object');
-      window.assert && window.assert(cornerXRadius === undefined || Object.getPrototypeOf(cornerXRadius) === Object.prototype,
-        'Extra prototype on Node options object is a code smell');
+      window.assert &&
+        window.assert(
+          arguments.length === 4 || arguments.length === 5,
+          'new Rectangle( x, y, width, height, { ... } ) should only take four or five arguments'
+        );
+      window.assert &&
+        window.assert(
+          cornerXRadius === undefined || typeof cornerXRadius === 'object',
+          'new Rectangle( x, y, width, height, { ... } ) fifth parameter should only ever be an options object'
+        );
+      window.assert &&
+        window.assert(
+          cornerXRadius === undefined ||
+            Object.getPrototypeOf(cornerXRadius) === Object.prototype,
+          'Extra prototype on Node options object is a code smell'
+        );
 
-      if (assert && cornerXRadius) {
-        assert((cornerXRadius as RectangleOptions).rectX === undefined, 'Should not specify rectX in multiple ways');
-        assert((cornerXRadius as RectangleOptions).rectY === undefined, 'Should not specify rectY in multiple ways');
-        assert((cornerXRadius as RectangleOptions).rectWidth === undefined, 'Should not specify rectWidth in multiple ways');
-        assert((cornerXRadius as RectangleOptions).rectHeight === undefined, 'Should not specify rectHeight in multiple ways');
-        assert((cornerXRadius as RectangleOptions).rectBounds === undefined, 'Should not specify rectBounds in multiple ways');
+      if (window.assert && cornerXRadius) {
+        window.assert(
+          (cornerXRadius as RectangleOptions).rectX === undefined,
+          'Should not specify rectX in multiple ways'
+        );
+        window.assert(
+          (cornerXRadius as RectangleOptions).rectY === undefined,
+          'Should not specify rectY in multiple ways'
+        );
+        window.assert(
+          (cornerXRadius as RectangleOptions).rectWidth === undefined,
+          'Should not specify rectWidth in multiple ways'
+        );
+        window.assert(
+          (cornerXRadius as RectangleOptions).rectHeight === undefined,
+          'Should not specify rectHeight in multiple ways'
+        );
+        window.assert(
+          (cornerXRadius as RectangleOptions).rectBounds === undefined,
+          'Should not specify rectBounds in multiple ways'
+        );
       }
-      options = combineOptions<RectangleOptions>(options, {
-        rectX: x,
-        rectY: y as number,
-        rectWidth: width,
-        rectHeight: height as number
-      }, cornerXRadius as RectangleOptions);
+      options = combineOptions<RectangleOptions>(
+        options,
+        {
+          rectX: x,
+          rectY: y as number,
+          rectWidth: width,
+          rectHeight: height as number
+        },
+        cornerXRadius as RectangleOptions
+      );
     }
     // new Rectangle( x, y, width, height, cornerXRadius, cornerYRadius, { ... } )
     else {
-      window.assert && window.assert(arguments.length === 6 || arguments.length === 7,
-        'new Rectangle( x, y, width, height, cornerXRadius, cornerYRadius{ ... } ) should only take six or seven arguments');
-      window.assert && window.assert(options === undefined || typeof options === 'object',
-        'new Rectangle( x, y, width, height, cornerXRadius, cornerYRadius{ ... } ) seventh parameter should only ever be an options object');
-      window.assert && window.assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
-        'Extra prototype on Node options object is a code smell');
+      window.assert &&
+        window.assert(
+          arguments.length === 6 || arguments.length === 7,
+          'new Rectangle( x, y, width, height, cornerXRadius, cornerYRadius{ ... } ) should only take six or seven arguments'
+        );
+      window.assert &&
+        window.assert(
+          options === undefined || typeof options === 'object',
+          'new Rectangle( x, y, width, height, cornerXRadius, cornerYRadius{ ... } ) seventh parameter should only ever be an options object'
+        );
+      window.assert &&
+        window.assert(
+          options === undefined ||
+            Object.getPrototypeOf(options) === Object.prototype,
+          'Extra prototype on Node options object is a code smell'
+        );
 
-      if (assert && providedOptions) {
-        assert(providedOptions.rectX === undefined, 'Should not specify rectX in multiple ways');
-        assert(providedOptions.rectY === undefined, 'Should not specify rectY in multiple ways');
-        assert(providedOptions.rectWidth === undefined, 'Should not specify rectWidth in multiple ways');
-        assert(providedOptions.rectHeight === undefined, 'Should not specify rectHeight in multiple ways');
-        assert(providedOptions.rectBounds === undefined, 'Should not specify rectBounds in multiple ways');
-        assert(providedOptions.cornerXRadius === undefined, 'Should not specify cornerXRadius in multiple ways');
-        assert(providedOptions.cornerYRadius === undefined, 'Should not specify cornerYRadius in multiple ways');
-        assert(providedOptions.cornerRadius === undefined, 'Should not specify cornerRadius in multiple ways');
+      if (window.assert && providedOptions) {
+        window.assert(
+          providedOptions.rectX === undefined,
+          'Should not specify rectX in multiple ways'
+        );
+        window.assert(
+          providedOptions.rectY === undefined,
+          'Should not specify rectY in multiple ways'
+        );
+        window.assert(
+          providedOptions.rectWidth === undefined,
+          'Should not specify rectWidth in multiple ways'
+        );
+        window.assert(
+          providedOptions.rectHeight === undefined,
+          'Should not specify rectHeight in multiple ways'
+        );
+        window.assert(
+          providedOptions.rectBounds === undefined,
+          'Should not specify rectBounds in multiple ways'
+        );
+        window.assert(
+          providedOptions.cornerXRadius === undefined,
+          'Should not specify cornerXRadius in multiple ways'
+        );
+        window.assert(
+          providedOptions.cornerYRadius === undefined,
+          'Should not specify cornerYRadius in multiple ways'
+        );
+        window.assert(
+          providedOptions.cornerRadius === undefined,
+          'Should not specify cornerRadius in multiple ways'
+        );
       }
-      options = combineOptions<RectangleOptions>(options, {
-        rectX: x,
-        rectY: y as number,
-        rectWidth: width,
-        rectHeight: height as number,
-        cornerXRadius: cornerXRadius as number,
-        cornerYRadius
-      }, providedOptions);
+      options = combineOptions<RectangleOptions>(
+        options,
+        {
+          rectX: x,
+          rectY: y as number,
+          rectWidth: width,
+          rectHeight: height as number,
+          cornerXRadius: cornerXRadius as number,
+          cornerYRadius
+        },
+        providedOptions
+      );
     }
 
-    this.localPreferredWidthProperty.lazyLink(this.updatePreferredSizes.bind(this));
-    this.localPreferredHeightProperty.lazyLink(this.updatePreferredSizes.bind(this));
-    this.localMinimumWidthProperty.lazyLink(this.updatePreferredSizes.bind(this));
-    this.localMinimumHeightProperty.lazyLink(this.updatePreferredSizes.bind(this));
+    this.localPreferredWidthProperty.lazyLink(
+      this.updatePreferredSizes.bind(this)
+    );
+    this.localPreferredHeightProperty.lazyLink(
+      this.updatePreferredSizes.bind(this)
+    );
+    this.localMinimumWidthProperty.lazyLink(
+      this.updatePreferredSizes.bind(this)
+    );
+    this.localMinimumHeightProperty.lazyLink(
+      this.updatePreferredSizes.bind(this)
+    );
 
     this.mutate(options);
   }
-
 
   /**
    * Determines the maximum arc size that can be accommodated by the current width and height.
@@ -257,9 +435,17 @@ export default class Rectangle extends SuperType {
     let bitmask = super.getStrokeRendererBitmask();
     const stroke = this.getStroke();
     // DOM stroke handling doesn't YET support gradients, patterns, or dashes (with the current implementation, it shouldn't be too hard)
-    if (stroke && !(stroke instanceof Gradient) && !(stroke instanceof Pattern) && !this.hasLineDash()) {
+    if (
+      stroke &&
+      !(stroke instanceof Gradient) &&
+      !(stroke instanceof Pattern) &&
+      !this.hasLineDash()
+    ) {
       // we can't support the bevel line-join with our current DOM rectangle display
-      if (this.getLineJoin() === 'miter' || (this.getLineJoin() === 'round' && Features.borderRadius)) {
+      if (
+        this.getLineJoin() === 'miter' ||
+        (this.getLineJoin() === 'round' && Features.borderRadius)
+      ) {
         bitmask |= Renderer.bitmaskDOM;
       }
     }
@@ -284,9 +470,16 @@ export default class Rectangle extends SuperType {
     // If the top/bottom or left/right strokes touch and overlap in the middle (small rectangle, big stroke), our DOM method won't work.
     // Additionally, if we're handling rounded rectangles or a stroke with lineJoin 'round', we'll need borderRadius
     // We also require for DOM that if it's a rounded rectangle, it's rounded with circular arcs (for now, could potentially do a transform trick!)
-    if ((!this.hasStroke() || (this.getLineWidth() <= this._rectHeight && this.getLineWidth() <= this._rectWidth)) &&
-      (!this.isRounded() || (Features.borderRadius && this._cornerXRadius === this._cornerYRadius)) &&
-      this._cornerYRadius <= maximumArcSize && this._cornerXRadius <= maximumArcSize) {
+    if (
+      (!this.hasStroke() ||
+        (this.getLineWidth() <= this._rectHeight &&
+          this.getLineWidth() <= this._rectWidth)) &&
+      (!this.isRounded() ||
+        (Features.borderRadius &&
+          this._cornerXRadius === this._cornerYRadius)) &&
+      this._cornerYRadius <= maximumArcSize &&
+      this._cornerXRadius <= maximumArcSize
+    ) {
       bitmask |= Renderer.bitmaskDOM;
     }
 
@@ -308,23 +501,38 @@ export default class Rectangle extends SuperType {
    * @param [cornerXRadius] - The horizontal radius of curved corners (0 for sharp corners)
    * @param [cornerYRadius] - The vertical radius of curved corners (0 for sharp corners)
    */
-  public setRect(x: number, y: number, width: number, height: number, cornerXRadius?: number, cornerYRadius?: number): this {
+  public setRect(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    cornerXRadius?: number,
+    cornerYRadius?: number
+  ): this {
     const hasXRadius = cornerXRadius !== undefined;
     const hasYRadius = cornerYRadius !== undefined;
 
-    window.assert && window.assert(isFinite(x) && isFinite(y) &&
-      isFinite(width) && isFinite(height), 'x/y/width/height should be finite numbers');
-    window.assert && window.assert(!hasXRadius || isFinite(cornerXRadius) &&
-      (!hasYRadius || isFinite(cornerYRadius)),
-      'Corner radii (if provided) should be finite numbers');
+    window.assert &&
+      window.assert(
+        isFinite(x) && isFinite(y) && isFinite(width) && isFinite(height),
+        'x/y/width/height should be finite numbers'
+      );
+    window.assert &&
+      window.assert(
+        !hasXRadius ||
+          (isFinite(cornerXRadius) && (!hasYRadius || isFinite(cornerYRadius))),
+        'Corner radii (if provided) should be finite numbers'
+      );
 
     // If this doesn't change the rectangle, don't notify about changes.
-    if (this._rectX === x &&
+    if (
+      this._rectX === x &&
       this._rectY === y &&
       this._rectWidth === width &&
       this._rectHeight === height &&
       (!hasXRadius || this._cornerXRadius === cornerXRadius) &&
-      (!hasYRadius || this._cornerYRadius === cornerYRadius)) {
+      (!hasYRadius || this._cornerYRadius === cornerYRadius)
+    ) {
       return this;
     }
 
@@ -337,7 +545,9 @@ export default class Rectangle extends SuperType {
 
     const stateLen = this._drawables.length;
     for (let i = 0; i < stateLen; i++) {
-      (this._drawables[i] as unknown as TRectangleDrawable).markDirtyRectangle();
+      (
+        this._drawables[i] as unknown as TRectangleDrawable
+      ).markDirtyRectangle();
     }
     this.invalidateRectangle();
 
@@ -348,7 +558,8 @@ export default class Rectangle extends SuperType {
    * Sets the x coordinate of the left side of this rectangle (in the local coordinate frame).
    */
   public setRectX(x: number): this {
-    window.assert && window.assert(isFinite(x), 'rectX should be a finite number');
+    window.assert &&
+      window.assert(isFinite(x), 'rectX should be a finite number');
 
     if (this._rectX !== x) {
       this._rectX = x;
@@ -363,9 +574,13 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set rectX(value: number) { this.setRectX(value); }
+  public set rectX(value: number) {
+    this.setRectX(value);
+  }
 
-  public get rectX(): number { return this.getRectX(); }
+  public get rectX(): number {
+    return this.getRectX();
+  }
 
   /**
    * Returns the x coordinate of the left side of this rectangle (in the local coordinate frame).
@@ -378,7 +593,8 @@ export default class Rectangle extends SuperType {
    * Sets the y coordinate of the top side of this rectangle (in the local coordinate frame).
    */
   public setRectY(y: number): this {
-    window.assert && window.assert(isFinite(y), 'rectY should be a finite number');
+    window.assert &&
+      window.assert(isFinite(y), 'rectY should be a finite number');
 
     if (this._rectY !== y) {
       this._rectY = y;
@@ -393,9 +609,13 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set rectY(value: number) { this.setRectY(value); }
+  public set rectY(value: number) {
+    this.setRectY(value);
+  }
 
-  public get rectY(): number { return this.getRectY(); }
+  public get rectY(): number {
+    return this.getRectY();
+  }
 
   /**
    * Returns the y coordinate of the top side of this rectangle (in the local coordinate frame).
@@ -408,7 +628,8 @@ export default class Rectangle extends SuperType {
    * Sets the width of the rectangle (in the local coordinate frame).
    */
   public setRectWidth(width: number): this {
-    window.assert && window.assert(isFinite(width), 'rectWidth should be a finite number');
+    window.assert &&
+      window.assert(isFinite(width), 'rectWidth should be a finite number');
 
     if (this._rectWidth !== width) {
       this._rectWidth = width;
@@ -423,9 +644,13 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set rectWidth(value: number) { this.setRectWidth(value); }
+  public set rectWidth(value: number) {
+    this.setRectWidth(value);
+  }
 
-  public get rectWidth(): number { return this.getRectWidth(); }
+  public get rectWidth(): number {
+    return this.getRectWidth();
+  }
 
   /**
    * Returns the width of the rectangle (in the local coordinate frame).
@@ -438,7 +663,8 @@ export default class Rectangle extends SuperType {
    * Sets the height of the rectangle (in the local coordinate frame).
    */
   public setRectHeight(height: number): this {
-    window.assert && window.assert(isFinite(height), 'rectHeight should be a finite number');
+    window.assert &&
+      window.assert(isFinite(height), 'rectHeight should be a finite number');
 
     if (this._rectHeight !== height) {
       this._rectHeight = height;
@@ -453,9 +679,13 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set rectHeight(value: number) { this.setRectHeight(value); }
+  public set rectHeight(value: number) {
+    this.setRectHeight(value);
+  }
 
-  public get rectHeight(): number { return this.getRectHeight(); }
+  public get rectHeight(): number {
+    return this.getRectHeight();
+  }
 
   /**
    * Returns the height of the rectangle (in the local coordinate frame).
@@ -474,14 +704,20 @@ export default class Rectangle extends SuperType {
    * radius will be equal to cornerXRadius (or a smaller radius if the rectangle is too small).
    */
   public setCornerXRadius(radius: number): this {
-    window.assert && window.assert(isFinite(radius), 'cornerXRadius should be a finite number');
+    window.assert &&
+      window.assert(
+        isFinite(radius),
+        'cornerXRadius should be a finite number'
+      );
 
     if (this._cornerXRadius !== radius) {
       this._cornerXRadius = radius;
 
       const stateLen = this._drawables.length;
       for (let i = 0; i < stateLen; i++) {
-        (this._drawables[i] as unknown as TRectangleDrawable).markDirtyCornerXRadius();
+        (
+          this._drawables[i] as unknown as TRectangleDrawable
+        ).markDirtyCornerXRadius();
       }
 
       this.invalidateRectangle();
@@ -489,9 +725,13 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set cornerXRadius(value: number) { this.setCornerXRadius(value); }
+  public set cornerXRadius(value: number) {
+    this.setCornerXRadius(value);
+  }
 
-  public get cornerXRadius(): number { return this.getCornerXRadius(); }
+  public get cornerXRadius(): number {
+    return this.getCornerXRadius();
+  }
 
   /**
    * Returns the horizontal corner radius of the rectangle (in the local coordinate frame).
@@ -510,14 +750,20 @@ export default class Rectangle extends SuperType {
    * radius will be equal to cornerYRadius (or a smaller radius if the rectangle is too small).
    */
   public setCornerYRadius(radius: number): this {
-    window.assert && window.assert(isFinite(radius), 'cornerYRadius should be a finite number');
+    window.assert &&
+      window.assert(
+        isFinite(radius),
+        'cornerYRadius should be a finite number'
+      );
 
     if (this._cornerYRadius !== radius) {
       this._cornerYRadius = radius;
 
       const stateLen = this._drawables.length;
       for (let i = 0; i < stateLen; i++) {
-        (this._drawables[i] as unknown as TRectangleDrawable).markDirtyCornerYRadius();
+        (
+          this._drawables[i] as unknown as TRectangleDrawable
+        ).markDirtyCornerYRadius();
       }
 
       this.invalidateRectangle();
@@ -525,9 +771,13 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set cornerYRadius(value: number) { this.setCornerYRadius(value); }
+  public set cornerYRadius(value: number) {
+    this.setCornerYRadius(value);
+  }
 
-  public get cornerYRadius(): number { return this.getCornerYRadius(); }
+  public get cornerYRadius(): number {
+    return this.getCornerYRadius();
+  }
 
   /**
    * Returns the vertical corner radius of the rectangle (in the local coordinate frame).
@@ -545,15 +795,24 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set rectBounds(value: Bounds2) { this.setRectBounds(value); }
+  public set rectBounds(value: Bounds2) {
+    this.setRectBounds(value);
+  }
 
-  public get rectBounds(): Bounds2 { return this.getRectBounds(); }
+  public get rectBounds(): Bounds2 {
+    return this.getRectBounds();
+  }
 
   /**
    * Returns a new Bounds2 generated from this Rectangle's x/y/width/height.
    */
   public getRectBounds(): Bounds2 {
-    return Bounds2.rect(this._rectX, this._rectY, this._rectWidth, this._rectHeight);
+    return Bounds2.rect(
+      this._rectX,
+      this._rectY,
+      this._rectWidth,
+      this._rectHeight
+    );
   }
 
   /**
@@ -566,9 +825,13 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set rectSize(value: Dimension2) { this.setRectSize(value); }
+  public set rectSize(value: Dimension2) {
+    this.setRectSize(value);
+  }
 
-  public get rectSize(): Dimension2 { return this.getRectSize(); }
+  public get rectSize(): Dimension2 {
+    return this.getRectSize();
+  }
 
   /**
    * Returns a new Dimension2 generated from this Rectangle's width/height.
@@ -590,9 +853,13 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set rectWidthFromRight(value: number) { this.setRectWidthFromRight(value); }
+  public set rectWidthFromRight(value: number) {
+    this.setRectWidthFromRight(value);
+  }
 
-  public get rectWidthFromRight(): number { return this.getRectWidth(); } // because JSHint complains
+  public get rectWidthFromRight(): number {
+    return this.getRectWidth();
+  } // because JSHint complains
 
   /**
    * Sets the height of the rectangle while keeping its bottom edge (y + height) in the same position
@@ -607,9 +874,13 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set rectHeightFromBottom(value: number) { this.setRectHeightFromBottom(value); }
+  public set rectHeightFromBottom(value: number) {
+    this.setRectHeightFromBottom(value);
+  }
 
-  public get rectHeightFromBottom(): number { return this.getRectHeight(); } // because JSHint complains
+  public get rectHeightFromBottom(): number {
+    return this.getRectHeight();
+  } // because JSHint complains
 
   /**
    * Returns whether this rectangle has any rounding applied at its corners. If either the x or y corner radius is 0,
@@ -624,7 +895,12 @@ export default class Rectangle extends SuperType {
    */
   public override computeShapeBounds(): Bounds2 {
     console.log('Rectangle.computeShapeBounds');
-    let bounds = new Bounds2(this._rectX, this._rectY, this._rectX + this._rectWidth, this._rectY + this._rectHeight);
+    let bounds = new Bounds2(
+      this._rectX,
+      this._rectY,
+      this._rectX + this._rectWidth,
+      this._rectY + this._rectHeight
+    );
     if (this._stroke) {
       // since we are axis-aligned, any stroke will expand our bounds by a guaranteed set amount
       bounds = bounds.dilated(this.getLineWidth() / 2);
@@ -639,12 +915,25 @@ export default class Rectangle extends SuperType {
   private createRectangleShape(): Shape {
     if (this.isRounded()) {
       // copy border-radius CSS behavior in Chrome, where the arcs won't intersect, in cases where the arc segments at full size would intersect each other
-      const maximumArcSize = Math.min(this._rectWidth / 2, this._rectHeight / 2);
-      return Shape.roundRectangle(this._rectX, this._rectY, this._rectWidth, this._rectHeight,
-        Math.min(maximumArcSize, this._cornerXRadius), Math.min(maximumArcSize, this._cornerYRadius)).makeImmutable();
-    }
-    else {
-      return Shape.rectangle(this._rectX, this._rectY, this._rectWidth, this._rectHeight).makeImmutable();
+      const maximumArcSize = Math.min(
+        this._rectWidth / 2,
+        this._rectHeight / 2
+      );
+      return Shape.roundRectangle(
+        this._rectX,
+        this._rectY,
+        this._rectWidth,
+        this._rectHeight,
+        Math.min(maximumArcSize, this._cornerXRadius),
+        Math.min(maximumArcSize, this._cornerYRadius)
+      ).makeImmutable();
+    } else {
+      return Shape.rectangle(
+        this._rectX,
+        this._rectY,
+        this._rectWidth,
+        this._rectHeight
+      ).makeImmutable();
     }
   }
 
@@ -652,16 +941,37 @@ export default class Rectangle extends SuperType {
    * Notifies that the rectangle has changed, and invalidates path information and our cached shape.
    */
   protected invalidateRectangle(): void {
-    window.assert && window.assert(isFinite(this._rectX), `A rectangle needs to have a finite x (${this._rectX})`);
-    window.assert && window.assert(isFinite(this._rectY), `A rectangle needs to have a finite y (${this._rectY})`);
-    window.assert && window.assert(this._rectWidth >= 0 && isFinite(this._rectWidth),
-      `A rectangle needs to have a non-negative finite width (${this._rectWidth})`);
-    window.assert && window.assert(this._rectHeight >= 0 && isFinite(this._rectHeight),
-      `A rectangle needs to have a non-negative finite height (${this._rectHeight})`);
-    window.assert && window.assert(this._cornerXRadius >= 0 && isFinite(this._cornerXRadius),
-      `A rectangle needs to have a non-negative finite arcWidth (${this._cornerXRadius})`);
-    window.assert && window.assert(this._cornerYRadius >= 0 && isFinite(this._cornerYRadius),
-      `A rectangle needs to have a non-negative finite arcHeight (${this._cornerYRadius})`);
+    console.log('Rectangle.invalidateRectangle');
+    window.assert &&
+      window.assert(
+        isFinite(this._rectX),
+        `A rectangle needs to have a finite x (${this._rectX})`
+      );
+    window.assert &&
+      window.assert(
+        isFinite(this._rectY),
+        `A rectangle needs to have a finite y (${this._rectY})`
+      );
+    window.assert &&
+      window.assert(
+        this._rectWidth >= 0 && isFinite(this._rectWidth),
+        `A rectangle needs to have a non-negative finite width (${this._rectWidth})`
+      );
+    window.assert &&
+      window.assert(
+        this._rectHeight >= 0 && isFinite(this._rectHeight),
+        `A rectangle needs to have a non-negative finite height (${this._rectHeight})`
+      );
+    window.assert &&
+      window.assert(
+        this._cornerXRadius >= 0 && isFinite(this._cornerXRadius),
+        `A rectangle needs to have a non-negative finite arcWidth (${this._cornerXRadius})`
+      );
+    window.assert &&
+      window.assert(
+        this._cornerYRadius >= 0 && isFinite(this._cornerYRadius),
+        `A rectangle needs to have a non-negative finite arcHeight (${this._cornerYRadius})`
+      );
 
     // sets our 'cache' to null, so we don't always have to recompute our shape
     this._shape = null;
@@ -727,27 +1037,47 @@ export default class Rectangle extends SuperType {
         return super.containsPointSelf(point);
       }
       const miter = this.getLineJoin() === 'miter' && !rounded;
-      result = result && Rectangle.intersects(x - halfLine, y - halfLine,
-        width + 2 * halfLine, height + 2 * halfLine,
-        miter ? 0 : (arcWidth + halfLine), miter ? 0 : (arcHeight + halfLine),
-        point);
+      result =
+        result &&
+        Rectangle.intersects(
+          x - halfLine,
+          y - halfLine,
+          width + 2 * halfLine,
+          height + 2 * halfLine,
+          miter ? 0 : arcWidth + halfLine,
+          miter ? 0 : arcHeight + halfLine,
+          point
+        );
     }
 
     if (this._fillPickable) {
       if (this._strokePickable) {
         return result;
+      } else {
+        return Rectangle.intersects(
+          x,
+          y,
+          width,
+          height,
+          arcWidth,
+          arcHeight,
+          point
+        );
       }
-      else {
-        return Rectangle.intersects(x, y, width, height, arcWidth, arcHeight, point);
-      }
-    }
-    else if (this._strokePickable) {
-      return result && !Rectangle.intersects(x + halfLine, y + halfLine,
-        width - 2 * halfLine, height - 2 * halfLine,
-        arcWidth - halfLine, arcHeight - halfLine,
-        point);
-    }
-    else {
+    } else if (this._strokePickable) {
+      return (
+        result &&
+        !Rectangle.intersects(
+          x + halfLine,
+          y + halfLine,
+          width - 2 * halfLine,
+          height - 2 * halfLine,
+          arcWidth - halfLine,
+          arcHeight - halfLine,
+          point
+        )
+      );
+    } else {
       return false; // either fill nor stroke is pickable
     }
   }
@@ -769,7 +1099,10 @@ export default class Rectangle extends SuperType {
    * @param wrapper
    * @param matrix - The transformation matrix already applied to the context.
    */
-  protected override canvasPaintSelf(wrapper: CanvasContextWrapper, matrix: Matrix3): void {
+  protected override canvasPaintSelf(
+    wrapper: CanvasContextWrapper,
+    matrix: Matrix3
+  ): void {
     // TODO: Have a separate method for this, instead of touching the prototype. Can make 'this' references too easily. https://github.com/phetsims/scenery/issues/1581
     RectangleCanvasDrawable.prototype.paintCanvas(wrapper, this, matrix);
   }
@@ -780,7 +1113,10 @@ export default class Rectangle extends SuperType {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createDOMDrawable(renderer: number, instance: Instance): DOMSelfDrawable {
+  public override createDOMDrawable(
+    renderer: number,
+    instance: Instance
+  ): DOMSelfDrawable {
     // @ts-expect-error
     return RectangleDOMDrawable.createFromPool(renderer, instance);
   }
@@ -791,7 +1127,10 @@ export default class Rectangle extends SuperType {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createSVGDrawable(renderer: number, instance: Instance): SVGSelfDrawable {
+  public override createSVGDrawable(
+    renderer: number,
+    instance: Instance
+  ): SVGSelfDrawable {
     // @ts-expect-error
     return RectangleSVGDrawable.createFromPool(renderer, instance);
   }
@@ -802,7 +1141,10 @@ export default class Rectangle extends SuperType {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createCanvasDrawable(renderer: number, instance: Instance): CanvasSelfDrawable {
+  public override createCanvasDrawable(
+    renderer: number,
+    instance: Instance
+  ): CanvasSelfDrawable {
     // @ts-expect-error
     return RectangleCanvasDrawable.createFromPool(renderer, instance);
   }
@@ -813,7 +1155,10 @@ export default class Rectangle extends SuperType {
    * @param renderer - In the bitmask format specified by Renderer, which may contain additional bit flags.
    * @param instance - Instance object that will be associated with the drawable
    */
-  public override createWebGLDrawable(renderer: number, instance: Instance): WebGLSelfDrawable {
+  public override createWebGLDrawable(
+    renderer: number,
+    instance: Instance
+  ): WebGLSelfDrawable {
     // @ts-expect-error
     return RectangleWebGLDrawable.createFromPool(renderer, instance);
   }
@@ -830,9 +1175,10 @@ export default class Rectangle extends SuperType {
    */
   public override setShape(shape: Shape | string | null): this {
     if (shape !== null) {
-      throw new Error('Cannot set the shape of a Rectangle to something non-null');
-    }
-    else {
+      throw new Error(
+        'Cannot set the shape of a Rectangle to something non-null'
+      );
+    } else {
       // probably called from the Path constructor
       this.invalidatePath();
     }
@@ -867,9 +1213,13 @@ export default class Rectangle extends SuperType {
     return this;
   }
 
-  public set cornerRadius(value: number) { this.setCornerRadius(value); }
+  public set cornerRadius(value: number) {
+    this.setCornerRadius(value);
+  }
 
-  public get cornerRadius(): number { return this.getCornerRadius(); }
+  public get cornerRadius(): number {
+    return this.getCornerRadius();
+  }
 
   /**
    * Returns the corner radius if both the horizontal and vertical corner radii are the same.
@@ -877,8 +1227,11 @@ export default class Rectangle extends SuperType {
    * NOTE: If there are different horizontal and vertical corner radii, this will fail an assertion and return the horizontal radius.
    */
   public getCornerRadius(): number {
-    window.assert && window.assert(this._cornerXRadius === this._cornerYRadius,
-      'getCornerRadius() invalid if x/y radii are different');
+    window.assert &&
+      window.assert(
+        this._cornerXRadius === this._cornerYRadius,
+        'getCornerRadius() invalid if x/y radii are different'
+      );
 
     return this._cornerXRadius;
   }
@@ -898,8 +1251,17 @@ export default class Rectangle extends SuperType {
    * @param arcHeight - Vertical corner radius of the rectangle
    * @param point - The point that may or may not be in the rounded rectangle
    */
-  public static intersects(x: number, y: number, width: number, height: number, arcWidth: number, arcHeight: number, point: Vector2): boolean {
-    const result = point.x >= x &&
+  public static intersects(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    arcWidth: number,
+    arcHeight: number,
+    point: Vector2
+  ): boolean {
+    const result =
+      point.x >= x &&
       point.x <= x + width &&
       point.y >= y &&
       point.y <= y + height;
@@ -924,22 +1286,24 @@ export default class Rectangle extends SuperType {
     if (point.x < x + width / 2) {
       closestCornerX = x + arcWidth;
       guaranteedInside = guaranteedInside || point.x >= closestCornerX;
-    }
-    else {
+    } else {
       closestCornerX = x + width - arcWidth;
       guaranteedInside = guaranteedInside || point.x <= closestCornerX;
     }
-    if (guaranteedInside) { return true; }
+    if (guaranteedInside) {
+      return true;
+    }
 
     if (point.y < y + height / 2) {
       closestCornerY = y + arcHeight;
       guaranteedInside = guaranteedInside || point.y >= closestCornerY;
-    }
-    else {
+    } else {
       closestCornerY = y + height - arcHeight;
       guaranteedInside = guaranteedInside || point.y <= closestCornerY;
     }
-    if (guaranteedInside) { return true; }
+    if (guaranteedInside) {
+      return true;
+    }
 
     // we are now in the rectangular region between the logical corner and the center of the closest corner's arc.
 
@@ -963,7 +1327,13 @@ export default class Rectangle extends SuperType {
    *
    * See Rectangle's constructor for detailed parameter information.
    */
-  public static rect(x: number, y: number, width: number, height: number, options?: RectangleOptions): Rectangle {
+  public static rect(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    options?: RectangleOptions
+  ): Rectangle {
     return new Rectangle(x, y, width, height, 0, 0, options);
   }
 
@@ -972,8 +1342,24 @@ export default class Rectangle extends SuperType {
    *
    * See Rectangle's constructor for detailed parameter information.
    */
-  public static roundedRect(x: number, y: number, width: number, height: number, cornerXRadius: number, cornerYRadius: number, options?: RectangleOptions): Rectangle {
-    return new Rectangle(x, y, width, height, cornerXRadius, cornerYRadius, options);
+  public static roundedRect(
+    x: number,
+    y: number,
+    width: number,
+    height: number,
+    cornerXRadius: number,
+    cornerYRadius: number,
+    options?: RectangleOptions
+  ): Rectangle {
+    return new Rectangle(
+      x,
+      y,
+      width,
+      height,
+      cornerXRadius,
+      cornerYRadius,
+      options
+    );
   }
 
   /**
@@ -982,7 +1368,13 @@ export default class Rectangle extends SuperType {
    * See Rectangle's constructor for detailed parameter information.
    */
   public static bounds(bounds: Bounds2, options?: RectangleOptions): Rectangle {
-    return new Rectangle(bounds.minX, bounds.minY, bounds.width, bounds.height, options);
+    return new Rectangle(
+      bounds.minX,
+      bounds.minY,
+      bounds.width,
+      bounds.height,
+      options
+    );
   }
 
   /**
@@ -991,8 +1383,21 @@ export default class Rectangle extends SuperType {
    *
    * See Rectangle's constructor for detailed parameter information.
    */
-  public static roundedBounds(bounds: Bounds2, cornerXRadius: number, cornerYRadius: number, options?: RectangleOptions): Rectangle {
-    return new Rectangle(bounds.minX, bounds.minY, bounds.width, bounds.height, cornerXRadius, cornerYRadius, options);
+  public static roundedBounds(
+    bounds: Bounds2,
+    cornerXRadius: number,
+    cornerYRadius: number,
+    options?: RectangleOptions
+  ): Rectangle {
+    return new Rectangle(
+      bounds.minX,
+      bounds.minY,
+      bounds.width,
+      bounds.height,
+      cornerXRadius,
+      cornerYRadius,
+      options
+    );
   }
 
   /**
@@ -1000,8 +1405,19 @@ export default class Rectangle extends SuperType {
    *
    * See Rectangle's constructor for detailed parameter information.
    */
-  public static dimension(dimension: Dimension2, options?: RectangleOptions): Rectangle {
-    return new Rectangle(0, 0, dimension.width, dimension.height, 0, 0, options);
+  public static dimension(
+    dimension: Dimension2,
+    options?: RectangleOptions
+  ): Rectangle {
+    return new Rectangle(
+      0,
+      0,
+      dimension.width,
+      dimension.height,
+      0,
+      0,
+      options
+    );
   }
 }
 
@@ -1012,7 +1428,10 @@ export default class Rectangle extends SuperType {
  * NOTE: See Node's _mutatorKeys documentation for more information on how this operates, and potential special
  *       cases that may apply.
  */
-Rectangle.prototype._mutatorKeys = [...RECTANGLE_OPTION_KEYS, ...SuperType.prototype._mutatorKeys];
+Rectangle.prototype._mutatorKeys = [
+  ...RECTANGLE_OPTION_KEYS,
+  ...SuperType.prototype._mutatorKeys
+];
 
 /**
  * {Array.<String>} - List of all dirty flags that should be available on drawables created from this node (or
@@ -1021,6 +1440,8 @@ Rectangle.prototype._mutatorKeys = [...RECTANGLE_OPTION_KEYS, ...SuperType.proto
  * (scenery-internal)
  * @override
  */
-Rectangle.prototype.drawableMarkFlags = Path.prototype.drawableMarkFlags.concat(['x', 'y', 'width', 'height', 'cornerXRadius', 'cornerYRadius']).filter(flag => flag !== 'shape');
+Rectangle.prototype.drawableMarkFlags = Path.prototype.drawableMarkFlags
+  .concat(['x', 'y', 'width', 'height', 'cornerXRadius', 'cornerYRadius'])
+  .filter((flag) => flag !== 'shape');
 
 scenery.register('Rectangle', Rectangle);

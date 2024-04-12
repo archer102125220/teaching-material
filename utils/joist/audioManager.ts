@@ -30,7 +30,7 @@ import Sim from '@/utils/joist/Sim';
 import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
 
-const ANY_AUDIO_SUPPORTED = phet.chipper.queryParameters.supportsVoicing || phet.chipper.queryParameters.supportsSound;
+const ANY_AUDIO_SUPPORTED = window.phet.chipper.queryParameters.supportsVoicing || window.phet.chipper.queryParameters.supportsSound;
 
 class AudioManager extends PhetioObject {
 
@@ -60,7 +60,7 @@ class AudioManager extends PhetioObject {
         'do not support these features, this element and its children can be ignored.'
     });
 
-    this.audioEnabledProperty = new BooleanProperty(phet.chipper.queryParameters.audio === 'enabled', {
+    this.audioEnabledProperty = new BooleanProperty(window.phet.chipper.queryParameters.audio === 'enabled', {
       tandem: tandem.createTandem('audioEnabledProperty'),
       phetioFeatured: true,
       phetioDocumentation: 'toggles all audio features on and off; supported only if this sim supports audio features.'

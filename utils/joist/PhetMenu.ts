@@ -56,8 +56,8 @@ class PhetMenu extends Popupable(Node, 0) {
   public constructor(sim: Sim, providedOptions?: PhetMenuOptions) {
 
     // Only show certain features for PhET Sims, such as links to our website
-    const isPhETBrand = phet.chipper.brand === 'phet';
-    const isApp = phet.chipper.isApp;
+    const isPhETBrand = window.phet.chipper.brand === 'phet';
+    const isApp = window.phet.chipper.isApp;
 
     const options = optionize<PhetMenuOptions, SelfOptions, ParentOptions>()({
 
@@ -111,7 +111,7 @@ class PhetMenu extends Popupable(Node, 0) {
         callback: () => {
           const url = `${'https://phet.colorado.edu/files/troubleshooting/' +
             '?sim='}${encodeURIComponent(sim.simNameProperty.value)
-            }&version=${encodeURIComponent(`${sim.version} ${phet.chipper.buildTimestamp ? phet.chipper.buildTimestamp : '(unbuilt)'}`)
+            }&version=${encodeURIComponent(`${sim.version} ${window.phet.chipper.buildTimestamp ? window.phet.chipper.buildTimestamp : '(unbuilt)'}`)
             }&url=${encodeURIComponent(window.location.href)
             }&dependencies=${encodeURIComponent(JSON.stringify({}))}`;
           openPopup(url);
@@ -119,7 +119,7 @@ class PhetMenu extends Popupable(Node, 0) {
       },
       {
         textStringProperty: new TinyProperty('QR code'),
-        present: phet.chipper.queryParameters.qrCode,
+        present: window.phet.chipper.queryParameters.qrCode,
         shouldBeHiddenWhenLinksAreNotAllowed: true,
         callback: () => {
           openPopup(`http://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(window.location.href)}&size=220x220&margin=0`);
@@ -170,7 +170,7 @@ class PhetMenu extends Popupable(Node, 0) {
             // our preferred filename
             const filename = `${stripEmbeddingMarks(sim.simNameProperty.value)} screenshot.png`;
 
-            if (!phet.chipper.isFuzzEnabled()) {
+            if (!window.phet.chipper.isFuzzEnabled()) {
 
               // @ts-expect-error when typescript knows anything about window. . ..
               window.saveAs(blob, filename);
@@ -190,10 +190,10 @@ class PhetMenu extends Popupable(Node, 0) {
       // "Full Screen" menu item
       {
         textStringProperty: JoistStrings.menuItem.fullscreenStringProperty,
-        present: FullScreen.isFullScreenEnabled() && !isApp && !platform.mobileSafari && !phet.chipper.queryParameters.preventFullScreen,
+        present: FullScreen.isFullScreenEnabled() && !isApp && !platform.mobileSafari && !window.phet.chipper.queryParameters.preventFullScreen,
         shouldBeHiddenWhenLinksAreNotAllowed: false,
         callback: () => {
-          if (!phet.chipper.isFuzzEnabled()) {
+          if (!window.phet.chipper.isFuzzEnabled()) {
             FullScreen.toggleFullScreen(sim.display);
           }
         },
@@ -334,7 +334,7 @@ class PhetMenu extends Popupable(Node, 0) {
 }
 
 const createBubbleShape = (width: number, height: number): Shape => {
-  const tail = new Shape()
+  const tail = new Shape(undefined, undefined, 'tail')
     .moveTo(width - 20, height)
     .lineToRelative(0, 20)
     .lineToRelative(-20, -20)

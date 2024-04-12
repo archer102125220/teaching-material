@@ -19,6 +19,8 @@ import PhetioObject from '@/utils/tandem/PhetioObject';
 import TandemConstants, { type PhetioID } from '@/utils/tandem/TandemConstants';
 import tandemNamespace from '@/utils/tandem/tandemNamespace';
 
+console.log('tandem/Tandem.ts');
+
 // constants
 // Tandem can't depend on joist, so cannot use packageJSON module
 const packageJSON = _.hasIn(window, 'phet.chipper.packageObject') ? window.phet.chipper.packageObject : { name: 'placeholder' };
@@ -54,8 +56,8 @@ const FORBIDDEN_SUPPLIED_TANDEM_NAMES = [
 ];
 
 const TEST_TANDEM_NAME = 'test';
-const INTER_TERM_SEPARATOR = phetio.PhetioIDUtils.INTER_TERM_SEPARATOR;
-export const DYNAMIC_ARCHETYPE_NAME = phetio.PhetioIDUtils.ARCHETYPE;
+const INTER_TERM_SEPARATOR = window.phetio.PhetioIDUtils.INTER_TERM_SEPARATOR;
+export const DYNAMIC_ARCHETYPE_NAME = window.phetio.PhetioIDUtils.ARCHETYPE;
 
 // used to keep track of missing tandems
 const missingTandems: {
@@ -227,7 +229,7 @@ class Tandem {
     if (PHET_IO_ENABLED) {
 
       // Throw an error if the tandem is required but not supplied
-      assert && Tandem.VALIDATION && assert(!(this.required && !this.supplied), 'Tandem was required but not supplied');
+      window.assert && Tandem.VALIDATION && window.assert(!(this.required && !this.supplied), 'Tandem was required but not supplied');
 
       // If tandem is optional and not supplied, then ignore it.
       if (!this.required && !this.supplied) {
@@ -297,7 +299,7 @@ class Tandem {
    * Create a new Tandem by appending the given id, or if the child Tandem already exists, return it instead.
    */
   public createTandem(name: string, options?: TandemOptions): Tandem {
-    assert && Tandem.VALIDATION && assert(!UNALLOWED_TANDEM_NAMES.includes(name), 'tandem name is not allowed: ' + name);
+    window.assert && Tandem.VALIDATION && window.assert(!UNALLOWED_TANDEM_NAMES.includes(name), 'tandem name is not allowed: ' + name);
 
     options = this.getExtendedOptions(options);
 

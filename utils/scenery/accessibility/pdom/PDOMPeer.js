@@ -79,8 +79,8 @@ class PDOMPeer {
       options
     );
 
-    window.window.assert &&
-      window.window.assert(
+    window.assert &&
+      window.assert(
         !this.id || this.isDisposed,
         'If we previously existed, we need to have been disposed'
       );
@@ -209,11 +209,8 @@ class PDOMPeer {
         this.node.accessibleName,
         callbacksForOtherNodes
       );
-      window.window.assert &&
-        window.window.assert(
-          typeof options === 'object',
-          'should return an object'
-        );
+      window.assert &&
+        window.assert(typeof options === 'object', 'should return an object');
     }
 
     if (this.node.pdomHeading !== null) {
@@ -223,11 +220,8 @@ class PDOMPeer {
         this.node.pdomHeading,
         callbacksForOtherNodes
       );
-      window.window.assert &&
-        window.window.assert(
-          typeof options === 'object',
-          'should return an object'
-        );
+      window.assert &&
+        window.assert(typeof options === 'object', 'should return an object');
     }
 
     if (this.node.helpText !== null) {
@@ -237,11 +231,8 @@ class PDOMPeer {
         this.node.helpText,
         callbacksForOtherNodes
       );
-      window.window.assert &&
-        window.window.assert(
-          typeof options === 'object',
-          'should return an object'
-        );
+      window.assert &&
+        window.assert(typeof options === 'object', 'should return an object');
     }
 
     // create the base DOM element representing this accessible instance
@@ -333,8 +324,7 @@ class PDOMPeer {
     this.node.updateOtherNodesActiveDescendant();
 
     callbacksForOtherNodes.forEach((callback) => {
-      window.window.assert &&
-        window.window.assert(typeof callback === 'function');
+      window.assert && window.assert(typeof callback === 'function');
       callback();
     });
   }
@@ -708,7 +698,7 @@ class PDOMPeer {
         attribute !== DISABLED_ATTRIBUTE_NAME,
         'this method does not currently support disabled, to make Display.interactive toggling easier to implement'
       );
-    window.window.assert && window.window.assert(typeof attribute === 'string');
+    window.assert && window.assert(typeof attribute === 'string');
     this._primarySibling && this._primarySibling.removeAttribute(attribute);
     this._labelSibling && this._labelSibling.removeAttribute(attribute);
     this._descriptionSibling &&
@@ -724,7 +714,7 @@ class PDOMPeer {
    * @param {Object} [options]
    */
   setClassToElement(className, options) {
-    window.window.assert && window.window.assert(typeof className === 'string');
+    window.assert && window.assert(typeof className === 'string');
 
     options = merge(
       {
@@ -745,7 +735,7 @@ class PDOMPeer {
    * @param {Object} [options]
    */
   removeClassFromElement(className, options) {
-    window.window.assert && window.window.assert(typeof className === 'string');
+    window.assert && window.assert(typeof className === 'string');
 
     options = merge(
       {
@@ -787,8 +777,8 @@ class PDOMPeer {
         firstPDOMInstance.peer = this;
       }
 
-      window.window.assert &&
-        window.window.assert(firstPDOMInstance.peer, 'peer should exist');
+      window.assert &&
+        window.assert(firstPDOMInstance.peer, 'peer should exist');
 
       // we can use the same element's id to update all of this Node's peers
       const otherPeerElement = firstPDOMInstance.peer.getElementByName(
@@ -803,8 +793,8 @@ class PDOMPeer {
         // NOTE: in the future, we would like to verify that the association exists but can't do that yet because
         // we have to support cases where we set label association prior to setting the sibling/parent tagName
         const previousAttributeValue = element.getAttribute(attribute) || '';
-        window.window.assert &&
-          window.window.assert(typeof previousAttributeValue === 'string');
+        window.assert &&
+          window.assert(typeof previousAttributeValue === 'string');
 
         const newAttributeValue = [
           previousAttributeValue.trim(),
@@ -838,8 +828,7 @@ class PDOMPeer {
   arrangeContentElement(contentElement, appendElement) {
     // if there is a containerParent
     if (this.topLevelElements[0] === this._containerParent) {
-      window.window.assert &&
-        window.window.assert(this.topLevelElements.length === 1);
+      window.assert && window.assert(this.topLevelElements.length === 1);
 
       if (appendElement) {
         this._containerParent.appendChild(contentElement);
@@ -899,7 +888,7 @@ class PDOMPeer {
    * @param {boolean} visible
    */
   setVisible(visible) {
-    window.window.assert && window.window.assert(typeof visible === 'boolean');
+    window.assert && window.assert(typeof visible === 'boolean');
     if (this.visible !== visible) {
       this.visible = visible;
       for (let i = 0; i < this.topLevelElements.length; i++) {
@@ -972,8 +961,7 @@ class PDOMPeer {
    * @param {boolean} focusable
    */
   setFocusable(focusable) {
-    window.window.assert &&
-      window.window.assert(typeof focusable === 'boolean');
+    window.assert && window.assert(typeof focusable === 'boolean');
 
     const peerHadFocus = this.isFocused();
     if (this.focusable !== focusable) {

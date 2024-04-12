@@ -254,16 +254,16 @@ class SVGGroup {
    * @public
    */
   update() {
-    sceneryLog &&
-      sceneryLog.SVGGroup &&
-      sceneryLog.SVGGroup(`update: ${this.toString()}`);
+    window.sceneryLog &&
+      window.sceneryLog.SVGGroup &&
+      window.sceneryLog.SVGGroup(`update: ${this.toString()}`);
 
     // we may have been disposed since being marked dirty on our block. we won't have a reference if we are disposed
     if (!this.block) {
       return;
     }
 
-    sceneryLog && sceneryLog.SVGGroup && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.SVGGroup && window.sceneryLog.push();
 
     const svgGroup = this.svgGroup;
 
@@ -272,9 +272,9 @@ class SVGGroup {
     if (this.transformDirty) {
       this.transformDirty = false;
 
-      sceneryLog &&
-        sceneryLog.SVGGroup &&
-        sceneryLog.SVGGroup(`transform update: ${this.toString()}`);
+      window.sceneryLog &&
+        window.sceneryLog.SVGGroup &&
+        window.sceneryLog.SVGGroup(`transform update: ${this.toString()}`);
 
       if (this.willApplyTransforms) {
         const isIdentity = this.node.transform.isIdentity();
@@ -302,9 +302,9 @@ class SVGGroup {
     if (this.visibilityDirty) {
       this.visibilityDirty = false;
 
-      sceneryLog &&
-        sceneryLog.SVGGroup &&
-        sceneryLog.SVGGroup(`visibility update: ${this.toString()}`);
+      window.sceneryLog &&
+        window.sceneryLog.SVGGroup &&
+        window.sceneryLog.SVGGroup(`visibility update: ${this.toString()}`);
 
       svgGroup.style.display = this.node.isVisible() ? '' : 'none';
     }
@@ -313,9 +313,9 @@ class SVGGroup {
     if (this.filterDirty) {
       this.filterDirty = false;
 
-      sceneryLog &&
-        sceneryLog.SVGGroup &&
-        sceneryLog.SVGGroup(`filter update: ${this.toString()}`);
+      window.sceneryLog &&
+        window.sceneryLog.SVGGroup &&
+        window.sceneryLog.SVGGroup(`filter update: ${this.toString()}`);
 
       const opacity = this.node.effectiveOpacity;
       if (this.willApplyFilters && opacity !== 1) {
@@ -384,9 +384,9 @@ class SVGGroup {
     if (this.clipDirty) {
       this.clipDirty = false;
 
-      sceneryLog &&
-        sceneryLog.SVGGroup &&
-        sceneryLog.SVGGroup(`clip update: ${this.toString()}`);
+      window.sceneryLog &&
+        window.sceneryLog.SVGGroup &&
+        window.sceneryLog.SVGGroup(`clip update: ${this.toString()}`);
 
       // OHTWO TODO: remove clip workaround (use this.willApplyFilters) https://github.com/phetsims/scenery/issues/1581
       if (this.node.clipArea) {
@@ -418,10 +418,12 @@ class SVGGroup {
     if (this.orderDirty) {
       this.orderDirty = false;
 
-      sceneryLog &&
-        sceneryLog.SVGGroup &&
-        sceneryLog.SVGGroup(`order update: ${this.toString()}`);
-      sceneryLog && sceneryLog.SVGGroup && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.SVGGroup &&
+        window.sceneryLog.SVGGroup(`order update: ${this.toString()}`);
+      window.sceneryLog &&
+        window.sceneryLog.SVGGroup &&
+        window.sceneryLog.push();
 
       // our instance should have the proper order of children. we check that way.
       let idx = this.children.length - 1;
@@ -433,9 +435,9 @@ class SVGGroup {
           // ensure that the spot in our array (and in the DOM) at [idx] is correct
           if (this.children[idx] !== group) {
             // out of order, rearrange
-            sceneryLog &&
-              sceneryLog.SVGGroup &&
-              sceneryLog.SVGGroup(
+            window.sceneryLog &&
+              window.sceneryLog.SVGGroup &&
+              window.sceneryLog.SVGGroup(
                 `group out of order: ${idx} for ${group.toString()}`
               );
 
@@ -450,17 +452,17 @@ class SVGGroup {
 
             // then in our children array
             const oldIndex = _.indexOf(this.children, group);
-            assert &&
-              assert(
+            window.assert &&
+              window.assert(
                 oldIndex < idx,
                 'The item we are moving backwards to location [idx] should not have an index greater than that'
               );
             this.children.splice(oldIndex, 1);
             this.children.splice(idx, 0, group);
           } else {
-            sceneryLog &&
-              sceneryLog.SVGGroup &&
-              sceneryLog.SVGGroup(
+            window.sceneryLog &&
+              window.sceneryLog.SVGGroup &&
+              window.sceneryLog.SVGGroup(
                 `group in place: ${idx} for ${group.toString()}`
               );
           }
@@ -470,10 +472,12 @@ class SVGGroup {
         }
       }
 
-      sceneryLog && sceneryLog.SVGGroup && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.SVGGroup &&
+        window.sceneryLog.pop();
     }
 
-    sceneryLog && sceneryLog.SVGGroup && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.SVGGroup && window.sceneryLog.pop();
   }
 
   /**
@@ -491,12 +495,13 @@ class SVGGroup {
    * @public
    */
   dispose() {
-    sceneryLog &&
-      sceneryLog.SVGGroup &&
-      sceneryLog.SVGGroup(`dispose ${this.toString()}`);
-    sceneryLog && sceneryLog.SVGGroup && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.SVGGroup &&
+      window.sceneryLog.SVGGroup(`dispose ${this.toString()}`);
+    window.sceneryLog && window.sceneryLog.SVGGroup && window.sceneryLog.push();
 
-    window.assert && window.assert(this.children.length === 0, 'Should be empty by now');
+    window.assert &&
+      window.assert(this.children.length === 0, 'Should be empty by now');
 
     if (this.hasFilter) {
       this.svgGroup.removeAttribute('filter');
@@ -540,7 +545,7 @@ class SVGGroup {
     // for now
     this.freeToPool();
 
-    sceneryLog && sceneryLog.SVGGroup && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.SVGGroup && window.sceneryLog.pop();
   }
 
   /**
@@ -560,8 +565,8 @@ class SVGGroup {
    * @param {Drawable} drawable
    */
   static addDrawable(block, drawable) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         drawable.instance,
         'Instance is required for a drawable to be grouped correctly in SVG'
       );
@@ -595,8 +600,8 @@ class SVGGroup {
     let group = instance.lookupSVGGroup(block);
 
     if (!group) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           instance !== block.rootGroup.instance,
           'Making sure we do not walk past our rootGroup'
         );

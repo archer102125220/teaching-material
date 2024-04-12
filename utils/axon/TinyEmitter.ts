@@ -17,8 +17,8 @@ import Random from '@/utils/dot/Random';
 import dotRandom from '@/utils/dot/dotRandom';
 
 // constants
-const listenerOrder = _.hasIn(window, 'phet.chipper.queryParameters') && phet.chipper.queryParameters.listenerOrder;
-const listenerLimit = _.hasIn(window, 'phet.chipper.queryParameters') && phet.chipper.queryParameters.listenerLimit;
+const listenerOrder = _.hasIn(window, 'phet.chipper.queryParameters') && window.phet.chipper.queryParameters.listenerOrder;
+const listenerLimit = _.hasIn(window, 'phet.chipper.queryParameters') && window.phet.chipper.queryParameters.listenerLimit;
 
 let random: Random | null = null;
 if (listenerOrder && listenerOrder.startsWith('random')) {
@@ -106,7 +106,7 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
 
     // Support for a query parameter that shuffles listeners, but bury behind assert so it will be stripped out on build
     // so it won't impact production performance.
-    if (assert && listenerOrder && (listenerOrder !== 'default') && !this.hasListenerOrderDependencies) {
+    if (window.assert && listenerOrder && (listenerOrder !== 'default') && !this.hasListenerOrderDependencies) {
       const asArray = Array.from(this.listeners);
 
       const reorderedListeners = listenerOrder.startsWith('random') ? random!.shuffle(asArray) : asArray.reverse();
@@ -159,10 +159,10 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
 
     this.changeCount && this.changeCount(1);
 
-    if (assert && listenerLimit && isFinite(listenerLimit) && maxListenerCount < this.listeners.size) {
+    if (window.assert && listenerLimit && isFinite(listenerLimit) && maxListenerCount < this.listeners.size) {
       maxListenerCount = this.listeners.size;
       console.log(`Max TinyEmitter listeners: ${maxListenerCount}`);
-      assert(maxListenerCount <= listenerLimit, `listener count of ${maxListenerCount} above ?listenerLimit=${listenerLimit}`);
+      window.assert(maxListenerCount <= listenerLimit, `listener count of ${maxListenerCount} above ?listenerLimit=${listenerLimit}`);
     }
   }
 
@@ -173,8 +173,8 @@ export default class TinyEmitter<T extends TEmitterParameter[] = []> implements 
 
     // Throw an error when removing a non-listener (except when the Emitter has already been disposed, see
     // https://github.com/phetsims/sun/issues/394#issuecomment-419998231
-    if (assert && !this.isDisposed) {
-      assert(this.listeners.has(listener), 'tried to removeListener on something that wasn\'t a listener');
+    if (window.assert && !this.isDisposed) {
+      window.assert(this.listeners.has(listener), 'tried to removeListener on something that wasn\'t a listener');
     }
     this.guardListeners();
     this.listeners.delete(listener);

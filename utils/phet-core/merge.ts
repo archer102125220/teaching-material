@@ -17,6 +17,8 @@ import _ from 'lodash';
 import phetCore from '@/utils/phet-core/phetCore';
 import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
+console.log('phet-core/merge.ts');
+
 // constants
 const OPTIONS_SUFFIX = 'Options';
 
@@ -31,13 +33,13 @@ function merge<A, B, C, D, E>(a: A, b: B, c: C, d: D, e: E): A & B & C & D & E;
  * @param  {...<Object|null>} sources
  */
 function merge(target: IntentionalAny, ...sources: IntentionalAny[]): IntentionalAny {
-  assert && assertIsMergeable(target);
+  window.assert && assertIsMergeable(target);
   window.assert && window.assert(target !== null, 'target should not be null'); // assertIsMergeable supports null
   window.assert && window.assert(sources.length > 0, 'at least one source expected');
 
   _.each(sources, source => {
     if (source) {
-      assert && assertIsMergeable(source);
+      window.assert && assertIsMergeable(source);
       for (const property in source) {
 
         // Providing a value of undefined in the target doesn't override the default, see https://github.com/phetsims/phet-core/issues/111

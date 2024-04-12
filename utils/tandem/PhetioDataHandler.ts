@@ -22,6 +22,8 @@ import Validation, { type Validator } from '@/utils/axon/Validation';
 import type StrictOmit from '@/utils/phet-core/types/StrictOmit';
 import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
+console.log('tandem/PhetioDataHandler.ts');
+
 const VALIDATE_OPTIONS_FALSE = { validateValidator: false };
 
 export type Parameter = {
@@ -32,7 +34,7 @@ export type Parameter = {
 
 // Simulations have thousands of Emitters, so we re-use objects where possible.
 const EMPTY_ARRAY: Parameter[] = [];
-assert && Object.freeze(EMPTY_ARRAY);
+window.assert && Object.freeze(EMPTY_ARRAY);
 
 // Allowed keys to options.parameters, the parameters to emit.
 const PARAMETER_KEYS = [
@@ -81,7 +83,7 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
       phetioDocumentation: ''
     }, providedOptions);
 
-    assert && PhetioDataHandler.validateParameters(options.parameters, !!options.tandem?.supplied);
+    window.assert && PhetioDataHandler.validateParameters(options.parameters, !!options.tandem?.supplied);
     window.assert && window.assert(options.phetioType === undefined,
       'PhetioDataHandler sets its own phetioType. Instead provide parameter phetioTypes through `options.parameters` with a phetioOuterType');
 
@@ -131,14 +133,14 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
         'Extra prototype on parameter object is a code smell');
 
       reachedPhetioPrivate = reachedPhetioPrivate || parameter.phetioPrivate!;
-      assert && reachedPhetioPrivate && assert(parameter.phetioPrivate,
+      window.assert && reachedPhetioPrivate && window.assert(parameter.phetioPrivate,
         'after first phetioPrivate parameter, all subsequent parameters must be phetioPrivate');
 
-      assert && tandemSupplied && Tandem.VALIDATION && assert(parameter.phetioType || parameter.phetioPrivate,
+      window.assert && tandemSupplied && Tandem.VALIDATION && window.assert(parameter.phetioType || parameter.phetioPrivate,
         'instrumented Emitters must include phetioType for each parameter or be marked as `phetioPrivate`.');
-      assert && parameter.phetioType && assert(parameter.name,
+      window.assert && parameter.phetioType && window.assert(parameter.name,
         '`name` is a required parameter for phet-io instrumented parameters.');
-      assert && assertMutuallyExclusiveOptions(parameter, ['phetioPrivate'], [
+      window.assert && assertMutuallyExclusiveOptions(parameter, ['phetioPrivate'], [
         'name', 'phetioType', 'phetioDocumentation'
       ]);
 
@@ -150,14 +152,14 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
       }
 
       // Changing after construction indicates a logic error.
-      assert && Object.freeze(parameters[i]);
+      window.assert && Object.freeze(parameters[i]);
 
       // validate the options passed in to validate each PhetioDataHandler argument
       Validation.validateValidator(parameter);
     }
 
     // Changing after construction indicates a logic error.
-    assert && Object.freeze(parameters);
+    window.assert && Object.freeze(parameters);
   }
 
   /**
@@ -169,11 +171,11 @@ class PhetioDataHandler<T extends IntentionalAny[] = []> extends PhetioObject {
     );
     for (let i = 0; i < this.parameters.length; i++) {
       const parameter = this.parameters[i];
-      assert && validate(args[i], parameter, VALIDATE_OPTIONS_FALSE);
+      window.assert && validate(args[i], parameter, VALIDATE_OPTIONS_FALSE);
 
       // valueType overrides the phetioType validator so we don't use that one if there is a valueType
       if (parameter.phetioType && !parameter.valueType) {
-        assert && validate(args[i], parameter.phetioType.validator, VALIDATE_OPTIONS_FALSE);
+        window.assert && validate(args[i], parameter.phetioType.validator, VALIDATE_OPTIONS_FALSE);
       }
     }
   }

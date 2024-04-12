@@ -91,14 +91,14 @@ class PropertyStateHandler {
     });
 
     phetioStateEngine.isSettingStateProperty.lazyLink(isSettingState => {
-      assert && !isSettingState && assert(this.phaseCallbackSets.size === 0, 'PhaseCallbacks should have all been applied');
+      window.assert && !isSettingState && window.assert(this.phaseCallbackSets.size === 0, 'PhaseCallbacks should have all been applied');
     });
 
     this.initialized = true;
   }
 
   private static validateInstrumentedProperty(property: ReadOnlyProperty<unknown>): void {
-    assert && Tandem.VALIDATION && assert(property instanceof ReadOnlyProperty && property.isPhetioInstrumented(), `must be an instrumented Property: ${property}`);
+    window.assert && Tandem.VALIDATION && window.assert(property instanceof ReadOnlyProperty && property.isPhetioInstrumented(), `must be an instrumented Property: ${property}`);
   }
 
   private validatePropertyPhasePair(property: ReadOnlyProperty<unknown>, phase: PropertyStatePhase): void {
@@ -132,7 +132,7 @@ class PropertyStateHandler {
 
       this.validatePropertyPhasePair(beforeProperty, beforePhase);
       this.validatePropertyPhasePair(afterProperty, afterPhase);
-      assert && beforeProperty === afterProperty && assert(beforePhase !== afterPhase, 'cannot set same Property to same phase');
+      window.assert && beforeProperty === afterProperty && window.assert(beforePhase !== afterPhase, 'cannot set same Property to same phase');
 
       const mapPair = this.getMapPairFromPhases(beforePhase, afterPhase);
 
@@ -234,7 +234,7 @@ class PropertyStateHandler {
     window.assert && window.assert(false, assertMessage);
 
     // We must exit here even if assertions are disabled so it wouldn't lock up the browser.
-    if (!assert) {
+    if (!window.assert) {
       throw new Error(assertMessage);
     }
   }

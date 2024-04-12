@@ -72,7 +72,7 @@ export default class NumberProperty extends Property<number> implements TRangedP
   public constructor(value: number, providedOptions?: NumberPropertyOptions) {
 
     // Please feel free to remove this if you have a reasonable case!
-    assert && providedOptions && assertMutuallyExclusiveOptions(['range'], ['validValues']);
+    window.assert && providedOptions && assertMutuallyExclusiveOptions(['range'], ['validValues']);
 
     const options = optionize<NumberPropertyOptions, StrictOmit<SelfOptions, 'rangePropertyOptions'>, PropertyOptions<number>>()({
 
@@ -95,7 +95,7 @@ export default class NumberProperty extends Property<number> implements TRangedP
       tandem: options.range !== DEFAULT_RANGE ? options.tandem?.createTandem(RANGE_PROPERTY_TANDEM_NAME) : Tandem.OPT_OUT
     }, options.rangePropertyOptions);
 
-    if (assert && Tandem.VALIDATION && options.rangePropertyOptions.tandem && options.rangePropertyOptions.tandem.supplied) {
+    if (window.assert && Tandem.VALIDATION && options.rangePropertyOptions.tandem && options.rangePropertyOptions.tandem.supplied) {
       window.assert && window.assert(options.rangePropertyOptions.tandem.name === RANGE_PROPERTY_TANDEM_NAME,
         `rangePropertyOptions.tandem.name must be ${RANGE_PROPERTY_TANDEM_NAME}: ${options.rangePropertyOptions.tandem.name}`);
     }
@@ -125,14 +125,14 @@ export default class NumberProperty extends Property<number> implements TRangedP
     this.numberType = options.numberType;
     this.rangeProperty = rangeProperty;
 
-    if (assert && Tandem.VALIDATION && this.rangeProperty.isPhetioInstrumented()) {
+    if (window.assert && Tandem.VALIDATION && this.rangeProperty.isPhetioInstrumented()) {
       window.assert && window.assert(this.isPhetioInstrumented(), 'NumberProperty must be phet-io instrumented if the range is');
     }
 
     const rangePropertyObserver = () => {
       validate(this.value, this.valueValidator, VALIDATE_OPTIONS_FALSE);
     };
-    assert && this.rangeProperty.link(rangePropertyObserver);
+    window.assert && this.rangeProperty.link(rangePropertyObserver);
 
     // For PhET-iO State, make sure that both the range and this value are correct before firing notifications (where the assertions are).
     this.rangeProperty.addPhetioStateDependencies([this]);

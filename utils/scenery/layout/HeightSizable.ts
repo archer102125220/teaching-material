@@ -197,7 +197,7 @@ const HeightSizable = memoize(<SuperType extends Constructor<Node>>(type: SuperT
         const idealHeight = this.localPreferredHeight === null ? effectiveMinimumHeight : this.localPreferredHeight;
 
         // Handle non-finite values with exact equality
-        assert(idealHeight === currentHeight || Math.abs(idealHeight - currentHeight) < 1e-7);
+        window.assert(idealHeight === currentHeight || Math.abs(idealHeight - currentHeight) < 1e-7);
       }
     }
 
@@ -215,7 +215,7 @@ const HeightSizable = memoize(<SuperType extends Constructor<Node>>(type: SuperT
     }
 
     private _updateLocalPreferredHeight(): void {
-      assert && this.auditMaxDimensions();
+      window.assert && this.auditMaxDimensions();
 
       if (!this._preferredSizeChanging) {
         this._preferredSizeChanging = true;

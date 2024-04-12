@@ -64,7 +64,7 @@ export default class AboutDialog extends Dialog {
     }, providedOptions);
 
     // Dynamic modules are loaded in simLauncher and accessed through their namespace
-    const Brand: TBrand = phet.brand.Brand;
+    const Brand: TBrand = window.phet.brand.Brand;
     window.assert && window.assert(Brand, 'Brand should exist by now');
 
     let children = [];
@@ -86,12 +86,12 @@ export default class AboutDialog extends Dialog {
     }));
 
     // Built versions will have a build timestamp
-    if (phet.chipper.buildTimestamp) {
-      children.push(new VoicingText(phet.chipper.buildTimestamp, {
+    if (window.phet.chipper.buildTimestamp) {
+      children.push(new VoicingText(window.phet.chipper.buildTimestamp, {
         font: new PhetFont(0.65 * NOMINAL_FONT_SIZE),
         maxWidth: MAX_WIDTH,
         tagName: 'p',
-        innerContent: phet.chipper.buildTimestamp
+        innerContent: window.phet.chipper.buildTimestamp
       }));
     }
 
@@ -156,8 +156,8 @@ export default class AboutDialog extends Dialog {
 
     // Show the brand copyright statement, if it exists
     if (Brand.copyright) {
-      const year = phet.chipper.buildTimestamp ? // defined for built versions
-        phet.chipper.buildTimestamp.split('-')[0] : // e.g. "2017-04-20 19:04:59 UTC" -> "2017"
+      const year = window.phet.chipper.buildTimestamp ? // defined for built versions
+        window.phet.chipper.buildTimestamp.split('-')[0] : // e.g. "2017-04-20 19:04:59 UTC" -> "2017"
         new Date().getFullYear(); // in unbuilt mode
 
       const copyright = StringUtils.fillIn(Brand.copyright, { year });

@@ -41,8 +41,8 @@ class PathSVGDrawable extends PathStatefulDrawable(SVGSelfDrawable) {
    * Implements the interface for SVGSelfDrawable (and is called from the SVGSelfDrawable's update).
    */
   updateSVGSelf() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !this.node.requiresSVGBoundsWorkaround(),
         'No workaround for https://github.com/phetsims/scenery/issues/196 is provided at this time, please add an epsilon'
       );

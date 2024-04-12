@@ -1,9 +1,10 @@
 <template>
   <div>
-    <GeometricOptics height="80vh" />
+    <ClientOnly>
+      <GeometricOptics height="80vh" @loading="$store.system.setLoading" />
+    </ClientOnly>
   </div>
 </template>
-<script setup>
-</script>
+<script setup></script>
 
 <style lang="scss" scoped></style>

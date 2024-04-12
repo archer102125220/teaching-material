@@ -71,7 +71,7 @@ export default class FlowCell extends FlowConfigurable(MarginLayoutCell) {
       isSeparator: false
     }, providedOptions);
 
-    assert && Object.keys(options).forEach(key => {
+    window.assert && Object.keys(options).forEach(key => {
       window.assert && window.assert(FLOW_CELL_KEYS.includes(key), `Cannot provide key ${key} to a FlowCell's layoutOptions. Perhaps this is a Grid-style layout option?`);
     });
 

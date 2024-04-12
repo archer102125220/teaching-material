@@ -2,7 +2,7 @@
 // Copyright 2013-2023, University of Colorado Boulder
 
 /**
- * Utility functions for Dot, placed into the phet.dot.X namespace.
+ * Utility functions for Dot, placed into the window.phet.dot.X namespace.
  *
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */

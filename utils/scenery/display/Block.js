@@ -21,13 +21,13 @@ class Block extends Drawable {
    * @param {number} renderer
    */
   initialize(display, renderer) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !display._isDisposing,
         'Should not create a block for a Display that is being disposed of'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !display._isDisposed,
         'Should not create a block for a disposed Display'
       );
@@ -56,7 +56,7 @@ class Block extends Drawable {
     // @public {number} - last set z-index, valid if > 0.
     this.zIndex = 0;
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.drawableList = cleanArray(this.drawableList);
     }
   }
@@ -67,8 +67,8 @@ class Block extends Drawable {
    * @override
    */
   dispose() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.drawableCount === 0,
         'There should be no drawables on a block when it is disposed'
       );
@@ -84,7 +84,7 @@ class Block extends Drawable {
     this.nextBlock = null;
 
     // TODO: are we potentially leaking drawable lists here? https://github.com/phetsims/scenery/issues/1581
-    if (assertSlow) {
+    if (window.assertSlow) {
       cleanArray(this.drawableList);
     }
 
@@ -101,17 +101,17 @@ class Block extends Drawable {
     this.drawableCount++;
     this.markDirtyDrawable(drawable);
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       const idx = _.indexOf(this.drawableList, drawable);
-      assertSlow &&
-        assertSlow(
+      window.assertSlow &&
+        window.assertSlow(
           idx === -1,
           'Drawable should not be added when it has not been removed'
         );
       this.drawableList.push(drawable);
 
-      assertSlow &&
-        assertSlow(
+      window.assertSlow &&
+        window.assertSlow(
           this.drawableCount === this.drawableList.length,
           'Count sanity check, to make sure our assertions are not buggy'
         );
@@ -128,17 +128,17 @@ class Block extends Drawable {
     this.drawableCount--;
     this.markDirty();
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       const idx = _.indexOf(this.drawableList, drawable);
-      assertSlow &&
-        assertSlow(
+      window.assertSlow &&
+        window.assertSlow(
           idx !== -1,
           'Drawable should be already added when it is removed'
         );
       this.drawableList.splice(idx, 1);
 
-      assertSlow &&
-        assertSlow(
+      window.assertSlow &&
+        window.assertSlow(
           this.drawableCount === this.drawableList.length,
           'Count sanity check, to make sure our assertions are not buggy'
         );
@@ -196,7 +196,7 @@ class Block extends Drawable {
    * @param {boolean} allowDirty
    */
   audit(allowPendingBlock, allowPendingList, allowDirty) {
-    if (assertSlow) {
+    if (window.assertSlow) {
       super.audit(allowPendingBlock, allowPendingList, allowDirty);
 
       let count = 0;
@@ -216,36 +216,37 @@ class Block extends Drawable {
         }
 
         if (!allowPendingBlock) {
-          assertSlow &&
-            assertSlow(
+          window.assertSlow &&
+            window.assertSlow(
               count === this.drawableCount,
               'drawableCount should match'
             );
 
-          assertSlow &&
-            assertSlow(
+          window.assertSlow &&
+            window.assertSlow(
               this.firstDrawable === this.pendingFirstDrawable,
               'No pending first drawable'
             );
-          assertSlow &&
-            assertSlow(
+          window.assertSlow &&
+            window.assertSlow(
               this.lastDrawable === this.pendingLastDrawable,
               'No pending last drawable'
             );
 
           // scan through to make sure our drawable lists are identical
           for (let d = this.firstDrawable; d !== null; d = d.nextDrawable) {
-            assertSlow &&
-              assertSlow(
+            window.assertSlow &&
+              window.assertSlow(
                 d.renderer === this.renderer,
                 'Renderers should match'
               );
-            assertSlow &&
-              assertSlow(
+            window.assertSlow &&
+              window.assertSlow(
                 d.parentDrawable === this,
-                'This block should be this drawable\'s parent'
+                "This block should be this drawable's parent"
               );
-            assertSlow && assertSlow(_.indexOf(this.drawableList, d) >= 0);
+            window.assertSlow &&
+              window.assertSlow(_.indexOf(this.drawableList, d) >= 0);
             if (d === this.lastDrawable) {
               break;
             }

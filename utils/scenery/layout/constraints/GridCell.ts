@@ -144,7 +144,7 @@ export default class GridCell extends GridConfigurable(MarginLayoutCell) {
       verticalSpan: 1
     }, providedOptions);
 
-    assert && Object.keys(options).forEach(key => {
+    window.assert && Object.keys(options).forEach(key => {
       window.assert && window.assert(GRID_CELL_KEYS.includes(key), `Cannot provide key ${key} to a GridCell's layoutOptions. Perhaps this is a Flow-style layout option?`);
     });
 

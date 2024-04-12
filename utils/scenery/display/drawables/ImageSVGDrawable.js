@@ -29,9 +29,9 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
   initialize(renderer, instance) {
     super.initialize(renderer, instance, false, keepSVGImageElements); // usesPaint: false
 
-    sceneryLog &&
-      sceneryLog.ImageSVGDrawable &&
-      sceneryLog.ImageSVGDrawable(
+    window.sceneryLog &&
+      window.sceneryLog.ImageSVGDrawable &&
+      window.sceneryLog.ImageSVGDrawable(
         `${this.id} initialized for ${instance.toString()}`
       );
 
@@ -69,9 +69,9 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
     const image = this.svgElement;
 
     if (this.dirtyImage) {
-      sceneryLog &&
-        sceneryLog.ImageSVGDrawable &&
-        sceneryLog.ImageSVGDrawable(`${this.id} Updating dirty image`);
+      window.sceneryLog &&
+        window.sceneryLog.ImageSVGDrawable &&
+        window.sceneryLog.ImageSVGDrawable(`${this.id} Updating dirty image`);
       if (this.node._image) {
         // like <image xlink:href='https://phet.colorado.edu/images/phet-logo-yellow.png' x='0' y='0' height='127px' width='242px'/>
         this.updateURL(image, true);
@@ -81,9 +81,9 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
         image.setAttributeNS(xlinkns, 'xlink:href', '//:0'); // see http://stackoverflow.com/questions/5775469/whats-the-valid-way-to-include-an-image-with-no-src
       }
     } else if (this.dirtyMipmap && this.node._image) {
-      sceneryLog &&
-        sceneryLog.ImageSVGDrawable &&
-        sceneryLog.ImageSVGDrawable(`${this.id} Updating dirty mipmap`);
+      window.sceneryLog &&
+        window.sceneryLog.ImageSVGDrawable &&
+        window.sceneryLog.ImageSVGDrawable(`${this.id} Updating dirty mipmap`);
       this.updateURL(image, false);
     }
 
@@ -111,9 +111,9 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
     let level = -1; // signals a default of "we are not using mipmapping"
     if (this.node._mipmap) {
       level = this.node.getMipmapLevel(this.instance.relativeTransform.matrix);
-      sceneryLog &&
-        sceneryLog.ImageSVGDrawable &&
-        sceneryLog.ImageSVGDrawable(`${this.id} Mipmap level: ${level}`);
+      window.sceneryLog &&
+        window.sceneryLog.ImageSVGDrawable &&
+        window.sceneryLog.ImageSVGDrawable(`${this.id} Mipmap level: ${level}`);
     }
 
     // bail out if we would use the currently-used mipmap level (or none) and there was no image change
@@ -128,9 +128,9 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
     this.mipmapLevel = level;
 
     if (this.node._mipmap && this.node.hasMipmaps()) {
-      sceneryLog &&
-        sceneryLog.ImageSVGDrawable &&
-        sceneryLog.ImageSVGDrawable(
+      window.sceneryLog &&
+        window.sceneryLog.ImageSVGDrawable &&
+        window.sceneryLog.ImageSVGDrawable(
           `${this.id} Setting image URL to mipmap level ${level}`
         );
       const url = this.node.getMipmapURL(level);
@@ -147,9 +147,9 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
       );
       image.setAttributeNS(xlinkns, 'xlink:href', url);
     } else {
-      sceneryLog &&
-        sceneryLog.ImageSVGDrawable &&
-        sceneryLog.ImageSVGDrawable(`${this.id} Setting image URL`);
+      window.sceneryLog &&
+        window.sceneryLog.ImageSVGDrawable &&
+        window.sceneryLog.ImageSVGDrawable(`${this.id} Setting image URL`);
       image.setAttribute('width', `${this.node.getImageWidth()}px`);
       image.setAttribute('height', `${this.node.getImageHeight()}px`);
       image.setAttributeNS(xlinkns, 'xlink:href', this.node.getImageURL());
@@ -166,9 +166,9 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
       this.usingMipmap = usingMipmap;
 
       if (usingMipmap) {
-        sceneryLog &&
-          sceneryLog.ImageSVGDrawable &&
-          sceneryLog.ImageSVGDrawable(
+        window.sceneryLog &&
+          window.sceneryLog.ImageSVGDrawable &&
+          window.sceneryLog.ImageSVGDrawable(
             `${this.id} Adding mipmap compute/listener needs`
           );
         this.instance.relativeTransform.addListener(
@@ -176,9 +176,9 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
         ); // when our relative tranform changes, notify us in the pre-repaint phase
         this.instance.relativeTransform.addPrecompute(); // trigger precomputation of the relative transform, since we will always need it when it is updated
       } else {
-        sceneryLog &&
-          sceneryLog.ImageSVGDrawable &&
-          sceneryLog.ImageSVGDrawable(
+        window.sceneryLog &&
+          window.sceneryLog.ImageSVGDrawable &&
+          window.sceneryLog.ImageSVGDrawable(
             `${this.id} Removing mipmap compute/listener needs`
           );
         this.instance.relativeTransform.removeListener(
@@ -207,9 +207,9 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
    * @private
    */
   onMipmapTransform() {
-    sceneryLog &&
-      sceneryLog.ImageSVGDrawable &&
-      sceneryLog.ImageSVGDrawable(`${this.id} Transform dirties mipmap`);
+    window.sceneryLog &&
+      window.sceneryLog.ImageSVGDrawable &&
+      window.sceneryLog.ImageSVGDrawable(`${this.id} Transform dirties mipmap`);
 
     this.markDirtyMipmap();
   }
@@ -220,9 +220,9 @@ class ImageSVGDrawable extends ImageStatefulDrawable(SVGSelfDrawable) {
    * @override
    */
   dispose() {
-    sceneryLog &&
-      sceneryLog.ImageSVGDrawable &&
-      sceneryLog.ImageSVGDrawable(`${this.id} disposing`);
+    window.sceneryLog &&
+      window.sceneryLog.ImageSVGDrawable &&
+      window.sceneryLog.ImageSVGDrawable(`${this.id} disposing`);
 
     // clean up mipmap listeners and compute needs
     this.updateMipmapStatus(false);

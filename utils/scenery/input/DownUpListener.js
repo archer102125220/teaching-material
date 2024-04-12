@@ -9,7 +9,13 @@
 import deprecationWarning from '@/utils/phet-core/deprecationWarning';
 import merge from '@/utils/phet-core/merge';
 import PhetioObject from '@/utils/tandem/PhetioObject';
-import { EventContext, Mouse, scenery, SceneryEvent, Trail } from '@/utils/scenery/imports';
+import {
+  EventContext,
+  Mouse,
+  scenery,
+  SceneryEvent,
+  Trail
+} from '@/utils/scenery/imports';
 
 /**
  * @deprecated - use PressListener instead
@@ -36,7 +42,7 @@ class DownUpListener extends PhetioObject {
    * @param {Object} [options]
    */
   constructor(options) {
-    assert &&
+    window.assert &&
       deprecationWarning(
         'DownUpListener is deprecated, please use PressListener instead'
       );
@@ -73,12 +79,14 @@ class DownUpListener extends PhetioObject {
     this.downListener = {
       // mouse/touch up
       up: (event) => {
-        sceneryLog &&
-          sceneryLog.InputListener &&
-          sceneryLog.InputListener(
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.InputListener(
             `DownUpListener (pointer) up for ${this.downTrail.toString()}`
           );
-        sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.push();
 
         window.assert && window.assert(event.pointer === this.pointer);
         if (
@@ -88,36 +96,46 @@ class DownUpListener extends PhetioObject {
           this.buttonUp(event);
         }
 
-        sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.pop();
       },
 
       // interruption of this Pointer listener
       interrupt: () => {
-        sceneryLog &&
-          sceneryLog.InputListener &&
-          sceneryLog.InputListener(
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.InputListener(
             `DownUpListener (pointer) interrupt for ${this.downTrail.toString()}`
           );
-        sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.push();
 
         this.interrupt();
 
-        sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.pop();
       },
 
       // touch cancel
       cancel: (event) => {
-        sceneryLog &&
-          sceneryLog.InputListener &&
-          sceneryLog.InputListener(
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.InputListener(
             `DownUpListener (pointer) cancel for ${this.downTrail.toString()}`
           );
-        sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.push();
 
         window.assert && window.assert(event.pointer === this.pointer);
         this.buttonUp(event);
 
-        sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.pop();
       }
     };
   }
@@ -141,10 +159,12 @@ class DownUpListener extends PhetioObject {
       return;
     }
 
-    sceneryLog &&
-      sceneryLog.InputListener &&
-      sceneryLog.InputListener('DownUpListener buttonDown');
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.InputListener &&
+      window.sceneryLog.InputListener('DownUpListener buttonDown');
+    window.sceneryLog &&
+      window.sceneryLog.InputListener &&
+      window.sceneryLog.push();
 
     // add our listener so we catch the up wherever we are
     event.pointer.addInputListener(this.downListener);
@@ -158,7 +178,9 @@ class DownUpListener extends PhetioObject {
       this.options.down(event, this.downTrail);
     }
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.InputListener &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -167,10 +189,12 @@ class DownUpListener extends PhetioObject {
    * @param {SceneryEvent} event
    */
   buttonUp(event) {
-    sceneryLog &&
-      sceneryLog.InputListener &&
-      sceneryLog.InputListener('DownUpListener buttonUp');
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.InputListener &&
+      window.sceneryLog.InputListener('DownUpListener buttonUp');
+    window.sceneryLog &&
+      window.sceneryLog.InputListener &&
+      window.sceneryLog.push();
 
     this.isDown = false;
     this.pointer.removeInputListener(this.downListener);
@@ -197,7 +221,9 @@ class DownUpListener extends PhetioObject {
     }
     event.currentTarget = currentTargetSave; // be polite to other listeners, restore currentTarget
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.InputListener &&
+      window.sceneryLog.pop();
   }
 
   /* ---------------------------------------------------------------------------*
@@ -220,10 +246,12 @@ class DownUpListener extends PhetioObject {
    */
   interrupt() {
     if (this.isDown) {
-      sceneryLog &&
-        sceneryLog.InputListener &&
-        sceneryLog.InputListener('DownUpListener interrupt');
-      sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.InputListener &&
+        window.sceneryLog.InputListener('DownUpListener interrupt');
+      window.sceneryLog &&
+        window.sceneryLog.InputListener &&
+        window.sceneryLog.push();
 
       this.interrupted = true;
 
@@ -242,7 +270,9 @@ class DownUpListener extends PhetioObject {
 
       this.interrupted = false;
 
-      sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.InputListener &&
+        window.sceneryLog.pop();
     }
   }
 }

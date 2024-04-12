@@ -180,7 +180,7 @@ Renderer.createSelfDrawable = function (
   if (window.assert) {
     _.each(node.drawableMarkFlags, (flag) => {
       const methodName = `markDirty${flag[0].toUpperCase()}${flag.slice(1)}`;
-      assert(
+      window.assert(
         typeof drawable[methodName] === 'function',
         `Did not find ${methodName}`
       );

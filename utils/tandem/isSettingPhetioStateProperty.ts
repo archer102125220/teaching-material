@@ -9,6 +9,8 @@
 import tandemNamespace from '@/utils/tandem/tandemNamespace';
 import TinyProperty from '@/utils/axon/TinyProperty';
 
+console.log('tandem/isSettingPhetioStateProperty.ts');
+
 const isSettingPhetioStateProperty = new TinyProperty(false);
 
 tandemNamespace.register('isSettingPhetioStateProperty', isSettingPhetioStateProperty);

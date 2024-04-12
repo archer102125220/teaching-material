@@ -156,12 +156,12 @@ export default class Slider extends Sizable(AccessibleSlider(Node, 0)) {
     providedOptions?: SliderOptions) {
 
     // Guard against mutually exclusive options before defaults are filled in.
-    assert && assertMutuallyExclusiveOptions(providedOptions, ['thumbNode'], [
+    window.assert && assertMutuallyExclusiveOptions(providedOptions, ['thumbNode'], [
       'thumbSize', 'thumbFill', 'thumbFillHighlighted', 'thumbStroke', 'thumbLineWidth', 'thumbCenterLineStroke',
       'thumbTouchAreaXDilation', 'thumbTouchAreaYDilation', 'thumbMouseAreaXDilation', 'thumbMouseAreaYDilation'
     ]);
 
-    assert && assertMutuallyExclusiveOptions(providedOptions, ['trackNode'], [
+    window.assert && assertMutuallyExclusiveOptions(providedOptions, ['trackNode'], [
       'trackSize', 'trackFillEnabled', 'trackFillDisabled', 'trackStroke', 'trackLineWidth', 'trackCornerRadius']);
 
     const options = optionize<SliderOptions, SelfOptions, OptionalParentOptions>()({
@@ -497,7 +497,7 @@ export default class Slider extends Sizable(AccessibleSlider(Node, 0)) {
     // pdom - custom focus highlight that surrounds and moves with the thumb
     this.focusHighlight = new HighlightFromNode(thumb);
 
-    assert && Tandem.VALIDATION && assert(!options.phetioLinkedProperty || options.phetioLinkedProperty.isPhetioInstrumented(),
+    window.assert && Tandem.VALIDATION && window.assert(!options.phetioLinkedProperty || options.phetioLinkedProperty.isPhetioInstrumented(),
       'If provided, phetioLinkedProperty should be PhET-iO instrumented');
 
     // Must happen after instrumentation (in super call)
@@ -517,7 +517,7 @@ export default class Slider extends Sizable(AccessibleSlider(Node, 0)) {
     this.mutate(boundsRequiredOptionKeys);
 
     // support for binder documentation, stripped out in builds and only runs when ?binder is specified
-    assert && phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL('sun', 'Slider', this);
+    window.assert && window.phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL('sun', 'Slider', this);
   }
 
   public get majorTicksVisible(): boolean { return this.getMajorTicksVisible(); }

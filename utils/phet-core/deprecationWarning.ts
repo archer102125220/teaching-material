@@ -8,13 +8,15 @@
 
 import phetCore from '@/utils/phet-core/phetCore';
 
+console.log('phet-core/deprecationWarning.ts');
+
 // contains all messages printed for deprecation warnings so that we do not print the same message multiple times
 const deprecatedMessages: Record<string, true> = {};
 
 const deprecationWarning = (message: string,
   showDeprecationWarnings: boolean = window.phet && window.phet.chipper &&
     window.phet.chipper.queryParameters &&
-    phet.chipper.queryParameters.deprecationWarnings): void => {
+    window.phet.chipper.queryParameters.deprecationWarnings): void => {
   if (showDeprecationWarnings && !deprecatedMessages.hasOwnProperty(message)) {
     deprecatedMessages[message] = true;
     console.warn(`Deprecation warning: ${message}`);

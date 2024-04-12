@@ -76,6 +76,8 @@ import { type Locale } from '@/i18n/joist/localeProperty';
 import isSettingPhetioStateProperty from '@/utils/tandem/isSettingPhetioStateProperty';
 import StringIO from '@/utils/tandem/types/StringIO';
 
+console.log('joist/Sim.ts');
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const $ = require('@/utils/sherpa/lib/jquery-2.1.0');
 
@@ -84,16 +86,16 @@ const PROGRESS_BAR_WIDTH = 273;
 const SUPPORTS_GESTURE_DESCRIPTION = platform.android || platform.mobileSafari;
 
 // globals
-phet.joist.elapsedTime = 0; // in milliseconds, use this in Tween.start for replicable playbacks
+window.phet.joist.elapsedTime = 0; // in milliseconds, use this in Tween.start for replicable playbacks
 
 // When the simulation is going to be used to play back a recorded session, the simulation must be put into a special
 // mode in which it will only update the model + view based on the playback clock events rather than the system clock.
 // This must be set before the simulation is launched in order to ensure that no errant stepSimulation steps are called
 // before the playback events begin.  This value is overridden for playback by PhetioEngineIO.
 // (phet-io)
-phet.joist.playbackModeEnabledProperty = new BooleanProperty(phet.chipper.queryParameters.playbackMode);
+window.phet.joist.playbackModeEnabledProperty = new BooleanProperty(window.phet.chipper.queryParameters.playbackMode);
 
-window.assert && window.assert(typeof phet.chipper.brand === 'string', 'phet.chipper.brand is required to run a sim');
+window.assert && window.assert(typeof window.phet.chipper.brand === 'string', 'phet.chipper.brand is required to run a sim');
 
 type SelfOptions = {
 
@@ -211,7 +213,7 @@ export default class Sim extends PhetioObject {
   private resizePending = true;
 
   // Make our locale available
-  public readonly locale: Locale = phet.chipper.locale || 'en';
+  public readonly locale: Locale = window.phet.chipper.locale || 'en';
 
   // create this only after all other members have been set on Sim
   private readonly simInfo: SimInfo;
@@ -258,6 +260,7 @@ export default class Sim extends PhetioObject {
    * @param [providedOptions] - see below for options
    */
   public constructor(simNameProperty: TReadOnlyProperty<string>, allSimScreens: AnyScreen[], providedOptions?: SimOptions, displayOptions?: { container: HTMLElement | Element | null }) {
+    console.log('Sim.constructor');
 
     window.phetSplashScreenDownloadComplete();
 
@@ -308,11 +311,11 @@ export default class Sim extends PhetioObject {
 
     // playbackModeEnabledProperty cannot be changed after Sim construction has begun, hence this listener is added before
     // anything else is done, see https://github.com/phetsims/phet-io/issues/1146
-    phet.joist.playbackModeEnabledProperty.lazyLink(() => {
+    window.phet.joist.playbackModeEnabledProperty.lazyLink(() => {
       throw new Error('playbackModeEnabledProperty cannot be changed after Sim construction has begun');
     });
 
-    assert && this.isConstructionCompleteProperty.lazyLink(isConstructionComplete => {
+    window.assert && this.isConstructionCompleteProperty.lazyLink(isConstructionComplete => {
       window.assert && window.assert(isConstructionComplete, 'Sim construction should never uncomplete');
     });
 
@@ -403,7 +406,7 @@ export default class Sim extends PhetioObject {
       this.frameCounter++;
 
       // Apply time scale effects here before usage
-      dt *= phet.chipper.queryParameters.speed;
+      dt *= window.phet.chipper.queryParameters.speed;
 
       if (this.resizePending) {
         this.resizeToWindow();
@@ -418,7 +421,7 @@ export default class Sim extends PhetioObject {
 
       // TODO: we are /1000 just to *1000?  Seems wasteful and like opportunity for error. See https://github.com/phetsims/joist/issues/387
       // Store the elapsed time in milliseconds for usage by Tween clients
-      phet.joist.elapsedTime += dt * 1000;
+      window.phet.joist.elapsedTime += dt * 1000;
 
       // timer step before model/view steps, see https://github.com/phetsims/joist/issues/401
       // Note that this is vital to support Interactive Description and the utterance queue.
@@ -434,7 +437,7 @@ export default class Sim extends PhetioObject {
       // See https://github.com/phetsims/joist/issues/401.
       // TODO https://github.com/phetsims/joist/issues/404 run TWEENs for the selected screen only
       if (window.TWEEN) {
-        window.TWEEN.update(phet.joist.elapsedTime);
+        window.TWEEN.update(window.phet.joist.elapsedTime);
       }
 
       this.display.step(dt);
@@ -444,11 +447,11 @@ export default class Sim extends PhetioObject {
       screen.view.step(dt);
 
       // Do not update the display while PhET-iO is customizing, or it could show the sim before it is fully ready for display.
-      if (!(Tandem.PHET_IO_ENABLED && !phet.phetio.phetioEngine.isReadyForDisplay)) {
+      if (!(Tandem.PHET_IO_ENABLED && !window.phet.phetio.phetioEngine.isReadyForDisplay)) {
         this.display.updateDisplay();
       }
 
-      if (phet.chipper.queryParameters.memoryLimit) {
+      if (window.phet.chipper.queryParameters.memoryLimit) {
         this.memoryMonitor.measure();
       }
       this.frameEndedEmitter.emit();
@@ -468,11 +471,11 @@ export default class Sim extends PhetioObject {
 
     const screenData = selectScreens(
       allSimScreens,
-      phet.chipper.queryParameters.homeScreen,
+      window.phet.chipper.queryParameters.homeScreen,
       QueryStringMachine.containsKey('homeScreen'),
-      phet.chipper.queryParameters.initialScreen,
+      window.phet.chipper.queryParameters.initialScreen,
       QueryStringMachine.containsKey('initialScreen'),
-      phet.chipper.queryParameters.screens,
+      window.phet.chipper.queryParameters.screens,
       QueryStringMachine.containsKey('screens'),
       selectedSimScreens => {
         const possibleScreenIndices = selectedSimScreens.map(screen => {
@@ -596,7 +599,7 @@ export default class Sim extends PhetioObject {
     window.assert && window.assert(window.phet.joist.launchCalled, 'Sim must be launched using simLauncher, ' +
       'see https://github.com/phetsims/joist/issues/142');
 
-    this.supportsGestureDescription = phet.chipper.queryParameters.supportsInteractiveDescription && SUPPORTS_GESTURE_DESCRIPTION;
+    this.supportsGestureDescription = window.phet.chipper.queryParameters.supportsInteractiveDescription && SUPPORTS_GESTURE_DESCRIPTION;
     this.hasKeyboardHelpContent = _.some(this.simScreens, simScreen => !!simScreen.createKeyboardHelpNode);
 
     window.assert && window.assert(!window.phet.joist.sim, 'Only supports one sim at a time');
@@ -647,7 +650,7 @@ export default class Sim extends PhetioObject {
 
     Helper.initialize(this, this.display);
 
-    Multilink.multilink([this.activeProperty, phet.joist.playbackModeEnabledProperty], (active, playbackModeEnabled: boolean) => {
+    Multilink.multilink([this.activeProperty, window.phet.joist.playbackModeEnabledProperty], (active, playbackModeEnabled: boolean) => {
 
       // If in playbackMode is enabled, then the display must be interactive to support PDOM event listeners during
       // playback (which often come directly from sim code and not from user input).
@@ -688,8 +691,8 @@ export default class Sim extends PhetioObject {
 
     this.simInfo = new SimInfo(this);
 
-    // Set up PhET-iO, must be done after phet.joist.sim is assigned
-    Tandem.PHET_IO_ENABLED && phet.phetio.phetioEngine.onSimConstructionStarted(
+    // Set up PhET-iO, must be done after window.phet.joist.sim is assigned
+    Tandem.PHET_IO_ENABLED && window.phet.phetio.phetioEngine.onSimConstructionStarted(
       this.simInfo,
       this.isConstructionCompleteProperty,
       this.frameEndedEmitter,
@@ -705,9 +708,9 @@ export default class Sim extends PhetioObject {
     this.boundRunAnimationLoop = this.runAnimationLoop.bind(this);
 
     // Third party support
-    phet.chipper.queryParameters.legendsOfLearning && new LegendsOfLearningSupport(this).start();
+    window.phet.chipper.queryParameters.legendsOfLearning && new LegendsOfLearningSupport(this).start();
 
-    assert && this.auditScreenNameKeys();
+    window.assert && this.auditScreenNameKeys();
   }
 
   /**
@@ -728,7 +731,7 @@ export default class Sim extends PhetioObject {
     voicingUtteranceQueue.clear();
 
     // Update the display asynchronously since it can trigger events on pointer validation, see https://github.com/phetsims/ph-scale/issues/212
-    animationFrameTimer.runOnNextTick(() => phet.joist.display.updateDisplay());
+    animationFrameTimer.runOnNextTick(() => window.phet.joist.display.updateDisplay());
   }
 
   private finishInit(screens: AnyScreen[]): void {
@@ -785,7 +788,7 @@ export default class Sim extends PhetioObject {
 
       // Don't resize on window size changes if we are playing back input events.
       // See https://github.com/phetsims/joist/issues/37
-      if (!phet.joist.playbackModeEnabledProperty.value) {
+      if (!window.phet.joist.playbackModeEnabledProperty.value) {
         this.resizePending = true;
       }
     };
@@ -933,7 +936,7 @@ export default class Sim extends PhetioObject {
               // Option for profiling
               // if true, prints screen initialization time (total, model, view) to the console and displays
               // profiling information on the screen
-              if (phet.chipper.queryParameters.profiler) {
+              if (window.phet.chipper.queryParameters.profiler) {
                 Profiler.start(this);
               }
 
@@ -951,7 +954,7 @@ export default class Sim extends PhetioObject {
               // If the sim is in playback mode, then flush the timer's listeners. This makes sure that anything kicked
               // to the next frame with `timer.runOnNextTick` during startup (like every notification about a PhET-iO
               // instrumented element in phetioEngine.phetioObjectAdded()) can clear out before beginning playback.
-              if (phet.joist.playbackModeEnabledProperty.value) {
+              if (window.phet.joist.playbackModeEnabledProperty.value) {
                 let beforeCounts = null;
                 if (window.assert) {
                   beforeCounts = Array.from(Random.allRandomInstances).map(n => n.numberOfCalls);
@@ -969,19 +972,19 @@ export default class Sim extends PhetioObject {
               // After the application is ready to go, remove the splash screen and progress bar.  Note the splash
               // screen is removed after one step(), so the rendering is ready to go when the progress bar is hidden.
               // no-op otherwise and will be disposed by phetioEngine.
-              if (!Tandem.PHET_IO_ENABLED || phet.preloads.phetio.queryParameters.phetioStandalone) {
+              if (!Tandem.PHET_IO_ENABLED || window.phet.preloads.phetio.queryParameters.phetioStandalone) {
                 window.phetSplashScreen.dispose();
               }
               // Sanity check that there is no phetio object in phet brand, see https://github.com/phetsims/phet-io/issues/1229
-              phet.chipper.brand === 'phet' && window.assert && window.assert(!Tandem.PHET_IO_ENABLED, 'window.phet.preloads.phetio should not exist for phet brand');
+              window.phet.chipper.brand === 'phet' && window.assert && window.assert(!Tandem.PHET_IO_ENABLED, 'window.phet.preloads.phetio should not exist for phet brand');
 
               // Communicate sim load (successfully) to CT or other listening parent frames
-              if (phet.chipper.queryParameters.continuousTest) {
-                phet.chipper.reportContinuousTestResult({
+              if (window.phet.chipper.queryParameters.continuousTest) {
+                window.phet.chipper.reportContinuousTestResult({
                   type: 'continuous-test-load'
                 });
               }
-              if (phet.chipper.queryParameters.postMessageOnLoad) {
+              if (window.phet.chipper.queryParameters.postMessageOnLoad) {
                 window.parent && window.parent.postMessage(JSON.stringify({
                   type: 'load',
                   url: window.location.href
@@ -1007,7 +1010,7 @@ export default class Sim extends PhetioObject {
 
     // Only run animation frames for an active sim. If in playbackMode, playback logic will handle animation frame
     // stepping manually.
-    if (this.activeProperty.value && !phet.joist.playbackModeEnabledProperty.value) {
+    if (this.activeProperty.value && !window.phet.joist.playbackModeEnabledProperty.value) {
 
       // Handle Input fuzzing before stepping the sim because input events occur outside of sim steps, but not before the
       // first sim step (to prevent issues like https://github.com/phetsims/equality-explorer/issues/161).
@@ -1024,7 +1027,7 @@ export default class Sim extends PhetioObject {
     if (Tandem.PHET_IO_ENABLED) {
 
       // PhET-iO batches messages to be sent to other frames, messages must be sent whether the sim is active or not
-      phet.phetio.phetioCommandProcessor.onAnimationLoop(this);
+      window.phet.phetio.phetioCommandProcessor.onAnimationLoop(this);
     }
   }
 
@@ -1091,7 +1094,7 @@ export default class Sim extends PhetioObject {
   }
 
   /**
-   * Checks for whether multi-screen sims have screen names that are in phet.screenNameKeys within package.json,
+   * Checks for whether multi-screen sims have screen names that are in window.phet.screenNameKeys within package.json,
    * see https://github.com/phetsims/chipper/issues/1367
    */
   private auditScreenNameKeys(): void {

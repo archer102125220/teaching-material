@@ -1,7 +1,7 @@
 // Copyright 2014-2023, University of Colorado Boulder
 
 /**
- * Minus sign, created using phet.scenery.Rectangle because scenery.Text("-") looks awful on Windows and cannot be accurately
+ * Minus sign, created using window.phet.scenery.Rectangle because scenery.Text("-") looks awful on Windows and cannot be accurately
  * centered. The origin is at the upper left.
  *
  * @author Chris Malley (PixelZoom, Inc.)

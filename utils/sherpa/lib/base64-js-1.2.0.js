@@ -129,6 +129,12 @@ export function fromByteArray(uint8) {
   return parts.join('');
 }
 
+if (typeof window === 'object') {
+  window.byteLength = byteLength;
+  window.toByteArray = toByteArray;
+  window.fromByteArray = fromByteArray;
+}
+
 export default {
   placeHoldersCount,
   byteLength,

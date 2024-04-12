@@ -214,8 +214,8 @@ GOQueryParameters.SCHEMA_MAP = SCHEMA_MAP;
 geometricOptics.register('GOQueryParameters', GOQueryParameters);
 
 // Log query parameters
-logGlobal('phet.chipper.queryParameters');
-logGlobal('phet.preloads.phetio.queryParameters');
-logGlobal('phet.geometricOptics.GOQueryParameters');
+logGlobal('window.phet.chipper.queryParameters');
+logGlobal('window.phet.preloads.phetio.queryParameters');
+logGlobal('window.phet.geometricOptics.GOQueryParameters');
 
 export default GOQueryParameters;

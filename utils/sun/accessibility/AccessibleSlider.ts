@@ -59,7 +59,7 @@ const AccessibleSlider = <SuperType extends Constructor<Node>>(Type: SuperType, 
 
       const providedOptions = args[optionsArgPosition] as AccessibleSliderOptions;
 
-      assert && providedOptions && assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
+      window.assert && providedOptions && window.assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
         'Extra prototype on AccessibleSlider options object is a code smell (or probably a bug)');
 
       // AccessibleSlider uses 'drag' terminology rather than 'change' for consistency with Slider

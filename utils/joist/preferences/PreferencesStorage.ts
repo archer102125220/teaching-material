@@ -60,7 +60,7 @@ class PreferencesStorage {
   }
 
   public static register(property: TProperty<unknown>, name: string): TProperty<unknown> {
-    if (!phet.chipper.queryParameters.preferencesStorage) {
+    if (!window.phet.chipper.queryParameters.preferencesStorage) {
       return property;
     }
 

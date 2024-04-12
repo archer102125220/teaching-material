@@ -25,6 +25,8 @@ import { combineOptions } from '@/utils/phet-core/optionize';
 import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 import phetioElementSelectionProperty from '@/utils/tandem/phetioElementSelectionProperty';
 
+console.log('scenery/nodes/Text.ts');
+
 const STRING_PROPERTY_NAME = 'stringProperty';
 
 // constants
@@ -90,6 +92,8 @@ export default class Text extends Paintable(Node) {
    *                             along-side options for Node
    */
   public constructor(string: string | number | TReadOnlyProperty<string>, options?: TextOptions) {
+    // console.log('Text.constructor');
+    // console.trace();
     window.assert && window.assert(options === undefined || Object.getPrototypeOf(options) === Object.prototype,
       'Extra prototype on Node options object is a code smell');
 
@@ -101,6 +105,9 @@ export default class Text extends Paintable(Node) {
     this._boundsMethod = 'hybrid';
     this._isHTML = false; // TODO: clean this up https://github.com/phetsims/scenery/issues/1581
     this._cachedRenderedText = null;
+
+    this._mutatorKeys = [...PAINTABLE_OPTION_KEYS, ...TEXT_OPTION_KEYS, ...Node.prototype._mutatorKeys];
+    this.drawableMarkFlags = [...Node.prototype.drawableMarkFlags, ...PAINTABLE_DRAWABLE_MARK_FLAGS, 'text', 'font', 'bounds'];
 
     const definedOptions = extendDefined<TextOptions>({
       fill: '#000000', // Default to black filled string
@@ -127,8 +134,9 @@ export default class Text extends Paintable(Node) {
   }
 
   public override mutate(options?: TextOptions): this {
+    // console.log('Text.mutate');
 
-    if (assert && options && options.hasOwnProperty('string') && options.hasOwnProperty(STRING_PROPERTY_NAME)) {
+    if (window.assert && options && options.hasOwnProperty('string') && options.hasOwnProperty(STRING_PROPERTY_NAME)) {
       window.assert && window.assert(options.stringProperty!.value === options.string, 'If both string and stringProperty are provided, then values should match');
     }
     return super.mutate(options);

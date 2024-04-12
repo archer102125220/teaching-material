@@ -132,9 +132,9 @@ class CanvasBlock extends FittedBlock {
     this.clipDirtyListener = this.markDirty.bind(this);
     this.opacityDirtyListener = this.markDirty.bind(this);
 
-    sceneryLog &&
-      sceneryLog.CanvasBlock &&
-      sceneryLog.CanvasBlock(`initialized #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.CanvasBlock(`initialized #${this.id}`);
     // TODO: dirty list of nodes (each should go dirty only once, easier than scanning all?) https://github.com/phetsims/scenery/issues/1581
   }
 
@@ -184,10 +184,12 @@ class CanvasBlock extends FittedBlock {
       return false;
     }
 
-    sceneryLog &&
-      sceneryLog.CanvasBlock &&
-      sceneryLog.CanvasBlock(`update #${this.id}`);
-    sceneryLog && sceneryLog.CanvasBlock && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.CanvasBlock(`update #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.push();
 
     while (this.dirtyDrawables.length) {
       this.dirtyDrawables.pop().update();
@@ -220,13 +222,15 @@ class CanvasBlock extends FittedBlock {
       this.walkDown(this.currentDrawable.instance.trail, 0);
     }
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.clipCount === 0,
         'clipCount should be zero after walking back down'
       );
 
-    sceneryLog && sceneryLog.CanvasBlock && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.pop();
 
     return true;
   }
@@ -243,12 +247,14 @@ class CanvasBlock extends FittedBlock {
    */
   applyClip(drawable) {
     this.clipDirty = false;
-    sceneryLog &&
-      sceneryLog.CanvasBlock &&
-      sceneryLog.CanvasBlock(
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.CanvasBlock(
         `Apply clip ${drawable.instance.trail.toDebugString()}`
       );
-    sceneryLog && sceneryLog.CanvasBlock && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.push();
 
     const wrapper = this.wrapperStack[this.wrapperStackIndex];
     const context = wrapper.context;
@@ -296,7 +302,9 @@ class CanvasBlock extends FittedBlock {
       }
     }
 
-    sceneryLog && sceneryLog.CanvasBlock && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -346,9 +354,9 @@ class CanvasBlock extends FittedBlock {
       const node = trail.nodes[i];
 
       if (node.hasClipArea()) {
-        sceneryLog &&
-          sceneryLog.CanvasBlock &&
-          sceneryLog.CanvasBlock(
+        window.sceneryLog &&
+          window.sceneryLog.CanvasBlock &&
+          window.sceneryLog.CanvasBlock(
             `Pop clip ${trail.subtrailTo(node).toDebugString()}`
           );
         // Pop clip
@@ -359,9 +367,9 @@ class CanvasBlock extends FittedBlock {
       // We should not apply opacity or other filters at or below the filter root
       if (i > filterRootIndex) {
         if (node._filters.length) {
-          sceneryLog &&
-            sceneryLog.CanvasBlock &&
-            sceneryLog.CanvasBlock(
+          window.sceneryLog &&
+            window.sceneryLog.CanvasBlock &&
+            window.sceneryLog.CanvasBlock(
               `Pop filters ${trail.subtrailTo(node).toDebugString()}`
             );
 
@@ -402,9 +410,9 @@ class CanvasBlock extends FittedBlock {
         }
 
         if (node.getEffectiveOpacity() !== 1) {
-          sceneryLog &&
-            sceneryLog.CanvasBlock &&
-            sceneryLog.CanvasBlock(
+          window.sceneryLog &&
+            window.sceneryLog.CanvasBlock &&
+            window.sceneryLog.CanvasBlock(
               `Pop opacity ${trail.subtrailTo(node).toDebugString()}`
             );
           // Pop opacity
@@ -438,9 +446,9 @@ class CanvasBlock extends FittedBlock {
       // We should not apply opacity at or below the filter root
       if (i > filterRootIndex) {
         if (node.getEffectiveOpacity() !== 1) {
-          sceneryLog &&
-            sceneryLog.CanvasBlock &&
-            sceneryLog.CanvasBlock(
+          window.sceneryLog &&
+            window.sceneryLog.CanvasBlock &&
+            window.sceneryLog.CanvasBlock(
               `Push opacity ${trail.subtrailTo(node).toDebugString()}`
             );
 
@@ -449,9 +457,9 @@ class CanvasBlock extends FittedBlock {
         }
 
         if (node._filters.length) {
-          sceneryLog &&
-            sceneryLog.CanvasBlock &&
-            sceneryLog.CanvasBlock(
+          window.sceneryLog &&
+            window.sceneryLog.CanvasBlock &&
+            window.sceneryLog.CanvasBlock(
               `Push filters ${trail.subtrailTo(node).toDebugString()}`
             );
 
@@ -461,9 +469,9 @@ class CanvasBlock extends FittedBlock {
       }
 
       if (node.hasClipArea()) {
-        sceneryLog &&
-          sceneryLog.CanvasBlock &&
-          sceneryLog.CanvasBlock(
+        window.sceneryLog &&
+          window.sceneryLog.CanvasBlock &&
+          window.sceneryLog.CanvasBlock(
             `Push clip ${trail.subtrailTo(node).toDebugString()}`
           );
         // Push clip
@@ -493,12 +501,14 @@ class CanvasBlock extends FittedBlock {
       return;
     }
 
-    sceneryLog &&
-      sceneryLog.CanvasBlock &&
-      sceneryLog.CanvasBlock(
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.CanvasBlock(
         `renderDrawable #${drawable.id} ${drawable.instance.trail.toDebugString()}`
       );
-    sceneryLog && sceneryLog.CanvasBlock && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.push();
 
     // For opacity/clip, walk up/down as necessary (Can only walk down if we are not the first drawable)
     const branchIndex = this.currentDrawable
@@ -519,8 +529,10 @@ class CanvasBlock extends FittedBlock {
     }
 
     // we're directly accessing the relative transform below, so we need to ensure that it is up-to-date
-    assert &&
-      assert(drawable.instance.relativeTransform.isValidationNotNeeded());
+    window.assert &&
+      window.assert(
+        drawable.instance.relativeTransform.isValidationNotNeeded()
+      );
 
     const matrix = drawable.instance.relativeTransform.matrix;
 
@@ -548,7 +560,9 @@ class CanvasBlock extends FittedBlock {
 
     this.currentDrawable = drawable;
 
-    sceneryLog && sceneryLog.CanvasBlock && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -556,9 +570,9 @@ class CanvasBlock extends FittedBlock {
    * @public
    */
   dispose() {
-    sceneryLog &&
-      sceneryLog.CanvasBlock &&
-      sceneryLog.CanvasBlock(`dispose #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.CanvasBlock(`dispose #${this.id}`);
 
     // clear references
     this.transformRootInstance = null;
@@ -577,9 +591,9 @@ class CanvasBlock extends FittedBlock {
    * @param {Drawable} drawable
    */
   markDirtyDrawable(drawable) {
-    sceneryLog &&
-      sceneryLog.dirty &&
-      sceneryLog.dirty(
+    window.sceneryLog &&
+      window.sceneryLog.dirty &&
+      window.sceneryLog.dirty(
         `markDirtyDrawable on CanvasBlock#${this.id} with ${drawable.toString()}`
       );
 
@@ -602,9 +616,11 @@ class CanvasBlock extends FittedBlock {
    * @param {Drawable} drawable
    */
   addDrawable(drawable) {
-    sceneryLog &&
-      sceneryLog.CanvasBlock &&
-      sceneryLog.CanvasBlock(`#${this.id}.addDrawable ${drawable.toString()}`);
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.CanvasBlock(
+        `#${this.id}.addDrawable ${drawable.toString()}`
+      );
 
     super.addDrawable(drawable);
 
@@ -635,9 +651,9 @@ class CanvasBlock extends FittedBlock {
    * @param {Drawable} drawable
    */
   removeDrawable(drawable) {
-    sceneryLog &&
-      sceneryLog.CanvasBlock &&
-      sceneryLog.CanvasBlock(
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.CanvasBlock(
         `#${this.id}.removeDrawable ${drawable.toString()}`
       );
 
@@ -669,9 +685,9 @@ class CanvasBlock extends FittedBlock {
    * @param {Drawable} lastDrawable
    */
   onIntervalChange(firstDrawable, lastDrawable) {
-    sceneryLog &&
-      sceneryLog.CanvasBlock &&
-      sceneryLog.CanvasBlock(
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.CanvasBlock(
         `#${this.id}.onIntervalChange ${firstDrawable.toString()} to ${lastDrawable.toString()}`
       );
 
@@ -689,12 +705,14 @@ class CanvasBlock extends FittedBlock {
    * @param {Drawable} drawable
    */
   onPotentiallyMovedDrawable(drawable) {
-    sceneryLog &&
-      sceneryLog.CanvasBlock &&
-      sceneryLog.CanvasBlock(
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.CanvasBlock(
         `#${this.id}.onPotentiallyMovedDrawable ${drawable.toString()}`
       );
-    sceneryLog && sceneryLog.CanvasBlock && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.push();
 
     window.assert && window.assert(drawable.parentDrawable === this);
 
@@ -703,7 +721,9 @@ class CanvasBlock extends FittedBlock {
     // a harder problem.
     drawable.markDirty();
 
-    sceneryLog && sceneryLog.CanvasBlock && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.CanvasBlock &&
+      window.sceneryLog.pop();
   }
 
   /**

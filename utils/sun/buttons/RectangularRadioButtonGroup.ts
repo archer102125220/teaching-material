@@ -335,7 +335,7 @@ export default class RectangularRadioButtonGroup<T> extends FlowBox {
     };
 
     // pdom - register component for binder docs
-    assert && phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL('sun', 'RectangularRadioButtonGroup', this);
+    window.assert && phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL('sun', 'RectangularRadioButtonGroup', this);
   }
 
   /**

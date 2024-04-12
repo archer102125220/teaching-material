@@ -24,7 +24,7 @@ class SimpleDragHandler extends PhetioObject {
    * @param {Object} [options]
    */
   constructor(options) {
-    assert &&
+    window.assert &&
       deprecationWarning(
         'SimpleDragHandler is deprecated, please use DragListener instead'
       );
@@ -117,10 +117,12 @@ class SimpleDragHandler extends PhetioObject {
           return;
         }
 
-        sceneryLog &&
-          sceneryLog.InputListener &&
-          sceneryLog.InputListener('SimpleDragHandler startDrag');
-        sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.InputListener('SimpleDragHandler startDrag');
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.push();
 
         // set a flag on the pointer so it won't pick up other nodes
         if (this._attach) {
@@ -151,7 +153,9 @@ class SimpleDragHandler extends PhetioObject {
           this.options.start.call(null, event, this.trail);
         }
 
-        sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.pop();
       },
       {
         tandem: options.tandem.createTandem('dragStartAction'),
@@ -188,15 +192,20 @@ class SimpleDragHandler extends PhetioObject {
 
         const delta = this.transform.inverseDelta2(globalDelta);
 
-        assert &&
-          assert(event.pointer === this.pointer, 'Wrong pointer in move');
+        window.assert &&
+          window.assert(
+            event.pointer === this.pointer,
+            'Wrong pointer in move'
+          );
 
-        sceneryLog &&
-          sceneryLog.InputListener &&
-          sceneryLog.InputListener(
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.InputListener(
             `SimpleDragHandler (pointer) move for ${this.trail.toString()}`
           );
-        sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.push();
 
         // move by the delta between the previous point, using the precomputed transform
         // prepend the translation on the node, so we can ignore whatever other transform state the node has
@@ -218,7 +227,9 @@ class SimpleDragHandler extends PhetioObject {
           event.currentTarget = saveCurrentTarget; // be polite to other listeners, restore currentTarget
         }
 
-        sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.pop();
       },
       {
         phetioHighFrequency: true,
@@ -245,10 +256,12 @@ class SimpleDragHandler extends PhetioObject {
           return;
         }
 
-        sceneryLog &&
-          sceneryLog.InputListener &&
-          sceneryLog.InputListener('SimpleDragHandler endDrag');
-        sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.InputListener('SimpleDragHandler endDrag');
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.push();
 
         if (this._attach) {
           // Only set the `dragging` flag on the pointer if we have attach:true
@@ -268,7 +281,9 @@ class SimpleDragHandler extends PhetioObject {
         // release our reference
         this.pointer = null;
 
-        sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.pop();
       },
       {
         tandem: options.tandem.createTandem('dragEndAction'),
@@ -322,14 +337,17 @@ class SimpleDragHandler extends PhetioObject {
           return;
         }
 
-        sceneryLog &&
-          sceneryLog.InputListener &&
-          sceneryLog.InputListener(
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.InputListener(
             `SimpleDragHandler (pointer) up for ${this.trail.toString()}`
           );
-        sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.push();
 
-        window.assert && window.assert(event.pointer === this.pointer, 'Wrong pointer in up');
+        window.assert &&
+          window.assert(event.pointer === this.pointer, 'Wrong pointer in up');
         if (
           !(event.pointer instanceof Mouse) ||
           event.domEvent.button === this.mouseButton
@@ -340,7 +358,9 @@ class SimpleDragHandler extends PhetioObject {
           event.currentTarget = saveCurrentTarget; // be polite to other listeners, restore currentTarget
         }
 
-        sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.pop();
       },
 
       // touch cancel
@@ -349,15 +369,20 @@ class SimpleDragHandler extends PhetioObject {
           return;
         }
 
-        sceneryLog &&
-          sceneryLog.InputListener &&
-          sceneryLog.InputListener(
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.InputListener(
             `SimpleDragHandler (pointer) cancel for ${this.trail.toString()}`
           );
-        sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.push();
 
-        assert &&
-          assert(event.pointer === this.pointer, 'Wrong pointer in cancel');
+        window.assert &&
+          window.assert(
+            event.pointer === this.pointer,
+            'Wrong pointer in cancel'
+          );
 
         const saveCurrentTarget = event.currentTarget;
         event.currentTarget = this.node; // #66: currentTarget on a pointer is null, so set it to the node we're dragging
@@ -369,7 +394,9 @@ class SimpleDragHandler extends PhetioObject {
           this.node.setMatrix(this.startTransformMatrix);
         }
 
-        sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.InputListener &&
+          window.sceneryLog.pop();
       },
 
       // mouse/touch move
@@ -392,8 +419,8 @@ class SimpleDragHandler extends PhetioObject {
   }
 
   set dragging(d) {
-    assert &&
-      assert(false, 'illegal call to set dragging on SimpleDragHandler');
+    window.assert &&
+      window.assert(false, 'illegal call to set dragging on SimpleDragHandler');
   }
 
   /**
@@ -425,10 +452,12 @@ class SimpleDragHandler extends PhetioObject {
    */
   interrupt() {
     if (this.dragging) {
-      sceneryLog &&
-        sceneryLog.InputListener &&
-        sceneryLog.InputListener('SimpleDragHandler interrupt');
-      sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.InputListener &&
+        window.sceneryLog.InputListener('SimpleDragHandler interrupt');
+      window.sceneryLog &&
+        window.sceneryLog.InputListener &&
+        window.sceneryLog.push();
 
       this.interrupted = true;
 
@@ -444,7 +473,9 @@ class SimpleDragHandler extends PhetioObject {
 
       this.interrupted = false;
 
-      sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.InputListener &&
+        window.sceneryLog.pop();
     }
   }
 
@@ -536,10 +567,12 @@ class SimpleDragHandler extends PhetioObject {
    * @public
    */
   dispose() {
-    sceneryLog &&
-      sceneryLog.InputListener &&
-      sceneryLog.InputListener('SimpleDragHandler dispose');
-    sceneryLog && sceneryLog.InputListener && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.InputListener &&
+      window.sceneryLog.InputListener('SimpleDragHandler dispose');
+    window.sceneryLog &&
+      window.sceneryLog.InputListener &&
+      window.sceneryLog.push();
 
     if (this.dragging) {
       if (this._attach) {
@@ -559,7 +592,9 @@ class SimpleDragHandler extends PhetioObject {
 
     super.dispose();
 
-    sceneryLog && sceneryLog.InputListener && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.InputListener &&
+      window.sceneryLog.pop();
   }
 
   /**

@@ -16,13 +16,15 @@ import _ from 'lodash';
 
 import phetCore from '@/utils/phet-core/phetCore';
 
+console.log('phet-core/assertMutuallyExclusiveOptions.ts');
+
 /**
  * @param options - an options object.  Could be before or after merge, and may therefore
  *                                        - be null or undefined
  * @param sets - families of mutually exclusive option keys, see examples above.
  */
 const assertMutuallyExclusiveOptions = function (options: object | null | undefined, ...sets: string[][]): void {
-  if (assert && options) {
+  if (window.assert && options) {
 
     // Determine which options are used from each set
     const usedElementsFromEachSet = sets.map(set => Object.keys(_.pick(options, ...set)));

@@ -418,8 +418,11 @@ class Cursor {
             const switchedString = ariaChecked === 'true' ? 'On' : 'Off';
             textContent += `${labelContent + COMMA + SPACE}switch${COMMA}${SPACE}${switchedString}`;
           } else {
-            assert &&
-              assert(false, 'checkbox switch must have aria-checked attribute');
+            window.assert &&
+              window.assert(
+                false,
+                'checkbox switch must have aria-checked attribute'
+              );
           }
         } else {
           const checkedString = element.checked ? ' Checked' : ' Not Checked';

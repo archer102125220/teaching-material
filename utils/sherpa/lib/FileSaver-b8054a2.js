@@ -233,12 +233,12 @@ var saveAs = saveAs
 // while `this` is nsIContentFrameMessageManager
 // with an attribute `content` that corresponds to the window
 
-// if (typeof module !== "undefined" && module !== null) {
-//   module.exports = saveAs;
-// } else if ((typeof define !== "undefined" && define !== null) && (define.amd != null)) {
-//   define([], function() {
-//     return saveAs;
-//   });
-// }
+if (typeof module !== "undefined" && module !== null) {
+  module.exports = saveAs;
+} else if ((typeof define !== "undefined" && define !== null) && (define.amd != null)) {
+  define([], function() {
+    return saveAs;
+  });
+}
 
 export default saveAs;

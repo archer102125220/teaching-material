@@ -29,13 +29,14 @@ class FittedBlock extends Block {
     // @private {Instance}
     this.transformRootInstance = transformRootInstance;
 
-    window.assert && window.assert(typeof transformRootInstance.isDisplayRoot === 'boolean');
+    window.assert &&
+      window.assert(typeof transformRootInstance.isDisplayRoot === 'boolean');
 
     // @private {boolean}
     this.canBeFullDisplay = transformRootInstance.isDisplayRoot;
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         preferredFit === FittedBlock.FULL_DISPLAY ||
           preferredFit === FittedBlock.COMMON_ANCESTOR
       );
@@ -107,9 +108,9 @@ class FittedBlock extends Block {
    * @public
    */
   markDirtyFit() {
-    sceneryLog &&
-      sceneryLog.dirty &&
-      sceneryLog.dirty(`markDirtyFit on FittedBlock#${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.dirty &&
+      window.sceneryLog.dirty(`markDirtyFit on FittedBlock#${this.id}`);
     this.dirtyFit = true;
 
     // Make sure we are visited in the repaint phase
@@ -121,8 +122,8 @@ class FittedBlock extends Block {
    * @protected
    */
   updateFit() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.fit === FittedBlock.FULL_DISPLAY ||
           this.fit === FittedBlock.COMMON_ANCESTOR,
         'Unsupported fit'
@@ -133,9 +134,9 @@ class FittedBlock extends Block {
       return;
     }
 
-    sceneryLog &&
-      sceneryLog.FittedBlock &&
-      sceneryLog.FittedBlock(`updateFit #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.FittedBlock &&
+      window.sceneryLog.FittedBlock(`updateFit #${this.id}`);
 
     this.dirtyFit = false;
 
@@ -164,8 +165,8 @@ class FittedBlock extends Block {
 
       this.setSizeFullDisplay();
     } else if (this.fit === FittedBlock.COMMON_ANCESTOR) {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           this.commonFitInstance.trail.length >=
             this.transformRootInstance.trail.length
         );
@@ -255,9 +256,9 @@ class FittedBlock extends Block {
    * @override
    */
   dispose() {
-    sceneryLog &&
-      sceneryLog.FittedBlock &&
-      sceneryLog.FittedBlock(`dispose #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.FittedBlock &&
+      window.sceneryLog.FittedBlock(`dispose #${this.id}`);
 
     this.display.sizeProperty.unlink(this.dirtyFitListener);
 
@@ -362,8 +363,8 @@ class FittedBlock extends Block {
    * @returns {Instance}
    */
   computeCommonAncestorInstance() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.firstDrawable.instance && this.lastDrawable.instance,
         'For common-ancestor fits, we need the first and last drawables to have direct instance references'
       );
@@ -391,8 +392,8 @@ class FittedBlock extends Block {
 
     const commonFitInstance = firstInstance;
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         commonFitInstance.trail.length >=
           this.transformRootInstance.trail.length
       );
@@ -408,9 +409,9 @@ class FittedBlock extends Block {
    * @param {Drawable} lastDrawable
    */
   onIntervalChange(firstDrawable, lastDrawable) {
-    sceneryLog &&
-      sceneryLog.FittedBlock &&
-      sceneryLog.FittedBlock(
+    window.sceneryLog &&
+      window.sceneryLog.FittedBlock &&
+      window.sceneryLog.FittedBlock(
         `#${this.id}.onIntervalChange ${firstDrawable.toString()} to ${lastDrawable.toString()}`
       );
 

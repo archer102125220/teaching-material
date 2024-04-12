@@ -65,14 +65,14 @@ export default class GOToolKeyboardDragListener extends KeyboardDragListener {
     this.addHotkey({
       keys: [KeyboardUtils.KEY_ESCAPE],
       callback: () => {
-        phet.log && phet.log('hotkey ESCAPE');
+        window.phet.log && window.phet.log('hotkey ESCAPE');
         returnToToolbox();
       }
     });
     this.addHotkey({
       keys: [KeyboardUtils.KEY_J],
       callback: () => {
-        phet.log && phet.log('hotkey J');
+        window.phet.log && window.phet.log('hotkey J');
         toolNode.jumpToPoint();
       }
     });

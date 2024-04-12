@@ -13,13 +13,15 @@ import axon from '@/utils/axon/axon';
 import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 import Validation, { type IsValidValueOptions, type Validator } from '@/utils/axon/Validation';
 
+console.log('axon/validate.ts');
+
 /**
  * If assertions are enabled, assert out if the value does not adhere to the validator. No-op without assertions.
  * @deprecated - this solution is worse than a direct assertion (or otherwise call Validation.getValidationError directly)
  */
 const validate = <T>(value: IntentionalAny, validator: Validator<T>, providedOptions?: IsValidValueOptions): void => {
 
-  if (assert) {
+  if (window.assert) {
 
     // Throws an error if not valid
     const result = Validation.getValidationError(value, validator, providedOptions);

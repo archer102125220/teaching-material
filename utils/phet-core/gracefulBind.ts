@@ -12,7 +12,7 @@ import phetCore from '@/utils/phet-core/phetCore';
 
 /**
  * If the path exists on the window global, return it as a bound function, otherwise returns null
- * @param path a path to a method, dot-separated, including the method, such as 'phet.joist.sim.showPopup'
+ * @param path a path to a method, dot-separated, including the method, such as 'window.phet.joist.sim.showPopup'
  */
 const gracefulBind = (path: string): null | VoidFunction => {
   window.assert && window.assert(path.split('.').length > 1, 'path must have multiple parts');

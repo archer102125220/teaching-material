@@ -520,7 +520,7 @@ class MeasuringTapeNode extends Node {
     this.mutate(options);
 
     // support for binder documentation, stripped out in builds and only runs when ?binder is specified
-    assert && phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL('scenery-phet', 'MeasuringTapeNode', this);
+    window.assert && window.phet.chipper.queryParameters.binder && InstanceRegistry.registerDataURL('scenery-phet', 'MeasuringTapeNode', this);
   }
 
   public reset(): void {

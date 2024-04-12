@@ -27,17 +27,17 @@ export type ProjectorModeToggleSwitchOptions = SelfOptions & StrictOmit<ParentOp
 class ProjectorModeToggleSwitch extends PreferencesControl {
   public constructor(colorProfileProperty: Property<string>, providedOptions?: ProjectorModeToggleSwitchOptions) {
     window.assert && window.assert(
-      phet.chipper.colorProfiles[0] !== SceneryConstants.PROJECTOR_COLOR_PROFILE &&
-      phet.chipper.colorProfiles.includes(SceneryConstants.PROJECTOR_COLOR_PROFILE) &&
-      phet.chipper.colorProfiles.length === 2 &&
-      phet.chipper.colorProfiles[0] !== phet.chipper.colorProfiles[1],
+      window.phet.chipper.colorProfiles[0] !== SceneryConstants.PROJECTOR_COLOR_PROFILE &&
+      window.phet.chipper.colorProfiles.includes(SceneryConstants.PROJECTOR_COLOR_PROFILE) &&
+      window.phet.chipper.colorProfiles.length === 2 &&
+      window.phet.chipper.colorProfiles[0] !== window.phet.chipper.colorProfiles[1],
       'ProjectorModeToggleSwitch requires sims that support the projector color profile and one other color profile');
 
     const projectorModeLabel = new Text(JoistStrings.projectorModeStringProperty, PreferencesDialog.PANEL_SECTION_LABEL_OPTIONS);
     const projectorModeDescription = new VoicingText(JoistStrings.preferences.tabs.visual.projectorModeDescriptionStringProperty, PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS);
 
     // Identify the non-projector color profile that this checkbox sets.
-    const otherColorProfile = phet.chipper.colorProfiles.find((colorProfile: string) => colorProfile !== SceneryConstants.PROJECTOR_COLOR_PROFILE);
+    const otherColorProfile = window.phet.chipper.colorProfiles.find((colorProfile: string) => colorProfile !== SceneryConstants.PROJECTOR_COLOR_PROFILE);
     const projectorModeSwitch = new ToggleSwitch(colorProfileProperty, otherColorProfile, SceneryConstants.PROJECTOR_COLOR_PROFILE, combineOptions<ToggleSwitchOptions>({
       a11yName: JoistStrings.projectorModeStringProperty
     }, PreferencesDialogConstants.TOGGLE_SWITCH_OPTIONS));

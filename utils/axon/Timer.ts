@@ -10,6 +10,8 @@
 import axon from '@/utils/axon/axon';
 import TinyEmitter from '@/utils/axon/TinyEmitter';
 
+console.log('axon/Timer.ts');
+
 export type TimerListener = ( dt: number ) => void;
 
 export default class Timer extends TinyEmitter<[ number ]> {

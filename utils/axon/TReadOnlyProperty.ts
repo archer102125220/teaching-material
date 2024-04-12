@@ -11,6 +11,8 @@ import ReadOnlyProperty, { type LinkOptions } from '@/utils/axon/ReadOnlyPropert
 import TinyProperty from '@/utils/axon/TinyProperty';
 import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
+console.log('axon/TReadOnlyProperty.ts');
+
 // eslint-disable-next-line no-use-before-define
 export type PropertyLinkListener<T> = (value: T, oldValue: T | null, tinyProperty: TReadOnlyProperty<T>) => void;
 // eslint-disable-next-line no-use-before-define

@@ -14,7 +14,6 @@ import TinyProperty from '@/utils/axon/TinyProperty';
 import { type PropertyLinkListener } from '@/utils/axon/TReadOnlyProperty';
 
 export default class TinyStaticProperty<T> extends TinyProperty<T> {
-
   // When set, it will be called whenever there is an attempt to read the value of this TinyStaticProperty.
   private readonly onAccessAttempt: () => void;
 
@@ -51,7 +50,6 @@ export default class TinyStaticProperty<T> extends TinyProperty<T> {
    * Directly notifies listeners of changes.
    */
   public override notifyListeners(oldValue: T | null): void {
-
     // We use this.get() to ensure value is up to date with onAccessAttempt().
     this.emit(this.get(), oldValue, this);
   }
@@ -61,6 +59,8 @@ export default class TinyStaticProperty<T> extends TinyProperty<T> {
    * notification provides the current value for newValue and null for oldValue.
    */
   public override link(listener: PropertyLinkListener<T>): void {
+    console.log('TinyStaticProperty.link');
+    console.trace();
     this.addListener(listener);
 
     // listener called with this.get() to ensure value is up to date with onAccessAttempt().
@@ -71,7 +71,6 @@ export default class TinyStaticProperty<T> extends TinyProperty<T> {
    * Returns true if and only if the specified value equals the value of this property
    */
   protected override equalsValue(value: T): boolean {
-
     // checked with this.get() to ensure value is up to date with onAccessAttempt()
     return this.areValuesEqual(value, this.get());
   }

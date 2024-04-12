@@ -76,19 +76,19 @@ export default class LensShapes implements OpticShapes {
       const right = new Vector2(2 * halfWidth, 0);
 
       // shape of convex lens
-      lensShape = new Shape()
+      lensShape = new Shape(undefined, undefined, 'lensShape')
         .moveToPoint(top)
         .quadraticCurveToPoint(left, bottom)
         .quadraticCurveToPoint(right, top)
         .close();
 
       // front (left) surface of the lens
-      frontShape = new Shape()
+      frontShape = new Shape(undefined, undefined, 'frontShape')
         .moveToPoint(top)
         .quadraticCurveToPoint(left, bottom);
 
       // back (right) surface of the lens
-      backShape = new Shape()
+      backShape = new Shape(undefined, undefined, 'backShape')
         .moveToPoint(top)
         .quadraticCurveToPoint(right, bottom);
     }
@@ -106,7 +106,7 @@ export default class LensShapes implements OpticShapes {
       const midRight = new Vector2(-midWidth / 2, 0);
 
       // shape of concave lens
-      lensShape = new Shape()
+      lensShape = new Shape(undefined, undefined, 'lensShape')
         .moveToPoint(topLeft)
         .lineToPoint(topRight)
         .quadraticCurveToPoint(midRight, bottomRight)
@@ -115,12 +115,12 @@ export default class LensShapes implements OpticShapes {
         .close();
 
       // front (left) surface of the lens
-      frontShape = new Shape()
+      frontShape = new Shape(undefined, undefined, 'frontShape')
         .moveToPoint(topLeft)
         .quadraticCurveToPoint(midLeft, bottomLeft);
 
       // back (right) surface of the lens
-      backShape = new Shape()
+      backShape = new Shape(undefined, undefined, 'backShape')
         .moveToPoint(topRight)
         .quadraticCurveToPoint(midRight, bottomRight);
     }

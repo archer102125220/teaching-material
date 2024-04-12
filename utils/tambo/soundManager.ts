@@ -319,18 +319,18 @@ class SoundManager extends PhetioObject {
 
       if (phetAudioContext.state !== 'running') {
 
-        phet.log && phet.log(`audio context not running, attempting to resume, state = ${phetAudioContext.state}`);
+        window.phet.log && window.phet.log(`audio context not running, attempting to resume, state = ${phetAudioContext.state}`);
 
         // tell the audio context to resume
         phetAudioContext.resume()
           .then(() => {
-            phet.log && phet.log(`resume appears to have succeeded, phetAudioContext.state = ${phetAudioContext.state}`);
+            window.phet.log && window.phet.log(`resume appears to have succeeded, phetAudioContext.state = ${phetAudioContext.state}`);
             removeUserInteractionListeners();
           })
           .catch(err => {
             const errorMessage = `error when trying to resume audio context, err = ${err}`;
             console.error(errorMessage);
-            assert && alert(errorMessage);
+            window.assert && window.alert(errorMessage);
           });
       }
       else {
@@ -359,7 +359,7 @@ class SoundManager extends PhetioObject {
     let previousAudioContextState: AudioContextState = phetAudioContext.state;
     audioContextStateChangeMonitor.addStateChangeListener(phetAudioContext, (state: AudioContextState) => {
 
-      phet.log && phet.log(
+      window.phet.log && window.phet.log(
         `audio context state changed, old state = ${previousAudioContextState
         }, new state = ${state
         }, audio context time = ${phetAudioContext.currentTime}`

@@ -34,7 +34,7 @@ class MemoryMonitor {
       windowSize: 2000,
 
       // {number} - Number of megabytes before operations will throw an error
-      memoryLimit: phet.chipper.queryParameters.memoryLimit
+      memoryLimit: window.phet.chipper.queryParameters.memoryLimit
     }, providedOptions);
 
     this.memoryLimit = options.memoryLimit * MB;

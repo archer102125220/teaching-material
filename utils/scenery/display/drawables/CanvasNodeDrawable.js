@@ -27,8 +27,8 @@ class CanvasNodeDrawable extends CanvasSelfDrawable {
    * @param {Matrix3} matrix - The transformation matrix applied for this node's coordinate system.
    */
   paintCanvas(wrapper, node, matrix) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !node.selfBounds.isEmpty(),
         `${
           'CanvasNode should not be used with an empty canvasBounds. ' +

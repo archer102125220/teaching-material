@@ -164,7 +164,7 @@ export default class ButtonNode extends Sizable(Voicing(Node)) {
       tandem: options.tandem?.createTandem('pressListener')
     }, options.listenerOptions);
 
-    assert && options.enabledProperty && assert(options.enabledProperty === buttonModel.enabledProperty,
+    window.assert && options.enabledProperty && window.assert(options.enabledProperty === buttonModel.enabledProperty,
       'if options.enabledProperty is provided, it must === buttonModel.enabledProperty');
     options.enabledProperty = buttonModel.enabledProperty;
 

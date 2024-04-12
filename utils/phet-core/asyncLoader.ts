@@ -10,11 +10,12 @@ import arrayRemove from '@/utils/phet-core/arrayRemove';
 import phetCore from '@/utils/phet-core/phetCore';
 import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 
+console.log('phet-core/asyncLoader.ts');
+
 type AsyncLoaderListener = () => void;
 type AsyncLoaderLock = () => void;
 
 class AsyncLoader {
-
   // Locks waiting to be resolved before we can move to the next phase after loading. Lock objects can be arbitrary
   // objects.
   private pendingLocks: IntentionalAny[];
@@ -49,11 +50,14 @@ class AsyncLoader {
    * Attempts to proceed to the next phase if possible (otherwise it's a no-op).
    */
   private proceedIfReady(): void {
+    console.log('AsyncLoader.proceedIfReady');
     if (this.pendingLocks.length === 0) {
-      window.assert && window.assert(!this.loadComplete, 'cannot complete load twice');
+      console.log('AsyncLoader.proceedIfReady  this.pendingLocks.length === 0');
+      window.assert &&
+        window.assert(!this.loadComplete, 'cannot complete load twice');
       this.loadComplete = true;
 
-      this.listeners.forEach(listener => listener());
+      this.listeners.forEach((listener) => listener());
     }
   }
 
@@ -61,10 +65,17 @@ class AsyncLoader {
    * Creates a lock, which is a callback that needs to be run before we can proceed.
    */
   public createLock(object?: IntentionalAny): AsyncLoaderLock {
-    window.assert && window.assert(!this.loadComplete, 'Cannot create more locks after load-step has completed');
+    console.log('AsyncLoader.createLock');
+    window.assert &&
+      window.assert(
+        !this.loadComplete,
+        'Cannot create more locks after load-step has completed'
+      );
     this.pendingLocks.push(object);
     return () => {
-      window.assert && window.assert(this.pendingLocks.includes(object), 'invalid lock');
+      console.log('AsyncLoader.createLock return function');
+      window.assert &&
+        window.assert(this.pendingLocks.includes(object), 'invalid lock');
       arrayRemove(this.pendingLocks, object);
       this.proceedIfReady();
     };

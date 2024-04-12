@@ -938,11 +938,11 @@ Imageable.testHitTestData = (imageData: ImageData, width: number, height: number
  * @param width - logical width of the image
  * @param height - logical height of the image
  */
-Imageable.hitTestDataToShape = (imageData: ImageData, width: number, height: number): Shape => {
+Imageable.hitTestDataToShape = (imageData: ImageData, width: number, height: number, shapeName: string = ''): Shape => {
   const widthScale = width / imageData.width;
   const heightScale = height / imageData.height;
 
-  const shape = new Shape();
+  const shape = new Shape(undefined, undefined, 'getSelfShapeShape:' + shapeName);
 
   // Create rows at a time, so that if we have 50 adjacent pixels "on", then we'll just make a rectangle 50-wide.
   // This lets us do the CAG faster.

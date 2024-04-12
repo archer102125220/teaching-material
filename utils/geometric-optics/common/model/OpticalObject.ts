@@ -84,7 +84,7 @@ export default class OpticalObject extends PhetioObject {
     });
 
     // For empirically setting the initial position of optical objects.
-    phet.log && this.positionProperty.link(position => phet.log(`${this.phetioID} position=${position}`));
+    window.phet.log && this.positionProperty.link(position => window.phet.log(`${this.phetioID} position=${position}`));
 
     this.objectDistanceProperty = new DerivedProperty([opticPositionProperty, this.positionProperty],
       (opticPosition, opticalObjectPosition) => (opticPosition.x - opticalObjectPosition.x), {

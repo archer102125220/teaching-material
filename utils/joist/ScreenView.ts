@@ -97,7 +97,7 @@ class ScreenView extends Node {
 
     super(options);
 
-    if (assert && this.isPhetioInstrumented()) {
+    if (window.assert && this.isPhetioInstrumented()) {
       window.assert && window.assert(options.tandem.name === 'view', 'tandem name should be view');
     }
 

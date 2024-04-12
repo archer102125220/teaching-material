@@ -43,7 +43,7 @@ export default class SpriteImage extends Imageable(Object) {
     const options = optionize<SpriteImageOptions, SelfOptions, ImageableOptions>()({
       hitTestPixels: false,
       pickable: true,
-      image: image
+      image
     }, providedOptions);
 
     super();

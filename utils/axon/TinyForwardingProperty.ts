@@ -95,7 +95,7 @@ export default class TinyForwardingProperty<ValueType> extends TinyProperty<Valu
    * @returns the passed in Node, for chaining.
    */
   public setTargetProperty<NodeType extends NodeLike, NodeParam extends (NodeType | null)>(node: NodeParam, tandemName: string | null, newTargetProperty: TProperty<ValueType> | null): NodeParam {
-    assert && node && tandemName === null && this.targetPropertyInstrumented && assert(!node.isPhetioInstrumented(), 'tandemName must be provided for instrumented Nodes');
+    window.assert && node && tandemName === null && this.targetPropertyInstrumented && window.assert(!node.isPhetioInstrumented(), 'tandemName must be provided for instrumented Nodes');
 
     // no-op if we are already forwarding to that property OR if we still aren't forwarding
     if (this.targetProperty === newTargetProperty) {
@@ -104,7 +104,7 @@ export default class TinyForwardingProperty<ValueType> extends TinyProperty<Valu
 
     const currentForwardingPropertyInstrumented = this.targetProperty &&
       this.targetProperty instanceof ReadOnlyProperty && this.targetProperty.isPhetioInstrumented();
-    assert && currentForwardingPropertyInstrumented && assert(newTargetProperty && newTargetProperty instanceof ReadOnlyProperty && newTargetProperty.isPhetioInstrumented(),
+    window.assert && currentForwardingPropertyInstrumented && window.assert(newTargetProperty && newTargetProperty instanceof ReadOnlyProperty && newTargetProperty.isPhetioInstrumented(),
       'Cannot set swap out a PhET-iO instrumented targetProperty for an uninstrumented one');
 
     // We need this information eagerly for later on in the function

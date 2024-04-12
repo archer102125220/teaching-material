@@ -7,7 +7,7 @@
  */
 
 import { Shape } from '@/utils/kite/imports';
-import sceneryPhet from '@/utils/scenery-phet/buttons/sceneryPhet';
+import sceneryPhet from '@/utils/scenery-phet/sceneryPhet';
 
 export default class PauseIconShape extends Shape {
 

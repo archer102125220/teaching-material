@@ -128,8 +128,7 @@ class RendererSummary {
 
     if (ancestorOldMask || ancestorNewMask) {
       const oldSubtreeBitmask = this.bitmask;
-      window.window.assert &&
-        window.window.assert(oldSubtreeBitmask !== undefined);
+      window.assert && window.assert(oldSubtreeBitmask !== undefined);
 
       for (let j = 0; j < numSummaryBits; j++) {
         const ancestorBit = summaryBits[j];
@@ -160,11 +159,8 @@ class RendererSummary {
         );
       }
 
-      window.window.assert &&
-        window.window.assert(
-          this.bitmask === this.computeBitmask(),
-          'Sanity check'
-        );
+      window.assert &&
+        window.assert(this.bitmask === this.computeBitmask(), 'Sanity check');
     }
 
     window.assert && this.audit();

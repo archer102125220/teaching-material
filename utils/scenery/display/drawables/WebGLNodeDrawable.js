@@ -8,7 +8,12 @@
  */
 
 import Poolable from '@/utils/phet-core/Poolable';
-import { Renderer, scenery, WebGLNode, WebGLSelfDrawable } from '@/utils/scenery/imports';
+import {
+  Renderer,
+  scenery,
+  WebGLNode,
+  WebGLSelfDrawable
+} from '@/utils/scenery/imports';
 
 class WebGLNodeDrawable extends WebGLSelfDrawable {
   /**
@@ -88,13 +93,13 @@ class WebGLNodeDrawable extends WebGLSelfDrawable {
       this.webGLBlock.projectionMatrix
     );
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         painted === WebGLNode.PAINTED_SOMETHING ||
           painted === WebGLNode.PAINTED_NOTHING
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         WebGLNode.PAINTED_NOTHING === 0 && WebGLNode.PAINTED_SOMETHING === 1,
         'Ensure we can pass the value through directly to indicate whether draw calls were made'
       );

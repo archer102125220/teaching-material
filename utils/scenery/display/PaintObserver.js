@@ -45,17 +45,17 @@ class PaintObserver {
   setPrimary(primary) {
     if (primary !== this.primary) {
       // window.sceneryLog
-      sceneryLog &&
-        sceneryLog.Paints &&
-        sceneryLog.Paints('[PaintObserver] primary update');
-      sceneryLog && sceneryLog.Paints && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.Paints &&
+        window.sceneryLog.Paints('[PaintObserver] primary update');
+      window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
 
       this.detachPrimary(this.primary);
       this.primary = primary;
       this.attachPrimary(primary);
       this.notifyChangeCallback();
 
-      sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+      window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
     }
   }
 
@@ -64,15 +64,15 @@ class PaintObserver {
    * @public
    */
   clean() {
-    sceneryLog &&
-      sceneryLog.Paints &&
-      sceneryLog.Paints('[PaintObserver] clean');
-    sceneryLog && sceneryLog.Paints && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.Paints &&
+      window.sceneryLog.Paints('[PaintObserver] clean');
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
 
     this.detachPrimary(this.primary);
     this.primary = null;
 
-    sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
   }
 
   /**
@@ -84,22 +84,25 @@ class PaintObserver {
    * @param {Property} property
    */
   updateSecondary(newPaint, oldPaint, property) {
-    sceneryLog &&
-      sceneryLog.Paints &&
-      sceneryLog.Paints('[PaintObserver] secondary update');
-    sceneryLog && sceneryLog.Paints && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.Paints &&
+      window.sceneryLog.Paints('[PaintObserver] secondary update');
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
 
     const count = this.secondaryPropertyCountsMap[property.id];
     // window.assert
-    assert &&
-      assert(count > 0, 'We should always be removing at least one reference');
+    window.assert &&
+      window.assert(
+        count > 0,
+        'We should always be removing at least one reference'
+      );
 
     for (let i = 0; i < count; i++) {
       this.attachSecondary(newPaint);
     }
     this.notifyChangeCallback();
 
-    sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
   }
 
   /**
@@ -114,38 +117,38 @@ class PaintObserver {
    * @param {PaintDef} paint
    */
   attachPrimary(paint) {
-    sceneryLog &&
-      sceneryLog.Paints &&
-      sceneryLog.Paints('[PaintObserver] attachPrimary');
-    sceneryLog && sceneryLog.Paints && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.Paints &&
+      window.sceneryLog.Paints('[PaintObserver] attachPrimary');
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
 
     if (paint instanceof ReadOnlyProperty) {
-      sceneryLog &&
-        sceneryLog.Paints &&
-        sceneryLog.Paints('[PaintObserver] add Property listener');
-      sceneryLog && sceneryLog.Paints && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.Paints &&
+        window.sceneryLog.Paints('[PaintObserver] add Property listener');
+      window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
       this.secondaryLazyLinkProperty(paint);
       this.attachSecondary(paint.get());
-      sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+      window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
     } else if (paint instanceof Color) {
-      sceneryLog &&
-        sceneryLog.Paints &&
-        sceneryLog.Paints('[PaintObserver] Color changed to immutable');
+      window.sceneryLog &&
+        window.sceneryLog.Paints &&
+        window.sceneryLog.Paints('[PaintObserver] Color changed to immutable');
 
       // We set the color to be immutable, so we don't need to add a listener
       paint.setImmutable();
     } else if (paint instanceof Gradient) {
-      sceneryLog &&
-        sceneryLog.Paints &&
-        sceneryLog.Paints('[PaintObserver] add Gradient listeners');
-      sceneryLog && sceneryLog.Paints && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.Paints &&
+        window.sceneryLog.Paints('[PaintObserver] add Gradient listeners');
+      window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
       for (let i = 0; i < paint.stops.length; i++) {
         this.attachPrimary(paint.stops[i].color);
       }
-      sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+      window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
     }
 
-    sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
   }
 
   /**
@@ -159,30 +162,30 @@ class PaintObserver {
    * @param {PaintDef} paint
    */
   detachPrimary(paint) {
-    sceneryLog &&
-      sceneryLog.Paints &&
-      sceneryLog.Paints('[PaintObserver] detachPrimary');
-    sceneryLog && sceneryLog.Paints && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.Paints &&
+      window.sceneryLog.Paints('[PaintObserver] detachPrimary');
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
 
     if (paint instanceof ReadOnlyProperty) {
-      sceneryLog &&
-        sceneryLog.Paints &&
-        sceneryLog.Paints('[PaintObserver] remove Property listener');
-      sceneryLog && sceneryLog.Paints && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.Paints &&
+        window.sceneryLog.Paints('[PaintObserver] remove Property listener');
+      window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
       this.secondaryUnlinkProperty(paint);
-      sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+      window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
     } else if (paint instanceof Gradient) {
-      sceneryLog &&
-        sceneryLog.Paints &&
-        sceneryLog.Paints('[PaintObserver] remove Gradient listeners');
-      sceneryLog && sceneryLog.Paints && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.Paints &&
+        window.sceneryLog.Paints('[PaintObserver] remove Gradient listeners');
+      window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
       for (let i = 0; i < paint.stops.length; i++) {
         this.detachPrimary(paint.stops[i].color);
       }
-      sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+      window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
     }
 
-    sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
   }
 
   /**
@@ -192,21 +195,21 @@ class PaintObserver {
    * @param {string|Color} paint
    */
   attachSecondary(paint) {
-    sceneryLog &&
-      sceneryLog.Paints &&
-      sceneryLog.Paints('[PaintObserver] attachSecondary');
-    sceneryLog && sceneryLog.Paints && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.Paints &&
+      window.sceneryLog.Paints('[PaintObserver] attachSecondary');
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
 
     if (paint instanceof Color) {
-      sceneryLog &&
-        sceneryLog.Paints &&
-        sceneryLog.Paints('[PaintObserver] Color set to immutable');
+      window.sceneryLog &&
+        window.sceneryLog.Paints &&
+        window.sceneryLog.Paints('[PaintObserver] Color set to immutable');
 
       // We set the color to be immutable, so we don't need to add a listener
       paint.setImmutable();
     }
 
-    sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
   }
 
   /**
@@ -214,17 +217,17 @@ class PaintObserver {
    * @private
    */
   notifyChanged() {
-    sceneryLog &&
-      sceneryLog.Paints &&
-      sceneryLog.Paints('[PaintObserver] changed');
-    sceneryLog && sceneryLog.Paints && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.Paints &&
+      window.sceneryLog.Paints('[PaintObserver] changed');
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
 
     if (this.primary instanceof Gradient) {
       this.primary.invalidateCanvasGradient();
     }
     this.changeCallback();
 
-    sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
   }
 
   /**
@@ -234,12 +237,12 @@ class PaintObserver {
    * @param {Property.<*>} property
    */
   secondaryLazyLinkProperty(property) {
-    sceneryLog &&
-      sceneryLog.Paints &&
-      sceneryLog.Paints(
+    window.sceneryLog &&
+      window.sceneryLog.Paints &&
+      window.sceneryLog.Paints(
         `[PaintObserver] secondaryLazyLinkProperty ${property._id}`
       );
-    sceneryLog && sceneryLog.Paints && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
 
     const id = property.id;
     const count = this.secondaryPropertyCountsMap[id];
@@ -250,7 +253,7 @@ class PaintObserver {
       property.lazyLink(this.updateSecondaryListener);
     }
 
-    sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
   }
 
   /**
@@ -261,16 +264,17 @@ class PaintObserver {
    * @param {Property.<*>} property
    */
   secondaryUnlinkProperty(property) {
-    sceneryLog &&
-      sceneryLog.Paints &&
-      sceneryLog.Paints(
+    window.sceneryLog &&
+      window.sceneryLog.Paints &&
+      window.sceneryLog.Paints(
         `[PaintObserver] secondaryUnlinkProperty ${property._id}`
       );
-    sceneryLog && sceneryLog.Paints && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.push();
 
     const id = property.id;
     const count = --this.secondaryPropertyCountsMap[id];
-    window.assert && window.assert(count >= 0, 'We should have had a reference before');
+    window.assert &&
+      window.assert(count >= 0, 'We should have had a reference before');
 
     if (count === 0) {
       delete this.secondaryPropertyCountsMap[id];
@@ -279,7 +283,7 @@ class PaintObserver {
       }
     }
 
-    sceneryLog && sceneryLog.Paints && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Paints && window.sceneryLog.pop();
   }
 }
 

@@ -4,4 +4,6 @@
 
 import Namespace from '@/utils/phet-core/Namespace';
 
+console.log('axon/axon.ts');
+
 export default new Namespace( 'axon' );

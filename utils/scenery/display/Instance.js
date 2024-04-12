@@ -79,8 +79,8 @@ class Instance {
    *                                            be used multiple places in the main instance tree)
    */
   initialize(display, trail, isDisplayRoot, isSharedCanvasCacheRoot) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !this.active,
         'We should never try to initialize an already active object'
       );
@@ -231,9 +231,9 @@ class Instance {
     // we need to be visited, whether updateRenderingState is required, and whether to visit children)
     this.skipPruningFrame = display._frameId;
 
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(`initialized ${this.toString()}`);
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(`initialized ${this.toString()}`);
 
     // Whether we have been instantiated. false if we are in a pool waiting to be instantiated.
     this.active = true;
@@ -364,16 +364,16 @@ class Instance {
    * - preferredRenderers
    */
   updateRenderingState() {
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(
         `updateRenderingState ${this.toString()}${this.stateless ? ' (stateless)' : ''}`
       );
-    sceneryLog && sceneryLog.Instance && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.push();
 
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(`old: ${this.getStateString()}`);
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(`old: ${this.getStateString()}`);
 
     // old state information, so we can compare what was changed
     const wasBackbone = this.isBackbone;
@@ -488,8 +488,8 @@ class Instance {
       (hasFilters || hasClip || node._canvasCache)
     ) {
       // everything underneath needs to be renderable with Canvas, otherwise we cannot cache
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           this.node._rendererSummary.isSingleCanvasSupported(),
           `Node canvasCache provided, but not all node contents can be rendered with Canvas under ${this.node.constructor.name}`
         );
@@ -506,8 +506,8 @@ class Instance {
         } else {
           // everything underneath needs to guarantee that its bounds are valid
           // OHTWO TODO: We'll probably remove this if we go with the "safe bounds" approach https://github.com/phetsims/scenery/issues/1581
-          assert &&
-            assert(
+          window.assert &&
+            window.assert(
               this.node._rendererSummary.areBoundsValid(),
               `Node singleCache provided, but not all node contents have valid bounds under ${this.node.constructor.name}`
             );
@@ -550,7 +550,8 @@ class Instance {
           supportedNodeBitmask & Renderer.bitmaskWebGL ||
           0;
 
-        window.assert && window.assert(this.selfRenderer, 'setSelfRenderer failure?');
+        window.assert &&
+          window.assert(this.selfRenderer, 'setSelfRenderer failure?');
       }
     }
 
@@ -595,10 +596,10 @@ class Instance {
     // update of rendering state).
     this.fittability.checkSelfFittability();
 
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(`new: ${this.getStateString()}`);
-    sceneryLog && sceneryLog.Instance && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(`new: ${this.getStateString()}`);
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.pop();
   }
 
   /**
@@ -629,21 +630,21 @@ class Instance {
    * @public
    */
   baseSyncTree() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.isDisplayRoot,
         'baseSyncTree() should only be called on the root instance'
       );
 
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(
         `-------- START baseSyncTree ${this.toString()} --------`
       );
     this.syncTree();
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(
         `-------- END baseSyncTree ${this.toString()} --------`
       );
     this.cleanSyncTreeResults();
@@ -662,20 +663,20 @@ class Instance {
    * @returns {boolean} - Whether the sync was possible. If it wasn't, a new instance subtree will need to be created.
    */
   syncTree() {
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(
         `syncTree ${this.toString()} ${this.getStateString()}${this.stateless ? ' (stateless)' : ''}`
       );
-    sceneryLog && sceneryLog.Instance && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.push();
 
-    if (sceneryLog && scenery.isLoggingPerformance()) {
+    if (window.sceneryLog && scenery.isLoggingPerformance()) {
       this.display.perfSyncTreeCount++;
     }
 
     // may access isTransformed up to root to determine relative trails
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !this.parent || !this.parent.stateless,
         'We should not have a stateless parent instance'
       );
@@ -691,19 +692,21 @@ class Instance {
     } else {
       // we can check whether updating state would have made any changes when we skip it (for slow assertions)
       // eslint-disable-next-line no-lonely-if
-      if (assertSlow) {
+      if (window.assertSlow) {
         this.updateRenderingState();
-        assertSlow(!this.anyStateChange);
+        window.assertSlow(!this.anyStateChange);
       }
     }
 
     if (!wasStateless && this.incompatibleStateChange) {
-      sceneryLog &&
-        sceneryLog.Instance &&
-        sceneryLog.Instance(
+      window.sceneryLog &&
+        window.sceneryLog.Instance &&
+        window.sceneryLog.Instance(
           `incompatible instance ${this.toString()} ${this.getStateString()}, aborting`
         );
-      sceneryLog && sceneryLog.Instance && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.Instance &&
+        window.sceneryLog.pop();
 
       // The false return will signal that a new instance needs to be used. our tree will be disposed soon.
       return false;
@@ -711,8 +714,8 @@ class Instance {
     this.stateless = false;
 
     // no need to overwrite, should always be the same
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !wasStateless || this.children.length === 0,
         'We should not have child instances on an instance without state'
       );
@@ -750,7 +753,7 @@ class Instance {
       // Synchronizes our children and self, with the drawables and change intervals of both combined
       this.localSyncTree(selfChanged);
 
-      if (assertSlow) {
+      if (window.assertSlow) {
         // before and after first/last drawables (inside any potential group drawable)
         this.auditChangeIntervals(
           oldFirstInnerDrawable,
@@ -764,7 +767,7 @@ class Instance {
       // the group drawable (as applicable).
       this.groupSyncTree(wasStateless);
 
-      if (assertSlow) {
+      if (window.assertSlow) {
         // before and after first/last drawables (outside of any potential group drawable)
         this.auditChangeIntervals(
           oldFirstDrawable,
@@ -776,10 +779,12 @@ class Instance {
     } else {
       // our sub-tree was not visited, since there were no relevant changes to it (that need instance synchronization
       // or drawable changes)
-      sceneryLog && sceneryLog.Instance && sceneryLog.Instance('pruned');
+      window.sceneryLog &&
+        window.sceneryLog.Instance &&
+        window.sceneryLog.Instance('pruned');
     }
 
-    sceneryLog && sceneryLog.Instance && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.pop();
 
     return true;
   }
@@ -798,24 +803,28 @@ class Instance {
     let firstDrawable = this.selfDrawable; // possibly null
     let currentDrawable = firstDrawable; // possibly null
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.firstChangeInterval === null && this.lastChangeInterval === null,
         'sanity checks that cleanSyncTreeResults were called'
       );
 
     let firstChangeInterval = null;
     if (selfChanged) {
-      sceneryLog &&
-        sceneryLog.ChangeInterval &&
-        sceneryLog.ChangeInterval('self');
-      sceneryLog && sceneryLog.ChangeInterval && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.ChangeInterval &&
+        window.sceneryLog.ChangeInterval('self');
+      window.sceneryLog &&
+        window.sceneryLog.ChangeInterval &&
+        window.sceneryLog.push();
       firstChangeInterval = ChangeInterval.newForDisplay(
         null,
         null,
         this.display
       );
-      sceneryLog && sceneryLog.ChangeInterval && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.ChangeInterval &&
+        window.sceneryLog.pop();
     }
     let currentChangeInterval = firstChangeInterval;
     let lastUnchangedDrawable = selfChanged ? null : this.selfDrawable; // possibly null
@@ -858,36 +867,46 @@ class Instance {
        * Change intervals
        * ---------------------------------------------------------------------------- */
 
-      sceneryLog &&
-        sceneryLog.ChangeInterval &&
-        sceneryLog.ChangeInterval(
+      window.sceneryLog &&
+        window.sceneryLog.ChangeInterval &&
+        window.sceneryLog.ChangeInterval(
           `changes for ${childInstance.toString()} in ${this.toString()}`
         );
-      sceneryLog && sceneryLog.ChangeInterval && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.ChangeInterval &&
+        window.sceneryLog.push();
 
       const wasIncluded = childInstance.stitchChangeIncluded;
       const isIncluded = includeChildDrawables;
       childInstance.stitchChangeIncluded = isIncluded;
 
-      sceneryLog &&
-        sceneryLog.ChangeInterval &&
-        sceneryLog.ChangeInterval(`included: ${wasIncluded} => ${isIncluded}`);
+      window.sceneryLog &&
+        window.sceneryLog.ChangeInterval &&
+        window.sceneryLog.ChangeInterval(
+          `included: ${wasIncluded} => ${isIncluded}`
+        );
 
       // check for forcing full change-interval on child
       if (childInstance.stitchChangeFrame === frameId) {
-        sceneryLog &&
-          sceneryLog.ChangeInterval &&
-          sceneryLog.ChangeInterval('stitchChangeFrame full change interval');
-        sceneryLog && sceneryLog.ChangeInterval && sceneryLog.push();
+        window.sceneryLog &&
+          window.sceneryLog.ChangeInterval &&
+          window.sceneryLog.ChangeInterval(
+            'stitchChangeFrame full change interval'
+          );
+        window.sceneryLog &&
+          window.sceneryLog.ChangeInterval &&
+          window.sceneryLog.push();
 
         // e.g. it was added, moved, or had visibility changes. requires full change interval
         childInstance.firstChangeInterval = childInstance.lastChangeInterval =
           ChangeInterval.newForDisplay(null, null, this.display);
 
-        sceneryLog && sceneryLog.ChangeInterval && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.ChangeInterval &&
+          window.sceneryLog.pop();
       } else {
-        assert &&
-          assert(
+        window.assert &&
+          window.assert(
             wasIncluded === isIncluded,
             'If we do not have stitchChangeFrame activated, our inclusion should not have changed'
           );
@@ -908,10 +927,12 @@ class Instance {
       // where there were nodes that needed stitch changes that aren't still children, or were moved. We create a
       // "bridge" change interval to span the gap where nodes were removed.
       if (needsBridge) {
-        sceneryLog &&
-          sceneryLog.ChangeInterval &&
-          sceneryLog.ChangeInterval('bridge');
-        sceneryLog && sceneryLog.ChangeInterval && sceneryLog.push();
+        window.sceneryLog &&
+          window.sceneryLog.ChangeInterval &&
+          window.sceneryLog.ChangeInterval('bridge');
+        window.sceneryLog &&
+          window.sceneryLog.ChangeInterval &&
+          window.sceneryLog.push();
 
         const bridge = ChangeInterval.newForDisplay(
           lastUnchangedDrawable,
@@ -925,7 +946,9 @@ class Instance {
         firstChangeInterval = firstChangeInterval || currentChangeInterval; // store if it is the first
         isBeforeOpen = true;
 
-        sceneryLog && sceneryLog.ChangeInterval && sceneryLog.pop();
+        window.sceneryLog &&
+          window.sceneryLog.ChangeInterval &&
+          window.sceneryLog.pop();
       }
 
       // Exclude child instances that are now (and were before) not included. NOTE: We still need to include those in
@@ -962,8 +985,8 @@ class Instance {
         } else if (firstChildChangeInterval) {
           firstChangeInterval = firstChangeInterval || firstChildChangeInterval; // store if it is the first
           if (firstChildChangeInterval.drawableBefore === null) {
-            assert &&
-              assert(
+            window.assert &&
+              window.assert(
                 !currentChangeInterval || lastUnchangedDrawable,
                 'If we have a current change interval, we should be guaranteed a non-null ' +
                   'lastUnchangedDrawable'
@@ -1010,12 +1033,14 @@ class Instance {
       // OHTWO TODO: only do this on instances that were actually traversed https://github.com/phetsims/scenery/issues/1581
       childInstance.cleanSyncTreeResults();
 
-      sceneryLog && sceneryLog.ChangeInterval && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.ChangeInterval &&
+        window.sceneryLog.pop();
     }
 
     // it's really the easiest way to compare if two things (casted to booleans) are the same?
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !!firstChangeInterval === !!currentChangeInterval,
         'Presence of first and current change intervals should be equal'
       );
@@ -1042,7 +1067,7 @@ class Instance {
     this.lastDrawable = this.lastInnerDrawable = currentDrawable; // either null, or the drawable itself
 
     // ensure that our firstDrawable and lastDrawable are correct
-    if (assertSlow) {
+    if (window.assertSlow) {
       let firstDrawableCheck = null;
       for (let j = 0; j < this.children.length; j++) {
         if (
@@ -1068,8 +1093,8 @@ class Instance {
         }
       }
 
-      assertSlow(firstDrawableCheck === this.firstDrawable);
-      assertSlow(lastDrawableCheck === this.lastDrawable);
+      window.assertSlow(firstDrawableCheck === this.firstDrawable);
+      window.assertSlow(lastDrawableCheck === this.lastDrawable);
     }
   }
 
@@ -1096,9 +1121,9 @@ class Instance {
           0
       ) {
         if (this.selfDrawable) {
-          sceneryLog &&
-            sceneryLog.Instance &&
-            sceneryLog.Instance(
+          window.sceneryLog &&
+            window.sceneryLog.Instance &&
+            window.sceneryLog.Instance(
               `replacing old drawable ${this.selfDrawable.toString()} with new renderer`
             );
 
@@ -1117,8 +1142,8 @@ class Instance {
         return true;
       }
     } else {
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           this.selfDrawable === null,
           'Non-painted nodes should not have a selfDrawable'
         );
@@ -1136,22 +1161,22 @@ class Instance {
    * @returns {Instance}
    */
   updateIncompatibleChildInstance(childInstance, index) {
-    if (sceneryLog && scenery.isLoggingPerformance()) {
+    if (window.sceneryLog && scenery.isLoggingPerformance()) {
       const affectedInstanceCount = childInstance.getDescendantCount() + 1; // +1 for itself
 
       if (affectedInstanceCount > 100) {
-        sceneryLog.PerfCritical &&
-          sceneryLog.PerfCritical(
+        window.sceneryLog.PerfCritical &&
+          window.sceneryLog.PerfCritical(
             `incompatible instance rebuild at ${this.trail.toPathString()}: ${affectedInstanceCount}`
           );
       } else if (affectedInstanceCount > 40) {
-        sceneryLog.PerfMajor &&
-          sceneryLog.PerfMajor(
+        window.sceneryLog.PerfMajor &&
+          window.sceneryLog.PerfMajor(
             `incompatible instance rebuild at ${this.trail.toPathString()}: ${affectedInstanceCount}`
           );
       } else if (affectedInstanceCount > 0) {
-        sceneryLog.PerfMinor &&
-          sceneryLog.PerfMinor(
+        window.sceneryLog.PerfMinor &&
+          window.sceneryLog.PerfMinor(
             `incompatible instance rebuild at ${this.trail.toPathString()}: ${affectedInstanceCount}`
           );
       }
@@ -1178,8 +1203,8 @@ class Instance {
    */
   groupSyncTree(wasStateless) {
     const groupRenderer = this.groupRenderer;
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         (this.isBackbone ? 1 : 0) +
           (this.isInstanceCanvasCache ? 1 : 0) +
           (this.isSharedCanvasCacheSelf ? 1 : 0) ===
@@ -1196,9 +1221,9 @@ class Instance {
     // if there is a change, prepare
     if (groupChanged) {
       if (this.groupDrawable) {
-        sceneryLog &&
-          sceneryLog.Instance &&
-          sceneryLog.Instance(
+        window.sceneryLog &&
+          window.sceneryLog.Instance &&
+          window.sceneryLog.Instance(
             `replacing group drawable ${this.groupDrawable.toString()}`
           );
 
@@ -1296,9 +1321,9 @@ class Instance {
       // OHTWO TODO: mark everything as changed (big change interval) https://github.com/phetsims/scenery/issues/1581
 
       if (this.sharedCacheDrawable) {
-        sceneryLog &&
-          sceneryLog.Instance &&
-          sceneryLog.Instance(
+        window.sceneryLog &&
+          window.sceneryLog.Instance &&
+          window.sceneryLog.Instance(
             `replacing shared cache drawable ${this.sharedCacheDrawable.toString()}`
           );
 
@@ -1467,18 +1492,20 @@ class Instance {
    */
   insertInstance(instance, index) {
     window.assert && window.assert(instance instanceof Instance);
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         index >= 0 && index <= this.children.length,
         `Instance insertion bounds check for index ${index} with previous children length ${this.children.length}`
       );
 
-    sceneryLog &&
-      sceneryLog.InstanceTree &&
-      sceneryLog.InstanceTree(
+    window.sceneryLog &&
+      window.sceneryLog.InstanceTree &&
+      window.sceneryLog.InstanceTree(
         `inserting ${instance.toString()} into ${this.toString()}`
       );
-    sceneryLog && sceneryLog.InstanceTree && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.InstanceTree &&
+      window.sceneryLog.push();
 
     // mark it as changed during this frame, so that we can properly set the change interval
     instance.stitchChangeFrame = this.display._frameId;
@@ -1505,7 +1532,9 @@ class Instance {
 
     this.markChildVisibilityDirty();
 
-    sceneryLog && sceneryLog.InstanceTree && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.InstanceTree &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -1525,18 +1554,20 @@ class Instance {
    */
   removeInstanceWithIndex(instance, index) {
     window.assert && window.assert(instance instanceof Instance);
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         index >= 0 && index < this.children.length,
         `Instance removal bounds check for index ${index} with previous children length ${this.children.length}`
       );
 
-    sceneryLog &&
-      sceneryLog.InstanceTree &&
-      sceneryLog.InstanceTree(
+    window.sceneryLog &&
+      window.sceneryLog.InstanceTree &&
+      window.sceneryLog.InstanceTree(
         `removing ${instance.toString()} from ${this.toString()}`
       );
-    sceneryLog && sceneryLog.InstanceTree && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.InstanceTree &&
+      window.sceneryLog.push();
 
     const frameId = this.display._frameId;
 
@@ -1571,7 +1602,9 @@ class Instance {
 
     this.relativeTransform.removeInstance(instance);
 
-    sceneryLog && sceneryLog.InstanceTree && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.InstanceTree &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -1599,10 +1632,12 @@ class Instance {
     window.assert && window.assert(typeof maxChangeIndex === 'number');
     window.assert && window.assert(minChangeIndex <= maxChangeIndex);
 
-    sceneryLog &&
-      sceneryLog.InstanceTree &&
-      sceneryLog.InstanceTree(`Reordering ${this.toString()}`);
-    sceneryLog && sceneryLog.InstanceTree && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.InstanceTree &&
+      window.sceneryLog.InstanceTree(`Reordering ${this.toString()}`);
+    window.sceneryLog &&
+      window.sceneryLog.InstanceTree &&
+      window.sceneryLog.push();
 
     // NOTE: For implementation, we've basically set parameters as if we removed all of the relevant instances and
     // then added them back in. There may be more efficient ways to do this, but the stitching and change interval
@@ -1635,7 +1670,9 @@ class Instance {
     );
     this.afterStableIndex = Math.max(this.afterStableIndex, maxChangeIndex + 1);
 
-    sceneryLog && sceneryLog.InstanceTree && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.InstanceTree &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -1663,15 +1700,15 @@ class Instance {
    * @param {number} index
    */
   onChildInserted(childNode, index) {
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(
         `inserting child node ${childNode.constructor.name}#${childNode.id} into ${this.toString()}`
       );
-    sceneryLog && sceneryLog.Instance && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.push();
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !this.stateless,
         'If we are stateless, we should not receive these notifications'
       );
@@ -1679,24 +1716,28 @@ class Instance {
     let instance = this.findChildInstanceOnNode(childNode);
 
     if (instance) {
-      sceneryLog &&
-        sceneryLog.Instance &&
-        sceneryLog.Instance('instance already exists');
+      window.sceneryLog &&
+        window.sceneryLog.Instance &&
+        window.sceneryLog.Instance('instance already exists');
       // it must have been added back. increment its counter
       instance.addRemoveCounter += 1;
       window.assert && window.assert(instance.addRemoveCounter === 0);
     } else {
-      sceneryLog &&
-        sceneryLog.Instance &&
-        sceneryLog.Instance('creating stub instance');
-      sceneryLog && sceneryLog.Instance && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.Instance &&
+        window.sceneryLog.Instance('creating stub instance');
+      window.sceneryLog &&
+        window.sceneryLog.Instance &&
+        window.sceneryLog.push();
       instance = Instance.createFromPool(
         this.display,
         this.trail.copy().addDescendant(childNode, index),
         false,
         false
       );
-      sceneryLog && sceneryLog.Instance && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.Instance &&
+        window.sceneryLog.pop();
     }
 
     this.insertInstance(instance, index);
@@ -1704,7 +1745,7 @@ class Instance {
     // make sure we are visited for syncTree()
     this.markSkipPruning();
 
-    sceneryLog && sceneryLog.Instance && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.pop();
   }
 
   /**
@@ -1715,27 +1756,27 @@ class Instance {
    * @param {number} index
    */
   onChildRemoved(childNode, index) {
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(
         `removing child node ${childNode.constructor.name}#${childNode.id} from ${this.toString()}`
       );
-    sceneryLog && sceneryLog.Instance && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.push();
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !this.stateless,
         'If we are stateless, we should not receive these notifications'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.children[index].node === childNode,
         'Ensure that our instance matches up'
       );
 
     const instance = this.findChildInstanceOnNode(childNode);
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         instance !== null,
         'We should always have a reference to a removed instance'
       );
@@ -1752,7 +1793,7 @@ class Instance {
     // make sure we are visited for syncTree()
     this.markSkipPruning();
 
-    sceneryLog && sceneryLog.Instance && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.pop();
   }
 
   /**
@@ -1763,17 +1804,17 @@ class Instance {
    * @param {number} maxChangeIndex
    */
   onChildrenReordered(minChangeIndex, maxChangeIndex) {
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(`reordering children for ${this.toString()}`);
-    sceneryLog && sceneryLog.Instance && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(`reordering children for ${this.toString()}`);
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.push();
 
     this.reorderInstances(minChangeIndex, maxChangeIndex);
 
     // make sure we are visited for syncTree()
     this.markSkipPruning();
 
-    sceneryLog && sceneryLog.Instance && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.pop();
   }
 
   /**
@@ -1781,8 +1822,8 @@ class Instance {
    * @private
    */
   onVisibilityChange() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !this.stateless,
         'If we are stateless, we should not receive these notifications'
       );
@@ -1803,8 +1844,8 @@ class Instance {
    * @private
    */
   onOpacityChange() {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !this.stateless,
         'If we are stateless, we should not receive these notifications'
       );
@@ -2107,13 +2148,13 @@ class Instance {
    * @public
    */
   dispose() {
-    sceneryLog &&
-      sceneryLog.Instance &&
-      sceneryLog.Instance(`dispose ${this.toString()}`);
-    sceneryLog && sceneryLog.Instance && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.Instance &&
+      window.sceneryLog.Instance(`dispose ${this.toString()}`);
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.push();
 
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         this.active,
         'Seems like we tried to dispose this Instance twice, it is not active'
       );
@@ -2176,7 +2217,7 @@ class Instance {
 
     this.freeToPool();
 
-    sceneryLog && sceneryLog.Instance && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Instance && window.sceneryLog.pop();
   }
 
   /**
@@ -2186,45 +2227,45 @@ class Instance {
    * @param {boolean} allowValidationNotNeededChecks
    */
   audit(frameId, allowValidationNotNeededChecks) {
-    if (assertSlow) {
+    if (window.assertSlow) {
       if (frameId === undefined) {
         frameId = this.display._frameId;
       }
 
-      assertSlow(
+      window.assertSlow(
         !this.stateless,
         'State is required for all display instances'
       );
 
-      assertSlow(
+      window.assertSlow(
         (this.firstDrawable === null) === (this.lastDrawable === null),
         'First/last drawables need to both be null or non-null'
       );
 
-      assertSlow(
+      window.assertSlow(
         (!this.isBackbone && !this.isSharedCanvasCachePlaceholder) ||
           this.groupDrawable,
         'If we are a backbone or shared cache, we need to have a groupDrawable reference'
       );
 
-      assertSlow(
+      window.assertSlow(
         !this.isSharedCanvasCachePlaceholder ||
           !this.node.isPainted() ||
           this.selfDrawable,
         'We need to have a selfDrawable if we are painted and not a shared cache'
       );
 
-      assertSlow(
+      window.assertSlow(
         (!this.isTransformed && !this.isCanvasCache) || this.groupDrawable,
         'We need to have a groupDrawable if we are a backbone or any type of canvas cache'
       );
 
-      assertSlow(
+      window.assertSlow(
         !this.isSharedCanvasCachePlaceholder || this.sharedCacheDrawable,
         'We need to have a sharedCacheDrawable if we are a shared cache'
       );
 
-      assertSlow(
+      window.assertSlow(
         this.addRemoveCounter === 0,
         'Our addRemoveCounter should always be 0 at the end of syncTree'
       );
@@ -2249,13 +2290,13 @@ class Instance {
    * @param {boolean} parentVisible
    */
   auditVisibility(parentVisible) {
-    if (assertSlow) {
+    if (window.assertSlow) {
       const visible = parentVisible && this.node.isVisible();
       const trailVisible = this.trail.isVisible();
-      assertSlow(visible === trailVisible, 'Trail visibility failure');
-      assertSlow(visible === this.visible, 'Visible flag failure');
+      window.assertSlow(visible === trailVisible, 'Trail visibility failure');
+      window.assertSlow(visible === this.visible, 'Visible flag failure');
 
-      assertSlow(
+      window.assertSlow(
         this.voicingVisible ===
           _.reduce(
             this.trail.nodes,
@@ -2308,12 +2349,12 @@ class Instance {
 
     function checkBetween(a, b) {
       // have the body of the function stripped (it's not inside the if statement due to JSHint)
-      if (assertSlow) {
-        assertSlow(a !== null);
-        assertSlow(b !== null);
+      if (window.assertSlow) {
+        window.assertSlow(a !== null);
+        window.assertSlow(b !== null);
 
         while (a !== b) {
-          assertSlow(
+          window.assertSlow(
             a.nextDrawable === a.oldNextDrawable,
             'Change interval mismatch'
           );
@@ -2322,25 +2363,25 @@ class Instance {
       }
     }
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       const firstChangeInterval = this.firstChangeInterval;
       const lastChangeInterval = this.lastChangeInterval;
 
       if (!firstChangeInterval || firstChangeInterval.drawableBefore !== null) {
-        assertSlow(
+        window.assertSlow(
           oldFirstDrawable === newFirstDrawable,
           'If we have no changes, or our first change interval is not open, our firsts should be the same'
         );
       }
       if (!lastChangeInterval || lastChangeInterval.drawableAfter !== null) {
-        assertSlow(
+        window.assertSlow(
           oldLastDrawable === newLastDrawable,
           'If we have no changes, or our last change interval is not open, our lasts should be the same'
         );
       }
 
       if (!firstChangeInterval) {
-        assertSlow(
+        window.assertSlow(
           !lastChangeInterval,
           'We should not be missing only one change interval'
         );
@@ -2348,7 +2389,7 @@ class Instance {
         // with no changes, everything should be identical
         oldFirstDrawable && checkBetween(oldFirstDrawable, oldLastDrawable);
       } else {
-        assertSlow(
+        window.assertSlow(
           lastChangeInterval,
           'We should not be missing only one change interval'
         );
@@ -2368,8 +2409,8 @@ class Instance {
         while (interval && interval.nextChangeInterval) {
           const nextInterval = interval.nextChangeInterval;
 
-          assertSlow(interval.drawableAfter !== null);
-          assertSlow(nextInterval.drawableBefore !== null);
+          window.assertSlow(interval.drawableAfter !== null);
+          window.assertSlow(nextInterval.drawableBefore !== null);
 
           checkBetween(interval.drawableAfter, nextInterval.drawableBefore);
 

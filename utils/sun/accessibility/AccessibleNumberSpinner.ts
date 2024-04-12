@@ -77,7 +77,7 @@ const AccessibleNumberSpinner = <SuperType extends Constructor<Node>>(Type: Supe
 
       const providedOptions = args[optionsArgPosition] as AccessibleValueHandlerOptions;
 
-      assert && providedOptions && assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
+      window.assert && providedOptions && window.assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
         'Extra prototype on AccessibleSlider options object is a code smell (or probably a bug)');
 
       const options = combineOptions<AccessibleValueHandlerOptions>({

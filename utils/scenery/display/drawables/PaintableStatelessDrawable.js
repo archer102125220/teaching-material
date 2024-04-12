@@ -13,7 +13,12 @@ import _ from 'lodash';
 
 import inheritance from '@/utils/phet-core/inheritance';
 import memoize from '@/utils/phet-core/memoize';
-import { Color, PaintObserver, scenery, SelfDrawable } from '@/utils/scenery/imports';
+import {
+  Color,
+  PaintObserver,
+  scenery,
+  SelfDrawable
+} from '@/utils/scenery/imports';
 
 const PaintableStatelessDrawable = memoize((type) => {
   window.assert && window.assert(_.includes(inheritance(type), SelfDrawable));
@@ -60,7 +65,7 @@ const PaintableStatelessDrawable = memoize((type) => {
      * @public
      */
     markDirtyFill() {
-      assert && Color.checkPaint(this.instance.node._fill);
+      window.assert && Color.checkPaint(this.instance.node._fill);
 
       this.markPaintDirty();
       this.fillObserver.setPrimary(this.instance.node._fill);
@@ -71,7 +76,7 @@ const PaintableStatelessDrawable = memoize((type) => {
      * @public
      */
     markDirtyStroke() {
-      assert && Color.checkPaint(this.instance.node._stroke);
+      window.assert && Color.checkPaint(this.instance.node._stroke);
 
       this.markPaintDirty();
       this.strokeObserver.setPrimary(this.instance.node._stroke);

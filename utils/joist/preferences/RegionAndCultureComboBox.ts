@@ -46,7 +46,7 @@ class RegionAndCultureComboBox extends ComboBox<RegionAndCulturePortrayal | null
     });
 
     // TODO: Need a different top layer node for ComboBox here. See https://github.com/phetsims/joist/issues/841
-    super(regionAndCultureProperty, comboBoxItems, phet.joist.sim.topLayer, options);
+    super(regionAndCultureProperty, comboBoxItems, window.phet.joist.sim.topLayer, options);
   }
 }
 

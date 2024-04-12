@@ -251,16 +251,16 @@ export default class Line extends Segment {
    */
   public getSVGPathFragment(): string {
     let oldPathFragment;
-    if (assert) {
+    if (window.assert) {
       oldPathFragment = this._svgPathFragment;
       this._svgPathFragment = null;
     }
     if (!this._svgPathFragment) {
       this._svgPathFragment = `L ${svgNumber(this._end.x)} ${svgNumber(this._end.y)}`;
     }
-    if (assert) {
+    if (window.assert) {
       if (oldPathFragment) {
-        assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
+        window.assert(oldPathFragment === this._svgPathFragment, 'Quadratic line segment changed without invalidate()');
       }
     }
     return this._svgPathFragment;

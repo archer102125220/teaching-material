@@ -10,6 +10,8 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+console.log('phet-core/OptionalKeys.ts');
+
 type OptionalKeys<T> = { [K in keyof T]-?: {} extends Pick<T, K> ? K : never }[keyof T]; // eslint-disable-line @typescript-eslint/ban-types
 
 

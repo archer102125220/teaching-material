@@ -111,7 +111,7 @@ export default class RadialGradient extends Gradient {
     const maxRadius = this.maxRadius;
     const minRadius = this.minRadius;
 
-    // TODO: replace with phet.dot.Utils.linear https://github.com/phetsims/scenery/issues/1581
+    // TODO: replace with window.phet.dot.Utils.linear https://github.com/phetsims/scenery/issues/1581
     // maps x linearly from [a0,b0] => [a1,b1]
     function linearMap(a0: number, b0: number, a1: number, b1: number, x: number): number {
       return a1 + (x - a0) * (b1 - a1) / (b0 - a0);
@@ -147,7 +147,7 @@ export default class RadialGradient extends Gradient {
    * Returns a string form of this object
    */
   public override toString(): string {
-    let result = `new phet.scenery.RadialGradient( ${this.start.x}, ${this.start.y}, ${this.startRadius}, ${this.end.x}, ${this.end.y}, ${this.endRadius} )`;
+    let result = `new window.phet.scenery.RadialGradient( ${this.start.x}, ${this.start.y}, ${this.startRadius}, ${this.end.x}, ${this.end.y}, ${this.endRadius} )`;
 
     _.each(this.stops, stop => {
       result += `.addColorStop( ${stop.ratio}, ${ColorDef.scenerySerialize(stop.color)} )`;

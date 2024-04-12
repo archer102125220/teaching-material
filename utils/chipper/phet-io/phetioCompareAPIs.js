@@ -524,4 +524,8 @@ export function handlePhetioCompareAPIs() {
   }
 }
 
+if (typeof window === 'object') {
+  handlePhetioCompareAPIs();
+}
+
 export default handlePhetioCompareAPIs;

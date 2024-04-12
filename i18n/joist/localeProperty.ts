@@ -31,8 +31,8 @@ const isLocaleValid = (locale?: Locale): boolean => {
 };
 
 // We might use a partial locale (e.g. 'en' instead of 'en_US'), so grab this if it exists. It might be the same as
-// phet.chipper.locale (that's OK).
-const partialLocale = typeof phet.chipper.locale === 'string' ? phet.chipper.locale.slice(0, 2) : undefined;
+// window.phet.chipper.locale (that's OK).
+const partialLocale = typeof window.phet.chipper.locale === 'string' ? window.phet.chipper.locale.slice(0, 2) : undefined;
 
 // Get the "most" valid locale, see https://github.com/phetsims/phet-io/issues/1882
 // 'ar_SA' would try 'ar_SA', 'ar', and 'en' (result: ar_SA)
@@ -40,12 +40,12 @@ const partialLocale = typeof phet.chipper.locale === 'string' ? phet.chipper.loc
 // 'zx_ZX' would try 'zx_ZX', 'zx', and 'en' (result: en)
 // NOTE: If the locale doesn't actually have any strings: THAT IS OK! Our string system will use the appropriate
 // fallback strings.
-const validInitialLocale = isLocaleValid(phet.chipper.locale) ? phet.chipper.locale :
+const validInitialLocale = isLocaleValid(window.phet.chipper.locale) ? window.phet.chipper.locale :
   isLocaleValid(partialLocale) ? partialLocale :
     FALLBACK_LOCALE;
 
-// Just in case we had an invalid locale, remap phet.chipper.locale to the "corrected" value
-phet.chipper.locale = validInitialLocale;
+// Just in case we had an invalid locale, remap window.phet.chipper.locale to the "corrected" value
+window.phet.chipper.locale = validInitialLocale;
 
 class LocaleProperty extends Property<Locale> {
   protected override unguardedSet(value: Locale): void {

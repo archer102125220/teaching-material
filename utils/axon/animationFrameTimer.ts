@@ -4,6 +4,8 @@
 import axon from '@/utils/axon/axon';
 import Timer from '@/utils/axon/Timer';
 
+console.log('axon/animationFrameTimer.ts');
+
 // Like stepTimer but runs every frame whether the sim is active or not.
 const animationFrameTimer = new Timer();
 

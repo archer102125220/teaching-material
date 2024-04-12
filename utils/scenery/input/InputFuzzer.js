@@ -71,8 +71,8 @@ class InputFuzzer {
    * @param {number} maximumPointerCount
    */
   fuzzEvents(averageEventCount, allowMouse, allowTouch, maximumPointerCount) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         averageEventCount > 0,
         `averageEventCount must be positive: ${averageEventCount}`
       );

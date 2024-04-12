@@ -18,7 +18,7 @@ const SimVersion = window.phet.preloads.chipper.SimVersion; // use preload from 
 
 // constants
 const simName = packageJSON.name;
-const simVersion = SimVersion.parse(packageJSON.version, phet.chipper.buildTimestamp);
+const simVersion = SimVersion.parse(packageJSON.version, window.phet.chipper.buildTimestamp);
 const requestProtocolString = (document.location.protocol === 'https:' ? 'https:' : 'http:');
 const TIMEOUT_MILLISECONDS = 15000; // How many ms before we time out (set to 'offline')
 
@@ -43,12 +43,12 @@ class UpdateCheck {
     this.timeoutCallback = this.timeout.bind(this);
 
     // If it's not PhET-branded OR if it is phet-io or in the phet-app, do not check for updates
-    this.areUpdatesChecked = phet.chipper.brand === 'phet' && !phet.chipper.isApp;
+    this.areUpdatesChecked = window.phet.chipper.brand === 'phet' && !window.phet.chipper.isApp;
 
     this.updateURL = `${'http://phet.colorado.edu/html-sim-update' +
       '?simulation='}${encodeURIComponent(simName)
       }&version=${encodeURIComponent(simVersion.toString())
-      }&buildTimestamp=${encodeURIComponent(`${phet.chipper.buildTimestamp}`)}`;
+      }&buildTimestamp=${encodeURIComponent(`${window.phet.chipper.buildTimestamp}`)}`;
 
     this.timeoutId = -1;
   }
@@ -142,9 +142,9 @@ class UpdateCheck {
       req.send(JSON.stringify({
         api: '1.0',
         simulation: simName,
-        locale: phet.joist.sim.locale,
+        locale: window.phet.joist.sim.locale,
         currentVersion: this.ourVersion.toString(),
-        buildTimestamp: phet.chipper.buildTimestamp
+        buildTimestamp: window.phet.chipper.buildTimestamp
       }));
     }
   }

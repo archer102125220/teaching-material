@@ -7,6 +7,8 @@ import ReadOnlyProperty from '@/utils/axon/ReadOnlyProperty';
 import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 import TinyProperty from '@/utils/axon/TinyProperty';
 
+console.log('axon/TProperty.ts');
+
 /**
  * A simple Property/TinyProperty like interface
  *

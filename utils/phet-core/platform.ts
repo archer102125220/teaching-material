@@ -23,7 +23,7 @@ function isIE(version: number): boolean {
 // See http://stackoverflow.com/questions/3007480/determine-if-user-navigated-from-mobile-safari
 function isMobileSafari(): boolean {
   return !!(
-    (window.phet && phet.chipper && phet.chipper.queryParameters && phet.chipper.queryParameters['phet-app']) ||
+    (window.phet && window.phet.chipper && window.phet.chipper.queryParameters && window.phet.chipper.queryParameters['phet-app']) ||
     ((ua.match(/(iPod|iPhone|iPad)/) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints >= 2)) && ua.match(/AppleWebKit/))
   );
 }

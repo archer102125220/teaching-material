@@ -779,19 +779,19 @@ export default class ParallelDOM extends PhetioObject {
    */
   public pdomAudit(): void {
 
-    if (this.hasPDOMContent && assert) {
+    if (this.hasPDOMContent && window.assert) {
 
-      this._inputType && assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support inputType');
-      this._pdomChecked && assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support pdomChecked.');
-      this._inputValue && assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support inputValue');
-      this._pdomChecked && assert(INPUT_TYPES_THAT_SUPPORT_CHECKED.includes(this._inputType!.toUpperCase()), `inputType does not support checked attribute: ${this._inputType}`);
-      this._focusHighlightLayerable && assert(this.focusHighlight instanceof Node, 'focusHighlight must be Node if highlight is layerable');
-      this._tagName!.toUpperCase() === INPUT_TAG && assert(typeof this._inputType === 'string', ' inputType expected for input');
+      this._inputType && window.assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support inputType');
+      this._pdomChecked && window.assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support pdomChecked.');
+      this._inputValue && window.assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tagName must be INPUT to support inputValue');
+      this._pdomChecked && window.assert(INPUT_TYPES_THAT_SUPPORT_CHECKED.includes(this._inputType!.toUpperCase()), `inputType does not support checked attribute: ${this._inputType}`);
+      this._focusHighlightLayerable && window.assert(this.focusHighlight instanceof Node, 'focusHighlight must be Node if highlight is layerable');
+      this._tagName!.toUpperCase() === INPUT_TAG && window.assert(typeof this._inputType === 'string', ' inputType expected for input');
 
       // note that most things that are not focusable by default need innerContent to be focusable on VoiceOver,
       // but this will catch most cases since often things that get added to the focus order have the application
       // role for custom input. Note that accessibleName will not be checked that it specifically changes innerContent, it is up to the dev to do this.
-      this.ariaRole === 'application' && assert(this.innerContent || this.accessibleName, 'must have some innerContent or element will never be focusable in VoiceOver');
+      this.ariaRole === 'application' && window.assert(this.innerContent || this.accessibleName, 'must have some innerContent or element will never be focusable in VoiceOver');
     }
 
     for (let i = 0; i < (this as unknown as Node).children.length; i++) {
@@ -1192,7 +1192,7 @@ export default class ParallelDOM extends PhetioObject {
    */
   public setInputType(inputType: string | null): void {
     window.assert && window.assert(inputType === null || typeof inputType === 'string');
-    assert && this.tagName && assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tag name must be INPUT to support inputType');
+    window.assert && this.tagName && window.assert(this._tagName!.toUpperCase() === INPUT_TAG, 'tag name must be INPUT to support inputType');
 
     if (inputType !== this._inputType) {
 
@@ -2209,11 +2209,11 @@ export default class ParallelDOM extends PhetioObject {
   public setPDOMOrder(pdomOrder: (Node | null)[] | null): void {
     window.assert && window.assert(Array.isArray(pdomOrder) || pdomOrder === null,
       `Array or null expected, received: ${pdomOrder}`);
-    assert && pdomOrder && pdomOrder.forEach((node, index) => {
+    window.assert && pdomOrder && pdomOrder.forEach((node, index) => {
       window.assert && window.assert(node === null || node instanceof Node,
         `Elements of pdomOrder should be either a Node or null. Element at index ${index} is: ${node}`);
     });
-    assert && pdomOrder && assert((this as unknown as Node).getTrails(node => _.includes(pdomOrder, node)).length === 0, 'pdomOrder should not include any ancestors or the node itself');
+    window.assert && pdomOrder && window.assert((this as unknown as Node).getTrails(node => _.includes(pdomOrder, node)).length === 0, 'pdomOrder should not include any ancestors or the node itself');
 
     // Only update if it has changed
     if (this._pdomOrder !== pdomOrder) {
@@ -2373,7 +2373,7 @@ export default class ParallelDOM extends PhetioObject {
    * value is converted to string since input values are generally string for HTML.
    */
   public setInputValue(inputValue: PDOMValueType | number | null): void {
-    assert && this._tagName && assert(_.includes(FORM_ELEMENTS, this._tagName.toUpperCase()), 'dom element must be a form element to support value');
+    window.assert && this._tagName && window.assert(_.includes(FORM_ELEMENTS, this._tagName.toUpperCase()), 'dom element must be a form element to support value');
 
     if (inputValue !== this._inputValue) {
       if (isTReadOnlyProperty(this._inputValue) && !this._inputValue.isDisposed) {
@@ -2461,7 +2461,7 @@ export default class ParallelDOM extends PhetioObject {
    */
   public setPDOMAttribute(attribute: string, value: PDOMValueType | boolean | number, providedOptions?: SetPDOMAttributeOptions): void {
 
-    assert && providedOptions && assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
+    window.assert && providedOptions && window.assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
       'Extra prototype on pdomAttribute options object is a code smell');
 
     const options = optionize<SetPDOMAttributeOptions>()({
@@ -2498,7 +2498,7 @@ export default class ParallelDOM extends PhetioObject {
     }
 
     let listener: ((rawValue: string | boolean | number) => void) | null = (rawValue: string | boolean | number) => {
-      assert && typeof rawValue === 'string' && validate(rawValue, Validation.STRING_WITHOUT_TEMPLATE_VARS_VALIDATOR);
+      window.assert && typeof rawValue === 'string' && validate(rawValue, Validation.STRING_WITHOUT_TEMPLATE_VARS_VALIDATOR);
 
       for (let j = 0; j < this._pdomInstances.length; j++) {
         const peer = this._pdomInstances[j].peer!;
@@ -2535,7 +2535,7 @@ export default class ParallelDOM extends PhetioObject {
    * @param [providedOptions]
    */
   public removePDOMAttribute(attribute: string, providedOptions?: RemovePDOMAttributeOptions): void {
-    assert && providedOptions && assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
+    window.assert && providedOptions && window.assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
       'Extra prototype on pdomAttribute options object is a code smell');
 
     const options = optionize<RemovePDOMAttributeOptions>()({
@@ -2591,7 +2591,7 @@ export default class ParallelDOM extends PhetioObject {
    * @param [providedOptions]
    */
   public hasPDOMAttribute(attribute: string, providedOptions?: HasPDOMAttributeOptions): boolean {
-    assert && providedOptions && assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
+    window.assert && providedOptions && window.assert(Object.getPrototypeOf(providedOptions) === Object.prototype,
       'Extra prototype on pdomAttribute options object is a code smell');
 
     const options = optionize<HasPDOMAttributeOptions>()({
@@ -3081,14 +3081,14 @@ export default class ParallelDOM extends PhetioObject {
     sceneryLog && sceneryLog.ParallelDOM && sceneryLog.push();
 
     // Find descendants with pdomOrders and check them against all of their ancestors/self
-    assert && (function recur(descendant) {
+    window.assert && (function recur(descendant) {
       // Prune the search (because milliseconds don't grow on trees, even if we do have assertions enabled)
       if (descendant._rendererSummary.hasNoPDOM()) { return; }
 
-      descendant.pdomOrder && assert(descendant.getTrails(node => _.includes(descendant.pdomOrder, node)).length === 0, 'pdomOrder should not include any ancestors or the node itself');
+      descendant.pdomOrder && window.assert(descendant.getTrails(node => _.includes(descendant.pdomOrder, node)).length === 0, 'pdomOrder should not include any ancestors or the node itself');
     })(node);
 
-    assert && PDOMTree.auditNodeForPDOMCycles(this as unknown as Node);
+    window.assert && PDOMTree.auditNodeForPDOMCycles(this as unknown as Node);
 
     this._pdomDisplaysInfo.onAddChild(node);
 

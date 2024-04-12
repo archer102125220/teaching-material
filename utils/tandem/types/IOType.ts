@@ -222,11 +222,11 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
       addChildElement: supertype && supertype.addChildElement
     }, providedOptions);
 
-    if (assert && supertype) {
+    if (window.assert && supertype) {
       (Object.keys(options.metadataDefaults) as (keyof PhetioElementMetadata)[]).forEach(metadataDefaultKey => {
         // eslint-disable-next-line no-prototype-builtins
-        assert && supertype.getAllMetadataDefaults().hasOwnProperty(metadataDefaultKey) &&
-          assert(supertype.getAllMetadataDefaults()[metadataDefaultKey] !== options.metadataDefaults[metadataDefaultKey],
+        window.assert && supertype.getAllMetadataDefaults().hasOwnProperty(metadataDefaultKey) &&
+          window.assert(supertype.getAllMetadataDefaults()[metadataDefaultKey] !== options.metadataDefaults[metadataDefaultKey],
             `${metadataDefaultKey} should not have the same default value as the ancestor metadata default.`);
       });
     }
@@ -284,7 +284,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
         // in a state call `toStateObject`, and the "n" portion is based on how many IOTypes in the hierarchy define a
         // toStateObject or stateSchema. In the future we could potentially improve performance by having validateStateObject
         // only check against the schema at this level, but then extra keys in the stateObject would not be caught. From work done in https://github.com/phetsims/phet-io/issues/1774
-        assert && this.validateStateObject(toStateObject);
+        window.assert && this.validateStateObject(toStateObject);
       }
       return toStateObject;
     };
@@ -301,7 +301,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
         // NOTE: Cannot use this.validateStateObject because options adopts supertype.applyState, which is bounds to the
         // parent IOType. This prevents correct validation because the supertype doesn't know about the subtype schemas.
         // @ts-expect-error we cannot type check against PhetioObject from this file
-        assert && coreObject.phetioType && coreObject.phetioType.validateStateObject(stateObject);
+        window.assert && coreObject.phetioType && coreObject.phetioType.validateStateObject(stateObject);
       }
 
       // Only do this non-standard applyState function from stateSchema if there is a stateSchema but no applyState provided
@@ -327,7 +327,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
       // assert that each public method adheres to the expected schema
       this.methods && Object.values(this.methods).forEach((methodObject: IOTypeMethod) => {
         if (typeof methodObject === 'object') {
-          assert && methodObject.invocableForReadOnlyElements && assert(typeof methodObject.invocableForReadOnlyElements === 'boolean',
+          window.assert && methodObject.invocableForReadOnlyElements && window.assert(typeof methodObject.invocableForReadOnlyElements === 'boolean',
             `invocableForReadOnlyElements must be of type boolean: ${methodObject.invocableForReadOnlyElements}`);
         }
       });
@@ -340,7 +340,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
 
       if (supertype) {
         const typeHierarchy = supertype.getTypeHierarchy();
-        assert && this.events && this.events.forEach(event => {
+        window.assert && this.events && this.events.forEach(event => {
 
           // Make sure events are not listed again
           window.assert && window.assert(!_.some(typeHierarchy, t => t.events.includes(event)), `IOType should not declare event that parent also has: ${event}`);
@@ -456,7 +456,7 @@ export default class IOType<T = any, StateType extends SelfStateType = any, Self
         if (!keyValid) {
           valid = false;
         }
-        assert && toAssert && assert(keyValid, `stateObject provided a key that is not in the schema: ${key}`);
+        window.assert && toAssert && window.assert(keyValid, `stateObject provided a key that is not in the schema: ${key}`);
       });
 
       return valid;
@@ -487,7 +487,7 @@ IOType.ObjectIO = new IOType<PhetioObject, null>(TandemConstants.OBJECT_IO_TYPE_
   documentation: 'The root of the PhET-iO Type hierarchy',
   toStateObject: (coreObject: PhetioObject) => {
 
-    if (phet && phet.tandem && phet.tandem.Tandem.VALIDATION) {
+    if (window.phet && window.phet.tandem && window.phet.tandem.Tandem.VALIDATION) {
 
       window.assert && window.assert(coreObject.tandem, 'coreObject must be PhET-iO object');
 

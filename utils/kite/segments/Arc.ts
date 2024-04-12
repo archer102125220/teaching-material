@@ -319,11 +319,11 @@ export default class Arc extends Segment {
    * Gets the start position of this arc.
    */
   public getStart(): Vector2 {
-    console.log({ _start: this._start, _startAngle: this._startAngle });
+    // console.log({ _start: this._start, _startAngle: this._startAngle });
     if (this._start === null) {
       this._start = this.positionAtAngle(this._startAngle);
     }
-    console.log({ _start: this._start, _startAngle: this._startAngle }, '_');
+    // console.log({ _start: this._start, _startAngle: this._startAngle }, '_');
     return this._start;
   }
 
@@ -502,7 +502,7 @@ export default class Arc extends Segment {
    * Returns the position of this arc at angle.
    */
   public positionAtAngle(angle: number): Vector2 {
-    console.log({ _radius: this._radius, angle });
+    // console.log({ _radius: this._radius, angle });
     return this._center.plus(Vector2.createPolar(this._radius, angle));
   }
 

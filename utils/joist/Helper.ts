@@ -287,11 +287,11 @@ export default class Helper {
       strictAxonDependencies: false
     });
 
-    const fuzzProperty = new BooleanProperty(phet.chipper.queryParameters.fuzz, {
+    const fuzzProperty = new BooleanProperty(window.phet.chipper.queryParameters.fuzz, {
       tandem: Tandem.OPT_OUT
     });
     fuzzProperty.lazyLink(fuzz => {
-      phet.chipper.queryParameters.fuzz = fuzz;
+      window.phet.chipper.queryParameters.fuzz = fuzz;
     });
 
     const measuringTapeVisibleProperty = new BooleanProperty(false, {
@@ -947,7 +947,7 @@ class HelperCheckbox extends Checkbox {
 //
 //     this[ this.primaryRectName ] = 2;
 //
-//     var dragListener = new phet.scenery.DragListener( {
+//     var dragListener = new window.phet.scenery.DragListener( {
 //       drag: event => {
 //         this.separatorLocation = dragListener.parentPoint[ this.primaryCoordinate ];
 //         this.layout();
@@ -1047,7 +1047,7 @@ class CollapsibleTreeNode<T extends PDOMTreeNode | VisualTreeNode> extends Node 
     });
 
     const buttonSize = 12;
-    const expandCollapseShape = new Shape()
+    const expandCollapseShape = new Shape(undefined, undefined, 'expandCollapseShape')
       .moveToPoint(Vector2.createPolar(buttonSize / 2.5, 3 / 4 * Math.PI).plusXY(buttonSize / 8, 0))
       .lineTo(buttonSize / 8, 0)
       .lineToPoint(Vector2.createPolar(buttonSize / 2.5, 5 / 4 * Math.PI).plusXY(buttonSize / 8, 0));
@@ -1985,7 +1985,7 @@ const createInfo = (trail: Trail): Node[] => {
 
   children.push(new RectangularPushButton({
     content: new Text('Copy Path', { fontSize: 12 }),
-    listener: () => copyToClipboard('phet.joist.display.rootNode' + trail.indices.map(index => {
+    listener: () => copyToClipboard('window.phet.joist.display.rootNode' + trail.indices.map(index => {
       return `.children[ ${index} ]`;
     }).join('')),
     tandem: Tandem.OPT_OUT

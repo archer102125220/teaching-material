@@ -321,16 +321,16 @@ const AccessibleValueHandler = <SuperType extends Constructor<Node>>(Type: Super
       window.assert && window.assert(providedOptions.enabledRangeProperty, 'enabledRangeProperty is a required option');
       window.assert && window.assert(providedOptions.valueProperty, 'valueProperty is a required option');
 
-      assert && providedOptions && assert(!providedOptions.hasOwnProperty('tagName') || providedOptions.tagName === null,
+      window.assert && providedOptions && window.assert(!providedOptions.hasOwnProperty('tagName') || providedOptions.tagName === null,
         'AccessibleValueHandler sets its own tagName. Only provide tagName to clear accessible content from the PDOM');
 
       // cannot be set by client
-      assert && providedOptions && assert(!providedOptions.hasOwnProperty('inputType'), 'AccessibleValueHandler sets its own inputType.');
+      window.assert && providedOptions && window.assert(!providedOptions.hasOwnProperty('inputType'), 'AccessibleValueHandler sets its own inputType.');
 
       // if rounding to keyboard step, keyboardStep must be defined so values aren't skipped and the slider
       // doesn't get stuck while rounding to the nearest value, see https://github.com/phetsims/sun/issues/410
-      if (assert && providedOptions && providedOptions.roundToStepSize) {
-        assert(providedOptions.keyboardStep, 'rounding to keyboardStep, define appropriate keyboardStep to round to');
+      if (window.assert && providedOptions && providedOptions.roundToStepSize) {
+        window.assert(providedOptions.keyboardStep, 'rounding to keyboardStep, define appropriate keyboardStep to round to');
       }
 
       // Override options

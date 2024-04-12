@@ -136,35 +136,35 @@ class Stitcher {
     firstChangeInterval,
     lastChangeInterval
   ) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         firstChangeInterval && lastChangeInterval,
         'We are guaranteed at least one change interval'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !firstDrawable || firstDrawable.previousDrawable === null,
         'End boundary of drawable linked list should link to null'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         !lastDrawable || lastDrawable.nextDrawable === null,
         'End boundary of drawable linked list should link to null'
       );
 
-    if (sceneryLog && sceneryLog.Stitch) {
-      sceneryLog.Stitch(
+    if (window.sceneryLog && window.sceneryLog.Stitch) {
+      window.sceneryLog.Stitch(
         `stitch ${backbone.toString()} first:${
           firstDrawable ? firstDrawable.toString() : 'null'
         } last:${lastDrawable ? lastDrawable.toString() : 'null'} oldFirst:${
           oldFirstDrawable ? oldFirstDrawable.toString() : 'null'
         } oldLast:${oldLastDrawable ? oldLastDrawable.toString() : 'null'}`
       );
-      sceneryLog.push();
+      window.sceneryLog.push();
     }
-    if (sceneryLog && sceneryLog.StitchDrawables) {
-      sceneryLog.StitchDrawables('Before:');
-      sceneryLog.push();
+    if (window.sceneryLog && window.sceneryLog.StitchDrawables) {
+      window.sceneryLog.StitchDrawables('Before:');
+      window.sceneryLog.push();
       Stitcher.debugDrawables(
         oldFirstDrawable,
         oldLastDrawable,
@@ -172,10 +172,10 @@ class Stitcher {
         lastChangeInterval,
         false
       );
-      sceneryLog.pop();
+      window.sceneryLog.pop();
 
-      sceneryLog.StitchDrawables('After:');
-      sceneryLog.push();
+      window.sceneryLog.StitchDrawables('After:');
+      window.sceneryLog.push();
       Stitcher.debugDrawables(
         firstDrawable,
         lastDrawable,
@@ -183,7 +183,7 @@ class Stitcher {
         lastChangeInterval,
         true
       );
-      sceneryLog.pop();
+      window.sceneryLog.pop();
     }
 
     this.backbone = backbone;
@@ -193,8 +193,8 @@ class Stitcher {
     // list of blocks that have their pendingFirstDrawable or pendingLastDrawable set, and need updateInterval() called
     this.touchedBlocks = cleanArray(this.touchedBlocks);
 
-    if (assertSlow) {
-      assertSlow(
+    if (window.assertSlow) {
+      window.assertSlow(
         !this.initialized,
         'We should not be already initialized (clean should be called)'
       );
@@ -218,12 +218,14 @@ class Stitcher {
    * @public
    */
   clean() {
-    sceneryLog && sceneryLog.Stitch && sceneryLog.Stitch('clean');
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch('-----------------------------------');
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch('clean');
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch('-----------------------------------');
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.auditStitch();
 
       this.initialized = false;
@@ -233,7 +235,7 @@ class Stitcher {
     this.firstDrawable = null;
     this.lastDrawable = null;
 
-    sceneryLog && sceneryLog.Stitch && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.pop();
   }
 
   /**
@@ -242,9 +244,9 @@ class Stitcher {
    * @protected
    */
   recordBackboneBoundaries() {
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(
         `recording backbone boundaries: ${
           this.firstDrawable ? this.firstDrawable.toString() : 'null'
         } to ${this.lastDrawable ? this.lastDrawable.toString() : 'null'}`
@@ -252,7 +254,7 @@ class Stitcher {
     this.backbone.previousFirstDrawable = this.firstDrawable;
     this.backbone.previousLastDrawable = this.lastDrawable;
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.boundariesRecorded = true;
     }
   }
@@ -267,23 +269,23 @@ class Stitcher {
   notePendingAddition(drawable, block) {
     window.assert && window.assert(drawable.renderer === block.renderer);
 
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(
         `pending add: ${drawable.toString()} to ${block.toString()}`
       );
-    sceneryLog && sceneryLog.Stitch && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.push();
 
     drawable.notePendingAddition(this.backbone.display, block, this.backbone);
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.pendingAdditions.push({
-        drawable: drawable,
-        block: block
+        drawable,
+        block
       });
     }
 
-    sceneryLog && sceneryLog.Stitch && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.pop();
   }
 
   /**
@@ -298,23 +300,23 @@ class Stitcher {
   notePendingMove(drawable, block) {
     window.assert && window.assert(drawable.renderer === block.renderer);
 
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(
         `pending move: ${drawable.toString()} to ${block.toString()}`
       );
-    sceneryLog && sceneryLog.Stitch && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.push();
 
     drawable.notePendingMove(this.backbone.display, block);
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.pendingMoves.push({
-        drawable: drawable,
-        block: block
+        drawable,
+        block
       });
     }
 
-    sceneryLog && sceneryLog.Stitch && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.pop();
   }
 
   /**
@@ -324,20 +326,20 @@ class Stitcher {
    * @param {Drawable} drawable
    */
   notePendingRemoval(drawable) {
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(`pending remove: ${drawable.toString()}`);
-    sceneryLog && sceneryLog.Stitch && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(`pending remove: ${drawable.toString()}`);
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.push();
 
     drawable.notePendingRemoval(this.backbone.display);
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.pendingRemovals.push({
-        drawable: drawable
+        drawable
       });
     }
 
-    sceneryLog && sceneryLog.Stitch && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.pop();
   }
 
   /**
@@ -348,10 +350,10 @@ class Stitcher {
    * @param {Block} block
    */
   markBlockForDisposal(block) {
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(`block for disposal: ${block.toString()}`);
-    sceneryLog && sceneryLog.Stitch && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(`block for disposal: ${block.toString()}`);
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.push();
 
     // TODO: PERFORMANCE: does this cause reflows / style calculation https://github.com/phetsims/scenery/issues/1581
     if (block.domElement.parentNode === this.backbone.domElement) {
@@ -360,25 +362,25 @@ class Stitcher {
     }
     block.markForDisposal(this.backbone.display);
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.disposedBlocks.push({
-        block: block
+        block
       });
     }
 
-    sceneryLog && sceneryLog.Stitch && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.pop();
   }
 
   /**
    * @protected
    */
   removeAllBlocks() {
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(
         `marking all blocks for disposal (count ${this.backbone.blocks.length})`
       );
-    sceneryLog && sceneryLog.Stitch && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.push();
 
     while (this.backbone.blocks.length) {
       const block = this.backbone.blocks[0];
@@ -387,7 +389,7 @@ class Stitcher {
       this.markBlockForDisposal(block);
     }
 
-    sceneryLog && sceneryLog.Stitch && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.pop();
   }
 
   /**
@@ -399,12 +401,12 @@ class Stitcher {
    * @param {Drawable} lastDrawable
    */
   notifyInterval(block, firstDrawable, lastDrawable) {
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(
         `notify interval: ${block.toString()} ${firstDrawable.toString()} to ${lastDrawable.toString()}`
       );
-    sceneryLog && sceneryLog.Stitch && sceneryLog.push();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.push();
 
     block.notifyInterval(firstDrawable, lastDrawable);
 
@@ -412,15 +414,15 @@ class Stitcher {
     // OHTWO TODO: is this necessary? What is this doing? https://github.com/phetsims/scenery/issues/1581
     this.backbone.markDirtyDrawable(block);
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.intervalsNotified.push({
-        block: block,
-        firstDrawable: firstDrawable,
-        lastDrawable: lastDrawable
+        block,
+        firstDrawable,
+        lastDrawable
       });
     }
 
-    sceneryLog && sceneryLog.Stitch && sceneryLog.pop();
+    window.sceneryLog && window.sceneryLog.Stitch && window.sceneryLog.pop();
   }
 
   /**
@@ -431,9 +433,9 @@ class Stitcher {
    * @param {Drawable} firstDrawable
    */
   markBeforeBlock(block, firstDrawable) {
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(
         `marking block first drawable ${block.toString()} with ${firstDrawable.toString()}`
       );
 
@@ -449,9 +451,9 @@ class Stitcher {
    * @param {Drawable} lastDrawable
    */
   markAfterBlock(block, lastDrawable) {
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(
         `marking block last drawable ${block.toString()} with ${lastDrawable.toString()}`
       );
 
@@ -468,9 +470,9 @@ class Stitcher {
       const block = this.touchedBlocks.pop();
 
       if (block.used) {
-        sceneryLog &&
-          sceneryLog.Stitch &&
-          sceneryLog.Stitch(
+        window.sceneryLog &&
+          window.sceneryLog.Stitch &&
+          window.sceneryLog.Stitch(
             `update interval: ${block.toString()} ${block.pendingFirstDrawable.toString()} to ${block.pendingLastDrawable.toString()}`
           );
 
@@ -480,7 +482,7 @@ class Stitcher {
         // OHTWO TODO: is this necessary? What is this doing? https://github.com/phetsims/scenery/issues/1581
         this.backbone.markDirtyDrawable(block);
 
-        if (assertSlow) {
+        if (window.assertSlow) {
           this.intervalsNotified.push({
             block,
             firstDrawable: block.pendingFirstDrawable,
@@ -488,9 +490,9 @@ class Stitcher {
           });
         }
       } else {
-        sceneryLog &&
-          sceneryLog.Stitch &&
-          sceneryLog.Stitch(
+        window.sceneryLog &&
+          window.sceneryLog.Stitch &&
+          window.sceneryLog.Stitch(
             `skipping update interval: ${block.toString()}, unused`
           );
       }
@@ -538,9 +540,9 @@ class Stitcher {
       throw new Error(`unsupported renderer for createBlock: ${renderer}`);
     }
 
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(
         `created block: ${block.toString()} with renderer: ${renderer} for drawable: ${drawable.toString()}`
       );
 
@@ -557,7 +559,7 @@ class Stitcher {
     // mark it dirty for now, so we can check
     backbone.markDirtyDrawable(block);
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.createdBlocks.push({
         block,
         renderer,
@@ -575,13 +577,13 @@ class Stitcher {
    * @param {Block} block
    */
   appendBlock(block) {
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(`appending block: ${block.toString()}`);
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(`appending block: ${block.toString()}`);
 
     this.backbone.blocks.push(block);
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.reindexed = false;
     }
   }
@@ -593,20 +595,20 @@ class Stitcher {
    * @param {Block} block
    */
   removeBlock(block) {
-    sceneryLog &&
-      sceneryLog.Stitch &&
-      sceneryLog.Stitch(`removing block: ${block.toString()}`);
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch(`removing block: ${block.toString()}`);
 
     // remove the block from our internal list
     const blockIndex = _.indexOf(this.backbone.blocks, block);
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         blockIndex >= 0,
         `Cannot remove block, not attached: ${block.toString()}`
       );
     this.backbone.blocks.splice(blockIndex, 1);
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.reindexed = false;
     }
   }
@@ -615,7 +617,9 @@ class Stitcher {
    * @protected
    */
   useNoBlocks() {
-    sceneryLog && sceneryLog.Stitch && sceneryLog.Stitch('using no blocks');
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch('using no blocks');
 
     // i.e. we will not use any blocks
     cleanArray(this.backbone.blocks);
@@ -627,11 +631,13 @@ class Stitcher {
    * @protected
    */
   reindex() {
-    sceneryLog && sceneryLog.Stitch && sceneryLog.Stitch('reindexing blocks');
+    window.sceneryLog &&
+      window.sceneryLog.Stitch &&
+      window.sceneryLog.Stitch('reindexing blocks');
 
     this.backbone.reindexBlocks();
 
-    if (assertSlow) {
+    if (window.assertSlow) {
       this.reindexed = true;
     }
   }
@@ -641,22 +647,22 @@ class Stitcher {
    * @protected
    */
   auditStitch() {
-    if (assertSlow) {
+    if (window.assertSlow) {
       const blocks = this.backbone.blocks;
       const previousBlocks = this.previousBlocks;
 
-      assertSlow(
+      window.assertSlow(
         this.initialized,
         'We seem to have finished a stitch without proper initialization'
       );
-      assertSlow(
+      window.assertSlow(
         this.boundariesRecorded,
         'Our stitch API requires recordBackboneBoundaries() to be called before' +
           ' it is finished.'
       );
 
       // ensure our indices are up-to-date (reindexed, or did not change)
-      assertSlow(
+      window.assertSlow(
         this.reindexed ||
           blocks.length === 0 ||
           // array equality of previousBlocks and blocks
@@ -667,7 +673,7 @@ class Stitcher {
 
       // all created blocks had intervals notified
       _.each(this.createdBlocks, (blockData) => {
-        assertSlow(
+        window.assertSlow(
           _.some(
             this.intervalsNotified,
             (intervalData) => blockData.block === intervalData.block
@@ -678,7 +684,7 @@ class Stitcher {
 
       // no disposed blocks had intervals notified
       _.each(this.disposedBlocks, (blockData) => {
-        assertSlow(
+        window.assertSlow(
           !_.some(
             this.intervalsNotified,
             (intervalData) => blockData.block === intervalData.block
@@ -693,7 +699,7 @@ class Stitcher {
         _.each(
           Drawable.oldListToArray(block.firstDrawable, block.lastDrawable),
           (drawable) => {
-            assertSlow(
+            window.assertSlow(
               _.some(
                 this.pendingRemovals,
                 (removalData) => removalData.drawable === drawable
@@ -717,7 +723,7 @@ class Stitcher {
             block.pendingLastDrawable
           ),
           (drawable) => {
-            assertSlow(
+            window.assertSlow(
               _.some(
                 this.pendingAdditions,
                 (additionData) =>
@@ -738,7 +744,7 @@ class Stitcher {
       // all disposed blocks should have been removed
       _.each(this.disposedBlocks, (blockData) => {
         const blockIdx = _.indexOf(blocks, blockData.block);
-        assertSlow(
+        window.assertSlow(
           blockIdx < 0,
           `Disposed block ${blockData.block.toString()} still present at index ${blockIdx}`
         );
@@ -747,7 +753,7 @@ class Stitcher {
       // all created blocks should have been added
       _.each(this.createdBlocks, (blockData) => {
         const blockIdx = _.indexOf(blocks, blockData.block);
-        assertSlow(
+        window.assertSlow(
           blockIdx >= 0,
           `Created block ${blockData.block.toString()} is not in the blocks array`
         );
@@ -755,10 +761,13 @@ class Stitcher {
 
       // all current blocks should be marked as used
       _.each(blocks, (block) => {
-        assertSlow(block.used, 'All current blocks should be marked as used');
+        window.assertSlow(
+          block.used,
+          'All current blocks should be marked as used'
+        );
       });
 
-      assertSlow(
+      window.assertSlow(
         blocks.length - previousBlocks.length ===
           this.createdBlocks.length - this.disposedBlocks.length,
         `${
@@ -770,25 +779,25 @@ class Stitcher {
           `after: ${_.map(blocks, (n) => n.id).join(',')}`
       );
 
-      assertSlow(
+      window.assertSlow(
         this.touchedBlocks.length === 0,
         'If we marked any blocks for changes, we should have called updateBlockIntervals'
       );
 
       if (blocks.length) {
-        assertSlow(
+        window.assertSlow(
           this.backbone.previousFirstDrawable !== null &&
             this.backbone.previousLastDrawable !== null,
           'If we are left with at least one block, we must be tracking at least one drawable'
         );
 
-        assertSlow(
+        window.assertSlow(
           blocks[0].pendingFirstDrawable ===
             this.backbone.previousFirstDrawable,
           'Our first drawable should match the first drawable of our first block'
         );
 
-        assertSlow(
+        window.assertSlow(
           blocks[blocks.length - 1].pendingLastDrawable ===
             this.backbone.previousLastDrawable,
           'Our last drawable should match the last drawable of our last block'
@@ -796,7 +805,7 @@ class Stitcher {
 
         for (let i = 0; i < blocks.length - 1; i++) {
           // [i] and [i+1] are a pair of consecutive blocks
-          assertSlow(
+          window.assertSlow(
             blocks[i].pendingLastDrawable.nextDrawable ===
               blocks[i + 1].pendingFirstDrawable &&
               blocks[i].pendingLastDrawable ===
@@ -805,7 +814,7 @@ class Stitcher {
           );
         }
       } else {
-        assertSlow(
+        window.assertSlow(
           this.backbone.previousFirstDrawable === null &&
             this.backbone.previousLastDrawable === null,
           'If we are left with no blocks, it must mean we are tracking precisely zero drawables'
@@ -820,13 +829,13 @@ class Stitcher {
    * @param {ChangeInterval} firstChangeInterval
    */
   static debugIntervals(firstChangeInterval) {
-    if (sceneryLog && sceneryLog.Stitch) {
+    if (window.sceneryLog && window.sceneryLog.Stitch) {
       for (
         let debugInterval = firstChangeInterval;
         debugInterval !== null;
         debugInterval = debugInterval.nextChangeInterval
       ) {
-        sceneryLog.Stitch(
+        window.sceneryLog.Stitch(
           `  interval: ${
             debugInterval.isEmpty() ? '(empty) ' : ''
           }${debugInterval.drawableBefore ? debugInterval.drawableBefore.toString() : '-'} to ${
@@ -856,9 +865,9 @@ class Stitcher {
     lastChangeInterval,
     useCurrent
   ) {
-    if (sceneryLog && sceneryLog.StitchDrawables) {
+    if (window.sceneryLog && window.sceneryLog.StitchDrawables) {
       if (firstDrawable === null) {
-        sceneryLog.StitchDrawables('nothing', 'color: #666;');
+        window.sceneryLog.StitchDrawables('nothing', 'color: #666;');
         return;
       }
 
@@ -876,7 +885,7 @@ class Stitcher {
         }
 
         const drawableString = `${drawable.renderer} ${!useCurrent && drawable.parentDrawable ? drawable.parentDrawable.toString() : ''} ${drawable.toDetailedString()}`;
-        sceneryLog.StitchDrawables(
+        window.sceneryLog.StitchDrawables(
           drawableString,
           isChanged
             ? useCurrent

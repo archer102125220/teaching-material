@@ -129,6 +129,7 @@ type ParsedSVGItem = {
 }[keyof CanApplyParsedSVG];
 
 class Shape implements CanApplyParsedSVG {
+  public readonly shapeName: string = '';
 
   // Lower-level piecewise mathematical description using segments, also individually immutable
   public readonly subpaths: Subpath[] = [];
@@ -155,7 +156,9 @@ class Shape implements CanApplyParsedSVG {
   /**
    * All arguments optional, they are for the copy() method. if used, ensure that 'bounds' is consistent with 'subpaths'
    */
-  public constructor(subpaths?: Subpath[] | string, bounds?: Bounds2) {
+  public constructor( subpaths?: Subpath[] | string, bounds?: Bounds2, shapeName?:string ) {
+
+    this.shapeName = shapeName || '';
 
     this._bounds = bounds ? bounds.copy() : null;
 
@@ -1049,9 +1052,9 @@ class Shape implements CanApplyParsedSVG {
   /**
    * Returns a copy of this shape
    */
-  public copy(): Shape {
+  public copy(shapeName: string = ''): Shape {
     // copy each individual subpath, so future modifications to either Shape doesn't affect the other one
-    return new Shape(_.map(this.subpaths, subpath => subpath.copy()), this.bounds);
+    return new Shape(_.map(this.subpaths, subpath => subpath.copy()), this.bounds, 'copyShape:' + shapeName);
   }
 
   /**
@@ -1094,18 +1097,18 @@ class Shape implements CanApplyParsedSVG {
   /**
    * Returns a new Shape that is transformed by the associated matrix
    */
-  public transformed(matrix: Matrix3): Shape {
+  public transformed(matrix: Matrix3, shapeName: string = ''): Shape {
     // TODO: allocation reduction https://github.com/phetsims/kite/issues/76
     const subpaths = _.map(this.subpaths, subpath => subpath.transformed(matrix));
     const bounds = _.reduce(subpaths, (bounds, subpath) => bounds.union(subpath.bounds), Bounds2.NOTHING);
-    return new Shape(subpaths, bounds);
+    return new Shape(subpaths, bounds, 'transformedShape:' + shapeName);
   }
 
   /**
    * Converts this subpath to a new shape made of many line segments (approximating the current shape) with the
    * transformation applied.
    */
-  public nonlinearTransformed(providedOptions?: NonlinearTransformedOptions): Shape {
+  public nonlinearTransformed(providedOptions?: NonlinearTransformedOptions, shapeName: string = ''): Shape {
     const options = combineOptions<NonlinearTransformedOptions>({
       minLevels: 0,
       maxLevels: 7,
@@ -1116,7 +1119,7 @@ class Shape implements CanApplyParsedSVG {
     // TODO: allocation reduction https://github.com/phetsims/kite/issues/76
     const subpaths = _.map(this.subpaths, subpath => subpath.nonlinearTransformed(options));
     const bounds = _.reduce(subpaths, (bounds, subpath) => bounds.union(subpath.bounds), Bounds2.NOTHING);
-    return new Shape(subpaths, bounds);
+    return new Shape(subpaths, bounds, 'nonlinearTransformedShape:' + shapeName);
   }
 
   /**
@@ -1335,7 +1338,7 @@ class Shape implements CanApplyParsedSVG {
    *
    * TODO: rename stroked( lineStyles )? https://github.com/phetsims/kite/issues/76
    */
-  public getStrokedShape(lineStyles: LineStyles): Shape {
+  public getStrokedShape(lineStyles: LineStyles, shapeName: string = ''): Shape {
     let subpaths: Subpath[] = [];
     const bounds = Bounds2.NOTHING.copy();
     let subLen = this.subpaths.length;
@@ -1348,13 +1351,13 @@ class Shape implements CanApplyParsedSVG {
     for (let i = 0; i < subLen; i++) {
       bounds.includeBounds(subpaths[i].bounds);
     }
-    return new Shape(subpaths, bounds);
+    return new Shape(subpaths, bounds, 'getStrokedShapeShape:' + shapeName);
   }
 
   /**
    * Gets a shape offset by a certain amount.
    */
-  public getOffsetShape(distance: number): Shape {
+  public getOffsetShape(distance: number, shapeName: string = ''): Shape {
     // TODO: abstract away this type of behavior https://github.com/phetsims/kite/issues/76
     const subpaths = [];
     const bounds = Bounds2.NOTHING.copy();
@@ -1366,19 +1369,40 @@ class Shape implements CanApplyParsedSVG {
     for (let i = 0; i < subLen; i++) {
       bounds.includeBounds(subpaths[i].bounds);
     }
-    return new Shape(subpaths, bounds);
+    return new Shape(subpaths, bounds, 'getOffsetShapeShape' + shapeName);
   }
 
   /**
    * Returns a copy of this subpath with the dash "holes" removed (has many subpaths usually).
    */
-  public getDashedShape(lineDash: number[], lineDashOffset: number, providedOptions?: GetDashedShapeOptions): Shape {
-    const options = optionize<GetDashedShapeOptions>()({
-      distanceEpsilon: 1e-10,
-      curveEpsilon: 1e-8
-    }, providedOptions);
+  public getDashedShape(
+    lineDash: number[],
+    lineDashOffset: number,
+    providedOptions?: GetDashedShapeOptions,
+    shapeName: string = ''
+  ): Shape {
+    const options = optionize<GetDashedShapeOptions>()(
+      {
+        distanceEpsilon: 1e-10,
+        curveEpsilon: 1e-8
+      },
+      providedOptions
+    );
 
-    return new Shape(_.flatten(this.subpaths.map(subpath => subpath.dashed(lineDash, lineDashOffset, options.distanceEpsilon, options.curveEpsilon))));
+    return new Shape(
+      _.flatten(
+        this.subpaths.map((subpath) =>
+          subpath.dashed(
+            lineDash,
+            lineDashOffset,
+            options.distanceEpsilon,
+            options.curveEpsilon
+          )
+        )
+      ),
+      undefined,
+      'getDashedShapeShape:' + shapeName
+    );
   }
 
   /**
@@ -1573,7 +1597,7 @@ class Shape implements CanApplyParsedSVG {
 
   public toString(): string {
     // TODO: consider a more verbose but safer way? https://github.com/phetsims/kite/issues/76
-    return `new phet.kite.Shape( '${this.getSVGPath()}' )`;
+    return `new window.phet.kite.Shape( '${this.getSVGPath()}' )`;
   }
 
   /* ---------------------------------------------------------------------------*
@@ -1616,7 +1640,10 @@ class Shape implements CanApplyParsedSVG {
    * Adds a subpath
    */
   private addSubpath(subpath: Subpath): this {
+    console.log('Shape.addSubpath befor', _.cloneDeep(this.subpaths));
+    console.trace();
     this.subpaths.push(subpath);
+    console.log('Shape.addSubpath after', _.cloneDeep(this.subpaths));
 
     // listen to when the subpath is invalidated (will cause bounds recomputation here)
     subpath.invalidatedEmitter.addListener(this._invalidateListener);
@@ -1734,8 +1761,8 @@ class Shape implements CanApplyParsedSVG {
    * Returns a new shape that contains the xor of the two shapes (a point in only one shape is in the resulting
    * shape).
    */
-  public shapeXor(shape: Shape): Shape {
-    return Graph.binaryResult(this, shape, Graph.BINARY_NONZERO_XOR);
+  public async shapeXor(shape: Shape): Promise<Shape> {
+    return await Graph.binaryResult(this, shape, Graph.BINARY_NONZERO_XOR);
   }
 
   /**
@@ -1771,17 +1798,17 @@ class Shape implements CanApplyParsedSVG {
   /**
    * Returns a Shape from the serialized representation.
    */
-  public static deserialize(obj: SerializedShape): Shape {
+  public static deserialize(obj: SerializedShape, shapeName: string = ''): Shape {
     window.assert && window.assert(obj.type === 'Shape');
 
-    return new Shape(obj.subpaths.map(Subpath.deserialize));
+    return new Shape(obj.subpaths.map(Subpath.deserialize), undefined, 'deserializeShape:' + shapeName);
   }
 
   /**
    * Creates a rectangle
    */
-  public static rectangle(x: number, y: number, width: number, height: number): Shape {
-    return new Shape().rect(x, y, width, height);
+  public static rectangle(x: number, y: number, width: number, height: number, shapeName: string = ''): Shape {
+    return new Shape(undefined, undefined, 'rectangleShape:' + shapeName).rect(x, y, width, height);
   }
 
   public static rect = Shape.rectangle;
@@ -1789,8 +1816,8 @@ class Shape implements CanApplyParsedSVG {
   /**
    * Creates a round rectangle {Shape}, with {number} arguments. Uses circular or elliptical arcs if given.
    */
-  public static roundRect(x: number, y: number, width: number, height: number, arcw: number, arch: number): Shape {
-    return new Shape().roundRect(x, y, width, height, arcw, arch);
+  public static roundRect(x: number, y: number, width: number, height: number, arcw: number, arch: number, shapeName: string = ''): Shape {
+    return new Shape(undefined, undefined, 'roundRectShape:' + shapeName).roundRect(x, y, width, height, arcw, arch);
   }
 
   public static roundRectangle = Shape.roundRect;
@@ -1814,7 +1841,7 @@ class Shape implements CanApplyParsedSVG {
    * @param height - Height of rectangle
    * @param [cornerRadii] - Optional object with potential radii for each corner.
    */
-  public static roundedRectangleWithRadii(x: number, y: number, width: number, height: number, cornerRadii?: Partial<CornerRadiiOptions>): Shape {
+  public static roundedRectangleWithRadii(x: number, y: number, width: number, height: number, cornerRadii?: Partial<CornerRadiiOptions>, shapeName:string = ''): Shape {
 
     // defaults to 0 (not using merge, since we reference each multiple times)
     let topLeftRadius = cornerRadii && cornerRadii.topLeft || 0;
@@ -1868,7 +1895,7 @@ class Shape implements CanApplyParsedSVG {
     window.assert && window.assert(topLeftRadius + bottomLeftRadius <= height, 'Corner overlap on left edge');
     window.assert && window.assert(topRightRadius + bottomRightRadius <= height, 'Corner overlap on right edge');
 
-    const shape = new Shape();
+    const shape = new Shape(undefined, undefined, 'roundedRectangleWithRadiiShape:' + shapeName);
     const right = x + width;
     const bottom = y + height;
 
@@ -1920,15 +1947,15 @@ class Shape implements CanApplyParsedSVG {
    * Creates a closed polygon from an array of vertices by connecting them by a series of lines.
    * The lines are joining the adjacent vertices in the array.
    */
-  public static polygon(vertices: Vector2[]): Shape {
-    return new Shape().polygon(vertices);
+  public static polygon(vertices: Vector2[], shapeName: string = ''): Shape {
+    return new Shape(undefined, undefined, 'polygonShape:' + shapeName).polygon(vertices);
   }
 
   /**
    * Creates a rectangular shape from bounds
    */
-  public static bounds(bounds: Bounds2): Shape {
-    return new Shape().rect(bounds.minX, bounds.minY, bounds.maxX - bounds.minX, bounds.maxY - bounds.minY);
+  public static bounds(bounds: Bounds2, shapeName: string = ''): Shape {
+    return new Shape(undefined, undefined, 'boundsShape:' + shapeName).rect(bounds.minX, bounds.minY, bounds.maxX - bounds.minX, bounds.maxY - bounds.minY);
   }
 
   /**
@@ -1937,12 +1964,13 @@ class Shape implements CanApplyParsedSVG {
   public static lineSegment(x1: number, y1: number, x2: number, y2: number): Shape;
   public static lineSegment(p1: Vector2, p2: Vector2): Shape;
   public static lineSegment(a: Vector2 | number, b: Vector2 | number, c?: number, d?: number): Shape {
+    console.log('(static)Shape.lineSegment', { a, b, c, d });
     if (typeof a === 'number') {
-      return new Shape().moveTo(a, b as number).lineTo(c!, d!);
+      return new Shape(undefined, undefined, 'lineSegmentAShape').moveTo(a, b as number).lineTo(c!, d!);
     }
     else {
       // then a and b must be {Vector2}
-      return new Shape().moveToPoint(a).lineToPoint(b as Vector2);
+      return new Shape(undefined, undefined, 'lineSegmentAElseShape').moveToPoint(a).lineToPoint(b as Vector2);
     }
   }
 
@@ -1953,8 +1981,8 @@ class Shape implements CanApplyParsedSVG {
    * @param sides - an integer
    * @param radius
    */
-  public static regularPolygon(sides: number, radius: number): Shape {
-    const shape = new Shape();
+  public static regularPolygon(sides: number, radius: number, shapeName: string = ''): Shape {
+    const shape = new Shape(undefined, undefined, 'regularPolygonShape:' + shapeName);
     _.each(_.range(sides), k => {
       const point = Vector2.createPolar(radius, 2 * Math.PI * k / sides);
       (k === 0) ? shape.moveToPoint(point) : shape.lineToPoint(point);
@@ -1972,10 +2000,10 @@ class Shape implements CanApplyParsedSVG {
   public static circle(a: Vector2 | number, b?: number, c?: number): Shape {
     if (b === undefined) {
       // circle( radius ), center = 0,0
-      return new Shape().circle(0, 0, a as number);
+      return new Shape(undefined, undefined, 'circleShape').circle(0, 0, a as number);
     }
     // @ts-expect-error - The signatures are compatible, it's just multiple different types at the same time
-    return new Shape().circle(a, b, c);
+    return new Shape(undefined, undefined, 'circleShape').circle(a, b, c);
   }
 
   /**
@@ -1989,10 +2017,10 @@ class Shape implements CanApplyParsedSVG {
     // TODO: Ellipse/EllipticalArc has a mess of parameters. Consider parameter object, or double-check parameter handling https://github.com/phetsims/kite/issues/76
     if (d === undefined) {
       // ellipse( radiusX, radiusY ), center = 0,0
-      return new Shape().ellipse(0, 0, a as number, b, c);
+      return new Shape(undefined, undefined, 'ellipseShape').ellipse(0, 0, a as number, b, c);
     }
     // @ts-expect-error - The signatures are compatible, it's just multiple different types at the same time
-    return new Shape().ellipse(a, b, c, d, e);
+    return new Shape(undefined, undefined, 'ellipseShape').ellipse(a, b, c, d, e);
   }
 
   /**
@@ -2007,7 +2035,7 @@ class Shape implements CanApplyParsedSVG {
   public static arc(center: Vector2, radius: number, startAngle: number, endAngle: number, anticlockwise?: boolean): Shape;
   public static arc(a: Vector2 | number, b: number, c: number, d: number, e?: number | boolean, f?: boolean): Shape {
     // @ts-expect-error - The signatures are compatible, it's just multiple different types at the same time
-    return new Shape().arc(a, b, c, d, e, f);
+    return new Shape(undefined, undefined, 'arcShape').arc(a, b, c, d, e, f);
   }
 
   /**
@@ -2034,14 +2062,14 @@ class Shape implements CanApplyParsedSVG {
   /**
    * Returns a new Shape constructed by appending a list of segments together.
    */
-  public static segments(segments: Segment[], closed?: boolean): Shape {
+  public static segments(segments: Segment[], closed?: boolean, shapeName: string = ''): Shape {
     if (window.assert) {
       for (let i = 1; i < segments.length; i++) {
         window.assert(segments[i - 1].end.equalsEpsilon(segments[i].start, 1e-6), 'Mismatched start/end');
       }
     }
 
-    return new Shape([new Subpath(segments, undefined, !!closed)]);
+    return new Shape([new Subpath(segments, undefined, !!closed)], undefined, 'segmentsShape:' + shapeName);
   }
 }
 

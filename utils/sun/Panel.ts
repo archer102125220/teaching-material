@@ -67,7 +67,7 @@ const DEFAULT_OPTIONS: OptionizeDefaults<SelfOptions, SuperOptions> = {
   minWidth: 0,
   minHeight: 0
 };
-assert && Object.freeze(DEFAULT_OPTIONS);
+window.assert && Object.freeze(DEFAULT_OPTIONS);
 
 export default class Panel extends Sizable(Node) {
 

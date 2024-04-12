@@ -179,6 +179,8 @@ import Utils from '@/utils/dot/Utils';
 import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 import type TEmitter from '@/utils/axon/TEmitter';
 
+console.log('scenery/nodes/Node.ts');
+
 let globalIdCounter = 1;
 
 const scratchBounds2 = Bounds2.NOTHING.copy(); // mutable {Bounds2} used temporarily in methods
@@ -681,10 +683,10 @@ class Node extends ParallelDOM {
   // This is an array of property (setter) names for Node.mutate(), which are also used when creating
   // Nodes with parameter objects.
   //
-  // E.g. new phet.scenery.Node( { x: 5, rotation: 20 } ) will create a Path, and apply setters in the order below
+  // E.g. new window.phet.scenery.Node( { x: 5, rotation: 20 } ) will create a Path, and apply setters in the order below
   // (node.x = 5; node.rotation = 20)
   //
-  // Some special cases exist (for function names). new phet.scenery.Node( { scale: 2 } ) will actually call
+  // Some special cases exist (for function names). new window.phet.scenery.Node( { scale: 2 } ) will actually call
   // node.scale( 2 ).
   //
   // The order below is important! Don't change this without knowing the implications.
@@ -843,6 +845,7 @@ class Node extends ParallelDOM {
     if (options) {
       this.mutate(options);
     }
+    // console.log({ NodeWidth: this?.width }); // error
   }
 
 
@@ -874,7 +877,7 @@ class Node extends ParallelDOM {
     this._rendererSummary.summaryChange(RendererSummary.bitmaskAll, node._rendererSummary.bitmask);
 
     node._parents.push(this);
-    if (assert && window.phet?.chipper?.queryParameters && isFinite(phet.chipper.queryParameters.parentLimit)) {
+    if (window.assert && window.phet?.chipper?.queryParameters && isFinite(window.phet.chipper.queryParameters.parentLimit)) {
       const parentCount = node._parents.length;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
@@ -887,15 +890,15 @@ class Node extends ParallelDOM {
         console.log(`Max Node parents: ${window.maxParentCount}`);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        assert(window.maxParentCount <= phet.chipper.queryParameters.parentLimit,
+        window.assert(window.maxParentCount <= window.phet.chipper.queryParameters.parentLimit,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
-          `parent count of ${window.maxParentCount} above ?parentLimit=${phet.chipper.queryParameters.parentLimit}`);
+          `parent count of ${window.maxParentCount} above ?parentLimit=${window.phet.chipper.queryParameters.parentLimit}`);
       }
     }
 
     this._children.splice(index, 0, node);
-    if (assert && window.phet?.chipper?.queryParameters && isFinite(phet.chipper.queryParameters.childLimit)) {
+    if (window.assert && window.phet?.chipper?.queryParameters && isFinite(window.phet.chipper.queryParameters.childLimit)) {
       const childCount = this._children.length;
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
@@ -908,10 +911,10 @@ class Node extends ParallelDOM {
         console.log(`Max Node children: ${window.maxChildCount}`);
         // eslint-disable-next-line @typescript-eslint/ban-ts-comment
         // @ts-expect-error
-        assert(window.maxChildCount <= phet.chipper.queryParameters.childLimit,
+        window.assert(window.maxChildCount <= window.phet.chipper.queryParameters.childLimit,
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-expect-error
-          `child count of ${window.maxChildCount} above ?childLimit=${phet.chipper.queryParameters.childLimit}`);
+          `child count of ${window.maxChildCount} above ?childLimit=${window.phet.chipper.queryParameters.childLimit}`);
       }
     }
 
@@ -1730,6 +1733,7 @@ class Node extends ParallelDOM {
    */
   public invalidateSelf(newSelfBounds?: Bounds2): void {
     console.log('invalidateSelf');
+    console.trace();
     window.assert && window.assert(newSelfBounds === undefined || newSelfBounds instanceof Bounds2,
       'invalidateSelf\'s newSelfBounds, if provided, needs to be Bounds2');
 
@@ -1793,10 +1797,10 @@ class Node extends ParallelDOM {
   /**
    * Returns a Shape that represents the area covered by containsPointSelf.
    */
-  public getSelfShape(): Shape {
+  public getSelfShape(shapeName: string = ''): Shape {
     const selfBounds = this.selfBounds;
     if (selfBounds.isEmpty()) {
-      return new Shape();
+      return new Shape(undefined, undefined, 'getSelfShapeShape:' + shapeName);
     }
     else {
       return Shape.bounds(this.selfBounds);
@@ -2105,20 +2109,20 @@ class Node extends ParallelDOM {
    * returned value.
    *
    * For example, hit-testing a simple shape (with no pickability) will return null:
-   * > new phet.scenery.Circle( 20 ).hitTest( phet.dot.v2( 0, 0 ) ); // null
+   * > new window.phet.scenery.Circle( 20 ).hitTest( window.phet.dot.v2( 0, 0 ) ); // null
    *
    * If the same shape is made to be pickable, it will return a trail:
-   * > new phet.scenery.Circle( 20, { pickable: true } ).hitTest( phet.dot.v2( 0, 0 ) );
+   * > new window.phet.scenery.Circle( 20, { pickable: true } ).hitTest( window.phet.dot.v2( 0, 0 ) );
    * > // returns a Trail with the circle as the only node.
    *
    * It will return the result that is visually stacked on top, so e.g.:
-   * > new phet.scenery.Node( {
+   * > new window.phet.scenery.Node( {
    * >   pickable: true,
    * >   children: [
-   * >     new phet.scenery.Circle( 20 ),
-   * >     new phet.scenery.Circle( 15 )
+   * >     new window.phet.scenery.Circle( 20 ),
+   * >     new window.phet.scenery.Circle( 15 )
    * >   ]
-   * > } ).hitTest( phet.dot.v2( 0, 0 ) ); // returns the "top-most" circle (the one with radius:15).
+   * > } ).hitTest( window.phet.dot.v2( 0, 0 ) ); // returns the "top-most" circle (the one with radius:15).
    *
    * This is used by Scenery's internal input system by calling hitTest on a Display's rootNode with the
    * global-coordinate point.
@@ -2873,7 +2877,7 @@ class Node extends ParallelDOM {
    * dimensions (maxWidth and maxHeight). See documentation in constructor for detailed behavior.
    */
   private updateMaxDimension(localBounds: Bounds2): void {
-    assert && this.auditMaxDimensions();
+    window.assert && this.auditMaxDimensions();
 
     const currentScale = this._appliedScaleFactor;
     let idealScale = 1;
@@ -4608,7 +4612,7 @@ class Node extends ParallelDOM {
    * default behavior.
    */
   public setMouseArea(area: Shape | Bounds2 | null): this {
-    window.assert && window.assert(area === null || area instanceof Shape || area instanceof Bounds2, 'mouseArea needs to be a phet.kite.Shape, phet.dot.Bounds2, or null');
+    window.assert && window.assert(area === null || area instanceof Shape || area instanceof Bounds2, 'mouseArea needs to be a window.phet.kite.Shape, window.phet.dot.Bounds2, or null');
 
     if (this._mouseArea !== area) {
       this._mouseArea = area; // TODO: could change what is under the mouse, invalidate! https://github.com/phetsims/scenery/issues/1581
@@ -4646,7 +4650,7 @@ class Node extends ParallelDOM {
    * default behavior.
    */
   public setTouchArea(area: Shape | Bounds2 | null): this {
-    window.assert && window.assert(area === null || area instanceof Shape || area instanceof Bounds2, 'touchArea needs to be a phet.kite.Shape, phet.dot.Bounds2, or null');
+    window.assert && window.assert(area === null || area instanceof Shape || area instanceof Bounds2, 'touchArea needs to be a window.phet.kite.Shape, window.phet.dot.Bounds2, or null');
 
     if (this._touchArea !== area) {
       this._touchArea = area; // TODO: could change what is under the touch, invalidate! https://github.com/phetsims/scenery/issues/1581
@@ -4684,7 +4688,7 @@ class Node extends ParallelDOM {
    * (anything outside is fully transparent).
    */
   public setClipArea(shape: Shape | null): void {
-    window.assert && window.assert(shape === null || shape instanceof Shape, 'clipArea needs to be a phet.kite.Shape, or null');
+    window.assert && window.assert(shape === null || shape instanceof Shape, 'clipArea needs to be a window.phet.kite.Shape, or null');
 
     if (this.clipArea !== shape) {
       this.clipAreaProperty.value = shape;
@@ -5578,7 +5582,7 @@ class Node extends ParallelDOM {
    */
   public toImage(callback: (image: HTMLImageElement, x: number, y: number) => void, x?: number, y?: number, width?: number, height?: number): void {
 
-    assert && deprecationWarning('Node.toImage() is deprecated, please use Node.rasterized() instead');
+    window.assert && deprecationWarning('Node.toImage() is deprecated, please use Node.rasterized() instead');
 
     window.assert && window.assert(x === undefined || typeof x === 'number', 'If provided, x should be a number');
     window.assert && window.assert(y === undefined || typeof y === 'number', 'If provided, y should be a number');
@@ -5617,7 +5621,7 @@ class Node extends ParallelDOM {
    */
   public toImageNodeAsynchronous(callback: (image: Node) => void, x?: number, y?: number, width?: number, height?: number): void {
 
-    assert && deprecationWarning('Node.toImageNodeAsyncrhonous() is deprecated, please use Node.rasterized() instead');
+    window.assert && deprecationWarning('Node.toImageNodeAsyncrhonous() is deprecated, please use Node.rasterized() instead');
 
     window.assert && window.assert(x === undefined || typeof x === 'number', 'If provided, x should be a number');
     window.assert && window.assert(y === undefined || typeof y === 'number', 'If provided, y should be a number');
@@ -5647,7 +5651,7 @@ class Node extends ParallelDOM {
    */
   public toCanvasNodeSynchronous(x?: number, y?: number, width?: number, height?: number): Node {
 
-    assert && deprecationWarning('Node.toCanvasNodeSynchronous() is deprecated, please use Node.rasterized() instead');
+    window.assert && deprecationWarning('Node.toCanvasNodeSynchronous() is deprecated, please use Node.rasterized() instead');
 
     window.assert && window.assert(x === undefined || typeof x === 'number', 'If provided, x should be a number');
     window.assert && window.assert(y === undefined || typeof y === 'number', 'If provided, y should be a number');
@@ -5683,7 +5687,7 @@ class Node extends ParallelDOM {
    */
   public toDataURLImageSynchronous(x?: number, y?: number, width?: number, height?: number): Image {
 
-    assert && deprecationWarning('Node.toDataURLImageSychronous() is deprecated, please use Node.rasterized() instead');
+    window.assert && deprecationWarning('Node.toDataURLImageSychronous() is deprecated, please use Node.rasterized() instead');
 
     window.assert && window.assert(x === undefined || typeof x === 'number', 'If provided, x should be a number');
     window.assert && window.assert(y === undefined || typeof y === 'number', 'If provided, y should be a number');
@@ -5714,7 +5718,7 @@ class Node extends ParallelDOM {
    */
   public toDataURLNodeSynchronous(x?: number, y?: number, width?: number, height?: number): Node {
 
-    assert && deprecationWarning('Node.toDataURLNodeSynchronous() is deprecated, please use Node.rasterized() instead');
+    window.assert && deprecationWarning('Node.toDataURLNodeSynchronous() is deprecated, please use Node.rasterized() instead');
 
     window.assert && window.assert(x === undefined || typeof x === 'number', 'If provided, x should be a number');
     window.assert && window.assert(y === undefined || typeof y === 'number', 'If provided, y should be a number');
@@ -6349,6 +6353,8 @@ class Node extends ParallelDOM {
    * node.scale( 2 ) instead of activating an ES5 setter directly.
    */
   public mutate(options?: NodeOptions): this {
+    // console.log('Node.mutate');
+    // console.log({ options, this: this, 'this.setFill': this.setFill, 'this._mutatorKeys': this._mutatorKeys });
 
     if (!options) {
       return this;
@@ -6364,16 +6370,16 @@ class Node extends ParallelDOM {
     window.assert && window.assert(_.filter(['translation', 'y', 'top', 'bottom', 'centerY', 'centerTop', 'rightTop', 'leftCenter', 'center', 'rightCenter', 'leftBottom', 'centerBottom', 'rightBottom'], key => options[key] !== undefined).length <= 1,
       `More than one mutation on this Node set the y component, check ${Object.keys(options).join(',')}`);
 
-    if (assert && options.hasOwnProperty('enabled') && options.hasOwnProperty('enabledProperty')) {
+    if (window.assert && options.hasOwnProperty('enabled') && options.hasOwnProperty('enabledProperty')) {
       window.assert && window.assert(options.enabledProperty!.value === options.enabled, 'If both enabled and enabledProperty are provided, then values should match');
     }
-    if (assert && options.hasOwnProperty('inputEnabled') && options.hasOwnProperty('inputEnabledProperty')) {
+    if (window.assert && options.hasOwnProperty('inputEnabled') && options.hasOwnProperty('inputEnabledProperty')) {
       window.assert && window.assert(options.inputEnabledProperty!.value === options.inputEnabled, 'If both inputEnabled and inputEnabledProperty are provided, then values should match');
     }
-    if (assert && options.hasOwnProperty('visible') && options.hasOwnProperty('visibleProperty')) {
+    if (window.assert && options.hasOwnProperty('visible') && options.hasOwnProperty('visibleProperty')) {
       window.assert && window.assert(options.visibleProperty!.value === options.visible, 'If both visible and visibleProperty are provided, then values should match');
     }
-    if (assert && options.hasOwnProperty('pickable') && options.hasOwnProperty('pickableProperty')) {
+    if (window.assert && options.hasOwnProperty('pickable') && options.hasOwnProperty('pickableProperty')) {
       window.assert && window.assert(options.pickableProperty!.value === options.pickable, 'If both pickable and pickableProperty are provided, then values should match');
     }
 

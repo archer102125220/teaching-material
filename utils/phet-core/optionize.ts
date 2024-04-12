@@ -21,6 +21,8 @@ import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 import type RequiredKeys from '@/utils/phet-core/types/RequiredKeys';
 import type OptionalKeys from '@/utils/phet-core/types/OptionalKeys';
 
+console.log('phet-core/optionize.ts');
+
 // Gets the parts of an object that are optional
 type Options<T> = Pick<T, OptionalKeys<T>>;
 

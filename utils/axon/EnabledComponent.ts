@@ -58,7 +58,7 @@ export default class EnabledComponent extends Disposable {
 
     const ownsEnabledProperty = !options.enabledProperty;
 
-    assert && options.enabledPropertyOptions && assert(!(!options.phetioEnabledPropertyInstrumented && options.enabledPropertyOptions.tandem),
+    window.assert && options.enabledPropertyOptions && window.assert(!(!options.phetioEnabledPropertyInstrumented && options.enabledPropertyOptions.tandem),
       'incompatible options. Cannot specify phetioEnabledPropertyInstrumented opt out and a Tandem via enabledPropertyOptions.');
 
     super(options);

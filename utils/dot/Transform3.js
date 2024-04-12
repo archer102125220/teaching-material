@@ -429,7 +429,7 @@ class Transform3 {
   }
 
   /**
-   * Returns a transformed phet.kite.Shape.
+   * Returns a transformed window.phet.kite.Shape.
    * @public
    *
    * @param {Shape} shape
@@ -609,7 +609,7 @@ class Transform3 {
   }
 
   /**
-   * Returns an inverse-transformed phet.kite.Shape.
+   * Returns an inverse-transformed window.phet.kite.Shape.
    * @public
    *
    * This is the inverse of transformShape()

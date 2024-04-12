@@ -248,8 +248,8 @@ class KeyboardDragListener extends EnabledComponent implements TInputListener {
   public constructor(providedOptions?: KeyboardDragListenerOptions) {
 
     // Use either dragSpeed or dragDelta, cannot use both at the same time.
-    assert && assertMutuallyExclusiveOptions(providedOptions, ['dragSpeed', 'shiftDragSpeed'], ['dragDelta', 'shiftDragDelta']);
-    assert && assertMutuallyExclusiveOptions(providedOptions, ['mapPosition'], ['dragBoundsProperty']);
+    window.assert && assertMutuallyExclusiveOptions(providedOptions, ['dragSpeed', 'shiftDragSpeed'], ['dragDelta', 'shiftDragDelta']);
+    window.assert && assertMutuallyExclusiveOptions(providedOptions, ['mapPosition'], ['dragBoundsProperty']);
 
     const options = optionize<KeyboardDragListenerOptions, SelfOptions, EnabledComponentOptions>()({
 

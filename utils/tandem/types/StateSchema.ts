@@ -78,7 +78,7 @@ export default class StateSchema<T, SelfStateType> {
   public constructor(providedOptions?: StateSchemaOptions<SelfStateType>) {
 
     // Either create with compositeSchema, or specify a that this state is just a value
-    assert && assertMutuallyExclusiveOptions(providedOptions, ['compositeSchema'], ['displayString', 'validator']);
+    window.assert && assertMutuallyExclusiveOptions(providedOptions, ['compositeSchema'], ['displayString', 'validator']);
 
     const options = optionize<StateSchemaOptions<SelfStateType>>()({
       displayString: '',
@@ -217,7 +217,7 @@ export default class StateSchema<T, SelfStateType> {
 
       let valid = null;
       if (!compositeStateObject) {
-        assert && toAssert && assert(false, 'There was no stateObject, but there was a state schema saying there should be', schema);
+        window.assert && toAssert && window.assert(false, 'There was no stateObject, but there was a state schema saying there should be', schema);
         valid = false;
         return valid;
       }
@@ -227,13 +227,13 @@ export default class StateSchema<T, SelfStateType> {
         if (typeof key === 'string') {
 
           if (!compositeStateObject.hasOwnProperty(key)) {
-            assert && toAssert && assert(false, `${key} in state schema but not in the state object`);
+            window.assert && toAssert && window.assert(false, `${key} in state schema but not in the state object`);
             valid = false;
           }
           else {
             // eslint-disable-next-line no-lonely-if
             if (!schema[key].isStateObjectValid(compositeStateObject[key], false)) {
-              assert && toAssert && assert(false, `stateObject is not valid for ${key}. stateObject=`, compositeStateObject[key], 'schema=', schema[key]);
+              window.assert && toAssert && window.assert(false, `stateObject is not valid for ${key}. stateObject=`, compositeStateObject[key], 'schema=', schema[key]);
               valid = false;
             }
           }
@@ -250,9 +250,9 @@ export default class StateSchema<T, SelfStateType> {
       window.assert && window.assert(this.validator, 'validator must be present if not composite');
       const valueStateObject = stateObject;
 
-      if (assert && toAssert) {
+      if (window.assert && toAssert) {
         const validationError = Validation.getValidationError(valueStateObject, this.validator!);
-        assert(validationError === null, 'valueStateObject failed validation', valueStateObject, validationError);
+        window.assert(validationError === null, 'valueStateObject failed validation', valueStateObject, validationError);
       }
 
       return Validation.isValueValid(valueStateObject, this.validator!);

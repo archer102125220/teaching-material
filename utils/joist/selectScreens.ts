@@ -26,11 +26,11 @@ export type ScreenReturnType = {
  * @author Sam Reid (PhET Interactive Simulations)
  *
  * @param allSimScreens - all of the screens declared by the sim, duck-typed for tests
- * @param homeScreenQueryParameter - from phet.chipper.queryParameters.homeScreen
+ * @param homeScreenQueryParameter - from window.phet.chipper.queryParameters.homeScreen
  * @param homeScreenQueryParameterProvided
- * @param initialScreenIndex - from phet.chipper.queryParameters.initialScreen
+ * @param initialScreenIndex - from window.phet.chipper.queryParameters.initialScreen
  * @param initialScreenQueryParameterProvided
- * @param screensQueryParameter - from phet.chipper.queryParameters.screens
+ * @param screensQueryParameter - from window.phet.chipper.queryParameters.screens
  * @param screensQueryParameterProvided
  * @param createHomeScreen
  * @returns - duck-typed for tests
@@ -63,7 +63,7 @@ export default function selectScreens(allSimScreens: AnyScreen[],
   // use all of the available sim screens as the default. Note that if the value of `screens` did not pass validation
   // in QueryStringMachine, it will be reverted to its default value of `null`, so it also needs to be checked for
   // truthiness before attempting to use it. For `screens` documentation, see the schema at
-  // phet.chipper.queryParameters.screens in initialize-globals.js.
+  // window.phet.chipper.queryParameters.screens in initialize-globals.js.
   if (screensQueryParameterProvided && screensQueryParameter) {
     window.assert && window.assert(screensQueryParameter.length > 0, 'Screens query parameter should have at least one value');
 

@@ -13,6 +13,8 @@ import BooleanIO from '@/utils/tandem/types/BooleanIO';
 import axon from '@/utils/axon/axon';
 import Property, { type PropertyOptions } from '@/utils/axon/Property';
 
+console.log('axon/BooleanProperty.ts');
+
 type SelfOptions = EmptySelfOptions;
 
 // client cannot specify superclass options that are controlled by BooleanProperty

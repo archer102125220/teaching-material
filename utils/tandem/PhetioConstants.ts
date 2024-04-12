@@ -2,6 +2,8 @@
 
 import tandemNamespace from '@/utils/tandem/tandemNamespace';
 
+console.log('tandem/PhetioConstants.ts');
+
 /**
  * Constants used in PhET-iO. Defined in the tandem repo since they need to be accessed in non-private code, like
  * IOType.ObjectIO.
@@ -13,5 +15,5 @@ const PhetioConstants = {
   IO_TYPE_SUFFIX: 'IO'
 };
 
-tandemNamespace.register( 'PhetioConstants', PhetioConstants );
+tandemNamespace.register('PhetioConstants', PhetioConstants);
 export default PhetioConstants;

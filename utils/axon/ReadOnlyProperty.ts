@@ -85,8 +85,8 @@ export type LinkOptions = {
 // understand and debug, we chose to turn off strictAxonDependencies if listener order is changed.
 // See https://github.com/phetsims/faradays-electromagnetic-lab/issues/57#issuecomment-1909089735
 const strictAxonDependencies = _.hasIn(window, 'phet.chipper.queryParameters') &&
-  phet.chipper.queryParameters.strictAxonDependencies &&
-  phet.chipper.queryParameters.listenerOrder === 'default';
+  window.phet.chipper.queryParameters.strictAxonDependencies &&
+  window.phet.chipper.queryParameters.listenerOrder === 'default';
 export const derivationStack: Array<IntentionalAny> = [];
 
 /**
@@ -143,7 +143,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
     }, providedOptions);
 
 
-    assert && options.units && assert(units.isValidUnits(options.units), `invalid units: ${options.units}`);
+    window.assert && options.units && window.assert(units.isValidUnits(options.units), `invalid units: ${options.units}`);
     if (options.units) {
       options.phetioEventMetadata = options.phetioEventMetadata || {};
       // eslint-disable-next-line no-prototype-builtins
@@ -151,7 +151,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
       options.phetioEventMetadata.units = options.units;
     }
 
-    if (assert && providedOptions) {
+    if (window.assert && providedOptions) {
 
       // @ts-expect-error -- for checking JS code
       window.assert && window.assert(!providedOptions.phetioType, 'Set phetioType via phetioValueType');
@@ -174,10 +174,10 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
     if (this.isPhetioInstrumented()) {
 
       // This assertion helps in instrumenting code that has the tandem but not type
-      assert && Tandem.VALIDATION && assert(this.phetioType,
+      window.assert && Tandem.VALIDATION && window.assert(this.phetioType,
         `phetioType passed to Property must be specified. Tandem.phetioID: ${this.tandem.phetioID}`);
 
-      assert && Tandem.VALIDATION && assert(options.phetioType.parameterTypes![0],
+      window.assert && Tandem.VALIDATION && window.assert(options.phetioType.parameterTypes![0],
         `phetioType parameter type must be specified (only one). Tandem.phetioID: ${this.tandem.phetioID}`);
 
       window.assert && window.assert(options.phetioValueType !== IOType.ObjectIO,
@@ -240,7 +240,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    * or internal code that must be fast.
    */
   public get(): T {
-    if (assert && strictAxonDependencies && derivationStack.length > 0) {
+    if (window.assert && strictAxonDependencies && derivationStack.length > 0) {
       const currentDependencies = derivationStack[derivationStack.length - 1];
       if (!currentDependencies.includes(this)) {
         window.assert && window.assert(false, 'accessed value outside of dependency tracking');
@@ -317,7 +317,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
     const newValue = this.get();
 
     // validate the before notifying listeners
-    assert && validate(newValue, this.valueValidator, VALIDATE_OPTIONS_FALSE);
+    window.assert && validate(newValue, this.valueValidator, VALIDATE_OPTIONS_FALSE);
 
     // Although this is not the idiomatic pattern (since it is guarded in the phetioStartEvent), this function is
     // called so many times that it is worth the optimization for PhET brand.
@@ -646,7 +646,7 @@ export default class ReadOnlyProperty<T> extends PhetioObject implements TReadOn
    */
   public override getPhetioMouseHitTarget(fromLinking = false): PhetioObject | 'phetioNotSelectable' {
 
-    if (phet.tandem.phetioElementSelectionProperty.value === 'string') {
+    if (window.phet.tandem.phetioElementSelectionProperty.value === 'string') {
 
       // As of this writing, the only way to get to this function is for Properties that have a value of strings, but
       // in the future that may not be the case. SR and MK still think it is preferable to keep this general, as false

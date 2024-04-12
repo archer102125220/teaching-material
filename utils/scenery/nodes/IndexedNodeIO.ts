@@ -143,7 +143,7 @@ const IndexedNodeIO = new IOType('IndexedNodeIO', {
       parameterTypes: [NumberIO],
       documentation: 'Deprecated, see "unlinkIndex".',
       implementation: function (this: Node, index: number): void {
-        assert && deprecationWarning('clearLinkIndex is deprecated, use unlinkIndex instead.', true);
+        window.assert && deprecationWarning('clearLinkIndex is deprecated, use unlinkIndex instead.', true);
         unlinkIndex.call(this, index);
       }
     },

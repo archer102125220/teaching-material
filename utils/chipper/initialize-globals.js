@@ -62,7 +62,7 @@ export function initializeGlobals() {
     ? window.phet.chipper.allowLocaleSwitching
     : true;
 
-  // duck type defaults so that not all package.json files need to have a phet.simFeatures section.
+  // duck type defaults so that not all package.json files need to have a window.phet.simFeatures section.
   const packageSimFeatures = packagePhet.simFeatures || {};
 
   // The color profile used by default, if no colorProfiles are specified in package.json.
@@ -89,7 +89,7 @@ export function initializeGlobals() {
    */
   const QUERY_PARAMETERS_SCHEMA = {
     // Schema that describes query parameters for PhET common code.
-    // These query parameters are available via global phet.chipper.queryParameters.
+    // These query parameters are available via global window.phet.chipper.queryParameters.
 
     /**
      * In environments where users should not be able to navigate hyperlinks away from the simulation, clients can use
@@ -381,7 +381,7 @@ export function initializeGlobals() {
 
     /**
      * Enables basic logging to the console.
-     * Usage in code: phet.log && phet.log( 'your message' );
+     * Usage in code: window.phet.log && window.phet.log( 'your message' );
      */
     log: { type: 'flag' },
 
@@ -584,7 +584,7 @@ export function initializeGlobals() {
     showCanvasNodeBounds: { type: 'flag' },
 
     /**
-     * Displays an overlay of the current bounds of each phet.scenery.FittedBlock
+     * Displays an overlay of the current bounds of each window.phet.scenery.FittedBlock
      */
     showFittedBlockBounds: { type: 'flag' },
 
@@ -742,7 +742,7 @@ export function initializeGlobals() {
      *
      * Enables interactive description in the simulation. Use this option to render the Parallel DOM for keyboard
      * navigation and screen-reader-based auditory descriptions. Can be permanently enabled if
-     * `supportsInteractiveDescription: true` is added under the `phet.simFeatures` entry of package.json. Query parameter
+     * `supportsInteractiveDescription: true` is added under the `window.phet.simFeatures` entry of package.json. Query parameter
      * value will always override package.json entry.
      */
     supportsInteractiveDescription: {
@@ -759,7 +759,7 @@ export function initializeGlobals() {
      * This feature is enabled by default whenever supportsInteractiveDescription is true in package.json, since PhET
      * wants to scale out this feature with all sims that support alternative input. The feature can be DISABLED when
      * supportsInteractiveDescription is true by setting `supportsInteractiveHighlights: false` under
-     * `phet.simFeatures` in package.json.
+     * `window.phet.simFeatures` in package.json.
      *
      * The query parameter will always override the package.json entry.
      */
@@ -853,7 +853,7 @@ export function initializeGlobals() {
 
     /**
      * Enables panning and zooming of the simulation. Can be permanently disabled if supportsPanAndZoom: false is
-     * added under the `phet.simFeatures` entry of package.json. Query parameter value will always override package.json entry.
+     * added under the `window.phet.simFeatures` entry of package.json. Query parameter value will always override package.json entry.
      *
      * Public, so that users can disable this feature if they need to.
      */
@@ -940,8 +940,8 @@ export function initializeGlobals() {
       window.phet.chipper.queryParameters.fuzzBoard;
 
     // Add a log function that displays messages to the console. Examples:
-    // phet.log && phet.log( 'You win!' );
-    // phet.log && phet.log( 'You lose', { color: 'red' } );
+    // window.phet.log && window.phet.log( 'You win!' );
+    // window.phet.log && window.phet.log( 'You lose', { color: 'red' } );
     if (window.phet.chipper.queryParameters.log) {
       window.phet.log = function (message, options) {
         options = _.assignIn(
@@ -1283,6 +1283,8 @@ export function initializeGlobals() {
   })();
 }
 
-// initializeGlobals();
+if (typeof window === 'object') {
+  initializeGlobals();
+}
 
 export default initializeGlobals;

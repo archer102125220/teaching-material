@@ -295,4 +295,10 @@ export function seedrandomInit() {
   );
 }
 
-export default seedrandomInit();
+export const seedrandom = seedrandomInit();
+
+if (typeof window === 'object') {
+  window.seedrandom = seedrandom;
+}
+
+export default seedrandom;

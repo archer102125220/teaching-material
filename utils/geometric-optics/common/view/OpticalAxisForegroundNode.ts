@@ -110,7 +110,7 @@ export default class OpticalAxisForegroundNode extends OpticalAxisNode {
         const halfFrameWidth = (imageOnRight ? framedImageNode.bounds.width : framedObjectNode.visibleBounds.width) / 2;
         const clipWidth2 = x1 - x2 - halfFrameWidth;
 
-        clipArea = new Shape()
+        clipArea = new Shape(undefined, undefined, 'clipArea')
           .rect(x1, minY, clipWidth1, clipHeight)
           .rect(x2, minY, clipWidth2, clipHeight);
       }

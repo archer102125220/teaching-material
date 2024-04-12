@@ -48,7 +48,7 @@ import { type Locale } from '@/i18n/joist/localeProperty';
 // If a polyfill for SpeechSynthesis is requested, try to initialize it here before SpeechSynthesis usages. For
 // now this is a PhET specific feature, available by query parameter in initialize-globals. QueryStringMachine
 // cannot be used for this, see https://github.com/phetsims/scenery/issues/1366
-if (window.phet && phet.chipper && phet.chipper.queryParameters && phet.chipper.queryParameters.speechSynthesisFromParent) {
+if (window.phet && window.phet.chipper && window.phet.chipper.queryParameters && window.phet.chipper.queryParameters.speechSynthesisFromParent) {
   SpeechSynthesisParentPolyfill.initialize();
 }
 

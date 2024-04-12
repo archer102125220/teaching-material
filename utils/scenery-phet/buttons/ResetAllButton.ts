@@ -90,7 +90,7 @@ export default class ResetAllButton extends ResetButton {
 
           // even though this is Tandem.REQUIRED, still be graceful if not yet instrumented
           this.isPhetioInstrumented()) {
-          phet.phetio.phetioEngine.phetioStateEngine.restoreStateForScreen(options.tandem);
+          window.phet.phetio.phetioEngine.phetioStateEngine.restoreStateForScreen(options.tandem);
         }
 
         // restore the enabled state to each utteranceQueue after resetting

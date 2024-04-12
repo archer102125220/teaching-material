@@ -151,7 +151,7 @@ class PhetioAction<T extends ActionParameter[] = []> extends PhetioDataHandler<T
 
     this.isExecutingCount++;
 
-    assert && super.validateArguments(...args);
+    window.assert && super.validateArguments(...args);
 
     // Although this is not the idiomatic pattern (since it is guarded in the phetioStartEvent), this function is
     // called so many times that it is worth the optimization for PhET brand.

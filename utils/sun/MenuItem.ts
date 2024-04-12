@@ -15,6 +15,8 @@ import sun from '@/utils/sun/sun';
 import optionize from '@/utils/phet-core/optionize';
 import type TReadOnlyProperty from '@/utils/axon/TReadOnlyProperty';
 
+console.log('sun/MenuItem.ts');
+
 // the check mark used for toggle-able menu items
 const CHECK_MARK_NODE = new Path(checkSolidShape, {
   fill: 'rgba(0,0,0,0.7)',

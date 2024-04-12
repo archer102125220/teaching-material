@@ -29,7 +29,7 @@ export default class LanguageSelectionNode extends Rectangle {
     const wrappedLocaleString = StringUtils.localeToLocalizedName(locale);
 
     // Include the locale code when running with ?dev.
-    const string = phet.chipper.queryParameters.dev ?
+    const string = window.phet.chipper.queryParameters.dev ?
       StringUtils.wrapLTR(`${wrappedLocaleString} (${locale})`) :
       wrappedLocaleString;
 

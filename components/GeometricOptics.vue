@@ -8,7 +8,88 @@ import _get from 'lodash/get';
 
 import localeInfo from '@/assets/chipper/localeInfo';
 
+// import FlatQueue from '@/utils/sherpa/lib/flatqueue-1.2.1';
+import '@/utils/sherpa/lib/flatqueue-1.2.1';
+// import {
+//   TextEncoderLite,
+//   TextDecoderLite
+// } from '@/utils/sherpa/lib/TextEncoderLite-3c9f6f0';
+import '@/utils/sherpa/lib/TextEncoderLite-3c9f6f0';
+// import {
+//   byteLength,
+//   toByteArray,
+//   fromByteArray
+// } from '@/utils/sherpa/lib/base64-js-1.2.0';
+import '@/utils/sherpa/lib/base64-js-1.2.0';
+// import seedrandom from '@/utils/sherpa/lib/seedrandom-2.4.2';
+import '@/utils/sherpa/lib/seedrandom-2.4.2';
+// import { paperInit } from '@/utils/sherpa/lib/paper-js-0.12.17';
+import '@/utils/sherpa/lib/paper-js-0.12.17';
+// import { heInit } from '@/utils/sherpa/lib/he-1.1.1';
+import '@/utils/sherpa/lib/he-1.1.1';
+// import FileSaver from '@/utils/sherpa/lib/FileSaver-b8054a2';
+import '@/utils/sherpa/lib/FileSaver-b8054a2';
+// import LineBreaker from '@/utils/sherpa/lib/linebreak-1.1.0';
+import '@/utils/sherpa/lib/linebreak-1.1.0';
+import '@/utils/chipper/initialize-globals';
+// import { initializeGlobals } from '@/utils/chipper/initialize-globals';
+import { splash } from '@/utils/joist/splash';
+import '@/utils/assert/assert';
+// import { createAssert } from '@/utils/assert/assert';
+// import { handlePhetioIDUtils } from '@/utils/tandem/PhetioIDUtils';
+import '@/utils/tandem/PhetioIDUtils';
+// import { handlePhetioCompareAPIs } from '@/utils/chipper/phet-io/phetioCompareAPIs';
+import '@/utils/chipper/phet-io/phetioCompareAPIs';
+import '@/i18n/handlePhetLocale';
+// import { SimVersion } from '@/utils/perennial-alias/SimVersion';
+import { GeometricOpticsInit } from '@/utils/geometric-optics/geometric-optics-main';
+
 const localeJsonModules = import.meta.glob('@/assets/json/**/*.json');
+
+// window.FlatQueue = FlatQueue;
+// paperInit(self);
+// heInit(window);
+// window.TextEncoderLite = TextEncoderLite;
+// window.TextDecoderLite = TextDecoderLite;
+// window.seedrandom = seedrandom;
+// window.saveAs = FileSaver;
+// window.LineBreaker = LineBreaker;
+// window.byteLength = byteLength;
+// window.toByteArray = toByteArray;
+// window.fromByteArray = fromByteArray;
+// initializeGlobals();
+// createAssert();
+// handlePhetioIDUtils();
+// handlePhetioCompareAPIs();
+// window.phet.preloads = window.phet?.preloads || { chipper: {} };
+// window.phet.preloads.chipper.SimVersion = SimVersion;
+// window.phet.chipper.packageObject = {
+//   name: 'geometric-optics',
+//   version: '1.4.0-dev.2',
+//   license: 'GPL-3.0',
+//   phet: {
+//     requirejsNamespace: 'GEOMETRIC_OPTICS',
+//     simulation: true,
+//     runnable: true,
+//     supportedBrands: ['phet', 'phet-io', 'adapted-from-phet'],
+//     simFeatures: {
+//       supportsSound: true,
+//       supportsInteractiveDescription: true,
+//       supportsDynamicLocale: true,
+//       colorProfiles: ['default']
+//     },
+//     phetLibs: [],
+//     'phet-io': {
+//       compareDesignedAPIChanges: true
+//     },
+//     supportsOutputJS: true,
+//     published: true,
+//     screenNameKeys: [
+//       'GEOMETRIC_OPTICS/screen.lens',
+//       'GEOMETRIC_OPTICS/screen.mirror'
+//     ]
+//   }
+// };
 
 const { $i18n } = useNuxtApp();
 
@@ -17,9 +98,11 @@ const props = defineProps({
   width: { type: String, default: null },
   className: { type: [String, Array, Object], default: null }
 });
+const emit = defineEmits(['loading']);
+
 const geometricOptics = ref(null);
 const geometricOpticsEl = ref(null);
-const geometricOpticsModule = ref(null);
+// const geometricOpticsModule = ref(null);
 const locale = ref(null);
 const localeListData = ref(null);
 const localeListMetadata = ref(null);
@@ -56,104 +139,67 @@ const className = computed(() => {
 });
 
 async function handleLoadGeometricOptics(container) {
-  const [
-    { FlatQueue },
-    { TextEncoderLite, TextDecoderLite },
-    { byteLength, toByteArray, fromByteArray },
-    { default: seedrandom },
-    { paperInit },
-    { default: heInit },
-    { default: FileSaver },
-    { default: LineBreaker },
-    { initializeGlobals },
-    { splash },
-    { createAssert },
-    { handlePhetioIDUtils },
-    { handlePhetioCompareAPIs },
-    { SimVersion },
-    {
-      locale: _locale,
-      localeListData: _localeListData,
-      localeListMetadata: _localeListMetadata
-    }
-  ] = await Promise.all([
-    import('@/utils/sherpa/lib/flatqueue-1.2.1'),
-    import('@/utils/sherpa/lib/TextEncoderLite-3c9f6f0'),
-    import('@/utils/sherpa/lib/base64-js-1.2.0'),
-    import('@/utils/sherpa/lib/seedrandom-2.4.2'),
-    import('@/utils/sherpa/lib/paper-js-0.12.17'),
-    import('@/utils/sherpa/lib/he-1.1.1'),
-    import('@/utils/sherpa/lib/FileSaver-b8054a2'),
-    import('@/utils/sherpa/lib/linebreak-1.1.0'),
-    import('@/utils/chipper/initialize-globals'),
-    import('@/utils/joist/splash'),
-    import('@/utils/assert/assert'),
-    import('@/utils/tandem/PhetioIDUtils'),
-    import('@/utils/chipper/phet-io/phetioCompareAPIs'),
-    import('@/utils/perennial-alias/SimVersion'),
-    handleLocale()
-  ]);
+  emit('loading', true);
+  // const [
+  //   { FlatQueue },
+  //   { TextEncoderLite, TextDecoderLite },
+  //   { byteLength, toByteArray, fromByteArray },
+  //   { default: seedrandom },
+  //   { paperInit },
+  //   { default: heInit },
+  //   { default: FileSaver },
+  //   { default: LineBreaker },
+  //   { initializeGlobals },
+  //   { splash },
+  //   { createAssert },
+  //   { handlePhetioIDUtils },
+  //   { handlePhetioCompareAPIs },
+  //   { SimVersion },
+  //   {
+  //     locale: _locale,
+  //     localeListData: _localeListData,
+  //     localeListMetadata: _localeListMetadata
+  //   }
+  // ] = await Promise.all([
+  //   import('@/utils/sherpa/lib/flatqueue-1.2.1'),
+  //   import('@/utils/sherpa/lib/TextEncoderLite-3c9f6f0'),
+  //   import('@/utils/sherpa/lib/base64-js-1.2.0'),
+  //   import('@/utils/sherpa/lib/seedrandom-2.4.2'),
+  //   import('@/utils/sherpa/lib/paper-js-0.12.17'),
+  //   import('@/utils/sherpa/lib/he-1.1.1'),
+  //   import('@/utils/sherpa/lib/FileSaver-b8054a2'),
+  //   import('@/utils/sherpa/lib/linebreak-1.1.0'),
+  //   import('@/utils/chipper/initialize-globals'),
+  //   import('@/utils/joist/splash'),
+  //   import('@/utils/assert/assert'),
+  //   import('@/utils/tandem/PhetioIDUtils'),
+  //   import('@/utils/chipper/phet-io/phetioCompareAPIs'),
+  //   import('@/utils/perennial-alias/SimVersion'),
+  //   handleLocale()
+  // ]);
+
+  const {
+    locale: _locale,
+    localeListData: _localeListData,
+    localeListMetadata: _localeListMetadata
+  } = await handleLocale();
   locale.value = _locale;
   localeListData.value = _localeListData;
   localeListMetadata.value = _localeListMetadata;
 
-  window.FlatQueue = FlatQueue;
-  paperInit(self);
-  heInit(window);
-  window.TextEncoderLite = TextEncoderLite;
-  window.TextDecoderLite = TextDecoderLite;
-  window.seedrandom = seedrandom;
-  window.saveAs = FileSaver;
-  window.LineBreaker = LineBreaker;
-  window.byteLength = byteLength;
-  window.toByteArray = toByteArray;
-  window.fromByteArray = fromByteArray;
-  initializeGlobals();
   splash(container);
   // splash();
-  createAssert();
-  handlePhetioIDUtils();
-  handlePhetioCompareAPIs();
 
-  if (typeof window.phet?.chipper === 'object') {
-    window.phet.chipper.locale = $i18n.locale.value.includes('zh')
-      ? 'zh_TW'
-      : 'en';
-    window.phet.chipper.strings = locale.value;
-    window.phet.chipper.stringMetadata =
-      localeListMetadata.value[
-        $i18n.locale.value.includes('zh') ? 'zh_TW' : 'en'
-      ];
-  }
-  window.phet.preloads = window.phet?.preloads || { chipper: {} };
-  window.phet.preloads.chipper.SimVersion = SimVersion;
-  window.phet.chipper.packageObject = {
-    name: 'geometric-optics',
-    version: '1.4.0-dev.2',
-    license: 'GPL-3.0',
-    phet: {
-      requirejsNamespace: 'GEOMETRIC_OPTICS',
-      simulation: true,
-      runnable: true,
-      supportedBrands: ['phet', 'phet-io', 'adapted-from-phet'],
-      simFeatures: {
-        supportsSound: true,
-        supportsInteractiveDescription: true,
-        supportsDynamicLocale: true,
-        colorProfiles: ['default']
-      },
-      phetLibs: [],
-      'phet-io': {
-        compareDesignedAPIChanges: true
-      },
-      supportsOutputJS: true,
-      published: true,
-      screenNameKeys: [
-        'GEOMETRIC_OPTICS/screen.lens',
-        'GEOMETRIC_OPTICS/screen.mirror'
-      ]
-    }
-  };
+  // if (typeof window.phet?.chipper === 'object') {
+  //   window.phet.chipper.locale = $i18n.locale.value.includes('zh')
+  //     ? 'zh_TW'
+  //     : 'en';
+  //   window.phet.chipper.strings = locale.value;
+  //   window.phet.chipper.stringMetadata =
+  //     localeListMetadata.value[
+  //       $i18n.locale.value.includes('zh') ? 'zh_TW' : 'en'
+  //     ];
+  // }
   // window.phet_container = container;
 
   // const [
@@ -175,10 +221,6 @@ async function handleLoadGeometricOptics(container) {
     console.log(44444);
     console.log(error);
   }
-  // setTimeout(() => {
-  //   console.log('setTimeout');
-  //   handleGeometricOptics(container);
-  // }, 1000);
   // setTimeout(
   //   () =>
   //     GeometricOpticsInit(
@@ -189,25 +231,40 @@ async function handleLoadGeometricOptics(container) {
   //     ),
   //   5000
   // );
+
+  emit('loading', false);
 }
 
-async function handleGeometricOptics(container) {
+function handleGeometricOptics(container) {
   console.log('handleGeometricOptics');
-  const _geometricOpticsModule = await import(
-    '@/utils/geometric-optics/geometric-optics-main'
-  );
-  console.log({ _geometricOpticsModule });
 
   // geometricOptics.value = await _geometricOpticsModule.getGeometricOptics();
-  geometricOptics.value =
-    await _geometricOpticsModule.GeometricOpticsInit(container);
+  geometricOptics.value = GeometricOpticsInit(container);
+  // geometricOptics.value = await _geometricOpticsModule.GeometricOpticsInit();
+
   console.log(
     'handleGeometricOptics _geometricOpticsModule.GeometricOpticsInit'
   );
   // geometricOptics.value = await _geometricOpticsModule.GeometricOpticsInit();
-
-  geometricOpticsModule.value = _geometricOpticsModule;
 }
+// async function handleGeometricOptics(container) {
+//   console.log('handleGeometricOptics');
+//   const _geometricOpticsModule = await import(
+//     '@/utils/geometric-optics/geometric-optics-main'
+//   );
+//   console.log({ _geometricOpticsModule });
+
+//   // geometricOptics.value = await _geometricOpticsModule.getGeometricOptics();
+//   geometricOptics.value =
+//     await _geometricOpticsModule.GeometricOpticsInit(container);
+//   // geometricOptics.value = await _geometricOpticsModule.GeometricOpticsInit();
+//   console.log(
+//     'handleGeometricOptics _geometricOpticsModule.GeometricOpticsInit'
+//   );
+//   // geometricOptics.value = await _geometricOpticsModule.GeometricOpticsInit();
+
+//   geometricOpticsModule.value = _geometricOpticsModule;
+// }
 
 // function GeometricOpticsInit(
 //   simLauncher,
@@ -504,6 +561,7 @@ function handleDirectionalFormatting(str, isRTL) {
 
 onMounted(() => {
   handleLoadGeometricOptics(geometricOpticsEl.value);
+  // handleLoadGeometricOptics();
 });
 </script>
 

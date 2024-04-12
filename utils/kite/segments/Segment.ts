@@ -481,8 +481,8 @@ export default abstract class Segment {
   /**
    * Returns a Shape containing just this one segment.
    */
-  public toShape(): Shape {
-    return new Shape([new Subpath([this])]);
+  public toShape(shapeName: string = ''): Shape {
+    return new Shape([new Subpath([this])], undefined, 'toShapeShape:' + shapeName);
   }
 
   public getClosestPoints(point: Vector2): ClosestToPointResult[] {

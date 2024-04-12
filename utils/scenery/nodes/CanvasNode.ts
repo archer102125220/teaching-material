@@ -110,8 +110,8 @@ export default abstract class CanvasNode extends Node {
   /**
    * Returns a Shape that represents the area covered by containsPointSelf.
    */
-  public override getSelfShape(): Shape {
-    return new Shape();
+  public override getSelfShape(shapeName: string = ''): Shape {
+    return new Shape(undefined, undefined, 'getSelfShapeShape:' + shapeName);
   }
 
   /**

@@ -371,7 +371,7 @@ export default class Trail {
   public setImmutable(): this {
     // if assertions are disabled, we hope this is inlined as a no-op
     if (window.assert) {
-      assert(this.immutable !== false, 'A trail cannot be made immutable after being flagged as mutable');
+      window.assert(this.immutable !== false, 'A trail cannot be made immutable after being flagged as mutable');
       this.immutable = true;
     }
 
@@ -383,7 +383,7 @@ export default class Trail {
   public setMutable(): this {
     // if assertions are disabled, we hope this is inlined as a no-op
     if (window.assert) {
-      assert(this.immutable !== true, 'A trail cannot be made mutable after being flagged as immutable');
+      window.assert(this.immutable !== true, 'A trail cannot be made mutable after being flagged as immutable');
       this.immutable = false;
     }
 
@@ -748,7 +748,7 @@ export default class Trail {
     if (window.assert) {
       const oldUniqueId = this.uniqueId;
       this.updateUniqueId();
-      assert(oldUniqueId === this.uniqueId);
+      window.assert(oldUniqueId === this.uniqueId);
     }
     return this.uniqueId;
   }

@@ -8,7 +8,7 @@
 
 import $ from '@/utils/sherpa/lib/jquery-2.1.0';
 
-import scenery from '@/utils/scenery';
+import scenery from '@/utils/scenery/scenery';
 
 // const $ = require('@/utils/sherpa/lib/jquery-2.1.0');
 
@@ -91,7 +91,7 @@ function snapshotEquals(assert, a, b, threshold, message, extraDom) {
 
     isEqual = false;
   }
-  window.assert.ok(isEqual, message);
+  assert.ok(isEqual, message);
   return isEqual;
 }
 

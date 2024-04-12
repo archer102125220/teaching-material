@@ -1,7 +1,7 @@
 // Copyright 2021-2023, University of Colorado Boulder
 
 /**
- * GORay extends phet.dot.Ray2 by adding a length property. Generally speaking, a ray has one endpoint and goes on
+ * GORay extends window.phet.dot.Ray2 by adding a length property. Generally speaking, a ray has one endpoint and goes on
  * infinitely in only one direction - you cannot measure the length of a ray. But our GORay can have finite or
  * semi-infinite length, and is used by LightRay to compute the line segments that describe a light ray as it
  * propagates.

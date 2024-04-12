@@ -150,7 +150,7 @@ export default abstract class LayoutConstraint {
    * (scenery-internal)
    */
   public validateLocalPreferredWidth(layoutContainer: WidthSizableNode): void {
-    if (assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock) {
+    if (window.assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock) {
       layoutContainer.validateLocalPreferredWidth();
     }
   }
@@ -161,7 +161,7 @@ export default abstract class LayoutConstraint {
    * (scenery-internal)
    */
   public validateLocalPreferredHeight(layoutContainer: HeightSizableNode): void {
-    if (assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock) {
+    if (window.assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock) {
       layoutContainer.validateLocalPreferredHeight();
     }
   }
@@ -172,7 +172,7 @@ export default abstract class LayoutConstraint {
    * (scenery-internal)
    */
   public validateLocalPreferredSize(layoutContainer: SizableNode): void {
-    if (assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock) {
+    if (window.assert && layoutContainer.localBounds.isFinite() && !this._layoutAttemptDuringLock) {
       layoutContainer.validateLocalPreferredSize();
     }
   }
@@ -187,7 +187,7 @@ export default abstract class LayoutConstraint {
     // If we're locked AND someone tries to do layout, record this so we can attempt layout once we are not locked
     // anymore. We have some infinite-loop detection here for common development errors.
     if (this.isLocked) {
-      assert && count++;
+      window.assert && count++;
       window.assert && window.assert(++count < 500, 'Likely infinite loop detected, are we triggering layout within the layout?');
       this._layoutAttemptDuringLock = true;
     }

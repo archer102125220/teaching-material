@@ -32,6 +32,8 @@ import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 import Disposable, { type DisposableOptions } from '@/utils/axon/Disposable';
 import DescriptionRegistry from '@/utils/tandem/DescriptionRegistry';
 
+console.log('tandem/PhetioObject.ts');
+
 // constants
 const PHET_IO_ENABLED = Tandem.PHET_IO_ENABLED;
 const IO_TYPE_VALIDATOR = { valueType: IOType, validationMessage: 'phetioType must be an IOType' };
@@ -213,8 +215,8 @@ class PhetioObject extends Disposable {
     providedOptions.tandem && Tandem.onMissingTandem(providedOptions.tandem);
 
     // Make sure that required tandems are supplied
-    if (assert && Tandem.VALIDATION && providedOptions.tandem && providedOptions.tandem.required) {
-      assert(providedOptions.tandem.supplied, 'required tandems must be supplied');
+    if (window.assert && Tandem.VALIDATION && providedOptions.tandem && providedOptions.tandem.required) {
+      window.assert(providedOptions.tandem.supplied, 'required tandems must be supplied');
     }
 
     if (ENABLE_DESCRIPTION_REGISTRY && providedOptions.tandem && providedOptions.tandem.supplied) {
@@ -237,24 +239,24 @@ class PhetioObject extends Disposable {
     window.assert && window.assert(!this.phetioObjectInitialized, 'cannot initialize twice');
 
     // Guard validation on assert to avoid calling a large number of no-ops when assertions are disabled, see https://github.com/phetsims/tandem/issues/200
-    assert && validate(providedOptions.tandem, { valueType: Tandem });
+    window.assert && validate(providedOptions.tandem, { valueType: Tandem });
 
     const defaults = combineOptions<OptionizeDefaults<PhetioObjectOptions>>({}, DEFAULTS, baseOptions);
 
     let options = optionize<PhetioObjectOptions>()(defaults, providedOptions);
 
     // validate options before assigning to properties
-    assert && validate(options.phetioType, IO_TYPE_VALIDATOR);
-    assert && validate(options.phetioState, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioState must be a boolean' }));
-    assert && validate(options.phetioReadOnly, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioReadOnly must be a boolean' }));
-    assert && validate(options.phetioEventType, PHET_IO_EVENT_TYPE_VALIDATOR);
-    assert && validate(options.phetioDocumentation, PHET_IO_DOCUMENTATION_VALIDATOR);
-    assert && validate(options.phetioHighFrequency, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioHighFrequency must be a boolean' }));
-    assert && validate(options.phetioPlayback, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioPlayback must be a boolean' }));
-    assert && validate(options.phetioFeatured, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioFeatured must be a boolean' }));
-    assert && validate(options.phetioEventMetadata, merge({}, OBJECT_VALIDATOR, { validationMessage: 'object literal expected' }));
-    assert && validate(options.phetioDynamicElement, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioDynamicElement must be a boolean' }));
-    assert && validate(options.phetioDesigned, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioDesigned must be a boolean' }));
+    window.assert && validate(options.phetioType, IO_TYPE_VALIDATOR);
+    window.assert && validate(options.phetioState, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioState must be a boolean' }));
+    window.assert && validate(options.phetioReadOnly, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioReadOnly must be a boolean' }));
+    window.assert && validate(options.phetioEventType, PHET_IO_EVENT_TYPE_VALIDATOR);
+    window.assert && validate(options.phetioDocumentation, PHET_IO_DOCUMENTATION_VALIDATOR);
+    window.assert && validate(options.phetioHighFrequency, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioHighFrequency must be a boolean' }));
+    window.assert && validate(options.phetioPlayback, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioPlayback must be a boolean' }));
+    window.assert && validate(options.phetioFeatured, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioFeatured must be a boolean' }));
+    window.assert && validate(options.phetioEventMetadata, merge({}, OBJECT_VALIDATOR, { validationMessage: 'object literal expected' }));
+    window.assert && validate(options.phetioDynamicElement, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioDynamicElement must be a boolean' }));
+    window.assert && validate(options.phetioDesigned, merge({}, BOOLEAN_VALIDATOR, { validationMessage: 'phetioDesigned must be a boolean' }));
 
     window.assert && window.assert(this.linkedElements !== null, 'this means addLinkedElement was called before instrumentation of this PhetioObject');
 
@@ -269,7 +271,7 @@ class PhetioObject extends Disposable {
     // baseline is created when a sim is run with assertions to assist in phetioAPIValidation.  However, even when
     // assertions are disabled, some wrappers such as studio need to generate the baseline anyway.
     // not all metadata are passed through via options, so store baseline for these additional properties
-    this.phetioBaselineMetadata = (phetioAPIValidation.enabled || phet.preloads.phetio.queryParameters.phetioEmitAPIBaseline) ?
+    this.phetioBaselineMetadata = (phetioAPIValidation.enabled || window.phet.preloads.phetio.queryParameters.phetioEmitAPIBaseline) ?
       this.getMetadata(merge({
         phetioIsArchetype: this.phetioIsArchetype,
         phetioArchetypePhetioID: this.phetioArchetypePhetioID
@@ -351,7 +353,7 @@ class PhetioObject extends Disposable {
     this.tandem.addPhetioObject(this);
     this.phetioObjectInitialized = true;
 
-    if (assert && Tandem.VALIDATION && this.isPhetioInstrumented() && options.tandemNameSuffix) {
+    if (window.assert && Tandem.VALIDATION && this.isPhetioInstrumented() && options.tandemNameSuffix) {
 
       const suffixArray = Array.isArray(options.tandemNameSuffix) ? options.tandemNameSuffix : [options.tandemNameSuffix];
       const matches = suffixArray.filter(suffix => {
@@ -444,7 +446,7 @@ class PhetioObject extends Disposable {
     if (PHET_IO_ENABLED && this.isPhetioInstrumented()) {
 
       // only one or the other can be provided
-      assert && assertMutuallyExclusiveOptions(providedOptions, ['data'], ['getData']);
+      window.assert && assertMutuallyExclusiveOptions(providedOptions, ['data'], ['getData']);
       const options = optionize<StartEventOptions>()({
 
         data: null,
@@ -454,8 +456,8 @@ class PhetioObject extends Disposable {
       }, providedOptions);
 
       window.assert && window.assert(this.phetioObjectInitialized, 'phetioObject should be initialized');
-      assert && options.data && assert(typeof options.data === 'object');
-      assert && options.getData && assert(typeof options.getData === 'function');
+      window.assert && options.data && window.assert(typeof options.data === 'object');
+      window.assert && options.getData && window.assert(typeof options.getData === 'function');
       window.assert && window.assert(arguments.length === 1 || arguments.length === 2, 'Prevent usage of incorrect signature');
 
       // TODO: don't drop PhET-iO events if they are created before we have a dataStream global. https://github.com/phetsims/phet-io/issues/1875
@@ -473,10 +475,10 @@ class PhetioObject extends Disposable {
       const skipHighFrequencyEvent = this.phetioHighFrequency &&
         _.hasIn(window, 'phet.preloads.phetio.queryParameters') &&
         !window.phet.preloads.phetio.queryParameters.phetioEmitHighFrequencyEvents &&
-        !phet.phetio.dataStream.isEmittingLowFrequencyEvent();
+        !window.phet.phetio.dataStream.isEmittingLowFrequencyEvent();
 
       // TODO: If there is no dataStream global defined, then we should handle this differently as to not drop the event that is triggered, see https://github.com/phetsims/phet-io/issues/1846
-      const skipFromUndefinedDatastream = !assert && !_.hasIn(window, 'phet.phetio.dataStream');
+      const skipFromUndefinedDatastream = !window.assert && !_.hasIn(window, 'phet.phetio.dataStream');
 
       if (skipHighFrequencyEvent || this.phetioEventType === EventType.OPT_OUT || skipFromUndefinedDatastream) {
         this.phetioMessageStack.push(SKIPPING_MESSAGE);
@@ -487,13 +489,13 @@ class PhetioObject extends Disposable {
       const data = options.getData ? options.getData() : options.data;
 
       this.phetioMessageStack.push(
-        phet.phetio.dataStream.start(this.phetioEventType, this.tandem.phetioID, this.phetioType, event, data, this.phetioEventMetadata, this.phetioHighFrequency)
+        window.phet.phetio.dataStream.start(this.phetioEventType, this.tandem.phetioID, this.phetioType, event, data, this.phetioEventMetadata, this.phetioHighFrequency)
       );
 
       // To support PhET-iO playback, any potential playback events downstream of this playback event must be marked as
       // non playback events. This is to prevent the PhET-iO playback engine from repeating those events. See
       // https://github.com/phetsims/phet-io/issues/1693
-      this.phetioPlayback && phet.phetio.dataStream.pushNonPlaybackable();
+      this.phetioPlayback && window.phet.phetio.dataStream.pushNonPlaybackable();
     }
   }
 
@@ -511,8 +513,8 @@ class PhetioObject extends Disposable {
       if (topMessageIndex === SKIPPING_MESSAGE) {
         return;
       }
-      this.phetioPlayback && phet.phetio.dataStream.popNonPlaybackable();
-      phet.phetio.dataStream.end(topMessageIndex);
+      this.phetioPlayback && window.phet.phetio.dataStream.popNonPlaybackable();
+      window.phet.phetio.dataStream.end(topMessageIndex);
     }
   }
 
@@ -521,8 +523,8 @@ class PhetioObject extends Disposable {
    */
   public propagateDynamicFlagsToDescendants(): void {
     window.assert && window.assert(Tandem.PHET_IO_ENABLED, 'phet-io should be enabled');
-    window.assert && window.assert(phet.phetio && phet.phetio.phetioEngine, 'Dynamic elements cannot be created statically before phetioEngine exists.');
-    const phetioEngine = phet.phetio.phetioEngine;
+    window.assert && window.assert(window.phet.phetio && window.phet.phetio.phetioEngine, 'Dynamic elements cannot be created statically before phetioEngine exists.');
+    const phetioEngine = window.phet.phetio.phetioEngine;
 
     // in the same order as bufferedPhetioObjects
     const unlaunchedPhetioIDs = !Tandem.launched ? Tandem.bufferedPhetioObjects.map(objectToPhetioID) : [];
@@ -684,10 +686,10 @@ class PhetioObject extends Disposable {
    * We don't want 'linked' mode to map from cardNode all the way to cardValueProperty (at least automatically), see https://github.com/phetsims/tandem/issues/300
    */
   public getPhetioMouseHitTarget(fromLinking = false): PhetioObject | 'phetioNotSelectable' {
-    window.assert && window.assert(phet.tandem.phetioElementSelectionProperty.value !== 'none', 'getPhetioMouseHitTarget should not be called when phetioElementSelectionProperty is none');
+    window.assert && window.assert(window.phet.tandem.phetioElementSelectionProperty.value !== 'none', 'getPhetioMouseHitTarget should not be called when phetioElementSelectionProperty is none');
 
     // Don't get a linked element for a linked element (recursive link element searching)
-    if (!fromLinking && phet.tandem.phetioElementSelectionProperty.value === 'linked') {
+    if (!fromLinking && window.phet.tandem.phetioElementSelectionProperty.value === 'linked') {
       const linkedElement = this.getCorrespondingLinkedElement();
       if (linkedElement !== 'noCorrespondingLinkedElement') {
         return linkedElement.getPhetioMouseHitTarget(true);
@@ -695,7 +697,7 @@ class PhetioObject extends Disposable {
       else if (this.tandem.parentTandem) {
         // Look for a sibling linkedElement if there are no child linkages, see https://github.com/phetsims/studio/issues/246#issuecomment-1018733408
 
-        const parent: PhetioObject | undefined = phet.phetio.phetioEngine.phetioElementMap[this.tandem.parentTandem.phetioID];
+        const parent: PhetioObject | undefined = window.phet.phetio.phetioEngine.phetioElementMap[this.tandem.parentTandem.phetioID];
         if (parent) {
           const linkedParentElement = parent.getCorrespondingLinkedElement();
           if (linkedParentElement !== 'noCorrespondingLinkedElement') {
@@ -707,7 +709,7 @@ class PhetioObject extends Disposable {
       // Otherwise fall back to the view element, don't return here
     }
 
-    if (phet.tandem.phetioElementSelectionProperty.value === 'string') {
+    if (window.phet.tandem.phetioElementSelectionProperty.value === 'string') {
       return 'phetioNotSelectable';
     }
 
@@ -729,7 +731,7 @@ class PhetioObject extends Disposable {
     // We are not selectable if we are unfeatured and we are only displaying featured elements.
     // To prevent a circular dependency. We need to have a Property (which is a PhetioObject) in order to use it.
     // This should remain a hard failure if we have not loaded this display Property by the time we want a mouse-hit target.
-    const featuredFilterCorrect = phet.tandem.phetioElementsDisplayProperty.value !== 'featured' || this.isDisplayedInFeaturedTree();
+    const featuredFilterCorrect = window.phet.tandem.phetioElementsDisplayProperty.value !== 'featured' || this.isDisplayedInFeaturedTree();
 
     return this.isPhetioInstrumented() && featuredFilterCorrect;
   }
@@ -745,7 +747,7 @@ class PhetioObject extends Disposable {
     }
     let displayed = false;
     this.tandem.iterateDescendants(descendantTandem => {
-      const parent: PhetioObject | undefined = phet.phetio.phetioEngine.phetioElementMap[descendantTandem.phetioID];
+      const parent: PhetioObject | undefined = window.phet.phetio.phetioEngine.phetioElementMap[descendantTandem.phetioID];
       if (parent && parent.isPhetioInstrumented() && parent.phetioFeatured) {
         displayed = true;
       }
@@ -764,7 +766,7 @@ class PhetioObject extends Disposable {
       const childPhetioID = phetio.PhetioIDUtils.append(this.tandem.phetioID, childName);
 
       // Note that if it doesn't find a phetioID, that may be a synthetic node with children but not itself instrumented.
-      const phetioObject: PhetioObject | undefined = phet.phetio.phetioEngine.phetioElementMap[childPhetioID];
+      const phetioObject: PhetioObject | undefined = window.phet.phetio.phetioEngine.phetioElementMap[childPhetioID];
       if (phetioObject instanceof LinkedElement) {
         linkedChildren.push(phetioObject);
       }
@@ -808,12 +810,12 @@ class PhetioObject extends Disposable {
   public override dispose(): void {
 
     // The phetioEvent stack should resolve by the next frame, so that's when we check it.
-    if (assert && Tandem.PHET_IO_ENABLED && this.tandem.supplied) {
+    if (window.assert && Tandem.PHET_IO_ENABLED && this.tandem.supplied) {
 
       const descendants: PhetioObject[] = [];
       this.tandem.iterateDescendants(tandem => {
-        if (phet.phetio.phetioEngine.hasPhetioObject(tandem.phetioID)) {
-          descendants.push(phet.phetio.phetioEngine.getPhetioElement(tandem.phetioID));
+        if (window.phet.phetio.phetioEngine.hasPhetioObject(tandem.phetioID)) {
+          descendants.push(window.phet.phetio.phetioEngine.getPhetioElement(tandem.phetioID));
         }
       });
 

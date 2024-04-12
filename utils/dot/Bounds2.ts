@@ -543,9 +543,9 @@ export default class Bounds2 implements TPoolable {
    * this bounds.
    */
   public withPoint(point: Vector2): Bounds2 {
-    // console.log('Bounds2.withPoint');
-    // console.log({ point });
-    // console.trace();
+    console.log('Bounds2.withPoint');
+    console.log({ point, _this: this });
+    console.trace();
 
     return this.withCoordinates(point.x, point.y);
   }
@@ -1362,8 +1362,8 @@ export default class Bounds2 implements TPoolable {
   }
 
   // Helps to identify the dimension of the bounds
-  public isBounds!: boolean;
-  public dimension?: number;
+  public isBounds!: boolean = true;
+  public dimension?: number = 2;
 
   /**
    * A constant Bounds2 with minimums = $\infty$, maximums = $-\infty$, so that it represents "no bounds whatsoever".

@@ -75,7 +75,7 @@ class SimInfo extends PhetioObject {
 
     // from Scenery Utils
     this.putInfo('checkIE11StencilSupport', Utils.checkIE11StencilSupport());
-    this.putInfo('isWebGLSupported', phet.chipper.queryParameters.webgl ? Utils.isWebGLSupported : false);
+    this.putInfo('isWebGLSupported', window.phet.chipper.queryParameters.webgl ? Utils.isWebGLSupported : false);
 
     let canvas: HTMLCanvasElement | null;
     let context: CanvasRenderingContext2D;
@@ -123,9 +123,9 @@ class SimInfo extends PhetioObject {
     // From PhET-iO code
     if (Tandem.PHET_IO_ENABLED) {
       this.putInfo('screenPropertyValue', sim.selectedScreenProperty.value.tandem.phetioID);
-      this.putInfo('wrapperMetadata', phet.preloads.phetio.simStartedMetadata);
-      this.putInfo('dataStreamVersion', phet.phetio.dataStream.VERSION);
-      this.putInfo('phetioCommandProcessorProtocol', phet.phetio.phetioCommandProcessor.PHET_IO_PROTOCOL);
+      this.putInfo('wrapperMetadata', window.phet.preloads.phetio.simStartedMetadata);
+      this.putInfo('dataStreamVersion', window.phet.phetio.dataStream.VERSION);
+      this.putInfo('phetioCommandProcessorProtocol', window.phet.phetio.phetioCommandProcessor.PHET_IO_PROTOCOL);
     }
   }
 

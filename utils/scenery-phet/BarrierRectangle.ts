@@ -52,7 +52,7 @@ export default class BarrierRectangle extends Plane {
         // If fuzzing is enabled, close popups with a reduced probability, to improve testing coverage.
         // As of this writing, this addresses Dialogs and the PhET menu.
         // See https://github.com/phetsims/aqua/issues/136
-        if (!phet.chipper.isFuzzEnabled() || dotRandom.nextDouble() < 0.005) {
+        if (!window.phet.chipper.isFuzzEnabled() || dotRandom.nextDouble() < 0.005) {
           modalNodeStack.get(modalNodeStack.length - 1).hide();
         }
       }

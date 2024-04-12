@@ -54,12 +54,18 @@ const StringUtils = {
    */
   fillIn: function (template, values) {
     template = template && template.get ? template.get() : template;
-    assert &&
-      assert(typeof template === 'string', `invalid template: ${template}`);
+    window.assert &&
+      window.assert(
+        typeof template === 'string',
+        `invalid template: ${template}`
+      );
 
     // To catch attempts to use StringUtils.fillIn like StringUtils.format
-    assert &&
-      assert(values && typeof values === 'object', `invalid values: ${values}`);
+    window.assert &&
+      window.assert(
+        values && typeof values === 'object',
+        `invalid values: ${values}`
+      );
 
     let newString = template;
 
@@ -352,8 +358,8 @@ const StringUtils = {
    * @returns {string}
    */
   localeToLocalizedName: function (locale) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         localeInfoModule[locale],
         'locale needs to be a valid locale code defined in localeInfoModule'
       );

@@ -338,4 +338,7 @@ export function handlePhetioIDUtils() {
   };
 }
 
+if (typeof window === 'object') {
+  handlePhetioIDUtils();
+}
 export default handlePhetioIDUtils;

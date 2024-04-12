@@ -20,6 +20,8 @@ import type Constructor from '@/utils/phet-core/types/Constructor';
 import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 import Vector2 from '@/utils/dot/Vector2';
 
+console.log('scenery/nodes/Paintable.ts');
+
 const isSafari5 = platform.safari5;
 
 const PAINTABLE_OPTION_KEYS = [
@@ -70,7 +72,9 @@ export type PaintableNode = Path | Text;
 const PAINTABLE_DRAWABLE_MARK_FLAGS = ['fill', 'stroke', 'lineWidth', 'lineOptions', 'cachedPaints'];
 
 const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType) => {
+  console.log('a Paintable = memoize(');
   window.assert && window.assert(_.includes(inheritance(type), Node), 'Only Node subtypes should mix Paintable');
+  console.log('b Paintable = memoize(');
 
   return class PaintableMixin extends type {
 
@@ -87,6 +91,8 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
     public _lineDrawingStyles: LineStyles;
 
     public constructor(...args: IntentionalAny[]) {
+      // console.log('Paintable.constructor');
+      // console.trace();
       super(...args);
 
       assertHasProperties(this, ['_drawables']);
@@ -111,9 +117,11 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
      * can also be provided.
      */
     public setFill(fill: TPaint): this {
+      // console.log('Paintable.setFill');
+      // console.trace();
       window.assert && window.assert(PaintDef.isPaintDef(fill), 'Invalid fill type');
 
-      if (assert && typeof fill === 'string') {
+      if (window.assert && typeof fill === 'string') {
         Color.checkPaintString(fill);
       }
 
@@ -172,7 +180,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
     public setStroke(stroke: TPaint): this {
       window.assert && window.assert(PaintDef.isPaintDef(stroke), 'Invalid stroke type');
 
-      if (assert && typeof stroke === 'string') {
+      if (window.assert && typeof stroke === 'string') {
         Color.checkPaintString(stroke);
       }
 
@@ -182,9 +190,9 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
       if (this._stroke !== stroke) {
         this._stroke = stroke;
 
-        if (assert && stroke instanceof Paint && stroke.transformMatrix) {
+        if (window.assert && stroke instanceof Paint && stroke.transformMatrix) {
           const scaleVector = stroke.transformMatrix.getScaleVector();
-          assert(Math.abs(scaleVector.x - scaleVector.y) < 1e-7, 'You cannot specify a pattern or gradient to a stroke that does not have a symmetric scale.');
+          window.assert(Math.abs(scaleVector.x - scaleVector.y) < 1e-7, 'You cannot specify a pattern or gradient to a stroke that does not have a symmetric scale.');
         }
         this.invalidateStroke();
       }
@@ -579,7 +587,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
       // @ts-expect-error - For performance, we could check this by ruling out string and 'transformMatrix' in fillValue
       if (fillValue.transformMatrix) {
         wrapper.context.save();
-        
+
         // @ts-expect-error
         fillValue.transformMatrix.canvasAppendTransform(wrapper.context);
       }
@@ -591,7 +599,7 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
     public afterCanvasFill(wrapper: CanvasContextWrapper): void {
       const fillValue = this.getFillValue();
 
-      
+
       // @ts-expect-error
       if (fillValue.transformMatrix) {
         wrapper.context.restore();
@@ -612,14 +620,14 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
       // @ts-expect-error - for performance
       if (strokeValue.transformMatrix) {
 
-        
+
         // @ts-expect-error
         const scaleVector: Vector2 = strokeValue.transformMatrix.getScaleVector();
         window.assert && window.assert(Math.abs(scaleVector.x - scaleVector.y) < 1e-7, 'You cannot specify a pattern or gradient to a stroke that does not have a symmetric scale.');
         const matrixMultiplier = 1 / scaleVector.x;
 
         wrapper.context.save();
-        
+
         // @ts-expect-error
         strokeValue.transformMatrix.canvasAppendTransform(wrapper.context);
 
@@ -722,10 +730,10 @@ const Paintable = memoize(<SuperType extends Constructor<Node>>(type: SuperType)
         }
 
         _.each(['lineWidth', 'lineCap', 'miterLimit', 'lineJoin', 'lineDashOffset'], prop => {
-          
+
           // @ts-expect-error
           if (this[prop] !== defaultStyles[prop]) {
-            
+
             // @ts-expect-error
             addProp(prop, this[prop]);
           }

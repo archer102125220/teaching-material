@@ -34,7 +34,7 @@ const FALLBACK_LOCALE = window.phet?.chipper?.locale || 'en';
 export const localizedStrings: LocalizedString[] = [];
 
 // For developer internal use, particularly for memory leak detection
-// e.g. _.max( phet.chipper.localizedStrings.map( ls => ls.property.tinyProperty.listeners.size ) ) to see if there is
+// e.g. _.max( window.phet.chipper.localizedStrings.map( ls => ls.property.tinyProperty.listeners.size ) ) to see if there is
 // likely a leak
 window.phet.chipper.localizedStrings = localizedStrings;
 
@@ -105,12 +105,12 @@ type TStringModule = {
  * @returns Nested object to be accessed like JoistStrings.ResetAllButton.name
  */
 const getStringModule = (requirejsNamespace: string): object => {
-  // Our string information is pulled globally, e.g. phet.chipper.strings[ locale ][ stringKey ] = stringValue;
-  // Our locale information is from phet.chipper.locale
+  // Our string information is pulled globally, e.g. window.phet.chipper.strings[ locale ][ stringKey ] = stringValue;
+  // Our locale information is from window.phet.chipper.locale
 
-  window.assert && window.assert(typeof window.phet.chipper.locale === 'string', 'phet.chipper.locale should have been loaded by now');
-  window.assert && window.assert(Object.keys(localeInfoModule).includes(window.phet.chipper.locale), 'phet.chipper.locale should have been loaded by now');
-  window.assert && window.assert(window.phet.chipper.strings, 'phet.chipper.strings should have been loaded by now');
+  window.assert && window.assert(typeof window.phet.chipper.locale === 'string', 'window.phet.chipper.locale should have been loaded by now');
+  window.assert && window.assert(Object.keys(localeInfoModule).includes(window.phet.chipper.locale), 'window.phet.chipper.locale should have been loaded by now');
+  window.assert && window.assert(window.phet.chipper.strings, 'window.phet.chipper.strings should have been loaded by now');
 
   // Construct locales in increasing specificity, e.g. [ 'en', 'zh', 'zh_CN' ], so we get fallbacks in order
   // const locales = [ FALLBACK_LOCALE ];
@@ -125,9 +125,9 @@ const getStringModule = (requirejsNamespace: string): object => {
   // Or an error if running an api-stable phet-io sim?
   // TODO: https://github.com/phetsims/phet-io/issues/1877 What will happen if this is stale? How will a developer know
   // to update it? Should it run in daily-grunt-work?
-  if (phet.chipper.usedStringsEN) {
+  if (window.phet.chipper.usedStringsEN) {
     // eslint-disable-next-line no-prototype-builtins
-    allStringKeysInRepo = allStringKeysInRepo.filter(stringKey => phet.chipper.usedStringsEN.hasOwnProperty(stringKey));
+    allStringKeysInRepo = allStringKeysInRepo.filter(stringKey => window.phet.chipper.usedStringsEN.hasOwnProperty(stringKey));
   }
 
   // localizedStringMap[ stringKey ]
@@ -215,9 +215,9 @@ const getStringModule = (requirejsNamespace: string): object => {
 
       const localizedString = new LocalizedString(
         stringKey,
-        phet.chipper.mapString(window.phet.chipper.strings[FALLBACK_LOCALE][stringKey]),
+        window.phet.chipper.mapString(window.phet.chipper.strings[FALLBACK_LOCALE][stringKey]),
         tandem,
-        phet.chipper.stringMetadata[stringKey]
+        window.phet.chipper.stringMetadata[stringKey]
       );
       localizedStringMap[stringKey] = localizedString;
 
@@ -226,7 +226,7 @@ const getStringModule = (requirejsNamespace: string): object => {
         const string: string = window.phet.chipper.strings[locale][stringKey];
         // Ignore zero-length strings, see https://github.com/phetsims/chipper/issues/1343
         if (typeof string === 'string' && string !== '') {
-          localizedString.setInitialValue(locale, phet.chipper.mapString(string));
+          localizedString.setInitialValue(locale, window.phet.chipper.mapString(string));
         }
       });
 

@@ -51,10 +51,12 @@ class WebGLBlock extends FittedBlock {
    * @returns {WebGLBlock} - For chaining
    */
   initialize(display, renderer, transformRootInstance, filterRootInstance) {
-    sceneryLog &&
-      sceneryLog.WebGLBlock &&
-      sceneryLog.WebGLBlock(`initialize #${this.id}`);
-    sceneryLog && sceneryLog.WebGLBlock && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.WebGLBlock(`initialize #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.push();
 
     // WebGLBlocks are hard-coded to take the full display size (as opposed to svg and canvas)
     // Since we saw some jitter on iPad, see #318 and generally expect WebGL layers to span the entire display
@@ -131,7 +133,9 @@ class WebGLBlock extends FittedBlock {
     Utils.prepareForTransform(this.canvas); // Apply CSS needed for future CSS transforms to work properly.
     Utils.unsetTransform(this.canvas); // clear out any transforms that could have been previously applied
 
-    sceneryLog && sceneryLog.WebGLBlock && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.pop();
 
     return this;
   }
@@ -144,17 +148,19 @@ class WebGLBlock extends FittedBlock {
    * canvas to get a valid context).
    */
   rebuildCanvas() {
-    sceneryLog &&
-      sceneryLog.WebGLBlock &&
-      sceneryLog.WebGLBlock(`rebuildCanvas #${this.id}`);
-    sceneryLog && sceneryLog.WebGLBlock && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.WebGLBlock(`rebuildCanvas #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.push();
 
     const canvas = document.createElement('canvas');
     const gl = this.getContextFromCanvas(canvas);
 
     // Don't assert-failure out if this is not our first attempt (we're testing to see if we can recreate)
-    assert &&
-      assert(gl || this.canvas, 'We should have a WebGL context by now');
+    window.assert &&
+      window.assert(gl || this.canvas, 'We should have a WebGL context by now');
 
     // If we're aggressively trying to rebuild, we need to ignore context creation failure.
     if (gl) {
@@ -195,7 +201,9 @@ class WebGLBlock extends FittedBlock {
       this.setupContext(gl);
     }
 
-    sceneryLog && sceneryLog.WebGLBlock && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -205,12 +213,15 @@ class WebGLBlock extends FittedBlock {
    * @param {WebGLRenderingContext} gl
    */
   setupContext(gl) {
-    sceneryLog &&
-      sceneryLog.WebGLBlock &&
-      sceneryLog.WebGLBlock(`setupContext #${this.id}`);
-    sceneryLog && sceneryLog.WebGLBlock && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.WebGLBlock(`setupContext #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.push();
 
-    window.assert && window.assert(gl, 'Should have an actual context if this is called');
+    window.assert &&
+      window.assert(gl, 'Should have an actual context if this is called');
 
     this.isContextLost = false;
 
@@ -253,7 +264,9 @@ class WebGLBlock extends FittedBlock {
     // Notify (e.g. WebGLNode painters need to be recreated)
     this.glChangedEmitter.emit();
 
-    sceneryLog && sceneryLog.WebGLBlock && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -261,21 +274,26 @@ class WebGLBlock extends FittedBlock {
    * @private
    */
   delayedRebuildCanvas() {
-    sceneryLog &&
-      sceneryLog.WebGLBlock &&
-      sceneryLog.WebGLBlock(`Delaying rebuilding of Canvas #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.WebGLBlock(`Delaying rebuilding of Canvas #${this.id}`);
     const self = this;
 
     // TODO: Can we move this to before the update() step? Could happen same-frame in that case. https://github.com/phetsims/scenery/issues/1581
     // NOTE: We don't want to rely on a common timer, so we're using the built-in form on purpose.
     window.setTimeout(function () {
-     
-      sceneryLog &&
-        sceneryLog.WebGLBlock &&
-        sceneryLog.WebGLBlock(`Executing delayed rebuilding #${this.id}`);
-      sceneryLog && sceneryLog.WebGLBlock && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.WebGLBlock &&
+        window.sceneryLog.WebGLBlock(
+          `Executing delayed rebuilding #${this.id}`
+        );
+      window.sceneryLog &&
+        window.sceneryLog.WebGLBlock &&
+        window.sceneryLog.push();
       self.rebuildCanvas();
-      sceneryLog && sceneryLog.WebGLBlock && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.WebGLBlock &&
+        window.sceneryLog.pop();
     });
   }
 
@@ -287,10 +305,12 @@ class WebGLBlock extends FittedBlock {
    */
   onContextLoss(domEvent) {
     if (!this.isContextLost) {
-      sceneryLog &&
-        sceneryLog.WebGLBlock &&
-        sceneryLog.WebGLBlock(`Context lost #${this.id}`);
-      sceneryLog && sceneryLog.WebGLBlock && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.WebGLBlock &&
+        window.sceneryLog.WebGLBlock(`Context lost #${this.id}`);
+      window.sceneryLog &&
+        window.sceneryLog.WebGLBlock &&
+        window.sceneryLog.push();
 
       this.isContextLost = true;
 
@@ -301,7 +321,9 @@ class WebGLBlock extends FittedBlock {
 
       this.markDirty();
 
-      sceneryLog && sceneryLog.WebGLBlock && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.WebGLBlock &&
+        window.sceneryLog.pop();
     }
   }
 
@@ -313,14 +335,16 @@ class WebGLBlock extends FittedBlock {
    */
   onContextRestoration(domEvent) {
     if (this.isContextLost) {
-      sceneryLog &&
-        sceneryLog.WebGLBlock &&
-        sceneryLog.WebGLBlock(`Context restored #${this.id}`);
-      sceneryLog && sceneryLog.WebGLBlock && sceneryLog.push();
+      window.sceneryLog &&
+        window.sceneryLog.WebGLBlock &&
+        window.sceneryLog.WebGLBlock(`Context restored #${this.id}`);
+      window.sceneryLog &&
+        window.sceneryLog.WebGLBlock &&
+        window.sceneryLog.push();
 
       const gl = this.getContextFromCanvas(this.canvas);
-      assert &&
-        assert(
+      window.assert &&
+        window.assert(
           gl,
           'We were told the context was restored, so this should work'
         );
@@ -329,7 +353,9 @@ class WebGLBlock extends FittedBlock {
 
       this.canvas.style.display = '';
 
-      sceneryLog && sceneryLog.WebGLBlock && sceneryLog.pop();
+      window.sceneryLog &&
+        window.sceneryLog.WebGLBlock &&
+        window.sceneryLog.pop();
     }
   }
 
@@ -391,10 +417,12 @@ class WebGLBlock extends FittedBlock {
       return false;
     }
 
-    sceneryLog &&
-      sceneryLog.WebGLBlock &&
-      sceneryLog.WebGLBlock(`update #${this.id}`);
-    sceneryLog && sceneryLog.WebGLBlock && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.WebGLBlock(`update #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.push();
 
     const gl = this.gl;
 
@@ -516,7 +544,9 @@ class WebGLBlock extends FittedBlock {
 
     gl.flush();
 
-    sceneryLog && sceneryLog.WebGLBlock && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.pop();
 
     return true;
   }
@@ -526,9 +556,9 @@ class WebGLBlock extends FittedBlock {
    * @public
    */
   dispose() {
-    sceneryLog &&
-      sceneryLog.WebGLBlock &&
-      sceneryLog.WebGLBlock(`dispose #${this.id}`);
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.WebGLBlock(`dispose #${this.id}`);
 
     // TODO: many things to dispose!? https://github.com/phetsims/scenery/issues/1581
 
@@ -544,9 +574,9 @@ class WebGLBlock extends FittedBlock {
    * @param {Drawable} drawable
    */
   markDirtyDrawable(drawable) {
-    sceneryLog &&
-      sceneryLog.dirty &&
-      sceneryLog.dirty(
+    window.sceneryLog &&
+      window.sceneryLog.dirty &&
+      window.sceneryLog.dirty(
         `markDirtyDrawable on WebGLBlock#${this.id} with ${drawable.toString()}`
       );
 
@@ -565,9 +595,11 @@ class WebGLBlock extends FittedBlock {
    * @param {Drawable} drawable
    */
   addDrawable(drawable) {
-    sceneryLog &&
-      sceneryLog.WebGLBlock &&
-      sceneryLog.WebGLBlock(`#${this.id}.addDrawable ${drawable.toString()}`);
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.WebGLBlock(
+        `#${this.id}.addDrawable ${drawable.toString()}`
+      );
 
     super.addDrawable(drawable);
 
@@ -582,9 +614,9 @@ class WebGLBlock extends FittedBlock {
    * @param {Drawable} drawable
    */
   removeDrawable(drawable) {
-    sceneryLog &&
-      sceneryLog.WebGLBlock &&
-      sceneryLog.WebGLBlock(
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.WebGLBlock(
         `#${this.id}.removeDrawable ${drawable.toString()}`
       );
 
@@ -657,9 +689,9 @@ class WebGLBlock extends FittedBlock {
    * @param {Drawable} lastDrawable
    */
   onIntervalChange(firstDrawable, lastDrawable) {
-    sceneryLog &&
-      sceneryLog.WebGLBlock &&
-      sceneryLog.WebGLBlock(
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.WebGLBlock(
         `#${this.id}.onIntervalChange ${firstDrawable.toString()} to ${lastDrawable.toString()}`
       );
 
@@ -674,18 +706,22 @@ class WebGLBlock extends FittedBlock {
    * @param {Drawable} drawable
    */
   onPotentiallyMovedDrawable(drawable) {
-    sceneryLog &&
-      sceneryLog.WebGLBlock &&
-      sceneryLog.WebGLBlock(
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.WebGLBlock(
         `#${this.id}.onPotentiallyMovedDrawable ${drawable.toString()}`
       );
-    sceneryLog && sceneryLog.WebGLBlock && sceneryLog.push();
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.push();
 
     window.assert && window.assert(drawable.parentDrawable === this);
 
     this.markDirty();
 
-    sceneryLog && sceneryLog.WebGLBlock && sceneryLog.pop();
+    window.sceneryLog &&
+      window.sceneryLog.WebGLBlock &&
+      window.sceneryLog.pop();
   }
 
   /**
@@ -761,7 +797,8 @@ class CustomProcessor extends Processor {
    * @param {Drawable} drawable
    */
   processDrawable(drawable) {
-    window.assert && window.assert(drawable.webglRenderer === Renderer.webglCustom);
+    window.assert &&
+      window.assert(drawable.webglRenderer === Renderer.webglCustom);
 
     this.drawable = drawable;
     this.draw();
@@ -793,7 +830,8 @@ class VertexColorPolygons extends Processor {
    * @param {Float32Array} projectionMatrixArray - Projection matrix entries
    */
   constructor(projectionMatrixArray) {
-    window.assert && window.assert(projectionMatrixArray instanceof Float32Array);
+    window.assert &&
+      window.assert(projectionMatrixArray instanceof Float32Array);
 
     super();
 
@@ -973,7 +1011,8 @@ class TexturedTrianglesProcessor extends Processor {
    * @param {Float32Array} projectionMatrixArray - Projection matrix entries
    */
   constructor(projectionMatrixArray) {
-    window.assert && window.assert(projectionMatrixArray instanceof Float32Array);
+    window.assert &&
+      window.assert(projectionMatrixArray instanceof Float32Array);
 
     super();
 
@@ -1073,8 +1112,8 @@ class TexturedTrianglesProcessor extends Processor {
       return;
     }
 
-    assert &&
-      assert(drawable.webglRenderer === Renderer.webglTexturedTriangles);
+    window.assert &&
+      window.assert(drawable.webglRenderer === Renderer.webglTexturedTriangles);
     if (
       this.currentSpriteSheet &&
       drawable.sprite.spriteSheet !== this.currentSpriteSheet

@@ -86,14 +86,14 @@ class KeyStateTracker {
         // This is likely to happen when pressing browser key commands like "ctrl + tab" to switch tabs.
         this.correctModifierKeys(domEvent);
 
-        if (assert && !KeyboardUtils.isShiftKey(domEvent)) {
-          assert(domEvent.shiftKey === this.shiftKeyDown, 'shift key inconsistency between event and keyState.');
+        if (window.assert && !KeyboardUtils.isShiftKey(domEvent)) {
+          window.assert(domEvent.shiftKey === this.shiftKeyDown, 'shift key inconsistency between event and keyState.');
         }
-        if (assert && !KeyboardUtils.isAltKey(domEvent)) {
-          assert(domEvent.altKey === this.altKeyDown, 'alt key inconsistency between event and keyState.');
+        if (window.assert && !KeyboardUtils.isAltKey(domEvent)) {
+          window.assert(domEvent.altKey === this.altKeyDown, 'alt key inconsistency between event and keyState.');
         }
-        if (assert && !KeyboardUtils.isControlKey(domEvent)) {
-          assert(domEvent.ctrlKey === this.ctrlKeyDown, 'ctrl key inconsistency between event and keyState.');
+        if (window.assert && !KeyboardUtils.isControlKey(domEvent)) {
+          window.assert(domEvent.ctrlKey === this.ctrlKeyDown, 'ctrl key inconsistency between event and keyState.');
         }
 
         // if the key is already down, don't do anything else (we don't want to create a new keyState object

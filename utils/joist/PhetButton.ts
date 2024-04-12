@@ -46,7 +46,7 @@ class PhetButton extends JoistButton {
   public constructor(sim: Sim, backgroundFillProperty: TReadOnlyProperty<Color>, tandem: Tandem) {
 
     // Dynamic modules are loaded in simLauncher and accessed through their namespace
-    const Brand: TBrand = phet.brand.Brand;
+    const Brand: TBrand = window.phet.brand.Brand;
     window.assert && window.assert(Brand, 'Brand should exist by now');
 
     // The logo images are loaded from the brand which is selected via query parameter (during unbuilt mode)
@@ -71,7 +71,7 @@ class PhetButton extends JoistButton {
 
     // Assert here means that ?ea was provided (potentially from the wrapper) AND that there are actually assertions
     // available for debugging.
-    const children = assert && Tandem.PHET_IO_ENABLED ?
+    const children = window.assert && Tandem.PHET_IO_ENABLED ?
       [
 
         // The underline in phet-io debug mode. "7" is the right distance to avoid hiding the trademark.

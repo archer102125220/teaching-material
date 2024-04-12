@@ -17,7 +17,16 @@ import { Shape } from '@/utils/kite/imports';
 import optionize from '@/utils/phet-core/optionize';
 import PhetColorScheme from '@/utils/scenery-phet/PhetColorScheme';
 import PhetFont from '@/utils/scenery-phet/PhetFont';
-import { Color, Node, type NodeOptions, Rectangle, Text, VBox, Voicing, type VoicingOptions } from '@/utils/scenery/imports';
+import {
+  Color,
+  Node,
+  type NodeOptions,
+  Rectangle,
+  Text,
+  VBox,
+  Voicing,
+  type VoicingOptions
+} from '@/utils/scenery/imports';
 import PushButtonModel from '@/utils/sun/buttons/PushButtonModel';
 import HighlightNode from '@/utils/joist/HighlightNode';
 import joist from '@/utils/joist/joist';
@@ -26,13 +35,16 @@ import type PickRequired from '@/utils/phet-core/types/PickRequired';
 
 // constants
 const HIGHLIGHT_SPACING = 4;
-const getHighlightWidth = (overlay: Node) => overlay.width + (2 * HIGHLIGHT_SPACING);
+const getHighlightWidth = (overlay: Node) =>
+  overlay.width + 2 * HIGHLIGHT_SPACING;
 
 type SelfOptions = {
   maxButtonWidth?: number | null;
 };
 type ParentOptions = VoicingOptions & NodeOptions;
-type NavigationBarScreenButtonOptions = SelfOptions & ParentOptions & PickRequired<ParentOptions, 'tandem'>;
+type NavigationBarScreenButtonOptions = SelfOptions &
+  ParentOptions &
+  PickRequired<ParentOptions, 'tandem'>;
 
 class NavigationBarScreenButton extends Voicing(Node) {
   private readonly buttonModel: PushButtonModel;
@@ -47,40 +59,64 @@ class NavigationBarScreenButton extends Voicing(Node) {
    * @param navBarHeight
    * @param [providedOptions]
    */
-  public constructor(navigationBarFillProperty: TReadOnlyProperty<Color>, screenProperty: Property<AnyScreen>,
-    screen: AnyScreen, simScreenIndex: number, navBarHeight: number,
-    providedOptions: NavigationBarScreenButtonOptions) {
+  public constructor(
+    navigationBarFillProperty: TReadOnlyProperty<Color>,
+    screenProperty: Property<AnyScreen>,
+    screen: AnyScreen,
+    simScreenIndex: number,
+    navBarHeight: number,
+    providedOptions: NavigationBarScreenButtonOptions
+  ) {
+    window.assert &&
+      window.assert(
+        screen.nameProperty.value,
+        `name is required for screen ${simScreenIndex}`
+      );
+    window.assert &&
+      window.assert(
+        screen.navigationBarIcon,
+        `navigationBarIcon is required for screen ${screen.nameProperty.value}`
+      );
 
-    window.assert && window.assert(screen.nameProperty.value, `name is required for screen ${simScreenIndex}`);
-    window.assert && window.assert(screen.navigationBarIcon, `navigationBarIcon is required for screen ${screen.nameProperty.value}`);
+    const options = optionize<
+      NavigationBarScreenButtonOptions,
+      SelfOptions,
+      ParentOptions
+    >()(
+      {
+        cursor: 'pointer',
+        phetioDocumentation: `Button in the navigation bar that selects the '${screen.tandem.name}' screen`,
+        maxButtonWidth: null, // {number|null} the maximum width of the button, causes text and/or icon to be scaled down if necessary
 
-    const options = optionize<NavigationBarScreenButtonOptions, SelfOptions, ParentOptions>()({
-      cursor: 'pointer',
-      phetioDocumentation: `Button in the navigation bar that selects the '${screen.tandem.name}' screen`,
-      maxButtonWidth: null, // {number|null} the maximum width of the button, causes text and/or icon to be scaled down if necessary
+        // pdom
+        tagName: 'button',
+        containerTagName: 'li',
+        descriptionContent: screen.descriptionContent,
+        appendDescription: true,
 
-      // pdom
-      tagName: 'button',
-      containerTagName: 'li',
-      descriptionContent: screen.descriptionContent,
-      appendDescription: true,
+        // voicing
+        voicingHintResponse: screen.descriptionContent
+      },
+      providedOptions
+    );
 
-      // voicing
-      voicingHintResponse: screen.descriptionContent
-    }, providedOptions);
-
-    window.assert && window.assert(!options.innerContent, 'NavigationBarScreenButton sets its own innerContent');
+    window.assert &&
+      window.assert(
+        !options.innerContent,
+        'NavigationBarScreenButton sets its own innerContent'
+      );
 
     super();
 
     this.screen = screen;
 
-    screen.pdomDisplayNameProperty.link(name => {
+    screen.pdomDisplayNameProperty.link((name) => {
       this.innerContent = name;
       this.voicingNameResponse = name;
     });
 
-    window.assert && window.assert(screen.navigationBarIcon, 'navigationBarIcon should exist');
+    window.assert &&
+      window.assert(screen.navigationBarIcon, 'navigationBarIcon should exist');
     // icon
     const icon = new Node({
       children: [screen.navigationBarIcon!], // wrap in case this icon is used in multiple place (eg, home screen and navbar)
@@ -90,6 +126,7 @@ class NavigationBarScreenButton extends Voicing(Node) {
       // Description, all accessibility should go through this button
       pdomVisible: false
     });
+    console.log({ NavigationBarScreenButtonIcon: icon }, icon.width);
 
     // frame around the icon
     const iconFrame = new Rectangle(0, 0, icon.width, icon.height);
@@ -115,28 +152,35 @@ class NavigationBarScreenButton extends Voicing(Node) {
 
     // highlights
     const highlightWidth = getHighlightWidth(overlay);
-    const brightenHighlight = new HighlightNode(highlightWidth, overlay.height, {
-      center: iconAndText.center,
-      fill: 'white'
-    });
+    const brightenHighlight = new HighlightNode(
+      highlightWidth,
+      overlay.height,
+      {
+        center: iconAndText.center,
+        fill: 'white'
+      }
+    );
     const darkenHighlight = new HighlightNode(highlightWidth, overlay.height, {
       center: iconAndText.center,
       fill: 'black'
     });
 
     // Is this button's screen selected?
-    const selectedProperty = new DerivedProperty([screenProperty], currentScreen => (currentScreen === screen));
+    const selectedProperty = new DerivedProperty(
+      [screenProperty],
+      (currentScreen) => currentScreen === screen
+    );
 
     // (phet-io) Create the button model, needs to be public so that PhET-iO wrappers can hook up to it if
     // needed. Note it shares a tandem with this, so the emitter will be instrumented as a child of the button.
     // Note that this buttonModel will always be phetioReadOnly false despite the parent value.
     this.buttonModel = new PushButtonModel({
       listener: () => {
-
-        screenProperty.value !== screen && this.voicingSpeakFullResponse({
-          objectResponse: null,
-          hintResponse: null
-        });
+        screenProperty.value !== screen &&
+          this.voicingSpeakFullResponse({
+            objectResponse: null,
+            hintResponse: null
+          });
         screenProperty.value = screen;
       },
       tandem: options.tandem,
@@ -160,42 +204,54 @@ class NavigationBarScreenButton extends Voicing(Node) {
 
     // manage interaction feedback
     Multilink.multilink(
-      [selectedProperty, this.buttonModel.looksPressedProperty, this.buttonModel.looksOverProperty, navigationBarFillProperty, this.buttonModel.enabledProperty],
+      [
+        selectedProperty,
+        this.buttonModel.looksPressedProperty,
+        this.buttonModel.looksOverProperty,
+        navigationBarFillProperty,
+        this.buttonModel.enabledProperty
+      ],
       (selected, looksPressed, looksOver, navigationBarFill, enabled) => {
-
         const useDarkenHighlights = !navigationBarFill.equals(Color.BLACK);
 
         // Color match yellow with the PhET Logo
-        const selectedTextColor = useDarkenHighlights ? 'black' : PhetColorScheme.BUTTON_YELLOW;
+        const selectedTextColor = useDarkenHighlights
+          ? 'black'
+          : PhetColorScheme.BUTTON_YELLOW;
         const unselectedTextColor = useDarkenHighlights ? 'gray' : 'white';
 
         text.fill = selected ? selectedTextColor : unselectedTextColor;
-        iconAndText.opacity = selected ? 1.0 : (looksPressed ? 0.65 : 0.5);
+        iconAndText.opacity = selected ? 1.0 : looksPressed ? 0.65 : 0.5;
 
-        brightenHighlight.visible = !useDarkenHighlights && enabled && (looksOver || looksPressed);
-        darkenHighlight.visible = useDarkenHighlights && enabled && (looksOver || looksPressed);
+        brightenHighlight.visible =
+          !useDarkenHighlights && enabled && (looksOver || looksPressed);
+        darkenHighlight.visible =
+          useDarkenHighlights && enabled && (looksOver || looksPressed);
 
         // Put a frame around the screen icon, depending on the navigation bar background color.
-        if (screen.showScreenIconFrameForNavigationBarFill === 'black' && navigationBarFill.equals(Color.BLACK)) {
+        if (
+          screen.showScreenIconFrameForNavigationBarFill === 'black' &&
+          navigationBarFill.equals(Color.BLACK)
+        ) {
           iconFrame.stroke = PhetColorScheme.SCREEN_ICON_FRAME;
-        }
-
-        else if (screen.showScreenIconFrameForNavigationBarFill === 'white' && navigationBarFill.equals(Color.WHITE)) {
+        } else if (
+          screen.showScreenIconFrameForNavigationBarFill === 'white' &&
+          navigationBarFill.equals(Color.WHITE)
+        ) {
           iconFrame.stroke = 'black'; // black frame on a white navbar
-        }
-        else {
+        } else {
           iconFrame.stroke = 'transparent'; // keep the same bounds for simplicity
         }
-      });
+      }
+    );
 
     // Keep the cursor in sync with if the button is enabled. This doesn't need to be disposed.
-    this.buttonModel.enabledProperty.link(enabled => {
+    this.buttonModel.enabledProperty.link((enabled) => {
       this.cursor = enabled ? options.cursor : null;
     });
 
     // Update the button's layout
     const updateLayout = () => {
-
       // adjust the vertical space between icon and text, see https://github.com/phetsims/joist/issues/143
       iconAndText.spacing = Utils.clamp(12 - text.height, 0, 3);
 
@@ -203,7 +259,8 @@ class NavigationBarScreenButton extends Voicing(Node) {
       overlay.setRectBounds(iconAndText.bounds);
 
       // adjust the highlights
-      brightenHighlight.spacing = darkenHighlight.spacing = getHighlightWidth(overlay);
+      brightenHighlight.spacing = darkenHighlight.spacing =
+        getHighlightWidth(overlay);
       brightenHighlight.center = darkenHighlight.center = iconAndText.center;
     };
 
@@ -211,32 +268,33 @@ class NavigationBarScreenButton extends Voicing(Node) {
     iconAndText.boundsProperty.lazyLink(updateLayout);
     text.boundsProperty.link(updateLayout);
 
-    this.children = [
-      iconAndText,
-      overlay,
-      brightenHighlight,
-      darkenHighlight
-    ];
+    this.children = [iconAndText, overlay, brightenHighlight, darkenHighlight];
 
-    const needsIconMaxWidth = options.maxButtonWidth && (this.width > options.maxButtonWidth);
+    const needsIconMaxWidth =
+      options.maxButtonWidth && this.width > options.maxButtonWidth;
 
     // Constrain text and icon width, if necessary
     if (needsIconMaxWidth) {
-      text.maxWidth = icon.maxWidth = options.maxButtonWidth! - (this.width - iconAndText.width);
-    }
-    else {
+      text.maxWidth = icon.maxWidth =
+        options.maxButtonWidth! - (this.width - iconAndText.width);
+    } else {
       // Don't allow the text to grow larger than the icon if changed later on using PhET-iO, see #438
       // Text is allowed to go beyond the bounds of the icon, hence we use `this.width` instead of `icon.width`
       text.maxWidth = this.width;
     }
 
-    needsIconMaxWidth && window.assert && window.assert(Utils.toFixed(this.width, 0) === Utils.toFixed(options.maxButtonWidth!, 0),
-      `this.width ${this.width} !== options.maxButtonWidth ${options.maxButtonWidth}`);
+    needsIconMaxWidth &&
+      window.assert &&
+      window.assert(
+        Utils.toFixed(this.width, 0) ===
+          Utils.toFixed(options.maxButtonWidth!, 0),
+        `this.width ${this.width} !== options.maxButtonWidth ${options.maxButtonWidth}`
+      );
 
     // A custom focus highlight so that the bottom of the highlight does not get cut-off below the navigation bar.
     // Setting to the localBounds directly prevents the default dilation of the highlight. Shape updates with changing
     // bounds to support dynamic layout.
-    this.localBoundsProperty.link(localBounds => {
+    this.localBoundsProperty.link((localBounds) => {
       this.focusHighlight = Shape.bounds(localBounds);
     });
 

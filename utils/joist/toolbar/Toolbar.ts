@@ -276,7 +276,7 @@ class DoubleChevron extends Path {
     const chevronWidth = 5;
     const chevronHeight = 12;
 
-    const chevronShape = new Shape();
+    const chevronShape = new Shape(undefined, undefined, 'chevronShape');
     for (let i = 0; i < 2; i++) {
       const left = i * chevronSpacing;
       chevronShape.moveTo(left, 0);

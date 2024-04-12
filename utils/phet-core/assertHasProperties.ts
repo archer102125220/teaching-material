@@ -9,7 +9,7 @@
  * assertHasProperties( { flower:2 }, [ 'tree' ] ) => error
  * assertHasProperties( { tree:1, flower:2 }, [ 'tree', 'flower' ] ) => no error
  * assertHasProperties( { tree:1 }, [ 'tree', 'flower' ] ) => error
- * assertHasProperties( new phet.scenery.Node(), [ 'getOpacity','opacity', '_opacity' ] ) => no error
+ * assertHasProperties( new window.phet.scenery.Node(), [ 'getOpacity','opacity', '_opacity' ] ) => no error
  *
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
@@ -21,7 +21,7 @@ import type IntentionalAny from '@/utils/phet-core/types/IntentionalAny';
 import phetCore from '@/utils/phet-core/phetCore';
 
 const assertHasProperties = (object: IntentionalAny, properties: string[]): void => {
-  if (assert && object) {
+  if (window.assert && object) {
 
 
     properties.forEach(property => {

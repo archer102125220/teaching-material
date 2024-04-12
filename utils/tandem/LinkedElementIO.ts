@@ -17,11 +17,11 @@ export type LinkedElementState = {
   elementID: string;
 };
 
-const LinkedElementIO = new IOType( 'LinkedElementIO', {
+const LinkedElementIO = new IOType('LinkedElementIO', {
   isValidValue: () => true,
   documentation: 'A LinkedElement',
   toStateObject: linkedElement => {
-    assert && Tandem.VALIDATION && assert( linkedElement.element.isPhetioInstrumented(), 'Linked elements must be instrumented' );
+    window.assert && Tandem.VALIDATION && window.assert(linkedElement.element.isPhetioInstrumented(), 'Linked elements must be instrumented');
     return { elementID: linkedElement.element.tandem.phetioID };
   },
 
@@ -31,7 +31,7 @@ const LinkedElementIO = new IOType( 'LinkedElementIO', {
   stateSchema: {
     elementID: StringIO
   }
-} );
+});
 
-tandemNamespace.register( 'LinkedElementIO', LinkedElementIO );
+tandemNamespace.register('LinkedElementIO', LinkedElementIO);
 export default LinkedElementIO;

@@ -130,4 +130,9 @@ export function TextDecoderLite() {}
   };
 })();
 
+if (typeof window === 'object') {
+  window.TextEncoderLite = TextEncoderLite;
+  window.TextDecoderLite = TextDecoderLite;
+}
+
 export default { TextEncoderLite, TextDecoderLite };

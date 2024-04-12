@@ -6,15 +6,18 @@
  * @author Chris Malley (PixelZoom, Inc.)
  */
 
-import Initializer from '@/utils/Initializer';
+// import Initializer from '@/utils/Initializer';
 
 import simLauncher from '@/utils/joist/simLauncher';
 import GeometricOpticsStrings from '@/utils/geometric-optics/GeometricOpticsStrings';
 import GOSim from '@/utils/geometric-optics/GOSim';
 
+console.log('geometric-optics/geometric-optics-main.ts');
 
-export async function GeometricOpticsInit(container: Element): Promise<{ simLauncher: typeof simLauncher, sim: GOSim }> {
-  await Initializer.initGeometricOptics();
+export function GeometricOpticsInit(
+  container: Element
+): Promise<{ simLauncher: typeof simLauncher; sim: GOSim }> {
+  // await Initializer.initGeometricOptics();
 
   return new Promise((resolve, reject) => {
     try {
@@ -41,10 +44,14 @@ export async function GeometricOpticsInit(container: Element): Promise<{ simLaun
 }
 
 function simLauncherLaunch(container: Element) {
-  const sim = new GOSim(GeometricOpticsStrings['geometric-optics'].titleStringProperty, {
-    isBasicsVersion: false,
-    phetioDesigned: true
-  }, { container });
+  const sim = new GOSim(
+    GeometricOpticsStrings['geometric-optics'].titleStringProperty,
+    {
+      isBasicsVersion: false,
+      phetioDesigned: true
+    },
+    { container }
+  );
   console.log({ sim });
   // sim.start();
   return sim;

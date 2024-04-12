@@ -38,14 +38,14 @@ class ChangeInterval {
    * @param {Drawable} drawableAfter
    */
   initialize(drawableBefore, drawableAfter) {
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         drawableBefore === null || drawableBefore instanceof Drawable,
         'drawableBefore can either be null to indicate that there is no un-changed drawable before our changes, ' +
           'or it can reference an un-changed drawable'
       );
-    assert &&
-      assert(
+    window.assert &&
+      window.assert(
         drawableAfter === null || drawableAfter instanceof Drawable,
         'drawableAfter can either be null to indicate that there is no un-changed drawable after our changes, ' +
           'or it can reference an un-changed drawable'

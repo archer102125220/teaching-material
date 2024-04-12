@@ -70,7 +70,7 @@ export default class RoundPushButton extends RoundButton {
     };
 
     // support for binder documentation, stripped out in builds and only runs when ?binder is specified
-    assert && phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL('sun', 'RoundPushButton', this);
+    window.assert && phet?.chipper?.queryParameters?.binder && InstanceRegistry.registerDataURL('sun', 'RoundPushButton', this);
   }
 
   public override dispose(): void {

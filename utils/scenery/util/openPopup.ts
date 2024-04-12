@@ -16,13 +16,13 @@ import { allowLinksProperty } from '@/utils/scenery/imports';
  *                   - see https://github.com/phetsims/joist/issues/830
  *                   - But individual cases (such as screenshot) can override this to be always allowed
  */
-function openPopup( url: string, allowPopups = allowLinksProperty.value ): void {
+function openPopup(url: string, allowPopups = allowLinksProperty.value): void {
 
   // If available, don't openPopups for fuzzing
-  const fuzzOptOut = phet && phet.chipper && phet.chipper.isFuzzEnabled();
+  const fuzzOptOut = window.phet && window.phet.chipper && window.phet.chipper.isFuzzEnabled();
 
-  if ( allowPopups && !fuzzOptOut ) {
-    const popupWindow = window.open( url, '_blank' ); // open in a new window/tab
+  if (allowPopups && !fuzzOptOut) {
+    const popupWindow = window.open(url, '_blank'); // open in a new window/tab
 
     // We can't guarantee the presence of a window object, since if it isn't opened then it will return null.
     // See https://github.com/phetsims/phet-ios-app/issues/508#issuecomment-520891177 and documentation at
@@ -31,5 +31,5 @@ function openPopup( url: string, allowPopups = allowLinksProperty.value ): void 
   }
 }
 
-scenery.register( 'openPopup', openPopup );
+scenery.register('openPopup', openPopup);
 export default openPopup;

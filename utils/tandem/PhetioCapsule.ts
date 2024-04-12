@@ -139,8 +139,8 @@ class PhetioCapsule<T extends PhetioObject, P extends IntentionalAny[] = []> ext
   public create(argsForCreateFunction: P, fromStateSetting = false): T {
     window.assert && window.assert(this.isPhetioInstrumented(), 'TODO: support uninstrumented PhetioCapsules? see https://github.com/phetsims/tandem/issues/184');
 
-    assert && this.supportsDynamicState && _.hasIn(window, 'phet.joist.sim.') &&
-      isSettingPhetioStateProperty.value && assert(fromStateSetting,
+    window.assert && this.supportsDynamicState && _.hasIn(window, 'phet.joist.sim.') &&
+      isSettingPhetioStateProperty.value && window.assert(fromStateSetting,
         'dynamic elements should only be created by the state engine when setting state.');
 
     // create with default state and substructure, details will need to be set by setter methods.

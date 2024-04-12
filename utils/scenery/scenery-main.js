@@ -11,11 +11,11 @@ import '@/utils/phet-core/main';
 import '@/utils/utterance-queue/main';
 import '@/utils/scenery/main';
 
-if (!window.hasOwnProperty('_')) {
-  throw new Error('Underscore/Lodash not found: _');
-}
-if (!window.hasOwnProperty('$')) {
-  throw new Error('jQuery not found: $');
-}
+// if (!window.hasOwnProperty('_')) {
+//   throw new Error('Underscore/Lodash not found: _');
+// }
+// if (!window.hasOwnProperty('$')) {
+//   throw new Error('jQuery not found: $');
+// }
 
 window.phet.scenery.Utils.polyfillRequestAnimationFrame();

@@ -42,23 +42,24 @@ type SelfOptions = {
 
 export type DerivedPropertyOptions<T> = SelfOptions & PropertyOptions<T>;
 
-const strictAxonDependenciesGlobal = _.hasIn(window, 'phet.chipper.queryParameters') && phet.chipper.queryParameters.strictAxonDependencies;
+const strictAxonDependenciesGlobal = _.hasIn(window, 'phet.chipper.queryParameters') && window.phet.chipper.queryParameters.strictAxonDependencies;
 
 /**
  * Compute the derived value given a derivation and an array of dependencies
  */
 function getDerivedValue<T, T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(strictAxonDependencies: boolean, derivation: (...params: [T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15]) => T, dependencies: Dependencies<T1, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>): T {
 
-  assert && strictAxonDependenciesGlobal && strictAxonDependencies && derivationStack.push(dependencies);
+  window.assert && strictAxonDependenciesGlobal && strictAxonDependencies && derivationStack.push(dependencies);
 
   try {
 
 
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    return derivation(...dependencies.map(property => property.get()));
+    return derivation(...dependencies.map((property) => property.get()));
   }
   finally {
-    assert && strictAxonDependenciesGlobal && strictAxonDependencies && derivationStack.pop();
+    window.assert && strictAxonDependenciesGlobal && strictAxonDependencies && derivationStack.pop();
   }
 }
 

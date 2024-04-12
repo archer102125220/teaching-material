@@ -40,6 +40,8 @@ import IOType from '@/utils/tandem/types/IOType';
 import axon from '@/utils/axon/axon';
 import { type ComparableObject } from '@/utils/axon/TinyProperty';
 
+console.log('axon/Validation.ts');
+
 const TYPEOF_STRINGS = ['string', 'number', 'boolean', 'function'];
 
 export type IsValidValueOptions = {
@@ -243,7 +245,7 @@ export default class Validation {
   public static validateValidator<T>(validator: Validator<T>): void {
     if (window.assert) {
       const error = Validation.getValidatorValidationError(validator);
-      error && assert(false, error);
+      error && window.assert(false, error);
     }
   }
 

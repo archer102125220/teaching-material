@@ -63,7 +63,7 @@ export default class ProjectionScreenNode extends InteractiveHighlighting(Node) 
     // The screen part of the projection screen, drawn in perspective.
     const screenNode = new Path(modelViewTransform.modelToViewShape(projectionScreen.screenShape), {
       fill: GOColors.projectionScreenFillProperty,
-      stroke: phet.chipper.queryParameters.dev ? 'red' : GOColors.projectionScreenStrokeProperty,
+      stroke: window.phet.chipper.queryParameters.dev ? 'red' : GOColors.projectionScreenStrokeProperty,
       lineWidth: 2,
 
       // projectionScreen.positionProperty is at the center of screenNode
