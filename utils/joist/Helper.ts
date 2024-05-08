@@ -810,12 +810,13 @@ export default class Helper {
         animationFrameTimer.addListener(frameListener);
 
         // document.body.appendChild(this.helperDisplay.domElement);
+        // this.helperDisplay.domElement.style.zIndex = '10000';
         if (typeof simDisplay.domElement?.parentNode?.appendChild === 'function') {
           simDisplay.domElement.parentNode.appendChild(this.helperDisplay.domElement);
         } else {
           document.body.appendChild(this.helperDisplay.domElement);
+          this.helperDisplay.domElement.style.zIndex = '10000';
         }
-        // this.helperDisplay.domElement.style.zIndex = '10000';
 
         const onLocationEvent = (event: SceneryEvent<TouchEvent | PointerEvent | MouseEvent>) => {
           this.pointerPositionProperty.value = event.pointer.point;
@@ -862,7 +863,12 @@ export default class Helper {
         sim.dimensionProperty.unlink(resizeListener);
         animationFrameTimer.removeListener(frameListener);
 
-        document.body.removeChild(this.helperDisplay!.domElement);
+        // document.body.removeChild(this.helperDisplay!.domElement);
+        if (typeof simDisplay.domElement?.parentNode?.removeChild === 'function') {
+          simDisplay.domElement.parentNode.removeChild(this.helperDisplay!.domElement);
+        } else {
+          document.body.removeChild(this.helperDisplay!.domElement);
+        }
 
         this.helperDisplay!.dispose();
 

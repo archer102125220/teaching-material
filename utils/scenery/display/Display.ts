@@ -1147,7 +1147,7 @@ export default class Display {
 
     if (this._allowCSSHacks) {
       // Prevents selection cursor issues in Safari, see https://github.com/phetsims/scenery/issues/476
-      document.onselectstart = () => false;
+      // document.onselectstart = () => false;
 
       // prevent any default zooming behavior from a trackpad on IE11 and Edge, all should be handled by scenery - must
       // be on the body, doesn't prevent behavior if on the display div
@@ -1859,10 +1859,11 @@ export default class Display {
     iframe.style.top = '0';
     // iframe.style.zIndex = '10000';
     // document.body.appendChild(iframe);
-    iframe.style.zIndex = typeof this.domElement?.parentNode?.appendChild === 'function' ? '10' : '10000';
     if (typeof this.domElement?.parentNode?.appendChild === 'function') {
+      iframe.style.zIndex = '10';
       this.domElement.parentNode.appendChild(iframe);
     } else {
+      iframe.style.zIndex = '10000';
       document.body.appendChild(iframe);
     }
 
@@ -1878,10 +1879,11 @@ export default class Display {
     closeButton.style.right = '0';
     // closeButton.style.zIndex = '10001';
     // document.body.appendChild(closeButton);
-    closeButton.style.zIndex = typeof this.domElement?.parentNode?.appendChild === 'function' ? '11' : '10001';
     if (typeof this.domElement?.parentNode?.appendChild === 'function') {
+      closeButton.style.zIndex ='11';
       this.domElement.parentNode.appendChild(closeButton);
     } else {
+      closeButton.style.zIndex = '10001';
       document.body.appendChild(closeButton);
     }
 

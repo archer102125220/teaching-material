@@ -655,7 +655,11 @@ class UtteranceQueue<A extends Announcer = Announcer> extends PhetioObject {
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-expect-error
-    (window.SIM_DISPLAY?.domElement?.parentNode || document.body) ? (window.SIM_DISPLAY?.domElement?.parentNode || document.body).appendChild(container) : document.children[0].appendChild(container);
+    window.SIM_DISPLAY?.domElement?.parentNode || document.body
+      ? (
+          window.SIM_DISPLAY?.domElement?.parentNode || document.body
+        ).appendChild(container)
+      : document.children[0].appendChild(container);
 
     let previousTime = 0;
     const step = (elapsedTime: number) => {

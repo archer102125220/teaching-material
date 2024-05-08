@@ -124,7 +124,7 @@ export default class SimDisplay extends Display {
     if (typeof options.container?.parentNode === 'object' && options.container?.parentNode !== null) {
       const parentNode = options.container.parentNode;
       // console.log( { parentNode: parentNode } );
-      parentNode.addEventListener('selectstart', () => false);
+      // parentNode.addEventListener('selectstart', () => false);
       const $parentNode = $(parentNode);
       $parentNode.css('padding', '0').css('margin', '0').css('overflow', 'hidden');
     } else {
@@ -138,7 +138,7 @@ export default class SimDisplay extends Display {
       if (document.getElementById('sim') && document.getElementById('sim')!.parentNode === document.body) {
         document.body.removeChild(document.getElementById('sim')!);
       }
-      document.onselectstart = function () { return false; };
+      // document.onselectstart = function () { return false; };
     }
 
     super(new Node({ renderer: options.rootRenderer }), options);
