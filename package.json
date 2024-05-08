@@ -1,7 +1,7 @@
 {
   "name": "teaching-material",
   "scripts": {
-    "build": "cross-env NODE_OPTIONS='--max_old_space_size=8192' VERCEL_BUILD_SYSTEM_REPORT=1 nuxi build && node build-utils.mjs",
+    "build": "nuxi build && node build-utils.mjs",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",

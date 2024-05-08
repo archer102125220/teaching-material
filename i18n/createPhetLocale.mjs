@@ -1,12 +1,12 @@
 import { dirname, resolve, join } from 'path';
 import { fileURLToPath } from 'url';
-import flat from 'flat';
+// import flat from 'flat';
 import fsExtra from 'fs-extra';
 import _ from 'lodash';
 
 import localeInfo from '../assets/chipper/localeInfo.mjs';
 
-const { unflatten } = flat;
+// const { unflatten } = flat;
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
@@ -221,10 +221,14 @@ export async function handleImportLocale(
 
     try {
       const { default: _default } = await import(localeAllPath, importArg);
-      localeData = {
-        ...localeData,
-        ...(_default?.[lang] || _default?.zh_TW || {})
-      };
+      const defaultLocaleData = _default?.[lang] || _default?.zh_TW || {};
+      Array.from(
+        new Set([...Object.keys(localeData), ...Object.keys(defaultLocaleData)])
+      ).forEach((dataKey) => {
+        if (localeData[dataKey] === null || localeData[dataKey] === undefined) {
+          localeData[dataKey] = defaultLocaleData[dataKey];
+        }
+      });
     } catch (localeAllError) {
       console.log(localeAllError, { localeAllPath });
     }
