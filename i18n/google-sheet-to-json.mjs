@@ -51,7 +51,7 @@ extractSheets(
     if (err) throw err;
     const en = {
       system: {
-        titleTemplate: 'I See You Taiwan Hostel  Alliance',
+        titleTemplate: 'Online textbook test',
         frontPage: 'home page',
         emptyData: 'No data available',
         pagination:
@@ -133,7 +133,7 @@ extractSheets(
     };
     const zhTw = {
       system: {
-        titleTemplate: '愛嬉遊臺灣青年旅館聯盟',
+        titleTemplate: '線上教材測試',
         frontPage: '首頁',
         emptyData: '尚無資料',
         pagination:
