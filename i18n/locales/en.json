@@ -1,6 +1,6 @@
 {
   "system": {
-    "titleTemplate": "I See You Taiwan Hostel  Alliance",
+    "titleTemplate": "Online textbook test",
     "frontPage": "home page",
     "emptyData": "No data available",
     "pagination": "Displaying search results from $__start__$ to $__end__$, total $__total__$ results.",
@@ -595,7 +595,8 @@
     },
     "timePicker": {
       "am": "AM",
-      "pm": "PM"
+      "pm": "PM",
+      "title": "Select Time"
     },
     "pagination": {
       "ariaLabel": {
@@ -789,6 +790,14 @@
     "popconfirm": {
       "confirmButtonText": "Yes",
       "cancelButtonText": "No"
+    },
+    "breadcrumb": {
+      "label": "Breadcrumb"
+    },
+    "carousel": {
+      "leftArrow": "Carousel arrow left",
+      "rightArrow": "Carousel arrow right",
+      "indicator": "Carousel switch to index {index}"
     }
   },
   "index": {

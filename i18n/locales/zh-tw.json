@@ -1,6 +1,6 @@
 {
   "system": {
-    "titleTemplate": "愛嬉遊臺灣青年旅館聯盟",
+    "titleTemplate": "線上教材測試",
     "frontPage": "首頁",
     "emptyData": "尚無資料",
     "pagination": "顯示第 $__start__$ -  $__end__$ 筆搜尋結果，共 $__total__$ 筆",
@@ -595,7 +595,8 @@
     },
     "timePicker": {
       "am": "AM",
-      "pm": "PM"
+      "pm": "PM",
+      "title": "Select Time"
     },
     "pagination": {
       "ariaLabel": {
@@ -726,7 +727,7 @@
       "next": "下一頁",
       "currentPage": "第 {pager} 頁",
       "prevPages": "向前 {pager} 頁",
-      "nextPages": "向后 {pager} 頁",
+      "nextPages": "向後 {pager} 頁",
       "deprecationWarning": "偵測到已過時的使用方式，請參閱 el-pagination 說明文件以了解更多資訊"
     },
     "dialog": {
@@ -788,6 +789,14 @@
     "popconfirm": {
       "confirmButtonText": "確認",
       "cancelButtonText": "取消"
+    },
+    "breadcrumb": {
+      "label": "面包屑"
+    },
+    "carousel": {
+      "leftArrow": "上一張投影片",
+      "rightArrow": "下一張投影片",
+      "indicator": "投影片切換至索引 {index}"
     }
   },
   "index": {
